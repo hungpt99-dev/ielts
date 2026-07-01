@@ -156,6 +156,12 @@ pnpm typecheck  # TypeScript type checking (tsc --noEmit)
 
 Please ensure your code passes linting and tests before submitting.
 
+## Contact
+
+Project Link: [https://github.com/<your-username>/ielts-journey](https://github.com/<your-username>/ielts-journey)
+
+Report bugs or suggest features via [GitHub Issues](https://github.com/<your-username>/ielts-journey/issues).
+
 ## License
 
 [MIT](LICENSE)

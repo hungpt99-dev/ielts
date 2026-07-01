@@ -1,0 +1,33 @@
+{
+  "project": {
+    "name": "ielts-journey",
+    "language": "typescript",
+    "sourceDir": "src",
+    "outputDir": ".codegraph"
+  },
+  "analysis": {
+    "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+    "exclude": ["src/**/*.test.*", "src/**/*.spec.*", "src/**/__tests__/**", "node_modules", "dist"],
+    "maxFileSize": 500000
+  },
+  "rules": {
+    "complexity": {
+      "maxCyclomaticComplexity": 10,
+      "maxCognitiveComplexity": 15,
+      "maxLinesPerFunction": 80
+    },
+    "dependencies": {
+      "detectCircular": true,
+      "maxDependenciesPerModule": 30
+    },
+    "maintainability": {
+      "minMaintainabilityIndex": 65,
+      "requireJSDoc": false
+    }
+  },
+  "indexing": {
+    "watch": true,
+    "watchInterval": 1000,
+    "followSymlinks": false
+  }
+}
