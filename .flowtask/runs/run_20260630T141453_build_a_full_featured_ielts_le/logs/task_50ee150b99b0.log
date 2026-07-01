@@ -1,0 +1,333 @@
+[2026-06-30T14:46:34.055Z] [INFO] Task started: Implement Grammar Notebook page with notes and quiz support
+[2026-06-30T14:46:34.057Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/pages/GrammarNotes.tsx","description":"Grammar Notebook page component","validationMethod":"file_exists"}]
+[2026-06-30T14:46:34.622Z] [INFO] [stderr] [0m
+[2026-06-30T14:46:34.622Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-06-30T14:46:34.622Z] [INFO] [stderr] [0m
+[2026-06-30T14:46:39.298Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"GrammarNotes grammar notebook page components hooks types IndexedDB"}
+[2026-06-30T14:46:39.468Z] [INFO] [stderr] [0m✱ [0mGlob "src/pages/*.tsx"[90m 10 matches[0m
+[2026-06-30T14:46:39.644Z] [INFO] [stderr] [0m✱ [0mGlob "src/types/*.ts"[90m 0 matches[0m
+[2026-06-30T14:46:39.828Z] [INFO] [stderr] [0m✱ [0mGlob "src/hooks/*.ts"[90m 1 match[0m
+[2026-06-30T14:46:40.027Z] [INFO] [stderr] [0m✱ [0mGlob "src/components/**/*.tsx"[90m 5 matches[0m
+[2026-06-30T14:46:43.035Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/index.ts"}
+[2026-06-30T14:46:43.194Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/lib/db.ts"}
+[2026-06-30T14:46:43.432Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/pages/WritingPractice.tsx"}
+[2026-06-30T14:46:43.634Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/components/ui/Button.tsx"}
+[2026-06-30T14:46:43.827Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/components/ui/Card.tsx"}
+[2026-06-30T14:46:44.063Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/components/ui/Modal.tsx"}
+[2026-06-30T14:46:44.278Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/pages/SpeakingPractice.tsx"}
+[2026-06-30T14:46:48.720Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/components/Layout.tsx"}
+[2026-06-30T14:46:49.075Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"seed data grammar notes src/lib/seed.ts"}
+[2026-06-30T14:47:43.857Z] [INFO] [stdout] Now I have a clear understanding of the codebase patterns. I'll create the GrammarNotes page and update Layout to wire it up.
+[2026-06-30T14:47:47.781Z] [INFO] [stderr] Wrote file successfully.
+[2026-06-30T14:47:47.781Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx">
+[2026-06-30T14:47:47.781Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-06-30T14:47:47.781Z] [INFO] [stderr] ERROR [4:29] 'CardHeader' is declared but its value is never read.
+[2026-06-30T14:47:47.781Z] [INFO] [stderr] [0m
+[2026-06-30T14:47:47.782Z] [INFO] [stderr] ERROR [4:41] 'CardTitle' is declared but its value is never read.
+[2026-06-30T14:47:47.780Z] [INFO] [stderr] [0m← [0mWrite src/pages/GrammarNotes.tsx
+[2026-06-30T14:47:47.781Z] [INFO] [stderr] 
+[2026-06-30T14:47:47.782Z] [INFO] [stderr] </diagnostics>
+[2026-06-30T14:47:47.782Z] [INFO] [stderr] [0m
+[2026-06-30T14:47:52.686Z] [INFO] [stderr] ===================================================================
+[2026-06-30T14:47:52.682Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+[2026-06-30T14:47:52.686Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+[2026-06-30T14:47:52.686Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+[2026-06-30T14:47:52.686Z] [INFO] [stderr]  import { useState, useEffect, useCallback, useMemo } from 'react'
+[2026-06-30T14:47:52.686Z] [INFO] [stderr]  import type { GrammarNote, GrammarStatus } from '../models'
+[2026-06-30T14:47:52.686Z] [INFO] [stderr] -import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+[2026-06-30T14:47:52.686Z] [INFO] [stderr] +import Card, { CardContent } from '../components/ui/Card'
+[2026-06-30T14:47:52.686Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-06-30T14:47:52.686Z] [INFO] [stderr]  import Modal from '../components/ui/Modal'
+[2026-06-30T14:47:52.686Z] [INFO] [stderr]  
+[2026-06-30T14:47:52.686Z] [INFO] [stderr]  import { getAll, add, put, remove } from '../lib/db'
+[2026-06-30T14:47:52.686Z] [INFO] [stderr] [0m
+[2026-06-30T14:47:52.686Z] [INFO] [stderr] @@ -1,8 +1,8 @@
+[2026-06-30T14:47:52.686Z] [INFO] [stderr]  const RELATED_SKILLS = ['reading', 'listening', 'writing', 'speaking'] as const
+[2026-06-30T14:47:52.686Z] [INFO] [stderr] 
+[2026-06-30T14:47:52.688Z] [INFO] [stderr] [0m← [0mEdit src/pages/GrammarNotes.tsx
+[2026-06-30T14:47:56.484Z] [INFO] [stdout] Now update Layout.tsx to import and route to GrammarNotes:
+[2026-06-30T14:47:57.495Z] [INFO] [stderr] [0m← [0mEdit src/components/Layout.tsx
+[2026-06-30T14:47:57.496Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:47:57.496Z] [INFO] [stderr]  import ReadingJournal from '../pages/ReadingJournal'
+[2026-06-30T14:47:57.496Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:47:57.496Z] [INFO] [stderr] @@ -8,8 +8,9 @@
+[2026-06-30T14:47:57.496Z] [INFO] [stderr]  import ListeningJournal from '../pages/ListeningJournal'
+[2026-06-30T14:47:57.496Z] [INFO] [stderr] ===================================================================
+[2026-06-30T14:47:57.496Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:47:57.496Z] [INFO] [stderr]  import WritingPractice from '../pages/WritingPractice'
+[2026-06-30T14:47:57.496Z] [INFO] [stderr] +import GrammarNotes from '../pages/GrammarNotes'
+[2026-06-30T14:47:57.496Z] [INFO] [stderr]  import SpeakingPractice from '../pages/SpeakingPractice'
+[2026-06-30T14:47:57.496Z] [INFO] [stderr]    { to: '/', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+[2026-06-30T14:47:57.496Z] [INFO] [stderr]  const navItems = [
+[2026-06-30T14:47:57.496Z] [INFO] [stderr] 
+[2026-06-30T14:47:57.496Z] [INFO] [stderr]  
+[2026-06-30T14:47:57.496Z] [INFO] [stderr]  import Settings from '../pages/Settings'
+[2026-06-30T14:47:57.496Z] [INFO] [stderr] [0m
+[2026-06-30T14:48:01.770Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:48:01.770Z] [INFO] [stderr] ===================================================================
+[2026-06-30T14:48:01.770Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:48:01.771Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:48:01.771Z] [INFO] [stderr]  <Route path="/writing" element={<WritingPractice />} />
+[2026-06-30T14:48:01.771Z] [INFO] [stderr]  <Route path="/listening" element={<ListeningJournal />} />
+[2026-06-30T14:48:01.770Z] [INFO] [stderr] [0m← [0mEdit src/components/Layout.tsx
+[2026-06-30T14:48:01.771Z] [INFO] [stderr]  <Route path="/reading" element={<ReadingJournal />} />
+[2026-06-30T14:48:01.771Z] [INFO] [stderr]  <Route path="/speaking" element={<SpeakingPractice />} />
+[2026-06-30T14:48:01.771Z] [INFO] [stderr] -<Route path="/grammar" element={<div className="text-slate-500 dark:text-slate-400">Grammar — coming soon</div>} />
+[2026-06-30T14:48:01.771Z] [INFO] [stderr] +<Route path="/grammar" element={<GrammarNotes />} />
+[2026-06-30T14:48:01.771Z] [INFO] [stderr]  <Route path="/mistakes" element={<div className="text-slate-500 dark:text-slate-400">Mistakes — coming soon</div>} />
+[2026-06-30T14:48:01.771Z] [INFO] [stderr] [0m
+[2026-06-30T14:48:01.771Z] [INFO] [stderr]  <Route path="/mock-tests" element={<div className="text-slate-500 dark:text-slate-400">Mock Tests — coming soon</div>} />
+[2026-06-30T14:48:01.771Z] [INFO] [stderr]  <Route path="/topics" element={<div className="text-slate-500 dark:text-slate-400">Topics — coming soon</div>} />
+[2026-06-30T14:48:01.771Z] [INFO] [stderr] 
+[2026-06-30T14:48:01.771Z] [INFO] [stderr] @@ -114,9 +114,9 @@
+[2026-06-30T14:48:01.771Z] [INFO] [stderr]  <Route path="/progress" element={<div className="text-slate-500 dark:text-slate-400">Progress — coming soon</div>} />
+[2026-06-30T14:48:14.641Z] [INFO] [stderr] [0m$ [0mpnpm typecheck 2>&1 || true
+[2026-06-30T14:48:14.641Z] [INFO] [stderr] $ tsc -b --noEmit
+[2026-06-30T14:48:14.641Z] [INFO] [stderr] [0m
+[2026-06-30T14:48:24.854Z] [INFO] [stderr] [0m$ [0mpnpm test 2>&1 || true
+[2026-06-30T14:48:24.856Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.856Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+[2026-06-30T14:48:24.856Z] [INFO] [stderr]  ✓ src/lib/spaced-repetition.test.ts (12 tests) 96ms
+[2026-06-30T14:48:24.856Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.857Z] [INFO] [stderr]  ✓ src/test/Button.test.tsx (4 tests) 258ms
+[2026-06-30T14:48:24.857Z] [INFO] [stderr] stderr | src/pages/VocabularyReview.test.tsx > VocabularyReview > shows loading spinner initially
+[2026-06-30T14:48:24.857Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.858Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:48:24.858Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:48:24.858Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:48:24.859Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.859Z] [INFO] [stderr] });
+[2026-06-30T14:48:24.859Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.860Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:48:24.860Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:48:24.860Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:48:24.858Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:48:24.860Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.860Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.861Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:48:24.862Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:48:24.860Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:48:24.862Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.862Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.858Z] [INFO] [stderr] $ vitest run
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] });
+[2026-06-30T14:48:24.862Z] [INFO] [stderr] });
+[2026-06-30T14:48:24.861Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:48:24.862Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.862Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:48:24.862Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.862Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:48:24.863Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] });
+[2026-06-30T14:48:24.864Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.863Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:48:24.864Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:48:24.864Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:48:24.864Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.864Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.868Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:48:24.864Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:48:24.868Z] [INFO] [stderr] });
+[2026-06-30T14:48:24.868Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.868Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:48:24.868Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:48:24.868Z] [INFO] [stderr]  Test Files  3 passed (3)
+[2026-06-30T14:48:24.868Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.868Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx (10 tests) 771ms
+[2026-06-30T14:48:24.868Z] [INFO] [stderr]       Tests  26 passed (26)
+[2026-06-30T14:48:24.868Z] [INFO] [stderr] [0m
+[2026-06-30T14:48:24.864Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:48:24.868Z] [INFO] [stderr]    Start at  21:48:19
+[2026-06-30T14:48:24.862Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:48:24.868Z] [INFO] [stderr]    Duration  4.98s (transform 1.08s, setup 712ms, collect 2.66s, tests 1.13s, environment 5.09s, prepare 904ms)
+[2026-06-30T14:48:24.868Z] [INFO] [stderr] 
+[2026-06-30T14:48:24.868Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:48:29.516Z] [INFO] [stdout] All 26 tests pass, typecheck clean. Here's what was done:
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] **Created `src/pages/GrammarNotes.tsx`** — a Grammar Notebook page that:
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] - Shows stats cards: total topics, mastered, reviewing, weak areas
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] - Create/Edit modal with fields: grammar topic (select/dropdown + custom), explanation, example sentences (split by `---`), common mistakes, corrected examples, personal note, related IELTS skill, status
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] - Empty state, loading spinner, error recovery
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] - Quick status toggle buttons per row for fast marking
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] - Lists grammar notes with search, status filter (Weak/Reviewing/Mastered), skill filter, and sorting
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] - Responsive, dark mode compatible
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] - CRUD operations via IndexedDB (`grammarNotes` store)
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] 
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] 
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] **Updated `src/components/Layout.tsx`** — wired `/grammar` route to the new page.
+[2026-06-30T14:48:29.517Z] [INFO] [stdout] - Detail modal showing all fields with styled displays for examples, mistakes, corrected examples
+[2026-06-30T14:48:30.174Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-06-30T14:48:30.181Z] [INFO] Output:
+Now I have a clear understanding of the codebase patterns. I'll create the GrammarNotes page and update Layout to wire it up.
+Now update Layout.tsx to import and route to GrammarNotes:
+All 26 tests pass, typecheck clean. Here's what was done:
+
+**Created `src/pages/GrammarNotes.tsx`** — a Grammar Notebook page that:
+- Lists grammar notes with search, status filter (Weak/Reviewing/Mastered), skill filter, and sorting
+- Shows stats cards: total topics, mastered, reviewing, weak areas
+- Create/Edit modal with fields: grammar topic (select/dropdown + custom), explanation, example sentences (split by `---`), common mistakes, corrected examples, personal note, related IELTS skill, status
+- Quick status toggle buttons per row for fast marking
+- Detail modal showing all fields with styled displays for examples, mistakes, corrected examples
+- CRUD operations via IndexedDB (`grammarNotes` store)
+- Empty state, loading spinner, error recovery
+- Responsive, dark mode compatible
+
+**Updated `src/components/Layout.tsx`** — wired `/grammar` route to the new page.
+[2026-06-30T14:48:30.185Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"GrammarNotes grammar notebook page components hooks types IndexedDB"}
+[0m✱ [0mGlob "src/pages/*.tsx"[90m 10 matches[0m
+[0m✱ [0mGlob "src/types/*.ts"[90m 0 matches[0m
+[0m✱ [0mGlob "src/hooks/*.ts"[90m 1 match[0m
+[0m✱ [0mGlob "src/components/**/*.tsx"[90m 5 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/index.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/lib/db.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/pages/WritingPractice.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/components/ui/Button.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/components/ui/Card.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/components/ui/Modal.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/pages/SpeakingPractice.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/components/Layout.tsx"}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"seed data grammar notes src/lib/seed.ts"}
+[0m
+[0m← [0mWrite src/pages/GrammarNotes.tsx
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx">
+ERROR [4:29] 'CardHeader' is declared but its value is never read.
+ERROR [4:41] 'CardTitle' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mEdit src/pages/GrammarNotes.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+@@ -1,8 +1,8 @@
+ import { useState, useEffect, useCallback, useMemo } from 'react'
+ import type { GrammarNote, GrammarStatus } from '../models'
+ import { getAll, add, put, remove } from '../lib/db'
+-import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
++import Card, { CardContent } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+ import Modal from '../components/ui/Modal'
+ 
+ const RELATED_SKILLS = ['reading', 'listening', 'writing', 'speaking'] as const
+
+[0m
+[0m← [0mEdit src/components/Layout.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+@@ -8,8 +8,9 @@
+ import ReadingJournal from '../pages/ReadingJournal'
+ import ListeningJournal from '../pages/ListeningJournal'
+ import WritingPractice from '../pages/WritingPractice'
+ import SpeakingPractice from '../pages/SpeakingPractice'
++import GrammarNotes from '../pages/GrammarNotes'
+ import Settings from '../pages/Settings'
+ 
+ const navItems = [
+   { to: '/', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+
+[0m
+[0m← [0mEdit src/components/Layout.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+@@ -114,9 +114,9 @@
+ <Route path="/reading" element={<ReadingJournal />} />
+ <Route path="/listening" element={<ListeningJournal />} />
+ <Route path="/writing" element={<WritingPractice />} />
+ <Route path="/speaking" element={<SpeakingPractice />} />
+-<Route path="/grammar" element={<div className="text-slate-500 dark:text-slate-400">Grammar — coming soon</div>} />
++<Route path="/grammar" element={<GrammarNotes />} />
+ <Route path="/mistakes" element={<div className="text-slate-500 dark:text-slate-400">Mistakes — coming soon</div>} />
+ <Route path="/mock-tests" element={<div className="text-slate-500 dark:text-slate-400">Mock Tests — coming soon</div>} />
+ <Route path="/topics" element={<div className="text-slate-500 dark:text-slate-400">Topics — coming soon</div>} />
+ <Route path="/progress" element={<div className="text-slate-500 dark:text-slate-400">Progress — coming soon</div>} />
+
+[0m
+[0m$ [0mpnpm typecheck 2>&1 || true
+$ tsc -b --noEmit
+[0m
+[0m$ [0mpnpm test 2>&1 || true
+$ vitest run
+
+ RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+
+ ✓ src/lib/spaced-repetition.test.ts (12 tests) 96ms
+ ✓ src/test/Button.test.tsx (4 tests) 258ms
+stderr | src/pages/VocabularyReview.test.tsx > VocabularyReview > shows loading spinner initially
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/pages/VocabularyReview.test.tsx (10 tests) 771ms
+
+ Test Files  3 passed (3)
+      Tests  26 passed (26)
+   Start at  21:48:19
+   Duration  4.98s (transform 1.08s, setup 712ms, collect 2.66s, tests 1.13s, environment 5.09s, prepare 904ms)
+[0m
+[2026-06-30T14:48:30.191Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-06-30T14:48:30.215Z] [INFO] Task completed successfully

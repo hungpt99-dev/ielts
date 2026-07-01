@@ -1,0 +1,311 @@
+[2026-06-30T14:41:37.448Z] [INFO] Task started: Implement Writing Practice Log page with version comparison and feedback
+[2026-06-30T14:41:37.450Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/pages/WritingPractice.tsx","description":"Writing Practice Log page component","validationMethod":"file_exists"}]
+[2026-06-30T14:41:37.978Z] [INFO] [stderr] [0m
+[2026-06-30T14:41:37.978Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-06-30T14:41:37.978Z] [INFO] [stderr] [0m
+[2026-06-30T14:41:44.264Z] [INFO] [stderr] [0m• [0mExplore project structure[90m Explore Agent[0m
+[2026-06-30T14:42:34.236Z] [INFO] [stderr] [0m✓ [0mExplore project structure[90m Explore Agent[0m
+[2026-06-30T14:42:36.848Z] [INFO] [stderr] [0m→ [0mRead src/models/index.ts[90m [offset=180, limit=25][0m
+[2026-06-30T14:42:37.067Z] [INFO] [stderr] [0m→ [0mRead src/pages/ListeningJournal.tsx
+[2026-06-30T14:42:37.330Z] [INFO] [stderr] [0m→ [0mRead src/components/Layout.tsx
+[2026-06-30T14:42:37.561Z] [INFO] [stderr] [0m→ [0mRead src/lib/db.ts
+[2026-06-30T14:42:42.768Z] [INFO] [stderr] [ ] Update Layout.tsx to use WritingPractice component
+[2026-06-30T14:42:42.768Z] [INFO] [stderr] [0m# [0mTodos
+[2026-06-30T14:42:42.768Z] [INFO] [stderr] [•] Create WritingPractice.tsx page component
+[2026-06-30T14:42:42.768Z] [INFO] [stderr] [0m
+[2026-06-30T14:42:42.768Z] [INFO] [stderr] [0m
+[2026-06-30T14:42:42.768Z] [INFO] [stderr] [ ] Verify the app builds and routes work
+[2026-06-30T14:43:49.817Z] [INFO] [stderr] Wrote file successfully.
+[2026-06-30T14:43:49.817Z] [INFO] [stderr] [0m← [0mWrite src/pages/WritingPractice.tsx
+[2026-06-30T14:43:49.817Z] [INFO] [stderr] [0m
+[2026-06-30T14:43:52.525Z] [INFO] [stderr] [•] Update Layout.tsx to use WritingPractice component
+[2026-06-30T14:43:52.525Z] [INFO] [stderr] [0m# [0mTodos
+[2026-06-30T14:43:52.525Z] [INFO] [stderr] [ ] Verify the app builds and routes work
+[2026-06-30T14:43:52.525Z] [INFO] [stderr] [0m
+[2026-06-30T14:43:52.525Z] [INFO] [stderr] [✓] Create WritingPractice.tsx page component
+[2026-06-30T14:43:56.244Z] [INFO] [stderr] ===================================================================
+[2026-06-30T14:43:56.244Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:43:56.244Z] [INFO] [stderr] @@ -6,8 +6,9 @@
+[2026-06-30T14:43:56.244Z] [INFO] [stderr]  import Vocabulary from '../pages/Vocabulary'
+[2026-06-30T14:43:56.244Z] [INFO] [stderr] +import WritingPractice from '../pages/WritingPractice'
+[2026-06-30T14:43:56.244Z] [INFO] [stderr]  import VocabularyReview from '../pages/VocabularyReview'
+[2026-06-30T14:43:56.244Z] [INFO] [stderr]  import Settings from '../pages/Settings'
+[2026-06-30T14:43:56.244Z] [INFO] [stderr]  import ReadingJournal from '../pages/ReadingJournal'
+[2026-06-30T14:43:56.244Z] [INFO] [stderr]    { to: '/', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+[2026-06-30T14:43:56.244Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:43:56.244Z] [INFO] [stderr]  const navItems = [
+[2026-06-30T14:43:56.244Z] [INFO] [stderr]  import ListeningJournal from '../pages/ListeningJournal'
+[2026-06-30T14:43:56.244Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:43:56.244Z] [INFO] [stderr]  
+[2026-06-30T14:43:56.244Z] [INFO] [stderr] [0m
+[2026-06-30T14:43:56.244Z] [INFO] [stderr] 
+[2026-06-30T14:43:56.244Z] [INFO] [stderr] [0m← [0mEdit src/components/Layout.tsx
+[2026-06-30T14:43:59.591Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:43:59.591Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:43:59.591Z] [INFO] [stderr] [0m← [0mEdit src/components/Layout.tsx
+[2026-06-30T14:43:59.591Z] [INFO] [stderr]  <Route path="/listening" element={<ListeningJournal />} />
+[2026-06-30T14:43:59.591Z] [INFO] [stderr]  <Route path="/reading" element={<ReadingJournal />} />
+[2026-06-30T14:43:59.591Z] [INFO] [stderr] ===================================================================
+[2026-06-30T14:43:59.591Z] [INFO] [stderr] -<Route path="/writing" element={<div className="text-slate-500 dark:text-slate-400">Writing — coming soon</div>} />
+[2026-06-30T14:43:59.591Z] [INFO] [stderr]  <Route path="/speaking" element={<div className="text-slate-500 dark:text-slate-400">Speaking — coming soon</div>} />
+[2026-06-30T14:43:59.591Z] [INFO] [stderr]  <Route path="/vocabulary" element={<Vocabulary />} />
+[2026-06-30T14:43:59.591Z] [INFO] [stderr] +<Route path="/writing" element={<WritingPractice />} />
+[2026-06-30T14:43:59.592Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+[2026-06-30T14:43:59.592Z] [INFO] [stderr]  <Route path="/mistakes" element={<div className="text-slate-500 dark:text-slate-400">Mistakes — coming soon</div>} />
+[2026-06-30T14:43:59.592Z] [INFO] [stderr]  <Route path="/grammar" element={<div className="text-slate-500 dark:text-slate-400">Grammar — coming soon</div>} />
+[2026-06-30T14:43:59.592Z] [INFO] [stderr] [0m
+[2026-06-30T14:43:59.591Z] [INFO] [stderr] @@ -110,9 +110,9 @@
+[2026-06-30T14:43:59.591Z] [INFO] [stderr]  <Route path="/vocabulary/review" element={<VocabularyReview />} />
+[2026-06-30T14:43:59.592Z] [INFO] [stderr] 
+[2026-06-30T14:43:59.592Z] [INFO] [stderr]  <Route path="/mock-tests" element={<div className="text-slate-500 dark:text-slate-400">Mock Tests — coming soon</div>} />
+[2026-06-30T14:44:02.069Z] [INFO] [stderr] [0m# [0mTodos
+[2026-06-30T14:44:02.069Z] [INFO] [stderr] [✓] Create WritingPractice.tsx page component
+[2026-06-30T14:44:02.069Z] [INFO] [stderr] [0m
+[2026-06-30T14:44:02.070Z] [INFO] [stderr] [✓] Update Layout.tsx to use WritingPractice component
+[2026-06-30T14:44:02.069Z] [INFO] [stderr] [•] Verify the app builds and routes work
+[2026-06-30T14:44:06.206Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS && npx tsc --noEmit 2>&1 | head -40
+[2026-06-30T14:44:06.206Z] [INFO] [stderr] [0m
+[2026-06-30T14:44:06.206Z] [INFO] [stderr] (no output)
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS && pnpm test 2>&1
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] $ vitest run
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr]  ✓ src/test/Button.test.tsx (4 tests) 41ms
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:44:10.103Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] stderr | src/pages/VocabularyReview.test.tsx > VocabularyReview > shows loading spinner initially
+[2026-06-30T14:44:10.103Z] [INFO] [stderr]  ✓ src/lib/spaced-repetition.test.ts (12 tests) 11ms
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] });
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] });
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:44:10.103Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] });
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] });
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.103Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] act(() => {
+[2026-06-30T14:44:10.104Z] [INFO] [stderr]   /* fire events that update state */
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:44:10.103Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] /* assert on the output */
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] });
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.104Z] [INFO] [stderr]  Test Files  3 passed (3)
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-06-30T14:44:10.104Z] [INFO] [stderr]    Duration  830ms (transform 83ms, setup 193ms, collect 269ms, tests 176ms, environment 876ms, prepare 154ms)
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.104Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx (10 tests) 124ms
+[2026-06-30T14:44:10.104Z] [INFO] [stderr]       Tests  26 passed (26)
+[2026-06-30T14:44:10.104Z] [INFO] [stderr]    Start at  21:44:09
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] 
+[2026-06-30T14:44:10.104Z] [INFO] [stderr] [0m
+[2026-06-30T14:44:12.752Z] [INFO] [stderr] [0m# [0mTodos
+[2026-06-30T14:44:12.752Z] [INFO] [stderr] [0m
+[2026-06-30T14:44:12.752Z] [INFO] [stderr] [✓] Create WritingPractice.tsx page component
+[2026-06-30T14:44:12.752Z] [INFO] [stderr] [✓] Verify the app builds and routes work
+[2026-06-30T14:44:12.752Z] [INFO] [stderr] [✓] Update Layout.tsx to use WritingPractice component
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] - **Full CRUD** for writing entries (Task 1 & Task 2) with all 13 fields from `WritingSession` type
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] **WritingPractice page** (`src/pages/WritingPractice.tsx`) — follows the same pattern as `ListeningJournal.tsx`/`ReadingJournal.tsx` with:
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] 
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] - **Stats cards**: total essays, avg band, total writing time, total words
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] - **Band trend chart** with color-coded bars (indigo for Task 1, emerald for Task 2)
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] All done. Here's what was implemented:
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] - **Common mistakes tracking** — parses comma-separated grammar & vocabulary mistakes across all sessions, showing frequency counts in a collapsible card
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] - **Detail modal** showing all fields
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] 
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] - **Create/Edit modal** with all form fields, auto word counting, and validation
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] - **Empty states**, loading spinner, and error handling with retry
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] 
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] - **Filters**: search, topic, task type, sort by date/band/word count
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] **Route updated** (`src/components/Layout.tsx`): replaced the placeholder for `/writing` with `<WritingPractice />`, and tests pass (26/26).
+[2026-06-30T14:44:17.717Z] [INFO] [stdout] - **Version comparison UI** — side-by-side diff view of original essay vs improved version (triggered via the compare icon button on any session with a `betterVersion`)
+[2026-06-30T14:44:17.855Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-06-30T14:44:17.855Z] [INFO] Output:
+All done. Here's what was implemented:
+
+**WritingPractice page** (`src/pages/WritingPractice.tsx`) — follows the same pattern as `ListeningJournal.tsx`/`ReadingJournal.tsx` with:
+
+- **Full CRUD** for writing entries (Task 1 & Task 2) with all 13 fields from `WritingSession` type
+- **Stats cards**: total essays, avg band, total writing time, total words
+- **Band trend chart** with color-coded bars (indigo for Task 1, emerald for Task 2)
+- **Common mistakes tracking** — parses comma-separated grammar & vocabulary mistakes across all sessions, showing frequency counts in a collapsible card
+- **Version comparison UI** — side-by-side diff view of original essay vs improved version (triggered via the compare icon button on any session with a `betterVersion`)
+- **Detail modal** showing all fields
+- **Create/Edit modal** with all form fields, auto word counting, and validation
+- **Filters**: search, topic, task type, sort by date/band/word count
+- **Empty states**, loading spinner, and error handling with retry
+
+**Route updated** (`src/components/Layout.tsx`): replaced the placeholder for `/writing` with `<WritingPractice />`, and tests pass (26/26).
+[2026-06-30T14:44:17.855Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m• [0mExplore project structure[90m Explore Agent[0m
+[0m✓ [0mExplore project structure[90m Explore Agent[0m
+[0m→ [0mRead src/models/index.ts[90m [offset=180, limit=25][0m
+[0m→ [0mRead src/pages/ListeningJournal.tsx
+[0m→ [0mRead src/components/Layout.tsx
+[0m→ [0mRead src/lib/db.ts
+[0m
+[0m# [0mTodos
+[•] Create WritingPractice.tsx page component
+[ ] Update Layout.tsx to use WritingPractice component
+[ ] Verify the app builds and routes work
+[0m
+[0m← [0mWrite src/pages/WritingPractice.tsx
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create WritingPractice.tsx page component
+[•] Update Layout.tsx to use WritingPractice component
+[ ] Verify the app builds and routes work
+[0m
+[0m← [0mEdit src/components/Layout.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+@@ -6,8 +6,9 @@
+ import Vocabulary from '../pages/Vocabulary'
+ import VocabularyReview from '../pages/VocabularyReview'
+ import ReadingJournal from '../pages/ReadingJournal'
+ import ListeningJournal from '../pages/ListeningJournal'
++import WritingPractice from '../pages/WritingPractice'
+ import Settings from '../pages/Settings'
+ 
+ const navItems = [
+   { to: '/', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+
+[0m
+[0m← [0mEdit src/components/Layout.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/Layout.tsx
+@@ -110,9 +110,9 @@
+ <Route path="/vocabulary" element={<Vocabulary />} />
+ <Route path="/vocabulary/review" element={<VocabularyReview />} />
+ <Route path="/reading" element={<ReadingJournal />} />
+ <Route path="/listening" element={<ListeningJournal />} />
+-<Route path="/writing" element={<div className="text-slate-500 dark:text-slate-400">Writing — coming soon</div>} />
++<Route path="/writing" element={<WritingPractice />} />
+ <Route path="/speaking" element={<div className="text-slate-500 dark:text-slate-400">Speaking — coming soon</div>} />
+ <Route path="/grammar" element={<div className="text-slate-500 dark:text-slate-400">Grammar — coming soon</div>} />
+ <Route path="/mistakes" element={<div className="text-slate-500 dark:text-slate-400">Mistakes — coming soon</div>} />
+ <Route path="/mock-tests" element={<div className="text-slate-500 dark:text-slate-400">Mock Tests — coming soon</div>} />
+
+[0m
+[0m# [0mTodos
+[✓] Create WritingPractice.tsx page component
+[✓] Update Layout.tsx to use WritingPractice component
+[•] Verify the app builds and routes work
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS && npx tsc --noEmit 2>&1 | head -40
+(no output)
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS && pnpm test 2>&1
+$ vitest run
+
+ RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+
+ ✓ src/lib/spaced-repetition.test.ts (12 tests) 11ms
+ ✓ src/test/Button.test.tsx (4 tests) 41ms
+stderr | src/pages/VocabularyReview.test.tsx > VocabularyReview > shows loading spinner initially
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/pages/VocabularyReview.test.tsx (10 tests) 124ms
+
+ Test Files  3 passed (3)
+      Tests  26 passed (26)
+   Start at  21:44:09
+   Duration  830ms (transform 83ms, setup 193ms, collect 269ms, tests 176ms, environment 876ms, prepare 154ms)
+[0m
+[0m# [0mTodos
+[✓] Create WritingPractice.tsx page component
+[✓] Update Layout.tsx to use WritingPractice component
+[✓] Verify the app builds and routes work
+[0m
+[2026-06-30T14:44:17.856Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-06-30T14:44:17.861Z] [INFO] Task completed successfully
