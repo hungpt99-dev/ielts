@@ -1,0 +1,263 @@
+[2026-07-01T10:09:10.685Z] [INFO] Task started: Design Public API Integration Architecture and Data Model
+[2026-07-01T10:09:10.692Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/features/publicApiIntegration/architecture.md","description":"Architecture and data model design document for public API integration","validationMethod":"file_exists"},{"action":"create","target":"src/features/publicApiIntegration/types.ts","description":"TypeScript interfaces for imported public API content items","validationMethod":"file_exists"}]
+[2026-07-01T10:09:11.285Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-01T10:09:11.285Z] [INFO] [stderr] [0m
+[2026-07-01T10:09:11.285Z] [INFO] [stderr] [0m
+[2026-07-01T10:09:16.658Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:09:16.659Z] [INFO] [stderr] [•] Explore project structure and existing types
+[2026-07-01T10:09:16.659Z] [INFO] [stderr] [ ] Create TypeScript interfaces in src/features/publicApiIntegration/types.ts
+[2026-07-01T10:09:16.659Z] [INFO] [stderr] [ ] Create architecture design document in src/features/publicApiIntegration/architecture.md
+[2026-07-01T10:09:16.659Z] [INFO] [stderr] [0m
+[2026-07-01T10:09:17.263Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"project structure, existing types, interfaces, IndexedDB, content types, db schema, features","maxFiles":20}
+[2026-07-01T10:09:17.512Z] [INFO] [stderr] [0m✱ [0mGlob "src/**/*.ts"[90m 28 matches[0m
+[2026-07-01T10:09:20.506Z] [INFO] [stderr] [0m→ [0mRead src/types/index.ts
+[2026-07-01T10:09:20.632Z] [INFO] [stderr] [0m→ [0mRead src/models/index.ts
+[2026-07-01T10:09:21.049Z] [INFO] [stderr] [0m→ [0mRead src/services/storage/Database.ts[90m [offset=1, limit=120][0m
+[2026-07-01T10:09:21.269Z] [INFO] [stderr] [0m→ [0mRead src/features
+[2026-07-01T10:09:24.696Z] [INFO] [stderr] [0m→ [0mRead src/services/storage/Database.ts[90m [offset=120, limit=200][0m
+[2026-07-01T10:09:25.165Z] [INFO] [stderr] DIR_NOT_FOUND
+[2026-07-01T10:09:25.165Z] [INFO] [stderr] [0m$ [0mls src/features/publicApiIntegration 2>/dev/null || echo "DIR_NOT_FOUND"
+[2026-07-01T10:09:25.165Z] [INFO] [stderr] [0m
+[2026-07-01T10:09:25.165Z] [INFO] [stderr] [0m
+[2026-07-01T10:09:28.319Z] [INFO] [stderr] [0m→ [0mRead src/services/storage/SettingsStorage.ts
+[2026-07-01T10:09:28.713Z] [INFO] [stderr] [0m→ [0mRead src/services/storage/Database.ts[90m [offset=320, limit=200][0m
+[2026-07-01T10:09:33.957Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:09:33.957Z] [INFO] [stderr] [0m
+[2026-07-01T10:09:33.957Z] [INFO] [stderr] [✓] Explore project structure and existing types
+[2026-07-01T10:09:33.957Z] [INFO] [stderr] [•] Create TypeScript interfaces in src/features/publicApiIntegration/types.ts
+[2026-07-01T10:09:33.957Z] [INFO] [stderr] [0m
+[2026-07-01T10:09:33.957Z] [INFO] [stderr] [ ] Create architecture design document in src/features/publicApiIntegration/architecture.md
+[2026-07-01T10:09:34.337Z] [INFO] [stderr] [0m
+[2026-07-01T10:09:34.337Z] [INFO] [stderr] [0m$ [0mmkdir -p src/features/publicApiIntegration
+[2026-07-01T10:09:34.337Z] [INFO] [stderr] (no output)
+[2026-07-01T10:09:34.373Z] [INFO] [stdout] Now I have a solid understanding of the project's models, database schema, and patterns. Let me create the files.
+[2026-07-01T10:09:54.508Z] [INFO] [stderr] 
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T10:09:54.508Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] [0m← [0mWrite src/features/publicApiIntegration/types.ts
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] 
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts">
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [5:43] 'LearningStatus' is declared but never used.
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] [0m
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T10:09:54.509Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+[2026-07-01T10:09:57.781Z] [INFO] [stderr]  // ============================================================
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/types.ts
+[2026-07-01T10:09:57.781Z] [INFO] [stderr]  // Public API Integration — TypeScript Interfaces
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] +import type { ISOString, VocabDifficulty } from '../../models'
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] @@ -1,9 +1,9 @@
+[2026-07-01T10:09:57.781Z] [INFO] [stderr]  
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] -import type { ISOString, VocabDifficulty, LearningStatus } from '../../models'
+[2026-07-01T10:09:57.781Z] [INFO] [stderr]  // ============================================================
+[2026-07-01T10:09:57.781Z] [INFO] [stderr]  // ── Source & Content Type Enums ─────────────────────────────
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+[2026-07-01T10:09:57.781Z] [INFO] [stderr]  
+[2026-07-01T10:09:57.781Z] [INFO] [stderr]  
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] 
+[2026-07-01T10:09:57.781Z] [INFO] [stderr]  export type PublicApiSourceName =
+[2026-07-01T10:09:57.781Z] [INFO] [stderr] [0m
+[2026-07-01T10:10:00.537Z] [INFO] [stderr] [✓] Explore project structure and existing types
+[2026-07-01T10:10:00.537Z] [INFO] [stderr] [✓] Create TypeScript interfaces in src/features/publicApiIntegration/types.ts
+[2026-07-01T10:10:00.537Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:10:00.537Z] [INFO] [stderr] [0m
+[2026-07-01T10:10:00.537Z] [INFO] [stderr] [•] Create architecture design document in src/features/publicApiIntegration/architecture.md
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] 
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T10:10:31.257Z] [INFO] [stderr] [0m← [0mWrite src/features/publicApiIntegration/architecture.md
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] [0m
+[2026-07-01T10:10:31.258Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T10:10:34.220Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff  15651  1 Jul 17:10 architecture.md
+[2026-07-01T10:10:34.220Z] [INFO] [stderr] drwxr-xr-x@  4 phamthanhhung  staff    128  1 Jul 17:10 .
+[2026-07-01T10:10:34.220Z] [INFO] [stderr] [0m$ [0mls -la src/features/publicApiIntegration/
+[2026-07-01T10:10:34.220Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff   8072  1 Jul 17:09 types.ts
+[2026-07-01T10:10:34.220Z] [INFO] [stderr] total 48
+[2026-07-01T10:10:34.220Z] [INFO] [stderr] drwxr-xr-x@ 15 phamthanhhung  staff    480  1 Jul 17:09 ..
+[2026-07-01T10:10:34.220Z] [INFO] [stderr] [0m
+[2026-07-01T10:10:34.720Z] [INFO] [stderr] [0m
+[2026-07-01T10:10:34.720Z] [INFO] [stderr] [✓] Explore project structure and existing types
+[2026-07-01T10:10:34.720Z] [INFO] [stderr] [✓] Create architecture design document in src/features/publicApiIntegration/architecture.md
+[2026-07-01T10:10:34.720Z] [INFO] [stderr] [✓] Create TypeScript interfaces in src/features/publicApiIntegration/types.ts
+[2026-07-01T10:10:34.720Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:10:37.512Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/features/publicApiIntegration/types.ts"}
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] 
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] 
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] ## Completion Summary
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - `PublicApiImportedContent` — IndexedDB entity with all required fields (id, title, content, contentType, sourceType, sourceName, sourceUrl, licenseName, attribution, importedAt, skill, topic, difficulty, tags, userNotes)
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] **`types.ts`** — TypeScript interfaces (19 symbols) covering:
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - `PublicApiKeyEntry`, `CorsProxyConfig` — Key management and CORS proxy
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] Created two files in `src/features/publicApiIntegration/`:
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - `PUBLIC_API_SOURCES` — Configuration array for all 7 supported sources (Wiktionary, Datamuse, Tatoeba, OER Commons, Wikipedia, Gutendex, YouTube)
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - Architecture diagram with UI → Service Layer → IndexedDB flow
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - `PublicApiSearchResult`, `PublicApiPreview` — Search and preview models
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - `PublicApiSourceConfig` — Source registry with CORS status and API key requirements
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - CORS error handling: direct for 6 sources, proxy fallback mechanism, YouTube workaround with manual paste
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - API key handling: keys stored in localStorage, never hardcoded, user-entered only
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - `PublicApiAiClassifyRequest` / `PublicApiAiClassifyResponse` — AI integration
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] **`architecture.md`** — Design document covering:
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - Licensing rules table
+[2026-07-01T10:10:43.067Z] [INFO] [stdout] - Data flow: search, preview, import, and AI classification sequences
+[2026-07-01T10:10:43.068Z] [INFO] [stdout] 
+[2026-07-01T10:10:43.068Z] [INFO] [stdout] - Directory structure with adapter/service/component/hook organization
+[2026-07-01T10:10:43.068Z] [INFO] [stdout] - Database migration plan (Dexie v3 additive schema)
+[2026-07-01T10:10:43.353Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-01T10:10:43.353Z] [INFO] Output:
+Now I have a solid understanding of the project's models, database schema, and patterns. Let me create the files.
+## Completion Summary
+
+Created two files in `src/features/publicApiIntegration/`:
+
+**`types.ts`** — TypeScript interfaces (19 symbols) covering:
+- `PublicApiImportedContent` — IndexedDB entity with all required fields (id, title, content, contentType, sourceType, sourceName, sourceUrl, licenseName, attribution, importedAt, skill, topic, difficulty, tags, userNotes)
+- `PublicApiSearchResult`, `PublicApiPreview` — Search and preview models
+- `PublicApiSourceConfig` — Source registry with CORS status and API key requirements
+- `PublicApiKeyEntry`, `CorsProxyConfig` — Key management and CORS proxy
+- `PublicApiAiClassifyRequest` / `PublicApiAiClassifyResponse` — AI integration
+- `PUBLIC_API_SOURCES` — Configuration array for all 7 supported sources (Wiktionary, Datamuse, Tatoeba, OER Commons, Wikipedia, Gutendex, YouTube)
+
+**`architecture.md`** — Design document covering:
+- Architecture diagram with UI → Service Layer → IndexedDB flow
+- Data flow: search, preview, import, and AI classification sequences
+- API key handling: keys stored in localStorage, never hardcoded, user-entered only
+- CORS error handling: direct for 6 sources, proxy fallback mechanism, YouTube workaround with manual paste
+- Database migration plan (Dexie v3 additive schema)
+- Licensing rules table
+- Directory structure with adapter/service/component/hook organization
+[2026-07-01T10:10:43.353Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m# [0mTodos
+[•] Explore project structure and existing types
+[ ] Create TypeScript interfaces in src/features/publicApiIntegration/types.ts
+[ ] Create architecture design document in src/features/publicApiIntegration/architecture.md
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"project structure, existing types, interfaces, IndexedDB, content types, db schema, features","maxFiles":20}
+[0m✱ [0mGlob "src/**/*.ts"[90m 28 matches[0m
+[0m→ [0mRead src/types/index.ts
+[0m→ [0mRead src/models/index.ts
+[0m→ [0mRead src/services/storage/Database.ts[90m [offset=1, limit=120][0m
+[0m→ [0mRead src/features
+[0m→ [0mRead src/services/storage/Database.ts[90m [offset=120, limit=200][0m
+[0m
+[0m$ [0mls src/features/publicApiIntegration 2>/dev/null || echo "DIR_NOT_FOUND"
+DIR_NOT_FOUND
+[0m
+[0m→ [0mRead src/services/storage/SettingsStorage.ts
+[0m→ [0mRead src/services/storage/Database.ts[90m [offset=320, limit=200][0m
+[0m
+[0m# [0mTodos
+[✓] Explore project structure and existing types
+[•] Create TypeScript interfaces in src/features/publicApiIntegration/types.ts
+[ ] Create architecture design document in src/features/publicApiIntegration/architecture.md
+[0m
+[0m$ [0mmkdir -p src/features/publicApiIntegration
+(no output)
+[0m
+[0m← [0mWrite src/features/publicApiIntegration/types.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts">
+ERROR [5:43] 'LearningStatus' is declared but never used.
+</diagnostics>
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/types.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+@@ -1,9 +1,9 @@
+ // ============================================================
+ // Public API Integration — TypeScript Interfaces
+ // ============================================================
+ 
+-import type { ISOString, VocabDifficulty, LearningStatus } from '../../models'
++import type { ISOString, VocabDifficulty } from '../../models'
+ 
+ // ── Source & Content Type Enums ─────────────────────────────
+ 
+ export type PublicApiSourceName =
+
+[0m
+[0m# [0mTodos
+[✓] Explore project structure and existing types
+[✓] Create TypeScript interfaces in src/features/publicApiIntegration/types.ts
+[•] Create architecture design document in src/features/publicApiIntegration/architecture.md
+[0m
+[0m← [0mWrite src/features/publicApiIntegration/architecture.md
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+[0m
+[0m$ [0mls -la src/features/publicApiIntegration/
+total 48
+drwxr-xr-x@  4 phamthanhhung  staff    128  1 Jul 17:10 .
+drwxr-xr-x@ 15 phamthanhhung  staff    480  1 Jul 17:09 ..
+-rw-r--r--@  1 phamthanhhung  staff  15651  1 Jul 17:10 architecture.md
+-rw-r--r--@  1 phamthanhhung  staff   8072  1 Jul 17:09 types.ts
+[0m
+[0m# [0mTodos
+[✓] Explore project structure and existing types
+[✓] Create TypeScript interfaces in src/features/publicApiIntegration/types.ts
+[✓] Create architecture design document in src/features/publicApiIntegration/architecture.md
+[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/features/publicApiIntegration/types.ts"}
+[2026-07-01T10:10:43.354Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T10:10:43.356Z] [INFO] Task completed successfully

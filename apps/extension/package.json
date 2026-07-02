@@ -1,0 +1,37 @@
+{
+  "name": "@ielts/extension",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5174 --strictPort",
+    "build": "node scripts/build.mjs",
+    "build:production": "node scripts/build.mjs production",
+    "package": "pnpm build && node scripts/package.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo 'no linter configured'",
+    "test": "echo 'no tests configured'",
+    "ai": "echo 'no tests configured'",
+    "clean": "rm -rf dist",
+    "clean:all": "rm -rf dist *.zip"
+  },
+  "dependencies": {
+    "@ielts/ai": "workspace:*",
+    "@ielts/ai-tutor": "workspace:*",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.5.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.308",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "esbuild": "^0.25.2",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.3",
+    "vitest": "^3.1.1"
+  }
+}

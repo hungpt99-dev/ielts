@@ -1,0 +1,22 @@
+[2026-07-01T14:10:06.811Z] [INFO] Task started: Validate UI renders correctly without chat icon
+[2026-07-01T14:10:07.098Z] [INFO] Executor finished with status: failed, exit code: 1
+[2026-07-01T14:10:07.098Z] [INFO] Output:
+[ELIFECYCLE] Test failed. See above for more details.
+[2026-07-01T14:10:07.098Z] [INFO] Error:
+$ vitest run --filter HeaderBar
+file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+          throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+                ^
+
+CACError: Unknown option `--filter`
+    at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+    at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+    at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.0
+[2026-07-01T14:10:07.098Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T14:10:07.100Z] [INFO] Task completed successfully

@@ -1,0 +1,32 @@
+export {
+  classifyContent,
+  classifyAndSave,
+  extractVocabulary,
+  generateReadingQuestions,
+  generateListeningExercise,
+  generateSpeakingPrompts,
+  generateWritingIdeas,
+  generateGrammarExercises,
+  generateMistakeReviewTasks,
+  getStoredAiConfig,
+  storeAiConfig,
+  clearStoredAiConfig,
+} from './classify'
+
+export type {
+  AiProviderConfig,
+  AiResult,
+  ExtractedVocabulary,
+  ReadingQuestion,
+  ReadingQuestionsResult,
+  ListeningGapFill,
+  ListeningExerciseResult,
+  SpeakingPrompt,
+  SpeakingPromptsResult,
+  WritingIdea,
+  WritingIdeasResult,
+  GrammarExercise,
+  GrammarExercisesResult,
+  MistakeReviewTask,
+  MistakeReviewResult,
+} from './classify'

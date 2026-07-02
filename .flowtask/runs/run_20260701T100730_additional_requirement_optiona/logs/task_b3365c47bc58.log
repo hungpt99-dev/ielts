@@ -1,0 +1,206 @@
+[2026-07-01T10:10:43.358Z] [INFO] Task started: Implement Public API Search and Result Display UI Component
+[2026-07-01T10:10:43.360Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/features/publicApiIntegration/components/PublicApiSearch.tsx","description":"React component for searching and displaying public API content results","validationMethod":"file_exists"}]
+[2026-07-01T10:10:44.049Z] [INFO] [stderr] [0m
+[2026-07-01T10:10:44.049Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-01T10:10:44.049Z] [INFO] [stderr] [0m
+[2026-07-01T10:10:49.098Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"publicApiIntegration PublicApiSearch features structure components","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-01T10:10:49.376Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/publicApiIntegration/**/*"[90m in . · 2 matches[0m
+[2026-07-01T10:10:49.705Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/**/components/*.tsx"[90m in . · 10 matches[0m
+[2026-07-01T10:10:52.325Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/types.ts
+[2026-07-01T10:10:52.578Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/architecture.md
+[2026-07-01T10:10:55.404Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/publicApiIntegration/**/*"[90m in . · 2 matches[0m
+[2026-07-01T10:10:55.996Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"existing component patterns Card Button Badge import style in IELTS project","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-01T10:10:56.011Z] [INFO] [stdout] Let me explore existing components and check what has already been built.
+[2026-07-01T10:10:59.001Z] [INFO] [stderr] [0m✱ [0mGlob "src/hooks/**/*"[90m in . · 2 matches[0m
+[2026-07-01T10:10:59.348Z] [INFO] [stderr] [0m✱ [0mGlob "src/services/**/*.ts"[90m in . · 9 matches[0m
+[2026-07-01T10:10:59.754Z] [INFO] [stderr] [0m✱ [0mGrep "export (function|const|class) DatabaseService"[90m in src · 1 match[0m
+[2026-07-01T10:10:59.804Z] [INFO] [stdout] Let me check existing hooks, the DatabaseService, and look at a few more feature components to understand patterns.
+[2026-07-01T10:11:02.245Z] [INFO] [stderr] [0m→ [0mRead src/services/storage/Database.ts[90m [offset=490, limit=80][0m
+[2026-07-01T10:11:02.617Z] [INFO] [stderr] [0m→ [0mRead src/features/vocabulary/components/ReviewMode.tsx[90m [limit=60][0m
+[2026-07-01T10:11:02.976Z] [INFO] [stderr] [0m→ [0mRead src/hooks/useDashboard.ts[90m [limit=50][0m
+[2026-07-01T10:11:06.257Z] [INFO] [stderr] [0m→ [0mRead src/models
+[2026-07-01T10:11:06.618Z] [INFO] [stderr] [0m✱ [0mGrep "export.*VocabDifficulty"[90m in src/models · 1 match[0m
+[2026-07-01T10:11:06.981Z] [INFO] [stderr] [0m→ [0mRead src/features/writing/components/FeedbackPanel.tsx[90m [limit=40][0m
+[2026-07-01T10:11:09.994Z] [INFO] [stderr] [0m✱ [0mGlob "src/pages/*.tsx"[90m in . · 18 matches[0m
+[2026-07-01T10:11:10.229Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration
+[2026-07-01T10:11:13.336Z] [INFO] [stderr] [0m→ [0mRead src/pages/SpeakingPractice.tsx[90m [limit=50][0m
+[2026-07-01T10:11:13.802Z] [INFO] [stderr] [0m✱ [0mGrep "import.*from.*'\.\./features"[90m in src/pages · 1 match[0m
+[2026-07-01T10:11:13.869Z] [INFO] [stdout] Let me look at a page that uses a feature component to understand the pattern, and check for existing test patterns.
+[2026-07-01T10:11:16.924Z] [INFO] [stderr] [0m→ [0mRead src/features/settings/AISettings.tsx[90m [limit=50][0m
+[2026-07-01T10:11:17.316Z] [INFO] [stderr] [0m✱ [0mGrep "import.*useToast|toast"[90m in src · 22 matches[0m
+[2026-07-01T10:11:19.884Z] [INFO] [stderr] [0m→ [0mRead src/components/ui/Toast.tsx
+[2026-07-01T10:11:20.144Z] [INFO] [stderr] [0m→ [0mRead src/components/ui/Modal.tsx
+[2026-07-01T10:11:32.924Z] [INFO] [stderr] [0m
+[2026-07-01T10:11:32.924Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:11:32.924Z] [INFO] [stderr] [ ] Verify file exists and passes lint/typecheck
+[2026-07-01T10:11:32.925Z] [INFO] [stderr] [0m
+[2026-07-01T10:11:32.924Z] [INFO] [stderr] [•] Create PublicApiSearch.tsx component with source selector, search input, API key input, results display, import buttons, CORS error handling
+[2026-07-01T10:11:33.090Z] [INFO] [stdout] Now I have full context. Let me create the component.
+[2026-07-01T10:11:36.059Z] [INFO] [stderr] drwxr-xr-x@ 15 phamthanhhung  staff    480  1 Jul 17:09 ..
+[2026-07-01T10:11:36.059Z] [INFO] [stderr] [0m$ [0mls -la src/features/publicApiIntegration/
+[2026-07-01T10:11:36.059Z] [INFO] [stderr] total 48
+[2026-07-01T10:11:36.059Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff   8072  1 Jul 17:09 types.ts
+[2026-07-01T10:11:36.059Z] [INFO] [stderr] drwxr-xr-x@  4 phamthanhhung  staff    128  1 Jul 17:10 .
+[2026-07-01T10:11:36.059Z] [INFO] [stderr] [0m
+[2026-07-01T10:11:36.059Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff  15651  1 Jul 17:10 architecture.md
+[2026-07-01T10:11:38.764Z] [INFO] [stderr] [0m$ [0mmkdir -p src/features/publicApiIntegration/components
+[2026-07-01T10:11:38.764Z] [INFO] [stderr] [0m
+[2026-07-01T10:11:38.764Z] [INFO] [stderr] (no output)
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] [0m← [0mWrite src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] 
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T10:12:29.407Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T10:12:29.407Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx">
+[2026-07-01T10:12:29.407Z] [INFO] [stderr] ERROR [231:3] 'source' is declared but its value is never read.
+[2026-07-01T10:12:29.406Z] [INFO] [stderr] 
+[2026-07-01T10:12:29.407Z] [INFO] [stderr] [0m
+[2026-07-01T10:12:29.407Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T10:12:33.077Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:12:33.077Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:33.077Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:33.077Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:33.077Z] [INFO] [stderr]  async function fetchPreview(
+[2026-07-01T10:12:33.077Z] [INFO] [stderr]    result: PublicApiSearchResult,
+[2026-07-01T10:12:33.077Z] [INFO] [stderr] @@ -285,9 +285,8 @@
+[2026-07-01T10:12:33.077Z] [INFO] [stderr] -  _source: PublicApiSourceConfig,
+[2026-07-01T10:12:33.077Z] [INFO] [stderr]  ): Promise<PublicApiPreview> {
+[2026-07-01T10:12:33.077Z] [INFO] [stderr]  
+[2026-07-01T10:12:33.077Z] [INFO] [stderr] 
+[2026-07-01T10:12:33.077Z] [INFO] [stderr]    // For most sources, the search result snippet is sufficient as preview.
+[2026-07-01T10:12:33.077Z] [INFO] [stderr]    let content = result.snippet
+[2026-07-01T10:12:33.077Z] [INFO] [stderr]  // ── Preview: fetch full content ─────────────────────────────
+[2026-07-01T10:12:33.077Z] [INFO] [stderr]    // Wikipedia/Wiktionary can fetch full page content.
+[2026-07-01T10:12:33.077Z] [INFO] [stderr] [0m
+[2026-07-01T10:12:33.077Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:36.786Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:12:36.786Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:36.786Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:36.786Z] [INFO] [stderr] @@ -462,9 +462,9 @@
+[2026-07-01T10:12:36.787Z] [INFO] [stderr]  async function handlePreview(result: PublicApiSearchResult) {
+[2026-07-01T10:12:36.787Z] [INFO] [stderr]    setPreviewLoading(true)
+[2026-07-01T10:12:36.787Z] [INFO] [stderr]    try {
+[2026-07-01T10:12:36.786Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:36.787Z] [INFO] [stderr] +    const preview = await fetchPreview(result)
+[2026-07-01T10:12:36.787Z] [INFO] [stderr] -    const preview = await fetchPreview(result, sourceConfig)
+[2026-07-01T10:12:36.787Z] [INFO] [stderr]    setPreviewItem(null)
+[2026-07-01T10:12:36.787Z] [INFO] [stderr]      setPreviewItem(preview)
+[2026-07-01T10:12:36.787Z] [INFO] [stderr]    } finally {
+[2026-07-01T10:12:36.787Z] [INFO] [stderr]      setError('Failed to load preview.')
+[2026-07-01T10:12:36.787Z] [INFO] [stderr] [0m
+[2026-07-01T10:12:36.787Z] [INFO] [stderr] 
+[2026-07-01T10:12:36.786Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:36.787Z] [INFO] [stderr]    } catch {
+[2026-07-01T10:12:40.604Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:40.605Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:40.605Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:40.605Z] [INFO] [stderr] @@ -728,9 +728,9 @@
+[2026-07-01T10:12:40.605Z] [INFO] [stderr]  <Button
+[2026-07-01T10:12:40.605Z] [INFO] [stderr]    onClick={async () => {
+[2026-07-01T10:12:40.605Z] [INFO] [stderr]    variant="primary"
+[2026-07-01T10:12:40.605Z] [INFO] [stderr] -    const preview = await fetchPreview(result, sourceConfig)
+[2026-07-01T10:12:40.605Z] [INFO] [stderr]      await handleImport(preview)
+[2026-07-01T10:12:40.605Z] [INFO] [stderr] +    const preview = await fetchPreview(result)
+[2026-07-01T10:12:40.605Z] [INFO] [stderr] [0m
+[2026-07-01T10:12:40.605Z] [INFO] [stderr]    loading={importing === result.id}
+[2026-07-01T10:12:40.605Z] [INFO] [stderr]    }}
+[2026-07-01T10:12:40.605Z] [INFO] [stderr]    disabled={importResult[result.id] === true}
+[2026-07-01T10:12:40.605Z] [INFO] [stderr] 
+[2026-07-01T10:12:40.605Z] [INFO] [stderr]    size="sm"
+[2026-07-01T10:12:40.605Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:40.605Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:12:43.501Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=228, limit=10][0m
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] [0m
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:48.135Z] [INFO] [stderr]  }
+[2026-07-01T10:12:48.135Z] [INFO] [stderr]    }))
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:12:48.135Z] [INFO] [stderr]  async function searchYouTube(
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] -  source: PublicApiSourceConfig,
+[2026-07-01T10:12:48.135Z] [INFO] [stderr]    query: string,
+[2026-07-01T10:12:48.135Z] [INFO] [stderr]    if (!apiKey) {
+[2026-07-01T10:12:48.135Z] [INFO] [stderr]    apiKey: string,
+[2026-07-01T10:12:48.135Z] [INFO] [stderr]  ): Promise<PublicApiSearchResult[]> {
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] +  _source: PublicApiSourceConfig,
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] [0m
+[2026-07-01T10:12:48.135Z] [INFO] [stderr]  
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] @@ -227,9 +227,9 @@
+[2026-07-01T10:12:48.135Z] [INFO] [stderr] 
+[2026-07-01T10:12:48.140Z] [INFO] Task waiting for input: apiKey:
+[2026-07-01T10:12:51.477Z] [INFO] [stderr] [0m$ [0mnpx tsc --noEmit --pretty 2>&1 | head -50
+[2026-07-01T10:12:51.477Z] [INFO] [stderr] [0m
+[2026-07-01T10:12:51.477Z] [INFO] [stderr] (no output)
+[2026-07-01T10:12:54.570Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/publicApiIntegration/**/*.tsx"[90m in . · 1 match[0m
+[2026-07-01T10:12:54.910Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/publicApiIntegration/**/*.test.*"[90m in . · 0 matches[0m
+[2026-07-01T10:12:54.970Z] [INFO] [stdout] Good — TypeScript compiles clean. Let me verify the file exists and check for any existing test patterns.
+[2026-07-01T10:12:59.773Z] [INFO] [stderr] [0m✱ [0mGrep ""test".*:.*".*filter"[90m in . · 0 matches[0m
+[2026-07-01T10:13:04.319Z] [INFO] [stderr] [0m
+[2026-07-01T10:13:04.319Z] [INFO] [stderr] [0m$ [0mnpx prettier --check src/features/publicApiIntegration/components/PublicApiSearch.tsx 2>&1 | head -10
+[2026-07-01T10:13:04.319Z] [INFO] [stderr] [warn] Code style issues found in the above file. Run Prettier with --write to fix.
+[2026-07-01T10:13:04.319Z] [INFO] [stderr] npm warn exec The following package was not found and will be installed: prettier@3.9.4
+[2026-07-01T10:13:04.319Z] [INFO] [stderr] Checking formatting...
+[2026-07-01T10:13:04.319Z] [INFO] [stderr] [warn] src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:13:04.319Z] [INFO] [stderr] [0m
+[2026-07-01T10:13:08.506Z] [INFO] [stderr] [0m
+[2026-07-01T10:13:08.506Z] [INFO] [stderr] [0m$ [0mnpx prettier --write src/features/publicApiIntegration/components/PublicApiSearch.tsx 2>&1
+[2026-07-01T10:13:08.506Z] [INFO] [stderr] src/features/publicApiIntegration/components/PublicApiSearch.tsx 65ms
+[2026-07-01T10:13:11.817Z] [INFO] [stderr] (no output)
+[2026-07-01T10:13:11.817Z] [INFO] [stderr] [0m
+[2026-07-01T10:13:11.817Z] [INFO] [stderr] [0m$ [0mnpx tsc --noEmit --pretty 2>&1
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] 
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] ESLint: 9.39.4
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] 
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] From ESLint v9.0.0, the default configuration file is now eslint.config.js.
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] 
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] Oops! Something went wrong! :(
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] 
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] https://eslint.org/chat/help to chat with the team.
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] [0m
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] [0m$ [0mnpx eslint src/features/publicApiIntegration/components/PublicApiSearch.tsx 2>&1 | head -30
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] 
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] If you are using a .eslintrc.* file, please follow the migration guide
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] If you still have problems after following the migration guide, please stop by
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] https://eslint.org/docs/latest/use/configure/migration-guide
+[2026-07-01T10:13:15.746Z] [INFO] [stderr] to update your configuration file to the new format:
+[2026-07-01T10:13:18.623Z] [INFO] [stderr] [0m✱ [0mGlob ".eslintrc*"[90m in . · 0 matches[0m
+[2026-07-01T10:13:18.946Z] [INFO] [stderr] [0m✱ [0mGlob "eslint.config.*"[90m in . · 0 matches[0m
+[2026-07-01T10:13:22.333Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:13:22.333Z] [INFO] [stderr] [0m
+[2026-07-01T10:13:22.333Z] [INFO] [stderr] [✓] Create PublicApiSearch.tsx component with source selector, search input, API key input, results display, import buttons, CORS error handling
+[2026-07-01T10:13:22.333Z] [INFO] [stderr] [0m
+[2026-07-01T10:13:22.334Z] [INFO] [stderr] [✓] Verify file exists and compiles clean (tsc --noEmit)
+[2026-07-01T10:13:27.374Z] [INFO] [stdout] Created `src/features/publicApiIntegration/components/PublicApiSearch.tsx` (798 lines).
+[2026-07-01T10:13:27.374Z] [INFO] [stdout] - **Source selector** dropdown with all 7 public APIs (Wiktionary, Datamuse, Tatoeba, OER Commons, Wikipedia, Gutendex, YouTube) — shows category, CORS status, and rate limit per source
+[2026-07-01T10:13:27.374Z] [INFO] [stdout] 
+[2026-07-01T10:13:27.374Z] [INFO] [stdout] - **Search input** with per-source search implementations (direct `fetch` calls — all CORS-friendly except YouTube)
+[2026-07-01T10:13:27.375Z] [INFO] [stdout] - **API key input** shown only for YouTube, stored in `localStorage` under `ielts-api-key-{source}` prefix
+[2026-07-01T10:13:27.375Z] [INFO] [stdout] - **CORS error handling** — catches `TypeError` (CORS failures), shows explanation with links to alternative sources that work without a proxy
+[2026-07-01T10:13:27.375Z] [INFO] [stdout] - **Preview modal** with full content, license/attribution metadata, and import confirmation
+[2026-07-01T10:13:27.375Z] [INFO] [stdout] **Component features:**
+[2026-07-01T10:13:27.374Z] [INFO] [stdout] - **Results list** with source badge, content-type badge, license badge, preview snippet, "View original" link, Preview + Import buttons
+[2026-07-01T10:13:27.375Z] [INFO] [stdout] 
+[2026-07-01T10:13:27.375Z] [INFO] [stdout] - **All states**: loading spinner, empty state, error state with dismiss, results display, imported confirmation
+[2026-07-01T10:13:27.375Z] [INFO] [stdout] TypeScript compiles clean (`tsc --noEmit` passes).
+[2026-07-01T10:13:27.375Z] [INFO] [stdout] - **Import flow** saves to `localStorage` (scaffold ready for IndexedDB when the DB migration lands)
+[2026-07-01T10:15:21.092Z] [INFO] User input provided via TTY prompt
+[2026-07-01T10:15:21.094Z] [INFO] Interactive session completed with exit code null
+[2026-07-01T10:15:21.094Z] [INFO] Executor finished with status: failed, exit code: undefined
+[2026-07-01T10:15:21.095Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T10:15:21.103Z] [INFO] Task completed successfully

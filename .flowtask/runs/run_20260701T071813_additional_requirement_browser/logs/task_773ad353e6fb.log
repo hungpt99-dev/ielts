@@ -1,0 +1,2217 @@
+[2026-07-01T07:24:17.103Z] [INFO] Task started: Create Browser Extension Manifest and Basic Scaffold
+[2026-07-01T07:24:17.105Z] [INFO] [info] [output-plan] [{"action":"create","target":"apps/extension/manifest.json","description":"Manifest V3 file for the browser extension","validationMethod":"file_exists"},{"action":"create","target":"apps/extension/src/popup/App.tsx","description":"Basic React popup UI scaffold","validationMethod":"file_exists"}]
+[2026-07-01T07:24:17.750Z] [INFO] [stderr] [0m
+[2026-07-01T07:24:17.750Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-01T07:24:17.750Z] [INFO] [stderr] [0m
+[2026-07-01T07:24:22.723Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"project structure apps packages monorepo","maxFiles":12}
+[2026-07-01T07:24:22.907Z] [INFO] [stderr] [0m→ [0mRead .
+[2026-07-01T07:24:26.635Z] [INFO] [stderr] [0m→ [0mRead package.json
+[2026-07-01T07:24:26.873Z] [INFO] [stderr] [0m→ [0mRead pnpm-workspace.yaml
+[2026-07-01T07:24:27.082Z] [INFO] [stderr] [0m→ [0mRead tsconfig.json
+[2026-07-01T07:24:27.325Z] [INFO] [stderr] [0m→ [0mRead vite.config.ts
+[2026-07-01T07:24:32.016Z] [INFO] [stderr] [0m→ [0mRead tsconfig.app.json
+[2026-07-01T07:24:32.248Z] [INFO] [stderr] [0m→ [0mRead src
+[2026-07-01T07:24:32.507Z] [INFO] [stderr] [0m✱ [0mGlob "**/tailwind.config.*"[90m 0 matches[0m
+[2026-07-01T07:24:38.130Z] [INFO] [stderr] [0m• [0mExplore design tokens and theme[90m Explore Agent[0m
+[2026-07-01T07:25:35.785Z] [INFO] [stderr] [0m✓ [0mExplore design tokens and theme[90m Explore Agent[0m
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Update pnpm-workspace.yaml to include apps/* and packages/*
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Create apps/extension directory structure
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [0m
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Create manifest.json (Manifest V3)
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Create package.json with build scripts
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Create src/popup/App.tsx with placeholder UI
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Create src/background/index.ts (service worker)
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Create tsconfig.json and vite.config.ts
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Create popup.html, options.html entry points
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [0m
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Create src/options/App.tsx (options page)
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Create src/content/index.ts (content script)
+[2026-07-01T07:26:54.286Z] [INFO] [stderr] [ ] Install dependencies and verify build
+[2026-07-01T07:26:59.358Z] [INFO] [stderr] [ ] Create apps/extension directory structure
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [ ] Create tsconfig.json and vite.config.ts
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [ ] Create popup.html, options.html entry points
+[2026-07-01T07:26:59.358Z] [INFO] [stderr] [ ] Create package.json with build scripts
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [ ] Create manifest.json (Manifest V3)
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [ ] Install dependencies and verify build
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [•] Update pnpm-workspace.yaml to include apps/* and packages/*
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [ ] Create src/options/App.tsx (options page)
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [ ] Create src/popup/App.tsx with placeholder UI
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [ ] Create src/background/index.ts (service worker)
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [0m
+[2026-07-01T07:26:59.358Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T07:26:59.359Z] [INFO] [stderr] [ ] Create src/content/index.ts (content script)
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-workspace.yaml
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-workspace.yaml
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] ===================================================================
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] +packages:
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-workspace.yaml
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] +  - 'apps/*'
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] +
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] [0m← [0mEdit pnpm-workspace.yaml
+[2026-07-01T07:27:02.524Z] [INFO] [stderr]  allowBuilds:
+[2026-07-01T07:27:02.525Z] [INFO] [stderr]    esbuild: true
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] +  - 'packages/*'
+[2026-07-01T07:27:02.525Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:02.524Z] [INFO] [stderr] @@ -1,2 +1,6 @@
+[2026-07-01T07:27:02.525Z] [INFO] [stderr] 
+[2026-07-01T07:27:05.175Z] [INFO] [stderr] (no output)
+[2026-07-01T07:27:05.175Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:05.176Z] [INFO] [stderr] [0m$ [0mmkdir -p apps/extension/src/popup apps/extension/src/background apps/extension/src/content apps/extension/src/options apps/extension/public
+[2026-07-01T07:27:08.568Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T07:27:08.568Z] [INFO] [stderr] [ ] Create package.json with build scripts
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [ ] Create tsconfig.json and vite.config.ts
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [✓] Update pnpm-workspace.yaml to include apps/* and packages/*
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [ ] Create src/background/index.ts (service worker)
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [ ] Create src/content/index.ts (content script)
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [ ] Create src/options/App.tsx (options page)
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [ ] Create src/popup/App.tsx with placeholder UI
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [•] Create manifest.json (Manifest V3)
+[2026-07-01T07:27:08.568Z] [INFO] [stderr] [✓] Create apps/extension directory structure
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [ ] Install dependencies and verify build
+[2026-07-01T07:27:08.569Z] [INFO] [stderr] [ ] Create popup.html, options.html entry points
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] 
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] [0m← [0mWrite apps/extension/manifest.json
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:13.926Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] [0m← [0mWrite apps/extension/package.json
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] 
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:18.265Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:18.266Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] [0m← [0mWrite apps/extension/tsconfig.json
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] 
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:19.682Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:21.332Z] [INFO] [stdout] Now let me create the rest of the scaffold files in parallel:
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:25.786Z] [INFO] [stderr] 
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] [0m← [0mWrite apps/extension/vite.config.ts
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] 
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:27:25.787Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T07:27:25.788Z] [INFO] [stderr] ERROR [12:24] Cannot find name '__dirname'.
+[2026-07-01T07:27:25.788Z] [INFO] [stderr] ERROR [13:26] Cannot find name '__dirname'.
+[2026-07-01T07:27:25.788Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:25.788Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:26.211Z] [INFO] [stderr] [0m← [0mWrite apps/extension/vite-env.d.ts
+[2026-07-01T07:27:26.211Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:26.211Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:26.211Z] [INFO] [stderr] 
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] 
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [12:24] Cannot find name '__dirname'.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [13:26] Cannot find name '__dirname'.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:26.212Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] [0m← [0mWrite apps/extension/vite.config.ts
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] 
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] 
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T07:27:30.559Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:30.558Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:30.559Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:37.022Z] [INFO] [stderr] [0m← [0mWrite apps/extension/popup.html
+[2026-07-01T07:27:37.022Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] 
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:37.023Z] [INFO] [stderr] 
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] [0m← [0mWrite apps/extension/options.html
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] 
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] 
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:38.035Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:38.520Z] [INFO] [stdout] Now let me create the HTML entry points and React source files:
+[2026-07-01T07:27:43.443Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/vite-env.d.ts
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] 
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] 
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:43.444Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/popup/main.tsx
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] 
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] 
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] 
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:49.248Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/popup/index.css
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] 
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] 
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] 
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:50.427Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:27:50.428Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:27:50.428Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:50.428Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:27:50.428Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/popup/App.tsx
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] 
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] 
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] 
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] 
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [82:26] Cannot find name 'chrome'.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [21:5] Cannot find name 'chrome'.
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:27:58.048Z] [INFO] [stderr] 
+[2026-07-01T07:27:58.048Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+[2026-07-01T07:27:58.048Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:27:58.048Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:58.048Z] [INFO] [stderr] ERROR [88:26] Cannot find name 'chrome'.
+[2026-07-01T07:27:58.048Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:27:58.048Z] [INFO] [stderr] [0m
+[2026-07-01T07:27:58.047Z] [INFO] [stderr] ERROR [82:52] Cannot find name 'chrome'.
+[2026-07-01T07:27:58.048Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/options/main.tsx
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] 
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] 
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] 
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] 
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:00.399Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] ERROR [21:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] ERROR [82:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] ERROR [88:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] 
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] ERROR [82:52] Cannot find name 'chrome'.
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:00.400Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/options/index.css
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] 
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] 
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] 
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] 
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [21:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [82:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [88:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:01.084Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] 
+[2026-07-01T07:28:01.084Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:01.084Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:01.084Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+[2026-07-01T07:28:01.084Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:01.084Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:01.083Z] [INFO] [stderr] ERROR [82:52] Cannot find name 'chrome'.
+[2026-07-01T07:28:01.084Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:10.737Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/options/App.tsx
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] 
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] 
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] 
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] 
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [21:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [82:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] ERROR [82:52] Cannot find name 'chrome'.
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] 
+[2026-07-01T07:28:10.738Z] [INFO] [stderr] ERROR [88:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] 
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] ERROR [31:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] ERROR [41:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/App.tsx">
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] ERROR [31:53] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:28:10.739Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:17.281Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] 
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/background/index.ts
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] 
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] 
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] 
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [82:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [82:52] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] 
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:17.282Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [88:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] 
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts">
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [3:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [1:41] Parameter 'details' implicitly has an 'any' type.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [1:1] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [21:3] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [15:3] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [28:3] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [21:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [50:1] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [50:50] Parameter 'tab' implicitly has an 'any' type.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [50:44] Parameter 'info' implicitly has an 'any' type.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [73:39] Parameter 'message' implicitly has an 'any' type.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [73:1] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [62:3] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [42:3] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [75:50] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [75:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [73:57] Parameter 'sendResponse' implicitly has an 'any' type.
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [88:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.284Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:17.284Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:17.284Z] [INFO] [stderr] ERROR [73:48] Parameter '_sender' implicitly has an 'any' type.
+[2026-07-01T07:28:17.284Z] [INFO] [stderr] ... and 1 more
+[2026-07-01T07:28:17.283Z] [INFO] [stderr] ERROR [35:3] Cannot find name 'chrome'.
+[2026-07-01T07:28:17.284Z] [INFO] [stderr] ERROR [88:50] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:28:17.760Z] [INFO] [stdout] Now let me create the React source files:
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] 
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/content/index.ts
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] 
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:28:20.655Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] 
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] 
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [82:52] Cannot find name 'chrome'.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [88:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [82:26] Cannot find name 'chrome'.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] 
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [1:1] Cannot find name 'chrome'.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [21:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content/index.ts">
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] 
+[2026-07-01T07:28:20.657Z] [INFO] [stderr] ERROR [1:48] Parameter '_sender' implicitly has an 'any' type.
+[2026-07-01T07:28:20.658Z] [INFO] [stderr] ERROR [1:39] Parameter 'message' implicitly has an 'any' type.
+[2026-07-01T07:28:20.656Z] [INFO] [stderr] ERROR [1:57] Parameter 'sendResponse' implicitly has an 'any' type.
+[2026-07-01T07:28:20.658Z] [INFO] [stderr] ERROR [19:7] Cannot find name 'chrome'.
+[2026-07-01T07:28:20.658Z] [INFO] [stderr] ERROR [5:47] Parameter 'result' implicitly has an 'any' type.
+[2026-07-01T07:28:20.658Z] [INFO] [stderr] ERROR [21:7] Cannot find name 'chrome'.
+[2026-07-01T07:28:20.658Z] [INFO] [stderr] ERROR [5:5] Cannot find name 'chrome'.
+[2026-07-01T07:28:20.658Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:28:20.658Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Create package.json with build scripts
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Create manifest.json (Manifest V3)
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Create popup.html, options.html entry points
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Create apps/extension directory structure
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Create src/popup/App.tsx with placeholder UI
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Update pnpm-workspace.yaml to include apps/* and packages/*
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Create src/background/index.ts (service worker)
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Create src/content/index.ts (content script)
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Create tsconfig.json and vite.config.ts
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [•] Install dependencies and verify build
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:28.761Z] [INFO] [stderr] [✓] Create src/options/App.tsx (options page)
+[2026-07-01T07:28:33.916Z] [INFO] [stderr]  "noUnusedLocals": true,
+[2026-07-01T07:28:33.916Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/tsconfig.json
+[2026-07-01T07:28:33.916Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/tsconfig.json
+[2026-07-01T07:28:33.916Z] [INFO] [stderr]  "noUnusedParameters": true,
+[2026-07-01T07:28:33.916Z] [INFO] [stderr] [0m← [0mEdit apps/extension/tsconfig.json
+[2026-07-01T07:28:33.916Z] [INFO] [stderr] @@ -16,8 +16,9 @@
+[2026-07-01T07:28:33.916Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/tsconfig.json
+[2026-07-01T07:28:33.916Z] [INFO] [stderr]  "noUncheckedSideEffectImports": true,
+[2026-07-01T07:28:33.916Z] [INFO] [stderr]  "noFallthroughCasesInSwitch": true,
+[2026-07-01T07:28:33.916Z] [INFO] [stderr] ===================================================================
+[2026-07-01T07:28:33.916Z] [INFO] [stderr] +"types": ["chrome"],
+[2026-07-01T07:28:33.916Z] [INFO] [stderr]  "baseUrl": ".",
+[2026-07-01T07:28:33.916Z] [INFO] [stderr]  "paths": {
+[2026-07-01T07:28:33.916Z] [INFO] [stderr]    "@/*": ["src/*"]
+[2026-07-01T07:28:33.916Z] [INFO] [stderr]  }
+[2026-07-01T07:28:33.916Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:33.917Z] [INFO] [stderr] 
+[2026-07-01T07:28:36.545Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:36.545Z] [INFO] [stderr] (no output)
+[2026-07-01T07:28:36.545Z] [INFO] [stderr] [0m$ [0mrm apps/extension/vite-env.d.ts
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] .                                        | [WARN] deprecated recharts@2.15.4
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] Progress: resolved 659, reused 588, downloaded 1, added 0
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] .                                        |   +4 +
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] Progress: resolved 206, reused 191, downloaded 0, added 0
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] Progress: resolved 667, reused 596, downloaded 1, added 4, done
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] Progress: resolved 1, reused 0, downloaded 0, added 0
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] [WARN] 3 deprecated subdependencies found: glob@11.1.0, source-map@0.8.0-beta.0, whatwg-encoding@3.1.1
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] Done in 2.3s using pnpm v11.1.2
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] [0m$ [0mpnpm install --filter extension
+[2026-07-01T07:28:41.563Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] [0m$ [0mpnpm build --filter extension
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(57,10): error TS6133: 'isISODate' is declared but its value is never read.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(83,7): error TS6133: 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(61,10): error TS6133: 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(84,7): error TS6133: 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] $ tsc -b && vite build --filter extension
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(92,7): error TS6133: 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(97,10): error TS6133: 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(278,6): error TS6196: 'Validator' is declared but never used.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(65,10): error TS6133: 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(85,7): error TS6133: 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(73,10): error TS6133: 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] [ELIFECYCLE] Command failed with exit code 2.
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] [0m
+[2026-07-01T07:28:48.161Z] [INFO] [stderr] src/services/storage/Database.ts(95,7): error TS6133: 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] ===================================================================
+[2026-07-01T07:29:01.457Z] [INFO] [stderr]  "type": "module",
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] [0m← [0mEdit apps/extension/package.json
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] -  "build": "tsc -b --noEmit && vite build",
+[2026-07-01T07:29:01.457Z] [INFO] [stderr]    "dev": "vite",
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] @@ -4,9 +4,9 @@
+[2026-07-01T07:29:01.457Z] [INFO] [stderr]    "typecheck": "tsc -b --noEmit"
+[2026-07-01T07:29:01.457Z] [INFO] [stderr]    "preview": "vite preview",
+[2026-07-01T07:29:01.457Z] [INFO] [stderr]  "dependencies": {
+[2026-07-01T07:29:01.457Z] [INFO] [stderr]  },
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] 
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] [0m
+[2026-07-01T07:29:01.457Z] [INFO] [stderr]  "scripts": {
+[2026-07-01T07:29:01.457Z] [INFO] [stderr]  "version": "0.1.0",
+[2026-07-01T07:29:01.457Z] [INFO] [stderr] +  "build": "vite build",
+[2026-07-01T07:29:01.519Z] [INFO] [stdout] The `tsc -b` step is picking up the root project's files. Let me fix the build script to use only `vite build` (typechecking will be a separate step):
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] [0m$ [0mpnpm build --filter extension
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(73,10): error TS6133: 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(61,10): error TS6133: 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(57,10): error TS6133: 'isISODate' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(83,7): error TS6133: 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(92,7): error TS6133: 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] $ tsc -b && vite build --filter extension
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(85,7): error TS6133: 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(278,6): error TS6196: 'Validator' is declared but never used.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(95,7): error TS6133: 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(65,10): error TS6133: 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(97,10): error TS6133: 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] [ELIFECYCLE] Command failed with exit code 2.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] src/services/storage/Database.ts(84,7): error TS6133: 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:29:07.682Z] [INFO] [stderr] [0m
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] vite v6.4.3 building for production...
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] transforming...
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] computing gzip size...
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] dist/popup.html                0.60 kB │ gzip:  0.35 kB
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] ✓ 33 modules transformed.
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] dist/assets/options.css        1.39 kB │ gzip:  0.60 kB
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] dist/options.html              0.61 kB │ gzip:  0.36 kB
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] dist/assets/options.js         4.37 kB │ gzip:  1.44 kB
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] dist/assets/chunk-client.js  194.42 kB │ gzip: 60.77 kB
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] [0m
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] ✓ built in 294ms
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] dist/assets/popup.css          1.45 kB │ gzip:  0.62 kB
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] rendering chunks...
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] dist/assets/popup.js           2.74 kB │ gzip:  1.06 kB
+[2026-07-01T07:29:16.463Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension exec -- vite build
+[2026-07-01T07:29:24.217Z] [INFO] [stdout] The build works from the extension directory directly. The `pnpm build --filter extension` syntax needs the filter first. Let me verify with the correct syntax:
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] $ vite build
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension run build
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] vite v6.4.3 building for production...
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] dist/assets/popup.css          1.45 kB │ gzip:  0.62 kB
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] rendering chunks...
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] dist/assets/options.css        1.39 kB │ gzip:  0.60 kB
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] dist/popup.html                0.60 kB │ gzip:  0.35 kB
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] [0m
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] transforming...
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] dist/options.html              0.61 kB │ gzip:  0.36 kB
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] dist/assets/options.js         4.37 kB │ gzip:  1.44 kB
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] dist/assets/popup.js           2.74 kB │ gzip:  1.06 kB
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] computing gzip size...
+[2026-07-01T07:29:24.785Z] [INFO] [stderr] ✓ built in 345ms
+[2026-07-01T07:29:24.786Z] [INFO] [stderr] ✓ 33 modules transformed.
+[2026-07-01T07:29:24.786Z] [INFO] [stderr] dist/assets/chunk-client.js  194.42 kB │ gzip: 60.77 kB
+[2026-07-01T07:29:36.683Z] [INFO] [stdout] The build succeeds for popup/options. Now I need to set up the full extension build (background/content scripts, manifest copy). Let me create a build helper:
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] 
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] [0m← [0mWrite apps/extension/scripts/build.mjs
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] 
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:29:39.925Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] 
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] 
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] [0m
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+[2026-07-01T07:29:39.926Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:29:43.323Z] [INFO] [stderr] [0m$ [0mls node_modules/esbuild/esbuild 2>/dev/null && echo "esbuild available" || echo "esbuild not available"
+[2026-07-01T07:29:43.323Z] [INFO] [stderr] [0m
+[2026-07-01T07:29:43.323Z] [INFO] [stderr] esbuild not available
+[2026-07-01T07:29:50.396Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:29:50.396Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:29:50.397Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:29:50.396Z] [INFO] [stderr] ===================================================================
+[2026-07-01T07:29:50.397Z] [INFO] [stderr] [0m← [0mEdit apps/extension/package.json
+[2026-07-01T07:29:50.397Z] [INFO] [stderr]    "react-dom": "^19.1.0",
+[2026-07-01T07:29:50.397Z] [INFO] [stderr] @@ -13,8 +13,11 @@
+[2026-07-01T07:29:50.397Z] [INFO] [stderr] +"dependencies": {
+[2026-07-01T07:29:50.397Z] [INFO] [stderr]    "react": "^19.1.0",
+[2026-07-01T07:29:50.397Z] [INFO] [stderr] +  "esbuild": "^0.25.0"
+[2026-07-01T07:29:50.397Z] [INFO] [stderr]    "@types/chrome": "^0.0.308",
+[2026-07-01T07:29:50.397Z] [INFO] [stderr] +},
+[2026-07-01T07:29:50.397Z] [INFO] [stderr]    "@types/react": "^19.1.2",
+[2026-07-01T07:29:50.397Z] [INFO] [stderr] 
+[2026-07-01T07:29:50.397Z] [INFO] [stderr]    "@types/react-dom": "^19.1.2",
+[2026-07-01T07:29:50.397Z] [INFO] [stderr]  "devDependencies": {
+[2026-07-01T07:29:50.397Z] [INFO] [stderr]  },
+[2026-07-01T07:29:50.397Z] [INFO] [stderr] [0m
+[2026-07-01T07:29:50.397Z] [INFO] [stderr]    "zod": "^4.4.3"
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] [0m← [0mEdit apps/extension/package.json
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] @@ -13,16 +13,14 @@
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]      "react-dom": "^19.1.0",
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] ===================================================================
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]      "zod": "^4.4.3"
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] -    "esbuild": "^0.25.0"
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] -  },
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] -  "dependencies": {
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]    "devDependencies": {
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]      "@types/chrome": "^0.0.308",
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]      "react": "^19.1.0",
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]      "typescript": "~5.8.3",
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]      "vite": "^6.3.3"
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]    },
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] +    "esbuild": "^0.25.2",
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] 
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]      "@vitejs/plugin-react": "^4.4.1",
+[2026-07-01T07:29:56.472Z] [INFO] [stderr] [0m
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]  }
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]      "@types/react-dom": "^19.1.2",
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]    }
+[2026-07-01T07:29:56.472Z] [INFO] [stderr]      "@types/react": "^19.1.2",
+[2026-07-01T07:30:02.122Z] [INFO] [stderr] Progress: resolved 667, reused 597, downloaded 0, added 0, done
+[2026-07-01T07:30:02.123Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:02.123Z] [INFO] [stderr] Done in 2.3s using pnpm v11.1.2
+[2026-07-01T07:30:02.122Z] [INFO] [stderr] [WARN] 3 deprecated subdependencies found: glob@11.1.0, source-map@0.8.0-beta.0, whatwg-encoding@3.1.1
+[2026-07-01T07:30:02.122Z] [INFO] [stderr] Progress: resolved 368, reused 297, downloaded 0, added 0
+[2026-07-01T07:30:02.122Z] [INFO] [stderr] .                                        | [WARN] deprecated recharts@2.15.4
+[2026-07-01T07:30:02.122Z] [INFO] [stderr] [0m$ [0mpnpm install --filter extension
+[2026-07-01T07:30:02.123Z] [INFO] [stderr] Progress: resolved 1, reused 0, downloaded 0, added 0
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] [0m$ [0mnode scripts/build.mjs
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] transforming...
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] ✓ 33 modules transformed.
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] vite v6.4.3 building for production...
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] dist/popup.html                0.60 kB │ gzip:  0.35 kB
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] rendering chunks...
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] dist/assets/popup.js           2.74 kB │ gzip:  1.06 kB
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] dist/assets/popup.css          1.45 kB │ gzip:  0.62 kB
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] dist/assets/options.css        1.39 kB │ gzip:  0.60 kB
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] dist/assets/chunk-client.js  194.42 kB │ gzip: 60.77 kB
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] computing gzip size...
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] ✓ built in 301ms
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] dist/options.html              0.61 kB │ gzip:  0.36 kB
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] dist/assets/options.js         4.37 kB │ gzip:  1.44 kB
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] ✓ Extension built successfully
+[2026-07-01T07:30:06.138Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] drwxr-xr-x@ 13 phamthanhhung  staff   416  1 Jul 14:29 ..
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] drwxr-xr-x@  9 phamthanhhung  staff   288  1 Jul 14:30 .
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff  1839  1 Jul 14:30 content.js
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff  2441  1 Jul 14:30 background.js
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff  1205  1 Jul 14:30 manifest.json
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff   613  1 Jul 14:30 options.html
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] drwxr-xr-x@  7 phamthanhhung  staff   224  1 Jul 14:30 assets
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] [0m$ [0mls -la dist/
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] total 40
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff   160  1 Jul 14:30 icons
+[2026-07-01T07:30:09.462Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff   596  1 Jul 14:30 popup.html
+[2026-07-01T07:30:13.801Z] [INFO] [stderr] chrome.runtime.onInstalled.addListener((details) => {
+[2026-07-01T07:30:13.801Z] [INFO] [stderr] // src/background/index.ts
+[2026-07-01T07:30:13.801Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:13.801Z] [INFO] [stderr]     chrome.storage.local.set({
+[2026-07-01T07:30:13.801Z] [INFO] [stderr]       dailyProgress: {
+[2026-07-01T07:30:13.801Z] [INFO] [stderr] [0m$ [0mhead -5 dist/background.js
+[2026-07-01T07:30:13.801Z] [INFO] [stderr]   if (details.reason === "install") {
+[2026-07-01T07:30:14.232Z] [INFO] [stderr] // src/content/index.ts
+[2026-07-01T07:30:14.232Z] [INFO] [stderr]     const { text, category, pageTitle, pageUrl } = message.payload;
+[2026-07-01T07:30:14.232Z] [INFO] [stderr] [0m$ [0mhead -5 dist/content.js
+[2026-07-01T07:30:14.232Z] [INFO] [stderr]     chrome.storage.local.get(["savedItems"], (result) => {
+[2026-07-01T07:30:14.232Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:14.232Z] [INFO] [stderr] chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+[2026-07-01T07:30:14.232Z] [INFO] [stderr]   if (message.type === "SAVE_SELECTION") {
+[2026-07-01T07:30:14.943Z] [INFO] [stderr] [0m$ [0mpython3 -c "import json; m = json.load(open('dist/manifest.json')); print(json.dumps(m, indent=2))"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "manifest_version": 3,
+[2026-07-01T07:30:14.943Z] [INFO] [stderr] {
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "description": "Collect English learning material from any webpage and save it to your IELTS study system.",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "name": "IELTS Learning Journey",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "author": "IELTS Learning Journey",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "version": "0.1.0",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "homepage_url": "https://ielts-journey.app",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "16": "icons/icon-16.png",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "icons": {
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   },
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "48": "icons/icon-48.png",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "storage",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "activeTab",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "contextMenus",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   ],
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "host_permissions": [
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "128": "icons/icon-128.png"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "permissions": [
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "scripting",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "tabs"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "background": {
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   ],
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "service_worker": "background.js",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "<all_urls>"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "type": "module"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     {
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]         "<all_urls>"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       "js": [
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "content_scripts": [
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       "matches": [
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   },
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       "world": "ISOLATED"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       "run_at": "document_idle",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]         "content.js"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       ],
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     }
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   ],
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "default_icon": {
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "default_title": "IELTS Learning Journey",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "default_popup": "popup.html",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       ],
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       "16": "icons/icon-16.png",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "action": {
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     }
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "page": "options.html",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       "48": "icons/icon-48.png",
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "options_ui": {
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       "resources": [
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     {
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     "open_in_tab": true
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       ],
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       "128": "icons/icon-128.png"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       "matches": [
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]         "assets/*"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   "web_accessible_resources": [
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]       ]
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]     }
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]         "<all_urls>"
+[2026-07-01T07:30:14.943Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   },
+[2026-07-01T07:30:14.943Z] [INFO] [stderr]   ]
+[2026-07-01T07:30:14.943Z] [INFO] [stderr] }
+[2026-07-01T07:30:14.944Z] [INFO] [stderr]   },
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] @@ -4,11 +4,12 @@
+[2026-07-01T07:30:18.866Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:30:18.867Z] [INFO] [stderr]  "version": "0.1.0",
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:30:18.867Z] [INFO] [stderr]  "type": "module",
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-01T07:30:18.866Z] [INFO] [stderr] [0m← [0mEdit apps/extension/package.json
+[2026-07-01T07:30:18.867Z] [INFO] [stderr]    "dev": "vite",
+[2026-07-01T07:30:18.867Z] [INFO] [stderr]    "preview": "vite preview",
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] ===================================================================
+[2026-07-01T07:30:18.867Z] [INFO] [stderr]  "scripts": {
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] -  "build": "vite build",
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] +  "build": "node scripts/build.mjs",
+[2026-07-01T07:30:18.867Z] [INFO] [stderr]  "dependencies": {
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] -  "typecheck": "tsc -b --noEmit"
+[2026-07-01T07:30:18.867Z] [INFO] [stderr]  },
+[2026-07-01T07:30:18.867Z] [INFO] [stderr]    "react-dom": "^19.1.0",
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] 
+[2026-07-01T07:30:18.867Z] [INFO] [stderr]    "react": "^19.1.0",
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] +  "typecheck": "tsc --noEmit",
+[2026-07-01T07:30:18.867Z] [INFO] [stderr] +  "clean": "rm -rf dist"
+[2026-07-01T07:30:18.960Z] [INFO] [stdout] Everything builds correctly. Let me update the package.json to use the build script and add a proper typecheck command:
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] 
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [57:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] [0m← [0mWrite apps/extension/.gitignore
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [73:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [65:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] 
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] 
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] 
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [278:6] 'Validator' is declared but never used.
+[2026-07-01T07:30:22.442Z] [INFO] [stderr] ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T07:30:22.442Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T07:30:22.441Z] [INFO] [stderr] ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] vite v6.4.3 building for production...
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] ✓ 33 modules transformed.
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension run build
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] rendering chunks...
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] computing gzip size...
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] $ node scripts/build.mjs
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] dist/assets/options.js         4.37 kB │ gzip:  1.44 kB
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] dist/options.html              0.61 kB │ gzip:  0.36 kB
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] dist/popup.html                0.60 kB │ gzip:  0.35 kB
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] dist/assets/popup.js           2.74 kB │ gzip:  1.06 kB
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] dist/assets/chunk-client.js  194.42 kB │ gzip: 60.77 kB
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] transforming...
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] ✓ built in 293ms
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] ✓ Extension built successfully
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] dist/assets/options.css        1.39 kB │ gzip:  0.60 kB
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:26.615Z] [INFO] [stderr] dist/assets/popup.css          1.45 kB │ gzip:  0.62 kB
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] [0m$ [0mecho "=== dist contents ===" && ls -R dist/ && echo "" && echo "=== manifest.json exists ===" && test -f manifest.json && echo "✓ manifest.json exists" && echo "=== popup App.tsx exists ===" && test -f src/popup/App.tsx && echo "✓ src/popup/App.tsx exists" && echo "" && echo "=== File counts ===" && find src -name "*.ts" -o -name "*.tsx" -o -name "*.css" | wc -l | xargs echo "source files:" && find dist -type f | wc -l | xargs echo "dist files:"
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] background.js
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] assets
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] icons
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] === dist contents ===
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] content.js
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] options.html
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] manifest.json
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] popup.html
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] chunk-client.js
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] 
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] options.js
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] options.css
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] dist/assets:
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] popup.css
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] icon-48.png
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] 
+[2026-07-01T07:30:30.695Z] [INFO] [stderr] popup.js
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] icon-128.png
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] 
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] icon-16.png
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] === manifest.json exists ===
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] === File counts ===
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] 
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] === popup App.tsx exists ===
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] ✓ manifest.json exists
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] source files: 9
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] ✓ src/popup/App.tsx exists
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] dist files: 13
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:30.696Z] [INFO] [stderr] dist/icons:
+[2026-07-01T07:30:34.707Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:34.707Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-01T07:30:34.707Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension run typecheck
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Create manifest.json (Manifest V3)
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Create apps/extension directory structure
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Create tsconfig.json and vite.config.ts
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Update pnpm-workspace.yaml to include apps/* and packages/*
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Create package.json with build scripts
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Create popup.html, options.html entry points
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Create src/popup/App.tsx with placeholder UI
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Create src/background/index.ts (service worker)
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Create src/options/App.tsx (options page)
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Install dependencies and verify build
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [0m
+[2026-07-01T07:30:40.029Z] [INFO] [stderr] [✓] Create src/content/index.ts (content script)
+[2026-07-01T07:30:40.116Z] [INFO] [stdout] All acceptance criteria met. Let me finalize the todo list:
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] Created the browser extension scaffold at `apps/extension/` with the following structure:
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ```
+[2026-07-01T07:30:45.972Z] [INFO] [stdout] ## Completion Summary
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ├── manifest.json              # Manifest V3 (permissions: storage, contextMenus, activeTab, scripting, tabs, <all_urls>)
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] 
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] 
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] apps/extension/
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ├── package.json               # Dependencies: React, Vite, @types/chrome, esbuild
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ├── tsconfig.json              # TypeScript config with chrome types
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ├── options.html               # Options page
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ├── vite.config.ts             # Vite build for popup/options
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ├── scripts/build.mjs          # Full build script (vite + esbuild + manifest copy)
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ├── popup.html                 # Popup entry (400px)
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ├── .gitignore
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] └── src/
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     │   ├── main.tsx           # React entry
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     ├── popup/
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     │   ├── App.tsx            # Popup UI with daily progress, stat cards, action buttons
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     ├── options/
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     │   └── index.css          # Design tokens matching main app theme
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     │   ├── main.tsx           # React entry
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     │   ├── App.tsx            # Settings page (AI provider, floating toolbar, defaults)
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     │   └── index.css          # Dark/light theme with same tokens
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     ├── background/
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     ├── content/
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     │   └── index.ts           # Service worker: contextMenus, install handler, message bus
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     │   └── index.ts           # Content script: save selection handler, toast notifications
+[2026-07-01T07:30:45.973Z] [INFO] [stdout]     └── vite-env.d.ts
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] ```
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] 
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] **Build output** (`dist/`): `manifest.json`, `background.js`, `content.js`, `popup.html`, `options.html`, assets, and icon placeholders — ready for loading as unpacked extension in Chrome.
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] 
+[2026-07-01T07:30:45.973Z] [INFO] [stdout] **Verified**: `pnpm --filter extension run build` → builds without errors ✅, typecheck passes ✅.
+[2026-07-01T07:30:46.302Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-01T07:30:46.302Z] [INFO] Output:
+Now let me create the rest of the scaffold files in parallel:
+Now let me create the HTML entry points and React source files:
+Now let me create the React source files:
+The `tsc -b` step is picking up the root project's files. Let me fix the build script to use only `vite build` (typechecking will be a separate step):
+The build works from the extension directory directly. The `pnpm build --filter extension` syntax needs the filter first. Let me verify with the correct syntax:
+The build succeeds for popup/options. Now I need to set up the full extension build (background/content scripts, manifest copy). Let me create a build helper:
+Everything builds correctly. Let me update the package.json to use the build script and add a proper typecheck command:
+All acceptance criteria met. Let me finalize the todo list:
+## Completion Summary
+
+Created the browser extension scaffold at `apps/extension/` with the following structure:
+
+```
+apps/extension/
+├── manifest.json              # Manifest V3 (permissions: storage, contextMenus, activeTab, scripting, tabs, <all_urls>)
+├── package.json               # Dependencies: React, Vite, @types/chrome, esbuild
+├── tsconfig.json              # TypeScript config with chrome types
+├── vite.config.ts             # Vite build for popup/options
+├── popup.html                 # Popup entry (400px)
+├── options.html               # Options page
+├── scripts/build.mjs          # Full build script (vite + esbuild + manifest copy)
+├── .gitignore
+└── src/
+    ├── popup/
+    │   ├── main.tsx           # React entry
+    │   ├── App.tsx            # Popup UI with daily progress, stat cards, action buttons
+    │   └── index.css          # Design tokens matching main app theme
+    ├── options/
+    │   ├── main.tsx           # React entry
+    │   ├── App.tsx            # Settings page (AI provider, floating toolbar, defaults)
+    │   └── index.css          # Dark/light theme with same tokens
+    ├── background/
+    │   └── index.ts           # Service work
+[2026-07-01T07:30:46.302Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"project structure apps packages monorepo","maxFiles":12}
+[0m→ [0mRead .
+[0m→ [0mRead package.json
+[0m→ [0mRead pnpm-workspace.yaml
+[0m→ [0mRead tsconfig.json
+[0m→ [0mRead vite.config.ts
+[0m→ [0mRead tsconfig.app.json
+[0m→ [0mRead src
+[0m✱ [0mGlob "**/tailwind.config.*"[90m 0 matches[0m
+[0m• [0mExplore design tokens and theme[90m Explore Agent[0m
+[0m✓ [0mExplore design tokens and theme[90m Explore Agent[0m
+[0m
+[0m# [0mTodos
+[ ] Update pnpm-workspace.yaml to include apps/* and packages/*
+[ ] Create apps/extension directory structure
+[ ] Create manifest.json (Manifest V3)
+[ ] Create package.json with build scripts
+[ ] Create tsconfig.json and vite.config.ts
+[ ] Create popup.html, options.html entry points
+[ ] Create src/popup/App.tsx with placeholder UI
+[ ] Create src/background/index.ts (service worker)
+[ ] Create src/content/index.ts (content script)
+[ ] Create src/options/App.tsx (options page)
+[ ] Install dependencies and verify build
+[0m
+[0m# [0mTodos
+[•] Update pnpm-workspace.yaml to include apps/* and packages/*
+[ ] Create apps/extension directory structure
+[ ] Create manifest.json (Manifest V3)
+[ ] Create package.json with build scripts
+[ ] Create tsconfig.json and vite.config.ts
+[ ] Create popup.html, options.html entry points
+[ ] Create src/popup/App.tsx with placeholder UI
+[ ] Create src/background/index.ts (service worker)
+[ ] Create src/content/index.ts (content script)
+[ ] Create src/options/App.tsx (options page)
+[ ] Install dependencies and verify build
+[0m
+[0m← [0mEdit pnpm-workspace.yaml
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-workspace.yaml
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-workspace.yaml
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-workspace.yaml
+@@ -1,2 +1,6 @@
++packages:
++  - 'apps/*'
++  - 'packages/*'
++
+ allowBuilds:
+   esbuild: true
+
+[0m
+[0m$ [0mmkdir -p apps/extension/src/popup apps/extension/src/background apps/extension/src/content apps/extension/src/options apps/extension/public
+(no output)
+[0m
+[0m# [0mTodos
+[✓] Update pnpm-workspace.yaml to include apps/* and packages/*
+[✓] Create apps/extension directory structure
+[•] Create manifest.json (Manifest V3)
+[ ] Create package.json with build scripts
+[ ] Create tsconfig.json and vite.config.ts
+[ ] Create popup.html, options.html entry points
+[ ] Create src/popup/App.tsx with placeholder UI
+[ ] Create src/background/index.ts (service worker)
+[ ] Create src/content/index.ts (content script)
+[ ] Create src/options/App.tsx (options page)
+[ ] Install dependencies and verify build
+[0m
+[0m← [0mWrite apps/extension/manifest.json
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/package.json
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/tsconfig.json
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/vite.config.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [12:24] Cannot find name '__dirname'.
+ERROR [13:26] Cannot find name '__dirname'.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/vite-env.d.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [12:24] Cannot find name '__dirname'.
+ERROR [13:26] Cannot find name '__dirname'.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/vite.config.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/popup.html
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/options.html
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/src/vite-env.d.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/src/popup/main.tsx
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/src/popup/index.css
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/src/popup/App.tsx
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+ERROR [21:5] Cannot find name 'chrome'.
+ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+ERROR [82:26] Cannot find name 'chrome'.
+ERROR [82:52] Cannot find name 'chrome'.
+ERROR [88:26] Cannot find name 'chrome'.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/src/options/main.tsx
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+ERROR [21:5] Cannot find name 'chrome'.
+ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+ERROR [82:26] Cannot find name 'chrome'.
+ERROR [82:52] Cannot find name 'chrome'.
+ERROR [88:26] Cannot find name 'chrome'.
+</diagnostics>
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/src/options/index.css
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+ERROR [21:5] Cannot find name 'chrome'.
+ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+ERROR [82:26] Cannot find name 'chrome'.
+ERROR [82:52] Cannot find name 'chrome'.
+ERROR [88:26] Cannot find name 'chrome'.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/src/options/App.tsx
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+ERROR [21:5] Cannot find name 'chrome'.
+ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+ERROR [82:26] Cannot find name 'chrome'.
+ERROR [82:52] Cannot find name 'chrome'.
+ERROR [88:26] Cannot find name 'chrome'.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/App.tsx">
+ERROR [31:5] Cannot find name 'chrome'.
+ERROR [31:53] Parameter 'result' implicitly has an 'any' type.
+ERROR [41:5] Cannot find name 'chrome'.
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/src/background/index.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+ERROR [21:5] Cannot find name 'chrome'.
+ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+ERROR [82:26] Cannot find name 'chrome'.
+ERROR [82:52] Cannot find name 'chrome'.
+ERROR [88:26] Cannot find name 'chrome'.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts">
+ERROR [1:1] Cannot find name 'chrome'.
+ERROR [1:41] Parameter 'details' implicitly has an 'any' type.
+ERROR [3:5] Cannot find name 'chrome'.
+ERROR [15:3] Cannot find name 'chrome'.
+ERROR [21:3] Cannot find name 'chrome'.
+ERROR [28:3] Cannot find name 'chrome'.
+ERROR [35:3] Cannot find name 'chrome'.
+ERROR [42:3] Cannot find name 'chrome'.
+ERROR [50:1] Cannot find name 'chrome'.
+ERROR [50:44] Parameter 'info' implicitly has an 'any' type.
+ERROR [50:50] Parameter 'tab' implicitly has an 'any' type.
+ERROR [62:3] Cannot find name 'chrome'.
+ERROR [73:1] Cannot find name 'chrome'.
+ERROR [73:39] Parameter 'message' implicitly has an 'any' type.
+ERROR [73:48] Parameter '_sender' implicitly has an 'any' type.
+ERROR [73:57] Parameter 'sendResponse' implicitly has an 'any' type.
+ERROR [75:5] Cannot find name 'chrome'.
+ERROR [75:50] Parameter 'result' implicitly has an 'any' type.
+ERROR [88:5] Cannot find name 'chrome'.
+ERROR [88:50] Parameter 'result' implicitly has an 'any' type.
+... and 1 more
+</diagnostics>
+[0m
+[0m← [0mWrite apps/extension/src/content/index.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx">
+ERROR [21:5] Cannot find name 'chrome'.
+ERROR [21:50] Parameter 'result' implicitly has an 'any' type.
+ERROR [82:26] Cannot find name 'chrome'.
+ERROR [82:52] Cannot find name 'chrome'.
+ERROR [88:26] Cannot find name 'chrome'.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content/index.ts">
+ERROR [1:1] Cannot find name 'chrome'.
+ERROR [1:39] Parameter 'message' implicitly has an 'any' type.
+ERROR [1:48] Parameter '_sender' implicitly has an 'any' type.
+ERROR [1:57] Parameter 'sendResponse' implicitly has an 'any' type.
+ERROR [5:5] Cannot find name 'chrome'.
+ERROR [5:47] Parameter 'result' implicitly has an 'any' type.
+ERROR [19:7] Cannot find name 'chrome'.
+ERROR [21:7] Cannot find name 'chrome'.
+</diagnostics>
+[0m
+[0m# [0mTodos
+[✓] Update pnpm-workspace.yaml to include apps/* and packages/*
+[✓] Create apps/extension directory structure
+[✓] Create manifest.json (Manifest V3)
+[✓] Create package.json with build scripts
+[✓] Create tsconfig.json and vite.config.ts
+[✓] Create popup.html, options.html entry points
+[✓] Create src/popup/App.tsx with placeholder UI
+[✓] Create src/background/index.ts (service worker)
+[✓] Create src/content/index.ts (content script)
+[✓] Create src/options/App.tsx (options page)
+[•] Install dependencies and verify build
+[0m
+[0m← [0mEdit apps/extension/tsconfig.json
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/tsconfig.json
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/tsconfig.json
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/tsconfig.json
+@@ -16,8 +16,9 @@
+ "noUnusedLocals": true,
+ "noUnusedParameters": true,
+ "noFallthroughCasesInSwitch": true,
+ "noUncheckedSideEffectImports": true,
++"types": ["chrome"],
+ "baseUrl": ".",
+ "paths": {
+   "@/*": ["src/*"]
+ }
+
+[0m
+[0m$ [0mrm apps/extension/vite-env.d.ts
+(no output)
+[0m
+[0m$ [0mpnpm install --filter extension
+Progress: resolved 1, reused 0, downloaded 0, added 0
+.                                        | [WARN] deprecated recharts@2.15.4
+Progress: resolved 206, reused 191, downloaded 0, added 0
+Progress: resolved 659, reused 588, downloaded 1, added 0
+[WARN] 3 deprecated subdependencies found: glob@11.1.0, source-map@0.8.0-beta.0, whatwg-encoding@3.1.1
+.                                        |   +4 +
+Progress: resolved 667, reused 596, downloaded 1, added 4, done
+Done in 2.3s using pnpm v11.1.2
+[0m
+[0m$ [0mpnpm build --filter extension
+$ tsc -b && vite build --filter extension
+src/services/storage/Database.ts(57,10): error TS6133: 'isISODate' is declared but its value is never read.
+src/services/storage/Database.ts(61,10): error TS6133: 'isOptionalString' is declared but its value is never read.
+src/services/storage/Database.ts(65,10): error TS6133: 'isBoolean' is declared but its value is never read.
+src/services/storage/Database.ts(73,10): error TS6133: 'isStringArray' is declared but its value is never read.
+src/services/storage/Database.ts(83,7): error TS6133: 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(84,7): error TS6133: 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(85,7): error TS6133: 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(92,7): error TS6133: 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+src/services/storage/Database.ts(95,7): error TS6133: 'VALID_QUESTION_TYPES' is declared but its value is never read.
+src/services/storage/Database.ts(97,10): error TS6133: 'validateDateFormat' is declared but its value is never read.
+src/services/storage/Database.ts(278,6): error TS6196: 'Validator' is declared but never used.
+[ELIFECYCLE] Command failed with exit code 2.
+[0m
+[0m← [0mEdit apps/extension/package.json
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+@@ -4,9 +4,9 @@
+ "version": "0.1.0",
+ "type": "module",
+ "scripts": {
+   "dev": "vite",
+-  "build": "tsc -b --noEmit && vite build",
++  "build": "vite build",
+   "preview": "vite preview",
+   "typecheck": "tsc -b --noEmit"
+ },
+ "dependencies": {
+
+[0m
+[0m$ [0mpnpm build --filter extension
+$ tsc -b && vite build --filter extension
+src/services/storage/Database.ts(57,10): error TS6133: 'isISODate' is declared but its value is never read.
+src/services/storage/Database.ts(61,10): error TS6133: 'isOptionalString' is declared but its value is never read.
+src/services/storage/Database.ts(65,10): error TS6133: 'isBoolean' is declared but its value is never read.
+src/services/storage/Database.ts(73,10): error TS6133: 'isStringArray' is declared but its value is never read.
+src/services/storage/Database.ts(83,7): error TS6133: 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(84,7): error TS6133: 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(85,7): error TS6133: 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(92,7): error TS6133: 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+src/services/storage/Database.ts(95,7): error TS6133: 'VALID_QUESTION_TYPES' is declared but its value is never read.
+src/services/storage/Database.ts(97,10): error TS6133: 'validateDateFormat' is declared but its value is never read.
+src/services/storage/Database.ts(278,6): error TS6196: 'Validator' is declared but never used.
+[ELIFECYCLE] Command failed with exit code 2.
+[0m
+[0m$ [0mpnpm --filter extension exec -- vite build
+vite v6.4.3 building for production...
+transforming...
+✓ 33 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/popup.html                0.60 kB │ gzip:  0.35 kB
+dist/options.html              0.61 kB │ gzip:  0.36 kB
+dist/assets/options.css        1.39 kB │ gzip:  0.60 kB
+dist/assets/popup.css          1.45 kB │ gzip:  0.62 kB
+dist/assets/popup.js           2.74 kB │ gzip:  1.06 kB
+dist/assets/options.js         4.37 kB │ gzip:  1.44 kB
+dist/assets/chunk-client.js  194.42 kB │ gzip: 60.77 kB
+✓ built in 294ms
+[0m
+[0m$ [0mpnpm --filter extension run build
+$ vite build
+vite v6.4.3 building for production...
+transforming...
+✓ 33 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/popup.html                0.60 kB │ gzip:  0.35 kB
+dist/options.html              0.61 kB │ gzip:  0.36 kB
+dist/assets/options.css        1.39 kB │ gzip:  0.60 kB
+dist/assets/popup.css          1.45 kB │ gzip:  0.62 kB
+dist/assets/popup.js           2.74 kB │ gzip:  1.06 kB
+dist/assets/options.js         4.37 kB │ gzip:  1.44 kB
+dist/assets/chunk-client.js  194.42 kB │ gzip: 60.77 kB
+✓ built in 345ms
+[0m
+[0m← [0mWrite apps/extension/scripts/build.mjs
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m$ [0mls node_modules/esbuild/esbuild 2>/dev/null && echo "esbuild available" || echo "esbuild not available"
+esbuild not available
+[0m
+[0m← [0mEdit apps/extension/package.json
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+@@ -13,8 +13,11 @@
+   "react": "^19.1.0",
+   "react-dom": "^19.1.0",
+   "zod": "^4.4.3"
+ },
++"dependencies": {
++  "esbuild": "^0.25.0"
++},
+ "devDependencies": {
+   "@types/chrome": "^0.0.308",
+   "@types/react": "^19.1.2",
+   "@types/react-dom": "^19.1.2",
+
+[0m
+[0m← [0mEdit apps/extension/package.json
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+@@ -13,16 +13,14 @@
+     "react": "^19.1.0",
+     "react-dom": "^19.1.0",
+     "zod": "^4.4.3"
+   },
+-  "dependencies": {
+-    "esbuild": "^0.25.0"
+-  },
+   "devDependencies": {
+     "@types/chrome": "^0.0.308",
+     "@types/react": "^19.1.2",
+     "@types/react-dom": "^19.1.2",
+     "@vitejs/plugin-react": "^4.4.1",
++    "esbuild": "^0.25.2",
+     "typescript": "~5.8.3",
+     "vite": "^6.3.3"
+   }
+ }
+
+[0m
+[0m$ [0mpnpm install --filter extension
+Progress: resolved 1, reused 0, downloaded 0, added 0
+.                                        | [WARN] deprecated recharts@2.15.4
+Progress: resolved 368, reused 297, downloaded 0, added 0
+[WARN] 3 deprecated subdependencies found: glob@11.1.0, source-map@0.8.0-beta.0, whatwg-encoding@3.1.1
+Progress: resolved 667, reused 597, downloaded 0, added 0, done
+Done in 2.3s using pnpm v11.1.2
+[0m
+[0m$ [0mnode scripts/build.mjs
+vite v6.4.3 building for production...
+transforming...
+✓ 33 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/popup.html                0.60 kB │ gzip:  0.35 kB
+dist/options.html              0.61 kB │ gzip:  0.36 kB
+dist/assets/options.css        1.39 kB │ gzip:  0.60 kB
+dist/assets/popup.css          1.45 kB │ gzip:  0.62 kB
+dist/assets/popup.js           2.74 kB │ gzip:  1.06 kB
+dist/assets/options.js         4.37 kB │ gzip:  1.44 kB
+dist/assets/chunk-client.js  194.42 kB │ gzip: 60.77 kB
+✓ built in 301ms
+✓ Extension built successfully
+[0m
+[0m$ [0mls -la dist/
+total 40
+drwxr-xr-x@  9 phamthanhhung  staff   288  1 Jul 14:30 .
+drwxr-xr-x@ 13 phamthanhhung  staff   416  1 Jul 14:29 ..
+drwxr-xr-x@  7 phamthanhhung  staff   224  1 Jul 14:30 assets
+-rw-r--r--@  1 phamthanhhung  staff  2441  1 Jul 14:30 background.js
+-rw-r--r--@  1 phamthanhhung  staff  1839  1 Jul 14:30 content.js
+drwxr-xr-x@  5 phamthanhhung  staff   160  1 Jul 14:30 icons
+-rw-r--r--@  1 phamthanhhung  staff  1205  1 Jul 14:30 manifest.json
+-rw-r--r--@  1 phamthanhhung  staff   613  1 Jul 14:30 options.html
+-rw-r--r--@  1 phamthanhhung  staff   596  1 Jul 14:30 popup.html
+[0m
+[0m$ [0mhead -5 dist/background.js
+// src/background/index.ts
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "install") {
+    chrome.storage.local.set({
+      dailyProgress: {
+[0m
+[0m$ [0mhead -5 dist/content.js
+// src/content/index.ts
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message.type === "SAVE_SELECTION") {
+    const { text, category, pageTitle, pageUrl } = message.payload;
+    chrome.storage.local.get(["savedItems"], (result) => {
+[0m
+[0m$ [0mpython3 -c "import json; m = json.load(open('dist/manifest.json')); print(json.dumps(m, indent=2))"
+{
+  "manifest_version": 3,
+  "name": "IELTS Learning Journey",
+  "version": "0.1.0",
+  "description": "Collect English learning material from any webpage and save it to your IELTS study system.",
+  "author": "IELTS Learning Journey",
+  "homepage_url": "https://ielts-journey.app",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "world": "ISOLATED"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "IELTS Learning Journey",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
+[0m
+[0m← [0mEdit apps/extension/package.json
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+@@ -4,11 +4,12 @@
+ "version": "0.1.0",
+ "type": "module",
+ "scripts": {
+   "dev": "vite",
+-  "build": "vite build",
++  "build": "node scripts/build.mjs",
+   "preview": "vite preview",
+-  "typecheck": "tsc -b --noEmit"
++  "typecheck": "tsc --noEmit",
++  "clean": "rm -rf dist"
+ },
+ "dependencies": {
+   "react": "^19.1.0",
+   "react-dom": "^19.1.0",
+
+[0m
+[0m← [0mWrite apps/extension/.gitignore
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [57:10] 'isISODate' is declared but its value is never read.
+ERROR [61:10] 'isOptionalString' is declared but its value is never read.
+ERROR [65:10] 'isBoolean' is declared but its value is never read.
+ERROR [73:10] 'isStringArray' is declared but its value is never read.
+ERROR [83:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [84:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [92:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [95:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [97:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [278:6] 'Validator' is declared but never used.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts">
+ERROR [3:25] Cannot find module 'path' or its corresponding type declarations.
+ERROR [4:31] Cannot find module 'url' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/options/main.tsx">
+ERROR [3:17] Cannot find module './App' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m$ [0mpnpm --filter extension run build
+$ node scripts/build.mjs
+vite v6.4.3 building for production...
+transforming...
+✓ 33 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/popup.html                0.60 kB │ gzip:  0.35 kB
+dist/options.html              0.61 kB │ gzip:  0.36 kB
+dist/assets/options.css        1.39 kB │ gzip:  0.60 kB
+dist/assets/popup.css          1.45 kB │ gzip:  0.62 kB
+dist/assets/popup.js           2.74 kB │ gzip:  1.06 kB
+dist/assets/options.js         4.37 kB │ gzip:  1.44 kB
+dist/assets/chunk-client.js  194.42 kB │ gzip: 60.77 kB
+✓ built in 293ms
+✓ Extension built successfully
+[0m
+[0m$ [0mecho "=== dist contents ===" && ls -R dist/ && echo "" && echo "=== manifest.json exists ===" && test -f manifest.json && echo "✓ manifest.json exists" && echo "=== popup App.tsx exists ===" && test -f src/popup/App.tsx && echo "✓ src/popup/App.tsx exists" && echo "" && echo "=== File counts ===" && find src -name "*.ts" -o -name "*.tsx" -o -name "*.css" | wc -l | xargs echo "source files:" && find dist -type f | wc -l | xargs echo "dist files:"
+=== dist contents ===
+assets
+background.js
+content.js
+icons
+manifest.json
+options.html
+popup.html
+
+dist/assets:
+chunk-client.js
+options.css
+options.js
+popup.css
+popup.js
+
+dist/icons:
+icon-128.png
+icon-16.png
+icon-48.png
+
+=== manifest.json exists ===
+✓ manifest.json exists
+=== popup App.tsx exists ===
+✓ src/popup/App.tsx exists
+
+=== File counts ===
+source files: 9
+dist files: 13
+[0m
+[0m$ [0mpnpm --filter extension run typecheck
+$ tsc --noEmit
+[0m
+[0m# [0mTodos
+[✓] Update pnpm-workspace.yaml to include apps/* and packages/*
+[✓] Create apps/extension directory structure
+[✓] Create manifest.json (Manifest V3)
+[✓] Create package.json with build scripts
+[✓] Create tsconfig.json and vite.config.ts
+[✓] Create popup.html, options.html entry points
+[✓] Create src/popup/App.tsx with placeholder UI
+[✓] Create src/background/index.ts (service worker)
+[✓] Create src/content/index.ts (content script)
+[✓] Create src/options/App.tsx (options page)
+[✓] Install dependencies and verify build
+[0m
+[2026-07-01T07:30:46.303Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T07:30:46.305Z] [INFO] Task completed successfully

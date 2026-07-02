@@ -1,0 +1,1011 @@
+{
+  "title": "Design and Implement IELTS Learning Journey Browser Extension",
+  "summary": "Plan and implement a comprehensive browser extension for IELTS Learning Journey to collect and manage English learning materials locally with AI integration.",
+  "tasks": [
+    {
+      "title": "Design Browser Extension Architecture and Data Flow",
+      "description": "Create a detailed architecture design document for the IELTS Learning Journey browser extension. Include data flow diagrams showing interaction between extension content scripts, background scripts, popup UI, IndexedDB storage, and the main website. Specify how data synchronization and backup/import-export will work without backend. Define messaging protocols between extension and website. Document browser security considerations and Manifest V3 compliance.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Architecture document covers all extension components and data flow",
+        "Data synchronization approach between extension and website is clearly defined",
+        "Manifest V3 compliance and security considerations are addressed"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A comprehensive architecture and data flow design document for the browser extension exists in docs/extension-architecture.md",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-architecture.md",
+          "description": "Architecture and data flow design document for the browser extension",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "create",
+      "inputContext": "Project requirements and existing website architecture",
+      "targetFiles": [
+        "docs/extension-architecture.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "docs/extension-architecture.md file exists"
+      ],
+      "verificationCommand": "ls docs/extension-architecture.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a clear blueprint for all subsequent extension development tasks"
+    },
+    {
+      "title": "Create Browser Extension Manifest and Basic Scaffold",
+      "description": "Create the browser extension scaffold using React, TypeScript, and Vite. Add Manifest V3 file with minimal permissions (storage, contextMenus, scripting). Setup basic folder structure under apps/extension with background script, content scripts, popup UI, and options page. Configure build scripts for extension packaging. Ensure no console errors and Manifest V3 compliance.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design Browser Extension Architecture and Data Flow"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Extension scaffold builds without errors",
+        "Manifest V3 file includes required permissions and matches design",
+        "Basic popup UI renders with placeholder content"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm build --filter extension"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "A working extension scaffold with Manifest V3 and basic popup UI exists in apps/extension",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "apps/extension/manifest.json",
+          "description": "Manifest V3 file for the browser extension",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "apps/extension/src/popup/App.tsx",
+          "description": "Basic React popup UI scaffold",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Extension architecture document",
+      "targetFiles": [
+        "apps/extension/manifest.json",
+        "apps/extension/src/popup/App.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "apps/extension/manifest.json file exists",
+        "apps/extension/src/popup/App.tsx file exists",
+        "pnpm build --filter extension exits 0"
+      ],
+      "verificationCommand": "pnpm build --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides the foundation for all extension features"
+    },
+    {
+      "title": "Implement Save Selected Text Feature with Categorization UI",
+      "description": "Implement content script and popup UI to allow users to select text on any webpage and save it into local IndexedDB with categories: Vocabulary, Useful phrase, Example sentence, Grammar note, Reading material, Writing idea, Speaking idea, Mistake note. Include UI to add topic, skill, difficulty, tags, and personal note before saving. Use shared types and validation schemas. Ensure data is saved in extension IndexedDB.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Browser Extension Manifest and Basic Scaffold"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "User can select text on any webpage and open extension popup to save it",
+        "Category selection and metadata input UI is functional",
+        "Data is validated and saved correctly in IndexedDB",
+        "Saved entries can be retrieved and displayed in extension"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Users can save categorized selected text with metadata into local extension database",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/contentScripts/saveSelectedText.ts",
+          "description": "Content script to capture selected text and send to extension",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/SaveTextForm.tsx",
+          "description": "Popup UI form for saving selected text with categories and metadata",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/storage/src/indexedDB.ts",
+          "description": "IndexedDB service for saving and retrieving learning entries",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Extension scaffold and architecture document",
+      "targetFiles": [
+        "apps/extension/src/contentScripts/saveSelectedText.ts",
+        "apps/extension/src/popup/components/SaveTextForm.tsx",
+        "packages/storage/src/indexedDB.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "selected text can be saved with metadata",
+        "data exists in IndexedDB",
+        "UI form works as expected"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables core user interaction to collect learning materials from web"
+    },
+    {
+      "title": "Develop Vocabulary Collector with AI Integration",
+      "description": "Implement vocabulary collector feature that saves unknown words with source sentence, page title, URL, topic, and note. Integrate AI service to generate meaning, IELTS-style example sentences, synonyms, collocations, and pronunciation notes using user's AI API key. Add saved words to spaced repetition review system. Use shared AI client and validation schemas. Provide UI in popup and floating toolbar for quick saving.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Save Selected Text Feature with Categorization UI"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Vocabulary entries can be saved with full metadata",
+        "AI generates vocabulary details correctly using user API key",
+        "Words can be added to spaced repetition review",
+        "UI allows quick vocabulary saving from popup and floating toolbar"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Vocabulary collector feature with AI enrichment and review integration is functional",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/VocabularyCollector.tsx",
+          "description": "Popup UI component for vocabulary collection and AI enrichment",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai/src/vocabularyService.ts",
+          "description": "AI service module for vocabulary meaning and examples generation",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/storage/src/reviewService.ts",
+          "description": "Service to add vocabulary to spaced repetition review",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Save selected text feature and AI client module",
+      "targetFiles": [
+        "apps/extension/src/popup/components/VocabularyCollector.tsx",
+        "packages/ai/src/vocabularyService.ts",
+        "packages/storage/src/reviewService.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "vocabulary entries saved with AI data",
+        "spaced repetition review updated",
+        "UI components render and function"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enhances vocabulary learning with AI and spaced repetition"
+    },
+    {
+      "title": "Implement Article Collector with AI Question Generation",
+      "description": "Create functionality to save webpage title, URL, selected paragraph, or full readable article content. Allow user to categorize article by IELTS topic and mark as Reading practice material. Integrate AI to generate IELTS-style questions from saved article content. Provide UI in popup and extension dashboard for managing articles.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Save Selected Text Feature with Categorization UI"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Users can save full or partial article content with metadata",
+        "Articles can be categorized and marked for reading practice",
+        "AI generates relevant IELTS-style questions from article content",
+        "UI allows managing saved articles and viewing generated questions"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Article collector with AI question generation is functional and integrated into extension UI",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/ArticleCollector.tsx",
+          "description": "Popup UI component for article collection and categorization",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai/src/articleService.ts",
+          "description": "AI service module for generating IELTS-style questions from articles",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Save selected text feature and AI client module",
+      "targetFiles": [
+        "apps/extension/src/popup/components/ArticleCollector.tsx",
+        "packages/ai/src/articleService.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "articles saved with metadata",
+        "AI questions generated and displayed",
+        "UI components functional"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Supports reading practice with AI-generated questions from real articles"
+    },
+    {
+      "title": "Develop Floating Learning Toolbar with Text Actions",
+      "description": "Implement a small floating toolbar that appears on any webpage when user selects text. Toolbar actions include: Save word, Save sentence, Explain meaning, Simplify text, Translate to Vietnamese, Generate IELTS vocabulary, Add to mistake notebook. Toolbar visibility can be toggled in extension settings. Use content scripts and messaging to communicate with background and popup scripts. Ensure toolbar is lightweight, non-intrusive, and accessible.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Browser Extension Manifest and Basic Scaffold"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Floating toolbar appears on text selection on any webpage",
+        "All toolbar actions trigger correct extension functionality",
+        "Toolbar can be enabled or disabled via settings",
+        "Toolbar UI is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Floating learning toolbar is fully functional and integrated with extension features",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/contentScripts/floatingToolbar.tsx",
+          "description": "Content script implementing floating toolbar UI and actions",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/settings.ts",
+          "description": "Background script managing toolbar enable/disable setting",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Extension scaffold and architecture document",
+      "targetFiles": [
+        "apps/extension/src/contentScripts/floatingToolbar.tsx",
+        "apps/extension/src/background/settings.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "toolbar appears on text selection",
+        "actions work as expected",
+        "setting toggles toolbar visibility"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Improves user experience by providing quick access to learning actions on any webpage"
+    },
+    {
+      "title": "Build Extension Popup UI with Learning Progress and Quick Actions",
+      "description": "Design and implement the extension popup UI showing today's learning progress, daily streak, pending reviews, and quick action buttons for adding vocabulary, notes, saving current page, opening dashboard, and starting vocabulary review. Use shared UI components and design tokens from the website. Ensure dark mode support and responsive layout. Include toast notifications after saving actions.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Browser Extension Manifest and Basic Scaffold"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Popup UI displays learning progress and statistics correctly",
+        "Quick action buttons trigger corresponding extension features",
+        "UI matches website design tokens and supports dark mode",
+        "Toast notifications appear after save actions"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Extension popup UI is visually consistent, functional, and user-friendly",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/PopupDashboard.tsx",
+          "description": "Popup UI component showing learning progress and quick actions",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/Toast.tsx",
+          "description": "Toast notification component used in extension popup",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Extension scaffold and shared UI components",
+      "targetFiles": [
+        "apps/extension/src/popup/components/PopupDashboard.tsx",
+        "packages/ui/src/components/Toast.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "popup UI renders learning progress",
+        "quick actions work",
+        "toast notifications appear"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a central user interface for extension interaction and motivation"
+    },
+    {
+      "title": "Implement AI Explain on Webpage Feature",
+      "description": "Enable users to select text on any webpage and request AI explanations: simple English, Vietnamese, IELTS vocabulary, grammar explanation, natural rewrite, example sentences, and quiz questions. Use user's configured AI API key stored locally. Show friendly error if API key is missing. Integrate with floating toolbar and context menu. Use shared AI client and validation schemas. Cache AI results locally to reduce cost.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Develop Floating Learning Toolbar with Text Actions",
+        "Build Extension Popup UI with Learning Progress and Quick Actions"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "AI explanations can be requested from selected text on any webpage",
+        "User's AI API key is used securely and locally",
+        "Errors are handled gracefully with user-friendly messages",
+        "Results are cached locally and displayed in UI"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "AI explain feature works seamlessly on webpages with user API key and caching",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/contentScripts/aiExplain.ts",
+          "description": "Content script handling AI explain requests and displaying results",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai/src/aiClient.ts",
+          "description": "Shared AI client module supporting user API key and caching",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Floating toolbar and AI client modules",
+      "targetFiles": [
+        "apps/extension/src/contentScripts/aiExplain.ts",
+        "packages/ai/src/aiClient.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "AI explain requests succeed using user API key",
+        "results cached and displayed",
+        "error messages shown if API key missing"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Adds powerful AI learning assistance directly on webpages"
+    },
+    {
+      "title": "Create YouTube/Video Learning Helper Feature",
+      "description": "Detect when user is on YouTube or video pages. Allow saving video title, URL, and user notes. Provide UI to paste transcript manually if automatic extraction fails. Use AI to generate vocabulary lists, summaries, listening questions, and shadowing practice from transcripts. Save results to Listening practice or Vocabulary categories. Integrate with extension popup and dashboard.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Browser Extension Manifest and Basic Scaffold",
+        "Develop Floating Learning Toolbar with Text Actions"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Video pages are detected and relevant UI shown",
+        "Users can save video metadata and notes",
+        "Transcript can be pasted manually",
+        "AI generates vocabulary, summaries, and questions from transcript",
+        "Results saved correctly in local database"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "YouTube/video helper feature is functional and integrated with AI and storage",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/contentScripts/videoHelper.ts",
+          "description": "Content script detecting video pages and providing helper UI",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/VideoHelper.tsx",
+          "description": "Popup UI component for video helper features",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai/src/videoService.ts",
+          "description": "AI service module for transcript analysis and content generation",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Extension scaffold and AI client",
+      "targetFiles": [
+        "apps/extension/src/contentScripts/videoHelper.ts",
+        "apps/extension/src/popup/components/VideoHelper.tsx",
+        "packages/ai/src/videoService.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "video helper UI appears on video pages",
+        "transcript can be pasted",
+        "AI generates content from transcript",
+        "data saved locally"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Supports listening practice and vocabulary building from videos"
+    },
+    {
+      "title": "Implement Dictionary Mini Panel with AI and Caching",
+      "description": "Create a dictionary mini panel that appears when user selects a word on any webpage. Show meaning, example, synonym, collocation, and IELTS topic if AI is enabled. Allow saving the word with one click. Cache AI results locally to reduce API calls. Integrate with floating toolbar and extension storage. Ensure panel is lightweight and non-intrusive.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Develop Floating Learning Toolbar with Text Actions",
+        "Implement AI Explain on Webpage Feature"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Dictionary panel appears on word selection",
+        "Displays AI-generated dictionary data",
+        "One-click save functionality works",
+        "Results are cached locally and reused",
+        "Panel UI is accessible and responsive"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Dictionary mini panel is functional with AI data and caching",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/contentScripts/dictionaryPanel.tsx",
+          "description": "Content script implementing dictionary mini panel UI and logic",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai/src/dictionaryService.ts",
+          "description": "AI service module for dictionary data generation",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Floating toolbar and AI client modules",
+      "targetFiles": [
+        "apps/extension/src/contentScripts/dictionaryPanel.tsx",
+        "packages/ai/src/dictionaryService.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "dictionary panel appears and shows AI data",
+        "save button works",
+        "results cached locally"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides quick dictionary lookup and saving with AI assistance"
+    },
+    {
+      "title": "Implement Mistake Capture Feature with Status Tracking",
+      "description": "Allow users to save confusing sentences, grammar mistakes, or writing mistakes from any webpage into a Mistake Notebook. Fields include original text, correction, explanation, skill, topic, and status (new, reviewing, fixed). Provide UI in popup and extension dashboard to add, edit, and track mistake entries. Use shared types and validation schemas. Save data locally in IndexedDB.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Save Selected Text Feature with Categorization UI"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Users can add mistake entries with all required fields",
+        "Entries can be edited and status updated",
+        "Mistake notebook data is saved and retrieved from local storage",
+        "UI is user-friendly and consistent with extension design"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Mistake capture feature with full status tracking is functional",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/MistakeNotebook.tsx",
+          "description": "Popup UI component for mistake capture and management",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/storage/src/mistakeService.ts",
+          "description": "Service module for managing mistake entries in IndexedDB",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Save selected text feature and storage service",
+      "targetFiles": [
+        "apps/extension/src/popup/components/MistakeNotebook.tsx",
+        "packages/storage/src/mistakeService.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "mistake entries saved and editable",
+        "status updates persist",
+        "UI components functional"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Helps users track and learn from their English mistakes"
+    },
+    {
+      "title": "Implement Local Data Sync and Backup/Restore Between Extension and Website",
+      "description": "Implement local data synchronization between extension IndexedDB and website IndexedDB or storage. If direct shared IndexedDB is restricted, implement a bridge using extension storage, downloadable JSON backups, and import/export functionality. Provide UI for backup export/import in both extension and website. Document browser limitations and chosen approach in docs/extension-architecture.md.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design Browser Extension Architecture and Data Flow",
+        "Implement Save Selected Text Feature with Categorization UI"
+      ],
+      "riskLevel": "high",
+      "acceptanceCriteria": [
+        "Data can be exported and imported as JSON backup files",
+        "Extension and website data can be synchronized when both are open",
+        "User can manually trigger backup and restore",
+        "Documentation clearly explains sync approach and browser limitations"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Reliable local data sync and backup/restore mechanism between extension and website is implemented",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "packages/storage/src/syncService.ts",
+          "description": "Service module handling data sync and backup/restore logic",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/BackupRestore.tsx",
+          "description": "Extension UI for data export/import backup",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "docs/extension-architecture.md",
+          "description": "Documentation update for data sync and browser limitations",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Extension architecture document and storage service",
+      "targetFiles": [
+        "packages/storage/src/syncService.ts",
+        "apps/extension/src/popup/components/BackupRestore.tsx",
+        "docs/extension-architecture.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "backup files can be exported and imported",
+        "sync works when extension and website open",
+        "documentation updated"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": true,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 360000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures data consistency and user control without backend"
+    },
+    {
+      "title": "Add Extension Settings UI and Secure AI API Key Management",
+      "description": "Implement extension settings page to configure AI provider (name, base URL, API key, model), theme mode, floating toolbar toggle, auto-save toggle, default save category and IELTS topic, data export/import, and clear extension data. Store API key securely locally and do not hard-code. Show clear privacy message about data usage. Use shared UI components and validation schemas.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Browser Extension Manifest and Basic Scaffold"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Settings UI allows configuring all required options",
+        "API key is stored securely and used for AI requests",
+        "Privacy message is clearly displayed",
+        "Settings persist across extension reloads"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Extension settings page is functional, secure, and user-friendly",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/options/SettingsPage.tsx",
+          "description": "Extension options page UI for settings",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/settingsStorage.ts",
+          "description": "Background script managing settings storage and API key security",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Extension scaffold and AI client",
+      "targetFiles": [
+        "apps/extension/src/options/SettingsPage.tsx",
+        "apps/extension/src/background/settingsStorage.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "settings UI works",
+        "API key stored and used securely",
+        "privacy message shown"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1500,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Allows user control over AI integration and extension behavior"
+    },
+    {
+      "title": "Ensure Extension Privacy, Security, and Manifest V3 Compliance",
+      "description": "Audit extension code to ensure no backend communication occurs except user-initiated AI calls. Verify no browsing history or webpage content is sent without explicit user action. Confirm API keys are not hard-coded and stored only locally. Check extension permissions are minimal and justified. Ensure content scripts are isolated and safe. Fix any console errors or warnings. Update manifest.json to comply fully with Manifest V3 requirements.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Browser Extension Manifest and Basic Scaffold",
+        "Add Extension Settings UI and Secure AI API Key Management"
+      ],
+      "riskLevel": "high",
+      "acceptanceCriteria": [
+        "No unauthorized data transmission occurs",
+        "API keys are stored securely and not hard-coded",
+        "Extension permissions are minimal and justified",
+        "Manifest V3 compliance is verified",
+        "No console errors or warnings during usage"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm lint",
+          "pnpm build --filter extension"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Extension is secure, privacy-respecting, and fully Manifest V3 compliant",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/manifest.json",
+          "description": "Updated manifest file with minimal permissions and V3 compliance",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/securityAudit.ts",
+          "description": "Code audit fixes and security improvements",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "review",
+      "actionType": "review",
+      "inputContext": "All extension code and manifest",
+      "targetFiles": [
+        "apps/extension/manifest.json",
+        "apps/extension/src/background/securityAudit.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "lint passes",
+        "build passes",
+        "no console errors",
+        "permissions minimal"
+      ],
+      "verificationCommand": "pnpm lint && pnpm build --filter extension",
+      "approvalRequired": true,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures extension is safe, private, and compliant for production"
+    },
+    {
+      "title": "Implement Extension UX/UI Polish and Accessibility Improvements",
+      "description": "Refine all extension UI components (popup, floating toolbar, dictionary panel, settings) for beautiful modern look consistent with website design tokens and theme system. Ensure fast, lightweight performance and smooth selected-text workflow. Add clear empty states and toast notifications after saving. Implement keyboard shortcuts for common actions if possible. Verify dark mode and light mode support without hard-coded colors. Improve accessibility with ARIA roles and keyboard navigation.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Build Extension Popup UI with Learning Progress and Quick Actions",
+        "Develop Floating Learning Toolbar with Text Actions",
+        "Implement Dictionary Mini Panel with AI and Caching",
+        "Add Extension Settings UI and Secure AI API Key Management"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "UI matches website design tokens and theme system",
+        "Dark mode and light mode work flawlessly",
+        "Keyboard shortcuts implemented and documented",
+        "Accessibility standards met with ARIA roles and keyboard navigation",
+        "Toast notifications appear after save actions",
+        "Empty states are clear and user-friendly"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Extension UI is polished, accessible, and consistent with website branding",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/*.tsx",
+          "description": "UI components refined for design consistency and accessibility",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/contentScripts/*.tsx",
+          "description": "Content scripts updated for keyboard shortcuts and accessibility",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "modify",
+      "inputContext": "Existing extension UI components and design tokens",
+      "targetFiles": [
+        "apps/extension/src/popup/components/PopupDashboard.tsx",
+        "apps/extension/src/popup/components/SaveTextForm.tsx",
+        "apps/extension/src/popup/components/VocabularyCollector.tsx",
+        "apps/extension/src/popup/components/ArticleCollector.tsx",
+        "apps/extension/src/popup/components/MistakeNotebook.tsx",
+        "apps/extension/src/popup/components/SettingsPage.tsx",
+        "apps/extension/src/contentScripts/floatingToolbar.tsx",
+        "apps/extension/src/contentScripts/dictionaryPanel.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "UI matches design tokens",
+        "dark mode tested",
+        "keyboard shortcuts work",
+        "ARIA roles present",
+        "toast notifications appear"
+      ],
+      "verificationCommand": "pnpm test --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Delivers a professional, accessible, and user-friendly extension UI"
+    },
+    {
+      "title": "Create Extension Build and Packaging Scripts with Documentation",
+      "description": "Develop build scripts to package the extension for Chrome Web Store upload, ensuring Manifest V3 compliance and no broken permissions. Create documentation for loading the unpacked extension in Chrome for development and testing. Verify build output has no console errors and good performance on normal webpages. Document any known limitations or browser compatibility notes.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Browser Extension Manifest and Basic Scaffold",
+        "Ensure Extension Privacy, Security, and Manifest V3 Compliance"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Build scripts produce valid extension package",
+        "Documentation for loading unpacked extension is clear and complete",
+        "No console errors in built extension",
+        "Extension performs well on normal webpages"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm build --filter extension"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Extension build and packaging process is automated and documented",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/package.json",
+          "description": "Build scripts and commands for extension packaging",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "create",
+          "target": "docs/extension-loading.md",
+          "description": "Documentation for loading unpacked extension in Chrome",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "documentation",
+      "actionType": "create",
+      "inputContext": "Extension scaffold and manifest",
+      "targetFiles": [
+        "apps/extension/package.json",
+        "docs/extension-loading.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "build scripts run successfully",
+        "documentation file exists"
+      ],
+      "verificationCommand": "pnpm build --filter extension && ls docs/extension-loading.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Prepares extension for production deployment and developer onboarding"
+    }
+  ]
+}

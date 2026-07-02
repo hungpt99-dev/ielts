@@ -1,0 +1,1 @@
+update doc and readme to allign with software industry standard, feature, code, ai coding agent

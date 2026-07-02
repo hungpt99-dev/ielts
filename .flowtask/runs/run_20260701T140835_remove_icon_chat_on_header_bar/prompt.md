@@ -1,0 +1,1 @@
+remove icon chat on header bar

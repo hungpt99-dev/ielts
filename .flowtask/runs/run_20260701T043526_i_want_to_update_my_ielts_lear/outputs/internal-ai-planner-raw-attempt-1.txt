@@ -1,0 +1,1183 @@
+{
+  "title": "Plan for Full Production-Ready IELTS Learning Journey Web App",
+  "summary": "Stepwise task plan to build a modern, responsive, fully featured static IELTS learning web app with local data storage and AI integration",
+  "tasks": [
+    {
+      "title": "Design and implement core UI layout and navigation in src/app/App.tsx and src/components/Layout.tsx",
+      "description": "Create a responsive, mobile-first layout with sidebar or top navigation, including routes for Dashboard, Planner, Vocabulary, Reading, Listening, Writing, Speaking, Grammar, Mistakes, Analytics, and Settings. Use Tailwind CSS or CSS Modules with CSS variables for theming. Implement theme system with light/dark modes and semantic CSS variables (--color-background, --color-primary, etc.). Ensure accessible colors, spacing, typography, and keyboard-friendly navigation.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "App layout renders correctly on desktop and mobile",
+        "Navigation links route to correct pages",
+        "Theme toggling between light and dark works",
+        "CSS variables are used for colors and spacing"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "A clean, responsive app shell with navigation and theme support is implemented and verified",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/app/App.tsx",
+          "description": "Main app component with routing and layout",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/components/Layout.tsx",
+          "description": "Layout component with navigation and theme support",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "modify",
+          "target": "src/styles/theme.css",
+          "description": "Define CSS variables and theme system",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Initial project setup with React, Tailwind CSS or CSS Modules",
+      "targetFiles": [
+        "src/app/App.tsx",
+        "src/components/Layout.tsx",
+        "src/styles/theme.css"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "App renders without errors",
+        "Navigation works",
+        "Theme toggles",
+        "CSS variables present"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides the foundational UI layout and navigation framework for the entire app"
+    },
+    {
+      "title": "Implement Daily IELTS Learning Dashboard in src/features/dashboard/Dashboard.tsx",
+      "description": "Develop the dashboard page showing today's study plan, daily checklist, study streak, total study time, IELTS skill progress (Listening, Reading, Writing, Speaking, Vocabulary, Grammar), quick action buttons, and motivation section. Use reusable components and theme variables. Integrate with local IndexedDB data models for progress and tasks. Add loading, empty, and error states.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design and implement core UI layout and navigation in src/app/App.tsx and src/components/Layout.tsx"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Dashboard displays all required sections with sample or real data",
+        "Progress charts and streak counters update correctly",
+        "Quick actions trigger navigation or modals",
+        "Responsive and accessible UI"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Dashboard page fully implemented with dynamic data display and user interactions",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/dashboard/Dashboard.tsx",
+          "description": "Dashboard page component with study plan and progress",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/dashboard/components/ProgressChart.tsx",
+          "description": "Reusable progress chart component using Recharts",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "App layout and navigation implemented, IndexedDB data models defined",
+      "targetFiles": [
+        "src/features/dashboard/Dashboard.tsx",
+        "src/features/dashboard/components/ProgressChart.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Dashboard renders with data",
+        "Charts display correctly",
+        "No UI errors"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides the main user landing page with daily learning overview and motivation"
+    },
+    {
+      "title": "Create Study Planner feature in src/features/planner/Planner.tsx with calendar and schedule generation",
+      "description": "Implement study planner allowing users to create daily, weekly, and monthly plans with custom IELTS target band and exam date. Auto-generate study schedule based on target band and available time. Provide calendar-style view with progress tracking and missed-task handling. Use React state management and IndexedDB for persistence. Include forms with validation using React Hook Form and Zod.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Daily IELTS Learning Dashboard in src/features/dashboard/Dashboard.tsx"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Users can create and edit study plans with validation",
+        "Auto-generated schedules reflect target band and time",
+        "Calendar view shows tasks and progress",
+        "Missed tasks are highlighted and manageable"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Fully functional study planner with scheduling and calendar UI",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/planner/Planner.tsx",
+          "description": "Study planner main component with forms and calendar",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/planner/components/CalendarView.tsx",
+          "description": "Calendar component showing study tasks and progress",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Dashboard implemented, IndexedDB models available",
+      "targetFiles": [
+        "src/features/planner/Planner.tsx",
+        "src/features/planner/components/CalendarView.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Planner UI works with validation",
+        "Calendar displays tasks",
+        "Schedules generate correctly"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables users to plan and track their IELTS study schedule effectively"
+    },
+    {
+      "title": "Develop Vocabulary Learning module in src/features/vocabulary with spaced repetition and AI example generation",
+      "description": "Build vocabulary learning feature with topic-based word lists, ability to add custom words with meaning, example sentence, pronunciation note, collocation, synonym, antonym. Implement spaced repetition system and review mode. Provide favorite and difficult words lists. Support import/export vocabulary data as JSON. Integrate AI-generated example sentences using user-provided API key stored locally. Use IndexedDB for data persistence and React Hook Form for input validation.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Study Planner feature in src/features/planner/Planner.tsx with calendar and schedule generation"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Users can add/edit/delete vocabulary entries with full metadata",
+        "Spaced repetition review mode functions correctly",
+        "Import/export of vocabulary data works",
+        "AI example generation triggers with valid API key"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Complete vocabulary learning feature with AI integration and data persistence",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/vocabulary/Vocabulary.tsx",
+          "description": "Main vocabulary learning component",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/vocabulary/components/WordForm.tsx",
+          "description": "Form component for adding/editing vocabulary words",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/vocabulary/components/ReviewMode.tsx",
+          "description": "Component for spaced repetition review",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Planner implemented, AI service interface defined",
+      "targetFiles": [
+        "src/features/vocabulary/Vocabulary.tsx",
+        "src/features/vocabulary/components/WordForm.tsx",
+        "src/features/vocabulary/components/ReviewMode.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Vocabulary UI works",
+        "Spaced repetition functions",
+        "Import/export tested",
+        "AI example generation tested"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 240000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a robust vocabulary learning system with AI assistance and spaced repetition"
+    },
+    {
+      "title": "Implement Reading Practice feature in src/features/reading with IELTS-style passages and AI passage generation",
+      "description": "Create reading practice page with IELTS-style passages categorized by topic. Support question types: multiple choice, true/false/not given, matching headings, gap fill. Include timer, answer checking, explanations, mistake saving, and reading history. Integrate AI-generated reading passages from selected topics using user API key. Use IndexedDB for persistence and React state management.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Develop Vocabulary Learning module in src/features/vocabulary with spaced repetition and AI example generation"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Reading passages load and display correctly",
+        "Question types function with answer validation",
+        "Timer works and can be reset",
+        "Mistakes are saved and retrievable",
+        "AI passage generation works with valid API key"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Full-featured reading practice module with AI passage generation and progress tracking",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/reading/ReadingPractice.tsx",
+          "description": "Reading practice main component",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/reading/components/Question.tsx",
+          "description": "Component for rendering different question types",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Vocabulary module implemented, AI service interface available",
+      "targetFiles": [
+        "src/features/reading/ReadingPractice.tsx",
+        "src/features/reading/components/Question.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Reading UI works",
+        "Questions validate answers",
+        "Timer functions",
+        "Mistakes saved",
+        "AI passage generation tested"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 240000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables IELTS reading practice with AI-generated content and detailed progress tracking"
+    },
+    {
+      "title": "Build Listening Practice feature in src/features/listening with transcript exercises and audio support",
+      "description": "Implement listening practice page with transcript-based gap-fill exercises, support for audio URLs and YouTube links, note-taking for listening practice, and tracking of listening practice time. Save notes and progress in IndexedDB. Provide timer and UI controls for audio playback. Use React state and hooks for interaction.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Reading Practice feature in src/features/reading with IELTS-style passages and AI passage generation"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Listening exercises load with transcript and audio",
+        "Gap-fill interaction works",
+        "Audio playback controls function",
+        "Listening notes can be saved and retrieved",
+        "Practice time is tracked and displayed"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Complete listening practice module with audio and transcript exercises",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/listening/ListeningPractice.tsx",
+          "description": "Listening practice main component",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/listening/components/AudioPlayer.tsx",
+          "description": "Audio player component with controls",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Reading practice implemented, IndexedDB models available",
+      "targetFiles": [
+        "src/features/listening/ListeningPractice.tsx",
+        "src/features/listening/components/AudioPlayer.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Listening UI works",
+        "Audio plays correctly",
+        "Gap-fill exercises function",
+        "Notes saved and loaded"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides IELTS listening practice with audio and transcript-based exercises"
+    },
+    {
+      "title": "Create Writing Practice feature in src/features/writing with prompt library, editor, and AI feedback",
+      "description": "Develop writing practice page supporting IELTS Writing Task 1 and Task 2 with prompt library, essay editor with word count and timer, draft saving, and AI feedback using user API key. Feedback categories include task response, coherence, vocabulary, grammar, estimated band score, improved version suggestion, and mistake list. Use React Hook Form for editor validation and IndexedDB for draft persistence.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Build Listening Practice feature in src/features/listening with transcript exercises and audio support"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Users can select prompts and write essays",
+        "Word count and timer function correctly",
+        "Drafts save and load from local storage",
+        "AI feedback is requested and displayed with categories",
+        "Mistakes list is generated and manageable"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Writing practice module with editor, prompt selection, and AI feedback fully functional",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/writing/WritingPractice.tsx",
+          "description": "Writing practice main component with editor and prompt library",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/writing/components/FeedbackPanel.tsx",
+          "description": "Component to display AI feedback with categories",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Listening practice implemented, AI service interface available",
+      "targetFiles": [
+        "src/features/writing/WritingPractice.tsx",
+        "src/features/writing/components/FeedbackPanel.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Writing editor works",
+        "Drafts save/load",
+        "AI feedback displays",
+        "Mistakes list generated"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 240000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables IELTS writing practice with AI-powered feedback and draft management"
+    },
+    {
+      "title": "Implement Speaking Practice feature in src/features/speaking with question bank, recording, and AI feedback",
+      "description": "Create speaking practice module with IELTS Speaking Part 1, 2, and 3 question bank, cue card practice, timer, browser microphone recording if supported, speaking notes saving, self-evaluation checklist, AI feedback from transcript or typed answer, and common speaking phrases. Use IndexedDB for data persistence and React state management.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Writing Practice feature in src/features/writing with prompt library, editor, and AI feedback"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Users can practice speaking questions with timer",
+        "Recording works if browser supports microphone",
+        "Speaking notes save and load",
+        "Self-evaluation checklist is usable",
+        "AI feedback is generated from transcript or typed input"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Complete speaking practice feature with recording and AI feedback",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/speaking/SpeakingPractice.tsx",
+          "description": "Speaking practice main component with question bank and recording",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/speaking/components/SelfEvaluation.tsx",
+          "description": "Self-evaluation checklist component",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Writing practice implemented, AI service interface available",
+      "targetFiles": [
+        "src/features/speaking/SpeakingPractice.tsx",
+        "src/features/speaking/components/SelfEvaluation.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Speaking UI works",
+        "Recording functions",
+        "Notes save/load",
+        "AI feedback tested"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 240000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides IELTS speaking practice with recording and AI-assisted feedback"
+    },
+    {
+      "title": "Develop Grammar Learning feature in src/features/grammar with topics, explanations, exercises, and AI generation",
+      "description": "Implement grammar learning module with a list of grammar topics, simple explanations, examples, practice exercises, mistake tracking, and personal grammar weakness list. Integrate AI-generated grammar exercises using user API key. Use IndexedDB for data persistence and React Hook Form with Zod for exercise validation.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Speaking Practice feature in src/features/speaking with question bank, recording, and AI feedback"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Grammar topics display with explanations and examples",
+        "Practice exercises function with validation",
+        "Mistakes are tracked and listed",
+        "AI-generated exercises can be requested and displayed"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Full grammar learning module with AI exercise generation and mistake tracking",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/grammar/GrammarLearning.tsx",
+          "description": "Grammar learning main component",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/grammar/components/Exercise.tsx",
+          "description": "Grammar exercise component with validation",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Speaking practice implemented, AI service interface available",
+      "targetFiles": [
+        "src/features/grammar/GrammarLearning.tsx",
+        "src/features/grammar/components/Exercise.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Grammar topics render",
+        "Exercises validate input",
+        "Mistakes tracked",
+        "AI exercises generated"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 240000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Supports grammar learning with exercises and AI-generated content"
+    },
+    {
+      "title": "Implement Mistake Notebook feature in src/features/mistakes/MistakeNotebook.tsx",
+      "description": "Create mistake notebook to save all mistakes from reading, writing, grammar, vocabulary, and speaking. Categorize mistakes, allow adding corrections and explanations, review mistakes daily, filter by skill and topic, and mark mistakes as fixed. Use IndexedDB for persistence and React state management.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Develop Grammar Learning feature in src/features/grammar with topics, explanations, exercises, and AI generation"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Mistakes can be added, categorized, and edited",
+        "Filtering by skill and topic works",
+        "Mistakes can be marked as fixed",
+        "Daily review UI is functional"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Mistake notebook fully functional with categorization and review features",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/mistakes/MistakeNotebook.tsx",
+          "description": "Mistake notebook main component",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Grammar learning implemented, IndexedDB models available",
+      "targetFiles": [
+        "src/features/mistakes/MistakeNotebook.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Mistake notebook UI works",
+        "Filtering and editing functional"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Centralizes mistake tracking and review across all IELTS skills"
+    },
+    {
+      "title": "Implement AI Tutor Integration in src/services/ai/AIService.ts and src/features/settings/AISettings.tsx",
+      "description": "Create AI service module supporting user-provided API keys stored securely in browser localStorage or IndexedDB. Support configurable AI provider settings: provider name, base URL, API key, model name. Provide functions for generating study plans, vocabulary examples, reading passages, writing checks, speaking questions, grammar explanations, mistake explanations, and daily learning content. Implement Settings UI for user to enter and test API key, toggle AI features on/off, and show clear warnings about local storage of keys.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Mistake Notebook feature in src/features/mistakes/MistakeNotebook.tsx"
+      ],
+      "riskLevel": "high",
+      "acceptanceCriteria": [
+        "User can enter and save AI API key and provider settings",
+        "API key is stored only locally and never hard-coded",
+        "User can test API connection with feedback",
+        "AI features can be toggled on/off",
+        "AI service functions handle missing or invalid keys gracefully"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "AI integration fully functional with user-configurable API keys and provider settings",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/services/ai/AIService.ts",
+          "description": "AI service module with API key management and request functions",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "src/features/settings/AISettings.tsx",
+          "description": "Settings UI for AI provider configuration and API key input",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Mistake notebook implemented, app settings module available",
+      "targetFiles": [
+        "src/services/ai/AIService.ts",
+        "src/features/settings/AISettings.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "API key input and storage works",
+        "API connection test works",
+        "AI features toggle works",
+        "No hard-coded keys"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": true,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables AI-powered features with secure user API key management"
+    },
+    {
+      "title": "Implement Browser Local Database with IndexedDB using Dexie.js in src/services/storage/Database.ts",
+      "description": "Create IndexedDB schema and versioned storage migration using Dexie.js for all app data models including vocabulary, tasks, sessions, grammar notes, mistakes, settings, and AI provider config. Use localStorage only for small settings like theme mode. Implement import/export full backup as JSON and reset data option. Ensure data persists after refresh and supports version upgrades cleanly.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement AI Tutor Integration in src/services/ai/AIService.ts and src/features/settings/AISettings.tsx"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "IndexedDB schema covers all data models",
+        "Versioned migrations work without data loss",
+        "Import/export backup JSON works correctly",
+        "Reset data option clears all app data",
+        "Data persists after page refresh"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Robust local database layer implemented with backup and reset features",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/services/storage/Database.ts",
+          "description": "Dexie.js database schema and migration logic",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "modify",
+          "target": "src/pages/ImportExport.tsx",
+          "description": "Add import/export and reset data UI integration",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "AI service implemented, app settings available",
+      "targetFiles": [
+        "src/services/storage/Database.ts",
+        "src/pages/ImportExport.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Database schema exists",
+        "Backup import/export tested",
+        "Reset data clears storage"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides persistent local data storage with backup and reset capabilities"
+    },
+    {
+      "title": "Implement Progress Analytics in src/features/analytics/Analytics.tsx with charts and streak calendar",
+      "description": "Create analytics page showing daily study time chart, skill progress chart, streak calendar, completed tasks, weakest skills, most common mistakes, vocabulary review progress, and writing score history. Use Recharts for charts and calendar components. Fetch data from IndexedDB and app state. Provide filtering and date range selection.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Browser Local Database with IndexedDB using Dexie.js in src/services/storage/Database.ts"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Charts render with correct data",
+        "Streak calendar displays study streaks",
+        "Filters and date ranges update charts",
+        "No UI or data errors"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Analytics page fully functional with interactive charts and streak calendar",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/analytics/Analytics.tsx",
+          "description": "Analytics main component with charts and calendar",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Database implemented, data models available",
+      "targetFiles": [
+        "src/features/analytics/Analytics.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Charts render",
+        "Streak calendar works",
+        "Filters update data"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides users with visual insights into their IELTS study progress"
+    },
+    {
+      "title": "Implement Settings page in src/features/settings/Settings.tsx with all user preferences and data management",
+      "description": "Create settings page allowing users to configure target IELTS band, exam date, daily study time, theme mode (light/dark/system), accent color, AI provider configuration, data backup/import/export, reset app data, and notification preferences if supported by browser. Use React Hook Form with validation. Integrate AISettings component for AI API key management. Provide confirmation modals for dangerous actions like reset.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement AI Tutor Integration in src/services/ai/AIService.ts and src/features/settings/AISettings.tsx",
+        "Implement Browser Local Database with IndexedDB using Dexie.js in src/services/storage/Database.ts"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "All settings fields are editable with validation",
+        "Theme and accent color changes apply immediately",
+        "Data backup/import/export functions correctly",
+        "Reset data shows confirmation modal and clears data",
+        "Notification preference toggles if supported"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Settings page fully functional with all user preferences and data management features",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/features/settings/Settings.tsx",
+          "description": "Settings main component with forms and data management",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "AISettings and database implemented",
+      "targetFiles": [
+        "src/features/settings/Settings.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Settings UI works",
+        "Validation functions",
+        "Backup and reset tested"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Allows users to customize app behavior and manage data securely"
+    },
+    {
+      "title": "Add static sample data for IELTS topics, vocabulary, grammar lessons, writing prompts, speaking questions, and reading examples in src/data/sampleData.ts",
+      "description": "Create static sample data files with representative IELTS topics, vocabulary entries, grammar lessons, writing prompts, speaking questions, and reading passages. Ensure the app works immediately without AI integration using this sample data. Structure data for easy import into IndexedDB on first app load or reset.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Settings page in src/features/settings/Settings.tsx with all user preferences and data management"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Sample data covers all IELTS skills and features",
+        "Data loads correctly on app initialization",
+        "App functions with sample data without AI"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Comprehensive static sample data available and integrated for immediate app use",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/data/sampleData.ts",
+          "description": "Static sample data for IELTS topics and exercises",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "data",
+      "actionType": "create",
+      "inputContext": "App features implemented, database schema defined",
+      "targetFiles": [
+        "src/data/sampleData.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Sample data file exists",
+        "App loads sample data on reset"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides immediate usable content for the app without AI dependency"
+    },
+    {
+      "title": "Add code quality improvements: folder structure, typing, reusable components, error handling, and validation",
+      "description": "Refactor codebase to ensure clean architecture with clear folder structure as per project mode. Add strong TypeScript typing across modules. Create reusable UI components and utility functions. Add error handling and form validation using React Hook Form and Zod. Remove duplicated logic and add comments only where useful. Ensure components are small and focused.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Add static sample data for IELTS topics, vocabulary, grammar lessons, writing prompts, speaking questions, and reading examples in src/data/sampleData.ts"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Codebase follows defined folder structure",
+        "TypeScript errors are zero",
+        "Reusable components are used",
+        "Forms have validation and error handling",
+        "No duplicated logic or unused code"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm lint",
+          "pnpm typecheck"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Codebase is clean, maintainable, and production-ready with strong typing and validation",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "src/",
+          "description": "Refactor codebase for quality improvements",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "All features implemented",
+      "targetFiles": [
+        "src/"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "No lint or type errors",
+        "Code review passes",
+        "Tests pass"
+      ],
+      "verificationCommand": "pnpm lint && pnpm typecheck",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures the app codebase is maintainable, extensible, and high quality"
+    },
+    {
+      "title": "Add testing for storage utilities, AI request builder, progress calculation, UI components, and main user flow",
+      "description": "Write unit tests for storage utilities, AI request builder, and progress calculation logic. Add component tests for important UI components using React Testing Library. Implement E2E test for main user flow covering login, study plan creation, vocabulary addition, and practice sessions using a suitable testing framework. Ensure tests cover edge cases and error handling.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Add code quality improvements: folder structure, typing, reusable components, error handling, and validation"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Unit tests cover storage, AI, and progress logic",
+        "Component tests cover key UI components",
+        "E2E test covers main user flow",
+        "All tests pass without errors"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Comprehensive test suite implemented and passing",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "tests/unit/storage.test.ts",
+          "description": "Unit tests for storage utilities",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "tests/unit/aiService.test.ts",
+          "description": "Unit tests for AI request builder",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "tests/component/Dashboard.test.tsx",
+          "description": "Component tests for Dashboard UI",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "tests/e2e/mainFlow.test.ts",
+          "description": "E2E test for main user flow",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "create",
+      "inputContext": "Codebase refactored and stable",
+      "targetFiles": [
+        "tests/unit/storage.test.ts",
+        "tests/unit/aiService.test.ts",
+        "tests/component/Dashboard.test.tsx",
+        "tests/e2e/mainFlow.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Tests run and pass",
+        "Coverage reports generated"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures app reliability and correctness through automated testing"
+    },
+    {
+      "title": "Prepare production build and deployment configuration for static hosting",
+      "description": "Configure Vite build for production with optimizations, lazy loading of heavy pages, and offline support for non-AI features. Ensure no TypeScript errors or unused code remain. Add friendly error handling for AI API failures and missing API keys. Prepare deployment scripts and documentation for Cloudflare Pages, Vercel, Netlify, or similar static hosts.",
+      "executor": "shell",
+      "dependsOn": [
+        "Add testing for storage utilities, AI request builder, progress calculation, UI components, and main user flow"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Production build completes without errors",
+        "App works offline for non-AI features",
+        "Lazy loading implemented for heavy pages",
+        "Deployment scripts and config files present"
+      ],
+      "commands": [
+        "pnpm build"
+      ],
+      "validation": {
+        "commands": [
+          "pnpm build"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Production-ready static build generated and deployment configuration prepared",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "vite.config.ts",
+          "description": "Vite config with production optimizations and lazy loading",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "create",
+          "target": "deploy/README.md",
+          "description": "Deployment instructions for static hosting",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "release",
+      "actionType": "execute",
+      "inputContext": "All features implemented and tested",
+      "targetFiles": [
+        "vite.config.ts",
+        "deploy/README.md"
+      ],
+      "targetArtifacts": [
+        "dist/"
+      ],
+      "evidence": [
+        "Build completes",
+        "No errors in console",
+        "Offline mode works"
+      ],
+      "verificationCommand": "pnpm build",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Delivers a production-ready static app build ready for deployment"
+    },
+    {
+      "title": "Create final delivery documentation with feature summary, local run, build, deploy, AI key config, and data storage explanation",
+      "description": "Write documentation summarizing completed features, instructions to run locally, build, and deploy the app as a static website. Include detailed explanation on how to configure AI API key securely, how local data storage works with IndexedDB and localStorage, and any remaining limitations or future improvements. Place documentation in docs/FINAL_DELIVERY.md.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Prepare production build and deployment configuration for static hosting"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Documentation covers all required topics clearly",
+        "Instructions are accurate and tested",
+        "File docs/FINAL_DELIVERY.md is created"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Comprehensive final delivery documentation created",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/FINAL_DELIVERY.md",
+          "description": "Final delivery documentation for the IELTS learning app",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "documentation",
+      "actionType": "create",
+      "inputContext": "All development and build tasks completed",
+      "targetFiles": [
+        "docs/FINAL_DELIVERY.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Documentation file exists",
+        "Content covers all required topics"
+      ],
+      "verificationCommand": "ls docs/FINAL_DELIVERY.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides users and maintainers with complete usage and deployment guidance"
+    }
+  ]
+}

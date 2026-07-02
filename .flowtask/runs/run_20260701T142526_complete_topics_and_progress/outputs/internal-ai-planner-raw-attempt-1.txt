@@ -1,0 +1,242 @@
+{
+  "title": "Complete Topics and Progress Features",
+  "summary": "Implement and finalize the topics and progress tracking features with data integration and UI updates",
+  "tasks": [
+    {
+      "title": "Complete Topic Progress Data Model and Storage Integration",
+      "description": "Enhance the data model for topics progress in src/models and ensure DatabaseService supports CRUD operations for topicsProgress. Modify src/services/storage/Database.ts to add methods for topicsProgress retrieval and updates. Ensure data consistency and proper typing.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "DatabaseService supports getAll, put, add, and delete for topicsProgress",
+        "Topics progress data model is defined with necessary fields like topicId, progressPercent, lastReviewedAt"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Topics progress data model and database integration are implemented and tested",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "src/models/index.ts",
+          "description": "Add or update topicsProgress data model definitions",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "src/services/storage/Database.ts",
+          "description": "Add CRUD methods for topicsProgress data",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Existing database service and models",
+      "targetFiles": [
+        "src/models/index.ts",
+        "src/services/storage/Database.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "file diff for models and database service",
+        "unit tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundational data support for topics progress tracking"
+    },
+    {
+      "title": "Implement Topics Progress UI Component in src/pages/TopicsProgress.tsx",
+      "description": "Create a new React component src/pages/TopicsProgress.tsx that displays the user's progress on various topics. Use charts (e.g., progress bars or pie charts) to visualize completion percentages. Fetch topicsProgress data from DatabaseService and update UI reactively. Include filtering and sorting by progress or topic name.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Complete Topic Progress Data Model and Storage Integration"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "TopicsProgress component fetches and displays topics progress data",
+        "UI includes visual progress indicators and supports sorting/filtering",
+        "Component integrates with existing app routing and styling conventions"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "TopicsProgress UI component is implemented, integrated, and tested",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "src/pages/TopicsProgress.tsx",
+          "description": "React component for displaying topics progress with charts and filters",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Topics progress data model and database service methods",
+      "targetFiles": [
+        "src/pages/TopicsProgress.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "file exists for TopicsProgress.tsx",
+        "component renders without errors",
+        "unit and integration tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 90000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides users with a visual overview of their topic progress"
+    },
+    {
+      "title": "Enhance Progress Page Data Aggregation and Visualization",
+      "description": "In src/pages/Progress.tsx, complete the data aggregation logic to compute progress metrics for topics and overall study progress. Integrate topicsProgress data into the progress charts and summaries. Add new charts or tables to visualize topic completion rates and progress trends over time. Ensure data is fetched efficiently and UI updates reactively.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Complete Topic Progress Data Model and Storage Integration",
+        "Implement Topics Progress UI Component in src/pages/TopicsProgress.tsx"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Progress page includes topics progress metrics and visualizations",
+        "Charts update correctly based on aggregated data",
+        "Performance is acceptable with large data sets"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Progress page fully integrates topics progress data and visualizes it",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "src/pages/Progress.tsx",
+          "description": "Add topics progress data aggregation and visualization to progress page",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Topics progress data and existing progress page code",
+      "targetFiles": [
+        "src/pages/Progress.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "file diff for Progress.tsx",
+        "charts render correctly",
+        "unit tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 90000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Completes the progress tracking feature with topic-level insights"
+    },
+    {
+      "title": "Add Unit and Integration Tests for Topics Progress Features",
+      "description": "Write comprehensive unit tests for the topicsProgress data model, database service methods, and UI components (TopicsProgress.tsx and Progress.tsx enhancements). Include integration tests to verify data flow from storage to UI. Use mocks and fixtures to simulate various progress states and edge cases.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Topics Progress UI Component in src/pages/TopicsProgress.tsx",
+        "Enhance Progress Page Data Aggregation and Visualization"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Unit tests cover all new data model and service methods",
+        "UI component tests cover rendering and user interactions",
+        "Integration tests verify end-to-end data flow",
+        "Test coverage for topics progress features is above 90%"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Topics progress features are fully tested with high coverage",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "src/pages/TopicsProgress.test.tsx",
+          "description": "Add tests for TopicsProgress component",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "modify",
+          "target": "src/pages/Progress.test.tsx",
+          "description": "Add tests for Progress page enhancements",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "src/services/storage/Database.test.ts",
+          "description": "Add tests for topicsProgress database methods",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "create",
+      "inputContext": "New topics progress code and existing test infrastructure",
+      "targetFiles": [
+        "src/pages/TopicsProgress.test.tsx",
+        "src/pages/Progress.test.tsx",
+        "src/services/storage/Database.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "test files exist and run",
+        "test coverage reports",
+        "all tests pass"
+      ],
+      "verificationCommand": "pnpm test -- --coverage",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures reliability and correctness of topics progress features"
+    }
+  ]
+}

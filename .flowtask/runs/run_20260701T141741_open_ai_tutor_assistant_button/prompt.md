@@ -1,0 +1,1 @@
+Open AI Tutor Assistant button change icon chat, and i can not open chat popup

@@ -1,0 +1,1751 @@
+[2026-07-01T10:15:21.108Z] [INFO] Task started: Implement Import Logic and IndexedDB Storage for Public API Content
+[2026-07-01T10:15:21.113Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/features/publicApiIntegration/api/import.ts","description":"Functions to import and save public API content into IndexedDB","validationMethod":"file_exists"}]
+[2026-07-01T10:15:21.820Z] [INFO] [stderr] [0m
+[2026-07-01T10:15:21.820Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-01T10:15:21.820Z] [INFO] [stderr] [0m
+[2026-07-01T10:15:26.628Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"publicApiIntegration api import IndexedDB storage"}
+[2026-07-01T10:15:26.751Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/publicApiIntegration/**/*"[90m 3 matches[0m
+[2026-07-01T10:15:26.929Z] [INFO] [stderr] [0m✱ [0mGlob "src/**/*indexeddb*"[90m 0 matches[0m
+[2026-07-01T10:15:27.094Z] [INFO] [stderr] [0m✱ [0mGlob "src/**/*IndexedDB*"[90m 0 matches[0m
+[2026-07-01T10:15:30.051Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"IDatabase","includeCode":true}
+[2026-07-01T10:15:30.255Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"generateId"}
+[2026-07-01T10:15:30.470Z] [INFO] [stderr] [0m✱ [0mGlob "src/**/*db*"[90m 1 match[0m
+[2026-07-01T10:15:30.615Z] [INFO] [stderr] [0m✱ [0mGlob "src/**/*storage*"[90m 0 matches[0m
+[2026-07-01T10:15:34.719Z] [INFO] [stderr] [0m→ [0mRead src/utils/index.ts[90m [limit=30][0m
+[2026-07-01T10:15:34.975Z] [INFO] [stderr] [0m→ [0mRead src/services/storage/Database.ts
+[2026-07-01T10:15:35.210Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/types.ts
+[2026-07-01T10:15:39.857Z] [INFO] [stderr] [0m✱ [0mGrep "PublicApiImportedContent"[90m 1 match[0m
+[2026-07-01T10:15:40.254Z] [INFO] [stderr] [0m→ [0mRead src/models
+[2026-07-01T10:15:40.419Z] [INFO] [stderr] [0m→ [0mRead src/services/storage/Database.ts[90m [offset=1401][0m
+[2026-07-01T10:15:43.828Z] [INFO] [stderr] [0m→ [0mRead src/models/index.ts
+[2026-07-01T10:16:12.042Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:12.042Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:16:12.042Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:12.042Z] [INFO] [stderr] [ ] Add PublicApiImportedContent to models/index.ts and update feature types
+[2026-07-01T10:16:12.042Z] [INFO] [stderr] [ ] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[2026-07-01T10:16:12.042Z] [INFO] [stderr] [ ] Run validation commands
+[2026-07-01T10:16:12.042Z] [INFO] [stderr] [ ] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[2026-07-01T10:16:12.042Z] [INFO] [stderr] [ ] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[2026-07-01T10:16:15.660Z] [INFO] [stderr] [ ] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[2026-07-01T10:16:15.660Z] [INFO] [stderr] [ ] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[2026-07-01T10:16:15.660Z] [INFO] [stderr] [ ] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[2026-07-01T10:16:15.660Z] [INFO] [stderr] [ ] Run validation commands
+[2026-07-01T10:16:15.660Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:15.660Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:16:15.660Z] [INFO] [stderr] [•] Add PublicApiImportedContent to models/index.ts and update feature types
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] [0m← [0mEdit src/models/index.ts
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:16:24.690Z] [INFO] [stderr]    createdAt: ISOString
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] @@ -563,8 +563,36 @@
+[2026-07-01T10:16:24.690Z] [INFO] [stderr]  }
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +// ── Public API Imported Content ────────────────────────────────
+[2026-07-01T10:16:24.690Z] [INFO] [stderr]    updatedAt: ISOString
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  id: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +export interface PublicApiImportedContent {
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  title: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  contentType: 'dictionary' | 'vocabulary-list' | 'reading' | 'listening' | 'article' | 'video' | 'exercise' | 'writing-prompt' | 'speaking-topic' | 'reference'
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  sourceName: 'wiktionary' | 'datamuse' | 'tatoeba' | 'oer-commons' | 'wikipedia' | 'gutendex' | 'youtube'
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  sourceUrl: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  sourceType: 'public-api'
+[2026-07-01T10:16:24.690Z] [INFO] [stderr]  
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  difficulty: VocabDifficulty
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  tags: string[]
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  userNotes: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  importedAt: ISOString
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  attribution: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  content: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  aiClassification?: {
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  licenseName: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  skill: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +    difficulty: VocabDifficulty
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +    topic: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +    vocabulary: string[]
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  topic: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +    summary: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +    skill: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr]  // ── AI-Generated Content ──────────────────────────────────────
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +}
+[2026-07-01T10:16:24.690Z] [INFO] [stderr]  export interface AiContent {
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +    tags: string[]
+[2026-07-01T10:16:24.691Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:24.691Z] [INFO] [stderr]  
+[2026-07-01T10:16:24.691Z] [INFO] [stderr]    id: string
+[2026-07-01T10:16:24.690Z] [INFO] [stderr] +  }
+[2026-07-01T10:16:24.691Z] [INFO] [stderr] 
+[2026-07-01T10:16:32.874Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+[2026-07-01T10:16:32.874Z] [INFO] [stderr] [0m← [0mEdit src/models/index.ts
+[2026-07-01T10:16:32.874Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:16:32.875Z] [INFO] [stderr]    studyNotes: StudyNote[]
+[2026-07-01T10:16:32.874Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+[2026-07-01T10:16:32.874Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+[2026-07-01T10:16:32.875Z] [INFO] [stderr]    customStudyPlans: CustomStudyPlan[]
+[2026-07-01T10:16:32.875Z] [INFO] [stderr]    usefulPhrases: UsefulPhrase[]
+[2026-07-01T10:16:32.875Z] [INFO] [stderr]    aiContents: AiContent[]
+[2026-07-01T10:16:32.875Z] [INFO] [stderr]  // ── Seed data types (for typed constants) ────────────────────
+[2026-07-01T10:16:32.875Z] [INFO] [stderr]  
+[2026-07-01T10:16:32.875Z] [INFO] [stderr]    progressRecords: ProgressRecord[]
+[2026-07-01T10:16:32.875Z] [INFO] [stderr] 
+[2026-07-01T10:16:32.875Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:32.875Z] [INFO] [stderr] +  publicApiContent: PublicApiImportedContent[]
+[2026-07-01T10:16:32.875Z] [INFO] [stderr]  }
+[2026-07-01T10:16:32.875Z] [INFO] [stderr] @@ -739,8 +739,9 @@
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/types.ts
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] @@ -1,9 +1,9 @@
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  // Public API Integration — TypeScript Interfaces
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] -import type { ISOString, VocabDifficulty } from '../../models'
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  // ============================================================
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] +import type { ISOString, VocabDifficulty, PublicApiImportedContent } from '../../models'
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  // ── Source & Content Type Enums ─────────────────────────────
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]    | 'direct'        // Works from browser with no proxy
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]    | 'cors-bypass'   // Needs CORS proxy
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]    | 'no-cors'       // Cannot be used from browser (server-side only)
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  // ============================================================
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] +// Re-export for convenience
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  export type PublicApiSourceName =
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] @@ -39,38 +39,11 @@
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  
+[2026-07-01T10:16:40.215Z] [INFO] [stderr]  
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] -// ── Imported Content (stored in IndexedDB) ──────────────────
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] -  content: string
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] -export interface PublicApiImportedContent {
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] -  title: string
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] -  id: string
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] +export type { PublicApiImportedContent }
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] -  sourceName: PublicApiSourceName
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  attribution: string
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  licenseName: string
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  importedAt: ISOString
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] -  contentType: PublicApiContentType
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  skill: string
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  tags: string[]
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  topic: string
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  userNotes: string
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  difficulty: VocabDifficulty
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -    topic: string
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  // Optional classification metadata set by AI
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  aiClassification?: {
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -    difficulty: VocabDifficulty
+[2026-07-01T10:16:40.215Z] [INFO] [stderr] -  sourceType: SourceType
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  sourceUrl: string
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -    tags: string[]
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -}
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -    summary: string
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -  }
+[2026-07-01T10:16:40.216Z] [INFO] [stderr]  // ── API Search & Preview ───────────────────────────────────
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -    vocabulary: string[]
+[2026-07-01T10:16:40.216Z] [INFO] [stderr]  export interface PublicApiSearchParams {
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] 
+[2026-07-01T10:16:40.216Z] [INFO] [stderr]    source: PublicApiSourceName
+[2026-07-01T10:16:40.216Z] [INFO] [stderr]  
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] -    skill: string
+[2026-07-01T10:16:40.216Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:42.870Z] [INFO] [stderr] [0m✱ [0mGrep "ISOString"[90m 1 match[0m
+[2026-07-01T10:16:46.402Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+[2026-07-01T10:16:46.403Z] [INFO] [stderr]  // ============================================================
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] @@ -1,9 +1,9 @@
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/types.ts
+[2026-07-01T10:16:46.403Z] [INFO] [stderr]  // Public API Integration — TypeScript Interfaces
+[2026-07-01T10:16:46.403Z] [INFO] [stderr]  // ============================================================
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] -import type { ISOString, VocabDifficulty, PublicApiImportedContent } from '../../models'
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] +import type { VocabDifficulty, PublicApiImportedContent } from '../../models'
+[2026-07-01T10:16:46.403Z] [INFO] [stderr]  
+[2026-07-01T10:16:46.403Z] [INFO] [stderr]  
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+[2026-07-01T10:16:46.403Z] [INFO] [stderr]  export type PublicApiSourceName =
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:46.403Z] [INFO] [stderr] 
+[2026-07-01T10:16:46.403Z] [INFO] [stderr]  
+[2026-07-01T10:16:46.403Z] [INFO] [stderr]  // ── Source & Content Type Enums ─────────────────────────────
+[2026-07-01T10:16:49.354Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:16:49.354Z] [INFO] [stderr] [✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[2026-07-01T10:16:49.355Z] [INFO] [stderr] [•] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[2026-07-01T10:16:49.355Z] [INFO] [stderr] [ ] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[2026-07-01T10:16:49.355Z] [INFO] [stderr] [ ] Run validation commands
+[2026-07-01T10:16:49.355Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:49.355Z] [INFO] [stderr] [ ] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[2026-07-01T10:16:54.456Z] [INFO] [stdout] Now I'll add the `publicApiContent` table to `Database.ts`. Multiple edits needed:
+[2026-07-01T10:16:54.776Z] [INFO] [stderr] @@ -24,8 +24,9 @@
+[2026-07-01T10:16:54.776Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:16:54.776Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:16:54.776Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:16:54.776Z] [INFO] [stderr]    UsefulPhrase,
+[2026-07-01T10:16:54.776Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:16:54.776Z] [INFO] [stderr]    ProgressRecord,
+[2026-07-01T10:16:54.776Z] [INFO] [stderr]  import { loadAppSettings, saveAppSettings, removeAppSettings } from './SettingsStorage'
+[2026-07-01T10:16:54.776Z] [INFO] [stderr]    CustomStudyPlan,
+[2026-07-01T10:16:54.776Z] [INFO] [stderr] [0m← [0mEdit src/services/storage/Database.ts
+[2026-07-01T10:16:54.776Z] [INFO] [stderr]    AiContent,
+[2026-07-01T10:16:54.777Z] [INFO] [stderr]  
+[2026-07-01T10:16:54.777Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:54.777Z] [INFO] [stderr] 
+[2026-07-01T10:16:54.776Z] [INFO] [stderr]    AppExportData,
+[2026-07-01T10:16:54.776Z] [INFO] [stderr] +  PublicApiImportedContent,
+[2026-07-01T10:16:54.777Z] [INFO] [stderr]  } from '../../models'
+[2026-07-01T10:16:58.681Z] [INFO] [stdout] Now add to `IDatabase` interface:
+[2026-07-01T10:16:59.235Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:16:59.235Z] [INFO] [stderr] [0m← [0mEdit src/services/storage/Database.ts
+[2026-07-01T10:16:59.235Z] [INFO] [stderr] @@ -137,8 +137,9 @@
+[2026-07-01T10:16:59.235Z] [INFO] [stderr]    studyNotes: Table<StudyNote, string>
+[2026-07-01T10:16:59.235Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:16:59.235Z] [INFO] [stderr]    aiContents: Table<AiContent, string>
+[2026-07-01T10:16:59.235Z] [INFO] [stderr]    usefulPhrases: Table<UsefulPhrase, string>
+[2026-07-01T10:16:59.235Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:16:59.235Z] [INFO] [stderr]    customStudyPlans: Table<CustomStudyPlan, string>
+[2026-07-01T10:16:59.235Z] [INFO] [stderr]    progressRecords: Table<ProgressRecord, string>
+[2026-07-01T10:16:59.235Z] [INFO] [stderr] +  publicApiContent: Table<PublicApiImportedContent, string>
+[2026-07-01T10:16:59.235Z] [INFO] [stderr]  }
+[2026-07-01T10:16:59.235Z] [INFO] [stderr] 
+[2026-07-01T10:16:59.235Z] [INFO] [stderr] [0m
+[2026-07-01T10:16:59.235Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:16:59.235Z] [INFO] [stderr]  
+[2026-07-01T10:16:59.235Z] [INFO] [stderr]  export class AppDatabase extends Dexie implements IDatabase {
+[2026-07-01T10:17:09.677Z] [INFO] [stderr] [0m← [0mEdit src/services/storage/Database.ts
+[2026-07-01T10:17:09.677Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:09.677Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:17:09.677Z] [INFO] [stderr] @@ -166,8 +166,9 @@
+[2026-07-01T10:17:09.677Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:09.677Z] [INFO] [stderr]    usefulPhrases!: Table<UsefulPhrase, string>
+[2026-07-01T10:17:09.677Z] [INFO] [stderr]    customStudyPlans!: Table<CustomStudyPlan, string>
+[2026-07-01T10:17:09.677Z] [INFO] [stderr]    studyNotes!: Table<StudyNote, string>
+[2026-07-01T10:17:09.677Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]        usefulPhrases: 'id, topic, skill, difficulty, *tags, isFavorite, createdAt',
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]    constructor(options?: DexieOptions) {
+[2026-07-01T10:17:09.677Z] [INFO] [stderr] +  publicApiContent!: Table<PublicApiImportedContent, string>
+[2026-07-01T10:17:09.677Z] [INFO] [stderr]    aiContents!: Table<AiContent, string>
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]      super(DB_NAME, options)
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]  
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]    progressRecords!: Table<ProgressRecord, string>
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]      })
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]        progressRecords: 'id, date, skill, createdAt',
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]        aiContents: 'id, type, topic, *tags, isFavorite, createdAt',
+[2026-07-01T10:17:09.678Z] [INFO] [stderr] @@ -215,8 +216,12 @@
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]    }
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]  
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]  }
+[2026-07-01T10:17:09.678Z] [INFO] [stderr] +    })
+[2026-07-01T10:17:09.678Z] [INFO] [stderr]  let dbInstance: AppDatabase | null = null
+[2026-07-01T10:17:09.678Z] [INFO] [stderr] +    this.version(3).stores({
+[2026-07-01T10:17:09.678Z] [INFO] [stderr] +
+[2026-07-01T10:17:09.678Z] [INFO] [stderr] +      publicApiContent: 'id, sourceName, contentType, topic, skill, difficulty, *tags, importedAt',
+[2026-07-01T10:17:09.678Z] [INFO] [stderr] [0m
+[2026-07-01T10:17:09.678Z] [INFO] [stderr] 
+[2026-07-01T10:17:13.090Z] [INFO] [stdout] Add to `TABLE_NAMES`:
+[2026-07-01T10:17:13.644Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:13.644Z] [INFO] [stderr] [0m← [0mEdit src/services/storage/Database.ts
+[2026-07-01T10:17:13.644Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:13.644Z] [INFO] [stderr]    'studyNotes',
+[2026-07-01T10:17:13.644Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:13.644Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:17:13.644Z] [INFO] [stderr]    'customStudyPlans',
+[2026-07-01T10:17:13.644Z] [INFO] [stderr] +  'publicApiContent',
+[2026-07-01T10:17:13.644Z] [INFO] [stderr]    'usefulPhrases',
+[2026-07-01T10:17:13.644Z] [INFO] [stderr]    'progressRecords',
+[2026-07-01T10:17:13.644Z] [INFO] [stderr]    'aiContents',
+[2026-07-01T10:17:13.644Z] [INFO] [stderr]  function validateImportData(data: unknown): data is AppExportData {
+[2026-07-01T10:17:13.644Z] [INFO] [stderr] @@ -264,8 +264,9 @@
+[2026-07-01T10:17:13.644Z] [INFO] [stderr] 
+[2026-07-01T10:17:13.644Z] [INFO] [stderr]  
+[2026-07-01T10:17:13.644Z] [INFO] [stderr] [0m
+[2026-07-01T10:17:13.644Z] [INFO] [stderr]  ]
+[2026-07-01T10:17:17.832Z] [INFO] [stdout] Add validator for `publicApiContent`:
+[2026-07-01T10:17:18.354Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] @@ -467,8 +467,15 @@
+[2026-07-01T10:17:18.354Z] [INFO] [stderr] [0m← [0mEdit src/services/storage/Database.ts
+[2026-07-01T10:17:18.355Z] [INFO] [stderr]      const base = validateBaseItem(item, ['topic'])
+[2026-07-01T10:17:18.355Z] [INFO] [stderr]      if (!base.valid) return base
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] +    const base = validateBaseItem(item, ['title', 'content', 'contentType', 'sourceName', 'sourceUrl', 'licenseName', 'attribution', 'importedAt'])
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:17:18.355Z] [INFO] [stderr]    },
+[2026-07-01T10:17:18.355Z] [INFO] [stderr]      return { valid: true }
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] +  },
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] +    if (!isNonEmptyString(o.licenseName)) return { valid: false, error: 'licenseName must be a non-empty string' }
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] +    if (!base.valid) return base
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] +  publicApiContent(item) {
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] +    const o = item as Record<string, unknown>
+[2026-07-01T10:17:18.355Z] [INFO] [stderr]  function validate(table: keyof IDatabase, item: unknown): void {
+[2026-07-01T10:17:18.355Z] [INFO] [stderr]  }
+[2026-07-01T10:17:18.355Z] [INFO] [stderr]  
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] 
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] +    return { valid: true }
+[2026-07-01T10:17:18.355Z] [INFO] [stderr]    const validator = validators[table]
+[2026-07-01T10:17:18.355Z] [INFO] [stderr] [0m
+[2026-07-01T10:17:25.708Z] [INFO] [stdout] Update `exportAll` to include `publicApiContent`:
+[2026-07-01T10:17:26.245Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:26.245Z] [INFO] [stderr] [0m← [0mEdit src/services/storage/Database.ts
+[2026-07-01T10:17:26.245Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:26.245Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:17:26.245Z] [INFO] [stderr]    readingPracticeSessions, listeningSessions, listeningPracticeSessions,
+[2026-07-01T10:17:26.246Z] [INFO] [stderr] -  customStudyPlans, usefulPhrases, aiContents, progressRecords] = await Promise.all([
+[2026-07-01T10:17:26.246Z] [INFO] [stderr] +  customStudyPlans, usefulPhrases, aiContents, publicApiContent, progressRecords] = await Promise.all([
+[2026-07-01T10:17:26.245Z] [INFO] [stderr]    writingSessions, speakingSessions, grammarNotes, mistakes, mockTests,
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    topicsProgress, passages, ieltsTopics, exampleSentences, readingPassages,
+[2026-07-01T10:17:26.245Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    listeningTranscripts, writingPrompts, speakingQuestions, studyNotes,
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    this.getAll<VocabularyEntry>('vocabulary'),
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    this.getAll<VocabReviewEntry>('vocabularyReviews'),
+[2026-07-01T10:17:26.245Z] [INFO] [stderr] @@ -1443,9 +1443,9 @@
+[2026-07-01T10:17:26.246Z] [INFO] [stderr] @@ -1468,8 +1468,9 @@
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    this.getAll<ReadingSession>('readingSessions'),
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    this.getAll<StudyNote>('studyNotes'),
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    this.getAll<UsefulPhrase>('usefulPhrases'),
+[2026-07-01T10:17:26.246Z] [INFO] [stderr] +  this.getAll<PublicApiImportedContent>('publicApiContent'),
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    this.getAll<ProgressRecord>('progressRecords'),
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    this.getAll<TaskEntry>('tasks'),
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    this.getAll<AiContent>('aiContents'),
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]    this.getAll<CustomStudyPlan>('customStudyPlans'),
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]  
+[2026-07-01T10:17:26.246Z] [INFO] [stderr] [0m
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]  return {
+[2026-07-01T10:17:26.246Z] [INFO] [stderr] 
+[2026-07-01T10:17:26.246Z] [INFO] [stderr]  ])
+[2026-07-01T10:17:29.855Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:17:29.855Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:29.855Z] [INFO] [stderr]      customStudyPlans,
+[2026-07-01T10:17:29.855Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:29.855Z] [INFO] [stderr]      usefulPhrases,
+[2026-07-01T10:17:29.855Z] [INFO] [stderr]      aiContents,
+[2026-07-01T10:17:29.855Z] [INFO] [stderr] @@ -1500,8 +1500,9 @@
+[2026-07-01T10:17:29.855Z] [INFO] [stderr] +    publicApiContent,
+[2026-07-01T10:17:29.855Z] [INFO] [stderr]      studyNotes,
+[2026-07-01T10:17:29.855Z] [INFO] [stderr]      progressRecords,
+[2026-07-01T10:17:29.855Z] [INFO] [stderr] [0m← [0mEdit src/services/storage/Database.ts
+[2026-07-01T10:17:29.855Z] [INFO] [stderr]    }
+[2026-07-01T10:17:29.855Z] [INFO] [stderr]  },
+[2026-07-01T10:17:29.855Z] [INFO] [stderr] 
+[2026-07-01T10:17:29.855Z] [INFO] [stderr]  
+[2026-07-01T10:17:29.855Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:29.855Z] [INFO] [stderr] [0m
+[2026-07-01T10:17:34.273Z] [INFO] [stdout] Now add the CRUD method for `publicApiContent`:
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] @@ -894,8 +894,25 @@
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] [0m← [0mEdit src/services/storage/Database.ts
+[2026-07-01T10:17:34.792Z] [INFO] [stderr]      return entry
+[2026-07-01T10:17:34.792Z] [INFO] [stderr]    })
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +// Public API Imported Content
+[2026-07-01T10:17:34.792Z] [INFO] [stderr]  
+[2026-07-01T10:17:34.792Z] [INFO] [stderr]  },
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +async addPublicApiContent(item: Omit<PublicApiImportedContent, 'id' | 'importedAt'> & { id?: string; importedAt?: string }): Promise<PublicApiImportedContent> {
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +    const entry: PublicApiImportedContent = {
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +  return safeDb(async () => {
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +      importedAt: item.importedAt || now,
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +    const now = new Date().toISOString()
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +      tags: item.tags || [],
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +      id: item.id || crypto.randomUUID(),
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +    validate('publicApiContent', entry)
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +    }
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +      ...item as PublicApiImportedContent,
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +    const db = getDb()
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +    await db.publicApiContent.put(entry)
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +  })
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +    return entry
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +},
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +
+[2026-07-01T10:17:34.793Z] [INFO] [stderr]  // Progress Records
+[2026-07-01T10:17:34.793Z] [INFO] [stderr]    return safeDb(async () => {
+[2026-07-01T10:17:34.793Z] [INFO] [stderr] [0m
+[2026-07-01T10:17:34.793Z] [INFO] [stderr]      const now = new Date().toISOString()
+[2026-07-01T10:17:34.793Z] [INFO] [stderr] 
+[2026-07-01T10:17:34.792Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+[2026-07-01T10:17:34.792Z] [INFO] [stderr]  async addProgressRecord(item: Omit<ProgressRecord, 'id' | 'createdAt'> & { id?: string }): Promise<ProgressRecord> {
+[2026-07-01T10:17:38.120Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:17:38.120Z] [INFO] [stderr] [•] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[2026-07-01T10:17:38.120Z] [INFO] [stderr] [ ] Run validation commands
+[2026-07-01T10:17:38.120Z] [INFO] [stderr] [ ] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[2026-07-01T10:17:38.120Z] [INFO] [stderr] [✓] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[2026-07-01T10:17:38.120Z] [INFO] [stderr] [0m
+[2026-07-01T10:17:38.120Z] [INFO] [stderr] [✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[2026-07-01T10:17:41.234Z] [INFO] [stderr] [0m$ [0mls src/features/publicApiIntegration/api/ 2>/dev/null || echo "directory does not exist"
+[2026-07-01T10:17:41.234Z] [INFO] [stderr] directory does not exist
+[2026-07-01T10:17:41.234Z] [INFO] [stderr] [0m
+[2026-07-01T10:17:46.232Z] [INFO] [stderr] [0m$ [0mmkdir -p src/features/publicApiIntegration/api
+[2026-07-01T10:17:46.233Z] [INFO] [stderr] [0m
+[2026-07-01T10:17:46.233Z] [INFO] [stderr] (no output)
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [62:10] 'isOptionalString' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [58:10] 'isISODate' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] [0m← [0mWrite src/features/publicApiIntegration/api/import.ts
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [74:10] 'isStringArray' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] 
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [84:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [86:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [93:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [66:10] 'isBoolean' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [85:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [96:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [98:10] 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:00.367Z] [INFO] [stderr] ERROR [286:6] 'Validator' is declared but never used.
+[2026-07-01T10:18:03.553Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:18:03.553Z] [INFO] [stderr] [✓] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[2026-07-01T10:18:03.553Z] [INFO] [stderr] [✓] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[2026-07-01T10:18:03.553Z] [INFO] [stderr] [ ] Run validation commands
+[2026-07-01T10:18:03.553Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:03.553Z] [INFO] [stderr] [✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[2026-07-01T10:18:03.553Z] [INFO] [stderr] [•] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[2026-07-01T10:18:07.293Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [limit=30][0m
+[2026-07-01T10:18:10.253Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=330, limit=70][0m
+[2026-07-01T10:18:15.338Z] [INFO] [stdout] Now replace the importContent stub with the real IndexedDB-based import:
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]      attribution: `Source: ${result.sourceName} (${result.licenseName})`,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]  }
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] @@ -346,45 +346,12 @@
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]  
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -// ── Import handler (stub — stores to localStorage until IndexedDB is wired) ──
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]    };
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]  
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -async function importContent(
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] +// ── Import handler (saves to IndexedDB) ──────────────────────
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -  preview: PublicApiPreview,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -  const entry = {
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    content: preview.content,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -): Promise<PublicApiImportResult> {
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    id: contentId,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    contentType: preview.contentType,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -  const contentId = generateId();
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    sourceName: preview.sourceName,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    sourceUrl: preview.sourceUrl,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    title: preview.title,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    skill: "",
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    importedAt: new Date().toISOString(),
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    attribution: preview.attribution,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    licenseName: preview.licenseName,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    tags: [] as string[],
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    userNotes: "",
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    topic: "",
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    difficulty: "medium" as const,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    sourceType: "public-api" as const,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]  
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -  };
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] +import { importPublicApiContent } from "../api/import";
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -      localStorage.getItem("ielts-imported-content") ?? "[]",
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    const existing = JSON.parse(
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    existing.push(entry);
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    localStorage.setItem("ielts-imported-content", JSON.stringify(existing));
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -  } catch {
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -  return { success: true, contentId };
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -  }
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    );
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -  try {
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -    // Storage might be full or unavailable
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -}
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]  
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] -
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]  // ── Content type display helpers ────────────────────────────
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]  const CONTENT_TYPE_INFO: Record<
+[2026-07-01T10:18:15.921Z] [INFO] [stderr]    PublicApiContentType,
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:15.921Z] [INFO] [stderr] 
+[2026-07-01T10:18:19.479Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=465, limit=30][0m
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]  import type {
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]    PublicApiSearchResult,
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] @@ -2,13 +2,13 @@
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]  } from "../types";
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]    PublicApiSourceName,
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]    PublicApiSourceConfig,
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]  import { PUBLIC_API_SOURCES } from "../types";
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]    PublicApiContentType,
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]    PublicApiPreview,
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] +import { importPublicApiContent, validateLicense } from "../api/import";
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] -  PublicApiImportResult,
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]    CardContent,
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]    CardTitle,
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] 
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]    CardHeader,
+[2026-07-01T10:18:24.830Z] [INFO] [stderr]  import Card, {
+[2026-07-01T10:18:24.830Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:27.797Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=1, limit=40][0m
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:32.372Z] [INFO] [stderr]  
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] -
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:32.372Z] [INFO] [stderr]  // ── Import handler (saves to IndexedDB) ──────────────────────
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] @@ -348,10 +348,8 @@
+[2026-07-01T10:18:32.372Z] [INFO] [stderr]  }
+[2026-07-01T10:18:32.372Z] [INFO] [stderr]  // ── Content type display helpers ────────────────────────────
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:32.372Z] [INFO] [stderr]    PublicApiContentType,
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:32.372Z] [INFO] [stderr]  
+[2026-07-01T10:18:32.372Z] [INFO] [stderr]  
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:32.372Z] [INFO] [stderr]  const CONTENT_TYPE_INFO: Record<
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] -import { importPublicApiContent } from "../api/import";
+[2026-07-01T10:18:32.372Z] [INFO] [stderr] 
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] @@ -469,16 +469,14 @@
+[2026-07-01T10:18:36.924Z] [INFO] [stderr]    setImporting(preview.id);
+[2026-07-01T10:18:36.924Z] [INFO] [stderr]  async function handleImport(preview: PublicApiPreview) {
+[2026-07-01T10:18:36.924Z] [INFO] [stderr]  
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] -  try {
+[2026-07-01T10:18:36.924Z] [INFO] [stderr]  }
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] -    const result = await importContent(preview);
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] -    setImportResult((prev) => ({ ...prev, [preview.id]: false }));
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] -  } catch {
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] -  } finally {
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] +  setImportResult((prev) => ({ ...prev, [preview.id]: result.success }));
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] -    setImportResult((prev) => ({ ...prev, [preview.id]: result.success }));
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] -    setImporting(null);
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] +  const result = await importPublicApiContent(preview);
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] +  if (!result.success) {
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] +  setImporting(null);
+[2026-07-01T10:18:36.924Z] [INFO] [stderr]    }
+[2026-07-01T10:18:36.924Z] [INFO] [stderr]  }
+[2026-07-01T10:18:36.924Z] [INFO] [stderr]    query.trim().length > 0 &&
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] +    setError(result.error ?? "Import failed");
+[2026-07-01T10:18:36.924Z] [INFO] [stderr]  const canSearch =
+[2026-07-01T10:18:36.924Z] [INFO] [stderr] 
+[2026-07-01T10:18:36.924Z] [INFO] [stderr]  
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] +import { importPublicApiContent } from "../api/import";
+[2026-07-01T10:18:41.023Z] [INFO] [stderr]    PublicApiContentType,
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] -import { importPublicApiContent, validateLicense } from "../api/import";
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] @@ -6,9 +6,9 @@
+[2026-07-01T10:18:41.023Z] [INFO] [stderr]  } from "../types";
+[2026-07-01T10:18:41.023Z] [INFO] [stderr]    CardContent,
+[2026-07-01T10:18:41.023Z] [INFO] [stderr]  import Card, {
+[2026-07-01T10:18:41.023Z] [INFO] [stderr]  import { PUBLIC_API_SOURCES } from "../types";
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] 
+[2026-07-01T10:18:41.023Z] [INFO] [stderr]    PublicApiSourceConfig,
+[2026-07-01T10:18:41.023Z] [INFO] [stderr]    CardTitle,
+[2026-07-01T10:18:41.023Z] [INFO] [stderr]    CardHeader,
+[2026-07-01T10:18:41.023Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:43.843Z] [INFO] [stderr] [0m✱ [0mGrep "generateId"[90m 4 matches[0m
+[2026-07-01T10:18:47.202Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:47.202Z] [INFO] [stderr] [✓] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[2026-07-01T10:18:47.202Z] [INFO] [stderr] [✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[2026-07-01T10:18:47.202Z] [INFO] [stderr] [✓] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[2026-07-01T10:18:47.202Z] [INFO] [stderr] [✓] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[2026-07-01T10:18:47.202Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:18:47.202Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:47.202Z] [INFO] [stderr] [•] Run validation commands
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] $ vitest run --filter publicApiIntegration
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] [0m$ [0mpnpm test --filter publicApiIntegration 2>&1 || echo "No test filter found, checking package.json scripts..."
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] 
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]                 ^
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] CACError: Unknown option `--filter`
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[2026-07-01T10:18:50.799Z] [INFO] [stderr]     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] Node.js v24.13.0
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] 
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:50.799Z] [INFO] [stderr] No test filter found, checking package.json scripts...
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] [0m$ [0mpnpm typecheck 2>&1 | head -30
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(25,3): error TS6133: 'ExerciseFeedbackCard' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] $ tsc -b --noEmit
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(16,3): error TS6133: 'findLesson' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(396,62): error TS6133: 'topic' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(22,3): error TS6133: 'suggestNextTopics' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(417,54): error TS6133: 'qType' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(433,61): error TS6133: 'topic' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(577,52): error TS6133: 'mode' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(396,97): error TS6133: 'language' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(736,10): error TS6133: 'friendCorrections' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(633,55): error TS6133: 'mode' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/pages/AITutorChat.tsx(783,10): error TS6133: 'suggestionsLoading' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr]   Types of parameters 'overrideText' and 'event' are incompatible.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(58,10): error TS6133: 'isISODate' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/pages/AITutorChat.tsx(2480,11): error TS2322: Type '(overrideText?: string) => Promise<void>' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(66,10): error TS6133: 'isBoolean' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr]     Type 'MouseEvent<HTMLButtonElement, MouseEvent>' is not assignable to type 'string'.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(396,77): error TS6133: 'userAnswer' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(84,7): error TS6133: 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(62,10): error TS6133: 'isOptionalString' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/pages/AITutorChat.tsx(180,39): error TS6133: 'topic' is declared but its value is never read.
+[2026-07-01T10:18:54.719Z] [INFO] [stderr] src/pages/AITutorChat.tsx(751,10): error TS6133: 'socraticHistory' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(93,7): error TS6133: 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(74,10): error TS6133: 'isStringArray' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(86,7): error TS6133: 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(85,7): error TS6133: 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/pages/AITutorChat.tsx(150,36): error TS6133: 'topic' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(98,10): error TS6133: 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(286,6): error TS6196: 'Validator' is declared but never used.
+[2026-07-01T10:18:54.720Z] [INFO] [stderr] src/services/storage/Database.ts(96,7): error TS6133: 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] [32m- 2[39m
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] [0m$ [0mpnpm test -- src/features/publicApiIntegration 2>&1 | tail -20
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] 
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] [31m+ 3[39m
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]     481|       const db = getDb()
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]     484|     }
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]     483|       expect(db.verno).toBe(2)
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]        |                        ^
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]     485|   })
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] 
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]  Test Files  1 failed | 3 passed (4)
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] 
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]    Start at  17:18:58
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]     482|       await db.open()
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] 
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]       Tests  5 failed | 72 passed (77)
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]  ❯ src/tests/storage/DatabaseMigration.test.ts:483:24
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] 
+[2026-07-01T10:18:59.531Z] [INFO] [stderr] [0m
+[2026-07-01T10:18:59.531Z] [INFO] [stderr]    Duration  785ms (transform 131ms, setup 231ms, collect 367ms, tests 252ms, environment 1.13s, prepare 184ms)
+[2026-07-01T10:19:02.481Z] [INFO] [stderr] [0m→ [0mRead src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:12.972Z] [INFO] [stdout] I need to update the test file to reflect the new DB version and table. Let me make all the fixes:
+[2026-07-01T10:19:17.889Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:17.890Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:19:17.889Z] [INFO] [stderr] [0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:17.890Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:17.889Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:17.889Z] [INFO] [stderr] [0m
+[2026-07-01T10:19:17.890Z] [INFO] [stderr]    'studyNotes', 'customStudyPlans', 'usefulPhrases',
+[2026-07-01T10:19:17.890Z] [INFO] [stderr] @@ -29,10 +29,12 @@
+[2026-07-01T10:19:17.890Z] [INFO] [stderr]  ]
+[2026-07-01T10:19:17.890Z] [INFO] [stderr] +const V3_NEW_TABLES = ['publicApiContent']
+[2026-07-01T10:19:17.890Z] [INFO] [stderr]    'aiContents', 'progressRecords',
+[2026-07-01T10:19:17.890Z] [INFO] [stderr] -const ALL_TABLES = [...V1_TABLES, ...V2_NEW_TABLES]
+[2026-07-01T10:19:17.890Z] [INFO] [stderr] +
+[2026-07-01T10:19:17.890Z] [INFO] [stderr]  
+[2026-07-01T10:19:17.890Z] [INFO] [stderr] +const ALL_TABLES = [...V1_TABLES, ...V2_NEW_TABLES, ...V3_NEW_TABLES]
+[2026-07-01T10:19:17.890Z] [INFO] [stderr]    const id = crypto.randomUUID() as string
+[2026-07-01T10:19:17.890Z] [INFO] [stderr]  
+[2026-07-01T10:19:17.890Z] [INFO] [stderr]    const now = new Date().toISOString()
+[2026-07-01T10:19:17.890Z] [INFO] [stderr] [0m
+[2026-07-01T10:19:17.890Z] [INFO] [stderr]  function makeItem(table: string, overrides: Record<string, unknown> = {}): Record<string, unknown> {
+[2026-07-01T10:19:17.890Z] [INFO] [stderr] 
+[2026-07-01T10:19:17.890Z] [INFO] [stderr]    const base: Record<string, Record<string, unknown>> = {
+[2026-07-01T10:19:30.025Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:30.025Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:19:30.025Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:30.026Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]  
+[2026-07-01T10:19:30.025Z] [INFO] [stderr] [0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:30.026Z] [INFO] [stderr] @@ -130,12 +130,12 @@
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]  // 1. Database Versioning & Schema
+[2026-07-01T10:19:30.026Z] [INFO] [stderr] +  it('opens at version 3', async () => {
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]      const db = new AppDatabase()
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]  // ──────────────────────────────────────────────────
+[2026-07-01T10:19:30.026Z] [INFO] [stderr] +    expect(db.verno).toBe(3)
+[2026-07-01T10:19:30.026Z] [INFO] [stderr] -    expect(db.verno).toBe(2)
+[2026-07-01T10:19:30.026Z] [INFO] [stderr] -  it('opens at version 2', async () => {
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]      db.close()
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]      await db.open()
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]  describe('AppDatabase versioning and schema', () => {
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]    it('registers all v1 stores', () => {
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]    })
+[2026-07-01T10:19:30.026Z] [INFO] [stderr]  
+[2026-07-01T10:19:30.026Z] [INFO] [stderr] 
+[2026-07-01T10:19:30.026Z] [INFO] [stderr] [0m
+[2026-07-01T10:19:38.958Z] [INFO] [stderr] [0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] @@ -145,19 +145,19 @@
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]  })
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]  
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] +it('registers all v2 and v3 stores (v1 + new tables)', () => {
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]    const names = db.tables.map(t => t.name)
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] -it('registers all v2 stores (v1 + new tables)', () => {
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]    const db = new AppDatabase()
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]    for (const table of ALL_TABLES) {
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]      expect(names).toContain(table)
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]    }
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]  })
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] -it('has exactly 25 tables', () => {
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]    }
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] +it('has exactly 26 tables', () => {
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]    const db = new AppDatabase()
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] -  expect(db.tables.length).toBe(25)
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] +  expect(db.tables.length).toBe(26)
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]  })
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]  
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]  it('upgrades from version 1 to version 2 preserving v1 data', async () => {
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]    const v1Db = new Dexie('ielts-journey')
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] 
+[2026-07-01T10:19:38.959Z] [INFO] [stderr] [0m
+[2026-07-01T10:19:38.959Z] [INFO] [stderr]      expect(names).toContain(table)
+[2026-07-01T10:19:38.960Z] [INFO] [stderr]  
+[2026-07-01T10:19:47.229Z] [INFO] [stderr] [0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:47.230Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:47.230Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:47.230Z] [INFO] [stderr]  
+[2026-07-01T10:19:47.230Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:47.230Z] [INFO] [stderr] @@ -175,9 +175,9 @@
+[2026-07-01T10:19:47.230Z] [INFO] [stderr] -expect(db.verno).toBe(2)
+[2026-07-01T10:19:47.230Z] [INFO] [stderr]  destroyDb()
+[2026-07-01T10:19:47.229Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:19:47.230Z] [INFO] [stderr]  const db = getDb()
+[2026-07-01T10:19:47.230Z] [INFO] [stderr]  const vocab = await db.vocabulary.toArray()
+[2026-07-01T10:19:47.230Z] [INFO] [stderr] +expect(db.verno).toBe(3)
+[2026-07-01T10:19:47.230Z] [INFO] [stderr]  await db.open()
+[2026-07-01T10:19:47.230Z] [INFO] [stderr]  
+[2026-07-01T10:19:47.230Z] [INFO] [stderr] 
+[2026-07-01T10:19:47.230Z] [INFO] [stderr]  expect(vocab).toHaveLength(1)
+[2026-07-01T10:19:47.230Z] [INFO] [stderr]  expect(vocab[0].word).toBe('word')
+[2026-07-01T10:19:47.230Z] [INFO] [stderr] [0m
+[2026-07-01T10:19:55.503Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:55.503Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:55.503Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:19:55.503Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:55.503Z] [INFO] [stderr]      for (let i = 0; i < 5; i++) {
+[2026-07-01T10:19:55.503Z] [INFO] [stderr] @@ -481,9 +481,9 @@
+[2026-07-01T10:19:55.503Z] [INFO] [stderr]        await db.open()
+[2026-07-01T10:19:55.503Z] [INFO] [stderr] [0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:19:55.503Z] [INFO] [stderr]        const db = getDb()
+[2026-07-01T10:19:55.503Z] [INFO] [stderr]    })
+[2026-07-01T10:19:55.503Z] [INFO] [stderr]        destroyDb()
+[2026-07-01T10:19:55.503Z] [INFO] [stderr] +      expect(db.verno).toBe(3)
+[2026-07-01T10:19:55.503Z] [INFO] [stderr]      }
+[2026-07-01T10:19:55.503Z] [INFO] [stderr] -      expect(db.verno).toBe(2)
+[2026-07-01T10:19:55.504Z] [INFO] [stderr]  })
+[2026-07-01T10:19:55.504Z] [INFO] [stderr] 
+[2026-07-01T10:19:55.504Z] [INFO] [stderr]  
+[2026-07-01T10:19:55.504Z] [INFO] [stderr] [0m
+[2026-07-01T10:20:03.637Z] [INFO] [stderr] [0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:20:03.637Z] [INFO] [stderr]      customStudyPlans: [],
+[2026-07-01T10:20:03.637Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:20:03.637Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:20:03.637Z] [INFO] [stderr]      studyNotes: [],
+[2026-07-01T10:20:03.637Z] [INFO] [stderr]      aiContents: [],
+[2026-07-01T10:20:03.637Z] [INFO] [stderr]      usefulPhrases: [],
+[2026-07-01T10:20:03.637Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+[2026-07-01T10:20:03.637Z] [INFO] [stderr] +    publicApiContent: [],
+[2026-07-01T10:20:03.637Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:20:03.637Z] [INFO] [stderr] @@ -110,8 +110,9 @@
+[2026-07-01T10:20:03.637Z] [INFO] [stderr]  }
+[2026-07-01T10:20:03.637Z] [INFO] [stderr] [0m
+[2026-07-01T10:20:03.637Z] [INFO] [stderr]      progressRecords: [],
+[2026-07-01T10:20:03.637Z] [INFO] [stderr]      ...overrides,
+[2026-07-01T10:20:03.637Z] [INFO] [stderr] 
+[2026-07-01T10:20:03.637Z] [INFO] [stderr]    }
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] act(() => {
+[2026-07-01T10:20:07.642Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] 
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] [0m$ [0mpnpm test -- src/tests/storage/DatabaseMigration.test.ts 2>&1 | tail -30
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] 
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] 
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] 
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] 
+[2026-07-01T10:20:07.642Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] act(() => {
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] });
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] 
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] 
+[2026-07-01T10:20:07.642Z] [INFO] [stderr]       Tests  77 passed (77)
+[2026-07-01T10:20:07.642Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx (10 tests) 140ms
+[2026-07-01T10:20:07.642Z] [INFO] [stderr]    Start at  17:20:06
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] });
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] [0m
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] 
+[2026-07-01T10:20:07.642Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T10:20:07.642Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts (51 tests) 96ms
+[2026-07-01T10:20:07.642Z] [INFO] [stderr]  Test Files  4 passed (4)
+[2026-07-01T10:20:07.642Z] [INFO] [stderr]    Duration  973ms (transform 151ms, setup 258ms, collect 470ms, tests 300ms, environment 1.37s, prepare 210ms)
+[2026-07-01T10:20:10.949Z] [INFO] [stdout] All 77 tests pass. Let me also run a broader test to ensure no other tests are broken:
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] [0m$ [0mpnpm test 2>&1 | tail -30
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] act(() => {
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] 
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T10:20:12.235Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] 
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] 
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] });
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] 
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] 
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] act(() => {
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T10:20:12.235Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] 
+[2026-07-01T10:20:12.235Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts (51 tests) 74ms
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] 
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] });
+[2026-07-01T10:20:12.235Z] [INFO] [stderr]  Test Files  4 passed (4)
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] 
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T10:20:12.235Z] [INFO] [stderr]       Tests  77 passed (77)
+[2026-07-01T10:20:12.235Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx (10 tests) 133ms
+[2026-07-01T10:20:12.235Z] [INFO] [stderr] [0m
+[2026-07-01T10:20:12.235Z] [INFO] [stderr]    Start at  17:20:11
+[2026-07-01T10:20:12.235Z] [INFO] [stderr]    Duration  892ms (transform 135ms, setup 190ms, collect 387ms, tests 255ms, environment 1.35s, prepare 219ms)
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] [0m$ [0mpnpm typecheck 2>&1 | grep -E "^src/.*:.*error" | grep -v "AITutorChat" | grep -v "pre-existing"
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(66,10): error TS6133: 'isBoolean' is declared but its value is never read.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(74,10): error TS6133: 'isStringArray' is declared but its value is never read.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(86,7): error TS6133: 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(84,7): error TS6133: 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(98,10): error TS6133: 'validateDateFormat' is declared but its value is never read.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(85,7): error TS6133: 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(286,6): error TS6196: 'Validator' is declared but never used.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(58,10): error TS6133: 'isISODate' is declared but its value is never read.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(93,7): error TS6133: 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] [0m
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(96,7): error TS6133: 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[2026-07-01T10:20:20.739Z] [INFO] [stderr] src/services/storage/Database.ts(62,10): error TS6133: 'isOptionalString' is declared but its value is never read.
+[2026-07-01T10:20:25.215Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/api/import.ts
+[2026-07-01T10:20:25.313Z] [INFO] [stdout] No new type errors. All errors are pre-existing. Let me verify the final state of the key files:
+[2026-07-01T10:20:30.668Z] [INFO] [stderr] [✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[2026-07-01T10:20:30.669Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:20:30.669Z] [INFO] [stderr] [✓] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[2026-07-01T10:20:30.669Z] [INFO] [stderr] [✓] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[2026-07-01T10:20:30.669Z] [INFO] [stderr] [✓] Run validation commands
+[2026-07-01T10:20:30.669Z] [INFO] [stderr] [0m
+[2026-07-01T10:20:30.669Z] [INFO] [stderr] [0m
+[2026-07-01T10:20:30.668Z] [INFO] [stderr] [✓] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] **Created:** `src/features/publicApiIntegration/api/import.ts` (125 lines)
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] **Exported functions:**
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] - `createImportEntry(preview, overrides?)` — creates a `PublicApiImportedContent` entry with `crypto.randomUUID()` ID and `new Date().toISOString()` timestamp
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] - `validateLicense(licenseName)` — validates license against known open licenses; rejects missing, unclear, or restrictive licenses (e.g. "All Rights Reserved", "Unknown")
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] - `importPublicApiContent(preview, overrides?)` — validates license, creates entry, saves to IndexedDB via `DatabaseService.addPublicApiContent()`, returns `PublicApiImportResult`
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] ## Completion Summary
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] - `importPublicApiContentBatch(previews, overrides?)` — batch variant
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] - `src/features/publicApiIntegration/types.ts` — re-exports `PublicApiImportedContent` from models
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] 
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] 
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] - `src/features/publicApiIntegration/components/PublicApiSearch.tsx` — replaced localStorage stub with IndexedDB import via `importPublicApiContent`
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] **Modified files:**
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] - `src/services/storage/Database.ts` — added `publicApiContent` table (DB version 3), validator, `addPublicApiContent()` CRUD method, and export/table support
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] - `src/models/index.ts` — added `PublicApiImportedContent` interface and `publicApiContent` field to `AppExportData`
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] - `src/tests/storage/DatabaseMigration.test.ts` — updated version checks (2→3) and table count (25→26)
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] **Validation:** 77/77 tests pass, no new type errors.
+[2026-07-01T10:20:35.982Z] [INFO] [stdout] 
+[2026-07-01T10:20:35.981Z] [INFO] [stdout] 
+[2026-07-01T10:20:36.290Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-01T10:20:36.290Z] [INFO] Output:
+Now I'll add the `publicApiContent` table to `Database.ts`. Multiple edits needed:
+Now add to `IDatabase` interface:
+Add to `TABLE_NAMES`:
+Add validator for `publicApiContent`:
+Update `exportAll` to include `publicApiContent`:
+Now add the CRUD method for `publicApiContent`:
+Now replace the importContent stub with the real IndexedDB-based import:
+I need to update the test file to reflect the new DB version and table. Let me make all the fixes:
+All 77 tests pass. Let me also run a broader test to ensure no other tests are broken:
+No new type errors. All errors are pre-existing. Let me verify the final state of the key files:
+## Completion Summary
+
+**Created:** `src/features/publicApiIntegration/api/import.ts` (125 lines)
+
+**Exported functions:**
+- `validateLicense(licenseName)` — validates license against known open licenses; rejects missing, unclear, or restrictive licenses (e.g. "All Rights Reserved", "Unknown")
+- `createImportEntry(preview, overrides?)` — creates a `PublicApiImportedContent` entry with `crypto.randomUUID()` ID and `new Date().toISOString()` timestamp
+- `importPublicApiContent(preview, overrides?)` — validates license, creates entry, saves to IndexedDB via `DatabaseService.addPublicApiContent()`, returns `PublicApiImportResult`
+- `importPublicApiContentBatch(previews, overrides?)` — batch variant
+
+**Modified files:**
+- `src/models/index.ts` — added `PublicApiImportedContent` interface and `publicApiContent` field to `AppExportData`
+- `src/features/publicApiIntegration/types.ts` — re-exports `PublicApiImportedContent` from models
+- `src/services/storage/Database.ts` — added `publicApiContent` table (DB version 3), validator, `addPublicApiContent()` CRUD method, and export/table support
+- `src/features/publicApiIntegration/components/PublicApiSearch.tsx` — replaced localStorage stub with IndexedDB import via `importPublicApiContent`
+- `src/tests/storage/DatabaseMigration.test.ts` — updated version checks (2→3) and table count (25→26)
+
+**Validation:** 
+[2026-07-01T10:20:36.291Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"publicApiIntegration api import IndexedDB storage"}
+[0m✱ [0mGlob "src/features/publicApiIntegration/**/*"[90m 3 matches[0m
+[0m✱ [0mGlob "src/**/*indexeddb*"[90m 0 matches[0m
+[0m✱ [0mGlob "src/**/*IndexedDB*"[90m 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"symbol":"IDatabase","includeCode":true}
+[0m⚙ [0mcodegraph_codegraph_search {"query":"generateId"}
+[0m✱ [0mGlob "src/**/*db*"[90m 1 match[0m
+[0m✱ [0mGlob "src/**/*storage*"[90m 0 matches[0m
+[0m→ [0mRead src/utils/index.ts[90m [limit=30][0m
+[0m→ [0mRead src/services/storage/Database.ts
+[0m→ [0mRead src/features/publicApiIntegration/types.ts
+[0m✱ [0mGrep "PublicApiImportedContent"[90m 1 match[0m
+[0m→ [0mRead src/models
+[0m→ [0mRead src/services/storage/Database.ts[90m [offset=1401][0m
+[0m→ [0mRead src/models/index.ts
+[0m
+[0m# [0mTodos
+[ ] Add PublicApiImportedContent to models/index.ts and update feature types
+[ ] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[ ] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[ ] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[ ] Run validation commands
+[0m
+[0m# [0mTodos
+[•] Add PublicApiImportedContent to models/index.ts and update feature types
+[ ] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[ ] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[ ] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[ ] Run validation commands
+[0m
+[0m← [0mEdit src/models/index.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+@@ -563,8 +563,36 @@
+   createdAt: ISOString
+   updatedAt: ISOString
+ }
+ 
++// ── Public API Imported Content ────────────────────────────────
++
++export interface PublicApiImportedContent {
++  id: string
++  title: string
++  content: string
++  contentType: 'dictionary' | 'vocabulary-list' | 'reading' | 'listening' | 'article' | 'video' | 'exercise' | 'writing-prompt' | 'speaking-topic' | 'reference'
++  sourceType: 'public-api'
++  sourceName: 'wiktionary' | 'datamuse' | 'tatoeba' | 'oer-commons' | 'wikipedia' | 'gutendex' | 'youtube'
++  sourceUrl: string
++  licenseName: string
++  attribution: string
++  importedAt: ISOString
++  skill: string
++  topic: string
++  difficulty: VocabDifficulty
++  tags: string[]
++  userNotes: string
++  aiClassification?: {
++    topic: string
++    skill: string
++    difficulty: VocabDifficulty
++    tags: string[]
++    vocabulary: string[]
++    summary: string
++  }
++}
++
+ // ── AI-Generated Content ──────────────────────────────────────
+ 
+ export interface AiContent {
+   id: string
+
+[0m
+[0m← [0mEdit src/models/index.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/models/index.ts
+@@ -739,8 +739,9 @@
+   studyNotes: StudyNote[]
+   customStudyPlans: CustomStudyPlan[]
+   usefulPhrases: UsefulPhrase[]
+   aiContents: AiContent[]
++  publicApiContent: PublicApiImportedContent[]
+   progressRecords: ProgressRecord[]
+ }
+ 
+ // ── Seed data types (for typed constants) ────────────────────
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/types.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+@@ -1,9 +1,9 @@
+ // ============================================================
+ // Public API Integration — TypeScript Interfaces
+ // ============================================================
+ 
+-import type { ISOString, VocabDifficulty } from '../../models'
++import type { ISOString, VocabDifficulty, PublicApiImportedContent } from '../../models'
+ 
+ // ── Source & Content Type Enums ─────────────────────────────
+ 
+ export type PublicApiSourceName =
+@@ -39,38 +39,11 @@
+   | 'direct'        // Works from browser with no proxy
+   | 'cors-bypass'   // Needs CORS proxy
+   | 'no-cors'       // Cannot be used from browser (server-side only)
+ 
+-// ── Imported Content (stored in IndexedDB) ──────────────────
++// Re-export for convenience
++export type { PublicApiImportedContent }
+ 
+-export interface PublicApiImportedContent {
+-  id: string
+-  title: string
+-  content: string
+-  contentType: PublicApiContentType
+-  sourceType: SourceType
+-  sourceName: PublicApiSourceName
+-  sourceUrl: string
+-  licenseName: string
+-  attribution: string
+-  importedAt: ISOString
+-  skill: string
+-  topic: string
+-  difficulty: VocabDifficulty
+-  tags: string[]
+-  userNotes: string
+-
+-  // Optional classification metadata set by AI
+-  aiClassification?: {
+-    topic: string
+-    skill: string
+-    difficulty: VocabDifficulty
+-    tags: string[]
+-    vocabulary: string[]
+-    summary: string
+-  }
+-}
+-
+ // ── API Search & Preview ───────────────────────────────────
+ 
+ export interface PublicApiSearchParams {
+   source: PublicApiSourceName
+
+[0m
+[0m✱ [0mGrep "ISOString"[90m 1 match[0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/types.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/types.ts
+@@ -1,9 +1,9 @@
+ // ============================================================
+ // Public API Integration — TypeScript Interfaces
+ // ============================================================
+ 
+-import type { ISOString, VocabDifficulty, PublicApiImportedContent } from '../../models'
++import type { VocabDifficulty, PublicApiImportedContent } from '../../models'
+ 
+ // ── Source & Content Type Enums ─────────────────────────────
+ 
+ export type PublicApiSourceName =
+
+[0m
+[0m# [0mTodos
+[✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[•] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[ ] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[ ] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[ ] Run validation commands
+[0m
+[0m← [0mEdit src/services/storage/Database.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+@@ -24,8 +24,9 @@
+   CustomStudyPlan,
+   UsefulPhrase,
+   AiContent,
+   ProgressRecord,
++  PublicApiImportedContent,
+   AppExportData,
+ } from '../../models'
+ import { loadAppSettings, saveAppSettings, removeAppSettings } from './SettingsStorage'
+ 
+
+[0m
+[0m← [0mEdit src/services/storage/Database.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+@@ -137,8 +137,9 @@
+   studyNotes: Table<StudyNote, string>
+   customStudyPlans: Table<CustomStudyPlan, string>
+   usefulPhrases: Table<UsefulPhrase, string>
+   aiContents: Table<AiContent, string>
++  publicApiContent: Table<PublicApiImportedContent, string>
+   progressRecords: Table<ProgressRecord, string>
+ }
+ 
+ export class AppDatabase extends Dexie implements IDatabase {
+
+[0m
+[0m← [0mEdit src/services/storage/Database.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+@@ -166,8 +166,9 @@
+   studyNotes!: Table<StudyNote, string>
+   customStudyPlans!: Table<CustomStudyPlan, string>
+   usefulPhrases!: Table<UsefulPhrase, string>
+   aiContents!: Table<AiContent, string>
++  publicApiContent!: Table<PublicApiImportedContent, string>
+   progressRecords!: Table<ProgressRecord, string>
+ 
+   constructor(options?: DexieOptions) {
+     super(DB_NAME, options)
+@@ -215,8 +216,12 @@
+       usefulPhrases: 'id, topic, skill, difficulty, *tags, isFavorite, createdAt',
+       aiContents: 'id, type, topic, *tags, isFavorite, createdAt',
+       progressRecords: 'id, date, skill, createdAt',
+     })
++
++    this.version(3).stores({
++      publicApiContent: 'id, sourceName, contentType, topic, skill, difficulty, *tags, importedAt',
++    })
+   }
+ }
+ 
+ let dbInstance: AppDatabase | null = null
+
+[0m
+[0m← [0mEdit src/services/storage/Database.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+@@ -264,8 +264,9 @@
+   'studyNotes',
+   'customStudyPlans',
+   'usefulPhrases',
+   'aiContents',
++  'publicApiContent',
+   'progressRecords',
+ ]
+ 
+ function validateImportData(data: unknown): data is AppExportData {
+
+[0m
+[0m← [0mEdit src/services/storage/Database.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+@@ -467,8 +467,15 @@
+     const base = validateBaseItem(item, ['topic'])
+     if (!base.valid) return base
+     return { valid: true }
+   },
++  publicApiContent(item) {
++    const base = validateBaseItem(item, ['title', 'content', 'contentType', 'sourceName', 'sourceUrl', 'licenseName', 'attribution', 'importedAt'])
++    if (!base.valid) return base
++    const o = item as Record<string, unknown>
++    if (!isNonEmptyString(o.licenseName)) return { valid: false, error: 'licenseName must be a non-empty string' }
++    return { valid: true }
++  },
+ }
+ 
+ function validate(table: keyof IDatabase, item: unknown): void {
+   const validator = validators[table]
+
+[0m
+[0m← [0mEdit src/services/storage/Database.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+@@ -1443,9 +1443,9 @@
+   readingPracticeSessions, listeningSessions, listeningPracticeSessions,
+   writingSessions, speakingSessions, grammarNotes, mistakes, mockTests,
+   topicsProgress, passages, ieltsTopics, exampleSentences, readingPassages,
+   listeningTranscripts, writingPrompts, speakingQuestions, studyNotes,
+-  customStudyPlans, usefulPhrases, aiContents, progressRecords] = await Promise.all([
++  customStudyPlans, usefulPhrases, aiContents, publicApiContent, progressRecords] = await Promise.all([
+   this.getAll<VocabularyEntry>('vocabulary'),
+   this.getAll<VocabReviewEntry>('vocabularyReviews'),
+   this.getAll<TaskEntry>('tasks'),
+   this.getAll<ReadingSession>('readingSessions'),
+@@ -1468,8 +1468,9 @@
+   this.getAll<StudyNote>('studyNotes'),
+   this.getAll<CustomStudyPlan>('customStudyPlans'),
+   this.getAll<UsefulPhrase>('usefulPhrases'),
+   this.getAll<AiContent>('aiContents'),
++  this.getAll<PublicApiImportedContent>('publicApiContent'),
+   this.getAll<ProgressRecord>('progressRecords'),
+ ])
+ 
+ return {
+
+[0m
+[0m← [0mEdit src/services/storage/Database.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+@@ -1500,8 +1500,9 @@
+     studyNotes,
+     customStudyPlans,
+     usefulPhrases,
+     aiContents,
++    publicApiContent,
+     progressRecords,
+   }
+ },
+ 
+
+[0m
+[0m← [0mEdit src/services/storage/Database.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts
+@@ -894,8 +894,25 @@
+     return entry
+   })
+ },
+ 
++// Public API Imported Content
++async addPublicApiContent(item: Omit<PublicApiImportedContent, 'id' | 'importedAt'> & { id?: string; importedAt?: string }): Promise<PublicApiImportedContent> {
++  return safeDb(async () => {
++    const now = new Date().toISOString()
++    const entry: PublicApiImportedContent = {
++      ...item as PublicApiImportedContent,
++      id: item.id || crypto.randomUUID(),
++      tags: item.tags || [],
++      importedAt: item.importedAt || now,
++    }
++    validate('publicApiContent', entry)
++    const db = getDb()
++    await db.publicApiContent.put(entry)
++    return entry
++  })
++},
++
+ // Progress Records
+ async addProgressRecord(item: Omit<ProgressRecord, 'id' | 'createdAt'> & { id?: string }): Promise<ProgressRecord> {
+   return safeDb(async () => {
+     const now = new Date().toISOString()
+
+[0m
+[0m# [0mTodos
+[✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[✓] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[•] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[ ] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[ ] Run validation commands
+[0m
+[0m$ [0mls src/features/publicApiIntegration/api/ 2>/dev/null || echo "directory does not exist"
+directory does not exist
+[0m
+[0m$ [0mmkdir -p src/features/publicApiIntegration/api
+(no output)
+[0m
+[0m← [0mWrite src/features/publicApiIntegration/api/import.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/storage/Database.ts">
+ERROR [58:10] 'isISODate' is declared but its value is never read.
+ERROR [62:10] 'isOptionalString' is declared but its value is never read.
+ERROR [66:10] 'isBoolean' is declared but its value is never read.
+ERROR [74:10] 'isStringArray' is declared but its value is never read.
+ERROR [84:7] 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+ERROR [85:7] 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+ERROR [86:7] 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+ERROR [93:7] 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+ERROR [96:7] 'VALID_QUESTION_TYPES' is declared but its value is never read.
+ERROR [98:10] 'validateDateFormat' is declared but its value is never read.
+ERROR [286:6] 'Validator' is declared but never used.
+</diagnostics>
+[0m
+[0m# [0mTodos
+[✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[✓] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[✓] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[•] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[ ] Run validation commands
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [limit=30][0m
+[0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=330, limit=70][0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -346,45 +346,12 @@
+     attribution: `Source: ${result.sourceName} (${result.licenseName})`,
+   };
+ }
+ 
+-// ── Import handler (stub — stores to localStorage until IndexedDB is wired) ──
++// ── Import handler (saves to IndexedDB) ──────────────────────
+ 
+-async function importContent(
+-  preview: PublicApiPreview,
+-): Promise<PublicApiImportResult> {
+-  const contentId = generateId();
+-  const entry = {
+-    id: contentId,
+-    title: preview.title,
+-    content: preview.content,
+-    contentType: preview.contentType,
+-    sourceType: "public-api" as const,
+-    sourceName: preview.sourceName,
+-    sourceUrl: preview.sourceUrl,
+-    licenseName: preview.licenseName,
+-    attribution: preview.attribution,
+-    importedAt: new Date().toISOString(),
+-    skill: "",
+-    topic: "",
+-    difficulty: "medium" as const,
+-    tags: [] as string[],
+-    userNotes: "",
+-  };
++import { importPublicApiContent } from "../api/import";
+ 
+-  try {
+-    const existing = JSON.parse(
+-      localStorage.getItem("ielts-imported-content") ?? "[]",
+-    );
+-    existing.push(entry);
+-    localStorage.setItem("ielts-imported-content", JSON.stringify(existing));
+-  } catch {
+-    // Storage might be full or unavailable
+-  }
+-
+-  return { success: true, contentId };
+-}
+-
+ // ── Content type display helpers ────────────────────────────
+ 
+ const CONTENT_TYPE_INFO: Record<
+   PublicApiContentType,
+
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=465, limit=30][0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -2,13 +2,13 @@
+ import type {
+   PublicApiSourceName,
+   PublicApiSearchResult,
+   PublicApiPreview,
+-  PublicApiImportResult,
+   PublicApiContentType,
+   PublicApiSourceConfig,
+ } from "../types";
+ import { PUBLIC_API_SOURCES } from "../types";
++import { importPublicApiContent, validateLicense } from "../api/import";
+ import Card, {
+   CardContent,
+   CardHeader,
+   CardTitle,
+
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=1, limit=40][0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -348,10 +348,8 @@
+ }
+ 
+ // ── Import handler (saves to IndexedDB) ──────────────────────
+ 
+-import { importPublicApiContent } from "../api/import";
+-
+ // ── Content type display helpers ────────────────────────────
+ 
+ const CONTENT_TYPE_INFO: Record<
+   PublicApiContentType,
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -469,16 +469,14 @@
+ }
+ 
+ async function handleImport(preview: PublicApiPreview) {
+   setImporting(preview.id);
+-  try {
+-    const result = await importContent(preview);
+-    setImportResult((prev) => ({ ...prev, [preview.id]: result.success }));
+-  } catch {
+-    setImportResult((prev) => ({ ...prev, [preview.id]: false }));
+-  } finally {
+-    setImporting(null);
++  const result = await importPublicApiContent(preview);
++  setImportResult((prev) => ({ ...prev, [preview.id]: result.success }));
++  if (!result.success) {
++    setError(result.error ?? "Import failed");
+   }
++  setImporting(null);
+ }
+ 
+ const canSearch =
+   query.trim().length > 0 &&
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -6,9 +6,9 @@
+   PublicApiContentType,
+   PublicApiSourceConfig,
+ } from "../types";
+ import { PUBLIC_API_SOURCES } from "../types";
+-import { importPublicApiContent, validateLicense } from "../api/import";
++import { importPublicApiContent } from "../api/import";
+ import Card, {
+   CardContent,
+   CardHeader,
+   CardTitle,
+
+[0m
+[0m✱ [0mGrep "generateId"[90m 4 matches[0m
+[0m
+[0m# [0mTodos
+[✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[✓] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[✓] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[✓] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[•] Run validation commands
+[0m
+[0m$ [0mpnpm test --filter publicApiIntegration 2>&1 || echo "No test filter found, checking package.json scripts..."
+$ vitest run --filter publicApiIntegration
+file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+          throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+                ^
+
+CACError: Unknown option `--filter`
+    at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+    at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+    at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.0
+[ELIFECYCLE] Test failed. See above for more details.
+No test filter found, checking package.json scripts...
+[0m
+[0m$ [0mpnpm typecheck 2>&1 | head -30
+$ tsc -b --noEmit
+src/pages/AITutorChat.tsx(16,3): error TS6133: 'findLesson' is declared but its value is never read.
+src/pages/AITutorChat.tsx(22,3): error TS6133: 'suggestNextTopics' is declared but its value is never read.
+src/pages/AITutorChat.tsx(25,3): error TS6133: 'ExerciseFeedbackCard' is declared but its value is never read.
+src/pages/AITutorChat.tsx(150,36): error TS6133: 'topic' is declared but its value is never read.
+src/pages/AITutorChat.tsx(180,39): error TS6133: 'topic' is declared but its value is never read.
+src/pages/AITutorChat.tsx(396,62): error TS6133: 'topic' is declared but its value is never read.
+src/pages/AITutorChat.tsx(396,77): error TS6133: 'userAnswer' is declared but its value is never read.
+src/pages/AITutorChat.tsx(396,97): error TS6133: 'language' is declared but its value is never read.
+src/pages/AITutorChat.tsx(417,54): error TS6133: 'qType' is declared but its value is never read.
+src/pages/AITutorChat.tsx(433,61): error TS6133: 'topic' is declared but its value is never read.
+src/pages/AITutorChat.tsx(577,52): error TS6133: 'mode' is declared but its value is never read.
+src/pages/AITutorChat.tsx(633,55): error TS6133: 'mode' is declared but its value is never read.
+src/pages/AITutorChat.tsx(736,10): error TS6133: 'friendCorrections' is declared but its value is never read.
+src/pages/AITutorChat.tsx(751,10): error TS6133: 'socraticHistory' is declared but its value is never read.
+src/pages/AITutorChat.tsx(783,10): error TS6133: 'suggestionsLoading' is declared but its value is never read.
+src/pages/AITutorChat.tsx(2480,11): error TS2322: Type '(overrideText?: string) => Promise<void>' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'.
+  Types of parameters 'overrideText' and 'event' are incompatible.
+    Type 'MouseEvent<HTMLButtonElement, MouseEvent>' is not assignable to type 'string'.
+src/services/storage/Database.ts(58,10): error TS6133: 'isISODate' is declared but its value is never read.
+src/services/storage/Database.ts(62,10): error TS6133: 'isOptionalString' is declared but its value is never read.
+src/services/storage/Database.ts(66,10): error TS6133: 'isBoolean' is declared but its value is never read.
+src/services/storage/Database.ts(74,10): error TS6133: 'isStringArray' is declared but its value is never read.
+src/services/storage/Database.ts(84,7): error TS6133: 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(85,7): error TS6133: 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(86,7): error TS6133: 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(93,7): error TS6133: 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+src/services/storage/Database.ts(96,7): error TS6133: 'VALID_QUESTION_TYPES' is declared but its value is never read.
+src/services/storage/Database.ts(98,10): error TS6133: 'validateDateFormat' is declared but its value is never read.
+src/services/storage/Database.ts(286,6): error TS6196: 'Validator' is declared but never used.
+[0m
+[0m$ [0mpnpm test -- src/features/publicApiIntegration 2>&1 | tail -20
+[32m- 2[39m
+[31m+ 3[39m
+
+ ❯ src/tests/storage/DatabaseMigration.test.ts:483:24
+    481|       const db = getDb()
+    482|       await db.open()
+    483|       expect(db.verno).toBe(2)
+       |                        ^
+    484|     }
+    485|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  5 failed | 72 passed (77)
+   Start at  17:18:58
+   Duration  785ms (transform 131ms, setup 231ms, collect 367ms, tests 252ms, environment 1.13s, prepare 184ms)
+
+[ELIFECYCLE] Test failed. See above for more details.
+[0m
+[0m→ [0mRead src/tests/storage/DatabaseMigration.test.ts
+[0m
+[0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+@@ -29,10 +29,12 @@
+   'studyNotes', 'customStudyPlans', 'usefulPhrases',
+   'aiContents', 'progressRecords',
+ ]
+ 
+-const ALL_TABLES = [...V1_TABLES, ...V2_NEW_TABLES]
++const V3_NEW_TABLES = ['publicApiContent']
+ 
++const ALL_TABLES = [...V1_TABLES, ...V2_NEW_TABLES, ...V3_NEW_TABLES]
++
+ function makeItem(table: string, overrides: Record<string, unknown> = {}): Record<string, unknown> {
+   const id = crypto.randomUUID() as string
+   const now = new Date().toISOString()
+   const base: Record<string, Record<string, unknown>> = {
+
+[0m
+[0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+@@ -130,12 +130,12 @@
+ // 1. Database Versioning & Schema
+ // ──────────────────────────────────────────────────
+ 
+ describe('AppDatabase versioning and schema', () => {
+-  it('opens at version 2', async () => {
++  it('opens at version 3', async () => {
+     const db = new AppDatabase()
+     await db.open()
+-    expect(db.verno).toBe(2)
++    expect(db.verno).toBe(3)
+     db.close()
+   })
+ 
+   it('registers all v1 stores', () => {
+
+[0m
+[0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+@@ -145,19 +145,19 @@
+     expect(names).toContain(table)
+   }
+ })
+ 
+-it('registers all v2 stores (v1 + new tables)', () => {
++it('registers all v2 and v3 stores (v1 + new tables)', () => {
+   const db = new AppDatabase()
+   const names = db.tables.map(t => t.name)
+   for (const table of ALL_TABLES) {
+     expect(names).toContain(table)
+   }
+ })
+ 
+-it('has exactly 25 tables', () => {
++it('has exactly 26 tables', () => {
+   const db = new AppDatabase()
+-  expect(db.tables.length).toBe(25)
++  expect(db.tables.length).toBe(26)
+ })
+ 
+ it('upgrades from version 1 to version 2 preserving v1 data', async () => {
+   const v1Db = new Dexie('ielts-journey')
+
+[0m
+[0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+@@ -175,9 +175,9 @@
+ 
+ destroyDb()
+ const db = getDb()
+ await db.open()
+-expect(db.verno).toBe(2)
++expect(db.verno).toBe(3)
+ 
+ const vocab = await db.vocabulary.toArray()
+ expect(vocab).toHaveLength(1)
+ expect(vocab[0].word).toBe('word')
+
+[0m
+[0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+@@ -481,9 +481,9 @@
+     for (let i = 0; i < 5; i++) {
+       destroyDb()
+       const db = getDb()
+       await db.open()
+-      expect(db.verno).toBe(2)
++      expect(db.verno).toBe(3)
+     }
+   })
+ })
+ 
+
+[0m
+[0m← [0mEdit src/tests/storage/DatabaseMigration.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/tests/storage/DatabaseMigration.test.ts
+@@ -110,8 +110,9 @@
+     studyNotes: [],
+     customStudyPlans: [],
+     usefulPhrases: [],
+     aiContents: [],
++    publicApiContent: [],
+     progressRecords: [],
+     ...overrides,
+   }
+ }
+
+[0m
+[0m$ [0mpnpm test -- src/tests/storage/DatabaseMigration.test.ts 2>&1 | tail -30
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/tests/storage/DatabaseMigration.test.ts (51 tests) 96ms
+ ✓ src/pages/VocabularyReview.test.tsx (10 tests) 140ms
+
+ Test Files  4 passed (4)
+      Tests  77 passed (77)
+   Start at  17:20:06
+   Duration  973ms (transform 151ms, setup 258ms, collect 470ms, tests 300ms, environment 1.37s, prepare 210ms)
+[0m
+[0m$ [0mpnpm test 2>&1 | tail -30
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/tests/storage/DatabaseMigration.test.ts (51 tests) 74ms
+ ✓ src/pages/VocabularyReview.test.tsx (10 tests) 133ms
+
+ Test Files  4 passed (4)
+      Tests  77 passed (77)
+   Start at  17:20:11
+   Duration  892ms (transform 135ms, setup 190ms, collect 387ms, tests 255ms, environment 1.35s, prepare 219ms)
+[0m
+[0m$ [0mpnpm typecheck 2>&1 | grep -E "^src/.*:.*error" | grep -v "AITutorChat" | grep -v "pre-existing"
+src/services/storage/Database.ts(58,10): error TS6133: 'isISODate' is declared but its value is never read.
+src/services/storage/Database.ts(62,10): error TS6133: 'isOptionalString' is declared but its value is never read.
+src/services/storage/Database.ts(66,10): error TS6133: 'isBoolean' is declared but its value is never read.
+src/services/storage/Database.ts(74,10): error TS6133: 'isStringArray' is declared but its value is never read.
+src/services/storage/Database.ts(84,7): error TS6133: 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(85,7): error TS6133: 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(86,7): error TS6133: 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+src/services/storage/Database.ts(93,7): error TS6133: 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+src/services/storage/Database.ts(96,7): error TS6133: 'VALID_QUESTION_TYPES' is declared but its value is never read.
+src/services/storage/Database.ts(98,10): error TS6133: 'validateDateFormat' is declared but its value is never read.
+src/services/storage/Database.ts(286,6): error TS6196: 'Validator' is declared but never used.
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/api/import.ts
+[0m
+[0m# [0mTodos
+[✓] Add PublicApiImportedContent to models/index.ts and update feature types
+[✓] Add publicApiContent table to Database.ts (interface, schema, validator, CRUD)
+[✓] Create src/features/publicApiIntegration/api/import.ts with import logic and license validation
+[✓] Update PublicApiSearch.tsx to use the new IndexedDB import function
+[✓] Run validation commands
+[0m
+[2026-07-01T10:20:36.291Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T10:20:36.294Z] [INFO] Task completed successfully

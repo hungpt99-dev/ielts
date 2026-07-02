@@ -1,0 +1,111 @@
+{
+  "title": "Remove redundant markdown documentation files",
+  "summary": "Identify and delete redundant .md documentation files in the project",
+  "tasks": [
+    {
+      "title": "Identify redundant .md documentation files in the project",
+      "description": "Scan the project directory to find all markdown (.md) files and identify which ones are redundant duplicates or no longer needed based on naming, content similarity, or usage references.",
+      "executor": "shell",
+      "dependsOn": [],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "A list of redundant markdown files to remove is generated",
+        "Files identified are confirmed to be duplicates or unused"
+      ],
+      "commands": [
+        "find . -type f -name '*.md' > all_md_files.txt",
+        "grep -ril 'redundant' . --include='*.md' > redundant_md_candidates.txt || true"
+      ],
+      "validation": {
+        "commands": [
+          "cat redundant_md_candidates.txt"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A text file listing redundant markdown files to be deleted",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "redundant_md_candidates.txt",
+          "description": "List of candidate redundant markdown files",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "read",
+      "inputContext": "Project directory with markdown files",
+      "targetFiles": [
+        "redundant_md_candidates.txt"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "redundant_md_candidates.txt file exists",
+        "command exited with 0"
+      ],
+      "verificationCommand": "cat redundant_md_candidates.txt",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a definitive list of redundant markdown files for removal"
+    },
+    {
+      "title": "Delete identified redundant markdown files",
+      "description": "Delete all markdown files listed in redundant_md_candidates.txt to remove redundant documentation files from the project.",
+      "executor": "shell",
+      "dependsOn": [
+        "Identify redundant .md documentation files in the project"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "All files listed in redundant_md_candidates.txt are deleted",
+        "No errors occur during deletion"
+      ],
+      "commands": [
+        "xargs -a redundant_md_candidates.txt rm -f"
+      ],
+      "validation": {
+        "commands": [
+          "test ! -s redundant_md_candidates.txt || ! xargs -a redundant_md_candidates.txt ls"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Redundant markdown files are removed from the project directory",
+      "outputPlan": [
+        {
+          "action": "delete",
+          "target": "files listed in redundant_md_candidates.txt",
+          "description": "Remove redundant markdown documentation files",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "operations",
+      "actionType": "delete",
+      "inputContext": "List of redundant markdown files from previous task",
+      "targetFiles": [],
+      "targetArtifacts": [],
+      "evidence": [
+        "Files no longer exist",
+        "command exited with 0"
+      ],
+      "verificationCommand": "xargs -a redundant_md_candidates.txt ls",
+      "approvalRequired": true,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Cleans up the project by removing redundant markdown documentation files"
+    }
+  ]
+}

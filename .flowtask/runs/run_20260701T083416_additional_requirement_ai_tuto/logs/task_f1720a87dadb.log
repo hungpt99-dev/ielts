@@ -1,0 +1,299 @@
+[2026-07-01T09:37:57.067Z] [INFO] Task started: Implement Smart Reminder Assistant with Local-First Notifications and In-App Reminders
+[2026-07-01T09:37:57.069Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/services/aiTutor/ReminderService.ts","description":"Local-first reminder service with notifications and alarms","validationMethod":"file_exists"},{"action":"create","target":"docs/ReminderLimitations.md","description":"Documentation of reminder limitations without backend","validationMethod":"file_exists"}]
+[2026-07-01T09:37:57.685Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-01T09:37:57.686Z] [INFO] [stderr] [0m
+[2026-07-01T09:37:57.685Z] [INFO] [stderr] [0m
+[2026-07-01T09:38:02.670Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"aiTutor services data models storage","maxFiles":15}
+[2026-07-01T09:38:02.904Z] [INFO] [stderr] [0m✱ [0mGlob "src/services/aiTutor/**/*"[90m 1 match[0m
+[2026-07-01T09:38:02.959Z] [INFO] [stderr] [0m✱ [0mGlob "docs/**/*"[90m 4 matches[0m
+[2026-07-01T09:38:05.518Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"ReminderType","includeCode":true}
+[2026-07-01T09:38:05.885Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/aiTutorModels.ts","offset":1,"limit":100}
+[2026-07-01T09:38:06.136Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/services/storage/LocalTutorStorage.ts"}
+[2026-07-01T09:38:09.338Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/aiTutorModels.ts","offset":100,"limit":100}
+[2026-07-01T09:38:09.570Z] [INFO] [stderr] [0m✱ [0mGlob "src/**/*Reminder*"[90m 0 matches[0m
+[2026-07-01T09:38:10.087Z] [INFO] [stderr] [0m✱ [0mGrep "Notification|notification"[90m in src · 7 matches[0m
+[2026-07-01T09:38:12.431Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/services/storage/SettingsStorage.ts"}
+[2026-07-01T09:38:13.062Z] [INFO] [stderr] [0m✱ [0mGrep "Notification\.requestPermission|Notification\.permission|new Notification"[90m in src · 2 matches[0m
+[2026-07-01T09:38:13.546Z] [INFO] [stderr] [0m✱ [0mGrep "chrome\.alarms|chromeAlarm|ChromeAlarm"[90m in src · 0 matches[0m
+[2026-07-01T09:38:16.472Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/**/*.ts"[90m 19 matches[0m
+[2026-07-01T09:38:16.933Z] [INFO] [stderr] [0m✱ [0mGrep "alarms|Alarm"[90m in apps/extension · 0 matches[0m
+[2026-07-01T09:38:19.686Z] [INFO] [stderr] [0m→ [0mRead src/features/settings/Settings.tsx[90m [offset=130, limit=80][0m
+[2026-07-01T09:38:20.121Z] [INFO] [stderr] [0m→ [0mRead src/features/settings/Settings.tsx[90m [offset=270, limit=30][0m
+[2026-07-01T09:38:20.425Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/index.ts
+[2026-07-01T09:38:36.342Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T09:38:36.342Z] [INFO] [stderr] [0m
+[2026-07-01T09:38:36.342Z] [INFO] [stderr] [0m
+[2026-07-01T09:38:36.342Z] [INFO] [stderr] [ ] Create docs/ReminderLimitations.md
+[2026-07-01T09:38:36.342Z] [INFO] [stderr] [•] Create src/services/aiTutor/ReminderService.ts
+[2026-07-01T09:38:36.342Z] [INFO] [stderr] [ ] Run validation (pnpm test)
+[2026-07-01T09:38:38.996Z] [INFO] [stderr] [0m
+[2026-07-01T09:38:38.996Z] [INFO] [stderr] [0m$ [0mls src/services/aiTutor/
+[2026-07-01T09:38:38.996Z] [INFO] [stderr] TopicContextManager.ts
+[2026-07-01T09:38:41.580Z] [INFO] [stderr] [0m→ [0mRead src/services/aiTutor/TopicContextManager.ts
+[2026-07-01T09:39:21.911Z] [INFO] [stdout] Now I have full context. Let me create both files.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] [0m← [0mWrite src/services/aiTutor/ReminderService.ts
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] 
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/aiTutor/ReminderService.ts">
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [143:47] Cannot find name 'chrome'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [164:9] Cannot find name 'chrome'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [158:14] Property 'alarmCreated' does not exist on type 'ReminderService'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [182:12] Property 'alarmCreated' does not exist on type 'ReminderService'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [193:7] Cannot find name 'chrome'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [143:19] Cannot find name 'chrome'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [178:7] Cannot find name 'chrome'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] [0m
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [165:14] Property 'alarmCreated' does not exist on type 'ReminderService'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [208:7] Cannot find name 'chrome'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [202:10] Property 'alarmCreated' does not exist on type 'ReminderService'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [201:5] Cannot find name 'chrome'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [207:29] Property 'alarmCreated' does not exist on type 'ReminderService'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [210:10] Property 'alarmCreated' does not exist on type 'ReminderService'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [194:12] Property 'alarmCreated' does not exist on type 'ReminderService'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [288:7] Cannot find name 'chrome'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [290:18] Cannot find name 'chrome'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [384:43] Argument of type 'Omit<Reminder, "id" | "createdAt" | "updatedAt" | "isTriggered" | "lastTriggeredAt">' is not assignable to parameter of type 'Omit<Reminder, "id" | "createdAt" | "updatedAt">'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr] ERROR [407:58] Argument of type 'Omit<Reminder, "id" | "createdAt" | "updatedAt" | "isTriggered" | "lastTriggeredAt">' is not assignable to parameter of type 'Omit<Reminder, "id" | "createdAt" | "updatedAt">'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr]   Property 'isTriggered' is missing in type 'Omit<Reminder, "id" | "createdAt" | "updatedAt" | "isTriggered" | "lastTriggeredAt">' but required in type 'Omit<Reminder, "id" | "createdAt" | "updatedAt">'.
+[2026-07-01T09:39:24.728Z] [INFO] [stderr]   Property 'isTriggered' is missing in type 'Omit<Reminder, "id" | "createdAt" | "updatedAt" | "isTriggered" | "lastTriggeredAt">' but required in type 'Omit<Reminder, "id" | "createdAt" | "updatedAt">'.
+[2026-07-01T09:39:24.729Z] [INFO] [stderr] ERROR [415:11] 'wasEnabled' is declared but its value is never read.
+[2026-07-01T09:39:24.729Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T09:39:24.729Z] [INFO] [stderr] [0m
+[2026-07-01T09:39:30.318Z] [INFO] [stderr] [0m✱ [0mGlob "**/tsconfig*.json"[90m 4 matches[0m
+[2026-07-01T09:39:30.614Z] [INFO] [stderr] [0m✱ [0mGlob "**/types/global.d.ts"[90m 0 matches[0m
+[2026-07-01T09:39:30.916Z] [INFO] [stderr] [0m✱ [0mGrep "chrome\."[90m 0 matches[0m
+[2026-07-01T09:39:33.515Z] [INFO] [stderr] [0m→ [0mRead tsconfig.app.json
+[2026-07-01T09:39:33.572Z] [INFO] [stderr] [0m→ [0mRead tsconfig.json
+[2026-07-01T09:39:43.642Z] [INFO] [stderr] [0m→ [0mRead src/services/aiTutor/ReminderService.ts[90m [limit=30][0m
+[2026-07-01T09:40:11.925Z] [INFO] [stderr] [0m
+[2026-07-01T09:40:11.925Z] [INFO] [stderr] [0m
+[2026-07-01T09:40:11.925Z] [INFO] [stderr] [0m← [0mWrite src/services/aiTutor/ReminderService.ts
+[2026-07-01T09:40:11.925Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T09:40:15.460Z] [INFO] [stderr] (no output)
+[2026-07-01T09:40:15.460Z] [INFO] [stderr] [0m
+[2026-07-01T09:40:15.460Z] [INFO] [stderr] [0m$ [0mpnpm tsc --noEmit 2>&1 | head -50
+[2026-07-01T09:40:18.413Z] [INFO] [stderr] [•] Create docs/ReminderLimitations.md
+[2026-07-01T09:40:18.414Z] [INFO] [stderr] [0m
+[2026-07-01T09:40:18.414Z] [INFO] [stderr] [ ] Run validation (pnpm test)
+[2026-07-01T09:40:18.414Z] [INFO] [stderr] [✓] Create src/services/aiTutor/ReminderService.ts
+[2026-07-01T09:40:18.414Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T09:40:18.478Z] [INFO] [stdout] No TypeScript errors. Now creating the documentation file.
+[2026-07-01T09:40:38.326Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T09:40:38.326Z] [INFO] [stderr] [0m
+[2026-07-01T09:40:38.326Z] [INFO] [stderr] [0m← [0mWrite docs/ReminderLimitations.md
+[2026-07-01T09:40:41.306Z] [INFO] [stderr] [✓] Create src/services/aiTutor/ReminderService.ts
+[2026-07-01T09:40:41.306Z] [INFO] [stderr] [0m
+[2026-07-01T09:40:41.306Z] [INFO] [stderr] [✓] Create docs/ReminderLimitations.md
+[2026-07-01T09:40:41.306Z] [INFO] [stderr] [•] Run validation (pnpm test)
+[2026-07-01T09:40:41.306Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T09:40:45.260Z] [INFO] [stderr] [0m$ [0mpnpm test 2>&1 | tail -40
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T09:40:45.261Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] });
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] });
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] act(() => {
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] act(() => {
+[2026-07-01T09:40:45.261Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr]  Test Files  4 passed (4)
+[2026-07-01T09:40:45.261Z] [INFO] [stderr]       Tests  77 passed (77)
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] [0m
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] });
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] 
+[2026-07-01T09:40:45.261Z] [INFO] [stderr]    Duration  860ms (transform 126ms, setup 276ms, collect 377ms, tests 228ms, environment 1.22s, prepare 175ms)
+[2026-07-01T09:40:45.261Z] [INFO] [stderr]    Start at  16:40:44
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] act(() => {
+[2026-07-01T09:40:45.261Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T09:40:45.261Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx (10 tests) 124ms
+[2026-07-01T09:40:48.184Z] [INFO] [stderr] [✓] Create docs/ReminderLimitations.md
+[2026-07-01T09:40:48.184Z] [INFO] [stderr] [0m
+[2026-07-01T09:40:48.184Z] [INFO] [stderr] [✓] Create src/services/aiTutor/ReminderService.ts
+[2026-07-01T09:40:48.184Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T09:40:48.184Z] [INFO] [stderr] [✓] Run validation (pnpm test)
+[2026-07-01T09:40:48.289Z] [INFO] [stdout] All 77 tests pass. Let me finalize.
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] **Created `src/services/aiTutor/ReminderService.ts`** — a local-first reminder service that:
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] - Polls every 60s for due reminders (checking `scheduledTime` + `repeatDays` or `scheduledDate`)
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] - Auto-creates default reminders (daily study, vocabulary review, mistake review, writing draft, exam countdown, missed task) on first init
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] ## Summary
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] - Delivers via 3 channels: **browser notifications** (Web Notification API), **Chrome extension notifications/alarms** (if available), and **in-app event callbacks** (for dashboard display)
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] - Provides CRUD via delegation to `LocalTutorStorage` + alarm lifecycle management
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] - Tracks triggered reminders per-day in `localStorage` to prevent duplicates
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] 
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] 
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] **Validation**: `pnpm test` — 4 test files, 77 tests, all passing.
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] 
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] **Created `docs/ReminderLimitations.md`** — documents all constraints of the local-first approach (tab must be open, no push server, no cross-device sync, `localStorage` eviction, etc.) across all delivery channels, with best practices and future improvement notes.
+[2026-07-01T09:40:53.062Z] [INFO] [stdout] - Exposes `checkMissedTasks()` and `checkExamCountdown()` for additional logic
+[2026-07-01T09:40:53.390Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-01T09:40:53.390Z] [INFO] Output:
+Now I have full context. Let me create both files.
+No TypeScript errors. Now creating the documentation file.
+All 77 tests pass. Let me finalize.
+## Summary
+
+**Created `src/services/aiTutor/ReminderService.ts`** — a local-first reminder service that:
+- Polls every 60s for due reminders (checking `scheduledTime` + `repeatDays` or `scheduledDate`)
+- Delivers via 3 channels: **browser notifications** (Web Notification API), **Chrome extension notifications/alarms** (if available), and **in-app event callbacks** (for dashboard display)
+- Auto-creates default reminders (daily study, vocabulary review, mistake review, writing draft, exam countdown, missed task) on first init
+- Provides CRUD via delegation to `LocalTutorStorage` + alarm lifecycle management
+- Tracks triggered reminders per-day in `localStorage` to prevent duplicates
+- Exposes `checkMissedTasks()` and `checkExamCountdown()` for additional logic
+
+**Created `docs/ReminderLimitations.md`** — documents all constraints of the local-first approach (tab must be open, no push server, no cross-device sync, `localStorage` eviction, etc.) across all delivery channels, with best practices and future improvement notes.
+
+**Validation**: `pnpm test` — 4 test files, 77 tests, all passing.
+[2026-07-01T09:40:53.391Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"aiTutor services data models storage","maxFiles":15}
+[0m✱ [0mGlob "src/services/aiTutor/**/*"[90m 1 match[0m
+[0m✱ [0mGlob "docs/**/*"[90m 4 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"symbol":"ReminderType","includeCode":true}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/aiTutorModels.ts","offset":1,"limit":100}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/services/storage/LocalTutorStorage.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/aiTutorModels.ts","offset":100,"limit":100}
+[0m✱ [0mGlob "src/**/*Reminder*"[90m 0 matches[0m
+[0m✱ [0mGrep "Notification|notification"[90m in src · 7 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/services/storage/SettingsStorage.ts"}
+[0m✱ [0mGrep "Notification\.requestPermission|Notification\.permission|new Notification"[90m in src · 2 matches[0m
+[0m✱ [0mGrep "chrome\.alarms|chromeAlarm|ChromeAlarm"[90m in src · 0 matches[0m
+[0m✱ [0mGlob "apps/extension/**/*.ts"[90m 19 matches[0m
+[0m✱ [0mGrep "alarms|Alarm"[90m in apps/extension · 0 matches[0m
+[0m→ [0mRead src/features/settings/Settings.tsx[90m [offset=130, limit=80][0m
+[0m→ [0mRead src/features/settings/Settings.tsx[90m [offset=270, limit=30][0m
+[0m→ [0mRead apps/extension/src/background/index.ts
+[0m
+[0m# [0mTodos
+[•] Create src/services/aiTutor/ReminderService.ts
+[ ] Create docs/ReminderLimitations.md
+[ ] Run validation (pnpm test)
+[0m
+[0m$ [0mls src/services/aiTutor/
+TopicContextManager.ts
+[0m
+[0m→ [0mRead src/services/aiTutor/TopicContextManager.ts
+[0m
+[0m← [0mWrite src/services/aiTutor/ReminderService.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/services/aiTutor/ReminderService.ts">
+ERROR [143:19] Cannot find name 'chrome'.
+ERROR [143:47] Cannot find name 'chrome'.
+ERROR [158:14] Property 'alarmCreated' does not exist on type 'ReminderService'.
+ERROR [164:9] Cannot find name 'chrome'.
+ERROR [165:14] Property 'alarmCreated' does not exist on type 'ReminderService'.
+ERROR [178:7] Cannot find name 'chrome'.
+ERROR [182:12] Property 'alarmCreated' does not exist on type 'ReminderService'.
+ERROR [193:7] Cannot find name 'chrome'.
+ERROR [194:12] Property 'alarmCreated' does not exist on type 'ReminderService'.
+ERROR [201:5] Cannot find name 'chrome'.
+ERROR [202:10] Property 'alarmCreated' does not exist on type 'ReminderService'.
+ERROR [207:29] Property 'alarmCreated' does not exist on type 'ReminderService'.
+ERROR [208:7] Cannot find name 'chrome'.
+ERROR [210:10] Property 'alarmCreated' does not exist on type 'ReminderService'.
+ERROR [288:7] Cannot find name 'chrome'.
+ERROR [290:18] Cannot find name 'chrome'.
+ERROR [384:43] Argument of type 'Omit<Reminder, "id" | "createdAt" | "updatedAt" | "isTriggered" | "lastTriggeredAt">' is not assignable to parameter of type 'Omit<Reminder, "id" | "createdAt" | "updatedAt">'.
+  Property 'isTriggered' is missing in type 'Omit<Reminder, "id" | "createdAt" | "updatedAt" | "isTriggered" | "lastTriggeredAt">' but required in type 'Omit<Reminder, "id" | "createdAt" | "updatedAt">'.
+ERROR [407:58] Argument of type 'Omit<Reminder, "id" | "createdAt" | "updatedAt" | "isTriggered" | "lastTriggeredAt">' is not assignable to parameter of type 'Omit<Reminder, "id" | "createdAt" | "updatedAt">'.
+  Property 'isTriggered' is missing in type 'Omit<Reminder, "id" | "createdAt" | "updatedAt" | "isTriggered" | "lastTriggeredAt">' but required in type 'Omit<Reminder, "id" | "createdAt" | "updatedAt">'.
+ERROR [415:11] 'wasEnabled' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m✱ [0mGlob "**/tsconfig*.json"[90m 4 matches[0m
+[0m✱ [0mGlob "**/types/global.d.ts"[90m 0 matches[0m
+[0m✱ [0mGrep "chrome\."[90m 0 matches[0m
+[0m→ [0mRead tsconfig.app.json
+[0m→ [0mRead tsconfig.json
+[0m→ [0mRead src/services/aiTutor/ReminderService.ts[90m [limit=30][0m
+[0m
+[0m← [0mWrite src/services/aiTutor/ReminderService.ts
+Wrote file successfully.
+[0m
+[0m$ [0mpnpm tsc --noEmit 2>&1 | head -50
+(no output)
+[0m
+[0m# [0mTodos
+[✓] Create src/services/aiTutor/ReminderService.ts
+[•] Create docs/ReminderLimitations.md
+[ ] Run validation (pnpm test)
+[0m
+[0m← [0mWrite docs/ReminderLimitations.md
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create src/services/aiTutor/ReminderService.ts
+[✓] Create docs/ReminderLimitations.md
+[•] Run validation (pnpm test)
+[0m
+[0m$ [0mpnpm test 2>&1 | tail -40
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/pages/VocabularyReview.test.tsx (10 tests) 124ms
+
+ Test Files  4 passed (4)
+      Tests  77 passed (77)
+   Start at  16:40:44
+   Duration  860ms (transform 126ms, setup 276ms, collect 377ms, tests 228ms, environment 1.22s, prepare 175ms)
+[0m
+[0m# [0mTodos
+[✓] Create src/services/aiTutor/ReminderService.ts
+[✓] Create docs/ReminderLimitations.md
+[✓] Run validation (pnpm test)
+[0m
+[2026-07-01T09:40:53.391Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T09:40:53.397Z] [INFO] Task completed successfully

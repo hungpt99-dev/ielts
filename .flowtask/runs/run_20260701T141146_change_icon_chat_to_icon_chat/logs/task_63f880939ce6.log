@@ -1,0 +1,335 @@
+[2026-07-01T14:12:26.622Z] [INFO] Task started: Replace old chat icon with new chat icon in src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:12:26.625Z] [INFO] [info] [output-plan] [{"action":"modify","target":"src/components/aiTutor/ModeSelector.tsx","description":"Updated chat icon in ModeSelector component","validationMethod":"file_diff"}]
+[2026-07-01T14:12:27.169Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-01T14:12:27.169Z] [INFO] [stderr] [0m
+[2026-07-01T14:12:27.169Z] [INFO] [stderr] [0m
+[2026-07-01T14:12:33.129Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"ModeSelector chat icon ModeSelector.tsx"}
+[2026-07-01T14:12:33.323Z] [INFO] [stderr] [0m✱ [0mGrep "chat"[90m 1 match[0m
+[2026-07-01T14:12:39.197Z] [INFO] [stderr] [0m✱ [0mGrep "MessageCircle|MessageSquare|chat.*icon|icon.*chat"[90m 0 matches[0m
+[2026-07-01T14:12:39.448Z] [INFO] [stderr] [0m✱ [0mGrep "lucide|lucide-react"[90m 0 matches[0m
+[2026-07-01T14:12:43.017Z] [INFO] [stderr] [0m✱ [0mGrep "svg|icon|className="h-5 w-5""[90m 14 matches[0m
+[2026-07-01T14:12:43.367Z] [INFO] [stderr] [0m✱ [0mGrep "ChatBubble|chat-bubble|chatBubble|ChatIcon"[90m 6 matches[0m
+[2026-07-01T14:12:47.804Z] [INFO] [stderr] [0m• [0mFind chat icon usage[90m Explore Agent[0m
+[2026-07-01T14:13:38.568Z] [INFO] [stderr] [0m✓ [0mFind chat icon usage[90m Explore Agent[0m
+[2026-07-01T14:13:51.961Z] [INFO] [stderr] (no output)
+[2026-07-01T14:13:51.961Z] [INFO] [stderr] [0m
+[2026-07-01T14:13:51.961Z] [INFO] [stderr] [0m
+[2026-07-01T14:13:51.961Z] [INFO] [stderr] [0m$ [0mgit log --oneline -10 -- src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:13:52.168Z] [INFO] [stderr] [0m
+[2026-07-01T14:13:52.168Z] [INFO] [stderr] [0m$ [0mgit diff HEAD -- src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:13:52.168Z] [INFO] [stderr] (no output)
+[2026-07-01T14:14:01.242Z] [INFO] [stderr] [0m→ [0mRead src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:01.687Z] [INFO] [stderr] [0m✱ [0mGrep "icon"[90m in src/components · 24 matches[0m
+[2026-07-01T14:14:01.778Z] [INFO] [stdout] Let me look at how other components handle both emoji and SVG icons in the same rendering context.
+[2026-07-01T14:14:11.856Z] [INFO] [stdout] Now I understand the pattern. The codebase uses Heroicons-style SVG paths for icons (e.g., `Layout.tsx`), while `ModeSelector.tsx` uses emojis. The chat icon needs to be replaced with the proper SVG path from `ChatIcon.tsx`.
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] [0m
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] ===================================================================
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:16.764Z] [INFO] [stderr]  const MODE_OPTIONS: ModeOption[] = [
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] [0m← [0mEdit src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:16.764Z] [INFO] [stderr]      label: 'Friendly Chat',
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] @@ -17,9 +17,9 @@
+[2026-07-01T14:14:16.764Z] [INFO] [stderr]    {
+[2026-07-01T14:14:16.764Z] [INFO] [stderr]      description: 'Casual conversation with learning connection',
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] +    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+[2026-07-01T14:14:16.764Z] [INFO] [stderr]    },
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] -    icon: '💬',
+[2026-07-01T14:14:16.764Z] [INFO] [stderr]    {
+[2026-07-01T14:14:16.764Z] [INFO] [stderr]      mode: 'friendly-chat',
+[2026-07-01T14:14:16.764Z] [INFO] [stderr]      mode: 'ielts-tutor',
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] 
+[2026-07-01T14:14:16.764Z] [INFO] [stderr] [0m
+[2026-07-01T14:14:20.859Z] [INFO] [stderr] The arguments provided to the tool are invalid: Invalid input for tool edit: JSON parsing failed: Text: {"filePath": "/Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx", "oldString": "              <span className=\"text-2xl\" aria-hidden=\"true\">{icon}</span>", "newString": "              {icon.startsWith('M') ? (\n                <svg className=\"h-6 w-6\" fill=\"none\" viewBox=\"0.
+[2026-07-01T14:14:20.859Z] [INFO] [stderr] Error message: JSON Parse error: Unterminated string
+[2026-07-01T14:14:20.859Z] [INFO] [stderr] [0m✗ [0mInvalid Tool
+[2026-07-01T14:14:20.859Z] [INFO] [stderr] [0m
+[2026-07-01T14:14:20.859Z] [INFO] [stdout] Now I need to update the rendering to handle the SVG path (detect SVG paths vs emojis):
+[2026-07-01T14:14:24.010Z] [INFO] [stderr] [0m→ [0mRead src/components/aiTutor/ModeSelector.tsx[90m [offset=110, limit=25][0m
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] [0m
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] [0m← [0mEdit src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] ===================================================================
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] @@ -111,9 +111,15 @@
+[2026-07-01T14:14:32.971Z] [INFO] [stderr]        ? 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-900/20'
+[2026-07-01T14:14:32.971Z] [INFO] [stderr]  >
+[2026-07-01T14:14:32.971Z] [INFO] [stderr]        : 'border-transparent bg-transparent hover:border-slate-300 hover:bg-slate-50 dark:hover:border-slate-600 dark:hover:bg-slate-800/50'
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] +    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] -  <span className="text-2xl" aria-hidden="true">{icon}</span>
+[2026-07-01T14:14:32.971Z] [INFO] [stderr]    }`}
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] +  {icon.startsWith('M') ? (
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] +      <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] +    </svg>
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] +  ) : (
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] +    <span className="text-2xl" aria-hidden="true">{icon}</span>
+[2026-07-01T14:14:32.971Z] [INFO] [stderr]    <span
+[2026-07-01T14:14:32.971Z] [INFO] [stderr]      className={`text-xs font-medium leading-tight ${
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:32.971Z] [INFO] [stderr]        isSelected
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] [0m
+[2026-07-01T14:14:32.971Z] [INFO] [stderr]          ? 'text-blue-700 dark:text-blue-300'
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] 
+[2026-07-01T14:14:32.971Z] [INFO] [stderr] +  )}
+[2026-07-01T14:14:35.328Z] [INFO] [stderr] [0m→ [0mRead src/components/aiTutor/ModeSelector.tsx
+[2026-07-01T14:14:35.899Z] [INFO] [stdout] Now let me verify the file and run the validation command:
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] [0m$ [0mpnpm test 2>&1 | head -50
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] $ vitest run
+[2026-07-01T14:14:37.159Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests) 5ms
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.159Z] [INFO] [stderr]  ✓ src/test/Button.test.tsx (4 tests) 41ms
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] [0m
+[2026-07-01T14:14:37.159Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts (72 tests) 78ms
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] stderr | src/pages/VocabularyReview.test.tsx > VocabularyReview > shows loading spinner initially
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.159Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.159Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] });
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] act(() => {
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] act(() => {
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.159Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T14:14:37.160Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.159Z] [INFO] [stderr]  ✓ src/utils/spaced-repetition.test.ts (12 tests) 16ms
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T14:14:37.159Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] });
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.160Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] act(() => {
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] act(() => {
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] });
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] });
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] 
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] [0m
+[2026-07-01T14:14:37.160Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] 
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] 
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T14:14:41.907Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] [0m$ [0mpnpm test 2>&1 | tail -30
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] act(() => {
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] });
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] 
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] act(() => {
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] 
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] 
+[2026-07-01T14:14:41.907Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] });
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T14:14:41.907Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx (10 tests) 148ms
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] 
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] 
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] 
+[2026-07-01T14:14:41.907Z] [INFO] [stderr] [0m
+[2026-07-01T14:14:41.907Z] [INFO] [stderr]  Test Files  6 passed (6)
+[2026-07-01T14:14:41.907Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts (51 tests) 111ms
+[2026-07-01T14:14:41.907Z] [INFO] [stderr]       Tests  191 passed (191)
+[2026-07-01T14:14:41.907Z] [INFO] [stderr]    Start at  21:14:40
+[2026-07-01T14:14:41.907Z] [INFO] [stderr]    Duration  928ms (transform 328ms, setup 355ms, collect 690ms, tests 388ms, environment 2.10s, prepare 309ms)
+[2026-07-01T14:14:45.890Z] [INFO] [stdout] **Changes made to `src/components/aiTutor/ModeSelector.tsx`:**
+[2026-07-01T14:14:45.890Z] [INFO] [stdout] 
+[2026-07-01T14:14:45.890Z] [INFO] [stdout] 
+[2026-07-01T14:14:45.890Z] [INFO] [stdout] All 191 tests pass. Here's the summary:
+[2026-07-01T14:14:45.890Z] [INFO] [stdout] 1. **Line 21** — Replaced the `💬` emoji with the Heroicons chat bubble SVG path (`M8 12h.01M12...`), matching the icon used in `ChatIcon.tsx`
+[2026-07-01T14:14:45.890Z] [INFO] [stdout] 2. **Lines 115-121** — Added conditional rendering: icons starting with `"M"` (SVG paths) are wrapped in an `<svg>` element with `stroke="currentColor"`; emoji icons continue to render as before
+[2026-07-01T14:14:46.089Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-01T14:14:46.090Z] [INFO] Output:
+Let me look at how other components handle both emoji and SVG icons in the same rendering context.
+Now I understand the pattern. The codebase uses Heroicons-style SVG paths for icons (e.g., `Layout.tsx`), while `ModeSelector.tsx` uses emojis. The chat icon needs to be replaced with the proper SVG path from `ChatIcon.tsx`.
+Now I need to update the rendering to handle the SVG path (detect SVG paths vs emojis):
+Now let me verify the file and run the validation command:
+All 191 tests pass. Here's the summary:
+
+**Changes made to `src/components/aiTutor/ModeSelector.tsx`:**
+
+1. **Line 21** — Replaced the `💬` emoji with the Heroicons chat bubble SVG path (`M8 12h.01M12...`), matching the icon used in `ChatIcon.tsx`
+2. **Lines 115-121** — Added conditional rendering: icons starting with `"M"` (SVG paths) are wrapped in an `<svg>` element with `stroke="currentColor"`; emoji icons continue to render as before
+[2026-07-01T14:14:46.090Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"ModeSelector chat icon ModeSelector.tsx"}
+[0m✱ [0mGrep "chat"[90m 1 match[0m
+[0m✱ [0mGrep "MessageCircle|MessageSquare|chat.*icon|icon.*chat"[90m 0 matches[0m
+[0m✱ [0mGrep "lucide|lucide-react"[90m 0 matches[0m
+[0m✱ [0mGrep "svg|icon|className="h-5 w-5""[90m 14 matches[0m
+[0m✱ [0mGrep "ChatBubble|chat-bubble|chatBubble|ChatIcon"[90m 6 matches[0m
+[0m• [0mFind chat icon usage[90m Explore Agent[0m
+[0m✓ [0mFind chat icon usage[90m Explore Agent[0m
+[0m
+[0m$ [0mgit log --oneline -10 -- src/components/aiTutor/ModeSelector.tsx
+(no output)
+[0m
+[0m$ [0mgit diff HEAD -- src/components/aiTutor/ModeSelector.tsx
+(no output)
+[0m
+[0m→ [0mRead src/components/aiTutor/ModeSelector.tsx
+[0m✱ [0mGrep "icon"[90m in src/components · 24 matches[0m
+[0m
+[0m← [0mEdit src/components/aiTutor/ModeSelector.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+@@ -17,9 +17,9 @@
+ const MODE_OPTIONS: ModeOption[] = [
+   {
+     mode: 'friendly-chat',
+     label: 'Friendly Chat',
+-    icon: '💬',
++    icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
+     description: 'Casual conversation with learning connection',
+   },
+   {
+     mode: 'ielts-tutor',
+
+[0m
+[0m✗ [0mInvalid Tool
+The arguments provided to the tool are invalid: Invalid input for tool edit: JSON parsing failed: Text: {"filePath": "/Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx", "oldString": "              <span className=\"text-2xl\" aria-hidden=\"true\">{icon}</span>", "newString": "              {icon.startsWith('M') ? (\n                <svg className=\"h-6 w-6\" fill=\"none\" viewBox=\"0.
+Error message: JSON Parse error: Unterminated string
+[0m
+[0m→ [0mRead src/components/aiTutor/ModeSelector.tsx[90m [offset=110, limit=25][0m
+[0m
+[0m← [0mEdit src/components/aiTutor/ModeSelector.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/components/aiTutor/ModeSelector.tsx
+@@ -111,9 +111,15 @@
+       ? 'border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-900/20'
+       : 'border-transparent bg-transparent hover:border-slate-300 hover:bg-slate-50 dark:hover:border-slate-600 dark:hover:bg-slate-800/50'
+   }`}
+ >
+-  <span className="text-2xl" aria-hidden="true">{icon}</span>
++  {icon.startsWith('M') ? (
++    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
++      <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
++    </svg>
++  ) : (
++    <span className="text-2xl" aria-hidden="true">{icon}</span>
++  )}
+   <span
+     className={`text-xs font-medium leading-tight ${
+       isSelected
+         ? 'text-blue-700 dark:text-blue-300'
+
+[0m
+[0m→ [0mRead src/components/aiTutor/ModeSelector.tsx
+[0m
+[0m$ [0mpnpm test 2>&1 | head -50
+$ vitest run
+
+ RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests) 5ms
+ ✓ src/utils/spaced-repetition.test.ts (12 tests) 16ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts (72 tests) 78ms
+ ✓ src/test/Button.test.tsx (4 tests) 41ms
+stderr | src/pages/VocabularyReview.test.tsx > VocabularyReview > shows loading spinner initially
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+[0m
+[0m$ [0mpnpm test 2>&1 | tail -30
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/tests/storage/DatabaseMigration.test.ts (51 tests) 111ms
+ ✓ src/pages/VocabularyReview.test.tsx (10 tests) 148ms
+
+ Test Files  6 passed (6)
+      Tests  191 passed (191)
+   Start at  21:14:40
+   Duration  928ms (transform 328ms, setup 355ms, collect 690ms, tests 388ms, environment 2.10s, prepare 309ms)
+[0m
+[2026-07-01T14:14:46.090Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T14:14:46.093Z] [INFO] Task completed successfully

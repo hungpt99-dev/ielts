@@ -1,0 +1,1 @@
+remove AI tutor tab, add ai tutor chat popup input

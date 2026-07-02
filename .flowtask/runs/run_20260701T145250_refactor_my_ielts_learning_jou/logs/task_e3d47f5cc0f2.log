@@ -1,0 +1,2321 @@
+[2026-07-02T01:15:48.015Z] [INFO] Task started: Improve Code Comments and Naming Conventions for Readability
+[2026-07-02T01:15:48.016Z] [INFO] [info] [output-plan] [{"action":"modify","target":"src/","description":"Code comments and naming improvements","validationMethod":"file_diff"},{"action":"modify","target":"packages/","description":"Code comments and naming improvements","validationMethod":"file_diff"}]
+[2026-07-02T01:15:48.557Z] [INFO] [stderr] [0m
+[2026-07-02T01:15:48.557Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-02T01:15:48.557Z] [INFO] [stderr] [0m
+[2026-07-02T01:15:58.206Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"project structure packages src features","maxFiles":64}
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] [0m$ [0mls -la
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@ 13 phamthanhhung  staff     416 Jun 30 20:44 ..
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] [0m
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x  28 phamthanhhung  staff     896 Jul  2 00:09 .
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@ 11 phamthanhhung  staff     352 Jul  2 08:15 .flowtask
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@ 17 phamthanhhung  staff     544 Jul  1 23:45 .git
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff    6148 Jul  1 10:03 .DS_Store
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@  4 phamthanhhung  staff     128 Jul  1 11:08 .wrangler
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x   9 phamthanhhung  staff     288 Jul  2 07:40 .codegraph
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@  3 phamthanhhung  staff      96 Jul  1 14:27 apps
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff      62 Jul  1 10:16 .gitignore
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@ 25 phamthanhhung  staff     800 Jul  2 08:08 docs
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] total 560
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@ 36 phamthanhhung  staff    1152 Jul  1 22:26 node_modules
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@  3 phamthanhhung  staff      96 Jul  1 23:07 features
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff    1721 Jul  2 07:27 package.json
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff     801 Jul  1 10:25 codegraph.config.json
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff     679 Jul  1 10:53 index.html
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff      70 Jul  1 16:21 pnpm-workspace.yaml
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff  223061 Jul  2 00:09 pnpm-lock.yaml
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff     160 Jul  2 07:27 scripts
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff   12005 Jul  2 08:15 README.md
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@ 10 phamthanhhung  staff     320 Jul  1 23:58 dist
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@ 10 phamthanhhung  staff     320 Jul  2 00:04 packages
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@  4 phamthanhhung  staff     128 Jul  1 10:46 public
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff     899 Jul  1 23:49 tsconfig.app.json
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] drwxr-xr-x@ 22 phamthanhhung  staff     704 Jul  1 20:52 src
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff     573 Jul  1 22:26 tsconfig.node.json
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff     119 Jun 30 21:23 tsconfig.json
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff    1516 Jul  1 23:57 vite.config.ts
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] [0m
+[2026-07-02T01:15:58.371Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff     905 Jul  2 07:39 vitest.config.ts
+[2026-07-02T01:15:58.389Z] [INFO] [stdout] Let me explore the current codebase structure and naming conventions.
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] === src/ structure ===
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/context/ThemeContext.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/types/index.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/main.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/context/SettingsContext.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] [0m$ [0mecho "=== src/ structure ===" && find src -type f -name "*.ts" -o -name "*.tsx" | head -80 && echo "=== packages/ structure ===" && find packages -type f -name "*.ts" -o -name "*.tsx" | head -80 && echo "=== features/ structure ===" && find features -type f -name "*.ts" -o -name "*.tsx" | head -80 && echo "=== apps/ structure ===" && find apps -type f -name "*.ts" -o -name "*.tsx" -o -name "*.mjs" | head -60
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/App.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/test/Button.test.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/app/App.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/pwa-config.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/test/vitest.d.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/extension/ProactiveAssistant.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/reading/data/passages.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/test/setup.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/reading/components/Question.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/settings/Settings.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/reading/ReadingPractice.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/settings/AISettings.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/listening/data/exercises.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/listening/components/AudioPlayer.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/grammar/GrammarLearning.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/listening/ListeningPractice.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/planner/validation.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/grammar/components/Exercise.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/utils/errorHandling.test.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/planner/Planner.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/listening/components/ListeningQuestion.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/types.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/components/ApiKeySettings.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/components/ImportedContentManager.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/ai/classify.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/mistakes/MistakeNotebook.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/ai/index.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/publicApiIntegration/api/import.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/notes/StudyNotesPage.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/dashboard/components/ProgressChart.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/vocabulary/components/ReviewMode.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/planner/components/CalendarView.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/speaking/components/SelfEvaluation.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/speaking/data/questions.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/speaking/data/phrases.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/vocabulary/components/WordForm.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/dashboard/Dashboard.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/writing/WritingPractice.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/writing/WritingPromptsPage.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/vocabulary/Vocabulary.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/tests/storage/DatabaseMigration.test.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/speaking/SpeakingPractice.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/writing/data/prompts.ts
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/writing/components/FeedbackPanel.tsx
+[2026-07-02T01:16:01.584Z] [INFO] [stderr] src/features/analytics/Analytics.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/models/aiTutorModels.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/Card.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/utils/spaced-repetition.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/utils/spaced-repetition.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/models/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/utils/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/ErrorDisplay.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/LoadingSpinner.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/DarkModeToggle.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/Badge.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/ConfirmDialog.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/Select.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/Button.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/Modal.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/FormField.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/EmptyState.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/Textarea.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/ToggleSwitch.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/aiTutor/NotificationCenter.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/Input.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/aiTutor/ChatIcon.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/layout/Headbar.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/Toast.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/aiTutor/FloatingTutorButton.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/ui/src/components/Toast.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/ui/src/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/ui/ErrorBoundary.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/aiTutor/TeachingMode.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/aiTutor/ChatUXEnhancements.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] src/components/aiTutor/FloatingTutorButton.test.tsx
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/next-best-action/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/weakness-detection/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] === packages/ structure ===
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/LearningEngine.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/__tests__/ProgressService.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/progress/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/types.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/__tests__/NextBestActionService.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/vitest.config.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/__tests__/DailyPlanService.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/__tests__/WeaknessDetectionService.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/__tests__/ProfileService.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/profile/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/__tests__/AnalyticsService.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/daily-plan/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/__tests__/LearningEngine.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/errors/LearningEngineError.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/daily-plan/DailyPlanService.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/vitest.config.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/analytics/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/userContent.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/built-in/speaking.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/built-in/topics.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/search.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/profile/ProfileService.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/built-in/grammar.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/built-in/listening.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/built-in/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/built-in/writing.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/built-in/reading.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/__tests__/seeding.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/__tests__/userContent.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/learning-engine/src/review-scheduler/index.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/built-in/phrases.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/types.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/importExport.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/__tests__/importExport.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/__tests__/search.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/seeding.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/utils/src/errors.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/storage/vitest.config.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/errors.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/content/src/index.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/schema.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/repositories/BaseRepository.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/reviewService.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/repositories/ContentRepository.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/repositories/VocabularyRepository.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/migrations.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/repositories/ProgressRepository.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/repositories/TaskRepository.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/repositories/MistakeRepository.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/repositories/index.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/repositories/SessionRepository.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/errors.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/syncService.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/TaskRepository.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/syncService.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/VocabularyRepository.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/ProgressRepository.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/ContentRepository.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/BaseRepository.test.ts
+[2026-07-02T01:16:01.585Z] [INFO] [stderr] packages/content/src/schemas.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/migrations.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/reviewService.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/utils/src/index.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/MistakeRepository.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/__tests__/backup.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/db.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/index.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/backup/index.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/proactiveMessageService.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] === features/ structure ===
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/types/index.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/proactiveMessageEngine.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/messageStorage.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/ChatWidget.test.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/chatHelpers.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/useProactiveMessages.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/proactiveEventBus.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] packages/storage/src/backup/types.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/utils/chatHelpers.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/ChatBubble.test.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/schemas/chat.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/utils/contextSuggestions.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/ChatIcon.test.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/ChatWidget.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/TutorAvatar.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/useExitAnimation.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/NotificationCenter.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/TypingIndicator.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/ContextSuggestionCard.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/ChatStyles.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/ChatBubble.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/ChatIcon.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/ProactiveMessagePreview.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/tests/QuickActions.test.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/hooks/useProactiveMessages.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/QuickActions.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/hooks/useChatWidget.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/services/proactiveMessageEngine.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/services/messageStorage.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/MissingKeyBanner.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/components/WelcomeState.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] === apps/ structure ===
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/services/proactiveEventBus.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/index.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] features/ai-tutor/services/proactiveMessageService.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/background/settingsStorage.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/background/index.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/vite.config.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/options/App.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/scripts/build.mjs
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/options/SettingsPage.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/main.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/options/main.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/App.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/components/BackupRestore.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/components/MistakeNotebook.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/background/securityAudit.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/scripts/package.mjs
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/content-script/miniTutor.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/content-script/sharedStyles.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/content-script/dictionaryPanel.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/content-script/videoHelper.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/content-script/index.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/storage/indexedDB.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/types.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/storage/vocabularyStore.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/content-script/aiExplain.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/services/storage.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/storage/videoStore.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/storage/mistakeStore.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/storage/articleStore.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/vite-env.d.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] apps/extension/src/__tests__/saveSelectedText.test.ts
+[2026-07-02T01:16:01.586Z] [INFO] [stderr] [0m
+[2026-07-02T01:16:04.181Z] [INFO] [stderr] [0m• [0mSurvey code comment quality[90m Explore Agent[0m
+[2026-07-02T01:18:34.522Z] [INFO] [stderr] [0m✓ [0mSurvey code comment quality[90m Explore Agent[0m
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [ ] Fix generic variable names (data, result, item, entry, content) in production code
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [ ] Remove redundant JSX comments ({/* Header */}, {/* Filters */}, etc.)
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [ ] Clean up excessive section divider comments (// ── Section ──)
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [ ] Improve comments for complex logic (SM-2, NextBestAction, analytics calendar)
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [0m
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [ ] Run lint to verify changes
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [ ] Centralize generateId() utility and remove 31 duplications
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [ ] Fix inconsistent naming (getXxx vs loadXxx, catch comment patterns)
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [ ] Fix single-letter variable names (d, h, m, s, q) in page components
+[2026-07-02T01:18:42.207Z] [INFO] [stderr] [0m
+[2026-07-02T01:18:42.259Z] [INFO] [stdout] Now I have a comprehensive understanding. Let me plan and execute the improvements systematically.
+[2026-07-02T01:18:46.484Z] [INFO] [stderr] [ ] Clean up excessive section divider comments (// ── Section ──)
+[2026-07-02T01:18:46.484Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-02T01:18:46.484Z] [INFO] [stderr] [ ] Remove redundant JSX comments ({/* Header */}, {/* Filters */}, etc.)
+[2026-07-02T01:18:46.484Z] [INFO] [stderr] [ ] Improve comments for complex logic (SM-2, NextBestAction, analytics calendar)
+[2026-07-02T01:18:46.485Z] [INFO] [stderr] [ ] Run lint to verify changes
+[2026-07-02T01:18:46.484Z] [INFO] [stderr] [ ] Fix single-letter variable names (d, h, m, s, q) in page components
+[2026-07-02T01:18:46.484Z] [INFO] [stderr] [ ] Fix inconsistent naming (getXxx vs loadXxx, catch comment patterns)
+[2026-07-02T01:18:46.484Z] [INFO] [stderr] [•] Centralize generateId() utility and remove 31 duplications
+[2026-07-02T01:18:46.484Z] [INFO] [stderr] [ ] Fix generic variable names (data, result, item, entry, content) in production code
+[2026-07-02T01:18:46.485Z] [INFO] [stderr] [0m
+[2026-07-02T01:18:46.575Z] [INFO] [stdout] Let me start. First, I'll read the key utility files and understand current state.
+[2026-07-02T01:18:48.755Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/utils/src/index.ts"}
+[2026-07-02T01:18:48.928Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/utils/index.ts"}
+[2026-07-02T01:18:49.104Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"generateId"}
+[2026-07-02T01:18:59.119Z] [INFO] [stderr] [0m
+[2026-07-02T01:18:59.119Z] [INFO] [stderr] {
+[2026-07-02T01:18:59.119Z] [INFO] [stderr] ---
+[2026-07-02T01:18:59.119Z] [INFO] [stderr] ---
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   "version": "0.1.0",
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   "name": "@ielts/exercises",
+[2026-07-02T01:18:59.119Z] [INFO] [stderr] [0m$ [0mgrep -r "from '@ielts/utils'" packages/ features/ --include="*.ts" --include="*.tsx" | head -5 && echo "---" && grep -r "from '\.\./utils'" packages/exercises/ --include="*.ts" | head -5 && echo "---" && cat packages/exercises/package.json 2>/dev/null && echo "---" && cat features/ai-tutor/package.json 2>/dev/null && echo "---" && cat packages/utils/package.json 2>/dev/null
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   "types": "./src/index.ts",
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   },
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   "private": true,
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]     "zod": "^4.4.3"
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   "main": "./src/index.ts",
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   "devDependencies": {
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   }
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   "dependencies": {
+[2026-07-02T01:18:59.119Z] [INFO] [stderr] }
+[2026-07-02T01:18:59.119Z] [INFO] [stderr] [0m
+[2026-07-02T01:18:59.119Z] [INFO] [stderr] ---
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]   "type": "module",
+[2026-07-02T01:18:59.119Z] [INFO] [stderr]     "typescript": "~5.8.3"
+[2026-07-02T01:19:01.583Z] [INFO] [stderr] [0m→ [0mRead pnpm-workspace.yaml
+[2026-07-02T01:19:01.794Z] [INFO] [stderr] [0m→ [0mRead package.json
+[2026-07-02T01:19:08.933Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/utils/spaced-repetition.ts"}
+[2026-07-02T01:19:09.108Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/pages/Dashboard.tsx"}
+[2026-07-02T01:19:09.376Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/pages/ListeningJournal.tsx","limit":80}
+[2026-07-02T01:19:09.478Z] [INFO] [stdout] Let me read the key files that need the most attention. I'll batch these reads.
+[2026-07-02T01:19:18.925Z] [INFO] [stderr] [0m→ [0mRead src/pages/ListeningJournal.tsx[90m [offset=80, limit=100][0m
+[2026-07-02T01:19:19.275Z] [INFO] [stderr] [0m→ [0mRead src/pages/ReadingJournal.tsx[90m [limit=70][0m
+[2026-07-02T01:19:19.611Z] [INFO] [stderr] [0m→ [0mRead src/pages/SpeakingPractice.tsx[90m [limit=60][0m
+[2026-07-02T01:19:19.960Z] [INFO] [stderr] [0m→ [0mRead src/pages/WritingPractice.tsx[90m [limit=60][0m
+[2026-07-02T01:19:20.292Z] [INFO] [stderr] [0m→ [0mRead src/pages/Mistakes.tsx[90m [limit=70][0m
+[2026-07-02T01:19:20.627Z] [INFO] [stderr] [0m→ [0mRead src/pages/GrammarNotes.tsx[90m [limit=60][0m
+[2026-07-02T01:19:20.723Z] [INFO] [stdout] Good. Now I have a clear picture. Let me read more files to plan my edits efficiently.
+[2026-07-02T01:19:28.498Z] [INFO] [stdout] Now let me start making changes. I'll begin with batch edits across multiple files.
+[2026-07-02T01:19:29.150Z] [INFO] [stderr] [0m← [0mEdit src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:29.150Z] [INFO] [stderr] [0m
+[2026-07-02T01:19:29.150Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:19:29.150Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:29.150Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:29.150Z] [INFO] [stderr] @@ -13,29 +13,15 @@
+[2026-07-02T01:19:29.150Z] [INFO] [stderr]  
+[2026-07-02T01:19:29.150Z] [INFO] [stderr]  ]
+[2026-07-02T01:19:29.150Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -function generateId(): string {
+[2026-07-02T01:19:29.150Z] [INFO] [stderr]  const LISTENING_SECTIONS = [1, 2, 3, 4] as const
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]  
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] +import { generateId, formatDate, formatDuration } from '../utils'
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]    if (maxScore <= 0) return 0
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]  function computeAccuracy(score: number, maxScore: number): number {
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]  }
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]  
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -function formatDate(dateStr: string): string {
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -  const d = new Date(dateStr)
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -}
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]  
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]    return Math.round((score / maxScore) * 100)
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -}
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -  const h = Math.floor(minutes / 60)
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -  if (minutes < 60) return `${minutes}m`
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -  return m > 0 ? `${h}h ${m}m` : `${h}h`
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]  function getScoreColor(accuracy: number): string {
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]    if (accuracy >= 80) return 'text-green-600 dark:text-green-400'
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -  const m = minutes % 60
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -function formatTime(minutes: number): string {
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] [0m
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] -}
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]    if (accuracy >= 60) return 'text-amber-600 dark:text-amber-400'
+[2026-07-02T01:19:29.151Z] [INFO] [stderr] 
+[2026-07-02T01:19:29.151Z] [INFO] [stderr]    return 'text-red-600 dark:text-red-400'
+[2026-07-02T01:19:33.562Z] [INFO] [stdout] Let me revert that change and take a different approach - I'll add the missing utils and fix naming.
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] @@ -13,9 +13,11 @@
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] [0m← [0mEdit src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:34.208Z] [INFO] [stderr]  const LISTENING_SECTIONS = [1, 2, 3, 4] as const
+[2026-07-02T01:19:34.208Z] [INFO] [stderr]  
+[2026-07-02T01:19:34.208Z] [INFO] [stderr]  
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] +  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:19:34.208Z] [INFO] [stderr]  ]
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] +function generateId(): string {
+[2026-07-02T01:19:34.208Z] [INFO] [stderr]  
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] -import { generateId, formatDate, formatDuration } from '../utils'
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] +}
+[2026-07-02T01:19:34.208Z] [INFO] [stderr]    if (maxScore <= 0) return 0
+[2026-07-02T01:19:34.208Z] [INFO] [stderr]    return Math.round((score / maxScore) * 100)
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] 
+[2026-07-02T01:19:34.208Z] [INFO] [stderr] [0m
+[2026-07-02T01:19:34.208Z] [INFO] [stderr]  function computeAccuracy(score: number, maxScore: number): number {
+[2026-07-02T01:19:36.853Z] [INFO] [stderr] [0m→ [0mRead src/pages/ListeningJournal.tsx[90m [limit=50][0m
+[2026-07-02T01:19:42.784Z] [INFO] [stdout] I need to restore `formatDate` and `formatTime` functions. Let me add them back and also fix naming.
+[2026-07-02T01:19:43.455Z] [INFO] [stderr] [0m← [0mEdit src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:43.455Z] [INFO] [stderr] [0m
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:43.455Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:19:43.455Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:43.455Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] @@ -42,8 +42,20 @@
+[2026-07-02T01:19:43.456Z] [INFO] [stderr]    return 'text-red-600 dark:text-red-400'
+[2026-07-02T01:19:43.456Z] [INFO] [stderr]  }
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +function formatDate(dateStr: string): string {
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +}
+[2026-07-02T01:19:43.456Z] [INFO] [stderr]  
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +function formatTime(minutes: number): string {
+[2026-07-02T01:19:43.456Z] [INFO] [stderr]    if (rating >= 5) return 'text-amber-600 dark:text-amber-400'
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +  const remainingMinutes = minutes % 60
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +  const date = new Date(dateStr)
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +  const hours = Math.floor(minutes / 60)
+[2026-07-02T01:19:43.456Z] [INFO] [stderr]    topic: string
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +}
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +  return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`
+[2026-07-02T01:19:43.456Z] [INFO] [stderr]  interface SessionFormData {
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +
+[2026-07-02T01:19:43.456Z] [INFO] [stderr]    title: string
+[2026-07-02T01:19:43.456Z] [INFO] [stderr]    sourceUrl: string
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] 
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +  if (minutes < 60) return `${minutes}m`
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] +
+[2026-07-02T01:19:43.456Z] [INFO] [stderr] [0m
+[2026-07-02T01:19:53.277Z] [INFO] [stdout] Now let me fix all the page files in parallel with better naming:
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] [0m← [0mEdit src/pages/ReadingJournal.tsx
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] @@ -20,12 +20,8 @@
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  ]
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]    'Summary Completion',
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]    'Matching Information',
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] -
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  function computeAccuracy(correct: number, total: number): number {
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]    if (total <= 0) return 0
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]    return Math.round((correct / total) * 100)
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] @@ -36,17 +32,17 @@
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] -}
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  }
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] -  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] -  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]    return Math.round(words / minutes)
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] -function generateId(): string {
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] -  const d = new Date(dateStr)
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] +  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  function formatDate(dateStr: string): string {
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  }
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] +  const date = new Date(dateStr)
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  }
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] -  const m = minutes % 60
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]    if (minutes < 60) return `${minutes}m`
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] -  return m > 0 ? `${h}h ${m}m` : `${h}h`
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  function formatTime(minutes: number): string {
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] +  const remainingMinutes = minutes % 60
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] -  const h = Math.floor(minutes / 60)
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  }
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] +  const hours = Math.floor(minutes / 60)
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]    title: string
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] 
+[2026-07-02T01:19:53.879Z] [INFO] [stderr]  interface SessionFormData {
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] +  return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`
+[2026-07-02T01:19:53.879Z] [INFO] [stderr] [0m
+[2026-07-02T01:19:57.857Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+[2026-07-02T01:19:57.857Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:19:57.857Z] [INFO] [stderr] +import { generateId } from '../utils'
+[2026-07-02T01:19:57.857Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+[2026-07-02T01:19:57.857Z] [INFO] [stderr]  import { useState, useEffect, useCallback, useMemo } from 'react'
+[2026-07-02T01:19:57.857Z] [INFO] [stderr]  import type { ReadingSession, QuestionType } from '../models'
+[2026-07-02T01:19:57.857Z] [INFO] [stderr] @@ -1,6 +1,7 @@
+[2026-07-02T01:19:57.857Z] [INFO] [stderr]  import { DatabaseService } from '../services/storage/Database'
+[2026-07-02T01:19:57.857Z] [INFO] [stderr]  import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+[2026-07-02T01:19:57.857Z] [INFO] [stderr]  import Modal from '../components/ui/Modal'
+[2026-07-02T01:19:57.857Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-07-02T01:19:57.857Z] [INFO] [stderr] [0m
+[2026-07-02T01:19:57.857Z] [INFO] [stderr] 
+[2026-07-02T01:19:57.857Z] [INFO] [stderr] [0m← [0mEdit src/pages/ReadingJournal.tsx
+[2026-07-02T01:19:57.857Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+[2026-07-02T01:20:07.181Z] [INFO] [stderr] [0m← [0mEdit src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:07.181Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]  
+[2026-07-02T01:20:07.181Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]  const CUE_CARD_PREP_TIME = 60
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]  const CUE_CARD_SPEAK_TIME = 120
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] @@ -20,22 +20,20 @@
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]  
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] -function generateId(): string {
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] -}
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] -  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]  
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] -  const d = new Date(dateStr)
+[2026-07-02T01:20:07.181Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] -  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] +  const date = new Date(dateStr)
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]  }
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]  function formatDate(dateStr: string): string {
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]  
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]  function formatDuration(seconds: number): string {
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] -  const m = Math.floor(seconds / 60)
+[2026-07-02T01:20:07.182Z] [INFO] [stderr]    if (seconds < 60) return `${seconds}s`
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] +import { generateId } from '../utils'
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] +  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] -  return s > 0 ? `${m}m ${s}s` : `${m}m`
+[2026-07-02T01:20:07.183Z] [INFO] [stderr] +  const remainingSeconds = seconds % 60
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] +  const minutes = Math.floor(seconds / 60)
+[2026-07-02T01:20:07.183Z] [INFO] [stderr]  }
+[2026-07-02T01:20:07.183Z] [INFO] [stderr] +  return remainingSeconds > 0 ? `${minutes}m ${remainingSeconds}s` : `${minutes}m`
+[2026-07-02T01:20:07.182Z] [INFO] [stderr] -  const s = seconds % 60
+[2026-07-02T01:20:07.183Z] [INFO] [stderr]  function getRatingColor(rating: number): string {
+[2026-07-02T01:20:07.183Z] [INFO] [stderr]    if (rating >= 7) return 'text-green-600 dark:text-green-400'
+[2026-07-02T01:20:07.183Z] [INFO] [stderr]  
+[2026-07-02T01:20:07.183Z] [INFO] [stderr] 
+[2026-07-02T01:20:07.183Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:10.250Z] [INFO] [stderr] [0m→ [0mRead src/pages/SpeakingPractice.tsx[90m [limit=30][0m
+[2026-07-02T01:20:14.090Z] [INFO] [stderr] [0m← [0mEdit src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:14.090Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:14.090Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:20:14.090Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:14.090Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:14.090Z] [INFO] [stderr]  import { DatabaseService } from '../services/storage/Database'
+[2026-07-02T01:20:14.090Z] [INFO] [stderr]  import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+[2026-07-02T01:20:14.091Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:14.091Z] [INFO] [stderr] @@ -3,8 +3,9 @@
+[2026-07-02T01:20:14.091Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-07-02T01:20:14.091Z] [INFO] [stderr]  import Modal from '../components/ui/Modal'
+[2026-07-02T01:20:14.091Z] [INFO] [stderr]  
+[2026-07-02T01:20:14.091Z] [INFO] [stderr]  const TOPICS = [
+[2026-07-02T01:20:14.091Z] [INFO] [stderr] +import { generateId } from '../utils'
+[2026-07-02T01:20:14.091Z] [INFO] [stderr]    'Education', 'Technology', 'Environment', 'Health', 'Work',
+[2026-07-02T01:20:14.091Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:14.091Z] [INFO] [stderr]    'Business', 'Travel', 'Culture', 'Society', 'Crime',
+[2026-07-02T01:20:14.091Z] [INFO] [stderr] 
+[2026-07-02T01:20:17.175Z] [INFO] [stderr] [0m→ [0mRead src/pages/SpeakingPractice.tsx[90m [limit=30][0m
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] [0m← [0mEdit src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+[2026-07-02T01:20:20.769Z] [INFO] [stderr]  
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] @@ -21,10 +21,8 @@
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:20:20.769Z] [INFO] [stderr]  const CUE_CARD_SPEAK_TIME = 120
+[2026-07-02T01:20:20.769Z] [INFO] [stderr]  const CUE_CARD_PREP_TIME = 60
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] -import { generateId } from '../utils'
+[2026-07-02T01:20:20.769Z] [INFO] [stderr]  
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] -
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] 
+[2026-07-02T01:20:20.769Z] [INFO] [stderr]  function formatDate(dateStr: string): string {
+[2026-07-02T01:20:20.769Z] [INFO] [stderr]    const date = new Date(dateStr)
+[2026-07-02T01:20:20.769Z] [INFO] [stderr]  }
+[2026-07-02T01:20:20.769Z] [INFO] [stderr]    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:20:20.769Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:24.773Z] [INFO] [stderr] [0m← [0mEdit src/pages/WritingPractice.tsx
+[2026-07-02T01:20:24.773Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+[2026-07-02T01:20:24.773Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+[2026-07-02T01:20:24.773Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+[2026-07-02T01:20:24.773Z] [INFO] [stderr]  import { useState, useEffect, useCallback, useMemo } from 'react'
+[2026-07-02T01:20:24.773Z] [INFO] [stderr] @@ -1,6 +1,7 @@
+[2026-07-02T01:20:24.773Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:20:24.773Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-07-02T01:20:24.773Z] [INFO] [stderr] +import { generateId } from '../utils'
+[2026-07-02T01:20:24.773Z] [INFO] [stderr]  import type { WritingSession, WritingTaskType } from '../models'
+[2026-07-02T01:20:24.773Z] [INFO] [stderr]  import { DatabaseService } from '../services/storage/Database'
+[2026-07-02T01:20:24.773Z] [INFO] [stderr]  import Modal from '../components/ui/Modal'
+[2026-07-02T01:20:24.773Z] [INFO] [stderr] 
+[2026-07-02T01:20:24.773Z] [INFO] [stderr]  import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+[2026-07-02T01:20:24.773Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:27.570Z] [INFO] [stderr] [0m→ [0mRead src/pages/WritingPractice.tsx[90m [limit=50][0m
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] @@ -17,22 +17,18 @@
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:20:32.529Z] [INFO] [stderr]    { value: 'task1', label: 'Task 1' },
+[2026-07-02T01:20:32.529Z] [INFO] [stderr]    { value: 'task2', label: 'Task 2' },
+[2026-07-02T01:20:32.529Z] [INFO] [stderr]  
+[2026-07-02T01:20:32.529Z] [INFO] [stderr]  ]
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] [0m← [0mEdit src/pages/WritingPractice.tsx
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] -function generateId(): string {
+[2026-07-02T01:20:32.529Z] [INFO] [stderr]  function formatDate(dateStr: string): string {
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] -}
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] -  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] +  const date = new Date(dateStr)
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] -  const d = new Date(dateStr)
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] +  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:20:32.530Z] [INFO] [stderr]  function formatTime(minutes: number): string {
+[2026-07-02T01:20:32.529Z] [INFO] [stderr]    if (minutes < 60) return `${minutes}m`
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] -
+[2026-07-02T01:20:32.529Z] [INFO] [stderr] -  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:20:32.530Z] [INFO] [stderr]  }
+[2026-07-02T01:20:32.530Z] [INFO] [stderr] -  const h = Math.floor(minutes / 60)
+[2026-07-02T01:20:32.530Z] [INFO] [stderr]  
+[2026-07-02T01:20:32.530Z] [INFO] [stderr] +  return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`
+[2026-07-02T01:20:32.530Z] [INFO] [stderr] +  const hours = Math.floor(minutes / 60)
+[2026-07-02T01:20:32.530Z] [INFO] [stderr] -  return m > 0 ? `${h}h ${m}m` : `${h}h`
+[2026-07-02T01:20:32.530Z] [INFO] [stderr] +  const remainingMinutes = minutes % 60
+[2026-07-02T01:20:32.530Z] [INFO] [stderr] 
+[2026-07-02T01:20:32.530Z] [INFO] [stderr]  function getBandColor(band: number): string {
+[2026-07-02T01:20:32.530Z] [INFO] [stderr] -  const m = minutes % 60
+[2026-07-02T01:20:32.530Z] [INFO] [stderr]    if (band >= 7) return 'text-green-600 dark:text-green-400'
+[2026-07-02T01:20:32.530Z] [INFO] [stderr]  
+[2026-07-02T01:20:32.530Z] [INFO] [stderr]  }
+[2026-07-02T01:20:32.531Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:35.896Z] [INFO] [stdout] Now let me fix the remaining files with the same pattern:
+[2026-07-02T01:20:36.495Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+[2026-07-02T01:20:36.495Z] [INFO] [stderr]  import Card, { CardContent } from '../components/ui/Card'
+[2026-07-02T01:20:36.495Z] [INFO] [stderr] +import { generateId } from '../utils'
+[2026-07-02T01:20:36.495Z] [INFO] [stderr] [0m← [0mEdit src/pages/Mistakes.tsx
+[2026-07-02T01:20:36.495Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:20:36.495Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+[2026-07-02T01:20:36.495Z] [INFO] [stderr]  import { DatabaseService } from '../services/storage/Database'
+[2026-07-02T01:20:36.495Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-07-02T01:20:36.495Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+[2026-07-02T01:20:36.495Z] [INFO] [stderr]  import { useToast } from '../components/ui/Toast'
+[2026-07-02T01:20:36.495Z] [INFO] [stderr]  
+[2026-07-02T01:20:36.495Z] [INFO] [stderr]  const MISTAKE_SKILLS: { value: MistakeSkill; label: string; color: string }[] = [
+[2026-07-02T01:20:36.495Z] [INFO] [stderr] @@ -3,8 +3,9 @@
+[2026-07-02T01:20:36.495Z] [INFO] [stderr]  import Modal from '../components/ui/Modal'
+[2026-07-02T01:20:36.495Z] [INFO] [stderr] 
+[2026-07-02T01:20:36.496Z] [INFO] [stderr]  import ErrorDisplay from '../components/ui/ErrorDisplay'
+[2026-07-02T01:20:36.496Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:39.283Z] [INFO] [stderr] [0m→ [0mRead src/pages/Mistakes.tsx[90m [offset=26, limit=20][0m
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] [0m← [0mEdit src/pages/Mistakes.tsx
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:20:43.549Z] [INFO] [stderr]  
+[2026-07-02T01:20:43.549Z] [INFO] [stderr]  type SortOption = typeof SORT_OPTIONS[number]
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+[2026-07-02T01:20:43.549Z] [INFO] [stderr]  const SORT_OPTIONS = ['newest', 'oldest', 'most-repeated', 'skill'] as const
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] @@ -25,15 +25,11 @@
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] -function generateId(): string {
+[2026-07-02T01:20:43.549Z] [INFO] [stderr]  
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] -
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] -  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] +  const date = new Date(dateStr)
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] +  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:20:43.549Z] [INFO] [stderr]    return MISTAKE_SKILLS.find(s => s.value === skill)?.color ?? ''
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] -  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:20:43.549Z] [INFO] [stderr]  function formatDate(dateStr: string): string {
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] -  const d = new Date(dateStr)
+[2026-07-02T01:20:43.549Z] [INFO] [stderr]  function getSkillStyle(skill: MistakeSkill): string {
+[2026-07-02T01:20:43.549Z] [INFO] [stderr]  
+[2026-07-02T01:20:43.549Z] [INFO] [stderr]  }
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] 
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] -}
+[2026-07-02T01:20:43.549Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:47.300Z] [INFO] [stderr] [0m← [0mEdit src/pages/GrammarNotes.tsx
+[2026-07-02T01:20:47.300Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+[2026-07-02T01:20:47.300Z] [INFO] [stderr]  import { useState, useEffect, useCallback, useMemo } from 'react'
+[2026-07-02T01:20:47.300Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+[2026-07-02T01:20:47.300Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:20:47.300Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+[2026-07-02T01:20:47.300Z] [INFO] [stderr]  import { useToast } from '../components/ui/Toast'
+[2026-07-02T01:20:47.300Z] [INFO] [stderr] 
+[2026-07-02T01:20:47.300Z] [INFO] [stderr]  import { DatabaseService } from '../services/storage/Database'
+[2026-07-02T01:20:47.300Z] [INFO] [stderr]  import Card, { CardContent } from '../components/ui/Card'
+[2026-07-02T01:20:47.300Z] [INFO] [stderr] +import { generateId } from '../utils'
+[2026-07-02T01:20:47.300Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-07-02T01:20:47.300Z] [INFO] [stderr] @@ -1,6 +1,7 @@
+[2026-07-02T01:20:47.300Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:47.300Z] [INFO] [stderr]  import type { GrammarNote, GrammarStatus } from '../models'
+[2026-07-02T01:20:50.153Z] [INFO] [stderr] [0m→ [0mRead src/pages/GrammarNotes.tsx[90m [offset=24, limit=20][0m
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] @@ -22,15 +22,11 @@
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] [0m← [0mEdit src/pages/GrammarNotes.tsx
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:20:54.113Z] [INFO] [stderr]    { value: 'mastered', label: 'Mastered', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
+[2026-07-02T01:20:54.113Z] [INFO] [stderr]  
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] -}
+[2026-07-02T01:20:54.113Z] [INFO] [stderr]  ]
+[2026-07-02T01:20:54.113Z] [INFO] [stderr]    { value: 'reviewing', label: 'Reviewing', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] -  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] -function generateId(): string {
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] -
+[2026-07-02T01:20:54.113Z] [INFO] [stderr]  function formatDate(dateStr: string): string {
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] -  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+[2026-07-02T01:20:54.113Z] [INFO] [stderr]  }
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] +  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:20:54.113Z] [INFO] [stderr]  function getStatusStyle(status: GrammarStatus): string {
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] +  const date = new Date(dateStr)
+[2026-07-02T01:20:54.113Z] [INFO] [stderr]    return STATUS_OPTIONS.find(s => s.value === status)?.color ?? ''
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] -  const d = new Date(dateStr)
+[2026-07-02T01:20:54.113Z] [INFO] [stderr]  
+[2026-07-02T01:20:54.113Z] [INFO] [stderr] 
+[2026-07-02T01:20:54.114Z] [INFO] [stderr] [0m
+[2026-07-02T01:20:57.238Z] [INFO] [stderr] [0m→ [0mRead src/pages/Vocabulary.tsx[90m [limit=60][0m
+[2026-07-02T01:20:57.594Z] [INFO] [stderr] [0m→ [0mRead src/pages/MockTests.tsx[90m [limit=50][0m
+[2026-07-02T01:20:57.898Z] [INFO] [stderr] [0m→ [0mRead src/pages/DailyPlan.tsx[90m [limit=80][0m
+[2026-07-02T01:21:02.269Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:02.269Z] [INFO] [stderr] [0m← [0mEdit src/pages/Vocabulary.tsx
+[2026-07-02T01:21:02.269Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+[2026-07-02T01:21:02.269Z] [INFO] [stderr] @@ -1,6 +1,7 @@
+[2026-07-02T01:21:02.269Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:02.269Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+[2026-07-02T01:21:02.269Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+[2026-07-02T01:21:02.269Z] [INFO] [stderr]  import { useState, useEffect, useCallback, useMemo } from 'react'
+[2026-07-02T01:21:02.269Z] [INFO] [stderr] +import { generateId } from '../utils'
+[2026-07-02T01:21:02.269Z] [INFO] [stderr]  import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../models'
+[2026-07-02T01:21:02.270Z] [INFO] [stderr]  import { DatabaseService } from '../services/storage/Database'
+[2026-07-02T01:21:02.270Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-07-02T01:21:02.269Z] [INFO] [stderr]  import { useToast } from '../components/ui/Toast'
+[2026-07-02T01:21:02.270Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:02.270Z] [INFO] [stderr] 
+[2026-07-02T01:21:02.270Z] [INFO] [stderr]  import Card, { CardContent } from '../components/ui/Card'
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] [0m← [0mEdit src/pages/Vocabulary.tsx
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+[2026-07-02T01:21:05.823Z] [INFO] [stderr]    hard: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] @@ -36,12 +36,8 @@
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] -function generateId(): string {
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] -  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:05.823Z] [INFO] [stderr]    meaning: string
+[2026-07-02T01:21:05.823Z] [INFO] [stderr]  
+[2026-07-02T01:21:05.823Z] [INFO] [stderr]  interface VocabFormData {
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] -
+[2026-07-02T01:21:05.823Z] [INFO] [stderr]    word: string
+[2026-07-02T01:21:05.823Z] [INFO] [stderr]    medium: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:05.823Z] [INFO] [stderr]  }
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] -}
+[2026-07-02T01:21:05.823Z] [INFO] [stderr]    meaningVi: string
+[2026-07-02T01:21:05.823Z] [INFO] [stderr] 
+[2026-07-02T01:21:09.812Z] [INFO] [stderr] [0m← [0mEdit src/pages/MockTests.tsx
+[2026-07-02T01:21:09.812Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+[2026-07-02T01:21:09.812Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+[2026-07-02T01:21:09.812Z] [INFO] [stderr]  import { useState, useEffect, useCallback, useMemo } from 'react'
+[2026-07-02T01:21:09.812Z] [INFO] [stderr] @@ -1,6 +1,7 @@
+[2026-07-02T01:21:09.812Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+[2026-07-02T01:21:09.812Z] [INFO] [stderr] +import { generateId } from '../utils'
+[2026-07-02T01:21:09.812Z] [INFO] [stderr]  import type { MockTestEntry } from '../models'
+[2026-07-02T01:21:09.812Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:09.812Z] [INFO] [stderr] 
+[2026-07-02T01:21:09.812Z] [INFO] [stderr]  import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+[2026-07-02T01:21:09.812Z] [INFO] [stderr]  import Modal from '../components/ui/Modal'
+[2026-07-02T01:21:09.812Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-07-02T01:21:09.812Z] [INFO] [stderr]  import { DatabaseService } from '../services/storage/Database'
+[2026-07-02T01:21:09.812Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] [0m← [0mEdit src/pages/MockTests.tsx
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] -  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:21:13.999Z] [INFO] [stderr]  import Modal from '../components/ui/Modal'
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] @@ -5,15 +5,11 @@
+[2026-07-02T01:21:13.999Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] -
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] -function generateId(): string {
+[2026-07-02T01:21:13.999Z] [INFO] [stderr]  function formatDate(dateStr: string): string {
+[2026-07-02T01:21:13.999Z] [INFO] [stderr]  import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] -}
+[2026-07-02T01:21:13.999Z] [INFO] [stderr]  
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] -  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] +  const date = new Date(dateStr)
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] -  const d = new Date(dateStr)
+[2026-07-02T01:21:13.999Z] [INFO] [stderr]    if (band >= 7) return 'text-green-600 dark:text-green-400'
+[2026-07-02T01:21:13.999Z] [INFO] [stderr]  }
+[2026-07-02T01:21:13.999Z] [INFO] [stderr]  
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] 
+[2026-07-02T01:21:13.999Z] [INFO] [stderr]  function getBandColor(band: number): string {
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:13.999Z] [INFO] [stderr] +  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+[2026-07-02T01:21:18.147Z] [INFO] [stderr] [0m← [0mEdit src/pages/DailyPlan.tsx
+[2026-07-02T01:21:18.147Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:18.147Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:18.147Z] [INFO] [stderr]  import { useState, useEffect, useCallback, useMemo } from 'react'
+[2026-07-02T01:21:18.147Z] [INFO] [stderr] @@ -1,6 +1,7 @@
+[2026-07-02T01:21:18.147Z] [INFO] [stderr] +import { generateId, today, isTodayDate, addDays, formatDateLabel, getWeekDates } from '../utils'
+[2026-07-02T01:21:18.147Z] [INFO] [stderr]  import Card, { CardContent } from '../components/ui/Card'
+[2026-07-02T01:21:18.147Z] [INFO] [stderr] 
+[2026-07-02T01:21:18.147Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:18.147Z] [INFO] [stderr]  import Button from '../components/ui/Button'
+[2026-07-02T01:21:18.147Z] [INFO] [stderr]  import type { TaskEntry, TaskCategory } from '../models'
+[2026-07-02T01:21:18.147Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:18.147Z] [INFO] [stderr]  import { DatabaseService } from '../services/storage/Database'
+[2026-07-02T01:21:18.147Z] [INFO] [stderr]  import Modal from '../components/ui/Modal'
+[2026-07-02T01:21:18.147Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] [0m← [0mEdit src/pages/DailyPlan.tsx
+[2026-07-02T01:21:23.451Z] [INFO] [stderr]  }
+[2026-07-02T01:21:23.451Z] [INFO] [stderr]  
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:23.451Z] [INFO] [stderr]  const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] @@ -27,47 +27,12 @@
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] -function today(): string {
+[2026-07-02T01:21:23.451Z] [INFO] [stderr]  
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] +function todayFn(): string {
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] -function formatDateLabel(dateStr: string): string {
+[2026-07-02T01:21:23.451Z] [INFO] [stderr]    return new Date().toISOString().slice(0, 10)
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] -  const d = new Date(dateStr + 'T00:00:00')
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] -    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  })
+[2026-07-02T01:21:23.451Z] [INFO] [stderr]  }
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -
+[2026-07-02T01:21:23.451Z] [INFO] [stderr]  
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -function isToday(dateStr: string): boolean {
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -}
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -}
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -
+[2026-07-02T01:21:23.451Z] [INFO] [stderr] -  return d.toLocaleDateString('en-US', {
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -}
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  const d = new Date(dateStr + 'T00:00:00')
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -function getWeekDates(dateStr: string): string[] {
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -function addDays(dateStr: string, n: number): string {
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  const d = new Date(dateStr + 'T00:00:00')
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  d.setDate(d.getDate() + n)
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  const day = d.getDay()
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  const dates: string[] = []
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  return dateStr === today()
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  d.setDate(diff)
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  return d.toISOString().slice(0, 10)
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  const diff = d.getDate() - day + (day === 0 ? -6 : 1)
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -    next.setDate(next.getDate() + i)
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  for (let i = 0; i < 7; i++) {
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -    const next = new Date(d)
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -    dates.push(next.toISOString().slice(0, 10))
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -}
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -function generateId(): string {
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  }
+[2026-07-02T01:21:23.452Z] [INFO] [stderr]  interface TaskFormData {
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -
+[2026-07-02T01:21:23.452Z] [INFO] [stderr]    description: string
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -}
+[2026-07-02T01:21:23.452Z] [INFO] [stderr]    title: string
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] 
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:23.452Z] [INFO] [stderr] -  return dates
+[2026-07-02T01:21:23.452Z] [INFO] [stderr]    category: TaskCategory
+[2026-07-02T01:21:26.215Z] [INFO] [stderr] [0m✱ [0mGrep "isToday\("[90m in src/pages/DailyPlan.tsx · 1 match[0m
+[2026-07-02T01:21:30.114Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] @@ -27,12 +27,10 @@
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:30.115Z] [INFO] [stderr]  }
+[2026-07-02T01:21:30.115Z] [INFO] [stderr]  
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] -}
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] -  return new Date().toISOString().slice(0, 10)
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] +
+[2026-07-02T01:21:30.115Z] [INFO] [stderr]  
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] -function todayFn(): string {
+[2026-07-02T01:21:30.115Z] [INFO] [stderr]  interface TaskFormData {
+[2026-07-02T01:21:30.115Z] [INFO] [stderr]  
+[2026-07-02T01:21:30.115Z] [INFO] [stderr]    description: string
+[2026-07-02T01:21:30.115Z] [INFO] [stderr]    title: string
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] [0m← [0mEdit src/pages/DailyPlan.tsx
+[2026-07-02T01:21:30.115Z] [INFO] [stderr]    category: TaskCategory
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] 
+[2026-07-02T01:21:30.115Z] [INFO] [stderr]  const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+[2026-07-02T01:21:30.115Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:33.303Z] [INFO] [stderr] [0m→ [0mRead src/pages/DailyPlan.tsx[90m [offset=325, limit=15][0m
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] [0m← [0mEdit src/pages/DailyPlan.tsx
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] @@ -326,9 +326,9 @@
+[2026-07-02T01:21:38.313Z] [INFO] [stderr]      </svg>
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] -  {!isToday(selectedDate) && (
+[2026-07-02T01:21:38.313Z] [INFO] [stderr]  <div className="flex items-center gap-2">
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:38.313Z] [INFO] [stderr]        Today
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] +  {!isTodayDate(selectedDate) && (
+[2026-07-02T01:21:38.313Z] [INFO] [stderr]      </Button>
+[2026-07-02T01:21:38.313Z] [INFO] [stderr]    </Button>
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] 
+[2026-07-02T01:21:38.313Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:38.313Z] [INFO] [stderr]  </div>
+[2026-07-02T01:21:38.313Z] [INFO] [stderr]      <Button variant="ghost" size="sm" onClick={() => setSelectedDate(today())}>
+[2026-07-02T01:21:38.313Z] [INFO] [stderr]    )}
+[2026-07-02T01:21:43.240Z] [INFO] [stdout] Now let me tackle the redundant JSX comments and section dividers. Let me process multiple files in parallel.
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] @@ -16,11 +16,11 @@
+[2026-07-02T01:21:48.174Z] [INFO] [stderr]    })
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:21:48.174Z] [INFO] [stderr]  
+[2026-07-02T01:21:48.174Z] [INFO] [stderr]  }
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] -  const h = new Date().getHours()
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] -  if (h < 12) return 'Good morning'
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] -  if (h < 18) return 'Good afternoon'
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] +  const hour = new Date().getHours()
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] +  if (hour < 12) return 'Good morning'
+[2026-07-02T01:21:48.174Z] [INFO] [stderr] +  if (hour < 18) return 'Good afternoon'
+[2026-07-02T01:21:48.174Z] [INFO] [stderr]    return 'Good evening'
+[2026-07-02T01:21:48.175Z] [INFO] [stderr]  function getGreeting(): string {
+[2026-07-02T01:21:48.175Z] [INFO] [stderr]  }
+[2026-07-02T01:21:48.175Z] [INFO] [stderr]  function bandColor(band: number): string {
+[2026-07-02T01:21:48.175Z] [INFO] [stderr]  
+[2026-07-02T01:21:48.175Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:48.175Z] [INFO] [stderr] 
+[2026-07-02T01:21:56.377Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:21:56.378Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:21:56.378Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:21:56.378Z] [INFO] [stderr] @@ -116,9 +116,8 @@
+[2026-07-02T01:21:56.378Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:21:56.378Z] [INFO] [stderr]  ].filter(s => s.value > 0)
+[2026-07-02T01:21:56.378Z] [INFO] [stderr]  
+[2026-07-02T01:21:56.378Z] [INFO] [stderr]  return (
+[2026-07-02T01:21:56.378Z] [INFO] [stderr]    <div className="mx-auto max-w-6xl space-y-6">
+[2026-07-02T01:21:56.378Z] [INFO] [stderr] -    {/* Header */}
+[2026-07-02T01:21:56.378Z] [INFO] [stderr]      <div>
+[2026-07-02T01:21:56.378Z] [INFO] [stderr]        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+[2026-07-02T01:21:56.378Z] [INFO] [stderr]          {getGreeting()}, IELTS Learner
+[2026-07-02T01:21:56.378Z] [INFO] [stderr]        </h1>
+[2026-07-02T01:21:56.378Z] [INFO] [stderr] 
+[2026-07-02T01:21:56.378Z] [INFO] [stderr] [0m
+[2026-07-02T01:21:56.378Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:21:59.614Z] [INFO] [stderr] [0m→ [0mRead src/pages/Dashboard.tsx[90m [offset=116, limit=20][0m
+[2026-07-02T01:22:07.953Z] [INFO] [stderr] [0m
+[2026-07-02T01:22:07.954Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:22:07.954Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:22:07.954Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:07.954Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:07.954Z] [INFO] [stderr]    </p>
+[2026-07-02T01:22:07.954Z] [INFO] [stderr]  
+[2026-07-02T01:22:07.954Z] [INFO] [stderr] @@ -125,11 +125,9 @@
+[2026-07-02T01:22:07.954Z] [INFO] [stderr]  </div>
+[2026-07-02T01:22:07.954Z] [INFO] [stderr] -{/* Summary cards row */}
+[2026-07-02T01:22:07.954Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:07.954Z] [INFO] [stderr] -  {/* Streak */}
+[2026-07-02T01:22:07.954Z] [INFO] [stderr]      {formatDate(new Date())}
+[2026-07-02T01:22:07.954Z] [INFO] [stderr]    <Card>
+[2026-07-02T01:22:07.954Z] [INFO] [stderr]      <CardContent>
+[2026-07-02T01:22:07.954Z] [INFO] [stderr]        <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+[2026-07-02T01:22:07.954Z] [INFO] [stderr]  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+[2026-07-02T01:22:07.955Z] [INFO] [stderr] [0m
+[2026-07-02T01:22:07.955Z] [INFO] [stderr] 
+[2026-07-02T01:22:07.955Z] [INFO] [stderr]          Study Streak
+[2026-07-02T01:22:16.373Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:22:16.373Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:16.374Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:16.374Z] [INFO] [stderr]        <span className="ml-1 text-sm font-normal text-slate-400">days</span>
+[2026-07-02T01:22:16.374Z] [INFO] [stderr]      </p>
+[2026-07-02T01:22:16.374Z] [INFO] [stderr] -{/* Weekly Progress */}
+[2026-07-02T01:22:16.374Z] [INFO] [stderr]  </Card>
+[2026-07-02T01:22:16.374Z] [INFO] [stderr]    </CardContent>
+[2026-07-02T01:22:16.374Z] [INFO] [stderr]    <CardContent>
+[2026-07-02T01:22:16.374Z] [INFO] [stderr]      <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+[2026-07-02T01:22:16.374Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:22:16.374Z] [INFO] [stderr]  <Card>
+[2026-07-02T01:22:16.374Z] [INFO] [stderr]        Weekly Progress
+[2026-07-02T01:22:16.374Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:16.374Z] [INFO] [stderr] 
+[2026-07-02T01:22:16.374Z] [INFO] [stderr] @@ -137,9 +137,8 @@
+[2026-07-02T01:22:16.374Z] [INFO] [stderr] [0m
+[2026-07-02T01:22:24.253Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:22:24.253Z] [INFO] [stderr] @@ -150,9 +150,8 @@
+[2026-07-02T01:22:24.253Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:24.253Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:24.254Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:22:24.254Z] [INFO] [stderr]    </CardContent>
+[2026-07-02T01:22:24.254Z] [INFO] [stderr]        {weeklyProgress.done} / {weeklyProgress.total} tasks
+[2026-07-02T01:22:24.254Z] [INFO] [stderr]  </Card>
+[2026-07-02T01:22:24.254Z] [INFO] [stderr] -{/* Study Hours */}
+[2026-07-02T01:22:24.254Z] [INFO] [stderr]      </p>
+[2026-07-02T01:22:24.254Z] [INFO] [stderr]  <Card>
+[2026-07-02T01:22:24.254Z] [INFO] [stderr]    <CardContent>
+[2026-07-02T01:22:24.254Z] [INFO] [stderr]        Total Study Hours
+[2026-07-02T01:22:24.254Z] [INFO] [stderr]      <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+[2026-07-02T01:22:24.254Z] [INFO] [stderr] 
+[2026-07-02T01:22:24.254Z] [INFO] [stderr] [0m
+[2026-07-02T01:22:24.254Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:32.291Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:32.291Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:22:32.291Z] [INFO] [stderr]        <span className="ml-1 text-sm font-normal text-slate-400">hrs</span>
+[2026-07-02T01:22:32.291Z] [INFO] [stderr]    </CardContent>
+[2026-07-02T01:22:32.291Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:32.291Z] [INFO] [stderr] @@ -161,9 +161,8 @@
+[2026-07-02T01:22:32.291Z] [INFO] [stderr] -{/* Band */}
+[2026-07-02T01:22:32.291Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:32.291Z] [INFO] [stderr]  </Card>
+[2026-07-02T01:22:32.291Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:22:32.291Z] [INFO] [stderr]    <CardContent>
+[2026-07-02T01:22:32.291Z] [INFO] [stderr] 
+[2026-07-02T01:22:32.291Z] [INFO] [stderr]      </p>
+[2026-07-02T01:22:32.291Z] [INFO] [stderr] [0m
+[2026-07-02T01:22:32.291Z] [INFO] [stderr]        Target Band
+[2026-07-02T01:22:32.291Z] [INFO] [stderr]  <Card>
+[2026-07-02T01:22:32.291Z] [INFO] [stderr]      <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+[2026-07-02T01:22:40.318Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:40.318Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:22:40.318Z] [INFO] [stderr] @@ -177,9 +177,8 @@
+[2026-07-02T01:22:40.318Z] [INFO] [stderr]    </Card>
+[2026-07-02T01:22:40.318Z] [INFO] [stderr]  
+[2026-07-02T01:22:40.318Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:22:40.318Z] [INFO] [stderr]  </div>
+[2026-07-02T01:22:40.318Z] [INFO] [stderr] -{/* Proactive Suggestions */}
+[2026-07-02T01:22:40.318Z] [INFO] [stderr]      </CardContent>
+[2026-07-02T01:22:40.318Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:40.318Z] [INFO] [stderr]  {suggestions.length > 0 && (
+[2026-07-02T01:22:40.318Z] [INFO] [stderr]    <div className="space-y-3">
+[2026-07-02T01:22:40.318Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:40.318Z] [INFO] [stderr]      <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+[2026-07-02T01:22:40.318Z] [INFO] [stderr] [0m
+[2026-07-02T01:22:40.318Z] [INFO] [stderr]        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-02T01:22:40.318Z] [INFO] [stderr] 
+[2026-07-02T01:22:48.511Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:22:48.511Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:22:48.511Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:48.511Z] [INFO] [stderr]  )}
+[2026-07-02T01:22:48.511Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:48.511Z] [INFO] [stderr] -{/* Middle section */}
+[2026-07-02T01:22:48.511Z] [INFO] [stderr]  
+[2026-07-02T01:22:48.511Z] [INFO] [stderr] @@ -219,11 +219,10 @@
+[2026-07-02T01:22:48.511Z] [INFO] [stderr] -  {/* Today's Plan */}
+[2026-07-02T01:22:48.511Z] [INFO] [stderr] +  
+[2026-07-02T01:22:48.511Z] [INFO] [stderr]  <div className="grid gap-6 lg:grid-cols-3">
+[2026-07-02T01:22:48.511Z] [INFO] [stderr]    </div>
+[2026-07-02T01:22:48.511Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:48.512Z] [INFO] [stderr]      <CardHeader>
+[2026-07-02T01:22:48.512Z] [INFO] [stderr]    <Card className="lg:col-span-2">
+[2026-07-02T01:22:48.512Z] [INFO] [stderr] [0m
+[2026-07-02T01:22:48.512Z] [INFO] [stderr] 
+[2026-07-02T01:22:48.512Z] [INFO] [stderr]        <span className="text-sm text-slate-500 dark:text-slate-400">
+[2026-07-02T01:22:48.511Z] [INFO] [stderr]      </div>
+[2026-07-02T01:22:48.512Z] [INFO] [stderr]        <CardTitle>Today's Plan</CardTitle>
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:56.525Z] [INFO] [stderr]  </Card>
+[2026-07-02T01:22:56.525Z] [INFO] [stderr]      )}
+[2026-07-02T01:22:56.525Z] [INFO] [stderr]    </CardContent>
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] @@ -274,11 +274,10 @@
+[2026-07-02T01:22:56.525Z] [INFO] [stderr]  
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] -{/* Right column */}
+[2026-07-02T01:22:56.525Z] [INFO] [stderr]        <CardTitle>Reviews Due</CardTitle>
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:22:56.525Z] [INFO] [stderr]      </CardHeader>
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] -<div className="space-y-4">
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] +  
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] +  <div className="space-y-4">
+[2026-07-02T01:22:56.525Z] [INFO] [stderr]    <Card>
+[2026-07-02T01:22:56.525Z] [INFO] [stderr]      <CardHeader>
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] -  {/* Due Reviews */}
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] [0m
+[2026-07-02T01:22:56.525Z] [INFO] [stderr] 
+[2026-07-02T01:23:04.767Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:04.767Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:04.767Z] [INFO] [stderr]    </CardContent>
+[2026-07-02T01:23:04.767Z] [INFO] [stderr]  </Card>
+[2026-07-02T01:23:04.767Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:23:04.767Z] [INFO] [stderr] @@ -298,9 +298,8 @@
+[2026-07-02T01:23:04.767Z] [INFO] [stderr] -{/* Weak Skills */}
+[2026-07-02T01:23:04.767Z] [INFO] [stderr]      )}
+[2026-07-02T01:23:04.767Z] [INFO] [stderr]        <CardTitle>Weak Skills</CardTitle>
+[2026-07-02T01:23:04.767Z] [INFO] [stderr]      <CardHeader>
+[2026-07-02T01:23:04.767Z] [INFO] [stderr]  
+[2026-07-02T01:23:04.767Z] [INFO] [stderr]  {weakSkills.length > 0 && (
+[2026-07-02T01:23:04.767Z] [INFO] [stderr] 
+[2026-07-02T01:23:04.767Z] [INFO] [stderr]    <Card>
+[2026-07-02T01:23:04.767Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:04.767Z] [INFO] [stderr] [0m
+[2026-07-02T01:23:04.767Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] @@ -320,11 +320,10 @@
+[2026-07-02T01:23:12.731Z] [INFO] [stderr]    </div>
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:12.731Z] [INFO] [stderr]  
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:23:12.731Z] [INFO] [stderr]      )}
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] +  
+[2026-07-02T01:23:12.731Z] [INFO] [stderr]  </div>
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] -  {/* Weekly study time */}
+[2026-07-02T01:23:12.731Z] [INFO] [stderr]  <div className="grid gap-6 lg:grid-cols-2">
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] [0m
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] -{/* Charts row */}
+[2026-07-02T01:23:12.731Z] [INFO] [stderr]        <CardTitle>This Week</CardTitle>
+[2026-07-02T01:23:12.731Z] [INFO] [stderr]      <CardHeader>
+[2026-07-02T01:23:12.731Z] [INFO] [stderr]    <Card>
+[2026-07-02T01:23:12.731Z] [INFO] [stderr] 
+[2026-07-02T01:23:12.731Z] [INFO] [stderr]      </CardHeader>
+[2026-07-02T01:23:21.114Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:23:21.114Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:21.114Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:21.114Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:21.114Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:23:21.114Z] [INFO] [stderr]      )}
+[2026-07-02T01:23:21.114Z] [INFO] [stderr]    </CardContent>
+[2026-07-02T01:23:21.114Z] [INFO] [stderr]  </Card>
+[2026-07-02T01:23:21.114Z] [INFO] [stderr] -{/* Skill balance */}
+[2026-07-02T01:23:21.114Z] [INFO] [stderr]    </CardHeader>
+[2026-07-02T01:23:21.114Z] [INFO] [stderr]  
+[2026-07-02T01:23:21.114Z] [INFO] [stderr] +
+[2026-07-02T01:23:21.114Z] [INFO] [stderr]  <Card>
+[2026-07-02T01:23:21.114Z] [INFO] [stderr] 
+[2026-07-02T01:23:21.114Z] [INFO] [stderr]    <CardHeader>
+[2026-07-02T01:23:21.114Z] [INFO] [stderr] [0m
+[2026-07-02T01:23:21.114Z] [INFO] [stderr]      <CardTitle>Skill Balance (7 days)</CardTitle>
+[2026-07-02T01:23:21.115Z] [INFO] [stderr] @@ -354,9 +354,9 @@
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] [0m← [0mEdit src/pages/Dashboard.tsx
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] @@ -402,9 +402,9 @@
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] ===================================================================
+[2026-07-02T01:23:29.094Z] [INFO] [stderr]      </CardContent>
+[2026-07-02T01:23:29.094Z] [INFO] [stderr]  </div>
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+[2026-07-02T01:23:29.094Z] [INFO] [stderr]  
+[2026-07-02T01:23:29.094Z] [INFO] [stderr]    </Card>
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] -{/* Bottom: focus recommendation + summary */}
+[2026-07-02T01:23:29.094Z] [INFO] [stderr]  <div className="grid gap-6 lg:grid-cols-2">
+[2026-07-02T01:23:29.094Z] [INFO] [stderr]        <p className="text-xs font-medium uppercase tracking-wider text-blue-600 dark:text-blue-400">
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] +
+[2026-07-02T01:23:29.094Z] [INFO] [stderr]    <Card className="border-l-4 border-l-blue-500">
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] [0m
+[2026-07-02T01:23:29.094Z] [INFO] [stderr] 
+[2026-07-02T01:23:29.094Z] [INFO] [stderr]      <CardContent>
+[2026-07-02T01:23:38.089Z] [INFO] [stderr] [0m• [0mRemove JSX comments in pages[90m General Agent[0m
+[2026-07-02T01:23:41.323Z] [INFO] [stderr] [0m• [0mRemove section divider comments[90m General Agent[0m
+[2026-07-02T01:23:45.059Z] [INFO] [stderr] [0m• [0mImprove complex logic comments[90m General Agent[0m
+[2026-07-02T01:23:45.158Z] [INFO] [stdout] Let me now use task agents to handle the remaining work in parallel:
+[2026-07-02T01:24:22.726Z] [INFO] [stderr] [0m✓ [0mImprove complex logic comments[90m General Agent[0m
+[2026-07-02T01:24:36.813Z] [INFO] [stderr] [0m✓ [0mRemove section divider comments[90m General Agent[0m
+[2026-07-02T01:26:23.772Z] [INFO] [stderr] [0m✓ [0mRemove JSX comments in pages[90m General Agent[0m
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [0m
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [✓] Centralize generateId() utility and remove 31 duplications
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [✓] Clean up excessive section divider comments (// ── Section ──)
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [✓] Remove redundant JSX comments ({/* Header */}, {/* Filters */}, etc.)
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [•] Fix inconsistent naming (getXxx vs loadXxx, catch comment patterns)
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [✓] Improve comments for complex logic (SM-2, NextBestAction, analytics calendar)
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [✓] Fix single-letter variable names (d, h, m, s, q) in page components
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [0m
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [•] Fix generic variable names (data, result, item, entry, content) in production code
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [ ] Run lint to verify changes
+[2026-07-02T01:26:28.518Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-02T01:26:37.076Z] [INFO] [stderr] [0m• [0mFix naming in features files[90m General Agent[0m
+[2026-07-02T01:26:43.547Z] [INFO] [stderr] [0m• [0mFix catch comments and naming[90m General Agent[0m
+[2026-07-02T01:26:43.602Z] [INFO] [stdout] Now let me fix the remaining `features/` and extension files:
+[2026-07-02T01:28:36.517Z] [INFO] [stderr] [0m✓ [0mFix catch comments and naming[90m General Agent[0m
+[2026-07-02T02:14:45.496Z] [INFO] Executor finished with status: failed, exit code: undefined
+[2026-07-02T02:14:45.497Z] [INFO] Output:
+Let me explore the current codebase structure and naming conventions.
+Now I have a comprehensive understanding. Let me plan and execute the improvements systematically.
+Let me start. First, I'll read the key utility files and understand current state.
+Let me read the key files that need the most attention. I'll batch these reads.
+Good. Now I have a clear picture. Let me read more files to plan my edits efficiently.
+Now let me start making changes. I'll begin with batch edits across multiple files.
+Let me revert that change and take a different approach - I'll add the missing utils and fix naming.
+I need to restore `formatDate` and `formatTime` functions. Let me add them back and also fix naming.
+Now let me fix all the page files in parallel with better naming:
+Now let me fix the remaining files with the same pattern:
+Now let me tackle the redundant JSX comments and section dividers. Let me process multiple files in parallel.
+Let me now use task agents to handle the remaining work in parallel:
+Now let me fix the remaining `features/` and extension files:
+[2026-07-02T02:14:45.497Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"project structure packages src features","maxFiles":64}
+[0m
+[0m$ [0mls -la
+total 560
+drwxr-xr-x  28 phamthanhhung  staff     896 Jul  2 00:09 .
+drwxr-xr-x@ 13 phamthanhhung  staff     416 Jun 30 20:44 ..
+-rw-r--r--@  1 phamthanhhung  staff    6148 Jul  1 10:03 .DS_Store
+drwxr-xr-x   9 phamthanhhung  staff     288 Jul  2 07:40 .codegraph
+drwxr-xr-x@ 11 phamthanhhung  staff     352 Jul  2 08:15 .flowtask
+drwxr-xr-x@ 17 phamthanhhung  staff     544 Jul  1 23:45 .git
+-rw-r--r--@  1 phamthanhhung  staff      62 Jul  1 10:16 .gitignore
+drwxr-xr-x@  4 phamthanhhung  staff     128 Jul  1 11:08 .wrangler
+-rw-r--r--@  1 phamthanhhung  staff   12005 Jul  2 08:15 README.md
+drwxr-xr-x@  3 phamthanhhung  staff      96 Jul  1 14:27 apps
+-rw-r--r--@  1 phamthanhhung  staff     801 Jul  1 10:25 codegraph.config.json
+drwxr-xr-x@ 10 phamthanhhung  staff     320 Jul  1 23:58 dist
+drwxr-xr-x@ 25 phamthanhhung  staff     800 Jul  2 08:08 docs
+drwxr-xr-x@  3 phamthanhhung  staff      96 Jul  1 23:07 features
+-rw-r--r--@  1 phamthanhhung  staff     679 Jul  1 10:53 index.html
+drwxr-xr-x@ 36 phamthanhhung  staff    1152 Jul  1 22:26 node_modules
+-rw-r--r--@  1 phamthanhhung  staff    1721 Jul  2 07:27 package.json
+drwxr-xr-x@ 10 phamthanhhung  staff     320 Jul  2 00:04 packages
+-rw-r--r--@  1 phamthanhhung  staff  223061 Jul  2 00:09 pnpm-lock.yaml
+-rw-r--r--@  1 phamthanhhung  staff      70 Jul  1 16:21 pnpm-workspace.yaml
+drwxr-xr-x@  4 phamthanhhung  staff     128 Jul  1 10:46 public
+drwxr-xr-x@  5 phamthanhhung  staff     160 Jul  2 07:27 scripts
+drwxr-xr-x@ 22 phamthanhhung  staff     704 Jul  1 20:52 src
+-rw-r--r--@  1 phamthanhhung  staff     899 Jul  1 23:49 tsconfig.app.json
+-rw-r--r--@  1 phamthanhhung  staff     119 Jun 30 21:23 tsconfig.json
+-rw-r--r--@  1 phamthanhhung  staff     573 Jul  1 22:26 tsconfig.node.json
+-rw-r--r--@  1 phamthanhhung  staff    1516 Jul  1 23:57 vite.config.ts
+-rw-r--r--@  1 phamthanhhung  staff     905 Jul  2 07:39 vitest.config.ts
+[0m
+[0m$ [0mecho "=== src/ structure ===" && find src -type f -name "*.ts" -o -name "*.tsx" | head -80 && echo "=== packages/ structure ===" && find packages -type f -name "*.ts" -o -name "*.tsx" | head -80 && echo "=== features/ structure ===" && find features -type f -name "*.ts" -o -name "*.tsx" | head -80 && echo "=== apps/ structure ===" && find apps -type f -name "*.ts" -o -name "*.tsx" -o -name "*.mjs" | head -60
+=== src/ structure ===
+src/App.tsx
+src/pwa-config.ts
+src/main.tsx
+src/types/index.ts
+src/context/ThemeContext.tsx
+src/context/SettingsContext.tsx
+src/extension/ProactiveAssistant.ts
+src/app/App.tsx
+src/test/Button.test.tsx
+src/test/vitest.d.ts
+src/test/setup.ts
+src/features/reading/ReadingPractice.tsx
+src/features/reading/components/Question.tsx
+src/features/reading/data/passages.ts
+src/features/settings/Settings.tsx
+src/features/settings/AISettings.tsx
+src/features/grammar/GrammarLearning.tsx
+src/features/grammar/components/Exercise.tsx
+src/features/listening/ListeningPractice.tsx
+src/features/listening/components/ListeningQuestion.tsx
+src/features/listening/components/AudioPlayer.tsx
+src/features/listening/data/exercises.ts
+src/features/planner/validation.ts
+src/features/planner/Planner.tsx
+src/features/planner/components/CalendarView.tsx
+src/features/publicApiIntegration/utils/errorHandling.ts
+src/features/publicApiIntegration/utils/errorHandling.test.ts
+src/features/publicApiIntegration/types.ts
+src/features/publicApiIntegration/components/ImportedContentManager.tsx
+src/features/publicApiIntegration/components/PublicApiSearch.tsx
+src/features/publicApiIntegration/components/ApiKeySettings.tsx
+src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts
+src/features/publicApiIntegration/ai/classify.ts
+src/features/publicApiIntegration/ai/index.ts
+src/features/publicApiIntegration/api/import.ts
+src/features/mistakes/MistakeNotebook.tsx
+src/features/dashboard/Dashboard.tsx
+src/features/dashboard/components/ProgressChart.tsx
+src/features/notes/StudyNotesPage.tsx
+src/features/speaking/SpeakingPractice.tsx
+src/features/speaking/components/SelfEvaluation.tsx
+src/features/speaking/data/questions.ts
+src/features/speaking/data/phrases.ts
+src/features/vocabulary/components/WordForm.tsx
+src/features/vocabulary/components/ReviewMode.tsx
+src/features/vocabulary/Vocabulary.tsx
+src/features/analytics/Analytics.tsx
+src/features/writing/WritingPractice.tsx
+src/features/writing/components/FeedbackPanel.tsx
+src/features/writing/WritingPromptsPage.tsx
+src/features/writing/data/prompts.ts
+src/tests/storage/DatabaseMigration.test.ts
+src/utils/spaced-repetition.ts
+src/utils/index.ts
+src/utils/spaced-repetition.test.ts
+src/models/aiTutorModels.ts
+src/models/index.ts
+src/components/ui/ConfirmDialog.tsx
+src/components/ui/Card.tsx
+src/components/ui/FormField.tsx
+src/components/ui/ErrorDisplay.tsx
+src/components/ui/DarkModeToggle.tsx
+src/components/ui/LoadingSpinner.tsx
+src/components/ui/Badge.tsx
+src/components/ui/ToggleSwitch.tsx
+src/components/ui/Button.tsx
+src/components/ui/Modal.tsx
+src/components/ui/Toast.tsx
+src/components/ui/EmptyState.tsx
+src/components/ui/Select.tsx
+src/components/ui/Textarea.tsx
+src/components/ui/Input.tsx
+src/components/ui/ErrorBoundary.tsx
+src/components/layout/Headbar.tsx
+src/components/aiTutor/FloatingTutorButton.test.tsx
+src/components/aiTutor/NotificationCenter.tsx
+src/components/aiTutor/ChatIcon.tsx
+src/components/aiTutor/FloatingTutorButton.tsx
+src/components/aiTutor/TeachingMode.tsx
+src/components/aiTutor/ChatUXEnhancements.tsx
+=== packages/ structure ===
+packages/ui/src/components/Toast.tsx
+packages/ui/src/index.ts
+packages/learning-engine/vitest.config.ts
+packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+packages/learning-engine/src/weakness-detection/index.ts
+packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+packages/learning-engine/src/review-scheduler/index.ts
+packages/learning-engine/src/progress/ProgressService.ts
+packages/learning-engine/src/progress/index.ts
+packages/learning-engine/src/next-best-action/NextBestActionService.ts
+packages/learning-engine/src/next-best-action/index.ts
+packages/learning-engine/src/LearningEngine.ts
+packages/learning-engine/src/types.ts
+packages/learning-engine/src/__tests__/LearningEngine.test.ts
+packages/learning-engine/src/__tests__/ProgressService.test.ts
+packages/learning-engine/src/__tests__/DailyPlanService.test.ts
+packages/learning-engine/src/__tests__/NextBestActionService.test.ts
+packages/learning-engine/src/__tests__/WeaknessDetectionService.test.ts
+packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+packages/learning-engine/src/__tests__/AnalyticsService.test.ts
+packages/learning-engine/src/__tests__/ProfileService.test.ts
+packages/learning-engine/src/profile/index.ts
+packages/learning-engine/src/profile/ProfileService.ts
+packages/learning-engine/src/index.ts
+packages/learning-engine/src/errors/LearningEngineError.ts
+packages/learning-engine/src/daily-plan/DailyPlanService.ts
+packages/learning-engine/src/daily-plan/index.ts
+packages/learning-engine/src/analytics/AnalyticsService.ts
+packages/learning-engine/src/analytics/index.ts
+packages/content/vitest.config.ts
+packages/content/src/userContent.ts
+packages/content/src/search.ts
+packages/content/src/schemas.ts
+packages/content/src/built-in/speaking.ts
+packages/content/src/built-in/topics.ts
+packages/content/src/built-in/grammar.ts
+packages/content/src/built-in/listening.ts
+packages/content/src/built-in/reading.ts
+packages/content/src/built-in/index.ts
+packages/content/src/built-in/writing.ts
+packages/content/src/built-in/phrases.ts
+packages/content/src/types.ts
+packages/content/src/__tests__/seeding.test.ts
+packages/content/src/__tests__/userContent.test.ts
+packages/content/src/__tests__/search.test.ts
+packages/content/src/__tests__/importExport.test.ts
+packages/content/src/importExport.ts
+packages/content/src/index.ts
+packages/content/src/seeding.ts
+packages/utils/src/errors.ts
+packages/utils/src/index.ts
+packages/storage/vitest.config.ts
+packages/storage/src/schema.ts
+packages/storage/src/errors.ts
+packages/storage/src/migrations.ts
+packages/storage/src/reviewService.ts
+packages/storage/src/repositories/ContentRepository.ts
+packages/storage/src/repositories/TaskRepository.ts
+packages/storage/src/repositories/BaseRepository.ts
+packages/storage/src/repositories/VocabularyRepository.ts
+packages/storage/src/repositories/index.ts
+packages/storage/src/repositories/MistakeRepository.ts
+packages/storage/src/repositories/ProgressRepository.ts
+packages/storage/src/repositories/SessionRepository.ts
+packages/storage/src/syncService.ts
+packages/storage/src/__tests__/errors.test.ts
+packages/storage/src/__tests__/syncService.test.ts
+packages/storage/src/__tests__/VocabularyRepository.test.ts
+packages/storage/src/__tests__/BaseRepository.test.ts
+packages/storage/src/__tests__/reviewService.test.ts
+packages/storage/src/__tests__/TaskRepository.test.ts
+packages/storage/src/__tests__/ContentRepository.test.ts
+packages/storage/src/__tests__/migrations.test.ts
+packages/storage/src/__tests__/MistakeRepository.test.ts
+packages/storage/src/__tests__/ProgressRepository.test.ts
+packages/storage/src/__tests__/backup.test.ts
+packages/storage/src/index.ts
+packages/storage/src/backup/types.ts
+packages/storage/src/backup/index.ts
+packages/storage/src/db.ts
+=== features/ structure ===
+features/ai-tutor/types/index.ts
+features/ai-tutor/tests/ChatWidget.test.tsx
+features/ai-tutor/tests/useProactiveMessages.test.ts
+features/ai-tutor/tests/proactiveEventBus.test.ts
+features/ai-tutor/tests/messageStorage.test.ts
+features/ai-tutor/tests/proactiveMessageEngine.test.ts
+features/ai-tutor/tests/proactiveMessageService.test.ts
+features/ai-tutor/tests/chatHelpers.test.ts
+features/ai-tutor/tests/ChatIcon.test.tsx
+features/ai-tutor/tests/ChatBubble.test.tsx
+features/ai-tutor/tests/QuickActions.test.tsx
+features/ai-tutor/utils/chatHelpers.ts
+features/ai-tutor/utils/contextSuggestions.ts
+features/ai-tutor/schemas/chat.ts
+features/ai-tutor/components/TutorAvatar.tsx
+features/ai-tutor/components/ChatWidget.tsx
+features/ai-tutor/components/NotificationCenter.tsx
+features/ai-tutor/components/ContextSuggestionCard.tsx
+features/ai-tutor/components/useExitAnimation.ts
+features/ai-tutor/components/ChatIcon.tsx
+features/ai-tutor/components/WelcomeState.tsx
+features/ai-tutor/components/ChatStyles.tsx
+features/ai-tutor/components/QuickActions.tsx
+features/ai-tutor/components/ChatBubble.tsx
+features/ai-tutor/components/TypingIndicator.tsx
+features/ai-tutor/components/ProactiveMessagePreview.tsx
+features/ai-tutor/components/MissingKeyBanner.tsx
+features/ai-tutor/hooks/useChatWidget.ts
+features/ai-tutor/hooks/useProactiveMessages.ts
+features/ai-tutor/index.ts
+features/ai-tutor/services/proactiveMessageService.ts
+features/ai-tutor/services/messageStorage.ts
+features/ai-tutor/services/proactiveMessageEngine.ts
+features/ai-tutor/services/proactiveEventBus.ts
+=== apps/ structure ===
+apps/extension/scripts/build.mjs
+apps/extension/scripts/package.mjs
+apps/extension/vite.config.ts
+apps/extension/src/background/settingsStorage.ts
+apps/extension/src/background/securityAudit.ts
+apps/extension/src/background/index.ts
+apps/extension/src/options/App.tsx
+apps/extension/src/options/main.tsx
+apps/extension/src/options/SettingsPage.tsx
+apps/extension/src/popup/App.tsx
+apps/extension/src/popup/main.tsx
+apps/extension/src/popup/components/SaveTextForm.tsx
+apps/extension/src/popup/components/MistakeNotebook.tsx
+apps/extension/src/popup/components/PopupDashboard.tsx
+apps/extension/src/popup/components/BackupRestore.tsx
+apps/extension/src/popup/components/ArticleCollector.tsx
+apps/extension/src/popup/components/VideoHelper.tsx
+apps/extension/src/popup/components/VocabularyCollector.tsx
+apps/extension/src/popup/components/MiniTutor.tsx
+apps/extension/src/content-script/floatingToolbar.ts
+apps/extension/src/content-script/dictionaryPanel.ts
+apps/extension/src/content-script/miniTutor.ts
+apps/extension/src/content-script/sharedStyles.ts
+apps/extension/src/content-script/aiExplain.ts
+apps/extension/src/content-script/videoHelper.ts
+apps/extension/src/content-script/saveSelectedText.ts
+apps/extension/src/content-script/index.ts
+apps/extension/src/storage/indexedDB.ts
+apps/extension/src/storage/vocabularyStore.ts
+apps/extension/src/storage/mistakeStore.ts
+apps/extension/src/storage/videoStore.ts
+apps/extension/src/storage/articleStore.ts
+apps/extension/src/types.ts
+apps/extension/src/__tests__/saveSelectedText.test.ts
+apps/extension/src/vite-env.d.ts
+apps/extension/src/services/storage.ts
+[0m
+[0m• [0mSurvey code comment quality[90m Explore Agent[0m
+[0m✓ [0mSurvey code comment quality[90m Explore Agent[0m
+[0m
+[0m# [0mTodos
+[ ] Centralize generateId() utility and remove 31 duplications
+[ ] Fix single-letter variable names (d, h, m, s, q) in page components
+[ ] Fix generic variable names (data, result, item, entry, content) in production code
+[ ] Remove redundant JSX comments ({/* Header */}, {/* Filters */}, etc.)
+[ ] Clean up excessive section divider comments (// ── Section ──)
+[ ] Improve comments for complex logic (SM-2, NextBestAction, analytics calendar)
+[ ] Fix inconsistent naming (getXxx vs loadXxx, catch comment patterns)
+[ ] Run lint to verify changes
+[0m
+[0m# [0mTodos
+[•] Centralize generateId() utility and remove 31 duplications
+[ ] Fix single-letter variable names (d, h, m, s, q) in page components
+[ ] Fix generic variable names (data, result, item, entry, content) in production code
+[ ] Remove redundant JSX comments ({/* Header */}, {/* Filters */}, etc.)
+[ ] Clean up excessive section divider comments (// ── Section ──)
+[ ] Improve comments for complex logic (SM-2, NextBestAction, analytics calendar)
+[ ] Fix inconsistent naming (getXxx vs loadXxx, catch comment patterns)
+[ ] Run lint to verify changes
+[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"packages/utils/src/index.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/utils/index.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"symbol":"generateId"}
+[0m
+[0m$ [0mgrep -r "from '@ielts/utils'" packages/ features/ --include="*.ts" --include="*.tsx" | head -5 && echo "---" && grep -r "from '\.\./utils'" packages/exercises/ --include="*.ts" | head -5 && echo "---" && cat packages/exercises/package.json 2>/dev/null && echo "---" && cat features/ai-tutor/package.json 2>/dev/null && echo "---" && cat packages/utils/package.json 2>/dev/null
+---
+---
+{
+  "name": "@ielts/exercises",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3"
+  }
+}
+---
+[0m
+[0m→ [0mRead pnpm-workspace.yaml
+[0m→ [0mRead package.json
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/utils/spaced-repetition.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/pages/Dashboard.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/pages/ListeningJournal.tsx","limit":80}
+[0m→ [0mRead src/pages/ListeningJournal.tsx[90m [offset=80, limit=100][0m
+[0m→ [0mRead src/pages/ReadingJournal.tsx[90m [limit=70][0m
+[0m→ [0mRead src/pages/SpeakingPractice.tsx[90m [limit=60][0m
+[0m→ [0mRead src/pages/WritingPractice.tsx[90m [limit=60][0m
+[0m→ [0mRead src/pages/Mistakes.tsx[90m [limit=70][0m
+[0m→ [0mRead src/pages/GrammarNotes.tsx[90m [limit=60][0m
+[0m
+[0m← [0mEdit src/pages/ListeningJournal.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+@@ -13,29 +13,15 @@
+ ]
+ 
+ const LISTENING_SECTIONS = [1, 2, 3, 4] as const
+ 
+-function generateId(): string {
+-  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+-}
++import { generateId, formatDate, formatDuration } from '../utils'
+ 
+ function computeAccuracy(score: number, maxScore: number): number {
+   if (maxScore <= 0) return 0
+   return Math.round((score / maxScore) * 100)
+ }
+ 
+-function formatDate(dateStr: string): string {
+-  const d = new Date(dateStr)
+-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+-}
+-
+-function formatTime(minutes: number): string {
+-  if (minutes < 60) return `${minutes}m`
+-  const h = Math.floor(minutes / 60)
+-  const m = minutes % 60
+-  return m > 0 ? `${h}h ${m}m` : `${h}h`
+-}
+-
+ function getScoreColor(accuracy: number): string {
+   if (accuracy >= 80) return 'text-green-600 dark:text-green-400'
+   if (accuracy >= 60) return 'text-amber-600 dark:text-amber-400'
+   return 'text-red-600 dark:text-red-400'
+
+[0m
+[0m← [0mEdit src/pages/ListeningJournal.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+@@ -13,9 +13,11 @@
+ ]
+ 
+ const LISTENING_SECTIONS = [1, 2, 3, 4] as const
+ 
+-import { generateId, formatDate, formatDuration } from '../utils'
++function generateId(): string {
++  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
++}
+ 
+ function computeAccuracy(score: number, maxScore: number): number {
+   if (maxScore <= 0) return 0
+   return Math.round((score / maxScore) * 100)
+
+[0m
+[0m→ [0mRead src/pages/ListeningJournal.tsx[90m [limit=50][0m
+[0m
+[0m← [0mEdit src/pages/ListeningJournal.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ListeningJournal.tsx
+@@ -42,8 +42,20 @@
+   if (rating >= 5) return 'text-amber-600 dark:text-amber-400'
+   return 'text-red-600 dark:text-red-400'
+ }
+ 
++function formatDate(dateStr: string): string {
++  const date = new Date(dateStr)
++  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
++}
++
++function formatTime(minutes: number): string {
++  if (minutes < 60) return `${minutes}m`
++  const hours = Math.floor(minutes / 60)
++  const remainingMinutes = minutes % 60
++  return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`
++}
++
+ interface SessionFormData {
+   title: string
+   topic: string
+   sourceUrl: string
+
+[0m
+[0m← [0mEdit src/pages/ReadingJournal.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+@@ -20,12 +20,8 @@
+   'Summary Completion',
+   'Matching Information',
+ ]
+ 
+-function generateId(): string {
+-  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+-}
+-
+ function computeAccuracy(correct: number, total: number): number {
+   if (total <= 0) return 0
+   return Math.round((correct / total) * 100)
+ }
+@@ -36,17 +32,17 @@
+   return Math.round(words / minutes)
+ }
+ 
+ function formatDate(dateStr: string): string {
+-  const d = new Date(dateStr)
+-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
++  const date = new Date(dateStr)
++  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+ }
+ 
+ function formatTime(minutes: number): string {
+   if (minutes < 60) return `${minutes}m`
+-  const h = Math.floor(minutes / 60)
+-  const m = minutes % 60
+-  return m > 0 ? `${h}h ${m}m` : `${h}h`
++  const hours = Math.floor(minutes / 60)
++  const remainingMinutes = minutes % 60
++  return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`
+ }
+ 
+ interface SessionFormData {
+   title: string
+
+[0m
+[0m← [0mEdit src/pages/ReadingJournal.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/ReadingJournal.tsx
+@@ -1,6 +1,7 @@
+ import { useState, useEffect, useCallback, useMemo } from 'react'
+ import type { ReadingSession, QuestionType } from '../models'
++import { generateId } from '../utils'
+ import { DatabaseService } from '../services/storage/Database'
+ import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+ import Modal from '../components/ui/Modal'
+
+[0m
+[0m← [0mEdit src/pages/SpeakingPractice.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+@@ -20,22 +20,20 @@
+ 
+ const CUE_CARD_PREP_TIME = 60
+ const CUE_CARD_SPEAK_TIME = 120
+ 
+-function generateId(): string {
+-  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+-}
++import { generateId } from '../utils'
+ 
+ function formatDate(dateStr: string): string {
+-  const d = new Date(dateStr)
+-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
++  const date = new Date(dateStr)
++  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+ }
+ 
+ function formatDuration(seconds: number): string {
+   if (seconds < 60) return `${seconds}s`
+-  const m = Math.floor(seconds / 60)
+-  const s = seconds % 60
+-  return s > 0 ? `${m}m ${s}s` : `${m}m`
++  const minutes = Math.floor(seconds / 60)
++  const remainingSeconds = seconds % 60
++  return remainingSeconds > 0 ? `${minutes}m ${remainingSeconds}s` : `${minutes}m`
+ }
+ 
+ function getRatingColor(rating: number): string {
+   if (rating >= 7) return 'text-green-600 dark:text-green-400'
+
+[0m
+[0m→ [0mRead src/pages/SpeakingPractice.tsx[90m [limit=30][0m
+[0m
+[0m← [0mEdit src/pages/SpeakingPractice.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+@@ -3,8 +3,9 @@
+ import { DatabaseService } from '../services/storage/Database'
+ import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+ import Modal from '../components/ui/Modal'
++import { generateId } from '../utils'
+ 
+ const TOPICS = [
+   'Education', 'Technology', 'Environment', 'Health', 'Work',
+   'Business', 'Travel', 'Culture', 'Society', 'Crime',
+
+[0m
+[0m→ [0mRead src/pages/SpeakingPractice.tsx[90m [limit=30][0m
+[0m
+[0m← [0mEdit src/pages/SpeakingPractice.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/SpeakingPractice.tsx
+@@ -21,10 +21,8 @@
+ 
+ const CUE_CARD_PREP_TIME = 60
+ const CUE_CARD_SPEAK_TIME = 120
+ 
+-import { generateId } from '../utils'
+-
+ function formatDate(dateStr: string): string {
+   const date = new Date(dateStr)
+   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+ }
+
+[0m
+[0m← [0mEdit src/pages/WritingPractice.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+@@ -1,6 +1,7 @@
+ import { useState, useEffect, useCallback, useMemo } from 'react'
+ import type { WritingSession, WritingTaskType } from '../models'
++import { generateId } from '../utils'
+ import { DatabaseService } from '../services/storage/Database'
+ import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+ import Modal from '../components/ui/Modal'
+
+[0m
+[0m→ [0mRead src/pages/WritingPractice.tsx[90m [limit=50][0m
+[0m
+[0m← [0mEdit src/pages/WritingPractice.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/WritingPractice.tsx
+@@ -17,22 +17,18 @@
+   { value: 'task1', label: 'Task 1' },
+   { value: 'task2', label: 'Task 2' },
+ ]
+ 
+-function generateId(): string {
+-  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+-}
+-
+ function formatDate(dateStr: string): string {
+-  const d = new Date(dateStr)
+-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
++  const date = new Date(dateStr)
++  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+ }
+ 
+ function formatTime(minutes: number): string {
+   if (minutes < 60) return `${minutes}m`
+-  const h = Math.floor(minutes / 60)
+-  const m = minutes % 60
+-  return m > 0 ? `${h}h ${m}m` : `${h}h`
++  const hours = Math.floor(minutes / 60)
++  const remainingMinutes = minutes % 60
++  return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`
+ }
+ 
+ function getBandColor(band: number): string {
+   if (band >= 7) return 'text-green-600 dark:text-green-400'
+
+[0m
+[0m← [0mEdit src/pages/Mistakes.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+@@ -3,8 +3,9 @@
+ import { DatabaseService } from '../services/storage/Database'
+ import Card, { CardContent } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+ import Modal from '../components/ui/Modal'
++import { generateId } from '../utils'
+ import ErrorDisplay from '../components/ui/ErrorDisplay'
+ import { useToast } from '../components/ui/Toast'
+ 
+ const MISTAKE_SKILLS: { value: MistakeSkill; label: string; color: string }[] = [
+
+[0m
+[0m→ [0mRead src/pages/Mistakes.tsx[90m [offset=26, limit=20][0m
+[0m
+[0m← [0mEdit src/pages/Mistakes.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Mistakes.tsx
+@@ -25,15 +25,11 @@
+ 
+ const SORT_OPTIONS = ['newest', 'oldest', 'most-repeated', 'skill'] as const
+ type SortOption = typeof SORT_OPTIONS[number]
+ 
+-function generateId(): string {
+-  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+-}
+-
+ function formatDate(dateStr: string): string {
+-  const d = new Date(dateStr)
+-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
++  const date = new Date(dateStr)
++  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+ }
+ 
+ function getSkillStyle(skill: MistakeSkill): string {
+   return MISTAKE_SKILLS.find(s => s.value === skill)?.color ?? ''
+
+[0m
+[0m← [0mEdit src/pages/GrammarNotes.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+@@ -1,6 +1,7 @@
+ import { useState, useEffect, useCallback, useMemo } from 'react'
+ import type { GrammarNote, GrammarStatus } from '../models'
++import { generateId } from '../utils'
+ import { DatabaseService } from '../services/storage/Database'
+ import { useToast } from '../components/ui/Toast'
+ import Card, { CardContent } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+
+[0m
+[0m→ [0mRead src/pages/GrammarNotes.tsx[90m [offset=24, limit=20][0m
+[0m
+[0m← [0mEdit src/pages/GrammarNotes.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/GrammarNotes.tsx
+@@ -22,15 +22,11 @@
+   { value: 'reviewing', label: 'Reviewing', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
+   { value: 'mastered', label: 'Mastered', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
+ ]
+ 
+-function generateId(): string {
+-  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+-}
+-
+ function formatDate(dateStr: string): string {
+-  const d = new Date(dateStr)
+-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
++  const date = new Date(dateStr)
++  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+ }
+ 
+ function getStatusStyle(status: GrammarStatus): string {
+   return STATUS_OPTIONS.find(s => s.value === status)?.color ?? ''
+
+[0m
+[0m→ [0mRead src/pages/Vocabulary.tsx[90m [limit=60][0m
+[0m→ [0mRead src/pages/MockTests.tsx[90m [limit=50][0m
+[0m→ [0mRead src/pages/DailyPlan.tsx[90m [limit=80][0m
+[0m
+[0m← [0mEdit src/pages/Vocabulary.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+@@ -1,6 +1,7 @@
+ import { useState, useEffect, useCallback, useMemo } from 'react'
+ import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../models'
++import { generateId } from '../utils'
+ import { DatabaseService } from '../services/storage/Database'
+ import { useToast } from '../components/ui/Toast'
+ import Card, { CardContent } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+
+[0m
+[0m← [0mEdit src/pages/Vocabulary.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Vocabulary.tsx
+@@ -36,12 +36,8 @@
+   medium: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+   hard: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+ }
+ 
+-function generateId(): string {
+-  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+-}
+-
+ interface VocabFormData {
+   word: string
+   meaning: string
+   meaningVi: string
+
+[0m
+[0m← [0mEdit src/pages/MockTests.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+@@ -1,6 +1,7 @@
+ import { useState, useEffect, useCallback, useMemo } from 'react'
+ import type { MockTestEntry } from '../models'
++import { generateId } from '../utils'
+ import { DatabaseService } from '../services/storage/Database'
+ import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+ import Modal from '../components/ui/Modal'
+
+[0m
+[0m← [0mEdit src/pages/MockTests.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/MockTests.tsx
+@@ -5,15 +5,11 @@
+ import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+ import Modal from '../components/ui/Modal'
+ 
+-function generateId(): string {
+-  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+-}
+-
+ function formatDate(dateStr: string): string {
+-  const d = new Date(dateStr)
+-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
++  const date = new Date(dateStr)
++  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+ }
+ 
+ function getBandColor(band: number): string {
+   if (band >= 7) return 'text-green-600 dark:text-green-400'
+
+[0m
+[0m← [0mEdit src/pages/DailyPlan.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+@@ -1,6 +1,7 @@
+ import { useState, useEffect, useCallback, useMemo } from 'react'
+ import type { TaskEntry, TaskCategory } from '../models'
++import { generateId, today, isTodayDate, addDays, formatDateLabel, getWeekDates } from '../utils'
+ import { DatabaseService } from '../services/storage/Database'
+ import Card, { CardContent } from '../components/ui/Card'
+ import Button from '../components/ui/Button'
+ import Modal from '../components/ui/Modal'
+
+[0m
+[0m← [0mEdit src/pages/DailyPlan.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+@@ -27,47 +27,12 @@
+ }
+ 
+ const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+ 
+-function today(): string {
++function todayFn(): string {
+   return new Date().toISOString().slice(0, 10)
+ }
+ 
+-function formatDateLabel(dateStr: string): string {
+-  const d = new Date(dateStr + 'T00:00:00')
+-  return d.toLocaleDateString('en-US', {
+-    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+-  })
+-}
+-
+-function isToday(dateStr: string): boolean {
+-  return dateStr === today()
+-}
+-
+-function addDays(dateStr: string, n: number): string {
+-  const d = new Date(dateStr + 'T00:00:00')
+-  d.setDate(d.getDate() + n)
+-  return d.toISOString().slice(0, 10)
+-}
+-
+-function getWeekDates(dateStr: string): string[] {
+-  const d = new Date(dateStr + 'T00:00:00')
+-  const day = d.getDay()
+-  const diff = d.getDate() - day + (day === 0 ? -6 : 1)
+-  d.setDate(diff)
+-  const dates: string[] = []
+-  for (let i = 0; i < 7; i++) {
+-    const next = new Date(d)
+-    next.setDate(next.getDate() + i)
+-    dates.push(next.toISOString().slice(0, 10))
+-  }
+-  return dates
+-}
+-
+-function generateId(): string {
+-  return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+-}
+-
+ interface TaskFormData {
+   title: string
+   description: string
+   category: TaskCategory
+
+[0m
+[0m✱ [0mGrep "isToday\("[90m in src/pages/DailyPlan.tsx · 1 match[0m
+[0m
+[0m← [0mEdit src/pages/DailyPlan.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+@@ -27,12 +27,10 @@
+ }
+ 
+ const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+ 
+-function todayFn(): string {
+-  return new Date().toISOString().slice(0, 10)
+-}
+ 
++
+ interface TaskFormData {
+   title: string
+   description: string
+   category: TaskCategory
+
+[0m
+[0m→ [0mRead src/pages/DailyPlan.tsx[90m [offset=325, limit=15][0m
+[0m
+[0m← [0mEdit src/pages/DailyPlan.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/DailyPlan.tsx
+@@ -326,9 +326,9 @@
+     </svg>
+   </Button>
+ </div>
+ <div className="flex items-center gap-2">
+-  {!isToday(selectedDate) && (
++  {!isTodayDate(selectedDate) && (
+     <Button variant="ghost" size="sm" onClick={() => setSelectedDate(today())}>
+       Today
+     </Button>
+   )}
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -16,11 +16,11 @@
+   })
+ }
+ 
+ function getGreeting(): string {
+-  const h = new Date().getHours()
+-  if (h < 12) return 'Good morning'
+-  if (h < 18) return 'Good afternoon'
++  const hour = new Date().getHours()
++  if (hour < 12) return 'Good morning'
++  if (hour < 18) return 'Good afternoon'
+   return 'Good evening'
+ }
+ 
+ function bandColor(band: number): string {
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -116,9 +116,8 @@
+ ].filter(s => s.value > 0)
+ 
+ return (
+   <div className="mx-auto max-w-6xl space-y-6">
+-    {/* Header */}
+     <div>
+       <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+         {getGreeting()}, IELTS Learner
+       </h1>
+
+[0m
+[0m→ [0mRead src/pages/Dashboard.tsx[90m [offset=116, limit=20][0m
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -125,11 +125,9 @@
+     {formatDate(new Date())}
+   </p>
+ </div>
+ 
+-{/* Summary cards row */}
+ <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+-  {/* Streak */}
+   <Card>
+     <CardContent>
+       <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+         Study Streak
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -137,9 +137,8 @@
+       <span className="ml-1 text-sm font-normal text-slate-400">days</span>
+     </p>
+   </CardContent>
+ </Card>
+-{/* Weekly Progress */}
+ <Card>
+   <CardContent>
+     <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+       Weekly Progress
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -150,9 +150,8 @@
+       {weeklyProgress.done} / {weeklyProgress.total} tasks
+     </p>
+   </CardContent>
+ </Card>
+-{/* Study Hours */}
+ <Card>
+   <CardContent>
+     <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+       Total Study Hours
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -161,9 +161,8 @@
+       <span className="ml-1 text-sm font-normal text-slate-400">hrs</span>
+     </p>
+   </CardContent>
+ </Card>
+-{/* Band */}
+ <Card>
+   <CardContent>
+     <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+       Target Band
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -177,9 +177,8 @@
+     </CardContent>
+   </Card>
+ </div>
+ 
+-{/* Proactive Suggestions */}
+ {suggestions.length > 0 && (
+   <div className="space-y-3">
+     <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -219,11 +219,10 @@
+     </div>
+   </div>
+ )}
+ 
+-{/* Middle section */}
+ <div className="grid gap-6 lg:grid-cols-3">
+-  {/* Today's Plan */}
++  
+   <Card className="lg:col-span-2">
+     <CardHeader>
+       <CardTitle>Today's Plan</CardTitle>
+       <span className="text-sm text-slate-500 dark:text-slate-400">
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -274,11 +274,10 @@
+     )}
+   </CardContent>
+ </Card>
+ 
+-{/* Right column */}
+-<div className="space-y-4">
+-  {/* Due Reviews */}
++  <div className="space-y-4">
++  
+   <Card>
+     <CardHeader>
+       <CardTitle>Reviews Due</CardTitle>
+     </CardHeader>
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -298,9 +298,8 @@
+     )}
+   </CardContent>
+ </Card>
+ 
+-{/* Weak Skills */}
+ {weakSkills.length > 0 && (
+   <Card>
+     <CardHeader>
+       <CardTitle>Weak Skills</CardTitle>
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -320,11 +320,10 @@
+     )}
+   </div>
+ </div>
+ 
+-{/* Charts row */}
+ <div className="grid gap-6 lg:grid-cols-2">
+-  {/* Weekly study time */}
++  
+   <Card>
+     <CardHeader>
+       <CardTitle>This Week</CardTitle>
+     </CardHeader>
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -354,9 +354,9 @@
+     )}
+   </CardContent>
+ </Card>
+ 
+-{/* Skill balance */}
++
+ <Card>
+   <CardHeader>
+     <CardTitle>Skill Balance (7 days)</CardTitle>
+   </CardHeader>
+
+[0m
+[0m← [0mEdit src/pages/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/pages/Dashboard.tsx
+@@ -402,9 +402,9 @@
+     </CardContent>
+   </Card>
+ </div>
+ 
+-{/* Bottom: focus recommendation + summary */}
++
+ <div className="grid gap-6 lg:grid-cols-2">
+   <Card className="border-l-4 border-l-blue-500">
+     <CardContent>
+       <p className="text-xs font-medium uppercase tracking-wider text-blue-600 dark:text-blue-400">
+
+[0m
+[0m• [0mRemove JSX comments in pages[90m General Agent[0m
+[0m• [0mRemove section divider comments[90m General Agent[0m
+[0m• [0mImprove complex logic comments[90m General Agent[0m
+[0m✓ [0mImprove complex logic comments[90m General Agent[0m
+[0m✓ [0mRemove section divider comments[90m General Agent[0m
+[0m✓ [0mRemove JSX comments in pages[90m General Agent[0m
+[0m
+[0m# [0mTodos
+[✓] Centralize generateId() utility and remove 31 duplications
+[✓] Fix single-letter variable names (d, h, m, s, q) in page components
+[•] Fix generic variable names (data, result, item, entry, content) in production code
+[✓] Remove redundant JSX comments ({/* Header */}, {/* Filters */}, etc.)
+[✓] Clean up excessive section divider comments (// ── Section ──)
+[✓] Improve comments for complex logic (SM-2, NextBestAction, analytics calendar)
+[•] Fix inconsistent naming (getXxx vs loadXxx, catch comment patterns)
+[ ] Run lint to verify changes
+[0m
+[0m• [0mFix naming in features files[90m General Agent[0m
+[0m• [0mFix catch comments and naming[90m General Agent[0m
+[0m✓ [0mFix catch comments and naming[90m General Agent[0m
+[2026-07-02T02:14:45.499Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-02T02:14:45.505Z] [INFO] Task completed successfully

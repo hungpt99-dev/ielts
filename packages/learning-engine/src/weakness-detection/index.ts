@@ -1,0 +1,1 @@
+export { WeaknessDetectionService } from './WeaknessDetectionService'

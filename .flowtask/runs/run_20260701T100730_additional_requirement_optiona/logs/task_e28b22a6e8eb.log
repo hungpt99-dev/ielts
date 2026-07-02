@@ -1,0 +1,1219 @@
+[2026-07-01T10:27:57.751Z] [INFO] Task started: Add Error Handling and User Guidance for CORS and API Restrictions
+[2026-07-01T10:27:57.753Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/features/publicApiIntegration/utils/errorHandling.ts","description":"Utility functions for detecting and handling CORS and API errors","validationMethod":"file_exists"}]
+[2026-07-01T10:27:58.338Z] [INFO] [stderr] [0m
+[2026-07-01T10:27:58.338Z] [INFO] [stderr] [0m
+[2026-07-01T10:27:58.338Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-01T10:28:03.611Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"publicApiIntegration feature structure errorHandling search import components"}
+[2026-07-01T10:28:03.727Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/publicApiIntegration/**/*"[90m 8 matches[0m
+[2026-07-01T10:28:06.218Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/types.ts
+[2026-07-01T10:28:06.520Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=350][0m
+[2026-07-01T10:28:06.767Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/api/import.ts
+[2026-07-01T10:28:07.070Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/ImportedContentManager.tsx
+[2026-07-01T10:28:11.971Z] [INFO] [stderr] [0m
+[2026-07-01T10:28:11.971Z] [INFO] [stderr] [0m$ [0mls /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/ 2>/dev/null || echo "directory does not exist"
+[2026-07-01T10:28:11.971Z] [INFO] [stderr] directory does not exist
+[2026-07-01T10:28:11.971Z] [INFO] [stderr] [0m
+[2026-07-01T10:28:12.250Z] [INFO] [stderr] [0m✱ [0mGlob "**/errorHandling*"[90m in src · 0 matches[0m
+[2026-07-01T10:28:12.705Z] [INFO] [stderr] [0m✱ [0mGrep "pnpm test.*errorHandling|test.*errorHandling"[90m in . · 4 matches[0m
+[2026-07-01T10:28:15.133Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/publicApiIntegration/**/*.test.*"[90m 0 matches[0m
+[2026-07-01T10:28:15.739Z] [INFO] [stderr] [0m✱ [0mGrep ""test".*"error"|"errorHandling""[90m in . · 0 matches[0m
+[2026-07-01T10:28:16.001Z] [INFO] [stderr] [0m$ [0mls /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/
+[2026-07-01T10:28:16.001Z] [INFO] [stderr] api
+[2026-07-01T10:28:16.001Z] [INFO] [stderr] architecture.md
+[2026-07-01T10:28:16.001Z] [INFO] [stderr] [0m
+[2026-07-01T10:28:16.001Z] [INFO] [stderr] types.ts
+[2026-07-01T10:28:16.001Z] [INFO] [stderr] [0m
+[2026-07-01T10:28:16.001Z] [INFO] [stderr] components
+[2026-07-01T10:28:16.001Z] [INFO] [stderr] ai
+[2026-07-01T10:28:22.631Z] [INFO] [stderr] [ ] Integrate error handling into ImportedContentManager component
+[2026-07-01T10:28:22.631Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:28:22.631Z] [INFO] [stderr] [ ] Integrate error handling into PublicApiSearch component
+[2026-07-01T10:28:22.631Z] [INFO] [stderr] [ ] Create and run tests for error handling
+[2026-07-01T10:28:22.631Z] [INFO] [stderr] [0m
+[2026-07-01T10:28:22.631Z] [INFO] [stderr] [•] Create src/features/publicApiIntegration/utils/errorHandling.ts with CORS and API error detection utilities
+[2026-07-01T10:28:25.874Z] [INFO] [stderr] [0m
+[2026-07-01T10:28:25.874Z] [INFO] [stderr] (no output)
+[2026-07-01T10:28:25.874Z] [INFO] [stderr] [0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils
+[2026-07-01T10:28:47.951Z] [INFO] [stderr] [0m← [0mWrite src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:28:47.951Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T10:28:47.951Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts">
+[2026-07-01T10:28:47.951Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T10:28:47.951Z] [INFO] [stderr] ERROR [83:31] 'error' is declared but its value is never read.
+[2026-07-01T10:28:47.951Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T10:28:47.951Z] [INFO] [stderr] 
+[2026-07-01T10:28:47.951Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:02.333Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=75, limit=30][0m
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:29:06.391Z] [INFO] [stderr]    }
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:29:06.391Z] [INFO] [stderr]    return false;
+[2026-07-01T10:29:06.391Z] [INFO] [stderr]  
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] -export function isServerError(error: unknown, status?: number): boolean {
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] +export function isServerError(_error: unknown, status?: number): boolean {
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] @@ -79,9 +79,9 @@
+[2026-07-01T10:29:06.391Z] [INFO] [stderr]  }
+[2026-07-01T10:29:06.391Z] [INFO] [stderr]    return false;
+[2026-07-01T10:29:06.391Z] [INFO] [stderr]  }
+[2026-07-01T10:29:06.391Z] [INFO] [stderr]  
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] 
+[2026-07-01T10:29:06.391Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:06.391Z] [INFO] [stderr]    if (status && status >= 500 && status < 600) return true;
+[2026-07-01T10:29:10.185Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=104, limit=50][0m
+[2026-07-01T10:29:21.545Z] [INFO] [stdout] Now let me update the `PublicApiSearch.tsx` to use the new error handling utility:
+[2026-07-01T10:29:22.234Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:22.234Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:29:22.234Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:22.234Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:22.234Z] [INFO] [stderr] @@ -4,11 +4,16 @@
+[2026-07-01T10:29:22.234Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:22.234Z] [INFO] [stderr]    PublicApiSearchResult,
+[2026-07-01T10:29:22.234Z] [INFO] [stderr] +  ApiErrorInfo,
+[2026-07-01T10:29:22.234Z] [INFO] [stderr]    PublicApiPreview,
+[2026-07-01T10:29:22.234Z] [INFO] [stderr]  import { PUBLIC_API_SOURCES } from "../types";
+[2026-07-01T10:29:22.234Z] [INFO] [stderr]  } from "../types";
+[2026-07-01T10:29:22.234Z] [INFO] [stderr]    PublicApiContentType,
+[2026-07-01T10:29:22.234Z] [INFO] [stderr]    PublicApiSourceConfig,
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] +} from "../utils/errorHandling";
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] +import {
+[2026-07-01T10:29:22.234Z] [INFO] [stderr]  import { importPublicApiContent } from "../api/import";
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] +  checkSourceUsability,
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] +  buildErrorMessage,
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]    CardContent,
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]    CardTitle,
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] @@ -47,16 +52,8 @@
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]      // localStorage unavailable
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]  import Card, {
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]    }
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]    CardHeader,
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]  }
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] -  return (
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] -    `or try a different source that works without a proxy.`
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] -  );
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] -    `"${source.label}" cannot be accessed directly from the browser due to CORS restrictions. ` +
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] -
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]  
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] -}
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] -function corsErrorExplanation(source: PublicApiSourceConfig): string {
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]  
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]  interface SearchFn {
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]    (
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] 
+[2026-07-01T10:29:22.235Z] [INFO] [stderr]  // ── API-specific search implementations ──────────────────────
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] -    `To use this source, you can configure a CORS proxy in your browser extension settings, ` +
+[2026-07-01T10:29:22.235Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:28.625Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:28.625Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:29:28.625Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:28.625Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:28.625Z] [INFO] [stderr]    PublicApiSearchResult,
+[2026-07-01T10:29:28.625Z] [INFO] [stderr]    PublicApiContentType,
+[2026-07-01T10:29:28.625Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:28.625Z] [INFO] [stderr] @@ -4,10 +4,10 @@
+[2026-07-01T10:29:28.625Z] [INFO] [stderr]  } from "../types";
+[2026-07-01T10:29:28.625Z] [INFO] [stderr] +import type { ApiErrorInfo } from "../utils/errorHandling";
+[2026-07-01T10:29:28.625Z] [INFO] [stderr]    PublicApiPreview,
+[2026-07-01T10:29:28.625Z] [INFO] [stderr] -  ApiErrorInfo,
+[2026-07-01T10:29:28.625Z] [INFO] [stderr]  import { importPublicApiContent } from "../api/import";
+[2026-07-01T10:29:28.625Z] [INFO] [stderr]    buildErrorMessage,
+[2026-07-01T10:29:28.626Z] [INFO] [stderr] 
+[2026-07-01T10:29:28.625Z] [INFO] [stderr]  import {
+[2026-07-01T10:29:28.626Z] [INFO] [stderr]  import { PUBLIC_API_SOURCES } from "../types";
+[2026-07-01T10:29:28.625Z] [INFO] [stderr]    PublicApiSourceConfig,
+[2026-07-01T10:29:28.626Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:32.640Z] [INFO] [stdout] Now let me update the error state and all error-related logic in the component:
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] @@ -393,9 +393,9 @@
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:33.209Z] [INFO] [stderr]  );
+[2026-07-01T10:29:33.209Z] [INFO] [stderr]    getStoredApiKey(PUBLIC_API_SOURCES[0].name),
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:33.209Z] [INFO] [stderr]  const [loading, setLoading] = useState(false);
+[2026-07-01T10:29:33.209Z] [INFO] [stderr]  const [results, setResults] = useState<PublicApiSearchResult[]>([]);
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] -const [error, setError] = useState<string | null>(null);
+[2026-07-01T10:29:33.209Z] [INFO] [stderr]  const [previewLoading, setPreviewLoading] = useState(false);
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] +const [error, setError] = useState<ApiErrorInfo | null>(null);
+[2026-07-01T10:29:33.209Z] [INFO] [stderr]  const [previewItem, setPreviewItem] = useState<PublicApiPreview | null>(null);
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] 
+[2026-07-01T10:29:33.209Z] [INFO] [stderr]  const [searched, setSearched] = useState(false);
+[2026-07-01T10:29:33.209Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:33.209Z] [INFO] [stderr]  const [importing, setImporting] = useState<string | null>(null);
+[2026-07-01T10:29:37.425Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=420, limit=70][0m
+[2026-07-01T10:29:43.098Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:43.098Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:43.098Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:43.098Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:29:43.098Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:43.098Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]    const handler = SEARCH_HANDLERS[sourceConfig.name];
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] +    setError({
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]  
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] -    setError(`No search implementation for "${sourceConfig.label}".`);
+[2026-07-01T10:29:43.098Z] [INFO] [stderr] @@ -428,24 +428,23 @@
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] +      type: "unknown",
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] +    });
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] +      title: "Unavailable Source",
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]      setLoading(false);
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] +      message: `No search implementation for "${sourceConfig.label}".`,
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]    try {
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]      return;
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]    if (!handler) {
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]  
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]      const data = await handler(sourceConfig, query.trim(), apiKey);
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] +      suggestions: [],
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]    } catch (err) {
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]    }
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] -        : err instanceof Error
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] -          ? err.message
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] -      err instanceof TypeError
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] -        ? corsErrorExplanation(sourceConfig)
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]    setImportResult({});
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] -    const message =
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]    }
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]      setResults(data);
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] -          : "An unexpected error occurred.";
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]    } finally {
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] -    setError(message);
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] +    setError(buildErrorMessage(err, sourceConfig));
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]  },
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:43.099Z] [INFO] [stderr]      setLoading(false);
+[2026-07-01T10:29:43.099Z] [INFO] [stderr] 
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:47.191Z] [INFO] [stderr]  import type { ApiErrorInfo } from "../utils/errorHandling";
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] @@ -8,12 +8,9 @@
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:47.191Z] [INFO] [stderr]  } from "../types";
+[2026-07-01T10:29:47.191Z] [INFO] [stderr]  import { PUBLIC_API_SOURCES } from "../types";
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] -  checkSourceUsability,
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] -  buildErrorMessage,
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] -import {
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] -} from "../utils/errorHandling";
+[2026-07-01T10:29:47.191Z] [INFO] [stderr]  import { importPublicApiContent } from "../api/import";
+[2026-07-01T10:29:47.191Z] [INFO] [stderr]    CardHeader,
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] +import { buildErrorMessage } from "../utils/errorHandling";
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:47.191Z] [INFO] [stderr]    CardContent,
+[2026-07-01T10:29:47.191Z] [INFO] [stderr]    CardTitle,
+[2026-07-01T10:29:47.191Z] [INFO] [stderr] 
+[2026-07-01T10:29:47.191Z] [INFO] [stderr]  import Card, {
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] @@ -453,10 +453,17 @@
+[2026-07-01T10:29:52.104Z] [INFO] [stderr]      const preview = await fetchPreview(result);
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:52.104Z] [INFO] [stderr]    try {
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] -    setError("Failed to load preview.");
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:52.104Z] [INFO] [stderr]    setPreviewItem(null);
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +  } catch (err) {
+[2026-07-01T10:29:52.104Z] [INFO] [stderr]      setPreviewItem(preview);
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +    setError({
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] -  } catch {
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +      suggestions: [
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +      type: "unknown",
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +    });
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +      ],
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +      title: "Preview Error",
+[2026-07-01T10:29:52.104Z] [INFO] [stderr]    } finally {
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +      message: "Failed to load preview. The source may be temporarily unavailable.",
+[2026-07-01T10:29:52.104Z] [INFO] [stderr]    }
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] 
+[2026-07-01T10:29:52.104Z] [INFO] [stderr]      setPreviewLoading(false);
+[2026-07-01T10:29:52.104Z] [INFO] [stderr]  }
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:52.104Z] [INFO] [stderr] +        { type: "retry-later", label: "Try again" },
+[2026-07-01T10:29:56.622Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:29:56.622Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:56.622Z] [INFO] [stderr] @@ -472,9 +472,16 @@
+[2026-07-01T10:29:56.622Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:56.622Z] [INFO] [stderr]    setImporting(preview.id);
+[2026-07-01T10:29:56.622Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:56.622Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:29:56.622Z] [INFO] [stderr]    const result = await importPublicApiContent(preview);
+[2026-07-01T10:29:56.622Z] [INFO] [stderr]    setImportResult((prev) => ({ ...prev, [preview.id]: result.success }));
+[2026-07-01T10:29:56.622Z] [INFO] [stderr]    if (!result.success) {
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] -    setError(result.error ?? "Import failed");
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] +    setError({
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] +      type: "unknown",
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] +      title: "Import Error",
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] +      message: result.error ?? "Import failed",
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] +      suggestions: [
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] +        { type: "retry-later", label: "Try again" },
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] +      ],
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] +    });
+[2026-07-01T10:29:56.623Z] [INFO] [stderr]    }
+[2026-07-01T10:29:56.623Z] [INFO] [stderr]  }
+[2026-07-01T10:29:56.623Z] [INFO] [stderr]    setImporting(null);
+[2026-07-01T10:29:56.623Z] [INFO] [stderr]  
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] 
+[2026-07-01T10:29:56.623Z] [INFO] [stderr] [0m
+[2026-07-01T10:29:59.581Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=595, limit=70][0m
+[2026-07-01T10:30:09.721Z] [INFO] [stderr] [0m
+[2026-07-01T10:30:09.721Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] @@ -619,15 +619,23 @@
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]  </svg>
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]    />
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] -    Search Error
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]  <div className="min-w-0 flex-1">
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]    <p className="text-sm font-medium text-red-700 dark:text-red-300">
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] -    {error}
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +    {error.title}
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]      <div className="mt-2 flex flex-wrap gap-2">
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] -  {error.includes("CORS") && (
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +  {error.suggestions.length > 0 && (
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +    {error.message}
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +          key={i}
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]    </p>
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +        <span
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]    </p>
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +        >
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +          className="rounded-lg bg-white px-2.5 py-1 text-xs font-medium text-slate-600 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-600"
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +          {s.label}
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +      {error.suggestions.map((s, i) => (
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +      ))}
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] +        </span>
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]        {PUBLIC_API_SOURCES.filter(
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]            s.corsStatus === "direct" && s.name !== sourceConfig.name,
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] 
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]          (s) =>
+[2026-07-01T10:30:09.722Z] [INFO] [stderr] [0m
+[2026-07-01T10:30:09.722Z] [INFO] [stderr]        ).map((s) => (
+[2026-07-01T10:30:13.313Z] [INFO] [stderr] [0m
+[2026-07-01T10:30:13.313Z] [INFO] [stderr] (no output)
+[2026-07-01T10:30:13.313Z] [INFO] [stderr] [0m$ [0mpnpm tsc --noEmit --pretty 2>&1 | head -60
+[2026-07-01T10:30:16.899Z] [INFO] [stderr] [•] Integrate error handling into ImportedContentManager component
+[2026-07-01T10:30:16.899Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:30:16.899Z] [INFO] [stderr] [✓] Create src/features/publicApiIntegration/utils/errorHandling.ts with CORS and API error detection utilities
+[2026-07-01T10:30:16.899Z] [INFO] [stderr] [✓] Integrate error handling into PublicApiSearch component
+[2026-07-01T10:30:16.899Z] [INFO] [stderr] [ ] Create and run tests for error handling
+[2026-07-01T10:30:16.899Z] [INFO] [stderr] [0m
+[2026-07-01T10:30:16.996Z] [INFO] [stdout] No TypeScript errors. Let me update the todo and also add error handling to `ImportedContentManager.tsx` for better robustness.
+[2026-07-01T10:30:25.565Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:30:25.565Z] [INFO] [stderr] [✓] Create src/features/publicApiIntegration/utils/errorHandling.ts with CORS and API error detection utilities
+[2026-07-01T10:30:25.565Z] [INFO] [stderr] [✓] Integrate error handling into ImportedContentManager component
+[2026-07-01T10:30:25.565Z] [INFO] [stderr] [0m
+[2026-07-01T10:30:25.565Z] [INFO] [stderr] [•] Create and run tests for error handling
+[2026-07-01T10:30:25.565Z] [INFO] [stderr] [✓] Integrate error handling into PublicApiSearch component
+[2026-07-01T10:30:25.641Z] [INFO] [stdout] The `ImportedContentManager` already handles IndexedDB and AI API errors gracefully — its AI failures show clear messages like "AI API key not configured." No additional CORS/API error integration needed there.
+[2026-07-01T10:30:25.642Z] [INFO] [stdout] Now let me create tests for the error handling utility.
+[2026-07-01T10:30:25.642Z] [INFO] [stdout] 
+[2026-07-01T10:30:28.547Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/publicApiIntegration/**/*.test.*"[90m 0 matches[0m
+[2026-07-01T10:30:28.750Z] [INFO] [stderr] [0m✱ [0mGlob "src/**/*.test.ts"[90m 2 matches[0m
+[2026-07-01T10:30:29.297Z] [INFO] [stderr] zsh:1: no matches found: /Users/phamthanhhung/Desktop/MyProject/IELTS/jest.config*
+[2026-07-01T10:30:29.297Z] [INFO] [stderr] [0m
+[2026-07-01T10:30:29.297Z] [INFO] [stderr] [0m
+[2026-07-01T10:30:29.297Z] [INFO] [stderr] [0m$ [0mls /Users/phamthanhhung/Desktop/MyProject/IELTS/vitest.config* /Users/phamthanhhung/Desktop/MyProject/IELTS/jest.config* /Users/phamthanhhung/Desktop/MyProject/IELTS/package.json 2>/dev/null
+[2026-07-01T10:30:32.306Z] [INFO] [stderr] [0m→ [0mRead src/utils/spaced-repetition.test.ts[90m [limit=20][0m
+[2026-07-01T10:30:32.485Z] [INFO] [stderr] [0m✱ [0mGlob "vitest.config.*"[90m 1 match[0m
+[2026-07-01T10:30:32.814Z] [INFO] [stderr] [0m
+[2026-07-01T10:30:32.814Z] [INFO] [stderr] "test": "vitest run",
+[2026-07-01T10:30:32.814Z] [INFO] [stderr] [0m$ [0mgrep -A 5 '"test"' /Users/phamthanhhung/Desktop/MyProject/IELTS/package.json | head -15
+[2026-07-01T10:30:32.814Z] [INFO] [stderr]     "typecheck": "tsc -b --noEmit"
+[2026-07-01T10:30:32.814Z] [INFO] [stderr]   },
+[2026-07-01T10:30:32.814Z] [INFO] [stderr]   "dependencies": {
+[2026-07-01T10:30:32.814Z] [INFO] [stderr]     "test:watch": "vitest",
+[2026-07-01T10:30:32.814Z] [INFO] [stderr]     "@hookform/resolvers": "^5.4.0",
+[2026-07-01T10:30:32.814Z] [INFO] [stderr] [0m
+[2026-07-01T10:53:38.371Z] [INFO] [stderr] [0m→ [0mRead vitest.config.ts
+[2026-07-01T10:53:59.269Z] [INFO] [stderr] [0m← [0mWrite src/features/publicApiIntegration/utils/errorHandling.test.ts
+[2026-07-01T10:53:59.269Z] [INFO] [stderr] [0m
+[2026-07-01T10:53:59.269Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T10:53:59.269Z] [INFO] [stderr] [0m
+[2026-07-01T10:54:03.572Z] [INFO] [stderr] [0m$ [0mpnpm test --run src/features/publicApiIntegration/utils/errorHandling.test.ts 2>&1
+[2026-07-01T10:54:03.572Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.572Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isCorsError > detects TypeError with NetworkError message 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isCorsError > returns false for regular errors 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr] $ vitest run --run src/features/publicApiIntegration/utils/errorHandling.test.ts
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]  ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests | 4 failed) 6ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isCorsError > detects TypeError with "Failed to fetch" message 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isCorsError > returns false for non-error values 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    × isRateLimitError > returns true when message mentions throttle 2ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isCorsError > returns false for DOMException abort 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]      → expected false to be true // Object.is equality
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isRateLimitError > returns true when message mentions quota 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isRateLimitError > returns false for other errors 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isAuthError > returns true for status 401 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isAuthError > returns true for status 403 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isAuthError > returns true when message mentions API key 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isRateLimitError > returns true for status 429 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isNetworkError > returns false for other error types 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isRateLimitError > returns true when message mentions rate 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isServerError > returns true for status 502 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isNetworkError > returns true for TypeError 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isServerError > returns false when no status 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isServerError > returns true for status 503 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    × isAuthError > returns true when message mentions auth 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isAuthError > returns false for other errors 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isServerError > returns true for status 500 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ isServerError > returns false for client errors 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]      → expected false to be true // Object.is equality
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ classifyError > classifies rate limit errors 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]      → expected 'network' to be 'cors' // Object.is equality
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ classifyError > defaults to unknown 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ classifyError > classifies CORS errors 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ classifyError > classifies auth errors 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    × classifyError > classifies network errors 0ms
+[2026-07-01T10:54:03.572Z] [INFO] [stderr]    ✓ classifyError > classifies server errors 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildErrorMessage > returns CORS error info with suggestions 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildErrorMessage > returns rate limit error info 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildSuggestions > provides CORS-related suggestions 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildErrorMessage > handles unknown errors gracefully 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildErrorMessage > returns auth error info 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildErrorMessage > returns server error info 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildSuggestions > provides network suggestions 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildSuggestions > provides retry suggestions for server error 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildSuggestions > provides key config suggestions for auth 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    × checkSourceUsability > marks no-cors sources as unusable 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ checkSourceUsability > marks direct sources as usable 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      → expected 'unknown' to be 'cors' // Object.is equality
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildErrorMessage > handles null error 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ buildSuggestions > provides retry suggestions for rate-limit 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]  FAIL  src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true when message mentions throttle
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    ✓ checkSourceUsability > warns about sources requiring API keys 0ms
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] AssertionError: expected false to be true // Object.is equality
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [32m- Expected[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [32m- true[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [31m+ false[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]  ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts:56:62
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [31m+ Received[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]        |                                                              ^
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      58| 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      56|     expect(isRateLimitError(new Error('Request throttled'))).toBe(true)
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      54| 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      55|   it('returns true when message mentions throttle', () => {
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]  FAIL  src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true when message mentions auth
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] AssertionError: expected false to be true // Object.is equality
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      57|   })
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [31m+ Received[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [32m- Expected[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      76| 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]        |                                                             ^
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [32m- true[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]  ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts:78:61
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      77|   it('returns true when message mentions auth', () => {
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [31m+ false[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      80| 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      79|   })
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] Expected: [32m"[7mc[27mor[7ms[27m"[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]      78|     expect(isAuthError(new Error('Authentication failed'))).toBe(true)
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]  ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts:133:57
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] Received: [31m"[7mnetw[27mor[7mk[27m"[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] AssertionError: expected 'network' to be 'cors' // Object.is equality
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]  FAIL  src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies network errors
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]        |                                                         ^
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     132|   it('classifies network errors', () => {
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     134|   })
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     135| 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]  FAIL  src/features/publicApiIntegration/utils/errorHandling.test.ts > checkSourceUsability > marks no-cors sources as unusable
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     131| 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] AssertionError: expected 'unknown' to be 'cors' // Object.is equality
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] Expected: [32m"cors"[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] Received: [31m"unknown"[39m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]  ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts:226:36
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     226|     expect(result.errorInfo!.type).toBe('cors')
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     225|     expect(result.errorInfo).not.toBeNull()
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     227|   })
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     224|     expect(result.warnings.length).toBeGreaterThan(0)
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]        |                                    ^
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     228| 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]     133|     expect(classifyError(new TypeError('load failed'))).toBe('cors')
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    Duration  483ms (transform 24ms, setup 42ms, collect 18ms, tests 6ms, environment 215ms, prepare 35ms)
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]  Test Files  1 failed (1)
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]    Start at  17:54:02
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [0m
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-01T10:54:03.573Z] [INFO] [stderr] 
+[2026-07-01T10:54:03.573Z] [INFO] [stderr]       Tests  4 failed | 38 passed (42)
+[2026-07-01T10:54:18.403Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=38, limit=50][0m
+[2026-07-01T10:54:18.504Z] [INFO] [stdout] Let me fix the issues:
+[2026-07-01T10:54:29.816Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:29.816Z] [INFO] [stderr] [0m
+[2026-07-01T10:54:29.816Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:29.816Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:29.816Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:54:29.816Z] [INFO] [stderr]    if (status === 429) return true;
+[2026-07-01T10:54:29.817Z] [INFO] [stderr]    if (
+[2026-07-01T10:54:29.816Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:29.817Z] [INFO] [stderr] -    /\b(rate|limit|throttl|too many|quota)\b/i.test(error.message)
+[2026-07-01T10:54:29.817Z] [INFO] [stderr]      error instanceof Error &&
+[2026-07-01T10:54:29.817Z] [INFO] [stderr] +    /\b(rate|limit|too many|quota)\b|throttl/i.test(error.message)
+[2026-07-01T10:54:29.817Z] [INFO] [stderr]    ) {
+[2026-07-01T10:54:29.817Z] [INFO] [stderr]      return true;
+[2026-07-01T10:54:29.816Z] [INFO] [stderr]  export function isRateLimitError(error: unknown, status?: number): boolean {
+[2026-07-01T10:54:29.817Z] [INFO] [stderr] @@ -52,9 +52,9 @@
+[2026-07-01T10:54:29.817Z] [INFO] [stderr]    return false;
+[2026-07-01T10:54:29.817Z] [INFO] [stderr] 
+[2026-07-01T10:54:29.817Z] [INFO] [stderr]    }
+[2026-07-01T10:54:29.817Z] [INFO] [stderr] [0m
+[2026-07-01T10:54:38.629Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:38.630Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:54:38.630Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:38.630Z] [INFO] [stderr]  export function isAuthError(error: unknown, status?: number): boolean {
+[2026-07-01T10:54:38.630Z] [INFO] [stderr] @@ -63,9 +63,9 @@
+[2026-07-01T10:54:38.630Z] [INFO] [stderr]    if (
+[2026-07-01T10:54:38.630Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:38.630Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:38.630Z] [INFO] [stderr]      error instanceof Error &&
+[2026-07-01T10:54:38.630Z] [INFO] [stderr] -    /\b(api.?key|auth|forbidden|invalid key|quota exceeded)\b/i.test(
+[2026-07-01T10:54:38.630Z] [INFO] [stderr]    if (status === 401 || status === 403) return true;
+[2026-07-01T10:54:38.630Z] [INFO] [stderr]        error.message,
+[2026-07-01T10:54:38.630Z] [INFO] [stderr] +    /\b(api.?key|forbidden|invalid key|quota exceeded)\b|\bauth/i.test(
+[2026-07-01T10:54:38.630Z] [INFO] [stderr]      return true;
+[2026-07-01T10:54:38.630Z] [INFO] [stderr]    ) {
+[2026-07-01T10:54:38.630Z] [INFO] [stderr]      )
+[2026-07-01T10:54:38.630Z] [INFO] [stderr] 
+[2026-07-01T10:54:38.630Z] [INFO] [stderr] [0m
+[2026-07-01T10:54:41.548Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=335, limit=40][0m
+[2026-07-01T10:54:44.404Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=315, limit=20][0m
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] [0m
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] @@ -327,13 +327,14 @@
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:54:53.169Z] [INFO] [stderr]  let errorInfo: ApiErrorInfo | null = null;
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T10:54:53.169Z] [INFO] [stderr]  if (source.corsStatus === "no-cors") {
+[2026-07-01T10:54:53.169Z] [INFO] [stderr]  
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] -  const info = buildErrorMessage(
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] -    new Error("CORS: API does not support browser access"),
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] -  );
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] -    source,
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] -  errorInfo = info;
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] +  errorInfo = {
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] +    type: "cors",
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] +    title: "CORS Restriction",
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] +    message: corsErrorMessage(source),
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] +  };
+[2026-07-01T10:54:53.169Z] [INFO] [stderr] +    suggestions: buildSuggestions("cors", source),
+[2026-07-01T10:54:53.170Z] [INFO] [stderr]      `${source.label} cannot be used directly from the browser. Use a CORS proxy or server-side proxy.`,
+[2026-07-01T10:54:53.170Z] [INFO] [stderr]    );
+[2026-07-01T10:54:53.170Z] [INFO] [stderr]  } else if (source.corsStatus === "cors-bypass") {
+[2026-07-01T10:54:53.170Z] [INFO] [stderr] 
+[2026-07-01T10:54:53.170Z] [INFO] [stderr]    warnings.push(
+[2026-07-01T10:54:53.170Z] [INFO] [stderr] [0m
+[2026-07-01T10:54:53.169Z] [INFO] [stderr]  const warnings: string[] = [];
+[2026-07-01T10:55:01.411Z] [INFO] [stderr] ===================================================================
+[2026-07-01T10:55:01.411Z] [INFO] [stderr] [0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.test.ts
+[2026-07-01T10:55:01.411Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.test.ts
+[2026-07-01T10:55:01.411Z] [INFO] [stderr] @@ -129,9 +129,9 @@
+[2026-07-01T10:55:01.411Z] [INFO] [stderr]    expect(classifyError(new Error('Invalid API key'), 403)).toBe('auth')
+[2026-07-01T10:55:01.411Z] [INFO] [stderr]  
+[2026-07-01T10:55:01.411Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.test.ts
+[2026-07-01T10:55:01.412Z] [INFO] [stderr]  it('classifies network errors', () => {
+[2026-07-01T10:55:01.412Z] [INFO] [stderr] +  expect(classifyError(new TypeError('load failed'))).toBe('network')
+[2026-07-01T10:55:01.412Z] [INFO] [stderr]  
+[2026-07-01T10:55:01.412Z] [INFO] [stderr]  })
+[2026-07-01T10:55:01.412Z] [INFO] [stderr]  })
+[2026-07-01T10:55:01.412Z] [INFO] [stderr]  it('classifies server errors', () => {
+[2026-07-01T10:55:01.412Z] [INFO] [stderr] -  expect(classifyError(new TypeError('load failed'))).toBe('cors')
+[2026-07-01T10:55:01.411Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.test.ts
+[2026-07-01T10:55:01.412Z] [INFO] [stderr] 
+[2026-07-01T10:55:01.412Z] [INFO] [stderr]    expect(classifyError(new Error('Server error'), 500)).toBe('server')
+[2026-07-01T10:55:01.412Z] [INFO] [stderr] [0m
+[2026-07-01T10:55:04.992Z] [INFO] [stderr] $ vitest run --run src/features/publicApiIntegration/utils/errorHandling.test.ts
+[2026-07-01T10:55:04.992Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+[2026-07-01T10:55:04.992Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests) 3ms
+[2026-07-01T10:55:04.992Z] [INFO] [stderr] 
+[2026-07-01T10:55:04.992Z] [INFO] [stderr]  Test Files  1 passed (1)
+[2026-07-01T10:55:04.992Z] [INFO] [stderr] 
+[2026-07-01T10:55:04.992Z] [INFO] [stderr] 
+[2026-07-01T10:55:04.992Z] [INFO] [stderr]    Start at  17:55:04
+[2026-07-01T10:55:04.992Z] [INFO] [stderr]    Duration  452ms (transform 25ms, setup 42ms, collect 20ms, tests 3ms, environment 207ms, prepare 41ms)
+[2026-07-01T10:55:04.992Z] [INFO] [stderr] [0m
+[2026-07-01T10:55:04.992Z] [INFO] [stderr] [0m$ [0mpnpm test --run src/features/publicApiIntegration/utils/errorHandling.test.ts 2>&1
+[2026-07-01T10:55:04.992Z] [INFO] [stderr]       Tests  42 passed (42)
+[2026-07-01T10:55:08.317Z] [INFO] [stdout] All 42 tests pass. Let me verify TypeScript compilation and run any related tests:
+[2026-07-01T10:55:08.472Z] [INFO] [stderr] [0m$ [0mpnpm tsc --noEmit --pretty 2>&1
+[2026-07-01T10:55:08.472Z] [INFO] [stderr] [0m
+[2026-07-01T10:55:08.472Z] [INFO] [stderr] (no output)
+[2026-07-01T10:55:12.610Z] [INFO] [stderr] $ vitest run --run src/features/publicApiIntegration/
+[2026-07-01T10:55:12.610Z] [INFO] [stderr] 
+[2026-07-01T10:55:12.610Z] [INFO] [stderr] 
+[2026-07-01T10:55:12.610Z] [INFO] [stderr]  Test Files  1 passed (1)
+[2026-07-01T10:55:12.610Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests) 3ms
+[2026-07-01T10:55:12.610Z] [INFO] [stderr]       Tests  42 passed (42)
+[2026-07-01T10:55:12.610Z] [INFO] [stderr] 
+[2026-07-01T10:55:12.610Z] [INFO] [stderr] [0m$ [0mpnpm test --run src/features/publicApiIntegration/ 2>&1
+[2026-07-01T10:55:12.610Z] [INFO] [stderr]    Duration  469ms (transform 25ms, setup 41ms, collect 19ms, tests 3ms, environment 213ms, prepare 37ms)
+[2026-07-01T10:55:12.610Z] [INFO] [stderr]    Start at  17:55:12
+[2026-07-01T10:55:12.610Z] [INFO] [stderr] [0m
+[2026-07-01T10:55:12.610Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+[2026-07-01T10:55:15.802Z] [INFO] [stderr] [✓] Create and run tests for error handling
+[2026-07-01T10:55:15.802Z] [INFO] [stderr] [✓] Create src/features/publicApiIntegration/utils/errorHandling.ts with CORS and API error detection utilities
+[2026-07-01T10:55:15.802Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T10:55:15.802Z] [INFO] [stderr] [0m
+[2026-07-01T10:55:15.802Z] [INFO] [stderr] [✓] Integrate error handling into ImportedContentManager component
+[2026-07-01T10:55:15.802Z] [INFO] [stderr] [✓] Integrate error handling into PublicApiSearch component
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] 
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] - **Error detection functions**: `isCorsError`, `isRateLimitError`, `isAuthError`, `isNetworkError`, `isServerError`, `classifyError` — each detects specific error types from error objects and optional HTTP status codes.
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] Created `src/features/publicApiIntegration/utils/errorHandling.ts` with a comprehensive set of utilities:
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] ## Summary
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] - **Error analysis & messages**: `buildErrorMessage` produces structured `ApiErrorInfo` with type, title, message, and contextual suggestions for each error category.
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] - **Suggestions engine**: `buildSuggestions` returns actionable steps per error type (switch source, configure proxy, check API key, retry, etc.).
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] - **Source usability check**: `checkSourceUsability` validates whether a source can be used from the browser (pre-checks CORS and API key requirements).
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] - Changed error state type from `string | null` to `ApiErrorInfo | null`
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] - **Safe fetch wrapper**: `safeApiFetch` wraps `fetch` with structured error handling returning `SafeFetchResult<T>`.
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] Integrated into `PublicApiSearch.tsx`:
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] 
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] 
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] Tests: 42/42 passing, covering all detection functions, classification, message building, suggestions, and source usability checking.
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] - Updated error UI to show structured title, message, and suggestion labels
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] - Replaced inline `corsErrorExplanation` with `buildErrorMessage` calls
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] 
+[2026-07-01T10:55:20.786Z] [INFO] [stdout] - Preview and import errors now produce structured `ApiErrorInfo`
+[2026-07-01T10:55:21.111Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-01T10:55:21.111Z] [INFO] Output:
+Now let me update the `PublicApiSearch.tsx` to use the new error handling utility:
+Now let me update the error state and all error-related logic in the component:
+No TypeScript errors. Let me update the todo and also add error handling to `ImportedContentManager.tsx` for better robustness.
+The `ImportedContentManager` already handles IndexedDB and AI API errors gracefully — its AI failures show clear messages like "AI API key not configured." No additional CORS/API error integration needed there.
+
+Now let me create tests for the error handling utility.
+Let me fix the issues:
+All 42 tests pass. Let me verify TypeScript compilation and run any related tests:
+## Summary
+
+Created `src/features/publicApiIntegration/utils/errorHandling.ts` with a comprehensive set of utilities:
+
+- **Error detection functions**: `isCorsError`, `isRateLimitError`, `isAuthError`, `isNetworkError`, `isServerError`, `classifyError` — each detects specific error types from error objects and optional HTTP status codes.
+- **Error analysis & messages**: `buildErrorMessage` produces structured `ApiErrorInfo` with type, title, message, and contextual suggestions for each error category.
+- **Suggestions engine**: `buildSuggestions` returns actionable steps per error type (switch source, configure proxy, check API key, retry, etc.).
+- **Source usability check**: `checkSourceUsability` validates whether a source can be used from the browser (pre-checks CORS and API key requirements).
+- **Safe fetch wrapper**: `safeApiFetch` wraps `fetch` with structured error handling returning `SafeFetchResult<T>`.
+
+Integrated into `PublicApiSearch.tsx`:
+- Replaced inline `corsErrorExplanation` with `buildErrorMessage` calls
+- Changed error state type from `string | null` to `ApiErrorInfo | null`
+- Updated error UI to show structured title, message, and suggestion labels
+- Preview and import errors now produce structured `ApiErrorInfo`
+
+Tests: 42/42 passing, covering all detection functions, classification, message bu
+[2026-07-01T10:55:21.111Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"publicApiIntegration feature structure errorHandling search import components"}
+[0m✱ [0mGlob "src/features/publicApiIntegration/**/*"[90m 8 matches[0m
+[0m→ [0mRead src/features/publicApiIntegration/types.ts
+[0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=350][0m
+[0m→ [0mRead src/features/publicApiIntegration/api/import.ts
+[0m→ [0mRead src/features/publicApiIntegration/components/ImportedContentManager.tsx
+[0m
+[0m$ [0mls /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/ 2>/dev/null || echo "directory does not exist"
+directory does not exist
+[0m
+[0m✱ [0mGlob "**/errorHandling*"[90m in src · 0 matches[0m
+[0m✱ [0mGrep "pnpm test.*errorHandling|test.*errorHandling"[90m in . · 4 matches[0m
+[0m✱ [0mGlob "src/features/publicApiIntegration/**/*.test.*"[90m 0 matches[0m
+[0m✱ [0mGrep ""test".*"error"|"errorHandling""[90m in . · 0 matches[0m
+[0m
+[0m$ [0mls /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/
+ai
+api
+architecture.md
+components
+types.ts
+[0m
+[0m# [0mTodos
+[•] Create src/features/publicApiIntegration/utils/errorHandling.ts with CORS and API error detection utilities
+[ ] Integrate error handling into PublicApiSearch component
+[ ] Integrate error handling into ImportedContentManager component
+[ ] Create and run tests for error handling
+[0m
+[0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils
+(no output)
+[0m
+[0m← [0mWrite src/features/publicApiIntegration/utils/errorHandling.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts">
+ERROR [83:31] 'error' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=75, limit=30][0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+@@ -79,9 +79,9 @@
+   }
+   return false;
+ }
+ 
+-export function isServerError(error: unknown, status?: number): boolean {
++export function isServerError(_error: unknown, status?: number): boolean {
+   if (status && status >= 500 && status < 600) return true;
+   return false;
+ }
+ 
+
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=104, limit=50][0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -4,11 +4,16 @@
+   PublicApiSearchResult,
+   PublicApiPreview,
+   PublicApiContentType,
+   PublicApiSourceConfig,
++  ApiErrorInfo,
+ } from "../types";
+ import { PUBLIC_API_SOURCES } from "../types";
+ import { importPublicApiContent } from "../api/import";
++import {
++  buildErrorMessage,
++  checkSourceUsability,
++} from "../utils/errorHandling";
+ import Card, {
+   CardContent,
+   CardHeader,
+   CardTitle,
+@@ -47,16 +52,8 @@
+     // localStorage unavailable
+   }
+ }
+ 
+-function corsErrorExplanation(source: PublicApiSourceConfig): string {
+-  return (
+-    `"${source.label}" cannot be accessed directly from the browser due to CORS restrictions. ` +
+-    `To use this source, you can configure a CORS proxy in your browser extension settings, ` +
+-    `or try a different source that works without a proxy.`
+-  );
+-}
+-
+ // ── API-specific search implementations ──────────────────────
+ 
+ interface SearchFn {
+   (
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -4,10 +4,10 @@
+   PublicApiSearchResult,
+   PublicApiPreview,
+   PublicApiContentType,
+   PublicApiSourceConfig,
+-  ApiErrorInfo,
+ } from "../types";
++import type { ApiErrorInfo } from "../utils/errorHandling";
+ import { PUBLIC_API_SOURCES } from "../types";
+ import { importPublicApiContent } from "../api/import";
+ import {
+   buildErrorMessage,
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -393,9 +393,9 @@
+   getStoredApiKey(PUBLIC_API_SOURCES[0].name),
+ );
+ const [results, setResults] = useState<PublicApiSearchResult[]>([]);
+ const [loading, setLoading] = useState(false);
+-const [error, setError] = useState<string | null>(null);
++const [error, setError] = useState<ApiErrorInfo | null>(null);
+ const [searched, setSearched] = useState(false);
+ const [previewItem, setPreviewItem] = useState<PublicApiPreview | null>(null);
+ const [previewLoading, setPreviewLoading] = useState(false);
+ const [importing, setImporting] = useState<string | null>(null);
+
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=420, limit=70][0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -428,24 +428,23 @@
+   setImportResult({});
+ 
+   const handler = SEARCH_HANDLERS[sourceConfig.name];
+   if (!handler) {
+-    setError(`No search implementation for "${sourceConfig.label}".`);
++    setError({
++      type: "unknown",
++      title: "Unavailable Source",
++      message: `No search implementation for "${sourceConfig.label}".`,
++      suggestions: [],
++    });
+     setLoading(false);
+     return;
+   }
+ 
+   try {
+     const data = await handler(sourceConfig, query.trim(), apiKey);
+     setResults(data);
+   } catch (err) {
+-    const message =
+-      err instanceof TypeError
+-        ? corsErrorExplanation(sourceConfig)
+-        : err instanceof Error
+-          ? err.message
+-          : "An unexpected error occurred.";
+-    setError(message);
++    setError(buildErrorMessage(err, sourceConfig));
+   } finally {
+     setLoading(false);
+   }
+ },
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -8,12 +8,9 @@
+ } from "../types";
+ import type { ApiErrorInfo } from "../utils/errorHandling";
+ import { PUBLIC_API_SOURCES } from "../types";
+ import { importPublicApiContent } from "../api/import";
+-import {
+-  buildErrorMessage,
+-  checkSourceUsability,
+-} from "../utils/errorHandling";
++import { buildErrorMessage } from "../utils/errorHandling";
+ import Card, {
+   CardContent,
+   CardHeader,
+   CardTitle,
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -453,10 +453,17 @@
+   setPreviewItem(null);
+   try {
+     const preview = await fetchPreview(result);
+     setPreviewItem(preview);
+-  } catch {
+-    setError("Failed to load preview.");
++  } catch (err) {
++    setError({
++      type: "unknown",
++      title: "Preview Error",
++      message: "Failed to load preview. The source may be temporarily unavailable.",
++      suggestions: [
++        { type: "retry-later", label: "Try again" },
++      ],
++    });
+   } finally {
+     setPreviewLoading(false);
+   }
+ }
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -472,9 +472,16 @@
+   setImporting(preview.id);
+   const result = await importPublicApiContent(preview);
+   setImportResult((prev) => ({ ...prev, [preview.id]: result.success }));
+   if (!result.success) {
+-    setError(result.error ?? "Import failed");
++    setError({
++      type: "unknown",
++      title: "Import Error",
++      message: result.error ?? "Import failed",
++      suggestions: [
++        { type: "retry-later", label: "Try again" },
++      ],
++    });
+   }
+   setImporting(null);
+ }
+ 
+
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx[90m [offset=595, limit=70][0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/components/PublicApiSearch.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+@@ -619,15 +619,23 @@
+   />
+ </svg>
+ <div className="min-w-0 flex-1">
+   <p className="text-sm font-medium text-red-700 dark:text-red-300">
+-    Search Error
++    {error.title}
+   </p>
+   <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+-    {error}
++    {error.message}
+   </p>
+-  {error.includes("CORS") && (
++  {error.suggestions.length > 0 && (
+     <div className="mt-2 flex flex-wrap gap-2">
++      {error.suggestions.map((s, i) => (
++        <span
++          key={i}
++          className="rounded-lg bg-white px-2.5 py-1 text-xs font-medium text-slate-600 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-600"
++        >
++          {s.label}
++        </span>
++      ))}
+       {PUBLIC_API_SOURCES.filter(
+         (s) =>
+           s.corsStatus === "direct" && s.name !== sourceConfig.name,
+       ).map((s) => (
+
+[0m
+[0m$ [0mpnpm tsc --noEmit --pretty 2>&1 | head -60
+(no output)
+[0m
+[0m# [0mTodos
+[✓] Create src/features/publicApiIntegration/utils/errorHandling.ts with CORS and API error detection utilities
+[✓] Integrate error handling into PublicApiSearch component
+[•] Integrate error handling into ImportedContentManager component
+[ ] Create and run tests for error handling
+[0m
+[0m# [0mTodos
+[✓] Create src/features/publicApiIntegration/utils/errorHandling.ts with CORS and API error detection utilities
+[✓] Integrate error handling into PublicApiSearch component
+[✓] Integrate error handling into ImportedContentManager component
+[•] Create and run tests for error handling
+[0m
+[0m✱ [0mGlob "src/features/publicApiIntegration/**/*.test.*"[90m 0 matches[0m
+[0m✱ [0mGlob "src/**/*.test.ts"[90m 2 matches[0m
+[0m
+[0m$ [0mls /Users/phamthanhhung/Desktop/MyProject/IELTS/vitest.config* /Users/phamthanhhung/Desktop/MyProject/IELTS/jest.config* /Users/phamthanhhung/Desktop/MyProject/IELTS/package.json 2>/dev/null
+zsh:1: no matches found: /Users/phamthanhhung/Desktop/MyProject/IELTS/jest.config*
+[0m
+[0m→ [0mRead src/utils/spaced-repetition.test.ts[90m [limit=20][0m
+[0m✱ [0mGlob "vitest.config.*"[90m 1 match[0m
+[0m
+[0m$ [0mgrep -A 5 '"test"' /Users/phamthanhhung/Desktop/MyProject/IELTS/package.json | head -15
+"test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+[0m
+[0m→ [0mRead vitest.config.ts
+[0m
+[0m← [0mWrite src/features/publicApiIntegration/utils/errorHandling.test.ts
+Wrote file successfully.
+[0m
+[0m$ [0mpnpm test --run src/features/publicApiIntegration/utils/errorHandling.test.ts 2>&1
+$ vitest run --run src/features/publicApiIntegration/utils/errorHandling.test.ts
+
+ RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+
+ ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests | 4 failed) 6ms
+   ✓ isCorsError > detects TypeError with "Failed to fetch" message 0ms
+   ✓ isCorsError > detects TypeError with NetworkError message 0ms
+   ✓ isCorsError > returns false for DOMException abort 0ms
+   ✓ isCorsError > returns false for regular errors 0ms
+   ✓ isCorsError > returns false for non-error values 0ms
+   ✓ isRateLimitError > returns true for status 429 0ms
+   ✓ isRateLimitError > returns true when message mentions rate 0ms
+   ✓ isRateLimitError > returns true when message mentions quota 0ms
+   × isRateLimitError > returns true when message mentions throttle 2ms
+     → expected false to be true // Object.is equality
+   ✓ isRateLimitError > returns false for other errors 0ms
+   ✓ isAuthError > returns true for status 401 0ms
+   ✓ isAuthError > returns true for status 403 0ms
+   ✓ isAuthError > returns true when message mentions API key 0ms
+   × isAuthError > returns true when message mentions auth 0ms
+     → expected false to be true // Object.is equality
+   ✓ isAuthError > returns false for other errors 0ms
+   ✓ isNetworkError > returns true for TypeError 0ms
+   ✓ isNetworkError > returns false for other error types 0ms
+   ✓ isServerError > returns true for status 500 0ms
+   ✓ isServerError > returns true for status 502 0ms
+   ✓ isServerError > returns true for status 503 0ms
+   ✓ isServerError > returns false for client errors 0ms
+   ✓ isServerError > returns false when no status 0ms
+   ✓ classifyError > classifies CORS errors 0ms
+   ✓ classifyError > classifies rate limit errors 0ms
+   ✓ classifyError > classifies auth errors 0ms
+   × classifyError > classifies network errors 0ms
+     → expected 'network' to be 'cors' // Object.is equality
+   ✓ classifyError > classifies server errors 0ms
+   ✓ classifyError > defaults to unknown 0ms
+   ✓ buildErrorMessage > returns CORS error info with suggestions 0ms
+   ✓ buildErrorMessage > returns rate limit error info 0ms
+   ✓ buildErrorMessage > returns auth error info 0ms
+   ✓ buildErrorMessage > returns server error info 0ms
+   ✓ buildErrorMessage > handles unknown errors gracefully 0ms
+   ✓ buildErrorMessage > handles null error 0ms
+   ✓ buildSuggestions > provides CORS-related suggestions 0ms
+   ✓ buildSuggestions > provides retry suggestions for rate-limit 0ms
+   ✓ buildSuggestions > provides key config suggestions for auth 0ms
+   ✓ buildSuggestions > provides network suggestions 0ms
+   ✓ buildSuggestions > provides retry suggestions for server error 0ms
+   × checkSourceUsability > marks no-cors sources as unusable 0ms
+     → expected 'unknown' to be 'cors' // Object.is equality
+   ✓ checkSourceUsability > marks direct sources as usable 0ms
+   ✓ checkSourceUsability > warns about sources requiring API keys 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true when message mentions throttle
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts:56:62
+     54| 
+     55|   it('returns true when message mentions throttle', () => {
+     56|     expect(isRateLimitError(new Error('Request throttled'))).toBe(true)
+       |                                                              ^
+     57|   })
+     58| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true when message mentions auth
+AssertionError: expected false to be true // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+ ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts:78:61
+     76| 
+     77|   it('returns true when message mentions auth', () => {
+     78|     expect(isAuthError(new Error('Authentication failed'))).toBe(true)
+       |                                                             ^
+     79|   })
+     80| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies network errors
+AssertionError: expected 'network' to be 'cors' // Object.is equality
+
+Expected: [32m"[7mc[27mor[7ms[27m"[39m
+Received: [31m"[7mnetw[27mor[7mk[27m"[39m
+
+ ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts:133:57
+    131| 
+    132|   it('classifies network errors', () => {
+    133|     expect(classifyError(new TypeError('load failed'))).toBe('cors')
+       |                                                         ^
+    134|   })
+    135| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/features/publicApiIntegration/utils/errorHandling.test.ts > checkSourceUsability > marks no-cors sources as unusable
+AssertionError: expected 'unknown' to be 'cors' // Object.is equality
+
+Expected: [32m"cors"[39m
+Received: [31m"unknown"[39m
+
+ ❯ src/features/publicApiIntegration/utils/errorHandling.test.ts:226:36
+    224|     expect(result.warnings.length).toBeGreaterThan(0)
+    225|     expect(result.errorInfo).not.toBeNull()
+    226|     expect(result.errorInfo!.type).toBe('cors')
+       |                                    ^
+    227|   })
+    228| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 38 passed (42)
+   Start at  17:54:02
+   Duration  483ms (transform 24ms, setup 42ms, collect 18ms, tests 6ms, environment 215ms, prepare 35ms)
+
+[ELIFECYCLE] Test failed. See above for more details.
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=38, limit=50][0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+@@ -52,9 +52,9 @@
+ export function isRateLimitError(error: unknown, status?: number): boolean {
+   if (status === 429) return true;
+   if (
+     error instanceof Error &&
+-    /\b(rate|limit|throttl|too many|quota)\b/i.test(error.message)
++    /\b(rate|limit|too many|quota)\b|throttl/i.test(error.message)
+   ) {
+     return true;
+   }
+   return false;
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+@@ -63,9 +63,9 @@
+ export function isAuthError(error: unknown, status?: number): boolean {
+   if (status === 401 || status === 403) return true;
+   if (
+     error instanceof Error &&
+-    /\b(api.?key|auth|forbidden|invalid key|quota exceeded)\b/i.test(
++    /\b(api.?key|forbidden|invalid key|quota exceeded)\b|\bauth/i.test(
+       error.message,
+     )
+   ) {
+     return true;
+
+[0m
+[0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=335, limit=40][0m
+[0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts[90m [offset=315, limit=20][0m
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.ts
+@@ -327,13 +327,14 @@
+ const warnings: string[] = [];
+ let errorInfo: ApiErrorInfo | null = null;
+ 
+ if (source.corsStatus === "no-cors") {
+-  const info = buildErrorMessage(
+-    new Error("CORS: API does not support browser access"),
+-    source,
+-  );
+-  errorInfo = info;
++  errorInfo = {
++    type: "cors",
++    title: "CORS Restriction",
++    message: corsErrorMessage(source),
++    suggestions: buildSuggestions("cors", source),
++  };
+   warnings.push(
+     `${source.label} cannot be used directly from the browser. Use a CORS proxy or server-side proxy.`,
+   );
+ } else if (source.corsStatus === "cors-bypass") {
+
+[0m
+[0m← [0mEdit src/features/publicApiIntegration/utils/errorHandling.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/publicApiIntegration/utils/errorHandling.test.ts
+@@ -129,9 +129,9 @@
+   expect(classifyError(new Error('Invalid API key'), 403)).toBe('auth')
+ })
+ 
+ it('classifies network errors', () => {
+-  expect(classifyError(new TypeError('load failed'))).toBe('cors')
++  expect(classifyError(new TypeError('load failed'))).toBe('network')
+ })
+ 
+ it('classifies server errors', () => {
+   expect(classifyError(new Error('Server error'), 500)).toBe('server')
+
+[0m
+[0m$ [0mpnpm test --run src/features/publicApiIntegration/utils/errorHandling.test.ts 2>&1
+$ vitest run --run src/features/publicApiIntegration/utils/errorHandling.test.ts
+
+ RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests) 3ms
+
+ Test Files  1 passed (1)
+      Tests  42 passed (42)
+   Start at  17:55:04
+   Duration  452ms (transform 25ms, setup 42ms, collect 20ms, tests 3ms, environment 207ms, prepare 41ms)
+[0m
+[0m$ [0mpnpm tsc --noEmit --pretty 2>&1
+(no output)
+[0m
+[0m$ [0mpnpm test --run src/features/publicApiIntegration/ 2>&1
+$ vitest run --run src/features/publicApiIntegration/
+
+ RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests) 3ms
+
+ Test Files  1 passed (1)
+      Tests  42 passed (42)
+   Start at  17:55:12
+   Duration  469ms (transform 25ms, setup 41ms, collect 19ms, tests 3ms, environment 213ms, prepare 37ms)
+[0m
+[0m# [0mTodos
+[✓] Create src/features/publicApiIntegration/utils/errorHandling.ts with CORS and API error detection utilities
+[✓] Integrate error handling into PublicApiSearch component
+[✓] Integrate error handling into ImportedContentManager component
+[✓] Create and run tests for error handling
+[0m
+[2026-07-01T10:55:21.111Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T10:55:21.114Z] [INFO] Task completed successfully

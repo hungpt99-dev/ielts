@@ -1,0 +1,848 @@
+{
+  "title": "Refactor IELTS Journey repo into clean pnpm monorepo",
+  "summary": "Incrementally refactor the repo structure, move apps and packages, update configs and scripts, and validate correctness",
+  "tasks": [
+    {
+      "title": "Move main web app source from root src/ to apps/web/src/",
+      "description": "Move all source files currently under root src/ folder into apps/web/src/ preserving structure. Update or remove root src/ folder after move. Ensure no files remain in root src/ except config files if any.",
+      "executor": "shell",
+      "dependsOn": [],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "All source files previously in root src/ are now in apps/web/src/",
+        "Root src/ folder is empty or removed",
+        "No source files remain in root src/"
+      ],
+      "commands": [
+        "mkdir -p apps/web/src",
+        "mv src/* apps/web/src/",
+        "rmdir src || true"
+      ],
+      "validation": {
+        "commands": [
+          "test ! -d src",
+          "test -d apps/web/src"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Main web app source files are relocated to apps/web/src/, root src/ folder is removed or empty",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/",
+          "description": "Main web app source files moved here",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "delete",
+          "target": "src/",
+          "description": "Root src folder removed",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "operations",
+      "actionType": "modify",
+      "inputContext": "Current repo structure with main web app source in root src/",
+      "targetFiles": [
+        "apps/web/src/"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "apps/web/src/ contains main web app source files",
+        "src/ folder does not exist"
+      ],
+      "verificationCommand": "test ! -d src && test -d apps/web/src",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Relocates main web app source to apps/web for monorepo structure"
+    },
+    {
+      "title": "Move Chrome extension source to apps/extension/",
+      "description": "Ensure the Chrome extension source code is located inside apps/extension/ folder. If currently elsewhere, move all extension source files into apps/extension/src/ preserving structure.",
+      "executor": "shell",
+      "dependsOn": [
+        "Move main web app source from root src/ to apps/web/src/"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Chrome extension source files are inside apps/extension/src/",
+        "No extension source files remain outside apps/extension/"
+      ],
+      "commands": [
+        "mkdir -p apps/extension/src",
+        "mv extension-src-folder/* apps/extension/src/ || true"
+      ],
+      "validation": {
+        "commands": [
+          "test -d apps/extension/src"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Chrome extension source files are located inside apps/extension/src/",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/",
+          "description": "Chrome extension source files moved here",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "operations",
+      "actionType": "modify",
+      "inputContext": "Current repo structure with Chrome extension source possibly outside apps/extension/",
+      "targetFiles": [
+        "apps/extension/src/"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "apps/extension/src/ contains extension source files"
+      ],
+      "verificationCommand": "test -d apps/extension/src",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures Chrome extension source is correctly placed in apps/extension"
+    },
+    {
+      "title": "Remove top-level features folder and relocate contents to packages",
+      "description": "Delete the top-level features folder. Move its contents into appropriate packages according to domain: ai tutor logic to packages/ai-tutor, shared logic to packages as per rules. Remove features folder after move.",
+      "executor": "shell",
+      "dependsOn": [
+        "Move Chrome extension source to apps/extension/"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "features folder no longer exists",
+        "All feature code relocated into appropriate packages folders",
+        "No duplicate or unclear feature locations remain"
+      ],
+      "commands": [
+        "mv features/ai-tutor packages/ai-tutor || true",
+        "mv features/* packages/ || true",
+        "rm -rf features"
+      ],
+      "validation": {
+        "commands": [
+          "test ! -d features",
+          "test -d packages/ai-tutor"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "features folder removed and its contents moved into packages as per domain rules",
+      "outputPlan": [
+        {
+          "action": "delete",
+          "target": "features/",
+          "description": "Top-level features folder removed",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/",
+          "description": "AI Tutor logic moved here",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "operations",
+      "actionType": "modify",
+      "inputContext": "Current repo with features folder containing domain logic",
+      "targetFiles": [
+        "packages/ai-tutor/"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "features/ folder does not exist",
+        "packages/ai-tutor/ contains AI Tutor logic"
+      ],
+      "verificationCommand": "test ! -d features && test -d packages/ai-tutor",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Removes unclear features folder and relocates code into packages"
+    },
+    {
+      "title": "Create packages folders and move shared reusable logic accordingly",
+      "description": "Create packages folders: ai, ai-tutor, content, exercises, learning-engine, storage, ui, theme, utils. Move corresponding shared logic code into these folders as per rules. Ensure each package has proper folder structure.",
+      "executor": "shell",
+      "dependsOn": [
+        "Remove top-level features folder and relocate contents to packages"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "All specified packages folders exist under packages/",
+        "Corresponding shared logic code moved into correct packages folders",
+        "No shared logic remains outside packages/"
+      ],
+      "commands": [
+        "mkdir -p packages/ai packages/ai-tutor packages/content packages/exercises packages/learning-engine packages/storage packages/ui packages/theme packages/utils",
+        "mv shared/ai/* packages/ai/ || true",
+        "mv shared/ai-tutor/* packages/ai-tutor/ || true",
+        "mv shared/content/* packages/content/ || true",
+        "mv shared/exercises/* packages/exercises/ || true",
+        "mv shared/learning-engine/* packages/learning-engine/ || true",
+        "mv shared/storage/* packages/storage/ || true",
+        "mv shared/ui/* packages/ui/ || true",
+        "mv shared/theme/* packages/theme/ || true",
+        "mv shared/utils/* packages/utils/ || true",
+        "rm -rf shared"
+      ],
+      "validation": {
+        "commands": [
+          "test -d packages/ai",
+          "test -d packages/ai-tutor",
+          "test -d packages/content",
+          "test -d packages/exercises",
+          "test -d packages/learning-engine",
+          "test -d packages/storage",
+          "test -d packages/ui",
+          "test -d packages/theme",
+          "test -d packages/utils",
+          "test ! -d shared"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Shared reusable logic is organized into packages folders as per domain rules",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "packages/ai/",
+          "description": "AI provider logic and prompt logic",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ai-tutor/",
+          "description": "Shared AI Tutor logic",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/content/",
+          "description": "Text article and transcript processing",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/exercises/",
+          "description": "IELTS exercise generation and checking",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/learning-engine/",
+          "description": "Study plan progress, weak skill, and learning logic",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/storage/",
+          "description": "IndexedDB and local storage wrappers",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ui/",
+          "description": "Shared React components",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/theme/",
+          "description": "Theme and design tokens",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/utils/",
+          "description": "Generic helper functions",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "operations",
+      "actionType": "modify",
+      "inputContext": "Repo with shared logic in various locations",
+      "targetFiles": [
+        "packages/ai/",
+        "packages/ai-tutor/",
+        "packages/content/",
+        "packages/exercises/",
+        "packages/learning-engine/",
+        "packages/storage/",
+        "packages/ui/",
+        "packages/theme/",
+        "packages/utils/"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "All packages folders exist",
+        "Shared logic moved into correct packages",
+        "shared/ folder removed"
+      ],
+      "verificationCommand": "test -d packages/ai && test -d packages/ai-tutor && test -d packages/content && test -d packages/exercises && test -d packages/learning-engine && test -d packages/storage && test -d packages/ui && test -d packages/theme && test -d packages/utils && test ! -d shared",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Organizes shared reusable logic into domain-specific packages"
+    },
+    {
+      "title": "Update all import paths and path aliases for moved files",
+      "description": "Update all import statements in apps and packages to reflect new folder structure. Update tsconfig.json path aliases to map to new packages and apps locations. Ensure no broken imports remain.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create packages folders and move shared reusable logic accordingly"
+      ],
+      "riskLevel": "high",
+      "acceptanceCriteria": [
+        "All import paths correctly reference new locations",
+        "No TypeScript import errors after update",
+        "tsconfig.json paths updated to match new monorepo structure"
+      ],
+      "validation": {
+        "commands": [
+          "pnpm typecheck"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "All imports and path aliases updated to new monorepo structure without errors",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "tsconfig.json",
+          "description": "Update path aliases for packages and apps",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/**/*",
+          "description": "Update imports in web app source",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/**/*",
+          "description": "Update imports in extension source",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/**/*",
+          "description": "Update imports in packages source",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "New folder structure with moved apps and packages",
+      "targetFiles": [
+        "tsconfig.json",
+        "apps/web/src/**/*",
+        "apps/extension/src/**/*",
+        "packages/**/*"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "pnpm typecheck passes",
+        "No import errors"
+      ],
+      "verificationCommand": "pnpm typecheck",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures all code references correct paths after refactor"
+    },
+    {
+      "title": "Update Vite config files for apps web and extension",
+      "description": "Modify Vite config files in apps/web and apps/extension to reflect new source locations, ports, and strict port usage. Set web app to port 5173 and extension to port 5174 with strict port binding.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Update all import paths and path aliases for moved files"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Vite configs use correct root and base paths",
+        "Web app configured to run on port 5173 with strict port",
+        "Extension configured to run on port 5174 with strict port",
+        "No Vite config errors on build"
+      ],
+      "validation": {
+        "commands": [
+          "pnpm build"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Vite configs updated and apps build successfully with new ports and paths",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/vite.config.ts",
+          "description": "Update web app Vite config for port 5173 and strict port",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/vite.config.ts",
+          "description": "Update extension Vite config for port 5174 and strict port",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Apps source moved and ports assigned",
+      "targetFiles": [
+        "apps/web/vite.config.ts",
+        "apps/extension/vite.config.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "pnpm build succeeds",
+        "Vite configs updated"
+      ],
+      "verificationCommand": "pnpm build",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 2000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Configures apps to run on correct ports with strict binding"
+    },
+    {
+      "title": "Update package.json names and scripts in all apps and packages",
+      "description": "Update package.json files in apps/web, apps/extension, and all packages to have correct package names reflecting monorepo scope. Add or update scripts for build, test, lint, and typecheck. Ensure root package.json scripts only orchestrate workspace commands and do not run dev for all apps.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Update Vite config files for apps web and extension"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "All package.json files have correct names with monorepo scope",
+        "All apps and packages have build, test, lint, and typecheck scripts",
+        "Root package.json scripts only orchestrate workspace commands",
+        "Separate dev commands exist for web and extension apps",
+        "No root dev command that starts all apps simultaneously"
+      ],
+      "validation": {
+        "commands": [
+          "pnpm run build --filter=apps/web",
+          "pnpm run build --filter=apps/extension",
+          "pnpm run lint --filter=packages/**",
+          "pnpm run typecheck --filter=packages/**"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "All package.json files updated with correct names and scripts, root package.json orchestrates workspace",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/package.json",
+          "description": "Update name and scripts for web app",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/package.json",
+          "description": "Update name and scripts for extension app",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/*/package.json",
+          "description": "Update names and scripts for packages",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "package.json",
+          "description": "Update root package.json scripts for workspace orchestration",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Apps and packages moved and configured",
+      "targetFiles": [
+        "apps/web/package.json",
+        "apps/extension/package.json",
+        "packages/*/package.json",
+        "package.json"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "pnpm build succeeds for apps",
+        "pnpm lint and typecheck succeed for packages",
+        "Root package.json scripts do not run dev for all apps"
+      ],
+      "verificationCommand": "pnpm run build --filter=apps/web && pnpm run build --filter=apps/extension && pnpm run lint --filter=packages/** && pnpm run typecheck --filter=packages/**",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Standardizes package names and scripts for monorepo consistency"
+    },
+    {
+      "title": "Update pnpm-workspace.yaml to include apps and packages folders",
+      "description": "Modify pnpm-workspace.yaml to include 'apps/*' and 'packages/*' as workspace packages. Ensure no other folders are included. Confirm allowBuilds setting for esbuild is present.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Update package.json names and scripts in all apps and packages"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "pnpm-workspace.yaml includes 'apps/*' and 'packages/*'",
+        "No other workspace package globs included",
+        "allowBuilds setting for esbuild is present"
+      ],
+      "validation": {
+        "commands": [
+          "cat pnpm-workspace.yaml"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "pnpm-workspace.yaml correctly configured for monorepo structure",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "pnpm-workspace.yaml",
+          "description": "Update workspace package globs and settings",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Monorepo structure with apps and packages folders",
+      "targetFiles": [
+        "pnpm-workspace.yaml"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "pnpm-workspace.yaml contains correct package globs",
+        "allowBuilds setting present"
+      ],
+      "verificationCommand": "cat pnpm-workspace.yaml",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Configures pnpm workspace for monorepo apps and packages"
+    },
+    {
+      "title": "Add separate dev commands for web and extension apps in root package.json",
+      "description": "Add dev commands in root package.json scripts section: 'dev:web' to start web app on port 5173 with strict port, 'dev:extension' to start extension app on port 5174 with strict port. Remove any existing root dev command that starts all apps simultaneously.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Update pnpm-workspace.yaml to include apps and packages folders"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Root package.json has 'dev:web' and 'dev:extension' scripts",
+        "No root dev script that starts all apps",
+        "Dev commands use correct ports and strict port flags"
+      ],
+      "validation": {
+        "commands": [
+          "cat package.json"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Root package.json scripts updated with separate dev commands for web and extension",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "package.json",
+          "description": "Add dev:web and dev:extension scripts, remove root dev script",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Root package.json scripts section",
+      "targetFiles": [
+        "package.json"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "package.json scripts contain dev:web and dev:extension",
+        "No root dev script for all apps"
+      ],
+      "verificationCommand": "cat package.json",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables separate dev commands for apps with correct ports"
+    },
+    {
+      "title": "Add safe AI validation commands for typecheck, lint, test, ai, and build",
+      "description": "Add validation scripts in root package.json and all apps/packages package.json files for safe AI validation. These commands run one-time checks only (no watch or dev mode), do not spawn Vite directly, and limit Vitest workers. Commands include typecheck, lint, test, ai (custom AI validation), and build.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Add separate dev commands for web and extension apps in root package.json"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Validation commands exist in root and all package.json files",
+        "Commands do not run dev or watch mode",
+        "Commands do not run Vite directly",
+        "Vitest workers limited for AI validation",
+        "AI validation commands run successfully"
+      ],
+      "validation": {
+        "commands": [
+          "pnpm run typecheck",
+          "pnpm run lint",
+          "pnpm run test",
+          "pnpm run ai",
+          "pnpm run build"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Safe AI validation commands added and verified to run without spawning dev or watch processes",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "package.json",
+          "description": "Add validation scripts in root package.json",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/package.json",
+          "description": "Add validation scripts in web app package.json",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/package.json",
+          "description": "Add validation scripts in extension app package.json",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/*/package.json",
+          "description": "Add validation scripts in all packages package.json",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Monorepo with apps and packages configured",
+      "targetFiles": [
+        "package.json",
+        "apps/web/package.json",
+        "apps/extension/package.json",
+        "packages/*/package.json"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Validation commands run successfully without dev or watch",
+        "No Vite direct runs in validation commands"
+      ],
+      "verificationCommand": "pnpm run typecheck && pnpm run lint && pnpm run test && pnpm run ai && pnpm run build",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables safe AI validation without spawning dev or watch processes"
+    },
+    {
+      "title": "Fix all broken imports, config paths, and package references after refactor",
+      "description": "Perform a thorough code fix pass to resolve any broken imports, incorrect config paths, or invalid package references caused by the refactor. Update all relevant files to ensure build, lint, typecheck, and tests pass without errors.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Add safe AI validation commands for typecheck, lint, test, ai, and build"
+      ],
+      "riskLevel": "high",
+      "acceptanceCriteria": [
+        "No broken imports remain",
+        "All config paths are correct",
+        "All package references are valid",
+        "pnpm typecheck, lint, test, and build pass successfully"
+      ],
+      "validation": {
+        "commands": [
+          "pnpm typecheck",
+          "pnpm lint",
+          "pnpm test",
+          "pnpm build"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Codebase is fully fixed and consistent with new monorepo structure",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/**/*",
+          "description": "Fix imports and config paths in web app",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/**/*",
+          "description": "Fix imports and config paths in extension app",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/**/*",
+          "description": "Fix imports and config paths in packages",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Monorepo with updated structure and configs",
+      "targetFiles": [
+        "apps/web/src/**/*",
+        "apps/extension/src/**/*",
+        "packages/**/*"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "pnpm typecheck passes",
+        "pnpm lint passes",
+        "pnpm test passes",
+        "pnpm build passes"
+      ],
+      "verificationCommand": "pnpm typecheck && pnpm lint && pnpm test && pnpm build",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 3,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures codebase correctness and consistency after refactor"
+    },
+    {
+      "title": "Run full validation: pnpm install, typecheck, lint, test, ai, and build",
+      "description": "Run the full validation suite on the refactored monorepo: pnpm install to update dependencies, pnpm typecheck to verify types, pnpm lint to check code style, pnpm test to run tests, pnpm ai to run AI validation commands, and pnpm build to build all apps and packages.",
+      "executor": "shell",
+      "dependsOn": [
+        "Fix all broken imports, config paths, and package references after refactor"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "pnpm install completes without errors",
+        "pnpm typecheck passes",
+        "pnpm lint passes",
+        "pnpm test passes",
+        "pnpm ai validation passes",
+        "pnpm build completes successfully"
+      ],
+      "commands": [
+        "pnpm install",
+        "pnpm typecheck",
+        "pnpm lint",
+        "pnpm test",
+        "pnpm ai",
+        "pnpm build"
+      ],
+      "validation": {
+        "commands": [
+          "pnpm typecheck",
+          "pnpm lint",
+          "pnpm test",
+          "pnpm ai",
+          "pnpm build"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Complete validation passes confirming monorepo refactor correctness",
+      "outputPlan": [],
+      "taskType": "validation",
+      "actionType": "execute",
+      "inputContext": "Refactored monorepo with updated structure and configs",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "validation logs and reports"
+      ],
+      "evidence": [
+        "pnpm install exit code 0",
+        "pnpm typecheck exit code 0",
+        "pnpm lint exit code 0",
+        "pnpm test exit code 0",
+        "pnpm ai exit code 0",
+        "pnpm build exit code 0"
+      ],
+      "verificationCommand": "pnpm typecheck && pnpm lint && pnpm test && pnpm ai && pnpm build",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 5000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Confirms the monorepo refactor is complete and stable"
+    }
+  ]
+}

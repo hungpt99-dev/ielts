@@ -1,0 +1,46 @@
+[2026-07-02T04:14:39.857Z] [INFO] Task started: Run lint, typecheck, and tests to validate renaming changes
+[2026-07-02T04:14:47.186Z] [INFO] Executor finished with status: failed, exit code: 1
+[2026-07-02T04:14:47.186Z] [INFO] Output:
+Scope: 11 of 12 workspace projects
+packages/ai lint$ echo 'no linter configured'
+packages/ai-tutor lint$ echo 'no linter configured'
+packages/exercises lint$ echo 'no linter configured'
+packages/storage lint$ echo 'no linter configured'
+packages/ai lint: no linter configured
+packages/ai-tutor lint: no linter configured
+packages/ai lint: Done
+packages/exercises lint: no linter configured
+packages/ai-tutor lint: Done
+packages/theme lint$ echo 'no linter configured'
+packages/exercises lint: Done
+packages/storage lint: no linter configured
+packages/ui lint$ echo 'no linter configured'
+packages/storage lint: Done
+packages/utils lint$ echo 'no linter configured'
+packages/theme lint: no linter configured
+packages/theme lint: Done
+packages/ui lint: no linter configured
+packages/ui lint: Done
+packages/utils lint: no linter configured
+packages/utils lint: Done
+packages/content lint$ echo 'no linter configured'
+apps/extension lint$ echo 'no linter configured'
+packages/learning-engine lint$ echo 'no linter configured'
+packages/content lint: no linter configured
+packages/content lint: Done
+apps/extension lint: no linter configured
+apps/extension lint: Done
+packages/learning-engine lint: no linter configured
+packages/learning-engine lint: Done
+apps/web lint$ eslint .
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+apps/web lint:   288:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/NotificationCenter.tsx
+apps/web lint:    66:6  warning  React Hook useEffect has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+apps/web lint:    81:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it
+[2026-07-02T04:14:47.187Z] [INFO] Error:
+$ pnpm -r lint
+$ pnpm -r typecheck
+$ pnpm -r test
+[2026-07-02T04:14:47.187Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-02T04:14:47.189Z] [INFO] Task completed successfully

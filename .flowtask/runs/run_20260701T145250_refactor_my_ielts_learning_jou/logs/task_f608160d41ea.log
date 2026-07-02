@@ -1,0 +1,1668 @@
+[2026-07-01T15:33:46.926Z] [INFO] Task started: Refactor Learning Journey Engine with Modular Feature Services
+[2026-07-01T15:33:46.928Z] [INFO] [info] [output-plan] [{"action":"modify","target":"packages/learning-engine/profile/","description":"User profile and target band progress logic","validationMethod":"file_exists"},{"action":"modify","target":"packages/learning-engine/progress/","description":"Progress calculation logic","validationMethod":"file_exists"},{"action":"modify","target":"packages/learning-engine/weakness-detection/","description":"Weak skill and mistake detection","validationMethod":"file_exists"},{"action":"modify","target":"packages/learning-engine/review-scheduler/","description":"Review scheduling logic","validationMethod":"file_exists"},{"action":"modify","target":"packages/learning-engine/next-best-action/","description":"Next best action calculation","validationMethod":"file_exists"},{"action":"modify","target":"packages/learning-engine/daily-plan/","description":"Daily study plan generation","validationMethod":"file_exists"},{"action":"modify","target":"packages/learning-engine/analytics/","description":"Analytics and weekly reflection data","validationMethod":"file_exists"}]
+[2026-07-01T15:33:47.542Z] [INFO] [stderr] [0m
+[2026-07-01T15:33:47.542Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-01T15:33:47.542Z] [INFO] [stderr] [0m
+[2026-07-01T15:33:52.422Z] [INFO] [stderr] [0m→ [0mSkill "systematic-debugging"
+[2026-07-01T15:33:54.884Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"packages/learning-engine"}
+[2026-07-01T15:33:55.244Z] [INFO] [stderr] [0m
+[2026-07-01T15:33:55.244Z] [INFO] [stderr] (no output)
+[2026-07-01T15:33:55.244Z] [INFO] [stderr] [0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine -type f 2>/dev/null | sort
+[2026-07-01T15:33:55.244Z] [INFO] [stderr] [0m
+[2026-07-01T15:33:55.477Z] [INFO] [stderr] [0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS/packages -maxdepth 1 -type d | sort
+[2026-07-01T15:33:55.477Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages
+[2026-07-01T15:33:55.477Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai
+[2026-07-01T15:33:55.477Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage
+[2026-07-01T15:33:55.477Z] [INFO] [stderr] [0m
+[2026-07-01T15:33:55.477Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ui
+[2026-07-01T15:33:55.565Z] [INFO] [stdout] Let me start by exploring the existing codebase structure, especially the learning engine and related packages.
+[2026-07-01T15:33:59.217Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:49 .
+[2026-07-01T15:33:59.217Z] [INFO] [stderr] [0m$ [0mls -la /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/
+[2026-07-01T15:33:59.217Z] [INFO] [stderr] drwxr-xr-x  27 phamthanhhung  staff  864  1 Jul 22:26 ..
+[2026-07-01T15:33:59.217Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:39 storage
+[2026-07-01T15:33:59.217Z] [INFO] [stderr] total 0
+[2026-07-01T15:33:59.217Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:39 ai
+[2026-07-01T15:33:59.217Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:51 ui
+[2026-07-01T15:33:59.217Z] [INFO] [stderr] [0m
+[2026-07-01T15:33:59.361Z] [INFO] [stderr] [0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS -type f -name "*.ts" -o -name "*.tsx" | grep -E "(learning|journey|engine|progress|profile|weakness|scheduler|analytics)" | grep -v node_modules | grep -v "\.next" | grep -v "out" | sort | head -60
+[2026-07-01T15:33:59.360Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/analytics/Analytics.tsx
+[2026-07-01T15:33:59.361Z] [INFO] [stderr] [0m
+[2026-07-01T15:33:59.426Z] [INFO] [stderr] [0m→ [0mRead .
+[2026-07-01T15:33:59.486Z] [INFO] [stdout] The learning-engine package doesn't exist yet. Let me inspect what's already in the repo to understand the current architecture better.
+[2026-07-01T15:34:02.370Z] [INFO] [stderr] [0m→ [0mRead src
+[2026-07-01T15:34:02.914Z] [INFO] [stderr] [0m
+[2026-07-01T15:34:02.914Z] [INFO] [stderr] total 8
+[2026-07-01T15:34:02.914Z] [INFO] [stderr] [0m$ [0mls -la /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai/ && ls -la /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/ && ls -la /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ui/
+[2026-07-01T15:34:02.914Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:39 .
+[2026-07-01T15:34:02.914Z] [INFO] [stderr] drwxr-xr-x@  3 phamthanhhung  staff   96  1 Jul 14:39 node_modules
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:49 ..
+[2026-07-01T15:34:02.914Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:49 ..
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] total 8
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] drwxr-xr-x@ 12 phamthanhhung  staff  384  1 Jul 22:18 src
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff  304  1 Jul 22:17 package.json
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff  189  1 Jul 14:36 package.json
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] drwxr-xr-x@ 5 phamthanhhung  staff  160  1 Jul 14:49 ..
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] total 8
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] drwxr-xr-x@ 3 phamthanhhung  staff   96  1 Jul 14:51 node_modules
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] drwxr-xr-x@  3 phamthanhhung  staff   96  1 Jul 14:39 node_modules
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] drwxr-xr-x@ 10 phamthanhhung  staff  320  1 Jul 22:12 src
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] drwxr-xr-x@ 4 phamthanhhung  staff  128  1 Jul 14:49 src
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] [0m
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:39 .
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] drwxr-xr-x@ 5 phamthanhhung  staff  160  1 Jul 14:51 .
+[2026-07-01T15:34:02.915Z] [INFO] [stderr] -rw-r--r--@ 1 phamthanhhung  staff  192  1 Jul 14:49 package.json
+[2026-07-01T15:34:03.131Z] [INFO] [stderr] [0m→ [0mRead pnpm-workspace.yaml
+[2026-07-01T15:34:08.514Z] [INFO] [stderr] [0m• [0mExplore learning engine consumers[90m Explore Agent[0m
+[2026-07-01T15:35:09.409Z] [INFO] [stderr] [0m✓ [0mExplore learning engine consumers[90m Explore Agent[0m
+[2026-07-01T15:35:13.618Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/storage/src/index.ts"}
+[2026-07-01T15:35:13.825Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/storage/src/repositories"}
+[2026-07-01T15:35:14.000Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/index.ts"}
+[2026-07-01T15:35:14.065Z] [INFO] [stdout] Now let me look at the storage package interfaces and models that the learning engine will need.
+[2026-07-01T15:35:16.868Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/repositories/index.ts
+[2026-07-01T15:35:17.036Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/aiTutorModels.ts"}
+[2026-07-01T15:35:17.333Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/repositories/ProgressRepository.ts
+[2026-07-01T15:35:20.362Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/repositories/BaseRepository.ts
+[2026-07-01T15:35:20.626Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/repositories/SessionRepository.ts
+[2026-07-01T15:35:23.928Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/reviewService.ts
+[2026-07-01T15:35:24.178Z] [INFO] [stderr] [0m→ [0mRead src/utils/spaced-repetition.ts
+[2026-07-01T15:35:24.422Z] [INFO] [stderr] [0m→ [0mRead packages/storage/package.json
+[2026-07-01T15:35:24.490Z] [INFO] [stdout] Let me also check the existing review service and understand the existing utils/spaced-repetition module that needs to be moved.
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [0m
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [ ] Implement profile/ module - band progress, exam countdown, streak
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [ ] Implement analytics/ module - streak, consistency, weekly reflection
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [ ] Implement progress/ module - exercise accuracy, weekly progress, skill sessions
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [ ] Implement daily-plan/ module - study plan generation, priority
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [•] Create packages/learning-engine/ package.json, tsconfig.json, and types
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [ ] Create LearningEngine orchestrator and public API (src/index.ts)
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [ ] Implement weakness-detection/ module - weak skills, repeated mistakes
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [ ] Register in pnpm workspace and add tests
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [ ] Implement review-scheduler/ module - SM-2 spaced repetition, due reviews
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [0m
+[2026-07-01T15:35:37.090Z] [INFO] [stderr] [ ] Implement next-best-action/ module - next best action calculation
+[2026-07-01T15:35:37.206Z] [INFO] [stdout] Now I have a thorough understanding of the existing codebase. Let me plan and create the learning-engine package with all required submodules.
+[2026-07-01T15:35:40.730Z] [INFO] [stderr] [0m
+[2026-07-01T15:35:40.730Z] [INFO] [stderr] [0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/{profile,progress,weakness-detection,review-scheduler,daily-plan,next-best-action,analytics,errors} && mkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__
+[2026-07-01T15:35:40.730Z] [INFO] [stderr] (no output)
+[2026-07-01T15:35:44.034Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/package.json
+[2026-07-01T15:35:44.034Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:35:44.034Z] [INFO] [stderr] [0m
+[2026-07-01T15:35:45.196Z] [INFO] [stderr] [0m
+[2026-07-01T15:35:45.196Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/tsconfig.json
+[2026-07-01T15:35:45.196Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:36:01.416Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/types.ts
+[2026-07-01T15:36:01.416Z] [INFO] [stderr] ERROR [15:3] 'AppSettings' is declared but never used.
+[2026-07-01T15:36:01.416Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts">
+[2026-07-01T15:36:01.416Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:36:01.416Z] [INFO] [stderr] ERROR [16:8] Cannot find module '@ielts/storage' or its corresponding type declarations.
+[2026-07-01T15:36:01.416Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T15:36:01.416Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:36:01.416Z] [INFO] [stderr] [0m
+[2026-07-01T15:36:01.416Z] [INFO] [stderr] 
+[2026-07-01T15:36:06.321Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/types.ts
+[2026-07-01T15:36:06.321Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:36:06.321Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+[2026-07-01T15:36:06.321Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+[2026-07-01T15:36:06.321Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+[2026-07-01T15:36:06.321Z] [INFO] [stderr] @@ -11,9 +11,8 @@
+[2026-07-01T15:36:06.321Z] [INFO] [stderr]    ListeningPracticeSession,
+[2026-07-01T15:36:06.321Z] [INFO] [stderr]    MockTestEntry,
+[2026-07-01T15:36:06.322Z] [INFO] [stderr]    TopicProgress,
+[2026-07-01T15:36:06.322Z] [INFO] [stderr] -  AppSettings,
+[2026-07-01T15:36:06.322Z] [INFO] [stderr]  } from '@ielts/storage'
+[2026-07-01T15:36:06.322Z] [INFO] [stderr]  
+[2026-07-01T15:36:06.322Z] [INFO] [stderr]  export type ISOString = string
+[2026-07-01T15:36:06.322Z] [INFO] [stderr]  
+[2026-07-01T15:36:06.322Z] [INFO] [stderr]    ProgressRecord,
+[2026-07-01T15:36:06.322Z] [INFO] [stderr] [0m
+[2026-07-01T15:36:06.322Z] [INFO] [stderr] 
+[2026-07-01T15:36:09.616Z] [INFO] [stdout] Let me install the package and set up the workspace properly.
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] Progress: resolved 471, reused 401, downloaded 0, added 0
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] Already up to date
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] Progress: resolved 263, reused 213, downloaded 0, added 0
+[2026-07-01T15:36:12.939Z] [INFO] [stderr] [0m$ [0mpnpm install
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] [WARN] 3 deprecated subdependencies found: glob@11.1.0, source-map@0.8.0-beta.0, whatwg-encoding@3.1.1
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] 
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] [WARN] deprecated recharts@2.15.4: 1.x and 2.x branches are no longer active. Bump to Recharts v3 to receive latest features and bugfixes. See https://github.com/recharts/recharts/wiki/3.0-migration-guide
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] Progress: resolved 669, reused 599, downloaded 0, added 0, done
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] Done in 3.3s using pnpm v11.1.2
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] [0m
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] Progress: resolved 1, reused 0, downloaded 0, added 0
+[2026-07-01T15:36:12.940Z] [INFO] [stderr] Scope: all 6 workspace projects
+[2026-07-01T15:36:16.275Z] [INFO] [stdout] Now let me create all the submodule services. I'll write them in parallel since they're independent.
+[2026-07-01T15:36:21.200Z] [INFO] [stderr] [0m
+[2026-07-01T15:36:21.200Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/errors/LearningEngineError.ts
+[2026-07-01T15:36:21.200Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [✓] Create packages/learning-engine/ package.json, tsconfig.json, and types
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [ ] Implement progress/ module - exercise accuracy, weekly progress, skill sessions
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [ ] Implement daily-plan/ module - study plan generation, priority
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [ ] Implement weakness-detection/ module - weak skills, repeated mistakes
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [ ] Implement review-scheduler/ module - SM-2 spaced repetition, due reviews
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [•] Implement profile/ module - band progress, exam countdown, streak
+[2026-07-01T15:36:27.653Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [ ] Implement analytics/ module - streak, consistency, weekly reflection
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [ ] Create LearningEngine orchestrator and public API (src/index.ts)
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [ ] Register in pnpm workspace and add tests
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [0m
+[2026-07-01T15:36:27.654Z] [INFO] [stderr] [ ] Implement next-best-action/ module - next best action calculation
+[2026-07-01T15:36:39.585Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/profile/ProfileService.ts
+[2026-07-01T15:36:39.585Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:36:39.585Z] [INFO] [stderr] [0m
+[2026-07-01T15:36:47.307Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/profile/index.ts
+[2026-07-01T15:36:47.307Z] [INFO] [stderr] [0m
+[2026-07-01T15:36:47.307Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:36:58.164Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:36:58.164Z] [INFO] [stderr] 
+[2026-07-01T15:36:58.164Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:36:58.164Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T15:36:58.165Z] [INFO] [stderr] ERROR [17:3] 'StudySkill' is declared but never used.
+[2026-07-01T15:36:58.165Z] [INFO] [stderr] [0m
+[2026-07-01T15:36:58.164Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts">
+[2026-07-01T15:36:58.165Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:36:58.165Z] [INFO] [stderr] ERROR [101:11] 'mockAccuracy' is declared but its value is never read.
+[2026-07-01T15:36:58.165Z] [INFO] [stderr] ERROR [9:3] 'TopicProgress' is declared but never used.
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/progress/index.ts
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] ERROR [101:11] 'mockAccuracy' is declared but its value is never read.
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] ERROR [17:3] 'StudySkill' is declared but never used.
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] ERROR [9:3] 'TopicProgress' is declared but never used.
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts">
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:00.203Z] [INFO] [stderr] 
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] @@ -5,17 +5,15 @@
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    SpeakingSession,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    WritingSession,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    MockTestEntry,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    ProgressRecord,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]  import type {
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    SkillProgress,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    ExerciseAccuracy,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]  } from '@ielts/storage'
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]  } from '../types'
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    WeeklyProgress,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    DayProgress,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    getWeeklyProgress(
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] -  TopicProgress,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] -  StudySkill,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]    ISOString,
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:03.978Z] [INFO] [stderr] 
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]  export class ProgressService {
+[2026-07-01T15:37:03.978Z] [INFO] [stderr]  
+[2026-07-01T15:37:04.645Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:04.645Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:04.645Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:37:04.645Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:04.644Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:04.645Z] [INFO] [stderr]  })
+[2026-07-01T15:37:04.645Z] [INFO] [stderr]    trend: this.determineTrend(progressRecords, 'speaking'),
+[2026-07-01T15:37:04.645Z] [INFO] [stderr]    accuracy: speakingAccuracy,
+[2026-07-01T15:37:04.645Z] [INFO] [stderr]  
+[2026-07-01T15:37:04.645Z] [INFO] [stderr] 
+[2026-07-01T15:37:04.645Z] [INFO] [stderr] @@ -95,9 +95,8 @@
+[2026-07-01T15:37:04.645Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:04.645Z] [INFO] [stderr]    totalMinutes: 0,
+[2026-07-01T15:37:04.645Z] [INFO] [stderr]  skills.push({
+[2026-07-01T15:37:04.645Z] [INFO] [stderr] -const mockAccuracy = this.computeMockTestAccuracy(mockTests)
+[2026-07-01T15:37:04.645Z] [INFO] [stderr]    sessions: 0,
+[2026-07-01T15:37:04.645Z] [INFO] [stderr]    skill: 'vocabulary',
+[2026-07-01T15:37:08.285Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:08.284Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:08.285Z] [INFO] [stderr]    ListeningPracticeSession,
+[2026-07-01T15:37:08.285Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:08.285Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:37:08.285Z] [INFO] [stderr] @@ -3,9 +3,8 @@
+[2026-07-01T15:37:08.285Z] [INFO] [stderr]    SpeakingSession,
+[2026-07-01T15:37:08.285Z] [INFO] [stderr] -  MockTestEntry,
+[2026-07-01T15:37:08.285Z] [INFO] [stderr]    ProgressRecord,
+[2026-07-01T15:37:08.285Z] [INFO] [stderr]    ReadingPracticeSession,
+[2026-07-01T15:37:08.285Z] [INFO] [stderr]    WritingSession,
+[2026-07-01T15:37:08.285Z] [INFO] [stderr]  import type {
+[2026-07-01T15:37:08.285Z] [INFO] [stderr]    SkillProgress,
+[2026-07-01T15:37:08.285Z] [INFO] [stderr] 
+[2026-07-01T15:37:08.285Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:08.285Z] [INFO] [stderr]  } from '@ielts/storage'
+[2026-07-01T15:37:08.285Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:09.089Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:09.090Z] [INFO] [stderr]    readingPractices: ReadingPracticeSession[],
+[2026-07-01T15:37:09.089Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:09.090Z] [INFO] [stderr] @@ -53,9 +53,8 @@
+[2026-07-01T15:37:09.090Z] [INFO] [stderr]    listeningPractices: ListeningPracticeSession[],
+[2026-07-01T15:37:09.090Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:09.089Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:09.090Z] [INFO] [stderr]    speakingSessions: SpeakingSession[],
+[2026-07-01T15:37:09.090Z] [INFO] [stderr] -  mockTests: MockTestEntry[],
+[2026-07-01T15:37:09.089Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:37:09.090Z] [INFO] [stderr]    writingSessions: WritingSession[],
+[2026-07-01T15:37:09.090Z] [INFO] [stderr]  
+[2026-07-01T15:37:09.090Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:09.090Z] [INFO] [stderr]    const skills: SkillProgress[] = []
+[2026-07-01T15:37:09.090Z] [INFO] [stderr] 
+[2026-07-01T15:37:09.090Z] [INFO] [stderr]    progressRecords: ProgressRecord[],
+[2026-07-01T15:37:09.090Z] [INFO] [stderr]  ): SkillProgress[] {
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] @@ -234,14 +234,8 @@
+[2026-07-01T15:37:10.016Z] [INFO] [stderr]    const avgRating = sessions.reduce((s, sp) => s + (sp.selfRating || 0), 0) / sessions.length
+[2026-07-01T15:37:10.016Z] [INFO] [stderr]    return Math.round((avgRating / 10) * 100)
+[2026-07-01T15:37:10.016Z] [INFO] [stderr]  }
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] -  if (tests.length === 0) return 0
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:37:10.016Z] [INFO] [stderr]  
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] -  return Math.round((avgBand / 9) * 100)
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] -private computeMockTestAccuracy(tests: MockTestEntry[]): number {
+[2026-07-01T15:37:10.017Z] [INFO] [stderr] -}
+[2026-07-01T15:37:10.017Z] [INFO] [stderr]  private determineTrend(
+[2026-07-01T15:37:10.017Z] [INFO] [stderr] -
+[2026-07-01T15:37:10.016Z] [INFO] [stderr] -  const avgBand = tests.reduce((s, t) => s + (t.overallBand || 0), 0) / tests.length
+[2026-07-01T15:37:10.017Z] [INFO] [stderr]  ): 'improving' | 'declining' | 'stable' {
+[2026-07-01T15:37:10.017Z] [INFO] [stderr]    records: ProgressRecord[],
+[2026-07-01T15:37:10.017Z] [INFO] [stderr] 
+[2026-07-01T15:37:10.017Z] [INFO] [stderr]    skill: string,
+[2026-07-01T15:37:10.017Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:12.541Z] [INFO] [stderr] [0m→ [0mRead packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-01T15:37:24.984Z] [INFO] [stdout] Now let me create the remaining modules in parallel.
+[2026-07-01T15:37:25.483Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:25.483Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T15:37:25.483Z] [INFO] [stderr] 
+[2026-07-01T15:37:25.483Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+[2026-07-01T15:37:25.483Z] [INFO] [stderr] ERROR [168:49] 'mistakeExample' is declared but its value is never read.
+[2026-07-01T15:37:25.483Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts">
+[2026-07-01T15:37:25.483Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:37:25.483Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:37:25.483Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:29.877Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/weakness-detection/index.ts
+[2026-07-01T15:37:29.878Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:37:29.878Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:37:29.878Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts">
+[2026-07-01T15:37:29.878Z] [INFO] [stderr] 
+[2026-07-01T15:37:29.878Z] [INFO] [stderr] ERROR [168:49] 'mistakeExample' is declared but its value is never read.
+[2026-07-01T15:37:29.878Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:37:29.878Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] @@ -164,9 +164,9 @@
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] -private generateSuggestion(skill: StudySkill, mistakeExample: string): string {
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] +private generateSuggestion(skill: StudySkill, _mistakeExample: string): string {
+[2026-07-01T15:37:33.488Z] [INFO] [stderr]  }
+[2026-07-01T15:37:33.488Z] [INFO] [stderr]  
+[2026-07-01T15:37:33.488Z] [INFO] [stderr]    return 'high'
+[2026-07-01T15:37:33.488Z] [INFO] [stderr]    if (accuracy >= 60) return 'medium'
+[2026-07-01T15:37:33.488Z] [INFO] [stderr]      reading: 'Practice skimming and scanning techniques. Focus on understanding question types.',
+[2026-07-01T15:37:33.488Z] [INFO] [stderr]    const suggestions: Record<StudySkill, string> = {
+[2026-07-01T15:37:33.488Z] [INFO] [stderr]      listening: 'Practice active listening with transcripts. Focus on signpost language.',
+[2026-07-01T15:37:33.488Z] [INFO] [stderr]      writing: 'Review essay structure and practice with timed writing tasks.',
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:33.488Z] [INFO] [stderr] 
+[2026-07-01T15:37:44.985Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+[2026-07-01T15:37:44.985Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts">
+[2026-07-01T15:37:44.985Z] [INFO] [stderr] ERROR [6:55] 'ISOString' is declared but never used.
+[2026-07-01T15:37:44.985Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:37:44.985Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T15:37:44.985Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:44.984Z] [INFO] [stderr] 
+[2026-07-01T15:37:44.985Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:37:49.367Z] [INFO] [stderr] 
+[2026-07-01T15:37:49.367Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/review-scheduler/index.ts
+[2026-07-01T15:37:49.367Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:37:49.367Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:37:49.367Z] [INFO] [stderr] [0m
+[2026-07-01T15:37:49.367Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts">
+[2026-07-01T15:37:49.367Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:37:49.367Z] [INFO] [stderr] ERROR [6:55] 'ISOString' is declared but never used.
+[2026-07-01T15:37:52.997Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+[2026-07-01T15:37:52.997Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+[2026-07-01T15:37:52.997Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:37:52.997Z] [INFO] [stderr]    VocabularyEntry,
+[2026-07-01T15:37:52.997Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+[2026-07-01T15:37:52.997Z] [INFO] [stderr] @@ -2,9 +2,9 @@
+[2026-07-01T15:37:52.997Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+[2026-07-01T15:37:52.998Z] [INFO] [stderr] +import type { DueReviews, VocabReviewDue, MistakeDue } from '../types'
+[2026-07-01T15:37:52.997Z] [INFO] [stderr]    MistakeEntry,
+[2026-07-01T15:37:52.998Z] [INFO] [stderr]  
+[2026-07-01T15:37:52.998Z] [INFO] [stderr]  type ReviewRating = 'again' | 'hard' | 'good' | 'easy'
+[2026-07-01T15:37:52.997Z] [INFO] [stderr] -import type { DueReviews, VocabReviewDue, MistakeDue, ISOString } from '../types'
+[2026-07-01T15:37:52.998Z] [INFO] [stderr]  } from '@ielts/storage'
+[2026-07-01T15:37:52.998Z] [INFO] [stderr] 
+[2026-07-01T15:37:52.997Z] [INFO] [stderr]    VocabReviewEntry,
+[2026-07-01T15:37:52.998Z] [INFO] [stderr]  export class ReviewSchedulerService {
+[2026-07-01T15:37:52.998Z] [INFO] [stderr]  
+[2026-07-01T15:37:52.998Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:09.632Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/daily-plan/DailyPlanService.ts
+[2026-07-01T15:38:09.632Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:38:09.632Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:10.044Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:38:10.044Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:10.044Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/daily-plan/index.ts
+[2026-07-01T15:38:12.917Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-01T15:38:12.917Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T15:38:12.917Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:38:12.917Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts">
+[2026-07-01T15:38:12.917Z] [INFO] [stderr] ERROR [8:5] 'now' is declared but its value is never read.
+[2026-07-01T15:38:12.917Z] [INFO] [stderr] ERROR [1:66] 'ISOString' is declared but never used.
+[2026-07-01T15:38:12.917Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:12.917Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:38:12.917Z] [INFO] [stderr] 
+[2026-07-01T15:38:17.283Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:38:17.283Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts">
+[2026-07-01T15:38:17.283Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/next-best-action/index.ts
+[2026-07-01T15:38:17.283Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:38:17.283Z] [INFO] [stderr] 
+[2026-07-01T15:38:17.283Z] [INFO] [stderr] ERROR [1:66] 'ISOString' is declared but never used.
+[2026-07-01T15:38:17.283Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:17.283Z] [INFO] [stderr] ERROR [8:5] 'now' is declared but its value is never read.
+[2026-07-01T15:38:17.283Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] @@ -1,5 +1,5 @@
+[2026-07-01T15:38:20.476Z] [INFO] [stderr]  
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] 
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] -import type { NextBestAction, StudySkill, WeakSkill, DueReviews, ISOString } from '../types'
+[2026-07-01T15:38:20.476Z] [INFO] [stderr]  export class NextBestActionService {
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] +import type { NextBestAction, StudySkill, WeakSkill, DueReviews } from '../types'
+[2026-07-01T15:38:20.476Z] [INFO] [stderr]      weakSkills: WeakSkill[],
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:20.476Z] [INFO] [stderr]    calculateNextBestActions(
+[2026-07-01T15:38:20.476Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-01T15:38:21.069Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-01T15:38:21.069Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:38:21.069Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-01T15:38:21.069Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-01T15:38:21.069Z] [INFO] [stderr]  calculateNextBestActions(
+[2026-07-01T15:38:21.069Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/next-best-action/NextBestActionService.ts
+[2026-07-01T15:38:21.069Z] [INFO] [stderr]    dueReviews: DueReviews,
+[2026-07-01T15:38:21.069Z] [INFO] [stderr]    const actions: NextBestAction[] = []
+[2026-07-01T15:38:21.069Z] [INFO] [stderr]    weakSkills: WeakSkill[],
+[2026-07-01T15:38:21.069Z] [INFO] [stderr] 
+[2026-07-01T15:38:21.069Z] [INFO] [stderr] @@ -4,9 +4,8 @@
+[2026-07-01T15:38:21.069Z] [INFO] [stderr]    profile: { studyStreak: number; examCountdownDays: number | null },
+[2026-07-01T15:38:21.069Z] [INFO] [stderr]  ): NextBestAction[] {
+[2026-07-01T15:38:21.069Z] [INFO] [stderr] -  now: Date = new Date(),
+[2026-07-01T15:38:21.069Z] [INFO] [stderr]    if (profile.examCountdownDays !== null && profile.examCountdownDays <= 7) {
+[2026-07-01T15:38:21.069Z] [INFO] [stderr]  
+[2026-07-01T15:38:21.069Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:24.179Z] [INFO] [stderr] [0m→ [0mRead packages/learning-engine/src/next-best-action/NextBestActionService.ts[90m [limit=12][0m
+[2026-07-01T15:38:41.749Z] [INFO] [stdout] Now let me create the Analytics module.
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] ERROR [4:3] 'ListeningSession' is declared but never used.
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] 
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts">
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] ERROR [31:13] 'task' is declared but its value is never read.
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:38:42.287Z] [INFO] [stderr] ERROR [3:3] 'ReadingSession' is declared but never used.
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] 
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/analytics/index.ts
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] ERROR [4:3] 'ListeningSession' is declared but never used.
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] ERROR [31:13] 'task' is declared but its value is never read.
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts">
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:38:46.667Z] [INFO] [stderr] ERROR [3:3] 'ReadingSession' is declared but never used.
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] @@ -1,8 +1,6 @@
+[2026-07-01T15:38:50.372Z] [INFO] [stderr]    MockTestEntry,
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] -  ListeningSession,
+[2026-07-01T15:38:50.372Z] [INFO] [stderr]  import type {
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] -  ReadingSession,
+[2026-07-01T15:38:50.372Z] [INFO] [stderr]    ListeningPracticeSession,
+[2026-07-01T15:38:50.372Z] [INFO] [stderr]    SpeakingSession,
+[2026-07-01T15:38:50.372Z] [INFO] [stderr]    ReadingPracticeSession,
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] 
+[2026-07-01T15:38:50.372Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:50.372Z] [INFO] [stderr]    WritingSession,
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] @@ -24,11 +24,9 @@
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:38:51.138Z] [INFO] [stderr]  ): StudyConsistency {
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] -    const day = d.slice(0, 10)
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:38:51.138Z] [INFO] [stderr]    const allDays = new Set<string>()
+[2026-07-01T15:38:51.138Z] [INFO] [stderr]    for (const d of taskDates) {
+[2026-07-01T15:38:51.138Z] [INFO] [stderr]    for (const d of sessionDates) allDays.add(d.slice(0, 10))
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] +    allDays.add(d.slice(0, 10))
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] -    allDays.add(day)
+[2026-07-01T15:38:51.138Z] [INFO] [stderr]    }
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] -    const task = { date: day }
+[2026-07-01T15:38:51.138Z] [INFO] [stderr]  
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] 
+[2026-07-01T15:38:51.138Z] [INFO] [stderr]  
+[2026-07-01T15:38:51.138Z] [INFO] [stderr] [0m
+[2026-07-01T15:38:51.138Z] [INFO] [stderr]    const sortedDays = Array.from(allDays).sort().reverse()
+[2026-07-01T15:38:53.891Z] [INFO] [stderr] [0m→ [0mRead packages/learning-engine/src/analytics/AnalyticsService.ts[90m [limit=35][0m
+[2026-07-01T15:39:10.461Z] [INFO] [stdout] Now let me create the LearningEngine orchestrator and main index.ts.
+[2026-07-01T15:39:11.013Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:11.014Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:39:11.014Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/LearningEngine.ts
+[2026-07-01T15:39:11.014Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:39:11.014Z] [INFO] [stderr] 
+[2026-07-01T15:39:11.014Z] [INFO] [stderr] ERROR [124:11] 'weeklyReflection' is declared but its value is never read.
+[2026-07-01T15:39:11.014Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:11.014Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts">
+[2026-07-01T15:39:11.014Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T15:39:15.371Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:39:15.370Z] [INFO] [stderr] 
+[2026-07-01T15:39:15.371Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:39:15.371Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/index.ts
+[2026-07-01T15:39:15.371Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:39:15.371Z] [INFO] [stderr] ERROR [124:11] 'weeklyReflection' is declared but its value is never read.
+[2026-07-01T15:39:15.371Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:15.371Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts">
+[2026-07-01T15:39:18.318Z] [INFO] [stderr] [0m→ [0mRead packages/learning-engine/src/types.ts[90m [offset=173][0m
+[2026-07-01T15:39:18.749Z] [INFO] [stderr] [0m→ [0mRead packages/learning-engine/src/LearningEngine.ts[90m [offset=119, limit=20][0m
+[2026-07-01T15:39:24.707Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts
+[2026-07-01T15:39:24.707Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:39:24.707Z] [INFO] [stderr]      dueReviews,
+[2026-07-01T15:39:24.707Z] [INFO] [stderr] @@ -137,8 +137,9 @@
+[2026-07-01T15:39:24.707Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts
+[2026-07-01T15:39:24.707Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts
+[2026-07-01T15:39:24.707Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/LearningEngine.ts
+[2026-07-01T15:39:24.707Z] [INFO] [stderr] +    weeklyReflection,
+[2026-07-01T15:39:24.707Z] [INFO] [stderr]      nextBestActions,
+[2026-07-01T15:39:24.706Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:24.707Z] [INFO] [stderr]      dailyPlan,
+[2026-07-01T15:39:24.707Z] [INFO] [stderr]      skillBalance,
+[2026-07-01T15:39:24.707Z] [INFO] [stderr]    }
+[2026-07-01T15:39:24.707Z] [INFO] [stderr]  }
+[2026-07-01T15:39:24.707Z] [INFO] [stderr]      studyConsistency,
+[2026-07-01T15:39:24.707Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:24.707Z] [INFO] [stderr]      bandProgressHistory,
+[2026-07-01T15:39:24.707Z] [INFO] [stderr] 
+[2026-07-01T15:39:28.179Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/types.ts
+[2026-07-01T15:39:28.179Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+[2026-07-01T15:39:28.179Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:39:28.179Z] [INFO] [stderr]    dueReviews: DueReviews
+[2026-07-01T15:39:28.179Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+[2026-07-01T15:39:28.179Z] [INFO] [stderr]    dailyPlan: DailyPlan
+[2026-07-01T15:39:28.179Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+[2026-07-01T15:39:28.179Z] [INFO] [stderr] @@ -211,7 +211,8 @@
+[2026-07-01T15:39:28.179Z] [INFO] [stderr]    nextBestActions: NextBestAction[]
+[2026-07-01T15:39:28.179Z] [INFO] [stderr]    studyConsistency: StudyConsistency
+[2026-07-01T15:39:28.179Z] [INFO] [stderr] +  weeklyReflection: WeeklyReflection
+[2026-07-01T15:39:28.179Z] [INFO] [stderr]    bandProgressHistory: BandProgress[]
+[2026-07-01T15:39:28.179Z] [INFO] [stderr]    skillBalance: SkillBalance[]
+[2026-07-01T15:39:28.179Z] [INFO] [stderr] 
+[2026-07-01T15:39:28.179Z] [INFO] [stderr]  }
+[2026-07-01T15:39:28.180Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [✓] Implement profile/ module - band progress, exam countdown, streak
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [✓] Implement progress/ module - exercise accuracy, weekly progress, skill sessions
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [✓] Implement weakness-detection/ module - weak skills, repeated mistakes
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [✓] Create packages/learning-engine/ package.json, tsconfig.json, and types
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [✓] Implement analytics/ module - streak, consistency, weekly reflection
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [✓] Implement daily-plan/ module - study plan generation, priority
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [✓] Create LearningEngine orchestrator and public API (src/index.ts)
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [✓] Implement review-scheduler/ module - SM-2 spaced repetition, due reviews
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [✓] Implement next-best-action/ module - next best action calculation
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [•] Typecheck and verify compilation
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:32.440Z] [INFO] [stderr] [ ] Add unit tests for learning engine modules
+[2026-07-01T15:39:38.063Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:38.063Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/learning-engine exec tsc --noEmit 2>&1 || true
+[2026-07-01T15:39:38.063Z] [INFO] [stderr] (no output)
+[2026-07-01T15:39:42.480Z] [INFO] [stderr] [0m$ [0mnpx tsc --noEmit 2>&1
+[2026-07-01T15:39:42.480Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:42.480Z] [INFO] [stderr] (no output)
+[2026-07-01T15:39:46.619Z] [INFO] [stderr] 540:  speakingSessions: speakingSessionSchema,
+[2026-07-01T15:39:46.619Z] [INFO] [stderr] 140:export const speakingSessionSchema = z.object({
+[2026-07-01T15:39:46.619Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:46.619Z] [INFO] [stderr] 511:  speakingSessions: z.array(speakingSessionSchema).default([]),
+[2026-07-01T15:39:46.619Z] [INFO] [stderr] [0m$ [0mgrep -n "speakingSessionSchema" /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/src/schema.ts | head -5
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 93:  totalQuestions: z.number().default(0),
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 96:  timeSpentMinutes: z.number().default(0),
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 101:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] [0m$ [0mgrep -n "selfRating\|durationSeconds\|createdAt\|timeSpentSeconds\|timeSpentMinutes\|estimatedBand\|score\|totalQuestions" /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/src/schema.ts | head -30
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 128:  timeSpentMinutes: z.number().default(0),
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 118:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 52:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 81:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 117:  selfRating: z.number().default(0),
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 111:  score: z.number().default(0),
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 147:  selfRating: z.number().default(0),
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 167:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 137:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 129:  estimatedBand: z.number().default(0),
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 231:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 181:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 196:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 245:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 261:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 154:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 277:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 346:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 293:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 323:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 376:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 310:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 414:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 361:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 438:  score: z.number().default(0),
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 146:  durationSeconds: z.number().default(0),
+[2026-07-01T15:39:47.107Z] [INFO] [stderr] 220:  createdAt: isoStringSchema,
+[2026-07-01T15:39:47.190Z] [INFO] [stdout] Let me verify the storage package exports the needed types.
+[2026-07-01T15:39:51.125Z] [INFO] [stderr] [0m→ [0mRead packages/storage/package.json
+[2026-07-01T15:39:54.650Z] [INFO] [stderr] [0m$ [0mgrep -n "test" /Users/phamthanhhung/Desktop/MyProject/IELTS/package.json | head -20
+[2026-07-01T15:39:54.651Z] [INFO] [stderr] 11:    "test": "vitest run",
+[2026-07-01T15:39:54.651Z] [INFO] [stderr] 12:    "test:watch": "vitest",
+[2026-07-01T15:39:54.651Z] [INFO] [stderr] 31:    "@testing-library/user-event": "^14.6.1",
+[2026-07-01T15:39:54.651Z] [INFO] [stderr] 47:    "vitest": "^3.1.1"
+[2026-07-01T15:39:54.651Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:54.651Z] [INFO] [stderr] 29:    "@testing-library/jest-dom": "^6.6.3",
+[2026-07-01T15:39:54.651Z] [INFO] [stderr] 30:    "@testing-library/react": "^16.3.0",
+[2026-07-01T15:39:54.651Z] [INFO] [stderr] [0m
+[2026-07-01T15:39:54.857Z] [INFO] [stderr] [0m→ [0mRead vitest.config.ts
+[2026-07-01T15:40:03.631Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:40:03.631Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:03.631Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:03.631Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/vitest.config.ts
+[2026-07-01T15:40:07.616Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:07.616Z] [INFO] [stderr] (no output)
+[2026-07-01T15:40:07.616Z] [INFO] [stderr] [0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__
+[2026-07-01T15:40:07.666Z] [INFO] [stdout] Now let me write the tests. I'll create comprehensive tests for the core modules.
+[2026-07-01T15:40:19.427Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:40:19.427Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/__tests__/ProfileService.test.ts
+[2026-07-01T15:40:19.427Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] LSP errors detected in this file, please fix:
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] 
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] ERROR [62:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:40:26.434Z] [INFO] [stderr] ERROR [53:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+[2026-07-01T15:40:34.036Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/__tests__/WeaknessDetectionService.test.ts
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] 
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] ERROR [53:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] ERROR [62:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:40:34.037Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/__tests__/NextBestActionService.test.ts
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] ERROR [62:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] 
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] ERROR [53:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:39.653Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:40:39.652Z] [INFO] [stderr] ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/__tests__/DailyPlanService.test.ts
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] 
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] ERROR [62:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:48.596Z] [INFO] [stderr] ERROR [53:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/__tests__/AnalyticsService.test.ts
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] 
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] ERROR [53:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] ERROR [62:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:54.343Z] [INFO] [stderr] ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] 
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] LSP errors detected in other files:
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] ERROR [53:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] <diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] ERROR [62:11] 'today' is declared but its value is never read.
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] </diagnostics>
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] [0m
+[2026-07-01T15:40:59.415Z] [INFO] [stderr] [0m← [0mWrite packages/learning-engine/src/__tests__/LearningEngine.test.ts
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] @@ -49,11 +49,10 @@
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-01T15:41:03.797Z] [INFO] [stderr]  
+[2026-07-01T15:41:03.797Z] [INFO] [stderr]  })
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] -  const reviews = []
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] +  const reviews: any[] = []
+[2026-07-01T15:41:03.797Z] [INFO] [stderr]  it('does not return mastered vocabulary', () => {
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] -  const today = new Date()
+[2026-07-01T15:41:03.797Z] [INFO] [stderr]    expect(due.find(d => d.vocabulary.id === 'v1')).toBeTruthy()
+[2026-07-01T15:41:03.797Z] [INFO] [stderr]    const due = service.getDueVocabularyReviews(vocab, reviews)
+[2026-07-01T15:41:03.797Z] [INFO] [stderr]    const vocab = [createVocab('v1', 'mastered')]
+[2026-07-01T15:41:03.797Z] [INFO] [stderr]  })
+[2026-07-01T15:41:03.797Z] [INFO] [stderr]  
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] [0m
+[2026-07-01T15:41:03.797Z] [INFO] [stderr] 
+[2026-07-01T15:41:03.797Z] [INFO] [stderr]    expect(due.length).toBe(0)
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-01T15:41:05.139Z] [INFO] [stderr]  })
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] @@ -57,11 +57,10 @@
+[2026-07-01T15:41:05.139Z] [INFO] [stderr]    expect(due.length).toBe(0)
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] +  const reviews: any[] = []
+[2026-07-01T15:41:05.139Z] [INFO] [stderr]    const vocab = [createVocab('v1', 'new')]
+[2026-07-01T15:41:05.139Z] [INFO] [stderr]  it('creates initial review entry for new vocabulary without review', () => {
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] -  const today = new Date()
+[2026-07-01T15:41:05.139Z] [INFO] [stderr]    expect(due[0].review.vocabularyId).toBe('v1')
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] -  const reviews = []
+[2026-07-01T15:41:05.139Z] [INFO] [stderr]    const due = service.getDueVocabularyReviews(vocab, reviews)
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] [0m
+[2026-07-01T15:41:05.139Z] [INFO] [stderr]    expect(due.length).toBe(1)
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] 
+[2026-07-01T15:41:05.139Z] [INFO] [stderr]  
+[2026-07-01T15:41:05.139Z] [INFO] [stderr]  
+[2026-07-01T15:41:05.139Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+[2026-07-01T15:41:08.162Z] [INFO] [stderr] [0m→ [0mRead packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts[90m [offset=56, limit=15][0m
+[2026-07-01T15:41:11.680Z] [INFO] [stdout] Let me run the tests to verify everything compiles and passes.
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] 
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]  ✓ src/__tests__/DailyPlanService.test.ts (8 tests) 2ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/learning-engine exec vitest run 2>&1
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]  ✓ src/__tests__/ReviewSchedulerService.test.ts (10 tests) 8ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] [0m
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]      → expected 1 to be +0 // Object.is equality
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]  ❯ src/__tests__/AnalyticsService.test.ts (7 tests | 1 failed) 15ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]  ✓ src/__tests__/NextBestActionService.test.ts (7 tests) 2ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]    ✓ AnalyticsService > calculates study consistency with active days 1ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]    ✓ AnalyticsService > calculates skill balance with pro-rated hours 0ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]    ✓ AnalyticsService > builds weekly history for last 7 days 0ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]  ✓ src/__tests__/WeaknessDetectionService.test.ts (4 tests) 2ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]    × AnalyticsService > returns zero streak when no dates 3ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]    ✓ AnalyticsService > generates band progress history from mock tests 9ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]    ✓ AnalyticsService > returns zero balances when no data 0ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]    ✓ AnalyticsService > generates weekly reflection with improvements 0ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]  ✓ src/__tests__/ProfileService.test.ts (7 tests) 2ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] 
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]  FAIL  src/__tests__/AnalyticsService.test.ts > AnalyticsService > returns zero streak when no dates
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] 
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]  ✓ src/__tests__/LearningEngine.test.ts (5 tests) 2ms
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] [32m- Expected[39m
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] [32m- 0[39m
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] 
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] [31m+ Received[39m
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] [31m+ 1[39m
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] 
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] AssertionError: expected 1 to be +0 // Object.is equality
+[2026-07-01T15:41:13.152Z] [INFO] [stderr]  ❯ src/__tests__/AnalyticsService.test.ts:25:39
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]      23|     const consistency = service.getStudyConsistency([], [])
+[2026-07-01T15:41:13.153Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]      25|     expect(consistency.longestStreak).toBe(0)
+[2026-07-01T15:41:13.153Z] [INFO] [stderr] 
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]        |                                       ^
+[2026-07-01T15:41:13.152Z] [INFO] [stderr] 
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]      24|     expect(consistency.currentStreak).toBe(0)
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]  Test Files  1 failed | 6 passed (7)
+[2026-07-01T15:41:13.153Z] [INFO] [stderr] 
+[2026-07-01T15:41:13.153Z] [INFO] [stderr] 
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]      27|   })
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]       Tests  1 failed | 47 passed (48)
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]    Start at  22:41:12
+[2026-07-01T15:41:13.153Z] [INFO] [stderr] undefined
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]      26|     expect(consistency.totalStudyDays).toBe(0)
+[2026-07-01T15:41:13.153Z] [INFO] [stderr]    Duration  333ms (transform 169ms, setup 0ms, collect 294ms, tests 34ms, environment 1ms, prepare 397ms)
+[2026-07-01T15:41:13.153Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine:
+[2026-07-01T15:41:13.153Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run
+[2026-07-01T15:41:13.153Z] [INFO] [stderr] [0m
+[2026-07-01T15:41:13.153Z] [INFO] [stderr] 
+[2026-07-01T15:41:17.613Z] [INFO] [stderr] [0m→ [0mRead packages/learning-engine/src/analytics/AnalyticsService.ts[90m [offset=55, limit=25][0m
+[2026-07-01T15:41:27.335Z] [INFO] [stderr] [0m
+[2026-07-01T15:41:27.335Z] [INFO] [stderr] [0m← [0mEdit packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:41:27.335Z] [INFO] [stderr] ===================================================================
+[2026-07-01T15:41:27.335Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:41:27.335Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:41:27.335Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-01T15:41:27.335Z] [INFO] [stderr]    }
+[2026-07-01T15:41:27.335Z] [INFO] [stderr] @@ -46,9 +46,9 @@
+[2026-07-01T15:41:27.335Z] [INFO] [stderr]  
+[2026-07-01T15:41:27.336Z] [INFO] [stderr]  }
+[2026-07-01T15:41:27.336Z] [INFO] [stderr]  let longestStreak = 0
+[2026-07-01T15:41:27.336Z] [INFO] [stderr] -let tempStreak = 1
+[2026-07-01T15:41:27.336Z] [INFO] [stderr]  for (let i = 1; i < sortedDays.length; i++) {
+[2026-07-01T15:41:27.336Z] [INFO] [stderr] +let tempStreak = sortedDays.length > 0 ? 1 : 0
+[2026-07-01T15:41:27.336Z] [INFO] [stderr]    const prevDate = new Date(sortedDays[i - 1])
+[2026-07-01T15:41:27.336Z] [INFO] [stderr]    const currDate = new Date(sortedDays[i])
+[2026-07-01T15:41:27.336Z] [INFO] [stderr]    const diffMs = prevDate.getTime() - currDate.getTime()
+[2026-07-01T15:41:27.336Z] [INFO] [stderr] [0m
+[2026-07-01T15:41:27.336Z] [INFO] [stderr] 
+[2026-07-01T15:41:31.186Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/learning-engine exec vitest run 2>&1
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]  ✓ src/__tests__/NextBestActionService.test.ts (7 tests) 2ms
+[2026-07-01T15:41:31.186Z] [INFO] [stderr] 
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]  ✓ src/__tests__/AnalyticsService.test.ts (7 tests) 8ms
+[2026-07-01T15:41:31.186Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]  ✓ src/__tests__/DailyPlanService.test.ts (8 tests) 3ms
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]  ✓ src/__tests__/LearningEngine.test.ts (5 tests) 4ms
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]  ✓ src/__tests__/ReviewSchedulerService.test.ts (10 tests) 10ms
+[2026-07-01T15:41:31.186Z] [INFO] [stderr] 
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]  ✓ src/__tests__/WeaknessDetectionService.test.ts (4 tests) 4ms
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]       Tests  48 passed (48)
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]    Duration  274ms (transform 187ms, setup 0ms, collect 300ms, tests 33ms, environment 1ms, prepare 366ms)
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]  ✓ src/__tests__/ProfileService.test.ts (7 tests) 2ms
+[2026-07-01T15:41:31.186Z] [INFO] [stderr] [0m
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]  Test Files  7 passed (7)
+[2026-07-01T15:41:31.186Z] [INFO] [stderr]    Start at  22:41:30
+[2026-07-01T15:41:34.611Z] [INFO] [stdout] All 48 tests pass. Let me also verify the full project type checks.
+[2026-07-01T15:41:35.604Z] [INFO] [stderr] (no output)
+[2026-07-01T15:41:35.604Z] [INFO] [stderr] [0m
+[2026-07-01T15:41:35.604Z] [INFO] [stderr] [0m$ [0mpnpm exec tsc --noEmit 2>&1
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Implement weakness-detection/ module - weak skills, repeated mistakes
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Implement next-best-action/ module - next best action calculation
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Implement progress/ module - exercise accuracy, weekly progress, skill sessions
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Implement review-scheduler/ module - SM-2 spaced repetition, due reviews
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Implement analytics/ module - streak, consistency, weekly reflection
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Implement daily-plan/ module - study plan generation, priority
+[2026-07-01T15:41:41.446Z] [INFO] [stderr] [✓] Create packages/learning-engine/ package.json, tsconfig.json, and types
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [0m
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Implement profile/ module - band progress, exam countdown, streak
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Create LearningEngine orchestrator and public API (src/index.ts)
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Typecheck and verify compilation
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [✓] Add unit tests for learning engine modules
+[2026-07-01T15:41:41.447Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] ### New Package: `packages/learning-engine/` (`@ielts/learning-engine`)
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] 
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] **Refactoring complete.** Here's a summary of what was created:
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] **7 modular subservices** following clean architecture:
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] | Module | Service | Responsibilities |
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] | `weakness-detection/` | `WeaknessDetectionService` | Weak skill ranking by accuracy, repeated mistake patterns, mistake category summaries |
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] 
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] 
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] |--------|---------|-----------------|
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] | `daily-plan/` | `DailyPlanService` | Daily plan generation with weak-skill + due-review priority, weekly schedule |
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] | `progress/` | `ProgressService` | Weekly progress, skill-by-skill accuracy, exercise accuracy, trend detection |
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] | `analytics/` | `AnalyticsService` | Study consistency/streak, weekly reflection, skill balance %, band progress history |
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] **Orchestrator:** `LearningEngine` class with `computeFullState()` that returns a complete `LearningEngineState` + individual getters for each concern. Provides the interface consumers (dashboard, AI tutor, exercise generator) need.
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] | `profile/` | `ProfileService` | Band progress %, exam countdown, study streak calculation |
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] | `next-best-action/` | `NextBestActionService` | Priority-sorted next actions (mock test, review, weak skill practice, fallback) |
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] | `review-scheduler/` | `ReviewSchedulerService` | SM-2 spaced repetition, due vocabulary/mistake reviews, review stats |
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] 
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] **Tests:** 48 tests across 7 test files — all passing. Coverage includes edge cases (empty data, mastered vocabulary, past exams, broken streaks, etc.).
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] 
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] **Verification:**
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] - `vitest run` — 48/48 passed
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] - `tsc --noEmit` — clean (no errors)
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] 
+[2026-07-01T15:41:47.725Z] [INFO] [stdout] - Package registered in pnpm workspace as `@ielts/learning-engine`
+[2026-07-01T15:41:47.951Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-01T15:41:47.952Z] [INFO] Output:
+Let me start by exploring the existing codebase structure, especially the learning engine and related packages.
+The learning-engine package doesn't exist yet. Let me inspect what's already in the repo to understand the current architecture better.
+Now let me look at the storage package interfaces and models that the learning engine will need.
+Let me also check the existing review service and understand the existing utils/spaced-repetition module that needs to be moved.
+Now I have a thorough understanding of the existing codebase. Let me plan and create the learning-engine package with all required submodules.
+Let me install the package and set up the workspace properly.
+Now let me create all the submodule services. I'll write them in parallel since they're independent.
+Now let me create the remaining modules in parallel.
+Now let me create the Analytics module.
+Now let me create the LearningEngine orchestrator and main index.ts.
+Let me verify the storage package exports the needed types.
+Now let me write the tests. I'll create comprehensive tests for the core modules.
+Let me run the tests to verify everything compiles and passes.
+All 48 tests pass. Let me also verify the full project type checks.
+**Refactoring complete.** Here's a summary of what was created:
+
+### New Package: `packages/learning-engine/` (`@ielts/learning-engine`)
+
+**7 modular subservices** following clean architecture:
+
+| Module | Service | Responsibilities |
+|--------|---------|-----------------|
+| `profile/` | `ProfileService` | Band progress %, exam countdown, study streak calculation |
+| `progress/` | `ProgressService` | Weekly progress, skill-by-skill accuracy, exercise accuracy, trend detection |
+| `weakness-detection/` | `WeaknessDetectionService` | Weak skill ranking by accuracy, repeated mistake patterns, mistake category summaries |
+| `review-scheduler/` | `ReviewSchedulerService` | SM-2 spaced repetition, due vocabulary/mistake reviews, review stats |
+| `daily-plan/` | `DailyPlanService` 
+[2026-07-01T15:41:47.952Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m→ [0mSkill "systematic-debugging"
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"packages/learning-engine"}
+[0m
+[0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine -type f 2>/dev/null | sort
+(no output)
+[0m
+[0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS/packages -maxdepth 1 -type d | sort
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ui
+[0m
+[0m$ [0mls -la /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/
+total 0
+drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:49 .
+drwxr-xr-x  27 phamthanhhung  staff  864  1 Jul 22:26 ..
+drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:39 ai
+drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:39 storage
+drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:51 ui
+[0m
+[0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS -type f -name "*.ts" -o -name "*.tsx" | grep -E "(learning|journey|engine|progress|profile|weakness|scheduler|analytics)" | grep -v node_modules | grep -v "\.next" | grep -v "out" | sort | head -60
+/Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/analytics/Analytics.tsx
+[0m
+[0m→ [0mRead .
+[0m→ [0mRead src
+[0m
+[0m$ [0mls -la /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai/ && ls -la /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/ && ls -la /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ui/
+total 8
+drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:39 .
+drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:49 ..
+drwxr-xr-x@  3 phamthanhhung  staff   96  1 Jul 14:39 node_modules
+-rw-r--r--@  1 phamthanhhung  staff  189  1 Jul 14:36 package.json
+drwxr-xr-x@ 10 phamthanhhung  staff  320  1 Jul 22:12 src
+total 8
+drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:39 .
+drwxr-xr-x@  5 phamthanhhung  staff  160  1 Jul 14:49 ..
+drwxr-xr-x@  3 phamthanhhung  staff   96  1 Jul 14:39 node_modules
+-rw-r--r--@  1 phamthanhhung  staff  304  1 Jul 22:17 package.json
+drwxr-xr-x@ 12 phamthanhhung  staff  384  1 Jul 22:18 src
+total 8
+drwxr-xr-x@ 5 phamthanhhung  staff  160  1 Jul 14:51 .
+drwxr-xr-x@ 5 phamthanhhung  staff  160  1 Jul 14:49 ..
+drwxr-xr-x@ 3 phamthanhhung  staff   96  1 Jul 14:51 node_modules
+-rw-r--r--@ 1 phamthanhhung  staff  192  1 Jul 14:49 package.json
+drwxr-xr-x@ 4 phamthanhhung  staff  128  1 Jul 14:49 src
+[0m
+[0m→ [0mRead pnpm-workspace.yaml
+[0m• [0mExplore learning engine consumers[90m Explore Agent[0m
+[0m✓ [0mExplore learning engine consumers[90m Explore Agent[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"packages/storage/src/index.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"packages/storage/src/repositories"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/index.ts"}
+[0m→ [0mRead packages/storage/src/repositories/index.ts
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/models/aiTutorModels.ts"}
+[0m→ [0mRead packages/storage/src/repositories/ProgressRepository.ts
+[0m→ [0mRead packages/storage/src/repositories/BaseRepository.ts
+[0m→ [0mRead packages/storage/src/repositories/SessionRepository.ts
+[0m→ [0mRead packages/storage/src/reviewService.ts
+[0m→ [0mRead src/utils/spaced-repetition.ts
+[0m→ [0mRead packages/storage/package.json
+[0m
+[0m# [0mTodos
+[•] Create packages/learning-engine/ package.json, tsconfig.json, and types
+[ ] Implement profile/ module - band progress, exam countdown, streak
+[ ] Implement progress/ module - exercise accuracy, weekly progress, skill sessions
+[ ] Implement weakness-detection/ module - weak skills, repeated mistakes
+[ ] Implement review-scheduler/ module - SM-2 spaced repetition, due reviews
+[ ] Implement daily-plan/ module - study plan generation, priority
+[ ] Implement next-best-action/ module - next best action calculation
+[ ] Implement analytics/ module - streak, consistency, weekly reflection
+[ ] Create LearningEngine orchestrator and public API (src/index.ts)
+[ ] Register in pnpm workspace and add tests
+[0m
+[0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/{profile,progress,weakness-detection,review-scheduler,daily-plan,next-best-action,analytics,errors} && mkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__
+(no output)
+[0m
+[0m← [0mWrite packages/learning-engine/package.json
+Wrote file successfully.
+[0m
+[0m← [0mWrite packages/learning-engine/tsconfig.json
+Wrote file successfully.
+[0m
+[0m← [0mWrite packages/learning-engine/src/types.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts">
+ERROR [15:3] 'AppSettings' is declared but never used.
+ERROR [16:8] Cannot find module '@ielts/storage' or its corresponding type declarations.
+</diagnostics>
+[0m
+[0m← [0mEdit packages/learning-engine/src/types.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+@@ -11,9 +11,8 @@
+   ListeningPracticeSession,
+   MockTestEntry,
+   ProgressRecord,
+   TopicProgress,
+-  AppSettings,
+ } from '@ielts/storage'
+ 
+ export type ISOString = string
+ 
+
+[0m
+[0m$ [0mpnpm install
+Scope: all 6 workspace projects
+Progress: resolved 1, reused 0, downloaded 0, added 0
+[WARN] deprecated recharts@2.15.4: 1.x and 2.x branches are no longer active. Bump to Recharts v3 to receive latest features and bugfixes. See https://github.com/recharts/recharts/wiki/3.0-migration-guide
+Progress: resolved 263, reused 213, downloaded 0, added 0
+Progress: resolved 471, reused 401, downloaded 0, added 0
+[WARN] 3 deprecated subdependencies found: glob@11.1.0, source-map@0.8.0-beta.0, whatwg-encoding@3.1.1
+Already up to date
+Progress: resolved 669, reused 599, downloaded 0, added 0, done
+
+Done in 3.3s using pnpm v11.1.2
+[0m
+[0m← [0mWrite packages/learning-engine/src/errors/LearningEngineError.ts
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create packages/learning-engine/ package.json, tsconfig.json, and types
+[•] Implement profile/ module - band progress, exam countdown, streak
+[ ] Implement progress/ module - exercise accuracy, weekly progress, skill sessions
+[ ] Implement weakness-detection/ module - weak skills, repeated mistakes
+[ ] Implement review-scheduler/ module - SM-2 spaced repetition, due reviews
+[ ] Implement daily-plan/ module - study plan generation, priority
+[ ] Implement next-best-action/ module - next best action calculation
+[ ] Implement analytics/ module - streak, consistency, weekly reflection
+[ ] Create LearningEngine orchestrator and public API (src/index.ts)
+[ ] Register in pnpm workspace and add tests
+[0m
+[0m← [0mWrite packages/learning-engine/src/profile/ProfileService.ts
+Wrote file successfully.
+[0m
+[0m← [0mWrite packages/learning-engine/src/profile/index.ts
+Wrote file successfully.
+[0m
+[0m← [0mWrite packages/learning-engine/src/progress/ProgressService.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts">
+ERROR [9:3] 'TopicProgress' is declared but never used.
+ERROR [17:3] 'StudySkill' is declared but never used.
+ERROR [101:11] 'mockAccuracy' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/progress/index.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts">
+ERROR [9:3] 'TopicProgress' is declared but never used.
+ERROR [17:3] 'StudySkill' is declared but never used.
+ERROR [101:11] 'mockAccuracy' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+@@ -5,17 +5,15 @@
+   WritingSession,
+   SpeakingSession,
+   MockTestEntry,
+   ProgressRecord,
+-  TopicProgress,
+ } from '@ielts/storage'
+ import type {
+   SkillProgress,
+   ExerciseAccuracy,
+   WeeklyProgress,
+   DayProgress,
+   ISOString,
+-  StudySkill,
+ } from '../types'
+ 
+ export class ProgressService {
+   getWeeklyProgress(
+
+[0m
+[0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+@@ -95,9 +95,8 @@
+   accuracy: speakingAccuracy,
+   trend: this.determineTrend(progressRecords, 'speaking'),
+ })
+ 
+-const mockAccuracy = this.computeMockTestAccuracy(mockTests)
+ skills.push({
+   skill: 'vocabulary',
+   sessions: 0,
+   totalMinutes: 0,
+
+[0m
+[0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+@@ -3,9 +3,8 @@
+   ReadingPracticeSession,
+   ListeningPracticeSession,
+   WritingSession,
+   SpeakingSession,
+-  MockTestEntry,
+   ProgressRecord,
+ } from '@ielts/storage'
+ import type {
+   SkillProgress,
+
+[0m
+[0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+@@ -53,9 +53,8 @@
+   readingPractices: ReadingPracticeSession[],
+   listeningPractices: ListeningPracticeSession[],
+   writingSessions: WritingSession[],
+   speakingSessions: SpeakingSession[],
+-  mockTests: MockTestEntry[],
+   progressRecords: ProgressRecord[],
+ ): SkillProgress[] {
+   const skills: SkillProgress[] = []
+ 
+
+[0m
+[0m← [0mEdit packages/learning-engine/src/progress/ProgressService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/progress/ProgressService.ts
+@@ -234,14 +234,8 @@
+   const avgRating = sessions.reduce((s, sp) => s + (sp.selfRating || 0), 0) / sessions.length
+   return Math.round((avgRating / 10) * 100)
+ }
+ 
+-private computeMockTestAccuracy(tests: MockTestEntry[]): number {
+-  if (tests.length === 0) return 0
+-  const avgBand = tests.reduce((s, t) => s + (t.overallBand || 0), 0) / tests.length
+-  return Math.round((avgBand / 9) * 100)
+-}
+-
+ private determineTrend(
+   records: ProgressRecord[],
+   skill: string,
+ ): 'improving' | 'declining' | 'stable' {
+
+[0m
+[0m→ [0mRead packages/learning-engine/src/progress/ProgressService.ts
+[0m
+[0m← [0mWrite packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts">
+ERROR [168:49] 'mistakeExample' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/weakness-detection/index.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts">
+ERROR [168:49] 'mistakeExample' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mEdit packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/weakness-detection/WeaknessDetectionService.ts
+@@ -164,9 +164,9 @@
+   if (accuracy >= 60) return 'medium'
+   return 'high'
+ }
+ 
+-private generateSuggestion(skill: StudySkill, mistakeExample: string): string {
++private generateSuggestion(skill: StudySkill, _mistakeExample: string): string {
+   const suggestions: Record<StudySkill, string> = {
+     reading: 'Practice skimming and scanning techniques. Focus on understanding question types.',
+     listening: 'Practice active listening with transcripts. Focus on signpost language.',
+     writing: 'Review essay structure and practice with timed writing tasks.',
+
+[0m
+[0m← [0mWrite packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts">
+ERROR [6:55] 'ISOString' is declared but never used.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/review-scheduler/index.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts">
+ERROR [6:55] 'ISOString' is declared but never used.
+</diagnostics>
+[0m
+[0m← [0mEdit packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+@@ -2,9 +2,9 @@
+   VocabularyEntry,
+   VocabReviewEntry,
+   MistakeEntry,
+ } from '@ielts/storage'
+-import type { DueReviews, VocabReviewDue, MistakeDue, ISOString } from '../types'
++import type { DueReviews, VocabReviewDue, MistakeDue } from '../types'
+ 
+ type ReviewRating = 'again' | 'hard' | 'good' | 'easy'
+ 
+ export class ReviewSchedulerService {
+
+[0m
+[0m← [0mWrite packages/learning-engine/src/daily-plan/DailyPlanService.ts
+Wrote file successfully.
+[0m
+[0m← [0mWrite packages/learning-engine/src/daily-plan/index.ts
+Wrote file successfully.
+[0m
+[0m← [0mWrite packages/learning-engine/src/next-best-action/NextBestActionService.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts">
+ERROR [1:66] 'ISOString' is declared but never used.
+ERROR [8:5] 'now' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/next-best-action/index.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts">
+ERROR [1:66] 'ISOString' is declared but never used.
+ERROR [8:5] 'now' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mEdit packages/learning-engine/src/next-best-action/NextBestActionService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+@@ -1,5 +1,5 @@
+-import type { NextBestAction, StudySkill, WeakSkill, DueReviews, ISOString } from '../types'
++import type { NextBestAction, StudySkill, WeakSkill, DueReviews } from '../types'
+ 
+ export class NextBestActionService {
+   calculateNextBestActions(
+     weakSkills: WeakSkill[],
+
+[0m
+[0m← [0mEdit packages/learning-engine/src/next-best-action/NextBestActionService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/next-best-action/NextBestActionService.ts
+@@ -4,9 +4,8 @@
+ calculateNextBestActions(
+   weakSkills: WeakSkill[],
+   dueReviews: DueReviews,
+   profile: { studyStreak: number; examCountdownDays: number | null },
+-  now: Date = new Date(),
+ ): NextBestAction[] {
+   const actions: NextBestAction[] = []
+ 
+   if (profile.examCountdownDays !== null && profile.examCountdownDays <= 7) {
+
+[0m
+[0m→ [0mRead packages/learning-engine/src/next-best-action/NextBestActionService.ts[90m [limit=12][0m
+[0m
+[0m← [0mWrite packages/learning-engine/src/analytics/AnalyticsService.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts">
+ERROR [3:3] 'ReadingSession' is declared but never used.
+ERROR [4:3] 'ListeningSession' is declared but never used.
+ERROR [31:13] 'task' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/analytics/index.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts">
+ERROR [3:3] 'ReadingSession' is declared but never used.
+ERROR [4:3] 'ListeningSession' is declared but never used.
+ERROR [31:13] 'task' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mEdit packages/learning-engine/src/analytics/AnalyticsService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+@@ -1,8 +1,6 @@
+ import type {
+   MockTestEntry,
+-  ReadingSession,
+-  ListeningSession,
+   WritingSession,
+   SpeakingSession,
+   ReadingPracticeSession,
+   ListeningPracticeSession,
+
+[0m
+[0m← [0mEdit packages/learning-engine/src/analytics/AnalyticsService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+@@ -24,11 +24,9 @@
+ ): StudyConsistency {
+   const allDays = new Set<string>()
+   for (const d of sessionDates) allDays.add(d.slice(0, 10))
+   for (const d of taskDates) {
+-    const day = d.slice(0, 10)
+-    const task = { date: day }
+-    allDays.add(day)
++    allDays.add(d.slice(0, 10))
+   }
+ 
+   const sortedDays = Array.from(allDays).sort().reverse()
+ 
+
+[0m
+[0m→ [0mRead packages/learning-engine/src/analytics/AnalyticsService.ts[90m [limit=35][0m
+[0m
+[0m← [0mWrite packages/learning-engine/src/LearningEngine.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts">
+ERROR [124:11] 'weeklyReflection' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/index.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts">
+ERROR [124:11] 'weeklyReflection' is declared but its value is never read.
+</diagnostics>
+[0m
+[0m→ [0mRead packages/learning-engine/src/types.ts[90m [offset=173][0m
+[0m→ [0mRead packages/learning-engine/src/LearningEngine.ts[90m [offset=119, limit=20][0m
+[0m
+[0m← [0mEdit packages/learning-engine/src/LearningEngine.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/LearningEngine.ts
+@@ -137,8 +137,9 @@
+     dueReviews,
+     dailyPlan,
+     nextBestActions,
+     studyConsistency,
++    weeklyReflection,
+     bandProgressHistory,
+     skillBalance,
+   }
+ }
+
+[0m
+[0m← [0mEdit packages/learning-engine/src/types.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/types.ts
+@@ -211,7 +211,8 @@
+   dueReviews: DueReviews
+   dailyPlan: DailyPlan
+   nextBestActions: NextBestAction[]
+   studyConsistency: StudyConsistency
++  weeklyReflection: WeeklyReflection
+   bandProgressHistory: BandProgress[]
+   skillBalance: SkillBalance[]
+ }
+
+[0m
+[0m# [0mTodos
+[✓] Create packages/learning-engine/ package.json, tsconfig.json, and types
+[✓] Implement profile/ module - band progress, exam countdown, streak
+[✓] Implement progress/ module - exercise accuracy, weekly progress, skill sessions
+[✓] Implement weakness-detection/ module - weak skills, repeated mistakes
+[✓] Implement review-scheduler/ module - SM-2 spaced repetition, due reviews
+[✓] Implement daily-plan/ module - study plan generation, priority
+[✓] Implement next-best-action/ module - next best action calculation
+[✓] Implement analytics/ module - streak, consistency, weekly reflection
+[✓] Create LearningEngine orchestrator and public API (src/index.ts)
+[•] Typecheck and verify compilation
+[ ] Add unit tests for learning engine modules
+[0m
+[0m$ [0mpnpm --filter @ielts/learning-engine exec tsc --noEmit 2>&1 || true
+(no output)
+[0m
+[0m$ [0mnpx tsc --noEmit 2>&1
+(no output)
+[0m
+[0m$ [0mgrep -n "speakingSessionSchema" /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/src/schema.ts | head -5
+140:export const speakingSessionSchema = z.object({
+511:  speakingSessions: z.array(speakingSessionSchema).default([]),
+540:  speakingSessions: speakingSessionSchema,
+[0m
+[0m$ [0mgrep -n "selfRating\|durationSeconds\|createdAt\|timeSpentSeconds\|timeSpentMinutes\|estimatedBand\|score\|totalQuestions" /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/src/schema.ts | head -30
+52:  createdAt: isoStringSchema,
+81:  createdAt: isoStringSchema,
+93:  totalQuestions: z.number().default(0),
+96:  timeSpentMinutes: z.number().default(0),
+101:  createdAt: isoStringSchema,
+111:  score: z.number().default(0),
+117:  selfRating: z.number().default(0),
+118:  createdAt: isoStringSchema,
+128:  timeSpentMinutes: z.number().default(0),
+129:  estimatedBand: z.number().default(0),
+137:  createdAt: isoStringSchema,
+146:  durationSeconds: z.number().default(0),
+147:  selfRating: z.number().default(0),
+154:  createdAt: isoStringSchema,
+167:  createdAt: isoStringSchema,
+181:  createdAt: isoStringSchema,
+196:  createdAt: isoStringSchema,
+220:  createdAt: isoStringSchema,
+231:  createdAt: isoStringSchema,
+245:  createdAt: isoStringSchema,
+261:  createdAt: isoStringSchema,
+277:  createdAt: isoStringSchema,
+293:  createdAt: isoStringSchema,
+310:  createdAt: isoStringSchema,
+323:  createdAt: isoStringSchema,
+346:  createdAt: isoStringSchema,
+361:  createdAt: isoStringSchema,
+376:  createdAt: isoStringSchema,
+414:  createdAt: isoStringSchema,
+438:  score: z.number().default(0),
+[0m
+[0m→ [0mRead packages/storage/package.json
+[0m
+[0m$ [0mgrep -n "test" /Users/phamthanhhung/Desktop/MyProject/IELTS/package.json | head -20
+11:    "test": "vitest run",
+12:    "test:watch": "vitest",
+29:    "@testing-library/jest-dom": "^6.6.3",
+30:    "@testing-library/react": "^16.3.0",
+31:    "@testing-library/user-event": "^14.6.1",
+47:    "vitest": "^3.1.1"
+[0m
+[0m→ [0mRead vitest.config.ts
+[0m
+[0m← [0mWrite packages/learning-engine/vitest.config.ts
+Wrote file successfully.
+[0m
+[0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__
+(no output)
+[0m
+[0m← [0mWrite packages/learning-engine/src/__tests__/ProfileService.test.ts
+Wrote file successfully.
+[0m
+[0m← [0mWrite packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+Wrote file successfully.
+
+LSP errors detected in this file, please fix:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+ERROR [53:11] 'today' is declared but its value is never read.
+ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+ERROR [62:11] 'today' is declared but its value is never read.
+ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/__tests__/WeaknessDetectionService.test.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+ERROR [53:11] 'today' is declared but its value is never read.
+ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+ERROR [62:11] 'today' is declared but its value is never read.
+ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/__tests__/NextBestActionService.test.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+ERROR [53:11] 'today' is declared but its value is never read.
+ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+ERROR [62:11] 'today' is declared but its value is never read.
+ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/__tests__/DailyPlanService.test.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+ERROR [53:11] 'today' is declared but its value is never read.
+ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+ERROR [62:11] 'today' is declared but its value is never read.
+ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/__tests__/AnalyticsService.test.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+ERROR [53:11] 'today' is declared but its value is never read.
+ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+ERROR [62:11] 'today' is declared but its value is never read.
+ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+</diagnostics>
+[0m
+[0m← [0mWrite packages/learning-engine/src/__tests__/LearningEngine.test.ts
+Wrote file successfully.
+
+LSP errors detected in other files:
+<diagnostics file="/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts">
+ERROR [53:11] 'today' is declared but its value is never read.
+ERROR [55:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [57:56] Variable 'reviews' implicitly has an 'any[]' type.
+ERROR [62:11] 'today' is declared but its value is never read.
+ERROR [64:11] Variable 'reviews' implicitly has type 'any[]' in some locations where its type cannot be determined.
+ERROR [66:56] Variable 'reviews' implicitly has an 'any[]' type.
+</diagnostics>
+[0m
+[0m← [0mEdit packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+@@ -49,11 +49,10 @@
+   expect(due.find(d => d.vocabulary.id === 'v1')).toBeTruthy()
+ })
+ 
+ it('does not return mastered vocabulary', () => {
+-  const today = new Date()
+   const vocab = [createVocab('v1', 'mastered')]
+-  const reviews = []
++  const reviews: any[] = []
+ 
+   const due = service.getDueVocabularyReviews(vocab, reviews)
+   expect(due.length).toBe(0)
+ })
+
+[0m
+[0m← [0mEdit packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts
+@@ -57,11 +57,10 @@
+   expect(due.length).toBe(0)
+ })
+ 
+ it('creates initial review entry for new vocabulary without review', () => {
+-  const today = new Date()
+   const vocab = [createVocab('v1', 'new')]
+-  const reviews = []
++  const reviews: any[] = []
+ 
+   const due = service.getDueVocabularyReviews(vocab, reviews)
+   expect(due.length).toBe(1)
+   expect(due[0].review.vocabularyId).toBe('v1')
+
+[0m
+[0m→ [0mRead packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts[90m [offset=56, limit=15][0m
+[0m
+[0m$ [0mpnpm --filter @ielts/learning-engine exec vitest run 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine
+
+ ✓ src/__tests__/NextBestActionService.test.ts (7 tests) 2ms
+ ✓ src/__tests__/DailyPlanService.test.ts (8 tests) 2ms
+ ✓ src/__tests__/ProfileService.test.ts (7 tests) 2ms
+ ✓ src/__tests__/WeaknessDetectionService.test.ts (4 tests) 2ms
+ ✓ src/__tests__/ReviewSchedulerService.test.ts (10 tests) 8ms
+ ❯ src/__tests__/AnalyticsService.test.ts (7 tests | 1 failed) 15ms
+   ✓ AnalyticsService > calculates study consistency with active days 1ms
+   × AnalyticsService > returns zero streak when no dates 3ms
+     → expected 1 to be +0 // Object.is equality
+   ✓ AnalyticsService > builds weekly history for last 7 days 0ms
+   ✓ AnalyticsService > calculates skill balance with pro-rated hours 0ms
+   ✓ AnalyticsService > returns zero balances when no data 0ms
+   ✓ AnalyticsService > generates band progress history from mock tests 9ms
+   ✓ AnalyticsService > generates weekly reflection with improvements 0ms
+ ✓ src/__tests__/LearningEngine.test.ts (5 tests) 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/__tests__/AnalyticsService.test.ts > AnalyticsService > returns zero streak when no dates
+AssertionError: expected 1 to be +0 // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 1[39m
+
+ ❯ src/__tests__/AnalyticsService.test.ts:25:39
+     23|     const consistency = service.getStudyConsistency([], [])
+     24|     expect(consistency.currentStreak).toBe(0)
+     25|     expect(consistency.longestStreak).toBe(0)
+       |                                       ^
+     26|     expect(consistency.totalStudyDays).toBe(0)
+     27|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 47 passed (48)
+   Start at  22:41:12
+   Duration  333ms (transform 169ms, setup 0ms, collect 294ms, tests 34ms, environment 1ms, prepare 397ms)
+
+undefined
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run
+[0m
+[0m→ [0mRead packages/learning-engine/src/analytics/AnalyticsService.ts[90m [offset=55, limit=25][0m
+[0m
+[0m← [0mEdit packages/learning-engine/src/analytics/AnalyticsService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/src/analytics/AnalyticsService.ts
+@@ -46,9 +46,9 @@
+   }
+ }
+ 
+ let longestStreak = 0
+-let tempStreak = 1
++let tempStreak = sortedDays.length > 0 ? 1 : 0
+ for (let i = 1; i < sortedDays.length; i++) {
+   const prevDate = new Date(sortedDays[i - 1])
+   const currDate = new Date(sortedDays[i])
+   const diffMs = prevDate.getTime() - currDate.getTime()
+
+[0m
+[0m$ [0mpnpm --filter @ielts/learning-engine exec vitest run 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine
+
+ ✓ src/__tests__/NextBestActionService.test.ts (7 tests) 2ms
+ ✓ src/__tests__/AnalyticsService.test.ts (7 tests) 8ms
+ ✓ src/__tests__/ProfileService.test.ts (7 tests) 2ms
+ ✓ src/__tests__/DailyPlanService.test.ts (8 tests) 3ms
+ ✓ src/__tests__/WeaknessDetectionService.test.ts (4 tests) 4ms
+ ✓ src/__tests__/ReviewSchedulerService.test.ts (10 tests) 10ms
+ ✓ src/__tests__/LearningEngine.test.ts (5 tests) 4ms
+
+ Test Files  7 passed (7)
+      Tests  48 passed (48)
+   Start at  22:41:30
+   Duration  274ms (transform 187ms, setup 0ms, collect 300ms, tests 33ms, environment 1ms, prepare 366ms)
+[0m
+[0m$ [0mpnpm exec tsc --noEmit 2>&1
+(no output)
+[0m
+[0m# [0mTodos
+[✓] Create packages/learning-engine/ package.json, tsconfig.json, and types
+[✓] Implement profile/ module - band progress, exam countdown, streak
+[✓] Implement progress/ module - exercise accuracy, weekly progress, skill sessions
+[✓] Implement weakness-detection/ module - weak skills, repeated mistakes
+[✓] Implement review-scheduler/ module - SM-2 spaced repetition, due reviews
+[✓] Implement daily-plan/ module - study plan generation, priority
+[✓] Implement next-best-action/ module - next best action calculation
+[✓] Implement analytics/ module - streak, consistency, weekly reflection
+[✓] Create LearningEngine orchestrator and public API (src/index.ts)
+[✓] Typecheck and verify compilation
+[✓] Add unit tests for learning engine modules
+[0m
+[2026-07-01T15:41:47.952Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T15:41:47.955Z] [INFO] Task completed successfully

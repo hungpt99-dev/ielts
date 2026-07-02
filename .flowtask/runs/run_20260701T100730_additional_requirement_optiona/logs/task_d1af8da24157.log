@@ -1,0 +1,626 @@
+[2026-07-01T11:03:15.991Z] [INFO] Task started: Perform End-to-End Manual Testing and Documentation of Public API Integration
+[2026-07-01T11:03:15.993Z] [INFO] [info] [output-plan] [{"action":"create","target":"docs/public-api-integration.md","description":"User documentation for public API integration feature","validationMethod":"file_exists"},{"action":"modify","target":"docs/release-notes.md","description":"Add release notes entry for public API integration","validationMethod":"file_diff"}]
+[2026-07-01T11:03:16.669Z] [INFO] [stderr] [0m
+[2026-07-01T11:03:16.669Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-01T11:03:16.669Z] [INFO] [stderr] [0m
+[2026-07-01T11:03:22.964Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T11:03:22.964Z] [INFO] [stderr] [•] Explore project structure and understand implemented public API features
+[2026-07-01T11:03:22.964Z] [INFO] [stderr] [ ] Create docs/public-api-integration.md with usage docs, limitations, licensing rules
+[2026-07-01T11:03:22.964Z] [INFO] [stderr] [ ] Update docs/release-notes.md with public API integration entry
+[2026-07-01T11:03:22.964Z] [INFO] [stderr] [0m
+[2026-07-01T11:03:22.964Z] [INFO] [stderr] [ ] Test user API key input and CORS error handling
+[2026-07-01T11:03:22.964Z] [INFO] [stderr] [ ] Manually test public API import flow (search, preview, import, classification, AI generation)
+[2026-07-01T11:03:28.812Z] [INFO] [stderr] [0m• [0mExplore public API features[90m Explore Agent[0m
+[2026-07-01T11:05:01.820Z] [INFO] [stderr] [0m✓ [0mExplore public API features[90m Explore Agent[0m
+[2026-07-01T11:05:05.326Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/types.ts
+[2026-07-01T11:05:05.629Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-01T11:05:05.983Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/ImportedContentManager.tsx
+[2026-07-01T11:05:09.917Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/api/import.ts
+[2026-07-01T11:05:10.251Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/ai/classify.ts
+[2026-07-01T11:05:10.557Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts
+[2026-07-01T11:05:10.921Z] [INFO] [stderr] [0m→ [0mRead src/features/publicApiIntegration/components/ApiKeySettings.tsx
+[2026-07-01T11:05:11.215Z] [INFO] [stderr] [0m→ [0mRead src/pages/PublicApiImportPage.tsx
+[2026-07-01T11:05:15.209Z] [INFO] [stderr] [0m
+[2026-07-01T11:05:15.209Z] [INFO] [stderr] package.json
+[2026-07-01T11:05:15.209Z] [INFO] [stderr] [0m$ [0mls package.json
+[2026-07-01T11:05:15.209Z] [INFO] [stderr] [0m
+[2026-07-01T11:05:15.598Z] [INFO] [stderr] architecture.md
+[2026-07-01T11:05:15.598Z] [INFO] [stderr] extension-loading.md
+[2026-07-01T11:05:15.597Z] [INFO] [stderr] [0m$ [0mls docs/
+[2026-07-01T11:05:15.598Z] [INFO] [stderr] [0m
+[2026-07-01T11:05:15.598Z] [INFO] [stderr] extension-architecture.md
+[2026-07-01T11:05:15.598Z] [INFO] [stderr] schema.md
+[2026-07-01T11:05:15.598Z] [INFO] [stderr] ReminderLimitations.md
+[2026-07-01T11:05:18.824Z] [INFO] [stderr] [0m$ [0mcat package.json | grep -E '"test|"vitest|"jest"
+[2026-07-01T11:05:18.824Z] [INFO] [stderr] [0m
+[2026-07-01T11:05:18.824Z] [INFO] [stderr] zsh:1: unmatched '
+[2026-07-01T11:05:19.273Z] [INFO] [stderr] "scripts": {
+[2026-07-01T11:05:19.273Z] [INFO] [stderr]     "build": "tsc -b && vite build",
+[2026-07-01T11:05:19.273Z] [INFO] [stderr]     "dev": "vite",
+[2026-07-01T11:05:19.273Z] [INFO] [stderr] [0m$ [0mcat package.json | grep -E '"scripts"' -A 20
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "test:watch": "vitest",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]   },
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "typecheck": "tsc -b --noEmit"
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "@hookform/resolvers": "^5.4.0",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "dexie": "^4.4.4",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "test": "vitest run",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "react-dom": "^19.1.0",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "react": "^19.1.0",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "lint": "eslint .",
+[2026-07-01T11:05:19.273Z] [INFO] [stderr]     "preview": "vite preview",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "react-router-dom": "^7.5.0",
+[2026-07-01T11:05:19.275Z] [INFO] [stderr]   "devDependencies": {
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "react-hook-form": "^7.80.0",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]   "dependencies": {
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "idb": "^8.0.2",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "zod": "^4.4.3"
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]     "recharts": "^2.15.3",
+[2026-07-01T11:05:19.274Z] [INFO] [stderr]   },
+[2026-07-01T11:05:19.275Z] [INFO] [stderr] [0m
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] [0m$ [0mnpx vitest run --reporter=verbose 2>&1 | tail -100
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] act(() => {
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] act(() => {
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] An update to VocabularyReview inside a test was not wrapped in act(...).
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] });
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] act(() => {
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] });
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] /* assert on the output */
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > opens at version 3 11ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Table indexes > indexes vocabulary by topic, status, difficulty 1ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr] });
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > registers all v1 stores 2ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > upgrades from version 1 to version 2 preserving v1 data 7ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > registers all v2 and v3 stores (v1 + new tables) 1ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects vocabulary with invalid status 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Table indexes > indexes tasks by date, category, isDone 1ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > has exactly 26 tables 1ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Table indexes > indexes v2 tables with tags and isFavorite where applicable 1ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects vocabulary with invalid difficulty 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects items with non-object type 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects grammarNote with missing explanation 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects aiContent with invalid type 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects items with missing id 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects mistake with invalid skill 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects vocabulary with missing word 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects progress record with non-numeric value 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects writing prompt with invalid taskType 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with non-numeric version 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with missing export timestamp 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects usefulPhrase with invalid difficulty 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import of completely invalid JSON 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with missing version field 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with a non-array table field 0ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with missing settings 0ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > DatabaseError provides clear messages > DatabaseError preserves the cause 0ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > DatabaseError provides clear messages > creates a DatabaseError with a meaningful message 0ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import of null 0ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > ValidationError provides clear messages > creates a ValidationError with a meaningful message 0ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import partial failure recovery > returns ImportSummary with skipped items in merge mode 2ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import partial failure recovery > returns ImportSummary with failure details when import has invalid items 5ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Reset and clear operations > clearAll clears all tables but leaves settings intact 3ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Database singleton lifecycle > getDb returns the same instance 1ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Reset and clear operations > resetAll clears all tables and settings 7ms
+[2026-07-01T11:05:24.019Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects speaking question with invalid part 0ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Data persistence across db lifecycle > persists data after close and reopen 3ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > reports corrupted vocabulary item in import summary 9ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeGetAll returns empty array for empty table 1ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Error wrapping via safeDb > wraps unknown errors in DatabaseError 3ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with empty object 0ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Database singleton lifecycle > remains open after repeated destroy and recreate 6ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeGetById returns undefined for non-existent item 1ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeCount returns zero for empty table 1ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safePut overwrites existing item with same id 2ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Bulk operations validate all items > safeBulkAdd rejects if any item is invalid 0ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows loading spinner initially 32ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Data persistence across db lifecycle > persists data in v2 tables after close and reopen 3ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeRemove on non-existent id does not throw 1ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Bulk operations validate all items > safeBulkPut accepts all valid items 2ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Database singleton lifecycle > destroyDb creates a new instance on next getDb 1ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows empty state when all words are mastered 4ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeRemove deletes an existing item 1ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows all four rating buttons 10ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > does not crash when adding duplicate id with safeAdd 1ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows meaning and requires revealing word in meaning-to-word mode 21ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows review card with word and meaning for word-to-meaning mode 8ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > calls put with updated review entry when rating 14ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows empty state when no reviews due 8ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]       Tests  191 passed (191)
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  Test Files  6 passed (6)
+[2026-07-01T11:05:24.020Z] [INFO] [stderr] 
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > moves to next card after rating 21ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows review stats 4ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]    Start at  18:05:22
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]  ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows completion screen when all words reviewed 15ms
+[2026-07-01T11:05:24.020Z] [INFO] [stderr]    Duration  948ms (transform 297ms, setup 395ms, collect 701ms, tests 346ms, environment 2.09s, prepare 313ms)
+[2026-07-01T11:05:24.020Z] [INFO] [stderr] [0m
+[2026-07-01T11:05:28.528Z] [INFO] [stderr] 
+[2026-07-01T11:05:28.528Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > detects TypeError with NetworkError message 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > detects TypeError with "Failed to fetch" message 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > returns false for DOMException abort 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > returns false for regular errors 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true for status 429 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr] [0m$ [0mnpx vitest run --reporter=verbose src/features/publicApiIntegration 2>&1
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true when message mentions rate 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns false for other errors 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true when message mentions quota 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true for status 403 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > returns false for non-error values 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true when message mentions API key 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns false for other errors 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true when message mentions auth 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true for status 401 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isNetworkError > returns true for TypeError 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isNetworkError > returns false for other error types 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns true for status 503 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies CORS errors 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns true for status 500 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns false for client errors 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies rate limit errors 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns true for status 502 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns false when no status 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies network errors 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > returns CORS error info with suggestions 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > returns rate limit error info 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > returns auth error info 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true when message mentions throttle 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > defaults to unknown 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies auth errors 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > handles unknown errors gracefully 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides CORS-related suggestions 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies server errors 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > handles null error 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides retry suggestions for rate-limit 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides network suggestions 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > rejects unclear or restrictive licenses 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > returns server error info 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides key config suggestions for auth 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > checkSourceUsability > marks no-cors sources as unusable 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > accepts known open licenses 1ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > checkSourceUsability > marks direct sources as usable 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > rejects empty string 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > checkSourceUsability > warns about sources requiring API keys 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > rejects unrecognized non-open licenses 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > createImportEntry > applies overrides correctly 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides retry suggestions for server error 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > accepts case-insensitive Creative Commons mentions 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > createImportEntry > creates entry with all required fields 1ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContent > imports content successfully with valid license 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > accepts open license mentions with warning 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContent > rejects import when license is invalid 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContent > returns error when database save fails 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContentBatch > imports batch of content items 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContentBatch > handles mixed success/failure in batch 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns classified data on success 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns error on network failure 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > extracts JSON from markdown code blocks 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns error when AI returns empty content 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > handles 401 from AI API 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > handles 429 from AI API 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyAndSave > classifies content and saves to database 1ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > accepts Public Domain mentions case-insensitively 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyAndSave > returns error when classification fails 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns error when no API key is configured 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns error on invalid JSON response 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > extractVocabulary > returns extracted vocabulary on success 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > extractVocabulary > returns error when no words extracted 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateReadingQuestions > returns error on API failure 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateGrammarExercises > returns grammar exercises on success 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateListeningExercise > returns gap-fill exercise on success 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateSpeakingPrompts > returns speaking prompts on success 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateMistakeReviewTasks > returns mistake review tasks on success 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyAndSave > returns error when DB save fails 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > returns default config when nothing is stored 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateReadingQuestions > returns questions on success 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateWritingIdeas > returns writing ideas on success 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > handles localStorage errors gracefully 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > handles partial config updates 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateApiKey (YouTube) > accepts valid YouTube key 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > stores and retrieves AI config 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > safeApiFetch > returns data on successful fetch 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > clears stored AI config 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > safeApiFetch > returns CORS error info on network failure 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateApiKey (YouTube) > rejects empty key 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > API key encoding/decoding > handles decoding errors gracefully 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > safeApiFetch > returns error info on HTTP error 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > API key encoding/decoding > encodes and decodes API keys 33ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateApiKey (YouTube) > rejects non-AIza key for YouTube 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > parses Gutendex book results 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > throws error when YouTube API key is missing 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > parses Datamuse word results 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Public API source configurations > YouTube is the only source requiring an API key 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Public API source configurations > YouTube is the only no-cors source 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > parses Wikipedia search results 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Public API source configurations > has direct-cors sources in categories that support browser access 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Integration: full import flow > classifies imported content via AI after import 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > handles Wikipedia API error 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > CORS and error handling integration > marks YouTube as unusable from browser 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > PublicApiImportedContent model > has all required fields from the schema 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Integration: full import flow > completes full import flow with Wikipedia content 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateApiKey (YouTube) > accepts any key for non-YouTube sources 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > CORS and error handling integration > suggests alternatives for CORS-restricted sources 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI API HTTP error handling > handles 429 from AI API 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Integration: full import flow > rejects import with restrictive license 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI API HTTP error handling > handles 401 from AI API 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > CORS and error handling integration > guides user on auth errors for YouTube 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > CORS and error handling integration > handles rate limit errors with source-specific message 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search UI logic > YouTube source requires API key to be searchable 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]  Test Files  2 passed (2)
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search UI logic > disables search when query is empty 0ms
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > API key encoding/decoding > handles encoding errors gracefully 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI API HTTP error handling > handles network errors in AI calls 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr] 
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]       Tests  114 passed (114)
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]    Duration  449ms (transform 81ms, setup 57ms, collect 93ms, tests 45ms, environment 335ms, prepare 79ms)
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search UI logic > source without API key is searchable with any query 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr]    Start at  18:05:27
+[2026-07-01T11:05:28.528Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Public API source configurations > has all required fields for each source 0ms
+[2026-07-01T11:05:28.529Z] [INFO] [stderr] [0m
+[2026-07-01T11:05:32.626Z] [INFO] [stderr] [✓] Explore project structure and understand implemented public API features
+[2026-07-01T11:05:32.627Z] [INFO] [stderr] [•] Manually test public API import flow (search, preview, import, classification, AI generation)
+[2026-07-01T11:05:32.627Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-01T11:05:32.627Z] [INFO] [stderr] [0m
+[2026-07-01T11:05:32.627Z] [INFO] [stderr] [ ] Update docs/release-notes.md with public API integration entry
+[2026-07-01T11:05:32.627Z] [INFO] [stderr] [ ] Create docs/public-api-integration.md with usage docs, limitations, licensing rules
+[2026-07-01T11:05:32.627Z] [INFO] [stderr] [ ] Test user API key input and CORS error handling
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] Dev server starting...
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] [0m$ [0mnpx vite --host 0.0.0.0 --port 5173 2>&1 &
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] echo "Dev server starting..."
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] 
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] curl -s -o /dev/null -w "%{http_code}" http://localhost:5173/ 2>/dev/null || echo "Not ready yet"
+[2026-07-01T11:06:06.633Z] [INFO] [stderr]   VITE v6.4.3  ready in 155 ms
+[2026-07-01T11:06:06.633Z] [INFO] [stderr]   ➜  Local:   http://localhost:5173/
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] 6:05:36 pm [vite] (client) Re-optimizing dependencies because lockfile has changed
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] sleep 3
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] Check if server is up
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] echo "Check if server is up"
+[2026-07-01T11:06:06.634Z] [INFO] [stderr] shell tool terminated command after exceeding timeout 30000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+[2026-07-01T11:06:06.634Z] [INFO] [stderr] 
+[2026-07-01T11:06:06.634Z] [INFO] [stderr] [0m
+[2026-07-01T11:06:06.633Z] [INFO] [stderr]   ➜  Network: http://192.168.1.5:5173/
+[2026-07-01T11:06:06.633Z] [INFO] [stderr] 
+[2026-07-01T11:06:06.634Z] [INFO] [stderr] </shell_metadata>
+[2026-07-01T11:06:06.634Z] [INFO] [stderr] 200
+[2026-07-01T11:06:06.634Z] [INFO] [stderr] <shell_metadata>
+[2026-07-01T11:06:09.650Z] [INFO] [stderr] [0m→ [0mSkill "webapp-testing"
+[2026-07-01T11:06:28.136Z] [INFO] [stderr] [93m[1m! [0mpermission requested: external_directory (/tmp/*); auto-rejecting
+[2026-07-01T11:06:28.141Z] [INFO] [stderr] [91m[1mError: [0mThe user rejected permission to use this specific tool call.
+[2026-07-01T11:06:28.141Z] [INFO] [stderr] [0m✗ [0mWrite /tmp/test_public_api.py failed
+[2026-07-01T11:06:28.562Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-01T11:06:28.562Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m# [0mTodos
+[•] Explore project structure and understand implemented public API features
+[ ] Manually test public API import flow (search, preview, import, classification, AI generation)
+[ ] Test user API key input and CORS error handling
+[ ] Create docs/public-api-integration.md with usage docs, limitations, licensing rules
+[ ] Update docs/release-notes.md with public API integration entry
+[0m
+[0m• [0mExplore public API features[90m Explore Agent[0m
+[0m✓ [0mExplore public API features[90m Explore Agent[0m
+[0m→ [0mRead src/features/publicApiIntegration/types.ts
+[0m→ [0mRead src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[0m→ [0mRead src/features/publicApiIntegration/components/ImportedContentManager.tsx
+[0m→ [0mRead src/features/publicApiIntegration/api/import.ts
+[0m→ [0mRead src/features/publicApiIntegration/ai/classify.ts
+[0m→ [0mRead src/features/publicApiIntegration/utils/errorHandling.ts
+[0m→ [0mRead src/features/publicApiIntegration/components/ApiKeySettings.tsx
+[0m→ [0mRead src/pages/PublicApiImportPage.tsx
+[0m
+[0m$ [0mls package.json
+package.json
+[0m
+[0m$ [0mls docs/
+architecture.md
+extension-architecture.md
+extension-loading.md
+ReminderLimitations.md
+schema.md
+[0m
+[0m$ [0mcat package.json | grep -E '"test|"vitest|"jest"
+zsh:1: unmatched '
+[0m
+[0m$ [0mcat package.json | grep -E '"scripts"' -A 20
+"scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "dexie": "^4.4.4",
+    "idb": "^8.0.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.80.0",
+    "react-router-dom": "^7.5.0",
+    "recharts": "^2.15.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+[0m
+[0m$ [0mnpx vitest run --reporter=verbose 2>&1 | tail -100
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to VocabularyReview inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > opens at version 3 11ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > registers all v1 stores 2ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > registers all v2 and v3 stores (v1 + new tables) 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > has exactly 26 tables 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > AppDatabase versioning and schema > upgrades from version 1 to version 2 preserving v1 data 7ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Table indexes > indexes vocabulary by topic, status, difficulty 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Table indexes > indexes tasks by date, category, isDone 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Table indexes > indexes v2 tables with tags and isFavorite where applicable 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects vocabulary with invalid difficulty 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects vocabulary with invalid status 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects vocabulary with missing word 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects grammarNote with missing explanation 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects mistake with invalid skill 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects writing prompt with invalid taskType 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects speaking question with invalid part 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects items with non-object type 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects items with missing id 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects progress record with non-numeric value 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects aiContent with invalid type 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Validation rejects corrupted data > rejects usefulPhrase with invalid difficulty 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with missing version field 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with non-numeric version 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with missing export timestamp 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with missing settings 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with a non-array table field 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import of completely invalid JSON 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import with empty object 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > rejects import of null 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import validation rejects corrupted backup data > reports corrupted vocabulary item in import summary 9ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > DatabaseError provides clear messages > creates a DatabaseError with a meaningful message 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > DatabaseError provides clear messages > DatabaseError preserves the cause 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > ValidationError provides clear messages > creates a ValidationError with a meaningful message 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Error wrapping via safeDb > wraps unknown errors in DatabaseError 3ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import partial failure recovery > returns ImportSummary with failure details when import has invalid items 5ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Import partial failure recovery > returns ImportSummary with skipped items in merge mode 2ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Reset and clear operations > resetAll clears all tables and settings 7ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Reset and clear operations > clearAll clears all tables but leaves settings intact 3ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Database singleton lifecycle > getDb returns the same instance 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Database singleton lifecycle > destroyDb creates a new instance on next getDb 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Database singleton lifecycle > remains open after repeated destroy and recreate 6ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Data persistence across db lifecycle > persists data after close and reopen 3ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Data persistence across db lifecycle > persists data in v2 tables after close and reopen 3ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeGetAll returns empty array for empty table 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeGetById returns undefined for non-existent item 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeCount returns zero for empty table 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > does not crash when adding duplicate id with safeAdd 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safePut overwrites existing item with same id 2ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeRemove deletes an existing item 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Safe operations handle corrupted IndexedDB gracefully > safeRemove on non-existent id does not throw 1ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Bulk operations validate all items > safeBulkAdd rejects if any item is invalid 0ms
+ ✓ src/tests/storage/DatabaseMigration.test.ts > Bulk operations validate all items > safeBulkPut accepts all valid items 2ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows loading spinner initially 32ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows empty state when no reviews due 8ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows empty state when all words are mastered 4ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows review card with word and meaning for word-to-meaning mode 8ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows meaning and requires revealing word in meaning-to-word mode 21ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows all four rating buttons 10ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > moves to next card after rating 21ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > calls put with updated review entry when rating 14ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows review stats 4ms
+ ✓ src/pages/VocabularyReview.test.tsx > VocabularyReview > shows completion screen when all words reviewed 15ms
+
+ Test Files  6 passed (6)
+      Tests  191 passed (191)
+   Start at  18:05:22
+   Duration  948ms (transform 297ms, setup 395ms, collect 701ms, tests 346ms, environment 2.09s, prepare 313ms)
+[0m
+[0m$ [0mnpx vitest run --reporter=verbose src/features/publicApiIntegration 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS
+
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > detects TypeError with "Failed to fetch" message 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > detects TypeError with NetworkError message 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > returns false for DOMException abort 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > returns false for regular errors 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isCorsError > returns false for non-error values 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true for status 429 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true when message mentions rate 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true when message mentions quota 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns true when message mentions throttle 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isRateLimitError > returns false for other errors 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true for status 401 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true for status 403 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true when message mentions API key 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns true when message mentions auth 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isAuthError > returns false for other errors 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isNetworkError > returns true for TypeError 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isNetworkError > returns false for other error types 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns true for status 500 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns true for status 502 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns true for status 503 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns false for client errors 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > isServerError > returns false when no status 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies CORS errors 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies rate limit errors 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies auth errors 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies network errors 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > classifies server errors 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > classifyError > defaults to unknown 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > returns CORS error info with suggestions 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > returns rate limit error info 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > returns auth error info 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > returns server error info 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > handles unknown errors gracefully 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildErrorMessage > handles null error 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides CORS-related suggestions 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides retry suggestions for rate-limit 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides key config suggestions for auth 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides network suggestions 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > buildSuggestions > provides retry suggestions for server error 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > checkSourceUsability > marks no-cors sources as unusable 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > checkSourceUsability > marks direct sources as usable 0ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts > checkSourceUsability > warns about sources requiring API keys 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > accepts known open licenses 1ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > rejects unclear or restrictive licenses 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > accepts case-insensitive Creative Commons mentions 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > accepts Public Domain mentions case-insensitively 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > accepts open license mentions with warning 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > rejects unrecognized non-open licenses 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateLicense > rejects empty string 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > createImportEntry > creates entry with all required fields 1ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > createImportEntry > applies overrides correctly 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContent > imports content successfully with valid license 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContent > rejects import when license is invalid 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContent > returns error when database save fails 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContentBatch > imports batch of content items 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > importPublicApiContentBatch > handles mixed success/failure in batch 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns classified data on success 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns error on network failure 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns error on invalid JSON response 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns error when AI returns empty content 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > returns error when no API key is configured 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > extracts JSON from markdown code blocks 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > handles 401 from AI API 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyContent > handles 429 from AI API 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyAndSave > classifies content and saves to database 1ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyAndSave > returns error when classification fails 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > classifyAndSave > returns error when DB save fails 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > extractVocabulary > returns extracted vocabulary on success 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > extractVocabulary > returns error when no words extracted 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateReadingQuestions > returns questions on success 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateReadingQuestions > returns error on API failure 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateListeningExercise > returns gap-fill exercise on success 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateSpeakingPrompts > returns speaking prompts on success 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateWritingIdeas > returns writing ideas on success 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateGrammarExercises > returns grammar exercises on success 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI generation functions > generateMistakeReviewTasks > returns mistake review tasks on success 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > returns default config when nothing is stored 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > stores and retrieves AI config 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > clears stored AI config 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > handles partial config updates 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI config storage > handles localStorage errors gracefully 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > safeApiFetch > returns data on successful fetch 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > safeApiFetch > returns error info on HTTP error 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > safeApiFetch > returns CORS error info on network failure 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > API key encoding/decoding > encodes and decodes API keys 33ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > API key encoding/decoding > handles encoding errors gracefully 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > API key encoding/decoding > handles decoding errors gracefully 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateApiKey (YouTube) > accepts valid YouTube key 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateApiKey (YouTube) > rejects empty key 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateApiKey (YouTube) > rejects non-AIza key for YouTube 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > validateApiKey (YouTube) > accepts any key for non-YouTube sources 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > parses Wikipedia search results 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > parses Datamuse word results 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > parses Gutendex book results 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > throws error when YouTube API key is missing 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search API response parsing > handles Wikipedia API error 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Public API source configurations > has all required fields for each source 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Public API source configurations > YouTube is the only source requiring an API key 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Public API source configurations > YouTube is the only no-cors source 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Public API source configurations > has direct-cors sources in categories that support browser access 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > PublicApiImportedContent model > has all required fields from the schema 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Integration: full import flow > completes full import flow with Wikipedia content 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Integration: full import flow > rejects import with restrictive license 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Integration: full import flow > classifies imported content via AI after import 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > CORS and error handling integration > marks YouTube as unusable from browser 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > CORS and error handling integration > suggests alternatives for CORS-restricted sources 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > CORS and error handling integration > guides user on auth errors for YouTube 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > CORS and error handling integration > handles rate limit errors with source-specific message 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI API HTTP error handling > handles 401 from AI API 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI API HTTP error handling > handles 429 from AI API 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > AI API HTTP error handling > handles network errors in AI calls 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search UI logic > source without API key is searchable with any query 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search UI logic > YouTube source requires API key to be searchable 0ms
+ ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts > Search UI logic > disables search when query is empty 0ms
+
+ Test Files  2 passed (2)
+      Tests  114 passed (114)
+   Start at  18:05:27
+   Duration  449ms (transform 81ms, setup 57ms, collect 93ms, tests 45ms, environment 335ms, prepare 79ms)
+[0m
+[0m# [0mTodos
+[✓] Explore project structure and understand implemented public API features
+[•] Manually test public API import flow (search, preview, import, classification, AI generation)
+[ ] Test user API key input and CORS error handling
+[ ] Create docs/public-api-integration.md with usage docs, limitations, licensing rules
+[ ] Update docs/release-notes.md with public API integration entry
+[0m
+[0m$ [0mnpx vite --host 0.0.0.0 --port 5173 2>&1 &
+echo "Dev server starting..."
+sleep 3
+echo "Check if server is up"
+curl -s -o /dev/null -w "%{http_code}" http://localhost:5173/ 2>/dev/null || echo "Not ready yet"
+Dev server starting...
+6:05:36 pm [vite] (client) Re-optimizing dependencies because lockfile has changed
+
+  VITE v6.4.3  ready in 155 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://192.168.1.5:5173/
+Check if server is up
+200
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 30000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m→ [0mSkill "webapp-testing"
+[93m[1m! [0mpermission requested: external_directory (/tmp/*); auto-rejecting
+[0m✗ [0mWrite /tmp/test_public_api.py failed
+[91m[1mError: [0mThe user rejected permission to use this specific tool call.
+[2026-07-01T11:06:28.562Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-01T11:06:28.565Z] [INFO] Task completed successfully

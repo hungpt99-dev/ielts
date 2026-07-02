@@ -1,0 +1,267 @@
+{
+  "title": "Update Documentation and README to Align with Industry Standards",
+  "summary": "Revise project documentation and README to reflect software features, codebase, and AI coding agent usage according to software industry standards.",
+  "tasks": [
+    {
+      "title": "Analyze Current README and Documentation for Improvement Areas",
+      "description": "Review the existing README.md and any project documentation files to identify outdated, incomplete, or unclear sections related to project features, code structure, and AI coding agent usage. Document specific areas needing updates or additions.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "A list of sections and points in README.md and docs identified for update or improvement",
+        "Clear notes on missing or unclear information about features, code, and AI coding agent"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A detailed analysis report listing all areas in README and documentation that require updates or enhancements to meet software industry standards.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": ".flowtask/README_update_analysis.md",
+          "description": "Analysis report of current README and documentation improvement areas",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Current README.md and project documentation files",
+      "targetFiles": [
+        "README.md"
+      ],
+      "targetArtifacts": [
+        ".flowtask/README_update_analysis.md"
+      ],
+      "evidence": [
+        "README.md file reviewed",
+        "analysis report file created"
+      ],
+      "verificationCommand": "ls .flowtask/README_update_analysis.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a clear scope and focus for the documentation update tasks."
+    },
+    {
+      "title": "Outline Updated README Structure Including Features, Code, and AI Coding Agent",
+      "description": "Create a detailed outline for the updated README.md that includes sections on project overview, features, code architecture, AI coding agent capabilities, installation, usage, and contribution guidelines. Ensure the outline aligns with software industry best practices for open source project documentation.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze Current README and Documentation for Improvement Areas"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "A comprehensive README outline covering all key aspects of the project",
+        "Outline includes clear headings and subheadings for features, codebase, and AI coding agent"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A structured README outline document ready for content writing and integration.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": ".flowtask/README_update_outline.md",
+          "description": "Structured outline for the updated README.md",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "writing",
+      "actionType": "generate",
+      "inputContext": "Analysis report from previous task",
+      "targetFiles": [
+        "README.md"
+      ],
+      "targetArtifacts": [
+        ".flowtask/README_update_outline.md"
+      ],
+      "evidence": [
+        "README outline file created"
+      ],
+      "verificationCommand": "ls .flowtask/README_update_outline.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a clear blueprint for writing the updated README content."
+    },
+    {
+      "title": "Draft Updated README Content with Industry Standard Sections",
+      "description": "Write the updated README.md content based on the approved outline. Include detailed descriptions of project features, codebase structure, and AI coding agent functionality. Use clear, concise language and industry-standard formatting (e.g., badges, code blocks, links).",
+      "executor": "opencode",
+      "dependsOn": [
+        "Outline Updated README Structure Including Features, Code, and AI Coding Agent"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "README.md draft includes all outlined sections with accurate and clear content",
+        "Content reflects current project state and AI coding agent capabilities",
+        "README uses markdown best practices for readability"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "A complete draft of README.md updated to industry standards and project specifics.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "README.md",
+          "description": "Updated README.md with new content on features, code, and AI coding agent",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "writing",
+      "actionType": "modify",
+      "inputContext": "README outline document and project source code for reference",
+      "targetFiles": [
+        "README.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "README.md file modified",
+        "git diff shows updated content"
+      ],
+      "verificationCommand": "git diff README.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides the main project entry point documentation reflecting current features and AI agent."
+    },
+    {
+      "title": "Update Additional Project Documentation to Reflect Features and AI Coding Agent",
+      "description": "Modify or create supplementary documentation files (e.g., docs/FEATURES.md, docs/AI_AGENT.md) to provide detailed technical descriptions of project features, code architecture, and AI coding agent usage. Ensure consistency with README and industry documentation standards.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Draft Updated README Content with Industry Standard Sections"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Supplementary docs updated or created with clear, detailed content",
+        "Documentation aligns with README and project codebase",
+        "Files use markdown formatting and are placed in appropriate docs/ directory"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Additional documentation files updated or created to complement README and provide in-depth project information.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "docs/FEATURES.md",
+          "description": "Detailed features documentation aligned with README",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "docs/AI_AGENT.md",
+          "description": "Documentation describing AI coding agent capabilities and usage",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "documentation",
+      "actionType": "modify",
+      "inputContext": "Updated README.md and project source code",
+      "targetFiles": [
+        "docs/FEATURES.md",
+        "docs/AI_AGENT.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "docs/FEATURES.md modified or created",
+        "docs/AI_AGENT.md modified or created",
+        "git diff shows documentation updates"
+      ],
+      "verificationCommand": "git diff docs/FEATURES.md docs/AI_AGENT.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enhances project documentation completeness and clarity on features and AI agent."
+    },
+    {
+      "title": "Review and Validate Updated README and Documentation",
+      "description": "Perform a thorough review of the updated README.md and supplementary documentation files to ensure clarity, accuracy, completeness, and adherence to software industry standards. Validate markdown formatting and check for consistency across documents.",
+      "executor": "shell",
+      "dependsOn": [
+        "Update Additional Project Documentation to Reflect Features and AI Coding Agent"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "No markdown syntax errors in README.md and docs",
+        "Content is consistent and accurate across all documentation",
+        "Documentation meets industry standards for open source projects"
+      ],
+      "commands": [
+        "markdownlint README.md docs/*.md"
+      ],
+      "validation": {
+        "commands": [
+          "markdownlint README.md docs/*.md"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Documentation passes markdown linting and manual review confirms quality and consistency.",
+      "outputPlan": [],
+      "taskType": "validation",
+      "actionType": "validate",
+      "inputContext": "Updated README.md and documentation files",
+      "targetFiles": [
+        "README.md",
+        "docs/FEATURES.md",
+        "docs/AI_AGENT.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "markdownlint exit code 0",
+        "manual review notes"
+      ],
+      "verificationCommand": "markdownlint README.md docs/*.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures the updated documentation is high quality and ready for project use."
+    }
+  ]
+}

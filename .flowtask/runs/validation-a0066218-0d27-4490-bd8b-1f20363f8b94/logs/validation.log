@@ -1,0 +1,244 @@
+[2026-07-01T14:45:20.914Z] COMMAND: npm run lint
+[stdout] > eslint .
+[stdout] > ielts-journey@0.1.0 lint
+[stdout] 
+[stdout] 
+[stderr] 
+[stderr] From ESLint v9.0.0, the default configuration file is now eslint.config.js.
+[stderr] ESLint: 9.39.4
+[stderr] 
+[stderr] to update your configuration file to the new format:
+[stderr] 
+[stderr] If you are using a .eslintrc.* file, please follow the migration guide
+[stderr] ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+[stderr] 
+[stderr] 
+[stderr] 
+[stderr] 
+[stderr] Oops! Something went wrong! :(
+[stderr] https://eslint.org/docs/latest/use/configure/migration-guide
+[stderr] If you still have problems after following the migration guide, please stop by
+[stderr] https://eslint.org/chat/help to chat with the team.
+[2026-07-01T14:45:21.141Z] EXIT: 2
+OUTPUT:
+
+
+> ielts-journey@0.1.0 lint
+
+> eslint .
+
+
+
+
+
+Oops! Something went wrong! :(
+
+
+
+ESLint: 9.39.4
+
+
+
+ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+
+
+
+From ESLint v9.0.0, the default configuration file is now eslint.config.js.
+
+If you are using a .eslintrc.* file, please follow the migration guide
+
+to update your configuration file to the new format:
+
+
+
+https://eslint.org/docs/latest/use/configure/migration-guide
+
+
+
+If you still have problems after following the migration guide, please stop by
+
+https://eslint.org/chat/help to chat with the team.
+
+
+
+STDERR:
+
+Oops! Something went wrong! :(
+
+ESLint: 9.39.4
+
+ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+
+From ESLint v9.0.0, the default configuration file is now eslint.config.js.
+If you are using a .eslintrc.* file, please follow the migration guide
+to update your configuration file to the new format:
+
+https://eslint.org/docs/latest/use/configure/migration-guide
+
+If you still have problems after following the migration guide, please stop by
+https://eslint.org/chat/help to chat with the team.
+---
+[2026-07-01T14:45:21.142Z] COMMAND: npm run typecheck
+[stdout] 
+[stdout] 
+[stdout] > tsc -b --noEmit
+[stdout] > ielts-journey@0.1.0 typecheck
+[stdout] src/pages/AITutorChat.tsx(16,3): error TS6133: 'findLesson' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(25,3): error TS6133: 'ExerciseFeedbackCard' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(180,39): error TS6133: 'topic' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(150,36): error TS6133: 'topic' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(396,62): error TS6133: 'topic' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(417,54): error TS6133: 'qType' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(633,55): error TS6133: 'mode' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(396,77): error TS6133: 'userAnswer' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(22,3): error TS6133: 'suggestNextTopics' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(433,61): error TS6133: 'topic' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(396,97): error TS6133: 'language' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(577,52): error TS6133: 'mode' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(751,10): error TS6133: 'socraticHistory' is declared but its value is never read.
+[stdout]   Types of parameters 'overrideText' and 'event' are incompatible.
+[stdout] src/pages/AITutorChat.tsx(2480,11): error TS2322: Type '(overrideText?: string) => Promise<void>' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'.
+[stdout] src/pages/AITutorChat.tsx(736,10): error TS6133: 'friendCorrections' is declared but its value is never read.
+[stdout]     Type 'MouseEvent<HTMLButtonElement, MouseEvent>' is not assignable to type 'string'.
+[stdout] src/services/storage/Database.ts(62,10): error TS6133: 'isOptionalString' is declared but its value is never read.
+[stdout] src/services/storage/Database.ts(58,10): error TS6133: 'isISODate' is declared but its value is never read.
+[stdout] src/services/storage/Database.ts(85,7): error TS6133: 'VALID_MISTAKE_STATUSES' is declared but its value is never read.
+[stdout] src/services/storage/Database.ts(66,10): error TS6133: 'isBoolean' is declared but its value is never read.
+[stdout] src/services/storage/Database.ts(84,7): error TS6133: 'VALID_GRAMMAR_STATUSES' is declared but its value is never read.
+[stdout] src/services/storage/Database.ts(74,10): error TS6133: 'isStringArray' is declared but its value is never read.
+[stdout] src/services/storage/Database.ts(86,7): error TS6133: 'VALID_LEARNING_STATUSES' is declared but its value is never read.
+[stdout] src/services/storage/Database.ts(286,6): error TS6196: 'Validator' is declared but never used.
+[stdout] src/services/storage/Database.ts(96,7): error TS6133: 'VALID_QUESTION_TYPES' is declared but its value is never read.
+[stdout] src/services/storage/Database.ts(93,7): error TS6133: 'VALID_PASSAGE_SOURCES' is declared but its value is never read.
+[stdout] src/services/storage/Database.ts(98,10): error TS6133: 'validateDateFormat' is declared but its value is never read.
+[stdout] src/pages/AITutorChat.tsx(783,10): error TS6133: 'suggestionsLoading' is declared but its value is never read.
+[2026-07-01T14:45:25.745Z] COMMAND: npm run lint && npm run typecheck
+[2026-07-01T14:45:25.745Z] EXIT: 2
+OUTPUT:
+
+
+> ielts-journey@0.1.0 typecheck
+
+> tsc -b --noEmit
+
+
+
+src/pages/AITutorChat.tsx(16,3): error TS6133: 'findLesson' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(22,3): error TS6133: 'suggestNextTopics' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(25,3): error TS6133: 'ExerciseFeedbackCard' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(150,36): error TS6133: 'topic' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(180,39): error TS6133: 'topic' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(396,62): error TS6133: 'topic' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(396,77): error TS6133: 'userAnswer' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(396,97): error TS6133: 'language' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(417,54): error TS6133: 'qType' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(433,61): error TS6133: 'topic' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(577,52): error TS6133: 'mode' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(633,55): error TS6133: 'mode' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(736,10): error TS6133: 'friendCorrections' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(751,10): error TS6133: 'socraticHistory' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(783,10): error TS6133: 'suggestionsLoading' is declared but its value is never read.
+
+src/pages/AITutorChat.tsx(2480,11): error TS2322: Type '(overrideText?: string) => Promise<void>' is not assignable to type 'MouseEventHandler<HTMLButtonElement>'.
+
+  Types of parameters 'overrideText' and 'event' are incompatible.
+
+    Type 'MouseEvent<HTMLButtonElement, MouseEvent>' is not assignable to type 'string'.
+
+src/services/storage/Database.ts(58,10): error TS6133: 'isISODate' is
+STDERR:
+
+---
+[stdout] > ielts-journey@0.1.0 lint
+[stdout] > eslint .
+[stdout] 
+[stdout] 
+[stderr] Oops! Something went wrong! :(
+[stderr] ESLint: 9.39.4
+[stderr] From ESLint v9.0.0, the default configuration file is now eslint.config.js.
+[stderr] ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+[stderr] 
+[stderr] 
+[stderr] 
+[stderr] If you still have problems after following the migration guide, please stop by
+[stderr] https://eslint.org/chat/help to chat with the team.
+[stderr] https://eslint.org/docs/latest/use/configure/migration-guide
+[stderr] 
+[stderr] to update your configuration file to the new format:
+[stderr] If you are using a .eslintrc.* file, please follow the migration guide
+[stderr] 
+[stderr] 
+[stderr] 
+[2026-07-01T14:45:25.914Z] EXIT: 2
+OUTPUT:
+
+
+> ielts-journey@0.1.0 lint
+
+> eslint .
+
+
+
+
+
+Oops! Something went wrong! :(
+
+
+
+ESLint: 9.39.4
+
+
+
+ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+
+
+
+From ESLint v9.0.0, the default configuration file is now eslint.config.js.
+
+If you are using a .eslintrc.* file, please follow the migration guide
+
+to update your configuration file to the new format:
+
+
+
+https://eslint.org/docs/latest/use/configure/migration-guide
+
+
+
+If you still have problems after following the migration guide, please stop by
+
+https://eslint.org/chat/help to chat with the team.
+
+
+
+STDERR:
+
+Oops! Something went wrong! :(
+
+ESLint: 9.39.4
+
+ESLint couldn't find an eslint.config.(js|mjs|cjs) file.
+
+From ESLint v9.0.0, the default configuration file is now eslint.config.js.
+If you are using a .eslintrc.* file, please follow the migration guide
+to update your configuration file to the new format:
+
+https://eslint.org/docs/latest/use/configure/migration-guide
+
+If you still have problems after following the migration guide, please stop by
+https://eslint.org/chat/help to chat with the team.
+---
