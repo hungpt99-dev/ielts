@@ -12,6 +12,7 @@ import AudioPlayer from './components/AudioPlayer'
 import LQuestion from './components/ListeningQuestion'
 import { SAMPLE_EXERCISES } from './data/exercises'
 import { generateId } from '../../utils'
+import { generateListeningExercise } from '../../services/ai/AIService'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -285,97 +286,29 @@ export default function ListeningPractice() {
       return
     }
 
-    const settingsRaw = localStorage.getItem('ielts-settings')
-    if (!settingsRaw) {
-      setAiError('Settings not found')
-      return
-    }
-
-    const settings = JSON.parse(settingsRaw)
-    if (!settings.aiApiKey) {
-      setAiError('Set your AI API key in Settings first')
-      return
-    }
-
     setAiGenerating(true)
     setAiError(null)
 
     try {
-      const difficultyInstruction =
-        aiDifficulty === 'easy'
-          ? 'Use simple vocabulary and clear speech patterns (IELTS band 5-6 level).'
-          : aiDifficulty === 'hard'
-            ? 'Use complex vocabulary, idiomatic expressions, and faster speech patterns (IELTS band 7-9 level).'
-            : 'Use moderate vocabulary and natural speech patterns (IELTS band 6-7 level).'
-
-      const prompt = `You are an IELTS listening exercise generator. Create an IELTS-style listening transcript on the topic "${aiTopic.trim()}".
-
-Requirements:
-- Write a transcript of 200-350 words that sounds like a natural spoken monologue or conversation
-- ${difficultyInstruction}
-- Include 4-5 listening comprehension questions
-- Questions should be a mix of gap-fill (where the user fills in missing words from the transcript) and multiple-choice
-- Each question must have a clear correct answer and explanation
-- For gap-fill questions, the blanks should be key content words from the transcript
-- For multiple-choice questions, provide 4 options each
-
-Respond with valid JSON in this exact format:
-{
-  "title": "Exercise title",
-  "transcript": "Full transcript text here...",
-  "questions": [
-    {
-      "id": "q1",
-      "type": "gap-fill",
-      "question": "Sentence with ________ to fill in.",
-      "blanks": ["word"],
-      "correctAnswer": ["word"],
-      "explanation": "Why this is correct"
-    },
-    {
-      "id": "q2",
-      "type": "multiple-choice",
-      "question": "Question text?",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "correctAnswer": 0,
-      "explanation": "Why this is correct"
-    }
-  ]
-}
-
-Make the transcript realistic and natural-sounding for a spoken context. Do not include any text outside the JSON object.`
-
-      const response = await fetch(settings.aiEndpoint || 'https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${settings.aiApiKey}`,
-        },
-        body: JSON.stringify({
-          model: settings.aiModel || 'gpt-4o-mini',
-          messages: [
-            { role: 'system', content: 'You are an IELTS listening exercise generator. Always respond with valid JSON.' },
-            { role: 'user', content: prompt },
-          ],
-          temperature: 0.7,
-          max_tokens: 2000,
-        }),
+      const { content, error } = await generateListeningExercise({
+        topic: aiTopic.trim(),
+        difficulty: aiDifficulty,
       })
 
-      if (!response.ok) {
-        const errBody = await response.text().catch(() => '')
-        throw new Error(`AI API error (${response.status}): ${errBody || response.statusText}`)
+      if (error) {
+        throw new Error(error)
       }
 
-      const data = await response.json()
-      const content = data.choices?.[0]?.message?.content || ''
+      if (!content) {
+        throw new Error('AI returned an empty response. Try again.')
+      }
 
-      let parsed
+      let parsed: Record<string, unknown>
       try {
         const jsonStart = content.indexOf('{')
         const jsonEnd = content.lastIndexOf('}')
         const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
-        parsed = JSON.parse(jsonStr)
+        parsed = JSON.parse(jsonStr) as Record<string, unknown>
       } catch {
         throw new Error('Failed to parse AI response. The response was not valid JSON.')
       }

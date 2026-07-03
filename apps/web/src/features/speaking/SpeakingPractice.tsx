@@ -8,6 +8,7 @@ import SelfEvaluation, { type EvaluationResult } from './components/SelfEvaluati
 import { SAMPLE_QUESTIONS, type SpeakingQuestion } from './data/questions'
 import { COMMON_PHRASES } from './data/phrases'
 import { generateId } from '../../utils'
+import { getSpeakingFeedback } from '../../services/ai/AIService'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -343,72 +344,24 @@ export default function SpeakingPractice() {
     const textForFeedback = improvedAnswer.trim() || answerNotes.trim()
     if (!textForFeedback) return
 
-    const settingsRaw = localStorage.getItem('ielts-settings')
-    if (!settingsRaw) {
-      setAiError('Settings not found')
-      return
-    }
-    const settings = JSON.parse(settingsRaw)
-    if (!settings.aiApiKey) {
-      setAiError('Set your AI API key in Settings first')
-      return
-    }
-
     setAiLoading(true)
     setAiError(null)
     setAiFeedback(null)
 
     try {
-      const partLabel = selectedQuestion
-        ? `Speaking Part ${selectedQuestion.part}`
-        : 'Speaking Practice'
-
       const questionText = selectedQuestion?.question || 'Custom practice'
+      const part = (selectedQuestion?.part || 1) as 1 | 2 | 3
 
-      const prompt = `You are an IELTS speaking examiner. Evaluate the following IELTS ${partLabel} response.
+      const { content, error } = await getSpeakingFeedback(textForFeedback, questionText, part)
 
-Question/Prompt:
-${questionText}
-
-Response:
-${textForFeedback}
-
-Provide detailed, constructive feedback covering:
-1. Fluency & Coherence - Did the response flow naturally? Were ideas logically connected?
-2. Lexical Resource (Vocabulary) - Range and appropriateness of vocabulary used
-3. Grammatical Range & Accuracy - Sentence structures and grammar errors
-4. Pronunciation & Intonation - Based on the written response, note any areas of concern
-5. Task Achievement - Did the speaker fully address the question?
-6. Estimated IELTS Band Score (1-9)
-7. Specific suggestions for improvement
-8. A model answer or improved version
-
-Format your response in clear sections with bullet points where appropriate. Be encouraging and specific.`
-
-      const response = await fetch(settings.aiEndpoint || 'https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${settings.aiApiKey}`,
-        },
-        body: JSON.stringify({
-          model: settings.aiModel || 'gpt-4o-mini',
-          messages: [
-            { role: 'system', content: 'You are an experienced IELTS speaking examiner. Provide constructive, detailed feedback.' },
-            { role: 'user', content: prompt },
-          ],
-          temperature: 0.7,
-          max_tokens: 2000,
-        }),
-      })
-
-      if (!response.ok) {
-        const errBody = await response.text().catch(() => '')
-        throw new Error(`AI API error (${response.status}): ${errBody || response.statusText}`)
+      if (error) {
+        throw new Error(error)
       }
 
-      const data = await response.json()
-      const content = data.choices?.[0]?.message?.content || ''
+      if (!content) {
+        throw new Error('AI returned an empty response. Try again.')
+      }
+
       setAiFeedback(content)
       saveSession()
     } catch (err) {

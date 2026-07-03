@@ -10,6 +10,7 @@ import type { ApiErrorInfo } from "../utils/errorHandling";
 import { PUBLIC_API_SOURCES } from "../types";
 import { importPublicApiContent } from "../api/import";
 import { buildErrorMessage } from "../utils/errorHandling";
+import { fetchWithCorsProxy } from "../utils/corsProxy";
 import Card, {
   CardContent,
   CardHeader,
@@ -175,7 +176,7 @@ async function searchGutendex(
 }
 
 async function searchTatoeba(
-  _source: PublicApiSourceConfig,
+  source: PublicApiSourceConfig,
   query: string,
   _apiKey: string,
 ): Promise<PublicApiSearchResult[]> {
@@ -185,7 +186,7 @@ async function searchTatoeba(
   url.searchParams.set("to", "eng");
   url.searchParams.set("limit", "10");
 
-  const res = await fetch(url.toString());
+  const res = await fetchWithCorsProxy(url.toString(), source);
   if (!res.ok) throw new Error(`Tatoeba API error: ${res.status}`);
   const data = await res.json();
 
@@ -202,7 +203,7 @@ async function searchTatoeba(
 }
 
 async function searchOerCommons(
-  _source: PublicApiSourceConfig,
+  source: PublicApiSourceConfig,
   query: string,
   _apiKey: string,
 ): Promise<PublicApiSearchResult[]> {
@@ -210,7 +211,7 @@ async function searchOerCommons(
   url.searchParams.set("search_term", query);
   url.searchParams.set("per_page", "10");
 
-  const res = await fetch(url.toString());
+  const res = await fetchWithCorsProxy(url.toString(), source);
   if (!res.ok) throw new Error(`OER Commons API error: ${res.status}`);
   const data = await res.json();
 

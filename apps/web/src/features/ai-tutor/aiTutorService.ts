@@ -4,6 +4,8 @@ import { loadRoadmap, getTodayTask } from '../roadmap/roadmapService'
 import type { TaskEntry, VocabularyEntry, VocabReviewEntry, MistakeEntry } from '../../models'
 import type { PersonalizationContext, SkillType, RecommendationReason } from '../personalization/types'
 import { buildPersonalizationContext } from '../personalization/personalizationService'
+import { callAI } from '@ielts/ai'
+import type { ProviderConfig } from '@ielts/ai'
 
 export interface TutorSuggestion {
   title: string
@@ -360,13 +362,58 @@ export class AITutorService {
       }]
     }
 
+    const config = this.buildProviderConfig()
     const chunkSize = Math.ceil(vocabForPractice.length / count)
+
     for (let i = 0; i < count; i++) {
       const chunk = vocabForPractice.slice(i * chunkSize, (i + 1) * chunkSize)
       if (chunk.length === 0) break
 
       const words = chunk.map(v => v.word || v.text || 'word')
       const meanings = chunk.map(v => v.meaning || v.definition || '').filter(Boolean)
+      const wordDetails = chunk.map(v =>
+        `- "${v.word || v.text}": ${v.meaning || v.definition || ''}${v.exampleSentence ? ` (e.g., ${v.exampleSentence})` : ''}`
+      ).join('\n')
+
+      if (config) {
+        const exercisePrompt = `You are an IELTS tutor. Create an IELTS-style writing exercise using the following vocabulary words. The exercise should help the student practice using these words in context.
+
+Words to use:
+${wordDetails}
+
+Return a JSON object with these fields:
+- "topic": a specific IELTS topic (e.g., "Environment", "Education", "Technology")
+- "prompt": a writing prompt that incorporates these words naturally
+- "instructions": clear step-by-step instructions for the exercise
+- "estimatedMinutes": estimated time in minutes (integer)`
+
+        const { content, error } = await callAI(
+          exercisePrompt,
+          'Generate an IELTS writing exercise using the provided vocabulary words. Return valid JSON only.',
+          () => config,
+          { temperature: 0.7, maxTokens: 300 },
+        )
+
+        if (!error && content) {
+          try {
+            const jsonMatch = content.match(/\{[\s\S]*\}/)
+            if (jsonMatch) {
+              const parsed = JSON.parse(jsonMatch[0])
+              prompts.push({
+                skill: 'Vocabulary',
+                topic: parsed.topic || `Saved Vocabulary Set ${i + 1}`,
+                prompt: parsed.prompt || `Practice using these words in context: ${words.join(', ')}`,
+                instructions: parsed.instructions || `Write sentences using: ${words.join(', ')}`,
+                wordsToUse: words,
+                estimatedMinutes: parsed.estimatedMinutes || Math.max(5, words.length * 2),
+              })
+              continue
+            }
+          } catch {
+            // fall through to template fallback
+          }
+        }
+      }
 
       prompts.push({
         skill: 'Vocabulary',
@@ -392,10 +439,40 @@ export class AITutorService {
       .filter(m => m.status !== 'resolved')
       .slice(0, 5)
 
+    const config = this.buildProviderConfig()
+
     for (const mistake of recentMistakes) {
       const skill = capitalizeSkill(mistake.skill)
+      const mistakeText = mistake.text || mistake.description || ''
+
+      if (config) {
+        const reviewPrompt = `You are an IELTS tutor. For the following mistake, provide:
+- EXPLANATION: why it is wrong and how to fix it (1-2 sentences)
+- SUGGESTION: a specific action the student can take to improve (1-2 sentences)
+- EXAMPLE: a corrected version of the mistake (1-2 sentences)
+
+Mistake: ${mistakeText}
+Skill: ${skill}`
+        const { content, error } = await callAI(
+          reviewPrompt,
+          'Give me explanation, suggestion, and example for this mistake.',
+          () => config,
+          { temperature: 0.7, maxTokens: 200 },
+        )
+        if (!error && content) {
+          reviews.push({
+            mistake: mistakeText,
+            skill,
+            explanation: content,
+            suggestion: content,
+            example: content,
+          })
+          continue
+        }
+      }
+
       reviews.push({
-        mistake: mistake.text || mistake.description || '',
+        mistake: mistakeText,
         skill,
         explanation: this.generateMistakeExplanation(mistake),
         suggestion: this.generateMistakeSuggestion(skill, mistake),
@@ -537,67 +614,47 @@ export class AITutorService {
     return null
   }
 
-  async answerQuestion(query: string, ctx?: PersonalizationContext): Promise<string> {
+  private buildProviderConfig(): ProviderConfig | null {
+    const settings = loadAppSettings()
+    if (!settings.aiApiKey) return null
+    return {
+      apiKey: settings.aiApiKey,
+      baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
+      model: settings.aiModel || 'gpt-4o-mini',
+    }
+  }
+
+  private buildTutorSystemPrompt(context: PersonalizationContext): string {
+    return `You are an expert IELTS tutor assistant integrated into a learning app. You help learners prepare for the IELTS exam with personalized advice, explanations, and motivation.
+
+Current user context:
+- Target band: ${context.profile.targetBand}, Current band: ${context.profile.currentBand}
+- Weak skills: ${context.profile.weakSkills.join(', ') || 'None identified'}
+- Study streak: ${context.progress.studyStreak} days
+- Exam countdown: ${context.exam.countdownDays} days${context.exam.isUrgent ? ' (URGENT)' : ''}
+- Today's unfinished tasks: ${context.progress.todayUnfinished}
+- Vocabulary saved: ${context.vocabulary.totalWords} (${context.vocabulary.dueForReview} due for review)
+- Total mistakes recorded: ${context.mistakes.total}
+
+Your role:
+1. Answer IELTS-related questions clearly and concisely.
+2. Provide study advice based on the user's current context.
+3. Explain English grammar, vocabulary, and IELTS strategies.
+4. Motivate and encourage the user.
+5. Keep responses practical, actionable, and in a friendly tutor tone.
+6. If the user asks about their personal data (weak skills, exam date, progress, vocabulary, mistakes), use the context provided above.
+7. Keep responses under 150 words unless the user asks for a detailed explanation.
+8. Do NOT make up specific data not provided in the context.`
+  }
+
+  async answerQuestion(query: string, ctx?: PersonalizationContext): Promise<string | null> {
     const context = ctx ?? await this.buildContext()
-    const lower = query.toLowerCase()
 
-    const weakSkills = context.profile.weakSkills
-    const suggestions = this.suggestTasks(context)
-    const topSuggestion = suggestions[0]
-
-    if (/\b(what should i study|what to do|recommend|suggest|what today)\b/.test(lower)) {
-      if (topSuggestion) {
-        return `Based on your progress, I recommend: **${topSuggestion.title}**. ${topSuggestion.contextExplanation}\n\nYou can start by clicking "Open ${topSuggestion.skill}" in your dashboard.`
-      }
-      return 'Start with a short vocabulary review or reading practice. Even 15 minutes of focused study makes a difference every day.'
-    }
-
-    if (/\b(weak|struggl|difficult|need to improve|worst)\b/.test(lower)) {
-      if (weakSkills.length > 0) {
-        const weakSkill = weakSkills[0]
-        const mistakeCount = context.mistakes.bySkill[weakSkill] ?? 0
-        return `Your weakest area is **${weakSkill}** with ${mistakeCount} recorded mistake${mistakeCount > 1 ? 's' : ''}.\n\nTo improve:\n1. Practice ${weakSkill}-specific exercises (${context.profile.dailyStudyMinutes} min/day recommended)\n2. Review your mistakes in ${weakSkill} regularly\n3. Use IELTS-style ${weakSkill} tasks from your roadmap\n\nYour target is Band ${context.profile.targetBand} and your current level is Band ${context.profile.currentBand}. Focused practice on ${weakSkill} will help close this gap.`
-      }
-      return 'You haven\'t identified any weak skills yet. Go to Settings to set your weak areas, and I can give you targeted advice.'
-    }
-
-    if (/\b(exam|test date|when.*exam|countdown)\b/.test(lower)) {
-      if (context.exam.countdownDays > 0) {
-        if (context.exam.isExamSoon) {
-          return `Your IELTS exam is in **${context.exam.countdownDays} day${context.exam.countdownDays > 1 ? 's' : ''}**! Focus on:\n• Full mock tests under timed conditions\n• Reviewing your most common mistakes\n• Getting plenty of rest\n\nYou've been preparing — trust your practice!`
-        }
-        return `Your IELTS exam is in **${context.exam.countdownDays} days**. ${context.exam.isUrgent ? 'Time to intensify your preparation!' : `You have enough time to improve systematically. Stay consistent with your ${context.profile.dailyStudyMinutes}-minute daily study plan.`}`
-      }
-      return 'You haven\'t set your exam date yet. Go to Settings to add it, so I can help you plan your preparation timeline.'
-    }
-
-    if (/\b(vocabulary|word|meaning|phrase)\b/.test(lower)) {
-      const vocabCount = context.vocabulary.totalWords
-      const dueCount = context.vocabulary.dueForReview
-      return `You've saved **${vocabCount} vocabulary word${vocabCount > 1 ? 's' : ''}** so far.\n• ${dueCount} word${dueCount > 1 ? 's' : ''} due for review\n• ${context.vocabulary.masteredCount} mastered\n• ${context.vocabulary.learningCount} still learning\n\nRegular review using spaced repetition helps you remember vocabulary long-term. Would you like me to create a practice exercise from your saved words?`
-    }
-
-    if (/\b(mistake|error|wrong|incorrect)\b/.test(lower)) {
-      return `You have **${context.mistakes.total} recorded mistake${context.mistakes.total > 1 ? 's' : ''}** (${context.mistakes.dueForReview} due for review).\n\nTop mistake areas:\n${Object.entries(context.mistakes.bySkill).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([skill, count]) => `• ${skill}: ${count}`).join('\n')}\n\nReviewing mistakes regularly turns weak points into strengths. Open Mistake Notebook to review them.`
-    }
-
-    if (/\b(roadmap|plan|path|progress|how.*far)\b/.test(lower)) {
-      if (context.roadmap.exists) {
-        return `Your IELTS roadmap is **${context.roadmap.currentPhaseName ? `in phase "${context.roadmap.currentPhaseName}"` : 'active'}** with **${context.roadmap.phaseProgress}%** overall progress.\n\nCurrent focus: ${context.roadmap.currentSkillFocus ?? 'Not set'}\nNext task: ${context.roadmap.nextTaskTitle ?? 'No pending tasks'}\n\nYou're making steady progress toward Band ${context.profile.targetBand}.`
-      }
-      return 'You haven\'t generated your learning roadmap yet. Complete the onboarding to create a personalized study plan based on your target band and exam date.'
-    }
-
-    if (/\b(progress|streak|how.*doing|consistency)\b/.test(lower)) {
-      return `Your current stats:\n• Study streak: ${context.progress.studyStreak} day${context.progress.studyStreak !== 1 ? 's' : ''}\n• Total study hours: ${context.progress.totalStudyHours}\n• Vocabulary saved: ${context.vocabulary.totalWords}\n• Tasks completed: ${context.tasks.completedCount}\n• Current band: ${context.profile.currentBand} → Target: ${context.profile.targetBand}\n\nConsistency is key. Even on busy days, 15 minutes of English exposure helps maintain your progress.`
-    }
-
-    if (/\b(motivat|encourage|tired|stuck|give up|burnout)\b/.test(lower)) {
-      const streak = context.progress.studyStreak
-      if (streak > 0) {
-        return `You've studied for **${streak} consecutive day${streak > 1 ? 's' : ''}** — that's already a huge achievement! IELTS preparation is a marathon, not a sprint. Every session, even short ones, builds your skills.\n\nRemember: Band ${context.profile.targetBand} is your goal. You're currently at Band ${context.profile.currentBand}. Every mistake you fix, every word you learn, every task you complete moves you closer. Keep going — you can do this! 💪`
-      }
-      return 'Every IELTS journey starts with a single step. You have the goal (Band ' + String(context.profile.targetBand) + '), now let\'s build the path. Start with one small task today, and tomorrow will be easier. You\'ve got this! 🌟'
+    const config = this.buildProviderConfig()
+    if (config) {
+      const systemPrompt = this.buildTutorSystemPrompt(context)
+      const { content, error } = await callAI(systemPrompt, query, () => config, { temperature: 0.7, maxTokens: 300 })
+      if (!error && content) return content
     }
 
     return null

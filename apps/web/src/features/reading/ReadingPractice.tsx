@@ -12,6 +12,7 @@ import EmptyState from '../../components/ui/EmptyState'
 import Question from './components/Question'
 import { SAMPLE_PASSAGES } from './data/passages'
 import { generateId } from '../../utils'
+import { generateReadingPassage } from '../../services/ai/AIService'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -306,102 +307,29 @@ export default function ReadingPractice() {
       return
     }
 
-    const settingsRaw = localStorage.getItem('ielts-settings')
-    if (!settingsRaw) {
-      setAiError('Settings not found')
-      return
-    }
-
-    const settings = JSON.parse(settingsRaw)
-    if (!settings.aiApiKey) {
-      setAiError('Set your AI API key in Settings first')
-      return
-    }
-
     setAiGenerating(true)
     setAiError(null)
 
     try {
-      const difficultyInstruction =
-        aiDifficulty === 'easy'
-          ? 'Use simple vocabulary and straightforward sentence structures (IELTS band 5-6 level).'
-          : aiDifficulty === 'hard'
-            ? 'Use complex vocabulary and sophisticated sentence structures (IELTS band 7-9 level).'
-            : 'Use moderate vocabulary and mixed sentence structures (IELTS band 6-7 level).'
-
-      const prompt = `You are an IELTS reading passage generator. Create an IELTS-style reading passage on the topic "${aiTopic.trim()}".
-
-Requirements:
-- Write a passage of 250-400 words
-- ${difficultyInstruction}
-- Include 5-6 reading comprehension questions
-- Questions should include a mix of types: multiple-choice, true/false/not given, and gap fill
-- Each question must have a clear correct answer and explanation
-
-Respond with valid JSON in this exact format:
-{
-  "title": "Passage title",
-  "text": "Full passage text here...",
-  "questions": [
-    {
-      "id": "q1",
-      "type": "multiple-choice",
-      "question": "Question text?",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "correctAnswer": 0,
-      "explanation": "Why this is correct"
-    },
-    {
-      "id": "q2",
-      "type": "true-false-not-given",
-      "question": "Statement to evaluate",
-      "correctAnswer": "true",
-      "explanation": "Explanation..."
-    },
-    {
-      "id": "q3",
-      "type": "gap-fill",
-      "question": "Complete the sentences:",
-      "blanks": ["word1", "word2"],
-      "correctAnswer": ["word1", "word2"],
-      "explanation": "Explanation..."
-    }
-  ]
-}
-
-Make sure the passage is realistic and the questions are directly answerable from the text. Do not include any text outside the JSON object.`
-
-      const response = await fetch(settings.aiEndpoint || 'https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${settings.aiApiKey}`,
-        },
-        body: JSON.stringify({
-          model: settings.aiModel || 'gpt-4o-mini',
-          messages: [
-            { role: 'system', content: 'You are an IELTS reading passage generator. Always respond with valid JSON.' },
-            { role: 'user', content: prompt },
-          ],
-          temperature: 0.7,
-          max_tokens: 2000,
-        }),
+      const { content, error } = await generateReadingPassage({
+        topic: aiTopic.trim(),
+        difficulty: aiDifficulty,
       })
 
-      if (!response.ok) {
-        const errBody = await response.text().catch(() => '')
-        throw new Error(`AI API error (${response.status}): ${errBody || response.statusText}`)
+      if (error) {
+        throw new Error(error)
       }
 
-      const data = await response.json()
-      const content = data.choices?.[0]?.message?.content || ''
+      if (!content) {
+        throw new Error('AI returned an empty response. Try again.')
+      }
 
-      let parsed
+      let parsed: Record<string, unknown>
       try {
         const jsonStart = content.indexOf('{')
         const jsonEnd = content.lastIndexOf('}')
         const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
-        parsed = JSON.parse(jsonStr)
+        parsed = JSON.parse(jsonStr) as Record<string, unknown>
       } catch {
         throw new Error('Failed to parse AI response. The response was not valid JSON.')
       }
@@ -414,10 +342,10 @@ Make sure the passage is realistic and the questions are directly answerable fro
 
       const passage: ReadingPassageWithQuestions = {
         id: generateId(),
-        title: parsed.title,
+        title: parsed.title as string,
         topic: aiTopic.trim(),
-        text: parsed.text,
-        questions: parsed.questions.map((q: Record<string, unknown>, i: number) => ({
+        text: parsed.text as string,
+        questions: (parsed.questions as Record<string, unknown>[]).map((q, i) => ({
           id: `ai-q${i}`,
           type: (validTypes as readonly string[]).includes(q.type as string)
             ? (q.type as 'multiple-choice' | 'true-false-not-given' | 'gap-fill')
@@ -429,7 +357,7 @@ Make sure the passage is realistic and the questions are directly answerable fro
           blanks: Array.isArray(q.blanks) ? (q.blanks as string[]) : undefined,
         })),
         difficulty: aiDifficulty,
-        wordCount: parsed.text.split(/\s+/).length,
+        wordCount: (parsed.text as string).split(/\s+/).length,
         estimatedMinutes: 20,
       }
 

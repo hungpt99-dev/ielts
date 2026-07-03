@@ -96,19 +96,26 @@ export interface MistakeReviewResult {
 
 // ── Helpers ──────────────────────────────────────────────────
 
-const AI_API_KEY_STORAGE_KEY = 'ielts-ai-api-key'
-const AI_BASE_URL_STORAGE_KEY = 'ielts-ai-base-url'
-const AI_MODEL_STORAGE_KEY = 'ielts-ai-model'
+const APP_SETTINGS_KEY = 'ielts-settings'
 
 const DEFAULT_BASE_URL = 'https://api.openai.com/v1'
 const DEFAULT_MODEL = 'gpt-4o-mini'
 
+function readAppSettings(): Record<string, unknown> | null {
+  try {
+    const raw = localStorage.getItem(APP_SETTINGS_KEY)
+    if (raw) return JSON.parse(raw)
+  } catch {}
+  return null
+}
+
 export function getStoredAiConfig(): AiProviderConfig {
   try {
+    const settings = readAppSettings()
     return {
-      apiKey: localStorage.getItem(AI_API_KEY_STORAGE_KEY) ?? '',
-      baseUrl: localStorage.getItem(AI_BASE_URL_STORAGE_KEY) ?? DEFAULT_BASE_URL,
-      model: localStorage.getItem(AI_MODEL_STORAGE_KEY) ?? DEFAULT_MODEL,
+      apiKey: (settings?.aiApiKey as string) ?? '',
+      baseUrl: (settings?.aiEndpoint as string) || DEFAULT_BASE_URL,
+      model: (settings?.aiModel as string) || DEFAULT_MODEL,
     }
   } catch {
     return { apiKey: '', baseUrl: DEFAULT_BASE_URL, model: DEFAULT_MODEL }
@@ -117,15 +124,11 @@ export function getStoredAiConfig(): AiProviderConfig {
 
 export function storeAiConfig(config: Partial<AiProviderConfig>): void {
   try {
-    if (config.apiKey !== undefined) {
-      localStorage.setItem(AI_API_KEY_STORAGE_KEY, config.apiKey)
-    }
-    if (config.baseUrl !== undefined) {
-      localStorage.setItem(AI_BASE_URL_STORAGE_KEY, config.baseUrl)
-    }
-    if (config.model !== undefined) {
-      localStorage.setItem(AI_MODEL_STORAGE_KEY, config.model)
-    }
+    const current = readAppSettings() ?? {}
+    if (config.apiKey !== undefined) current.aiApiKey = config.apiKey
+    if (config.baseUrl !== undefined) current.aiEndpoint = config.baseUrl
+    if (config.model !== undefined) current.aiModel = config.model
+    localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(current))
   } catch {
     // localStorage unavailable
   }
@@ -133,9 +136,11 @@ export function storeAiConfig(config: Partial<AiProviderConfig>): void {
 
 export function clearStoredAiConfig(): void {
   try {
-    localStorage.removeItem(AI_API_KEY_STORAGE_KEY)
-    localStorage.removeItem(AI_BASE_URL_STORAGE_KEY)
-    localStorage.removeItem(AI_MODEL_STORAGE_KEY)
+    const current = readAppSettings() ?? {}
+    delete current.aiApiKey
+    delete current.aiEndpoint
+    delete current.aiModel
+    localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(current))
   } catch {
     // localStorage unavailable
   }

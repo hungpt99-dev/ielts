@@ -1,0 +1,35 @@
+[2026-07-03T09:38:43.941Z] [INFO] Task started: Run Full Test Suite to Validate All Features Work Correctly with Real AI Calls
+[2026-07-03T09:38:46.564Z] [INFO] Executor finished with status: failed, exit code: 1
+[2026-07-03T09:38:46.564Z] [INFO] Output:
+Scope: 11 of 12 workspace projects
+packages/ai test$ vitest run --passWithNoTests
+packages/ai-tutor test$ vitest run --passWithNoTests
+packages/storage test$ vitest run --passWithNoTests
+packages/exercises test$ vitest run --passWithNoTests
+packages/ai test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai
+packages/ai-tutor test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+packages/storage test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage
+packages/exercises test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises
+packages/ai test:  ✓ src/__tests__/errors.test.ts (9 tests) 3ms
+packages/ai test:  ❯ src/__tests__/prompts.test.ts (20 tests | 8 failed) 28ms
+packages/ai test:    ✓ Explain prompt > builds simple explain prompt 1ms
+packages/ai test:    ✓ Explain prompt > builds vietnamese explain prompt 0ms
+packages/ai test:    ✓ Explain prompt > builds ielts vocab prompt 0ms
+packages/ai test:    ✓ Explain prompt > builds grammar explain prompt 0ms
+packages/ai test:    ✓ Explain prompt > builds rewrite prompt 0ms
+packages/ai test:    ✓ Explain prompt > builds example sentences prompt 0ms
+packages/ai test:    ✓ Explain prompt > builds quiz prompt 0ms
+packages/ai test:    ✓ Explain prompt > includes JSON schema in user prompt 0ms
+packages/ai test:    ✓ Explain prompt > uses the provided text in the prompt 0ms
+packages/ai test:    ✓ Explain prompt > exports all AI explain labels 0ms
+packages/ai test:    ✓ Explain prompt > exports all AI explain icons 0ms
+packages/ai test:    ✓ Explain prompt > exports all AI explain prompts 0ms
+packages/ai test:    × Vocabulary prompts > builds vocabulary details prompt 3ms
+packages/ai test:      → expected [] to include 'aberration'
+packages/ai test:    × Vocabulary prompts > builds vocabulary quiz prompt 0ms
+packages/ai test:      → Cannot read properties of undefined (reading 'join')
+packages/ai test:    × Article question prompt > 
+[2026-07-03T09:38:46.565Z] [INFO] Error:
+$ pnpm -r test
+[2026-07-03T09:38:46.565Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-03T09:38:46.567Z] [INFO] Task completed successfully

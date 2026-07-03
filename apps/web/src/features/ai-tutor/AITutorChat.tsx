@@ -46,6 +46,7 @@ export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings 
           suggestions.push({
             title: 'Why today matters',
             message: b.whyTodayMatters,
+            action: 'teach-me',
             actionLabel: 'Show me what to do',
           })
         }
@@ -54,6 +55,7 @@ export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings 
           suggestions.push({
             title: 'Weak skill reminder',
             message: b.weakSkillReminder,
+            action: 'practice-with-me',
             actionLabel: 'Practice now',
           })
         }
@@ -63,6 +65,7 @@ export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings 
           suggestions.push({
             title: task.title,
             message: task.contextExplanation,
+            action: 'make-exercise',
             actionLabel: task.actionLabel,
           })
         }
@@ -71,6 +74,7 @@ export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings 
           suggestions.push({
             title: 'Exam countdown',
             message: b.examCountdownMessage,
+            action: 'teach-me',
             actionLabel: 'View plan',
           })
         }
@@ -119,7 +123,6 @@ export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings 
       hasAiKey={hasAiKey}
       onOpenSettings={onOpenSettings}
       onSendMessage={handleSendMessage}
-      onQuickAction={handleQuickAction}
       contextSuggestions={contextSuggestions.length > 0 ? contextSuggestions : undefined}
       title="AI Tutor"
       subtitle={subtitle}

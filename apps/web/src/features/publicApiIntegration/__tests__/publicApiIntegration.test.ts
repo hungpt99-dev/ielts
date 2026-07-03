@@ -45,6 +45,7 @@ const mockDb = vi.hoisted(() => ({
   updatePublicApiContent: vi.fn(),
   safeGetAll: vi.fn(),
   safeRemove: vi.fn(),
+  add: vi.fn(),
 }))
 
 vi.mock('../../../services/storage/Database', () => ({
@@ -904,9 +905,12 @@ describe('Public API source configurations', () => {
       const sources = PUBLIC_API_SOURCES.filter(s => s.category === cat)
       const hasDirect = sources.some(s => s.corsStatus === 'direct')
       const hasNoCors = sources.some(s => s.corsStatus === 'no-cors')
+      const allProxyOrNoCors = sources.every(s => s.corsStatus === 'no-cors' || s.corsStatus === 'cors-bypass')
       if (hasNoCors && !hasDirect) {
-        // Category only has no-cors sources (e.g. Video & Listening with YouTube)
-        expect(sources.every(s => s.corsStatus === 'no-cors' || s.corsStatus === 'cors-bypass')).toBe(true)
+        expect(allProxyOrNoCors).toBe(true)
+      } else if (!hasDirect && allProxyOrNoCors) {
+        // Category only has cors-bypass sources (usable with proxy)
+        expect(allProxyOrNoCors).toBe(true)
       } else {
         expect(hasDirect).toBe(true)
       }

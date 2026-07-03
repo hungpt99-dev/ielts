@@ -1,6 +1,7 @@
 import { useId } from 'react'
 import type { MistakeEntry, MistakeSkill } from '../../models'
 import DatabaseService from '../../services/storage/Database'
+import { getSpeakingFeedback as aiGetSpeakingFeedback, generateSpeakingQuestions as aiGenerateSpeakingQuestions } from '../../services/ai/AIService'
 
 export type SpeakingPhase = 'idle' | 'select-part' | 'part1' | 'part2' | 'part3' | 'feedback' | 'completed'
 
@@ -38,7 +39,81 @@ export interface BandEstimate {
 
 // ── Part 1 Questions ────────────────────────────────────────────
 
-const PART1_QUESTIONS: SpeakingQuestionItem[] = [
+let cachedPart1Questions: SpeakingQuestionItem[] | null = null
+let cachedCueCards: CueCard[] | null = null
+let cachedPart3Questions: SpeakingQuestionItem[] | null = null
+let cacheTimestamp = 0
+const CACHE_TTL = 3600_000 // 1 hour
+
+async function ensureQuestionCache(): Promise<void> {
+  const now = Date.now()
+  if (cachedPart1Questions && cachedCueCards && cachedPart3Questions && (now - cacheTimestamp) < CACHE_TTL) {
+    return
+  }
+
+  try {
+    const [part1Result, part2Result, part3Result] = await Promise.all([
+      aiGenerateSpeakingQuestions(1, 'familiar topics'),
+      aiGenerateSpeakingQuestions(2, 'various topics'),
+      aiGenerateSpeakingQuestions(3, 'abstract topics'),
+    ])
+
+    if (!part1Result.error && part1Result.content) {
+      try {
+        const parsed = JSON.parse(part1Result.content)
+        if (parsed.questions) {
+          cachedPart1Questions = parsed.questions.map((q: string, i: number) => ({
+            id: `p1-ai-${i}`,
+            part: 1 as const,
+            question: q,
+            topic: 'Mixed',
+          }))
+        }
+      } catch {}
+    }
+
+    if (!part2Result.error && part2Result.content) {
+      try {
+        const parsed = JSON.parse(part2Result.content)
+        if (parsed.cueCard) {
+          cachedCueCards = [parsed.cueCard].map((c: any, i: number) => ({
+            id: `p2-ai-${i}`,
+            topic: c.topic || 'General',
+            title: c.title || 'Describe something',
+            instructions: c.instructions || 'You should say:',
+            bulletPoints: c.bulletPoints || [],
+            followUpQuestions: c.followUpQuestions || [],
+          }))
+        }
+      } catch {}
+    }
+
+    if (!part3Result.error && part3Result.content) {
+      try {
+        const parsed = JSON.parse(part3Result.content)
+        if (parsed.questions) {
+          cachedPart3Questions = parsed.questions.map((q: string, i: number) => ({
+            id: `p3-ai-${i}`,
+            part: 3 as const,
+            question: q,
+            topic: 'Discussion',
+          }))
+        }
+      } catch {}
+    }
+  } catch {
+    // Fall through to static questions below
+  }
+
+  // Fall back to hardcoded questions if AI failed
+  if (!cachedPart1Questions) cachedPart1Questions = STATIC_PART1_QUESTIONS
+  if (!cachedCueCards) cachedCueCards = STATIC_PART2_CUE_CARDS
+  if (!cachedPart3Questions) cachedPart3Questions = STATIC_PART3_QUESTIONS
+
+  cacheTimestamp = now
+}
+
+const STATIC_PART1_QUESTIONS: SpeakingQuestionItem[] = [
   // Work / Study
   { id: 'p1-1', part: 1, question: "Do you work or are you a student?", topic: 'Work/Study' },
   { id: 'p1-2', part: 1, question: "What do you do (for work / as your job)?", topic: 'Work/Study' },
@@ -98,7 +173,7 @@ const PART1_QUESTIONS: SpeakingQuestionItem[] = [
 
 // ── Part 2 Cue Cards ────────────────────────────────────────────
 
-const PART2_CUE_CARDS: CueCard[] = [
+const STATIC_PART2_CUE_CARDS: CueCard[] = [
   {
     id: 'p2-1', topic: 'Person', title: 'Describe a person you admire',
     instructions: "Describe a person you admire. You should say:",
@@ -183,7 +258,7 @@ const PART2_CUE_CARDS: CueCard[] = [
 
 // ── Part 3 Questions ────────────────────────────────────────────
 
-const PART3_QUESTIONS: SpeakingQuestionItem[] = [
+const STATIC_PART3_QUESTIONS: SpeakingQuestionItem[] = [
   { id: 'p3-1', part: 3, question: "How have family roles changed in your country in recent decades?", topic: 'Family & Society' },
   { id: 'p3-2', part: 3, question: "Do you think it's better to live in a big city or a small town? Why?", topic: 'Urban vs Rural' },
   { id: 'p3-3', part: 3, question: "What are the main environmental problems facing your country?", topic: 'Environment' },
@@ -228,18 +303,24 @@ export function detectPartChoice(message: string): 1 | 2 | 3 | null {
 
 // ── Question Selection ──────────────────────────────────────────
 
-export function getRandomPart1Questions(count = 3): SpeakingQuestionItem[] {
-  const shuffled = [...PART1_QUESTIONS].sort(() => Math.random() - 0.5)
+export async function getRandomPart1Questions(count = 3): Promise<SpeakingQuestionItem[]> {
+  await ensureQuestionCache()
+  const pool = cachedPart1Questions || STATIC_PART1_QUESTIONS
+  const shuffled = [...pool].sort(() => Math.random() - 0.5)
   return shuffled.slice(0, count)
 }
 
-export function getRandomCueCard(): CueCard {
-  const idx = Math.floor(Math.random() * PART2_CUE_CARDS.length)
-  return PART2_CUE_CARDS[idx]
+export async function getRandomCueCard(): Promise<CueCard> {
+  await ensureQuestionCache()
+  const pool = cachedCueCards || STATIC_PART2_CUE_CARDS
+  const idx = Math.floor(Math.random() * pool.length)
+  return pool[idx]
 }
 
-export function getRandomPart3Questions(count = 2): SpeakingQuestionItem[] {
-  const shuffled = [...PART3_QUESTIONS].sort(() => Math.random() - 0.5)
+export async function getRandomPart3Questions(count = 2): Promise<SpeakingQuestionItem[]> {
+  await ensureQuestionCache()
+  const pool = cachedPart3Questions || STATIC_PART3_QUESTIONS
+  const shuffled = [...pool].sort(() => Math.random() - 0.5)
   return shuffled.slice(0, count)
 }
 
@@ -484,7 +565,50 @@ function generateGeneralAdvice(analysis: AnalysisResult, part: 1 | 2 | 3, band: 
 
 // ── Main Feedback Generator ─────────────────────────────────────
 
-export function generateSpeakingFeedback(text: string, part: 1 | 2 | 3): SpeakingFeedback {
+export async function generateSpeakingFeedback(text: string, part: 1 | 2 | 3): Promise<SpeakingFeedback> {
+  try {
+    const aiResult = await aiGetSpeakingFeedback(text, `IELTS Speaking Part ${part} question`, part)
+    if (!aiResult.error && aiResult.content) {
+      try {
+        const parsed = JSON.parse(aiResult.content)
+        const band: BandEstimate = {
+          overall: parsed.bandScore || 6.0,
+          fluency: parsed.fluencyScore || parsed.fluencyNotes ? 6.0 : 5.0,
+          grammar: parsed.grammarScore || parsed.grammarNotes ? 6.0 : 5.0,
+          vocabulary: parsed.vocabularyScore || parsed.vocabularyNotes ? 6.0 : 5.0,
+          coherence: 6.0,
+        }
+
+        const feedback: SpeakingFeedback = {
+          id: crypto.randomUUID?.() ?? Date.now().toString(36),
+          corrections: [],
+          betterPhrases: [],
+          bandEstimate: band,
+          generalAdvice: '',
+        }
+
+        const parts: string[] = []
+        if (parsed.fluencyNotes) parts.push(`**Fluency & Coherence:** ${parsed.fluencyNotes}`)
+        if (parsed.vocabularyNotes) parts.push(`**Vocabulary:** ${parsed.vocabularyNotes}`)
+        if (parsed.grammarNotes) parts.push(`**Grammar:** ${parsed.grammarNotes}`)
+        if (parsed.pronunciationNotes) parts.push(`**Pronunciation:** ${parsed.pronunciationNotes}`)
+        if (parsed.betterExpressions) {
+          feedback.betterPhrases = [{ phrase: parsed.betterExpressions, context: 'Consider using these expressions to enhance your response.' }]
+        }
+        if (parsed.improvedAnswer) {
+          parts.push(`**Improved Version:**\n${parsed.improvedAnswer}`)
+        }
+
+        feedback.generalAdvice = parts.join('\n\n')
+        return feedback
+      } catch {
+        // Fall through to template
+      }
+    }
+  } catch {
+    // Fall through to template
+  }
+
   const analysis = analyzeText(text)
   const bandEstimate = estimateBand(text, analysis)
   const betterPhrases = generateBetterPhrases(text, part)

@@ -1,6 +1,6 @@
 import { useState, useId, useCallback } from 'react'
 import type { TutorMemory } from '../../models/aiTutorModels'
-import { generateId } from '../../utils'
+import { aiEvaluateAnswer, aiReviewMistakes } from './aiTutorHelper'
 
 // ── Types ─────────────────────────────────────────────────────
 
@@ -1000,6 +1000,78 @@ export function ExerciseFeedbackCard({ isCorrect, feedback }: ExerciseFeedbackCa
       </p>
     </div>
   )
+}
+
+export async function evaluateCheckingAnswerAI(
+  question: CheckingQuestion,
+  userAnswer: string,
+  lessonTopic: string,
+): Promise<{ isCorrect: boolean; feedback: string }> {
+  try {
+    const result = await aiEvaluateAnswer({
+      question: question.question,
+      correctAnswer: question.correctAnswer,
+      userAnswer,
+      exerciseType: 'checking',
+      lessonTopic,
+    })
+
+    if (result.isCorrect) {
+      return {
+        isCorrect: true,
+        feedback: `✅ Correct! ${question.explanation}\n\nGreat understanding! Let's move on to some practice exercises.`,
+      }
+    }
+
+    return {
+      isCorrect: false,
+      feedback: `❌ Not quite. The correct answer is: "${question.correctAnswer}".\n\n${question.explanation}\n\nDon't worry — mistakes are part of learning! Let's try some exercises to reinforce this.`,
+    }
+  } catch {
+    return evaluateCheckingAnswer(question, userAnswer)
+  }
+}
+
+export async function evaluateExerciseAnswerAI(
+  question: ExerciseQuestion,
+  userAnswer: string,
+): Promise<{ isCorrect: boolean; feedback: string; expected: string }> {
+  try {
+    const result = await aiEvaluateAnswer({
+      question: question.question,
+      correctAnswer: question.correctAnswer,
+      userAnswer,
+      exerciseType: question.type,
+      lessonTopic: '',
+    })
+
+    if (result.isCorrect) {
+      return {
+        isCorrect: true,
+        feedback: `✅ Excellent! "${userAnswer}" is correct.\n\n${question.explanation}\n\nKeep up the great work!`,
+        expected: question.correctAnswer,
+      }
+    }
+
+    return {
+      isCorrect: false,
+      feedback: `📝 Good try! The correct answer is: "${question.correctAnswer}".\n\n${question.explanation}\n\nReview the rule above and try to understand why this is the answer.`,
+      expected: question.correctAnswer,
+    }
+  } catch {
+    return evaluateExerciseAnswer(question, userAnswer)
+  }
+}
+
+export async function generateMistakeReviewAI(
+  memory: TutorMemory | null,
+  language: 'english' | 'vietnamese' | 'both' = 'english',
+  limit = 5,
+): Promise<string> {
+  if (!memory || memory.repeatedMistakePatterns.length === 0) {
+    return '📝 **Mistake Review**\n\nNo mistakes recorded yet. Keep practicing and I will track your common mistakes here! 💪'
+  }
+  return aiReviewMistakes({ patterns: memory.repeatedMistakePatterns, limit, language })
 }
 
 

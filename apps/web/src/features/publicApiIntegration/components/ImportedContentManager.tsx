@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import type { PublicApiImportedContent } from '../../../models'
+import type { PublicApiImportedContent, StudyNote } from '../../../models'
 import { DatabaseService } from '../../../services/storage/Database'
 import Card, { CardContent, CardHeader, CardTitle } from '../../../components/ui/Card'
 import Button from '../../../components/ui/Button'
@@ -270,6 +270,24 @@ export default function ImportedContentManager() {
       }
 
       setExerciseResult(result)
+
+      // Save generated exercises as a study note for persistence
+      if (result) {
+        try {
+          const note: Omit<StudyNote, 'id' | 'createdAt' | 'updatedAt'> & { id?: string } = {
+            title: `AI Exercises: ${title} (${type})`,
+            content: result,
+            topic: selectedItem?.topic || '',
+            skill: type === 'reading' ? 'Reading' : type === 'listening' ? 'Listening' : type === 'speaking' ? 'Speaking' : type === 'writing' ? 'Writing' : 'Grammar',
+            tags: ['ai-generated', 'exercises', type],
+            isFavorite: false,
+            isDraft: false,
+          }
+          await DatabaseService.addStudyNote(note)
+        } catch {
+          // Non-critical
+        }
+      }
     } catch (err) {
       setExerciseError(
         err instanceof Error ? err.message : 'Failed to generate exercises',

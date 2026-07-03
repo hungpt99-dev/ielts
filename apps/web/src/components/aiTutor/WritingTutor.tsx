@@ -3,6 +3,14 @@ import type { MistakeEntry, MistakeSkill } from '../../models'
 import DatabaseService from '../../services/storage/Database'
 import type { WritingFeedbackRecord } from '../../models/aiTutorModels'
 import { LocalTutorStorage } from '../../services/storage/LocalTutorStorage'
+import {
+  aiGenerateBrainstormingIdeas,
+  aiGenerateOutline,
+  aiImproveThesisStatement,
+  aiCheckParagraphStructure,
+  aiGenerateFullWritingFeedback,
+  aiGenerateImprovedVersion as aiGenerateImprovedVersionFn,
+} from './aiTutorHelper'
 
 export type WritingPhase =
   | 'idle'
@@ -171,21 +179,22 @@ function getDefaultBrainstorming(topic: string): BrainstormingIdea[] {
   ]
 }
 
-export function generateBrainstorming(topic: string): BrainstormingIdea[] {
-  const normalized = Object.keys(BRAINSTORM_DATA).find(
-    k => k.toLowerCase() === topic.toLowerCase(),
-  ) || Object.keys(BRAINSTORM_DATA).find(
-    k => topic.toLowerCase().includes(k.toLowerCase()),
-  )
-  if (normalized) return BRAINSTORM_DATA[normalized]
-  return getDefaultBrainstorming(topic)
-}
-
-export function formatBrainstorming(ideas: BrainstormingIdea[]): string {
-  const items = ideas.map(
-    (idea, i) => `**${i + 1}. ${idea.point}**\n${idea.explanation}${idea.example ? `\n\ud83d\udccc *Example:* ${idea.example}` : ''}`,
-  )
-  return `\ud83d\udca1 **Brainstorming Ideas**\n\n${items.join('\n\n')}\n\n---\n\nWhich idea would you like to develop further? Or shall I help you create an outline?`
+export async function generateBrainstorming(topic: string, language: 'english' | 'vietnamese' | 'both' = 'english'): Promise<string> {
+  try {
+    const result = await aiGenerateBrainstormingIdeas(topic, language)
+    return `💡 **Brainstorming Ideas for "${topic}"**\n\n${result}\n\n---\n\nWhich idea would you like to develop further? Or shall I help you create an outline?`
+  } catch {
+    const normalized = Object.keys(BRAINSTORM_DATA).find(
+      k => k.toLowerCase() === topic.toLowerCase(),
+    ) || Object.keys(BRAINSTORM_DATA).find(
+      k => topic.toLowerCase().includes(k.toLowerCase()),
+    )
+    const ideas = normalized ? BRAINSTORM_DATA[normalized] : getDefaultBrainstorming(topic)
+    const items = ideas.map(
+      (idea, i) => `**${i + 1}. ${idea.point}**\n${idea.explanation}${idea.example ? `\n📌 *Example:* ${idea.example}` : ''}`,
+    )
+    return `💡 **Brainstorming Ideas**\n\n${items.join('\n\n')}\n\n---\n\nWhich idea would you like to develop further? Or shall I help you create an outline?`
+  }
 }
 
 export function getBrainstormPrompt(topic: string): string {
@@ -214,7 +223,15 @@ export function getRewritePrompt(targetBand: number): string {
 
 // ── Outline Generator ─────────────────────────────────────────
 
-export function generateOutline(topic: string, taskType: WritingTaskType): WritingOutline {
+export async function generateOutline(topic: string, taskType: WritingTaskType, language: 'english' | 'vietnamese' | 'both' = 'english'): Promise<string> {
+  try {
+    return await aiGenerateOutline(topic, taskType, language)
+  } catch {
+    return formatOutlineFallback(topic, taskType)
+  }
+}
+
+function formatOutlineFallback(topic: string, taskType: WritingTaskType): string {
   if (taskType === 'task1') {
     return {
       introduction: '**Introduction:**\n\u2022 Paraphrase the question/title of the chart/graph\n\u2022 Give an overview of the main trend(s) or key feature(s)\n\u2022 Do NOT give specific numbers in the introduction',
@@ -382,7 +399,15 @@ export function formatOutline(outline: WritingOutline): string {
 
 // ── Thesis Statement Improvement ──────────────────────────────
 
-export function improveThesisStatement(userThesis: string, topic: string): string {
+export async function improveThesisStatement(userThesis: string, topic: string, language: 'english' | 'vietnamese' | 'both' = 'english'): Promise<string> {
+  try {
+    return await aiImproveThesisStatement(userThesis, topic, language)
+  } catch {
+    return improveThesisStatementFallback(userThesis, topic)
+  }
+}
+
+function improveThesisStatementFallback(userThesis: string, topic: string): string {
   const lower = userThesis.toLowerCase()
   const feedback: string[] = []
 
@@ -426,7 +451,15 @@ function getThesisExample(topic: string): string | null {
 
 // ── Paragraph Structure Feedback ──────────────────────────────
 
-export function checkParagraphStructure(paragraph: string): string {
+export async function checkParagraphStructure(paragraph: string, language: 'english' | 'vietnamese' | 'both' = 'english'): Promise<string> {
+  try {
+    return await aiCheckParagraphStructure(paragraph, language)
+  } catch {
+    return checkParagraphStructureFallback(paragraph)
+  }
+}
+
+function checkParagraphStructureFallback(paragraph: string): string {
   const lower = paragraph.toLowerCase()
   const feedback: string[] = []
   const words = paragraph.split(/\s+/).filter(Boolean)
@@ -738,7 +771,15 @@ function improveVocabulary(text: string): string {
   return improved
 }
 
-export function generateImprovedVersion(text: string, targetBand: number): string {
+export async function generateImprovedVersion(text: string, targetBand: number, language: 'english' | 'vietnamese' | 'both' = 'english'): Promise<string> {
+  try {
+    return await aiGenerateImprovedVersionFn(text, targetBand, language)
+  } catch {
+    return generateImprovedVersionFallback(text, targetBand)
+  }
+}
+
+function generateImprovedVersionFallback(text: string, targetBand: number): string {
   let improved = text.trim()
 
   const wc = improved.split(/\s+/).filter(Boolean).length
@@ -791,7 +832,15 @@ function generateGeneralAdvice(analysis: WritingAnalysis, taskType: WritingTaskT
 
 // ── Main Feedback Generator ───────────────────────────────────
 
-export function generateWritingFeedback(text: string, taskType: WritingTaskType, topic: string): WritingFeedbackData {
+export async function generateWritingFeedback(text: string, taskType: WritingTaskType, topic: string, language: 'english' | 'vietnamese' | 'both' = 'english'): Promise<string> {
+  try {
+    return await aiGenerateFullWritingFeedback(text, taskType, topic, language)
+  } catch {
+    return formatFeedbackMessage(generateWritingFeedbackFallback(text, taskType, topic), language)
+  }
+}
+
+function generateWritingFeedbackFallback(text: string, taskType: WritingTaskType, topic: string): WritingFeedbackData {
   const analysis = analyzeWriting(text, taskType)
   const band = estimateWritingBand(analysis, taskType)
   const strengths = generateStrengths(analysis)

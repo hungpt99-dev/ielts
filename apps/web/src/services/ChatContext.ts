@@ -61,9 +61,9 @@ const PAGE_LABELS: Record<AppPage, string> = {
 function pathToPage(path: string): AppPage {
   if (path === '/' || path === '') return 'dashboard'
   if (path.startsWith('/plan')) return 'plan'
-  if (path.startsWith('/vocabulary/review')) return 'vocabulary-review'
+  if (path.startsWith('/review-center')) return 'review'
+  if (path.startsWith('/review')) return 'vocabulary-review'
   if (path.startsWith('/vocabulary')) return 'vocabulary'
-  if (path.startsWith('/review')) return 'review'
   if (path.startsWith('/reading')) return 'reading'
   if (path.startsWith('/listening')) return 'listening'
   if (path.startsWith('/writing')) return 'writing'

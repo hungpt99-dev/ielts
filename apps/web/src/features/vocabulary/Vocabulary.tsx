@@ -7,6 +7,8 @@ import Modal from '../../components/ui/Modal'
 import EmptyState from '../../components/ui/EmptyState'
 import WordForm from './components/WordForm'
 import ReviewMode from './components/ReviewMode'
+import VocabularyImport from './VocabularyImport'
+import { onVocabularyChanged } from './vocabularyEvents'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -67,6 +69,10 @@ export default function Vocabulary() {
 
   useEffect(() => {
     loadEntries()
+  }, [loadEntries])
+
+  useEffect(() => {
+    return onVocabularyChanged(loadEntries)
   }, [loadEntries])
 
   const allTags = useMemo(() => {
@@ -199,28 +205,8 @@ export default function Vocabulary() {
     URL.revokeObjectURL(url)
   }
 
-  function handleImport() {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = '.json'
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0]
-      if (!file) return
-      try {
-        const text = await file.text()
-        const data = JSON.parse(text)
-        const items = Array.isArray(data) ? data : (data.vocabulary || [])
-        for (const item of items) {
-          if (item.word && item.meaning) {
-            await DatabaseService.add('vocabulary', item)
-          }
-        }
-        await loadEntries()
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to import vocabulary')
-      }
-    }
-    input.click()
+  function handleImportComplete(count: number) {
+    loadEntries()
   }
 
   if (loading) {
@@ -275,12 +261,10 @@ export default function Vocabulary() {
                 </svg>
                 Export
               </Button>
-              <Button onClick={handleImport} variant="secondary">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                </svg>
-                Import
-              </Button>
+              <VocabularyImport
+                onImportComplete={handleImportComplete}
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+              />
               <Button onClick={openCreateForm}>
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />

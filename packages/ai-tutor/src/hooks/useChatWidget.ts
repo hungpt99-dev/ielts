@@ -91,18 +91,34 @@ export function useChatWidget(options: UseChatWidgetOptions): UseChatWidgetRetur
         externalQuickAction(action)
         return
       }
-      addMessage('user', ACTION_LABELS[action] || action)
+      const prompt = ACTION_LABELS[action] || action
+      addMessage('user', prompt)
       setShowActions(false)
       setIsTyping(true)
       setSendError(null)
-      const delay = 1000 + Math.random() * 600
-      setTimeout(() => {
-        setIsTyping(false)
-        addMessage('assistant', generateQuickResponse(action))
-        setShowActions(true)
-      }, delay)
+
+      if (externalSendMessage) {
+        externalSendMessage(prompt)
+          .then(response => {
+            setIsTyping(false)
+            addMessage('assistant', response)
+            setShowActions(true)
+          })
+          .catch(() => {
+            setIsTyping(false)
+            addMessage('assistant', "I'm sorry, I couldn't process your message right now. Please try again.")
+            setShowActions(true)
+          })
+      } else {
+        const delay = 1000 + Math.random() * 600
+        setTimeout(() => {
+          setIsTyping(false)
+          addMessage('assistant', generateQuickResponse(action))
+          setShowActions(true)
+        }, delay)
+      }
     },
-    [addMessage, externalQuickAction],
+    [addMessage, externalQuickAction, externalSendMessage],
   )
 
   const handleSendMessage = useCallback(async () => {

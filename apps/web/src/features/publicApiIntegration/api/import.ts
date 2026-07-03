@@ -1,5 +1,5 @@
 import { DatabaseService } from '../../../services/storage/Database'
-import type { PublicApiImportedContent } from '../../../models'
+import type { PublicApiImportedContent, VocabularyEntry } from '../../../models'
 import type {
   PublicApiPreview,
   PublicApiImportResult,
@@ -103,6 +103,27 @@ export async function importPublicApiContent(
   try {
     const entry = createImportEntry(preview, overrides)
     await DatabaseService.addPublicApiContent(entry)
+
+    if (preview.contentType === 'dictionary' || preview.contentType === 'vocabulary-list') {
+      const vocabEntry: Omit<VocabularyEntry, 'id' | 'createdAt' | 'updatedAt'> = {
+        word: preview.title,
+        meaning: preview.content || preview.title,
+        meaningVi: '',
+        pronunciation: '',
+        partOfSpeech: '',
+        topic: overrides?.topic || 'general',
+        exampleSentence: '',
+        collocations: [],
+        synonyms: [],
+        antonyms: [],
+        wordFamily: [],
+        personalNote: '',
+        difficulty: overrides?.difficulty ?? 'medium',
+        status: 'new',
+        tags: overrides?.tags ?? [],
+      }
+      await DatabaseService.add('vocabulary', vocabEntry)
+    }
 
     return {
       success: true,

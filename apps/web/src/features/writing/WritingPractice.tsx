@@ -4,9 +4,9 @@ import { DatabaseService } from '../../services/storage/Database'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
-import FeedbackPanel, { type WritingFeedback } from './components/FeedbackPanel'
-import { SAMPLE_PROMPTS, type WritingPrompt } from './data/prompts'
+import { SAMPLE_PROMPTS } from './data/prompts'
 import { generateId } from '../../utils'
+import { checkWriting } from '../../services/ai/AIService'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -208,81 +208,21 @@ export default function WritingPractice() {
   async function handleGetAiFeedback() {
     if (!essayText.trim() || !questionText.trim()) return
 
-    const settingsRaw = localStorage.getItem('ielts-settings')
-    if (!settingsRaw) {
-      setAiError('Settings not found')
-      return
-    }
-    const settings = JSON.parse(settingsRaw)
-    if (!settings.aiApiKey) {
-      setAiError('Set your AI API key in Settings first')
-      return
-    }
-
     setAiLoading(true)
     setAiError(null)
 
     try {
-      const taskType = selectedPrompt?.taskType || 'task2'
-      const taskInstruction = taskType === 'task1'
-        ? 'Task 1: The essay describes, summarizes, or explains a visual (chart, graph, table, map). Focus on whether the response accurately reports main features, makes comparisons, and stays objective.'
-        : 'Task 2: The essay responds to an opinion, discussion, or problem-solution prompt. Focus on whether it presents a clear position, develops arguments, and addresses all parts of the prompt.'
+      const taskType = (selectedPrompt?.taskType || 'task2') as 'task1' | 'task2'
 
-      const prompt = `You are an IELTS writing examiner. Evaluate the following IELTS Writing ${taskType === 'task1' ? 'Task 1' : 'Task 2'} essay.
+      const { content, error } = await checkWriting(essayText, questionText, taskType)
 
-${taskInstruction}
-
-Question:
-${questionText}
-
-Essay:
-${essayText}
-
-Respond with valid JSON in this exact format:
-{
-  "taskResponse": "Feedback on task achievement / task response (2-3 sentences)",
-  "coherence": "Feedback on coherence and cohesion (2-3 sentences)",
-  "vocabulary": "Feedback on vocabulary range and accuracy (2-3 sentences)",
-  "grammar": "Feedback on grammatical range and accuracy (2-3 sentences)",
-  "bandScore": 6.5,
-  "overallFeedback": "Overall assessment and advice (2-4 sentences)",
-  "improvedVersion": "A rewritten improved version of the entire essay",
-  "mistakes": [
-    {
-      "category": "grammar" | "vocabulary" | "coherence" | "task-response",
-      "text": "Original problematic text",
-      "correction": "Corrected version",
-      "explanation": "Why this is an improvement"
-    }
-  ]
-}
-
-Be specific and constructive. Provide a realistic band score between 1.0 and 9.0. Do not include any text outside the JSON object.`
-
-      const response = await fetch(settings.aiEndpoint || 'https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${settings.aiApiKey}`,
-        },
-        body: JSON.stringify({
-          model: settings.aiModel || 'gpt-4o-mini',
-          messages: [
-            { role: 'system', content: 'You are an IELTS writing examiner. Always respond with valid JSON.' },
-            { role: 'user', content: prompt },
-          ],
-          temperature: 0.7,
-          max_tokens: 3000,
-        }),
-      })
-
-      if (!response.ok) {
-        const errBody = await response.text().catch(() => '')
-        throw new Error(`AI API error (${response.status}): ${errBody || response.statusText}`)
+      if (error) {
+        throw new Error(error)
       }
 
-      const data = await response.json()
-      const content = data.choices?.[0]?.message?.content || ''
+      if (!content) {
+        throw new Error('AI returned an empty response. Try again.')
+      }
 
       let parsed
       try {

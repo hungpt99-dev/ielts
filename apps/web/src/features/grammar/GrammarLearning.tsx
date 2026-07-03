@@ -7,6 +7,7 @@ import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import Exercise, { type GrammarExerciseItem } from './components/Exercise'
 import { generateId } from '../../utils'
+import { generateGrammarExercises } from '../../services/ai/AIService'
 
 const GRAMMAR_TOPICS = [
   'Tenses', 'Articles', 'Prepositions', 'Conditionals', 'Modal Verbs',
@@ -578,49 +579,15 @@ export default function GrammarLearning() {
     setAiError(null)
 
     try {
-      const prompt = `You are an IELTS grammar tutor. Generate 5 grammar practice exercises for the topic "${topic}". 
-Include a mix of multiple-choice, gap-fill, and true/false questions.
+      const { content, error } = await generateGrammarExercises(topic, 5)
 
-Respond with valid JSON in this exact format:
-{
-  "exercises": [
-    {
-      "type": "multiple-choice" | "gap-fill" | "true-false",
-      "question": "The question text",
-      "options": ["Option A", "Option B", "Option C", "Option D"] (only for multiple-choice),
-      "correctAnswer": "The correct answer",
-      "explanation": "Brief explanation of the answer"
-    }
-  ]
-}`
-
-      const response = await fetch(
-        settings.aiEndpoint || 'https://api.openai.com/v1/chat/completions',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${settings.aiApiKey}`,
-          },
-          body: JSON.stringify({
-            model: settings.aiModel || 'gpt-4o-mini',
-            messages: [
-              { role: 'system', content: 'You are an IELTS grammar tutor. Always respond with valid JSON.' },
-              { role: 'user', content: prompt },
-            ],
-            temperature: 0.7,
-            max_tokens: 2000,
-          }),
-        },
-      )
-
-      if (!response.ok) {
-        const errBody = await response.text().catch(() => '')
-        throw new Error(`AI API error (${response.status}): ${errBody || response.statusText}`)
+      if (error) {
+        throw new Error(error)
       }
 
-      const data = await response.json()
-      const content = data.choices?.[0]?.message?.content || ''
+      if (!content) {
+        throw new Error('AI returned an empty response. Try again.')
+      }
 
       let parsed
       try {

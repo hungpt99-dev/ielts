@@ -5,6 +5,7 @@ import { z } from 'zod'
 import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../../../models'
 import Button from '../../../components/ui/Button'
 import { useSettings } from '../../../context/SettingsContext'
+import { callAI } from '@ielts/ai'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -149,32 +150,27 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
     setAiError(null)
 
     try {
-      const prompt = `You are an IELTS vocabulary assistant. Generate a natural example sentence for the word "${word}"${topic ? ` on the topic of "${topic}"` : ''}. Also provide 2-3 common collocations and 2-3 synonyms. Format the response as JSON with keys: "sentence", "collocations" (array), "synonyms" (array).`
+      const systemPrompt = 'You are an IELTS vocabulary assistant. Always respond with valid JSON.'
+      const userPrompt = `Generate a natural example sentence for the word "${word}"${topic ? ` on the topic of "${topic}"` : ''}. Also provide 2-3 common collocations and 2-3 synonyms. Format the response as JSON with keys: "sentence", "collocations" (array), "synonyms" (array).`
 
-      const response = await fetch(settings.aiEndpoint || 'https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${settings.aiApiKey}`,
-        },
-        body: JSON.stringify({
+      const { content, error } = await callAI(
+        systemPrompt,
+        userPrompt,
+        () => ({
+          apiKey: settings.aiApiKey,
+          baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
           model: settings.aiModel || 'gpt-4o-mini',
-          messages: [
-            { role: 'system', content: 'You are an IELTS vocabulary assistant. Always respond with valid JSON.' },
-            { role: 'user', content: prompt },
-          ],
-          temperature: 0.7,
-          max_tokens: 300,
         }),
-      })
+        { temperature: 0.7, maxTokens: 300 },
+      )
 
-      if (!response.ok) {
-        const errBody = await response.text().catch(() => '')
-        throw new Error(`AI API error (${response.status}): ${errBody || response.statusText}`)
+      if (error) {
+        throw new Error(error)
       }
 
-      const data = await response.json()
-      const content = data.choices?.[0]?.message?.content || ''
+      if (!content) {
+        throw new Error('Empty response from AI')
+      }
 
       let parsed
       try {

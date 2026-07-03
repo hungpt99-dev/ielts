@@ -11,6 +11,29 @@ const mockTaskData = vi.hoisted(() => ({ value: [] as any[] }))
 const mockVocabData = vi.hoisted(() => ({ value: [] as any[] }))
 const mockMistakeData = vi.hoisted(() => ({ value: [] as any[] }))
 
+const mockCallAI = vi.hoisted(() =>
+  vi.fn((_systemPrompt: string, userPrompt: string) => {
+    const lower = (userPrompt || '').toLowerCase()
+    if (lower.includes('what should i study') || lower.includes('recommend')) {
+      return Promise.resolve({ content: 'I recommend focusing on your Writing skills today based on your progress.', error: null })
+    }
+    if (lower.includes('weak') || lower.includes('struggl')) {
+      return Promise.resolve({ content: 'Your weakest area is Writing with 5 recorded mistakes.', error: null })
+    }
+    if (lower.includes('exam') || lower.includes('when is') || lower.includes('test date')) {
+      return Promise.resolve({ content: 'Your IELTS exam is in 60 days.', error: null })
+    }
+    if (lower.includes('doing') || lower.includes('progress') || lower.includes('streak') || lower.includes('how am i') || lower.includes('consistency')) {
+      return Promise.resolve({ content: 'Your current streak is 5 days.', error: null })
+    }
+    return Promise.resolve({ content: null, error: 'Unable to answer that question.' })
+  })
+)
+
+vi.mock('@ielts/ai', () => ({
+  callAI: mockCallAI,
+}))
+
 vi.mock('../../../services/storage/Database', () => ({
   DatabaseService: {
     getAll: (table: string) => {
@@ -33,12 +56,12 @@ vi.mock('../../../services/storage/SettingsStorage', () => ({
     studyReminder: 'Time to study!',
     studyGoal: 'academic' as const,
     preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri'],
-    aiApiKey: '',
+    aiApiKey: 'test-key',
     aiProvider: 'openai' as const,
     aiEndpoint: '',
     aiModel: 'gpt-4o-mini',
     darkMode: false,
-    aiEnabled: false,
+    aiEnabled: true,
   }),
 }))
 

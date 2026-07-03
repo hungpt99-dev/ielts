@@ -2,6 +2,9 @@ import type { VocabularyEntry, VocabReviewEntry, ReviewRating, VocabDifficulty, 
 import { DatabaseService } from '../../services/storage/Database'
 import { generateId } from '../../utils'
 import { getInitialReviewEntry, calculateNextReview } from '../../utils/spaced-repetition'
+import { loadAppSettings } from '../../services/storage/SettingsStorage'
+import { callAI } from '@ielts/ai'
+import type { ProviderConfig } from '@ielts/ai'
 
 export interface VocabStats {
   total: number
@@ -282,6 +285,15 @@ export async function generateExercisesFromVocabulary(
     }]
   }
 
+  const settings = loadAppSettings()
+  const config: ProviderConfig | null = settings.aiApiKey
+    ? {
+        apiKey: settings.aiApiKey,
+        baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
+        model: settings.aiModel || 'gpt-4o-mini',
+      }
+    : null
+
   const chunkSize = Math.ceil(entries.length / count)
   for (let i = 0; i < count; i++) {
     const chunk = entries.slice(i * chunkSize, (i + 1) * chunkSize)
@@ -290,6 +302,50 @@ export async function generateExercisesFromVocabulary(
     const words = chunk.map(v => v.word)
     const meanings = chunk.map(v => v.meaning).filter(Boolean)
     const topics = [...new Set(chunk.map(v => v.topic))].filter(Boolean)
+
+    if (config) {
+      const wordDetails = chunk.map(v =>
+        `- "${v.word}": ${v.meaning}${v.exampleSentence ? ` (e.g., ${v.exampleSentence})` : ''}`
+      ).join('\n')
+
+      const aiPrompt = `You are an IELTS tutor. Create an IELTS-style writing exercise using these vocabulary words.
+
+Words to use:
+${wordDetails}
+
+Return a JSON object with these fields:
+- "topic": a specific IELTS topic
+- "prompt": a writing prompt that incorporates these words naturally
+- "instructions": clear step-by-step instructions
+- "estimatedMinutes": estimated time in minutes (integer)`
+
+      const { content, error } = await callAI(
+        aiPrompt,
+        'Generate an IELTS writing exercise using the provided vocabulary words. Return valid JSON only.',
+        () => config,
+        { temperature: 0.7, maxTokens: 300 },
+      )
+
+      if (!error && content) {
+        try {
+          const jsonMatch = content.match(/\{[\s\S]*\}/)
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0])
+            prompts.push({
+              skill: 'Vocabulary',
+              topic: parsed.topic || (topics.length > 0 ? topics.join(', ') : `Saved Words ${i + 1}`),
+              prompt: parsed.prompt || `Practice using these words in context: ${words.join(', ')}`,
+              instructions: parsed.instructions || `Write sentences using: ${words.join(', ')}`,
+              wordsToUse: words,
+              estimatedMinutes: parsed.estimatedMinutes || Math.max(5, words.length * 2),
+            })
+            continue
+          }
+        } catch {
+          // fall through to template fallback
+        }
+      }
+    }
 
     prompts.push({
       skill: 'Vocabulary',

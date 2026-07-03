@@ -6,7 +6,20 @@ interface ChatPopupProps extends ChatWidgetProps {
   onOpenSettings?: () => void
 }
 
-export default function ChatPopup({ isOpen, onClose, hasAiKey: hasAiKeyProp, onOpenSettings }: ChatPopupProps) {
+export default function ChatPopup({
+  isOpen,
+  onClose,
+  hasAiKey: hasAiKeyProp,
+  onOpenSettings,
+  onSendMessage,
+  onQuickAction,
+  onClearChat,
+  contextSuggestions,
+  title = 'AI Tutor',
+  subtitle = 'Online · IELTS Coach',
+  placeholder = 'Type a message...',
+  className,
+}: ChatPopupProps) {
   const [hasAiKey, setHasAiKey] = useState(hasAiKeyProp ?? false)
 
   useEffect(() => {
@@ -34,6 +47,14 @@ export default function ChatPopup({ isOpen, onClose, hasAiKey: hasAiKeyProp, onO
         window.location.hash = '#/settings'
         onClose()
       })}
+      onSendMessage={onSendMessage}
+      onQuickAction={onQuickAction}
+      onClearChat={onClearChat}
+      contextSuggestions={contextSuggestions}
+      title={title}
+      subtitle={subtitle}
+      placeholder={placeholder}
+      className={className}
     />
   )
 }

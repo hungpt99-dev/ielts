@@ -13,7 +13,6 @@ import {
   type CheckingQuestion,
   type ExerciseQuestion,
   type ExerciseAnswerRecord,
-  findLesson,
   detectLessonFromMessage,
   generateLessonText,
   generateFeedbackMessage,
@@ -23,7 +22,17 @@ import {
   CheckingQuestionCard,
   ExerciseCard,
   ExerciseFeedbackCard,
+  evaluateCheckingAnswerAI,
+  evaluateExerciseAnswerAI,
+  generateMistakeReviewAI,
 } from '../components/aiTutor/TeachingMode'
+import {
+  aiGenerateResponse,
+  aiGenerateSocraticQuestion,
+  aiGenerateGentleCorrection,
+  aiGenerateDailyCheckIn,
+  aiGenerateLesson,
+} from '../components/aiTutor/aiTutorHelper'
 import React from 'react'
 import { generateId } from '../utils'
 import {
@@ -56,9 +65,7 @@ import {
   detectWritingTaskType,
   detectWritingTopic,
   generateBrainstorming,
-  formatBrainstorming,
   generateOutline,
-  formatOutline,
   improveThesisStatement,
   checkParagraphStructure,
   generateWritingFeedback,
@@ -77,17 +84,19 @@ import {
   detectContentSubmission,
   getActionSelectorMessage,
   detectActionChoice,
-  generateSummary,
-  generateVocabularyList,
-  generateComprehensionQuestions,
-  generateOpinionQuestions,
-  generateExercises,
-  generateIeltsConnection,
-  generateExplanation,
   isBackRequest,
   ActionSelectorCard,
   READING_ACTIONS,
 } from '../components/aiTutor/ReadingListeningTutor'
+import {
+  aiGenerateSummary,
+  aiGenerateVocabularyList as aiGenerateVocabularyListFn,
+  aiGenerateComprehensionQuestions as aiGenerateComprehensionQuestionsFn,
+  aiGenerateOpinionQuestions,
+  aiGenerateExercises as aiGenerateExercisesFn,
+  aiGenerateIeltsConnection,
+  aiGenerateExplanation,
+} from '../components/aiTutor/aiTutorHelper'
 
 type Language = 'english' | 'vietnamese' | 'both'
 
@@ -974,7 +983,7 @@ export default function AITutorChat() {
 
       // Teaching flow: user answering a checking question
       if (teachingPhase === 'checking' && activeCheckingQ) {
-        const { isCorrect, feedback } = evaluateCheckingAnswer(activeCheckingQ, text)
+        const { isCorrect, feedback } = await evaluateCheckingAnswerAI(activeCheckingQ, text, activeLesson?.topic || '')
         responseText = feedback
 
         if (!isCorrect && activeLesson) {
@@ -1012,7 +1021,7 @@ export default function AITutorChat() {
       }
       // Teaching flow: user answering an exercise
       else if (teachingPhase === 'exercise' && activeExercise) {
-        const result = evaluateExerciseAnswer(activeExercise, text)
+        const result = await evaluateExerciseAnswerAI(activeExercise, text)
         responseText = result.feedback
 
         const newResults = [...exerciseResults, {
@@ -1055,44 +1064,88 @@ export default function AITutorChat() {
       }
       // Start new grammar lesson
       else if (mode === 'grammar-teacher' && teachingPhase === 'idle') {
-        const contextHint = await topicContextManager.getContextForPrompt(mode)
         const contextStr = contextManager.hasPermission()
           ? await contextManager.getFormattedContextString()
           : ''
-        const fullHint = contextStr ? contextHint + '\n' + contextStr : contextHint
-        const detected = detectLessonFromMessage(text, 'grammar')
-        if (detected) {
-          const lesson = detected.lesson
-          responseText = generateLessonText(lesson, language)
-          setActiveLesson(lesson)
-          setActiveCheckingQ(lesson.checkingQuestion)
-          setTeachingPhase('checking')
+        const detectedGrammar = detectLessonFromMessage(text, 'grammar')
+        if (detectedGrammar) {
+          try {
+            const lessonData = await aiGenerateLesson({ topic: detectedGrammar.lesson.topic, type: 'grammar', language })
+            const lesson: TeachingLesson = {
+              id: lessonData.title.toLowerCase().replace(/\s+/g, '-'),
+              type: 'grammar',
+              topic: detectedGrammar.lesson.topic,
+              title: lessonData.title,
+              level: 'intermediate',
+              explanation: lessonData.explanation,
+              rules: lessonData.rules,
+              examples: lessonData.examples,
+              checkingQuestion: lessonData.checkingQuestion,
+              exercises: lessonData.exercises,
+              summary: lessonData.summary,
+              nextTopic: lessonData.nextTopic,
+              commonMistakes: lessonData.commonMistakes,
+            }
+            responseText = generateLessonText(lesson, language)
+            setActiveLesson(lesson)
+            setActiveCheckingQ(lesson.checkingQuestion)
+            setTeachingPhase('checking')
+          } catch {
+            responseText = await aiGenerateResponse({ userMessage: text, mode, language, context: contextStr })
+          }
         } else {
-          responseText = generateResponse(text, mode, language, fullHint)
+          responseText = await aiGenerateResponse({ userMessage: text, mode, language, context: contextStr })
         }
       }
       // Start new vocabulary lesson
       else if (mode === 'vocabulary-coach' && teachingPhase === 'idle') {
-        const contextHint = await topicContextManager.getContextForPrompt(mode)
         const contextStr = contextManager.hasPermission()
           ? await contextManager.getFormattedContextString()
           : ''
-        const fullHint = contextStr ? contextHint + '\n' + contextStr : contextHint
-        const detected = detectLessonFromMessage(text, 'vocabulary')
-        if (detected) {
-          const lesson = detected.lesson
-          responseText = generateLessonText(lesson, language)
-          setActiveLesson(lesson)
-          setActiveCheckingQ(lesson.checkingQuestion)
-          setTeachingPhase('checking')
+        const detectedVocab = detectLessonFromMessage(text, 'vocabulary')
+        if (detectedVocab) {
+          try {
+            const lessonData = await aiGenerateLesson({ topic: detectedVocab.lesson.topic, type: 'vocabulary', language })
+            const lesson: TeachingLesson = {
+              id: lessonData.title.toLowerCase().replace(/\s+/g, '-'),
+              type: 'vocabulary',
+              topic: detectedVocab.lesson.topic,
+              title: lessonData.title,
+              level: 'intermediate',
+              explanation: lessonData.explanation,
+              rules: lessonData.rules,
+              examples: lessonData.examples,
+              checkingQuestion: lessonData.checkingQuestion,
+              exercises: lessonData.exercises,
+              summary: lessonData.summary,
+              nextTopic: lessonData.nextTopic,
+              commonMistakes: lessonData.commonMistakes,
+            }
+            responseText = generateLessonText(lesson, language)
+            setActiveLesson(lesson)
+            setActiveCheckingQ(lesson.checkingQuestion)
+            setTeachingPhase('checking')
+          } catch {
+            responseText = await aiGenerateResponse({ userMessage: text, mode, language, context: contextStr })
+          }
         } else {
-          responseText = generateResponse(text, mode, language, fullHint)
+          responseText = await aiGenerateResponse({ userMessage: text, mode, language, context: contextStr })
         }
       }
       // Socratic flow: user answering a Socratic question
       else if (mode === 'socratic-tutor' && socraticPhase === 'questioning' && socraticQA) {
-        const result = generateSocraticFollowUp(text, socraticQA, detectTopic(text), socraticRound, language)
-        const updatedQA: SocraticQA = { ...socraticQA, userAnswer: text }
+        const previousQA = socraticHistory.length > 0
+          ? socraticHistory.map(qa => ({ question: qa.question, answer: qa.userAnswer || '', type: qa.type }))
+          : [{ question: socraticQA.question, answer: text, type: socraticQA.type }]
+
+        const result = await aiGenerateSocraticQuestion({
+          userMessage: text,
+          topic: detectTopic(text),
+          round: socraticRound,
+          previousQA,
+          language,
+        })
+        const updatedQA: SocraticQA = { ...socraticQA, userAnswer: text, feedback: result.feedback }
         setSocraticHistory(prev => [...prev, updatedQA])
 
         if (result.wrapUp) {
@@ -1100,11 +1153,12 @@ export default function AITutorChat() {
           setSocraticPhase('feedback')
           setSocraticQA(null)
           setSocraticRound(0)
-        } else if (result.nextQuestion) {
-          const nextHint = result.nextQuestion.hint || getSocraticHintForType(result.nextQuestion.type, detectTopic(text))
+        } else if (result.question) {
           const nextQA: SocraticQA = {
-            ...result.nextQuestion,
-            hint: nextHint,
+            id: generateId(),
+            type: result.type as SocraticQuestionType,
+            question: result.question,
+            hint: result.hint,
           }
           responseText = nextQA.question
           setSocraticQA(nextQA)
@@ -1118,10 +1172,21 @@ export default function AITutorChat() {
       }
       // Socratic flow: starting a new Socratic conversation
       else if (mode === 'socratic-tutor' && socraticPhase === 'idle') {
-        const question = generateSocraticStartingQuestion(text, detectTopic(text))
+        const result = await aiGenerateSocraticQuestion({
+          userMessage: text,
+          topic: detectTopic(text),
+          round: 0,
+          language,
+        })
         const intro = "Let's explore this together using the Socratic method — I'll guide you with questions so you discover the answer yourself! 🧠\n\n"
-        responseText = intro + question.question
-        setSocraticQA(question)
+        const question = result.question || "What do you already know about this topic? Try explaining it in your own words! 💡"
+        responseText = intro + question
+        setSocraticQA({
+          id: generateId(),
+          type: (result.type || 'justify') as SocraticQuestionType,
+          question: question,
+          hint: result.hint,
+        })
         setSocraticPhase('questioning')
         setSocraticRound(1)
         setSocraticHistory([])
@@ -1136,18 +1201,18 @@ export default function AITutorChat() {
         if (choice) {
           setSpeakingPart(choice)
           if (choice === 1) {
-            const qs = getRandomPart1Questions(3)
+            const qs = await getRandomPart1Questions(3)
             setSpeakingQuestions(qs)
             setCurrentSpeakingQIndex(0)
             setSpeakingPhase('part1')
             responseText = generateSpeakingStartMessage(1, qs)
           } else if (choice === 2) {
-            const card = getRandomCueCard()
+            const card = await getRandomCueCard()
             setSpeakingCueCard(card)
             setSpeakingPhase('part2')
             responseText = generateSpeakingStartMessage(2, undefined, card)
           } else {
-            const qs = getRandomPart3Questions(2)
+            const qs = await getRandomPart3Questions(2)
             setSpeakingQuestions(qs)
             setCurrentSpeakingQIndex(0)
             setSpeakingPhase('part3')
@@ -1159,7 +1224,7 @@ export default function AITutorChat() {
       }
       else if (mode === 'speaking-partner' && (speakingPhase === 'part1' || speakingPhase === 'part2' || speakingPhase === 'part3')) {
         const part = speakingPart
-        const feedback = generateSpeakingFeedback(text, part)
+        const feedback = await generateSpeakingFeedback(text, part)
         setSpeakingFeedback(feedback)
         setSpeakingPhase('feedback')
         await saveSpeakingMistakesToNotebook(text, feedback.corrections, part)
@@ -1169,20 +1234,20 @@ export default function AITutorChat() {
         const lower = text.trim().toLowerCase()
         if (isNextQuestionRequest(text) || /\b(next|continue|another|more)\b/.test(lower)) {
           if (speakingPart === 1) {
-            const qs = getRandomPart1Questions(1)
+            const qs = await getRandomPart1Questions(1)
             setSpeakingQuestions(qs)
             setCurrentSpeakingQIndex(0)
             setSpeakingPhase('part1')
             setSpeakingFeedback(null)
             responseText = qs[0].question
           } else if (speakingPart === 2) {
-            const card = getRandomCueCard()
+            const card = await getRandomCueCard()
             setSpeakingCueCard(card)
             setSpeakingPhase('part2')
             setSpeakingFeedback(null)
             responseText = generateSpeakingStartMessage(2, undefined, card)
           } else {
-            const qs = getRandomPart3Questions(1)
+            const qs = await getRandomPart3Questions(1)
             setSpeakingQuestions(qs)
             setCurrentSpeakingQIndex(0)
             setSpeakingPhase('part3')
@@ -1194,18 +1259,18 @@ export default function AITutorChat() {
           setSpeakingPart(choice)
           setSpeakingFeedback(null)
           if (choice === 1) {
-            const qs = getRandomPart1Questions(3)
+            const qs = await getRandomPart1Questions(3)
             setSpeakingQuestions(qs)
             setCurrentSpeakingQIndex(0)
             setSpeakingPhase('part1')
             responseText = generateSpeakingStartMessage(1, qs)
           } else if (choice === 2) {
-            const card = getRandomCueCard()
+            const card = await getRandomCueCard()
             setSpeakingCueCard(card)
             setSpeakingPhase('part2')
             responseText = generateSpeakingStartMessage(2, undefined, card)
           } else {
-            const qs = getRandomPart3Questions(2)
+            const qs = await getRandomPart3Questions(2)
             setSpeakingQuestions(qs)
             setCurrentSpeakingQIndex(0)
             setSpeakingPhase('part3')
@@ -1228,19 +1293,15 @@ export default function AITutorChat() {
           if (detectedTask === 'brainstorm') {
             const topic = detectWritingTopic(text) || 'general'
             setWritingTopic(topic)
-            const ideas = generateBrainstorming(topic)
-            setWritingBrainstorming(ideas)
+            responseText = await generateBrainstorming(topic, language)
             setWritingPhase('brainstorming')
-            responseText = formatBrainstorming(ideas)
           } else if (detectedTask === 'outline') {
             const topic = detectWritingTopic(text) || 'education'
             const taskType = detectWritingTaskType(text)
             setWritingTopic(topic)
             setWritingTaskType(taskType)
-            const outline = generateOutline(topic, taskType)
-            setWritingOutline(outline)
+            responseText = await generateOutline(topic, taskType, language)
             setWritingPhase('outlining')
-            responseText = formatOutline(outline)
           } else if (detectedTask === 'thesis') {
             const topic = detectWritingTopic(text) || ''
             setWritingTopic(topic)
@@ -1261,25 +1322,20 @@ export default function AITutorChat() {
             responseText = 'Please paste the text you\'d like me to rewrite, and tell me your target band score (e.g., "Band 7").\n\nI\'ll upgrade vocabulary, add complex structures, and improve overall quality to match your target level.'
           }
         } else {
-          // User sent a message instead of choosing - try detecting task from text
           if (/\b(brainstorm|idea|suggest|argument|point)\b/i.test(text)) {
             const topic = detectWritingTopic(text) || 'general'
             setWritingTopic(topic)
-            const ideas = generateBrainstorming(topic)
-            setWritingBrainstorming(ideas)
+            responseText = await generateBrainstorming(topic, language)
             setWritingPhase('brainstorming')
             setWritingTask('brainstorm')
-            responseText = formatBrainstorming(ideas)
           } else if (/\b(outline|structure|organize|arrange)\b/i.test(text)) {
             const topic = detectWritingTopic(text) || 'education'
             const taskType = detectWritingTaskType(text)
             setWritingTopic(topic)
             setWritingTaskType(taskType)
-            const outline = generateOutline(topic, taskType)
-            setWritingOutline(outline)
+            responseText = await generateOutline(topic, taskType, language)
             setWritingPhase('outlining')
             setWritingTask('outline')
-            responseText = formatOutline(outline)
           } else {
             responseText = "I didn't catch which task you'd like to do. Please choose from the options above, or type a number (1-6)!"
           }
@@ -1290,11 +1346,9 @@ export default function AITutorChat() {
           const taskType = detectWritingTaskType(text)
           const topic = writingTopic || detectWritingTopic(text) || 'education'
           setWritingTaskType(taskType)
-          const outline = generateOutline(topic, taskType)
-          setWritingOutline(outline)
+          responseText = await generateOutline(topic, taskType, language)
           setWritingPhase('outlining')
           setWritingTask('outline')
-          responseText = formatOutline(outline)
         } else {
           responseText = `Great choice! Would you like me to create an **outline** based on these ideas, or would you like to explore a different topic?\n\nType the topic name for more brainstorming, or type **"outline"** to create an essay structure!`
         }
@@ -1318,26 +1372,19 @@ export default function AITutorChat() {
             responseText = 'What topic is your essay about? For example: Education, Technology, Environment, etc.'
           }
         } else {
-          responseText = improveThesisStatement(text, writingTopic)
+          responseText = await improveThesisStatement(text, writingTopic, language)
           setWritingPhase('idle')
         }
       }
       else if (mode === 'writing-coach' && writingPhase === 'paragraph') {
-        responseText = checkParagraphStructure(text)
+        responseText = await checkParagraphStructure(text, language)
         setWritingPhase('idle')
       }
       else if (mode === 'writing-coach' && writingPhase === 'draft-input') {
         const topic = writingTopic || detectWritingTopic(text) || 'general'
         const taskType = writingTaskType || detectWritingTaskType(text)
-        const feedback = generateWritingFeedback(text, taskType, topic)
-
-        setWritingFeedbackData(feedback)
+        responseText = await generateWritingFeedback(text, taskType, topic, language)
         setWritingPhase('feedback')
-
-        await saveWritingFeedback(feedback, session.id)
-        await saveWritingMistakesToNotebook(text, feedback.grammarIssues, taskType)
-
-        responseText = formatWritingFeedbackMessage(feedback, language)
       }
       else if (mode === 'writing-coach' && writingPhase === 'feedback') {
         const lower = text.trim().toLowerCase()
@@ -1369,8 +1416,7 @@ export default function AITutorChat() {
             responseText = 'Please enter a valid band score between 4.0 and 9.0.'
           }
         } else if (text.length > 20) {
-          const improved = generateImprovedVersion(text, writingTargetBand)
-          responseText = improved
+          responseText = await generateImprovedVersion(text, writingTargetBand, language)
           setWritingPhase('idle')
         } else {
           responseText = 'Please tell me your target band score (e.g., "Band 7"), or paste the text you want rewritten!'
@@ -1405,17 +1451,17 @@ export default function AITutorChat() {
             responseText = "Please quote the word, phrase, or sentence you'd like me to explain (use \"quotes\" around it), or tell me what part you need help understanding!\n\nFor example: \"What does 'sustainable' mean?\" or \"I don't understand the second paragraph.\""
             setRlPhase('explaining')
           } else if (action === 'summarize') {
-            responseText = generateSummary(rlAnalysis, language)
+            responseText = await aiGenerateSummary({ text: rlContent, analysis: rlAnalysis, language })
           } else if (action === 'vocabulary') {
-            responseText = generateVocabularyList(rlAnalysis, language)
+            responseText = await aiGenerateVocabularyListFn({ text: rlContent, analysis: rlAnalysis, language })
           } else if (action === 'comprehension') {
-            responseText = generateComprehensionQuestions(rlAnalysis, language)
+            responseText = await aiGenerateComprehensionQuestionsFn({ text: rlContent, analysis: rlAnalysis, language })
           } else if (action === 'opinion') {
-            responseText = generateOpinionQuestions(rlAnalysis, language)
+            responseText = await aiGenerateOpinionQuestions({ text: rlContent, analysis: rlAnalysis, language })
           } else if (action === 'exercises') {
-            responseText = generateExercises(rlAnalysis, language)
+            responseText = await aiGenerateExercisesFn({ text: rlContent, analysis: rlAnalysis, language })
           } else if (action === 'ielts-connection') {
-            responseText = generateIeltsConnection(rlAnalysis, language)
+            responseText = await aiGenerateIeltsConnection({ text: rlContent, analysis: rlAnalysis, language })
           } else {
             responseText = "You can choose an action from the buttons above, or type the action name (e.g., 'summarize', 'vocabulary', 'exercises'). Type **'back'** to start with different content!\n\nAvailable actions:\n" +
               READING_ACTIONS.map((a, i) => `${i + 1}. ${a.label} — ${a.description}`).join('\n')
@@ -1427,35 +1473,33 @@ export default function AITutorChat() {
           setRlPhase('action-select')
           responseText = rlAnalysis ? getActionSelectorMessage(rlAnalysis) : "What content would you like to explore?"
         } else if (rlAnalysis) {
-          responseText = generateExplanation(rlContent, text, rlAnalysis, language)
+          responseText = await aiGenerateExplanation({ content: rlContent, query: text, analysis: rlAnalysis, language })
           setRlPhase('action-select')
         }
       }
       // Normal response flow (friendly chat, other modes)
       else {
-        // Gather context if permission granted
         const contextStr = contextManager.hasPermission()
           ? await contextManager.getFormattedContextString()
           : ''
 
         if (mode === 'friendly-chat') {
-          const corrections = getGentleCorrections(text)
-          const baseResponse = generateResponse(text, mode, language)
+          const correctionsPromise = aiGenerateGentleCorrection({ userMessage: text, language })
+          const baseResponsePromise = aiGenerateResponse({ userMessage: text, mode, language, context: contextStr })
 
-          let finalResponse = baseResponse
+          let finalResponse = await baseResponsePromise
 
-          if (!hasCheckedInToday()) {
-            finalResponse = getDailyCheckInMessage() + '\n\n' + baseResponse
+          const checkInRequired = !hasCheckedInToday()
+          if (checkInRequired) {
+            const checkInMsg = await aiGenerateDailyCheckIn({ language })
+            finalResponse = checkInMsg + '\n\n' + finalResponse
             markCheckedInToday()
             setShowCheckInPrompt(false)
           }
 
-          if (corrections.length > 0) {
-            finalResponse += formatCorrectionsAsText(corrections)
-          }
-
-          if (contextStr) {
-            finalResponse += '\n\n' + contextStr
+          const correctionText = await correctionsPromise
+          if (correctionText) {
+            finalResponse += correctionText
           }
 
           responseText = finalResponse
@@ -1464,7 +1508,7 @@ export default function AITutorChat() {
           const enrichedHint = contextStr
             ? contextHint + '\n' + contextStr
             : contextHint
-          responseText = generateResponse(text, mode, language, enrichedHint)
+          responseText = await aiGenerateResponse({ userMessage: text, mode, language, context: enrichedHint })
         }
       }
 

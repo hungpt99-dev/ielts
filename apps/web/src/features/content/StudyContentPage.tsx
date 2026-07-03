@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { getContentByTitle, getAllContentTemplates } from '../tasks/ieltsContent'
 import type { ContentTemplate } from '../tasks/ieltsContent'
 import type { TaskContentSection, TaskPracticeQuestion, StudySkill, Difficulty } from '../tasks/types'
+import { aiGenerateStudyContent } from '../../components/aiTutor/aiTutorHelper'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
@@ -310,6 +311,7 @@ export default function StudyContentPage() {
   const [content, setContent] = useState<ContentTemplate | null>(null)
   const [contentData, setContentData] = useState<ReturnType<ContentTemplate['getContent']> | null>(null)
   const [loading, setLoading] = useState(true)
+  const [generatingAI, setGeneratingAI] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const [answers, setAnswers] = useState<AnswerState>({})
@@ -327,19 +329,71 @@ export default function StudyContentPage() {
     if (!title || contentGeneratedRef.current) return
     contentGeneratedRef.current = true
 
-    try {
-      const found = getContentByTitle(title)
-      if (found) {
-        setContent(found)
-        setContentData(found.getContent())
-      } else {
-        setError(`Content not found: "${title}"`)
+    let cancelled = false
+
+    ;(async () => {
+      try {
+        const found = getContentByTitle(title)
+        if (found) {
+          if (cancelled) return
+          setContent(found)
+          setContentData(found.getContent())
+          setLoading(false)
+          return
+        }
+
+        // Content not found — generate with AI based on user profile
+        setGeneratingAI(true)
+
+        const settings = JSON.parse(localStorage.getItem('ielts-settings') || '{}')
+        const skill = settings.weakSkills?.[0] || 'Vocabulary'
+        const difficulty = 'medium'
+
+        const aiContent = await aiGenerateStudyContent({ title, skill, difficulty })
+        if (cancelled) return
+
+        const generatedTemplate: ContentTemplate = {
+          skill: skill as StudySkill,
+          title,
+          objective: aiContent.objective,
+          difficulty: difficulty as Difficulty,
+          estimatedMinutes: aiContent.estimatedMinutes,
+          getContent: () => ({
+            sections: aiContent.sections,
+            questions: aiContent.questions,
+            tips: aiContent.tips,
+            whyItMatters: aiContent.whyItMatters,
+            topic: aiContent.topic,
+          }),
+        }
+
+        setContent(generatedTemplate)
+        setContentData(generatedTemplate.getContent())
+        setGeneratingAI(false)
+        setLoading(false)
+
+        // Save AI-generated content as a study note for persistence
+        try {
+          await DatabaseService.addStudyNote({
+            title: `AI Generated: ${title}`,
+            content: JSON.stringify(aiContent, null, 2),
+            topic: aiContent.topic,
+            skill: skill,
+            tags: ['ai-generated', skill.toLowerCase(), 'study-content'],
+            isFavorite: false,
+            isDraft: false,
+          })
+        } catch {
+          // Non-critical
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : `Content not found: "${title}"`)
+          setGeneratingAI(false)
+          setLoading(false)
+        }
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load content')
-    } finally {
-      setLoading(false)
-    }
+    })()
 
     DatabaseService.queryByIndex<TaskEntry>('tasks', 'title', title)
       .then(tasks => {
@@ -350,6 +404,8 @@ export default function StudyContentPage() {
         }
       })
       .catch(() => {})
+
+    return () => { cancelled = true }
   }, [title])
 
   useEffect(() => {
@@ -467,8 +523,8 @@ export default function StudyContentPage() {
     }
   }, [title, content, contentData, showToast])
 
-  if (loading) {
-    return <LoadingSpinner size="lg" fullPage message="Loading study content..." />
+  if (loading || generatingAI) {
+    return <LoadingSpinner size="lg" fullPage message={generatingAI ? 'Generating study content with AI...' : 'Loading study content...'} />
   }
 
   if (error) {

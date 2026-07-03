@@ -14,6 +14,7 @@
 import { LocalTutorStorage } from './storage/LocalTutorStorage'
 import { DatabaseService } from './storage/Database'
 import { loadAppSettings } from './storage/SettingsStorage'
+import { aiGenerateProactiveMessage } from '../components/aiTutor/aiTutorHelper'
 import type {
   TutorMemory,
   ExerciseResult,
@@ -92,7 +93,7 @@ export interface ProactiveMessageSettings {
 export const DEFAULT_PROACTIVE_MESSAGE_SETTINGS: ProactiveMessageSettings = {
   enabled: true,
   browserNotifications: false,
-  aiEnhanced: false,
+  aiEnhanced: true,
   quietHoursStart: '22:00',
   quietHoursEnd: '08:00',
   reminderTime: '09:00',
@@ -441,10 +442,8 @@ export class ProactiveMessageEngine {
       ...this.checkTopicPracticeSuggestion(currentPage, memory),
     )
 
-    if (this.settings.aiEnhanced) {
-      const aiMessages = await this.generateAIEnhancedMessages(settings)
-      candidates.push(...aiMessages)
-    }
+    const aiMessages = await this.generateAIEnhancedMessages(settings)
+    candidates.push(...aiMessages)
 
     return candidates.slice(0, 3)
   }
@@ -1069,24 +1068,52 @@ export class ProactiveMessageEngine {
   private async generateAIEnhancedMessages(
     settings: AppSettings,
   ): Promise<ProactiveMessage[]> {
-    if (!settings.aiEnabled || !settings.aiApiKey) {
-      return [
-        {
-          id: generateId(),
-          triggerType: 'topic_practice_suggestion',
-          category: 'motivation',
-          title: 'AI-Enhanced Coaching Unavailable',
-          message: 'To enable AI-enhanced proactive coaching, add your AI API key in Settings. Until then, I\'ll use rule-based suggestions.',
-          priority: 'low',
-          isRead: false,
-          isDismissed: false,
-          isSnoozed: false,
-          createdAt: new Date().toISOString(),
-        },
-      ]
-    }
+    if (!settings.aiApiKey) return []
 
-    return []
+    try {
+      const memory = await LocalTutorStorage.loadMemory().catch(() => null)
+      const mistakes = await DatabaseService.getAll<MistakeEntry>('mistakes').catch(() => [] as MistakeEntry[])
+      const vocab = await DatabaseService.getAll<VocabularyEntry>('vocabulary').catch(() => [] as VocabularyEntry[])
+
+      const lastStudyDate = memory?.lastStudyDate ? new Date(memory.lastStudyDate) : null
+      const lastStudyDaysAgo = lastStudyDate
+        ? Math.floor((Date.now() - lastStudyDate.getTime()) / 86_400_000)
+        : 0
+
+      const message = await aiGenerateProactiveMessage({
+        streak: memory?.learningStreak || 0,
+        weakSkills: settings.weakSkills || [],
+        examCountdownDays: settings.examDate
+          ? Math.max(0, Math.ceil((new Date(settings.examDate).getTime() - Date.now()) / 86_400_000))
+          : 0,
+        dueVocabularyCount: vocab.length,
+        mistakeCount: mistakes.filter(m => m.status !== 'resolved').length,
+        lastStudyDaysAgo,
+        todayUnfinishedTasks: 0,
+      }, 'english')
+
+      const uniqueSuffix = Date.now().toString(36) + Math.random().toString(36).slice(2, 6)
+
+      return [{
+        id: generateId() + '-ai-' + uniqueSuffix,
+        triggerType: 'topic_practice_suggestion',
+        category: 'motivation',
+        title: 'AI Coach Suggestion',
+        message,
+        priority: 'low',
+        action: {
+          type: 'navigate',
+          label: 'Open AI Tutor',
+          payload: { path: '/tutor' },
+        },
+        isRead: false,
+        isDismissed: false,
+        isSnoozed: false,
+        createdAt: new Date().toISOString(),
+      }]
+    } catch {
+      return []
+    }
   }
 
 

@@ -1,0 +1,1741 @@
+[2026-07-03T09:54:09.829Z] [INFO] Task started: Modify Word tab component to listen for vocabulary updates
+[2026-07-03T09:54:09.832Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/web/src/features/vocabulary/WordTab.tsx","description":"Add state subscription or event listener to update word list on vocabulary import","validationMethod":"file_diff"}]
+[2026-07-03T09:54:10.491Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-03T09:54:10.491Z] [INFO] [stderr] [0m
+[2026-07-03T09:54:10.491Z] [INFO] [stderr] [0m
+[2026-07-03T09:54:15.697Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"WordTab vocabulary import store state update","maxFiles":20}
+[2026-07-03T09:54:15.765Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/vocabulary/**/*"[90m 6 matches[0m
+[2026-07-03T09:54:18.528Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"WordTab"}
+[2026-07-03T09:54:18.768Z] [INFO] [stderr] [0m✱ [0mGrep "WordTab"[90m 0 matches[0m
+[2026-07-03T09:54:19.187Z] [INFO] [stderr] [0m✱ [0mGrep "word.*tab|Word.*Tab"[90m 3 matches[0m
+[2026-07-03T09:54:21.519Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/vocabulary/VocabularyManager.tsx
+[2026-07-03T09:54:21.778Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:54:26.834Z] [INFO] [stderr] [0m✱ [0mGrep "Vocabulary"[90m in apps/web/src · 100 matches[0m
+[2026-07-03T09:54:27.353Z] [INFO] [stderr] [0m✱ [0mGrep "WordTab|wordTab|word-tab"[90m in apps/web/src · 0 matches[0m
+[2026-07-03T09:54:34.517Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/Vocabulary.tsx
+[2026-07-03T09:54:41.862Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/Layout.tsx
+[2026-07-03T09:54:48.658Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"ImportExport DataManagement vocabulary import pages","maxFiles":15}
+[2026-07-03T09:54:57.185Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/pages/PublicApiImportPage.tsx","includeCode":true}
+[2026-07-03T09:55:11.659Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"DatabaseService","limit":5}
+[2026-07-03T09:55:12.172Z] [INFO] [stderr] [0m✱ [0mGrep "class DatabaseService|DatabaseService =""[90m in apps/web/src/services · 0 matches[0m
+[2026-07-03T09:55:15.437Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"DatabaseService","includeCode":true,"file":"apps/web/src/services/storage/Database.ts"}
+[2026-07-03T09:55:18.691Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage/Database.ts[90m [offset=536, limit=50][0m
+[2026-07-03T09:55:23.338Z] [INFO] [stderr] cb9e5b1 Initial commit
+[2026-07-03T09:55:23.338Z] [INFO] [stderr] [0m
+[2026-07-03T09:55:23.338Z] [INFO] [stderr] 1f5d7c8 refactor: restructure from SPA to monorepo with apps/packages
+[2026-07-03T09:55:23.338Z] [INFO] [stderr] 7cf6160 Add README Contact section, remove manifest link, add CodeGraph config, Cloudflare headers, and self-test script
+[2026-07-03T09:55:23.338Z] [INFO] [stderr] [0m$ [0mgit log --oneline -10
+[2026-07-03T09:55:23.338Z] [INFO] [stderr] [0m
+[2026-07-03T09:55:23.338Z] [INFO] [stderr] 829246c feat: auto-redirect from landing page to dashboard if onboarding complete
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] [0m$ [0mgit diff HEAD~1 -- apps/web/src/features/vocabulary/ 2>/dev/null || echo "No changes found"
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] Full output saved to: /Users/phamthanhhung/.local/share/opencode/tool-output/tool_f276790a2001F4eK2f1p308dvW
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] 
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] ...output truncated...
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    computeStats().then(s => setStats(s))
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] 
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    setModalOpen(false)
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +  function handleCloseModal() {
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +  async function handleToggleFavorite(entry: VocabularyEntry) {
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    setEditingEntry(null)
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    setEntries(prev => prev.filter(e => e.id !== id))
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    const updated = await changeStatus(entry, status)
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +      const s = await computeStats()
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    if (stats) {
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    const updated = await toggleFavorite(entry)
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +  async function handleStatusChange(entry: VocabularyEntry, status: VocabStatus) {
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +      setStats(s)
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    const updated = await toggleTag(entry, tag)
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +  async function handleToggleTag(entry: VocabularyEntry, tag: string) {
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    }
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.526Z] [INFO] [stderr] +    setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  async function handleQuickRate(entry: VocabularyEntry, rating: ReviewRating) {
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    await rateWord(entry, rating)
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +      const s = await computeStats()
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +      setStats(s)
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    if (stats) {
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  if (loading) {
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  if (error) {
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    return <LoadingSpinner message="Loading vocabulary..." fullPage />
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +      <div className="flex h-full items-center justify-center">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <CardContent>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            <Button variant="secondary" className="mt-4" onClick={loadEntries}>Retry</Button>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    }
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    return (
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +        <Card className="max-w-md text-center">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            <p className="text-sm text-red-500">{error}</p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          </CardContent>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +        </Card>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  if (tab === 'review') {
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    return <ReviewMode onComplete={() => setTab('browse')} />
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +      </div>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    )
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +      <ExerciseMode
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    return (
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +        onBack={() => setTab('browse')}
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +      />
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +        entries={entries}
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  if (tab === 'exercises') {
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    )
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +  return (
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +        <div>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +    <div className="mx-auto max-w-6xl space-y-6">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          </h1>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            Build your IELTS vocabulary with words, meanings, and examples
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            Vocabulary Notebook
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            Exercises
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          </p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <Button onClick={() => setTab('review')} variant="secondary">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            </svg>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <Button onClick={() => setTab('exercises')} variant="secondary" disabled={entries.length === 0}>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          </Button>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <Button onClick={openCreateForm}>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          </Button>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +        <div className="flex flex-wrap gap-2">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            Review
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            </svg>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            Add Word
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            </svg>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            <CardContent className="text-center">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +      {stats && !compact && (
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <p className="mt-1 text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <Card>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          </Card>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Total</p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          </Button>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <Card>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            <CardContent className="text-center">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            </CardContent>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          </Card>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <p className="mt-1 text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.newCount}</p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            </CardContent>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            <CardContent className="text-center">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <Card>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">New</p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <p className="mt-1 text-2xl font-bold text-amber-600 dark:text-amber-400">{stats.learning}</p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            </CardContent>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Learning</p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            <CardContent className="text-center">
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          <Card>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +          </Card>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +            </CardContent>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <p className="mt-1 text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.reviewing}</p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +              <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Reviewing</p>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +          </Card>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            <CardContent className="text-center">
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +          <Card>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Mastered</p>
+[2026-07-03T09:55:26.527Z] [INFO] [stderr] +          </Card>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +          <Card>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            </CardContent>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <p className="mt-1 text-2xl font-bold text-green-600 dark:text-green-400">{stats.mastered}</p>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Hard Words</p>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            </CardContent>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            <CardContent className="text-center">
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +          </Card>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <p className="mt-1 text-2xl font-bold text-red-600 dark:text-red-400">{stats.hardCount}</p>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +          {[
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            { key: 'all' as const, label: 'All Words', count: entries.length },
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +      {!compact && (
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            { key: 'favorites' as const, label: 'Favorites', count: favorites.length },
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            { key: 'difficult' as const, label: 'Difficult', count: hardWords.length },
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              key={t.key}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +          ].map(t => (
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +        <div className="flex flex-wrap items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 p-1 dark:border-slate-700 dark:bg-slate-800/50">
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            <button
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                  ? 'bg-blue-600 text-white shadow-sm'
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              onClick={() => { setView(t.key); setStatusFilter(''); setDifficultyFilter(''); setTopicFilter(''); setTagFilter(''); setSearch('') }}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              }`}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            >
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              }`}>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              {t.label}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                view === t.key
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <span className={`rounded-full px-2 py-0.5 text-xs ${
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                {t.count}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            </button>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                view === t.key ? 'bg-white/20' : 'bg-slate-200 dark:bg-slate-700'
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +        <CardContent>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +      <Card>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                  : 'text-slate-600 hover:bg-white hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200'
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +          <div className="flex flex-wrap items-center gap-3">
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <label htmlFor="vocab-search" className="sr-only">Search</label>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <input
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            <div className="min-w-[200px] flex-1">
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +          ))}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              </span>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                id="vocab-search"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                type="text"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100 dark:placeholder-slate-500"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                onChange={e => setSearch(e.target.value)}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                value={search}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                placeholder="Search words, meanings, examples..."
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            <select
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            </div>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              className="rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              aria-label="Filter by topic"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              onChange={e => setTopicFilter(e.target.value)}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              value={topicFilter}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                <option key={t} value={t}>{t}</option>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              {IELTS_TOPICS.map(t => (
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <option value="">All Topics</option>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              value={statusFilter}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              />
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            </select>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            >
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              ))}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            <select
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              className="rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              aria-label="Filter by status"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            >
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              onChange={e => setStatusFilter(e.target.value as VocabStatus | '')}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <option value="">All Status</option>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            </select>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            <select
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              {STATUSES.map(s => (
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              className="rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <option value="">All Difficulty</option>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              onChange={e => setDifficultyFilter(e.target.value as VocabDifficulty | '')}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              aria-label="Filter by difficulty"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              {DIFFICULTIES.map(d => (
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              value={difficultyFilter}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            {allTags.length > 0 && (
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              ))}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            </select>
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +            >
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                value={tagFilter}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              ))}
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                className="rounded-lg border border-slate-300 bg-white px-2 py-2 text-xs text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +              <select
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                {allTags.map(t => (
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                aria-label="Filter by tag"
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +              >
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                ))}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  <option key={t} value={t}>{t}</option>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +            {(search || topicFilter || statusFilter || difficultyFilter || tagFilter) && (
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                variant="ghost"
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +            )}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +              </select>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  setSearch('')
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                onClick={() => {
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                size="sm"
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  setDifficultyFilter('')
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  setStatusFilter('')
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  setTopicFilter('')
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +              <Button
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +              >
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                <option value="">All Tags</option>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                }}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                Clear
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  setTagFilter('')
+[2026-07-03T09:55:26.528Z] [INFO] [stderr] +                onChange={e => setTagFilter(e.target.value)}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +          </div>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +            )}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +              </Button>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +      {filteredEntries.length === 0 ? (
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +        </CardContent>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +        <EmptyState
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +          icon={
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +      </Card>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +            <svg className="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +            </svg>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +          }
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +          title={entries.length === 0 ? 'Your vocabulary notebook is empty.' : 'No words match your filters.'}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +        />
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +      ) : (
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +            <div
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +          action={entries.length === 0 ? { label: 'Add Your First Word', onClick: openCreateForm } : undefined}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +          {paginatedEntries.map(entry => (
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +              key={entry.id}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +              className="rounded-lg border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600"
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +        <div className="space-y-2">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +              <div className="flex items-start justify-between gap-4">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  <div className="flex flex-wrap items-center gap-2">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                <div className="min-w-0 flex-1">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      onClick={() => openDetail(entry)}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    <button
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +          description={entries.length === 0 ? 'Add your first word to start building your IELTS vocabulary.' : 'Try adjusting your search or filters.'}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      className="text-left"
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      <h3 className="text-lg font-semibold text-slate-900 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    {entry.pronunciation && (
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +            >
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                        {entry.word}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      </h3>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      </span>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    >
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                        /{entry.pronunciation}/
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      <span className="text-sm text-slate-400 dark:text-slate-500">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  </div>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    )}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    </span>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      {entry.partOfSpeech}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    <span className="text-xs italic text-slate-400 dark:text-slate-500">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  </p>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    <p className="text-xs text-slate-400 dark:text-slate-500">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  <p className="mt-0.5 text-sm text-slate-700 dark:text-slate-300">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  {entry.meaningVi && (
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    {entry.meaning}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    </p>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +      </div>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      {entry.meaningVi}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_COLORS[entry.status]}`}>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  <div className="mt-2 flex flex-wrap items-center gap-2">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      {entry.status}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    </button>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  )}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-400">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      {entry.difficulty}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    </span>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    </span>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                        className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      {entry.topic}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    </span>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      <span
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      >
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    {entry.tags.map(tag => (
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                      </span>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                    ))}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                        {tag}
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                </div>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                <div className="flex shrink-0 flex-col gap-1">
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                  </div>
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +                        key={tag}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    <button
+[2026-07-03T09:55:26.529Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                  <div className="flex gap-1">
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        entry.tags.includes('favorite') ? 'text-yellow-500' : 'text-slate-400 hover:text-yellow-500'
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      className={`rounded p-1.5 transition-colors hover:scale-110 ${
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${DIFFICULTY_COLORS[entry.difficulty]}`}>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      title={entry.tags.includes('favorite') ? 'Remove from favorites' : 'Add to favorites'}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      aria-label={entry.tags.includes('favorite') ? 'Remove from favorites' : 'Add to favorites'}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    >
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      onClick={() => handleToggleFavorite(entry)}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      <svg className="h-4 w-4" fill={entry.tags.includes('favorite') ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    </button>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      </svg>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      }`}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        changeDifficulty(entry, newDiff).then(updated => {
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                          setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      onClick={() => {
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      }}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        entry.difficulty === 'hard' ? 'text-red-500' : 'text-slate-400 hover:text-red-500'
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        })
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      className={`rounded p-1.5 transition-colors hover:scale-110 ${
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        const newDiff = entry.difficulty === 'hard' ? 'medium' : 'hard'
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      }`}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      aria-label={entry.difficulty === 'hard' ? 'Remove difficult mark' : 'Mark as difficult'}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      </svg>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      title={entry.difficulty === 'hard' ? 'Remove difficult mark' : 'Mark as difficult'}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                  </div>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    >
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    <button
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                  <div className="flex gap-1">
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    {STATUSES.map(s => (
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      <button
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        onClick={() => handleStatusChange(entry, s)}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        key={s}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        className={`rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors ${
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                          entry.status === s
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        }`}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                            : 'text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300'
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      >
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        {s === 'new' ? 'New' : s.charAt(0).toUpperCase() + s.slice(1)}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                            ? STATUS_COLORS[s]
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        aria-label={`Mark as ${s}`}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                  </div>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    </button>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      </button>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                  <div className="flex gap-1">
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    ))}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    <Button
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      variant="ghost"
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      size="sm"
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    >
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      </svg>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    </Button>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      onClick={() => openEditForm(entry)}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    <Button
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      size="sm"
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      variant="ghost"
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      aria-label="Edit word"
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      onClick={() => handleDelete(entry.id)}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      className="p-1.5 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      aria-label="Delete word"
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    </Button>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                  </div>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      className="p-1.5"
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      </svg>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    >
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +              <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3 dark:border-slate-700">
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +              </div>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">Quick rate:</span>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    key={rating}
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                </div>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    className={`rounded px-2 py-0.5 text-[10px] font-medium transition-colors ${
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                  <button
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      rating === 'hard' ? 'bg-orange-100 text-orange-600 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-400' :
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                    onClick={() => handleQuickRate(entry, rating)}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +                      'bg-green-100 text-green-600 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400'
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      rating === 'again' ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400' :
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +                    title={`Rate as ${rating}`}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +                    }`}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +                  </button>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                {(['again', 'hard', 'good', 'easy'] as ReviewRating[]).map(rating => (
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +                    {rating}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +                  >
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            </div>
+[2026-07-03T09:55:26.530Z] [INFO] [stderr] +                      rating === 'good' ? 'bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400' :
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              </div>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      {filteredEntries.length > pageSize && (
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +                ))}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        <div className="flex items-center justify-between">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          <p className="text-xs text-slate-500 dark:text-slate-400">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          <div className="flex gap-1">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            <Button
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              variant="ghost"
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              disabled={page <= 1}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          </p>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              onClick={() => setPage(p => p - 1)}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, filteredEntries.length)} of {filteredEntries.length}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            >
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              size="sm"
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            <Button
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              variant="ghost"
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              onClick={() => setPage(p => p + 1)}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              size="sm"
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              disabled={page >= totalFilteredPages}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              Previous
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            </Button>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +              Next
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            </Button>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          </div>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          ))}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      <Modal open={modalOpen} onClose={handleCloseModal} title={editingEntry ? 'Edit Word' : 'Add Word'} size="lg">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        <WordForm
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          onCancel={handleCloseModal}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            >
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          initialValues={editingEntry}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        />
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          saving={saving}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        {detailEntry && <WordDetail entry={detailEntry} onEdit={() => { setDetailOpen(false); openEditForm(detailEntry) }} onClose={() => setDetailOpen(false)} />}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      <Modal open={detailOpen} onClose={() => setDetailOpen(false)} title={detailEntry?.word || ''} size="lg">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          onSave={handleSave}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      </Modal>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +  )
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +    </div>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +  return (
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      <div className="flex flex-wrap items-center gap-2">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${STATUS_COLORS[entry.status]}`}>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +    <div className="space-y-4">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          {entry.status}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        </span>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      </Modal>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${DIFFICULTY_COLORS[entry.difficulty]}`}>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          {entry.difficulty}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          {entry.topic}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        <span className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-400">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +function WordDetail({ entry, onEdit, onClose }: { entry: VocabularyEntry; onEdit: () => void; onClose: () => void }) {
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        </span>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        </span>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        {entry.tags.map(tag => (
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          <span
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            {tag}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          </span>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          >
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      </div>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        ))}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      {entry.pronunciation && (
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        <p className="text-sm text-slate-400 dark:text-slate-500">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        </p>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        {entry.partOfSpeech}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      <p className="text-xs italic text-slate-400 dark:text-slate-500">
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      </p>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +          Pronunciation: /{entry.pronunciation}/
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +            key={tag}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        <p className="text-sm text-slate-700 dark:text-slate-300">{entry.meaning}</p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <p className="text-sm text-slate-400 dark:text-slate-500">{entry.meaningVi}</p>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Meaning</p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        )}
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      {entry.exampleSentence && (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        <div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Example</p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            &ldquo;{entry.exampleSentence}&rdquo;
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          </p>
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +      <div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <p className="text-sm italic text-slate-700 dark:text-slate-300">
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      <div className="grid gap-4 sm:grid-cols-2">
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        {entry.collocations.length > 0 && (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Collocations</p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              {entry.collocations.map((c, i) => (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            <div className="mt-1 flex flex-wrap gap-1.5">
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                <span
+[2026-07-03T09:55:26.531Z] [INFO] [stderr] +        {entry.meaningVi && (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                  key={i}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                  {c}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              ))}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                >
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        )}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        {entry.synonyms.length > 0 && (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            <div className="mt-1 flex flex-wrap gap-1.5">
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                  className="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              {entry.synonyms.map((s, i) => (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                </span>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Synonyms</p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                  key={i}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                  className="rounded-lg bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600 dark:bg-green-900/30 dark:text-green-400"
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                <span
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                </span>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                  {s}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      {entry.antonyms.length > 0 && (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        )}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        <div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              ))}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            {entry.antonyms.map((a, i) => (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <div className="mt-1 flex flex-wrap gap-1.5">
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              <span
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-medium text-red-600 dark:bg-red-900/30 dark:text-red-400"
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              >
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                >
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                key={i}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            ))}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Antonyms</p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        <div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Word Family</p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                {a}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              <span
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                key={i}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <div className="mt-1 flex flex-wrap gap-1.5">
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              >
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            {entry.wordFamily.map((wf, i) => (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                className="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-400"
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              </span>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +                {wf}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            ))}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +              </span>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      {entry.wordFamily.length > 0 && (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      {entry.personalNote && (
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Personal Note</p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <p className="text-sm text-slate-700 dark:text-slate-300">{entry.personalNote}</p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        <div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        <p className="text-xs text-slate-400 dark:text-slate-500">
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        </p>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +      <div className="flex items-center justify-between border-t border-slate-200 pt-4 dark:border-slate-700">
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          {entry.updatedAt !== entry.createdAt && ` · Updated: ${new Date(entry.updatedAt).toLocaleDateString()}`}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          Added: {new Date(entry.createdAt).toLocaleDateString()}
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +        <div className="flex gap-2">
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          <Button variant="secondary" size="sm" onClick={onEdit}>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          </Button>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +            Close
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +            Edit
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +          </div>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          <Button variant="ghost" size="sm" onClick={onClose}>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          </Button>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      </div>
+[2026-07-03T09:55:26.532Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    </div>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +function ExerciseMode({ entries, onBack }: { entries: VocabularyEntry[]; onBack: () => void }) {
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  )
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  const [exercises, setExercises] = useState<VocabExercisePrompt[]>([])
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  const [selectedWords, setSelectedWords] = useState<VocabularyEntry[]>([])
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    setSelectedIds(prev => {
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  const [generating, setGenerating] = useState(false)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      if (next.has(entry.id)) {
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  function toggleSelect(entry: VocabularyEntry) {
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      const next = new Set(prev)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        next.delete(entry.id)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      }
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      } else {
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        next.add(entry.id)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  function selectAll() {
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    if (selectedIds.size === entries.length) {
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      return next
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      setSelectedIds(new Set())
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    } else {
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      setSelectedIds(new Set(entries.map(e => e.id)))
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    })
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    setGenerating(true)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  async function generate() {
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    setExercises(result)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    }
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    setGenerating(false)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  return (
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    const result = await generateExercisesFromVocabulary(words.length > 0 ? words : entries, 3)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    <div className="mx-auto max-w-3xl space-y-6">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +    const words = entries.filter(e => selectedIds.has(e.id))
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      <div className="flex items-center justify-between">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        <div>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +            Generate practice exercises from your saved words
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +            Vocabulary Exercises
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          </p>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        <Button variant="ghost" onClick={onBack}>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          Back to Vocabulary
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      </div>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          </h1>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        </Button>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        <CardContent>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      <Card>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          <div className="space-y-3">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +            <div className="flex items-center justify-between">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                Select words to practice ({selectedIds.size} selected)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +              <Button variant="ghost" size="sm" onClick={selectAll}>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +              <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +              </Button>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                {selectedIds.size === entries.length ? 'Deselect All' : 'Select All'}
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +            <div className="flex max-h-48 flex-wrap gap-2 overflow-y-auto">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                  className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +              </p>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                    selectedIds.has(entry.id)
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +            </div>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                  key={entry.id}
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +              {entries.slice(0, 50).map(entry => (
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                      ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-900/30 dark:text-blue-300'
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                  onClick={() => toggleSelect(entry)}
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300'
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                  }`}
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                >
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                  {entry.word}
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +              ))}
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                <button
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +            </div>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +            <Button onClick={generate} disabled={generating} loading={generating} className="w-full">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +                </button>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          </div>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +              Generate Exercises
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +            </Button>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        </CardContent>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +        <div className="space-y-4">
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +      {exercises.length > 0 && (
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +            <Card key={i}>
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +          {exercises.map((ex, i) => (
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                <div className="flex items-start justify-between">
+[2026-07-03T09:55:26.533Z] [INFO] [stderr] +      </Card>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                  <div>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                    </p>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                    <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                    <p className="text-xs text-slate-500 dark:text-slate-400">
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                      {ex.estimatedMinutes} min &middot; {ex.wordsToUse.length} words
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                      Exercise {i + 1}: {ex.topic}
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +              <CardContent className="space-y-3">
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                    </p>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                  </div>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                  <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                <p className="text-sm text-slate-700 dark:text-slate-300">{ex.prompt}</p>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                </div>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                <div className="rounded-lg bg-slate-50 p-3 dark:bg-slate-800">
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                  <p className="mt-1 whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                    {ex.instructions}
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                    {ex.skill}
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                  <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Instructions</p>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                <div className="flex flex-wrap gap-1.5">
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                  {ex.wordsToUse.map((w, j) => (
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                </div>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                  </p>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                    <span
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                      className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                  </span>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                      key={j}
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                      {w}
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                    </span>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                    >
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                  ))}
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +              </CardContent>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +          ))}
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +        </div>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +            </Card>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +      )}
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +  )
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +    </div>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] --- a/apps/web/src/features/vocabulary/components/ReviewMode.tsx
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] index c222a36..c6eb54b 100644
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +++ b/apps/web/src/features/vocabulary/components/ReviewMode.tsx
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] diff --git a/apps/web/src/features/vocabulary/components/ReviewMode.tsx b/apps/web/src/features/vocabulary/components/ReviewMode.tsx
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +                </div>
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  ]
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] @@ -15,10 +15,10 @@ const REVIEW_MODES: { value: ReviewMode; label: string }[] = [
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  const RATING_BUTTONS: { rating: ReviewRating; label: string; color: string }[] = [
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] -  { rating: 'good', label: 'Good', color: 'bg-blue-500 hover:bg-blue-600 focus-visible:ring-blue-400' },
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] -  { rating: 'easy', label: 'Easy', color: 'bg-green-500 hover:bg-green-600 focus-visible:ring-green-400' },
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] -  { rating: 'hard', label: 'Hard', color: 'bg-orange-500 hover:bg-orange-600 focus-visible:ring-orange-400' },
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +  { rating: 'again', label: 'Again', color: 'bg-red-500 hover:bg-red-600 focus-visible:ring-red-400 dark:bg-red-700 dark:hover:bg-red-800' },
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +  { rating: 'hard', label: 'Hard', color: 'bg-orange-500 hover:bg-orange-600 focus-visible:ring-orange-400 dark:bg-orange-700 dark:hover:bg-orange-800' },
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +  { rating: 'easy', label: 'Easy', color: 'bg-green-500 hover:bg-green-600 focus-visible:ring-green-400 dark:bg-green-700 dark:hover:bg-green-800' },
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  ]
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] -  { rating: 'again', label: 'Again', color: 'bg-red-500 hover:bg-red-600 focus-visible:ring-red-400' },
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] @@ -98,6 +98,7 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void })
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +  { rating: 'good', label: 'Good', color: 'bg-blue-500 hover:bg-blue-600 focus-visible:ring-blue-400 dark:bg-blue-700 dark:hover:bg-blue-800' },
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  function getToday(): string {
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]        const vocabStatus: VocabStatus =
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +        (rating === 'good' || rating === 'easy') && currentItem.vocab.status === 'reviewing' ? 'mastered' :
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]          currentItem.vocab.status === 'new' || currentItem.vocab.status === 'learning' ? 'learning' :
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] --- a/apps/web/src/features/vocabulary/components/WordForm.tsx
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]          currentItem.vocab.status
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] diff --git a/apps/web/src/features/vocabulary/components/WordForm.tsx b/apps/web/src/features/vocabulary/components/WordForm.tsx
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +++ b/apps/web/src/features/vocabulary/components/WordForm.tsx
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] index c812a09..0b8082f 100644
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] @@ -1,10 +1,11 @@
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  import { useState } from 'react'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  import { useForm } from 'react-hook-form'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../../../models'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]          rating === 'again' ? 'learning' :
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +import { z } from 'zod'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  import Button from '../../../components/ui/Button'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] -import { z } from 'zod/v4'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  import { zodResolver } from '@hookform/resolvers/zod'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]    'Education', 'Technology', 'Environment', 'Health', 'Work',
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  import { useSettings } from '../../../context/SettingsContext'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  const IELTS_TOPICS = [
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] @@ -149,32 +150,27 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]      try {
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +import { callAI } from '@ielts/ai'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +      const systemPrompt = 'You are an IELTS vocabulary assistant. Always respond with valid JSON.'
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] -      const prompt = `You are an IELTS vocabulary assistant. Generate a natural example sentence for the word "${word}"${topic ? ` on the topic of "${topic}"` : ''}. Also provide 2-3 common collocations and 2-3 synonyms. Format the response as JSON with keys: "sentence", "collocations" (array), "synonyms" (array).`
+[2026-07-03T09:55:26.534Z] [INFO] [stderr] +      const userPrompt = `Generate a natural example sentence for the word "${word}"${topic ? ` on the topic of "${topic}"` : ''}. Also provide 2-3 common collocations and 2-3 synonyms. Format the response as JSON with keys: "sentence", "collocations" (array), "synonyms" (array).`
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -      const response = await fetch(settings.aiEndpoint || 'https://api.openai.com/v1/chat/completions', {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -          'Content-Type': 'application/json',
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -        method: 'POST',
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -          'Authorization': `Bearer ${settings.aiApiKey}`,
+[2026-07-03T09:55:26.534Z] [INFO] [stderr]      setAiError(null)
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -        },
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -        body: JSON.stringify({
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -        headers: {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +      const { content, error } = await callAI(
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +        userPrompt,
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +          apiKey: settings.aiApiKey,
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +          baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +        () => ({
+[2026-07-03T09:55:26.535Z] [INFO] [stderr]            model: settings.aiModel || 'gpt-4o-mini',
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +        systemPrompt,
+[2026-07-03T09:55:26.535Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -          messages: [
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -            { role: 'user', content: prompt },
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -            { role: 'system', content: 'You are an IELTS vocabulary assistant. Always respond with valid JSON.' },
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -          temperature: 0.7,
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -          max_tokens: 300,
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -          ],
+[2026-07-03T09:55:26.535Z] [INFO] [stderr]          }),
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +      )
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -      if (!response.ok) {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +        { temperature: 0.7, maxTokens: 300 },
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -      })
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -        const errBody = await response.text().catch(() => '')
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +      if (error) {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -        throw new Error(`AI API error (${response.status}): ${errBody || response.statusText}`)
+[2026-07-03T09:55:26.535Z] [INFO] [stderr]        }
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +        throw new Error(error)
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -      const data = await response.json()
+[2026-07-03T09:55:26.535Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +      if (!content) {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] -      const content = data.choices?.[0]?.message?.content || ''
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +        throw new Error('Empty response from AI')
+[2026-07-03T09:55:26.535Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.535Z] [INFO] [stderr]  
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +      }
+[2026-07-03T09:55:26.535Z] [INFO] [stderr]        try {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr]        let parsed
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] --- /dev/null
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +++ b/apps/web/src/features/vocabulary/vocabularyService.ts
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] diff --git a/apps/web/src/features/vocabulary/vocabularyService.ts b/apps/web/src/features/vocabulary/vocabularyService.ts
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] new file mode 100644
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] index 0000000..915de62
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +import type { VocabularyEntry, VocabReviewEntry, ReviewRating, VocabDifficulty, VocabStatus } from '../../models'
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] @@ -0,0 +1,382 @@
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +import { DatabaseService } from '../../services/storage/Database'
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +import { loadAppSettings } from '../../services/storage/SettingsStorage'
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +import { getInitialReviewEntry, calculateNextReview } from '../../utils/spaced-repetition'
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +import type { ProviderConfig } from '@ielts/ai'
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +import { generateId } from '../../utils'
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +export interface VocabStats {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +import { callAI } from '@ielts/ai'
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  total: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  newCount: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  learning: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  reviewing: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  mastered: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  masteredCount: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  learningCount: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  hardCount: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +export interface VocabFilter {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  topic?: string
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  search?: string
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  view?: 'all' | 'favorites' | 'difficult'
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  difficulty?: VocabDifficulty | ''
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  status?: VocabStatus | ''
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  dueForReview: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  skill: 'Vocabulary'
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +export interface VocabExercisePrompt {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  prompt: string
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  topic: string
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  instructions: string
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  estimatedMinutes: number
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  tag?: string
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  wordsToUse: string[]
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  return new Date().toISOString().slice(0, 10)
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +export async function getAllVocabulary(): Promise<VocabularyEntry[]> {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +function getToday(): string {
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +  return DatabaseService.getAll<VocabularyEntry>('vocabulary')
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +export async function getVocabularyById(id: string): Promise<VocabularyEntry | undefined> {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +export async function addVocabulary(
+[2026-07-03T09:55:26.535Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +): Promise<VocabularyEntry> {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  const now = new Date().toISOString()
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  entry: Omit<VocabularyEntry, 'id' | 'createdAt' | 'updatedAt'>,
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  const full: VocabularyEntry = {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    ...entry,
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  return DatabaseService.getById<VocabularyEntry>('vocabulary', id)
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    createdAt: now,
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  await DatabaseService.add('vocabulary', full)
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    updatedAt: now,
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  return full
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    id: generateId(),
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +export async function updateVocabulary(
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  id: string,
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +): Promise<void> {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  changes: Partial<VocabularyEntry>,
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    ...changes,
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  })
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  await DatabaseService.update<VocabularyEntry>('vocabulary', id, {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  await DatabaseService.remove('vocabulary', id)
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +export async function upsertVocabulary(entry: VocabularyEntry): Promise<void> {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  await DatabaseService.put('vocabulary', entry)
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +export async function deleteVocabulary(id: string): Promise<void> {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    updatedAt: new Date().toISOString(),
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  entries: VocabularyEntry[],
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  filter: VocabFilter,
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +export function filterVocabulary(
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  let filtered = entries
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  if (filter.view === 'favorites') {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    filtered = filtered.filter(e => e.tags.includes('favorite'))
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  } else if (filter.view === 'difficult') {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +): VocabularyEntry[] {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +      e =>
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    filtered = filtered.filter(e => e.difficulty === 'hard')
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    const q = filter.search.toLowerCase()
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    filtered = filtered.filter(
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  if (filter.search) {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +        e.meaningVi.toLowerCase().includes(q) ||
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +        e.exampleSentence.toLowerCase().includes(q),
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +        e.word.toLowerCase().includes(q) ||
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    )
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  if (filter.topic) {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  if (filter.status) {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    filtered = filtered.filter(e => e.topic === filter.topic)
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +        e.meaning.toLowerCase().includes(q) ||
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    filtered = filtered.filter(e => e.difficulty === filter.difficulty)
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    filtered = filtered.filter(e => e.status === filter.status)
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  if (filter.difficulty) {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +    filtered = filtered.filter(e => e.tags.includes(filter.tag!))
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  if (filter.tag) {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  return filtered.sort((a, b) => a.word.localeCompare(b.word))
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +  const all = entries ?? await getAllVocabulary()
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +export async function computeStats(entries?: VocabularyEntry[]): Promise<VocabStats> {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const dueForReview = reviews.filter(r => {
+[2026-07-03T09:55:26.536Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    const nextDate = new Date(r.nextReviewDate)
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  }).length
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    if (r.interval >= 21 && r.repetitions >= 5) return false
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const newWords = all.filter(v => {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    const review = reviews.find(r => r.vocabularyId === v.id)
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const reviews = await DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews')
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    nextDate.setHours(0, 0, 0, 0)
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    return nextDate <= new Date()
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  }).length
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    total: all.length,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    reviewing: all.filter(e => e.status === 'reviewing').length,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    newCount: all.filter(e => e.status === 'new').length,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    return !review
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    mastered: all.filter(e => e.status === 'mastered').length,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    masteredCount: reviews.filter(r => r.interval >= 21 && r.repetitions >= 5).length,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    learning: all.filter(e => e.status === 'learning').length,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    hardCount: all.filter(e => e.difficulty === 'hard').length,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    learningCount: reviews.filter(r => r.interval < 21 || r.repetitions < 5).length,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    dueForReview,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  return {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const tags = new Set<string>()
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  for (const e of all) {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const all = entries ?? await getAllVocabulary()
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +export async function getAllTags(entries?: VocabularyEntry[]): Promise<string[]> {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    for (const t of e.tags) tags.add(t)
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +export async function getWordsByTopic(topic: string): Promise<VocabularyEntry[]> {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  return Array.from(tags).sort()
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  return all.filter(e => e.topic === topic)
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const all = await getAllVocabulary()
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const all = await getAllVocabulary()
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +export async function getWordsByStatus(status: VocabStatus): Promise<VocabularyEntry[]> {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  return all.filter(e => e.status === status)
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const all = await getAllVocabulary()
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  return all.filter(e => e.tags.includes(tag))
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    ? entry.tags.filter(t => t !== 'favorite')
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const tags = entry.tags.includes('favorite')
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +export async function toggleFavorite(entry: VocabularyEntry): Promise<VocabularyEntry> {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const updated: VocabularyEntry = { ...entry, tags, updatedAt: new Date().toISOString() }
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +    : [...entry.tags, 'favorite']
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  await DatabaseService.put('vocabulary', updated)
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +export async function changeStatus(
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  return updated
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  status: VocabStatus,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +export async function getWordsByTag(tag: string): Promise<VocabularyEntry[]> {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +): Promise<VocabularyEntry> {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const updated: VocabularyEntry = { ...entry, status, updatedAt: new Date().toISOString() }
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  entry: VocabularyEntry,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  await DatabaseService.put('vocabulary', updated)
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +export async function changeDifficulty(
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  return updated
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +): Promise<VocabularyEntry> {
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  return updated
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  entry: VocabularyEntry,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  difficulty: VocabDifficulty,
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  await DatabaseService.put('vocabulary', updated)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.537Z] [INFO] [stderr] +  const updated: VocabularyEntry = { ...entry, difficulty, updatedAt: new Date().toISOString() }
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +export async function toggleTag(
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  entry: VocabularyEntry,
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  tag: string,
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const tags = entry.tags.includes(tag)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +): Promise<VocabularyEntry> {
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    ? entry.tags.filter(t => t !== tag)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const updated: VocabularyEntry = { ...entry, tags, updatedAt: new Date().toISOString() }
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  return updated
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    getAllVocabulary(),
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    : [...entry.tags, tag]
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews'),
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const [vocabulary, reviews] = await Promise.all([
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const todayStr = getToday()
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const reviewMap = new Map(reviews.map(r => [r.vocabularyId, r]))
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +export async function getDueReviewWords(): Promise<VocabularyEntry[]> {
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const due: VocabularyEntry[] = []
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  for (const v of vocabulary) {
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  ])
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    if (review) {
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    const review = reviewMap.get(v.id)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +      if (review.nextReviewDate.slice(0, 10) <= todayStr) {
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  await DatabaseService.put('vocabulary', updated)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +      }
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +      due.push(v)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    }
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +        due.push(v)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    if (v.status === 'mastered') continue
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    } else if (v.status === 'new' || v.status === 'learning' || v.status === 'reviewing') {
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  due.sort((a, b) => a.word.localeCompare(b.word))
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +export async function rateWord(
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  return due
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  entry: VocabularyEntry,
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const now = new Date()
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  rating: ReviewRating,
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +): Promise<VocabReviewEntry> {
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  let review = existing.find(r => r.vocabularyId === entry.id)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    review = getInitialReviewEntry(entry.id, now)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  if (!review) {
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const updatedReview = calculateNextReview(review, rating, now)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const existing = await DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews')
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const vocabStatus: VocabStatus =
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    rating === 'again' ? 'learning' :
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    (rating === 'good' || rating === 'easy') && entry.status === 'reviewing' ? 'mastered' :
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    entry.status
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    entry.status === 'new' || entry.status === 'learning' ? 'learning' :
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  await DatabaseService.put('vocabularyReviews', updatedReview)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  if (entry.status !== vocabStatus) {
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +    await changeStatus(entry, vocabStatus)
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  entries: VocabularyEntry[],
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  count: number = 3,
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +export async function generateExercisesFromVocabulary(
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  const prompts: VocabExercisePrompt[] = []
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +  if (entries.length === 0) {
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      instructions: 'Write 4-5 sentences describing why protecting the environment is important. Try to use words like: sustainable, pollution, conservation, ecosystem, and biodiversity.',
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +  return updatedReview
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      skill: 'Vocabulary',
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    return [{
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      estimatedMinutes: 10,
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +): Promise<VocabExercisePrompt[]> {
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      topic: 'Environment',
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      prompt: 'Write a paragraph about environmental protection using topic-specific vocabulary.',
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    }]
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +  const config: ProviderConfig | null = settings.aiApiKey && settings.aiEnabled
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +  const settings = loadAppSettings()
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        apiKey: settings.aiApiKey,
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      wordsToUse: ['sustainable', 'pollution', 'conservation', 'ecosystem', 'biodiversity'],
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        model: settings.aiModel || 'gpt-4o-mini',
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.538Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +  const chunkSize = Math.ceil(entries.length / count)
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    : null
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    const chunk = entries.slice(i * chunkSize, (i + 1) * chunkSize)
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      }
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    ? {
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +  for (let i = 0; i < count; i++) {
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    const words = chunk.map(v => v.word)
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    const meanings = chunk.map(v => v.meaning).filter(Boolean)
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    if (chunk.length === 0) break
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    const topics = [...new Set(chunk.map(v => v.topic))].filter(Boolean)
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        `- "${v.word}": ${v.meaning}${v.exampleSentence ? ` (e.g., ${v.exampleSentence})` : ''}`
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      const wordDetails = chunk.map(v =>
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    if (config) {
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      const aiPrompt = `You are an IELTS tutor. Create an IELTS-style writing exercise using these vocabulary words.
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      ).join('\n')
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +Words to use:
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +Return a JSON object with these fields:
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +- "instructions": clear step-by-step instructions
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +- "prompt": a writing prompt that incorporates these words naturally
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +- "topic": a specific IELTS topic
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +- "estimatedMinutes": estimated time in minutes (integer)`
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        aiPrompt,
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      const { content, error } = await callAI(
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +${wordDetails}
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        { temperature: 0.7, maxTokens: 300 },
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        () => config,
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      )
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      if (!error && content) {
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        try {
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +          const jsonMatch = content.match(/\{[\s\S]*\}/)
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        'Generate an IELTS writing exercise using the provided vocabulary words. Return valid JSON only.',
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +            const parsed = JSON.parse(jsonMatch[0])
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +            prompts.push({
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +              skill: 'Vocabulary',
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +              prompt: parsed.prompt || `Practice using these words in context: ${words.join(', ')}`,
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +              instructions: parsed.instructions || `Write sentences using: ${words.join(', ')}`,
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +          if (jsonMatch) {
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +              topic: parsed.topic || (topics.length > 0 ? topics.join(', ') : `Saved Words ${i + 1}`),
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +          }
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        } catch {
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +            continue
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +              estimatedMinutes: parsed.estimatedMinutes || Math.max(5, words.length * 2),
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +            })
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        }
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    }
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      }
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +              wordsToUse: words,
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      skill: 'Vocabulary',
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +      instructions: meanings.length > 0
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        : `Write one sentence for each word: ${words.join(', ')}`,
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +      topic: topics.length > 0 ? topics.join(', ') : `Saved Words ${i + 1}`,
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +        ? `Write one sentence for each word below to show you understand its meaning:\n${words.map((w, j) => `- "${w}": ${meanings[j] ?? 'use in context'}`).join('\n')}`
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +      prompt: `Practice using these ${words.length} saved word${words.length > 1 ? 's' : ''} in context: ${words.join(', ')}`,
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +    prompts.push({
+[2026-07-03T09:55:26.539Z] [INFO] [stderr] +          // fall through to template fallback
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +    })
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +      estimatedMinutes: Math.max(5, words.length * 2),
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +      wordsToUse: words,
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  }
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  return prompts
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  const all = await getAllVocabulary()
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +export async function getRecentlySaved(days: number = 7): Promise<VocabularyEntry[]> {
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  return all.filter(v => new Date(v.createdAt) >= cutoff)
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  cutoff.setDate(cutoff.getDate() - days)
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  const q = query.toLowerCase()
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  const cutoff = new Date()
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  return all.filter(
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +    e =>
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +      e.meaning.toLowerCase().includes(q) ||
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +      e.word.toLowerCase().includes(q) ||
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  const all = await getAllVocabulary()
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +      e.meaningVi.toLowerCase().includes(q) ||
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +export async function searchVocabulary(query: string): Promise<VocabularyEntry[]> {
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +  )
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +      e.exampleSentence.toLowerCase().includes(q),
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] [0m
+[2026-07-03T09:55:26.540Z] [INFO] [stderr] +}
+[2026-07-03T09:55:26.585Z] [INFO] Task waiting for input: apiKey:
+[2026-07-03T09:55:26.596Z] [INFO] User input provided via TTY prompt
+[2026-07-03T09:55:48.163Z] [INFO] [stderr] [•] Verify which component serves as the Word tab and needs modification
+[2026-07-03T09:55:48.163Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-03T09:55:48.163Z] [INFO] [stderr] [ ] Validate with pnpm test
+[2026-07-03T09:55:48.163Z] [INFO] [stderr] [0m
+[2026-07-03T09:55:48.163Z] [INFO] [stderr] [ ] Add vocabulary store subscription or event mechanism to update word list on import
+[2026-07-03T09:55:48.273Z] [INFO] [stdout] Now I understand the architecture. The `WordTab.tsx` file doesn't exist yet. The feature component at `apps/web/src/features/vocabulary/Vocabulary.tsx` already has `VocabularyImport` with `handleImportComplete` → `loadEntries()`, but it's not the one routed at `/vocabulary`. Let me check which component is actually the "Word tab" and what's missing.
+[2026-07-03T09:55:51.681Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"useVocabulary|vocabularyStore|vocabularyContext|vocabStore","limit":10}
+[2026-07-03T09:55:52.325Z] [INFO] [stderr] [0m✱ [0mGrep "createContext|useContext.*Vocabulary|vocabulary.*context"[90m in apps/web/src · 10 matches[0m
+[2026-07-03T09:56:05.428Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage/Database.ts[90m [offset=586, limit=100][0m
+[2026-07-03T09:56:08.601Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage/Database.ts[90m [offset=686, limit=200][0m
+[2026-07-03T09:56:27.352Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/**/*vocab*test*"[90m 0 matches[0m
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:    ✓ Explain prompt > builds ielts vocab prompt 0ms
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] [0m$ [0mpnpm test -- --list 2>/dev/null | grep -i vocab || echo "No vocab tests found via pnpm test --list"
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:    × Vocabulary prompts > builds vocabulary quiz prompt 0ms
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:      90|   it('builds vocabulary details prompt', () => {
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:    × Vocabulary prompts > builds vocabulary details prompt 3ms
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] [0m
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:  FAIL  src/__tests__/prompts.test.ts > Video transcript prompts > builds vocabulary from transcript prompt
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:      91|     const prompt = buildVocabularyDetailsPrompt('aberration')
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:    × Video transcript prompts > builds vocabulary from transcript prompt 0ms
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:  FAIL  src/__tests__/prompts.test.ts > Vocabulary prompts > builds vocabulary quiz prompt
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:  ❯ buildVocabularyQuizPrompt src/prompts/vocabulary.ts:45:22
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:     118|     expect(prompt).toContain('vocabulary')
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] [0m
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:     116|     const prompt = buildVocabularyFromTranscriptPrompt(transcript)
+[2026-07-03T09:56:29.745Z] [INFO] [stderr] packages/ai test:  FAIL  src/__tests__/prompts.test.ts > Vocabulary prompts > builds vocabulary details prompt
+[2026-07-03T09:56:38.197Z] [INFO] [stderr] [•] Add vocabulary event emitter for cross-component notifications
+[2026-07-03T09:56:38.197Z] [INFO] [stderr] [ ] Validate with pnpm test
+[2026-07-03T09:56:38.197Z] [INFO] [stderr] [ ] Update VocabularyImport to emit events after import
+[2026-07-03T09:56:38.197Z] [INFO] [stderr] [ ] Update Vocabulary component to listen for vocabulary events
+[2026-07-03T09:56:38.197Z] [INFO] [stderr] [✓] Verify which component serves as the Word tab and needs modification
+[2026-07-03T09:56:38.197Z] [INFO] [stderr] [0m
+[2026-07-03T09:56:38.197Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-03T09:56:38.319Z] [INFO] [stdout] Based on my analysis, the feature `Vocabulary.tsx` already uses a direct callback pattern for import, but lacks a general subscription mechanism. I'll add a custom event system so the word list updates regardless of where vocabulary changes originate (import, AI tutor, etc.).
+[2026-07-03T09:56:41.581Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/vocabulary/vocabularyEvents.ts
+[2026-07-03T09:56:41.581Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-03T09:56:41.582Z] [INFO] [stderr] [0m
+[2026-07-03T09:56:45.453Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:56:45.453Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:56:45.453Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:56:45.453Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:56:45.453Z] [INFO] [stderr] ===================================================================
+[2026-07-03T09:56:45.453Z] [INFO] [stderr] @@ -1,6 +1,7 @@
+[2026-07-03T09:56:45.453Z] [INFO] [stderr]  
+[2026-07-03T09:56:45.453Z] [INFO] [stderr]  export interface VocabularyImportProps {
+[2026-07-03T09:56:45.453Z] [INFO] [stderr] +import { emitVocabularyChanged } from './vocabularyEvents'
+[2026-07-03T09:56:45.453Z] [INFO] [stderr]    onImportComplete: (count: number) => void
+[2026-07-03T09:56:45.453Z] [INFO] [stderr] 
+[2026-07-03T09:56:45.453Z] [INFO] [stderr]  import { useRef } from 'react'
+[2026-07-03T09:56:45.453Z] [INFO] [stderr]  import { DatabaseService } from '../../services/storage/Database'
+[2026-07-03T09:56:45.453Z] [INFO] [stderr] [0m
+[2026-07-03T09:56:45.453Z] [INFO] [stderr]    className?: string
+[2026-07-03T09:56:45.510Z] [INFO] [stdout] Now update `VocabularyImport.tsx` to emit the event after a successful import:
+[2026-07-03T09:56:48.743Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:56:48.743Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:56:48.743Z] [INFO] [stderr] ===================================================================
+[2026-07-03T09:56:48.743Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:56:48.743Z] [INFO] [stderr] @@ -27,8 +27,9 @@
+[2026-07-03T09:56:48.743Z] [INFO] [stderr]  
+[2026-07-03T09:56:48.743Z] [INFO] [stderr]      }
+[2026-07-03T09:56:48.743Z] [INFO] [stderr] +  emitVocabularyChanged()
+[2026-07-03T09:56:48.743Z] [INFO] [stderr]  } catch (err) {
+[2026-07-03T09:56:48.743Z] [INFO] [stderr]    }
+[2026-07-03T09:56:48.743Z] [INFO] [stderr]    onImportComplete(count)
+[2026-07-03T09:56:48.744Z] [INFO] [stderr] [0m
+[2026-07-03T09:56:48.744Z] [INFO] [stderr]    if (fileInputRef.current) {
+[2026-07-03T09:56:48.744Z] [INFO] [stderr]  } finally {
+[2026-07-03T09:56:48.744Z] [INFO] [stderr] 
+[2026-07-03T09:56:48.744Z] [INFO] [stderr]    throw err
+[2026-07-03T09:56:48.743Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:56:52.576Z] [INFO] [stderr] [✓] Add vocabulary event emitter for cross-component notifications
+[2026-07-03T09:56:52.576Z] [INFO] [stderr] [ ] Validate with pnpm test
+[2026-07-03T09:56:52.576Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-03T09:56:52.576Z] [INFO] [stderr] [•] Update Vocabulary component to listen for vocabulary events
+[2026-07-03T09:56:52.576Z] [INFO] [stderr] [✓] Update VocabularyImport to emit events after import
+[2026-07-03T09:56:52.576Z] [INFO] [stderr] [0m
+[2026-07-03T09:56:52.576Z] [INFO] [stderr] [✓] Verify which component serves as the Word tab and needs modification
+[2026-07-03T09:56:57.258Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:56:57.258Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:56:57.258Z] [INFO] [stderr] ===================================================================
+[2026-07-03T09:56:57.258Z] [INFO] [stderr] @@ -7,8 +7,9 @@
+[2026-07-03T09:56:57.258Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:56:57.258Z] [INFO] [stderr]  import EmptyState from '../../components/ui/EmptyState'
+[2026-07-03T09:56:57.258Z] [INFO] [stderr]  import VocabularyImport from './VocabularyImport'
+[2026-07-03T09:56:57.258Z] [INFO] [stderr]  import WordForm from './components/WordForm'
+[2026-07-03T09:56:57.258Z] [INFO] [stderr]  
+[2026-07-03T09:56:57.258Z] [INFO] [stderr]  import ReviewMode from './components/ReviewMode'
+[2026-07-03T09:56:57.258Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:56:57.258Z] [INFO] [stderr] +import { onVocabularyChanged } from './vocabularyEvents'
+[2026-07-03T09:56:57.258Z] [INFO] [stderr]    'Education', 'Technology', 'Environment', 'Health', 'Work',
+[2026-07-03T09:56:57.258Z] [INFO] [stderr]    'Business', 'Travel', 'Culture', 'Society', 'Crime',
+[2026-07-03T09:56:57.258Z] [INFO] [stderr] [0m
+[2026-07-03T09:56:57.258Z] [INFO] [stderr] 
+[2026-07-03T09:56:57.258Z] [INFO] [stderr]  const IELTS_TOPICS = [
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] ===================================================================
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:57:00.542Z] [INFO] [stderr]  useEffect(() => {
+[2026-07-03T09:57:00.542Z] [INFO] [stderr]    loadEntries()
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] @@ -70,8 +70,12 @@
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] +  return onVocabularyChanged(loadEntries)
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] +}, [loadEntries])
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:57:00.542Z] [INFO] [stderr]  }, [loadEntries])
+[2026-07-03T09:57:00.542Z] [INFO] [stderr]    const tags = new Set<string>()
+[2026-07-03T09:57:00.542Z] [INFO] [stderr]  
+[2026-07-03T09:57:00.542Z] [INFO] [stderr]  const allTags = useMemo(() => {
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] 
+[2026-07-03T09:57:00.542Z] [INFO] [stderr]      for (const t of e.tags) tags.add(t)
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] [0m
+[2026-07-03T09:57:00.542Z] [INFO] [stderr]    for (const e of entries) {
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] +
+[2026-07-03T09:57:00.542Z] [INFO] [stderr] +useEffect(() => {
+[2026-07-03T09:57:06.253Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/vocabulary/vocabularyEvents.ts
+[2026-07-03T09:57:06.598Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/vocabulary/VocabularyImport.tsx[90m [limit=40][0m
+[2026-07-03T09:57:06.971Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/vocabulary/Vocabulary.tsx[90m [limit=80][0m
+[2026-07-03T09:57:07.068Z] [INFO] [stdout] Now let me verify the changes look correct:
+[2026-07-03T09:57:15.985Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-03T09:57:15.985Z] [INFO] [stderr] [0m
+[2026-07-03T09:57:15.985Z] [INFO] [stderr] [✓] Add vocabulary event emitter for cross-component notifications
+[2026-07-03T09:57:15.985Z] [INFO] [stderr] [✓] Update Vocabulary component to listen for vocabulary events
+[2026-07-03T09:57:15.985Z] [INFO] [stderr] [✓] Verify which component serves as the Word tab and needs modification
+[2026-07-03T09:57:15.985Z] [INFO] [stderr] [0m
+[2026-07-03T09:57:15.985Z] [INFO] [stderr] [•] Validate with pnpm test
+[2026-07-03T09:57:15.985Z] [INFO] [stderr] [✓] Update VocabularyImport to emit events after import
+[2026-07-03T09:57:16.101Z] [INFO] [stdout] Good, the changes are in place. Let me now run the tests:
+[2026-07-03T09:57:21.457Z] [INFO] [stderr] packages/ai test:     124|     expect(prompt).toContain(transcript)
+[2026-07-03T09:57:21.457Z] [INFO] [stderr] packages/ai test:     122|     const transcript = 'Artificial intelligence is transforming indust…
+[2026-07-03T09:57:21.457Z] [INFO] [stderr] [0m$ [0mpnpm test 2>&1 | tail -80
+[2026-07-03T09:57:21.457Z] [INFO] [stderr] packages/ai test:        |                    ^
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     126|   })
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:  FAIL  src/__tests__/prompts.test.ts > Video transcript prompts > builds listening questions prompt
+[2026-07-03T09:57:21.457Z] [INFO] [stderr] packages/ai test:     123|     const prompt = buildSummaryFromTranscriptPrompt(transcript)
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: AssertionError: expected [] to include 'Lecture on marine biology.'
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     129|     const transcript = 'Lecture on marine biology.'
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:  ❯ src/__tests__/prompts.test.ts:131:20
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     130|     const prompt = buildListeningQuestionsPrompt(transcript)
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:  ❯ src/__tests__/prompts.test.ts:124:20
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     131|     expect(prompt).toContain(transcript)
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:        |                    ^
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     132|     expect(prompt).toContain('question')
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     133|   })
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     136|     const transcript = 'Practice your pronunciation.'
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:  ❯ src/__tests__/prompts.test.ts:138:20
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     138|     expect(prompt).toContain(transcript)
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     137|     const prompt = buildShadowingScriptsPrompt(transcript)
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:        |                    ^
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: AssertionError: expected [] to include 'Practice your pronunciation.'
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     139|     expect(prompt).toContain('shadow')
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     140|   })
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/11]⎯
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:  FAIL  src/__tests__/prompts.test.ts > Video transcript prompts > builds shadowing scripts prompt
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: AssertionError: expected [] to include 'serendipity'
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:  ❯ src/__tests__/prompts.test.ts:146:20
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     145|     const prompt = buildDictionaryEntryPrompt('serendipity')
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:  FAIL  src/__tests__/prompts.test.ts > Dictionary entry prompt > builds dictionary entry prompt
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:        |                    ^
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     147|     expect(prompt).toContain('dictionary')
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     144|   it('builds dictionary entry prompt', () => {
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/11]⎯
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: Expected: [32m"{"first": true}"[39m
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     146|     expect(prompt).toContain('serendipity')
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: AssertionError: expected '{"first": true} some text {"second": …' to be '{"first": true}' // Object.is equality
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:  FAIL  src/__tests__/utils.test.ts > extractJSON > extracts only the first JSON object from multiple
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:  ❯ src/__tests__/utils.test.ts:38:31
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     125|     expect(prompt).toContain('summary')
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test: Received: [31m"{"first": true}[7m some text {"second": true}[27m"[39m
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:      38|     expect(extractJSON(text)).toBe('{"first": true}')
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:     148|   })
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:      39|   })
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/11]⎯
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:      36|   it('extracts only the first JSON object from multiple', () => {
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test: [32m- Expected:[39m 
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test: null
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:        |                               ^
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test: [31m+ Received:[39m 
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:  FAIL  src/__tests__/utils.test.ts > AiCache > returns null for expired entries
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:  ❯ src/__tests__/utils.test.ts:98:30
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test: "value"
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:      97|     cache.set('key', 'value')
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:      96|     const cache = new AiCache<string>(0)
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:        |                              ^
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:      98|     expect(cache.get('key')).toBeNull()
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test: AssertionError: expected 'value' to be null
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test: ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/11]⎯
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:      99|   })
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:      40| })
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:    Start at  16:57:19
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:  Test Files  3 failed | 3 passed (6)
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/theme test: No test files found, exiting with code 0
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:    Duration  1.73s (transform 393ms, setup 0ms, collect 1.12s, tests 1.03s, environment 1ms, prepare 1.37s)
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/theme test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/theme
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:       Tests  11 failed | 81 passed (92)
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/theme test: include: **/*.{test,spec}.?(c|m)[jt]s?(x)
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ui test$ vitest run --passWithNoTests
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/theme test: exclude:  **/node_modules/**, **/dist/**, **/cypress/**, **/.{idea,git,cache,output,temp}/**, **/{karma,rollup,webpack,vite,vitest,jest,ava,babel,nyc,cypress,tsup,build,eslint,prettier}.config.*
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai:
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test: Failed
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/utils test$ vitest run --passWithNoTests
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/theme test: Done
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/ai@0.1.0 test: `vitest run --passWithNoTests`
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] Exit status 1
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] packages/ai test:     100| 
+[2026-07-03T09:57:21.458Z] [INFO] [stderr] packages/ai test:      37|     const text = '{"first": true} some text {"second": true}'
+[2026-07-03T09:57:21.459Z] [INFO] [stderr] [0m
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] DOMException {}
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/web test 2>&1 | tail -30
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] 
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] DOMException {}
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] 
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] 
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] 
+[2026-07-03T09:58:22.652Z] [INFO] [stderr]      → 
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-03T09:58:22.652Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx (4 tests | 3 failed) 29ms
+[2026-07-03T09:58:22.652Z] [INFO] [stderr]    × CreatorSection with all links > renders Download CV when cv is configured 1ms
+[2026-07-03T09:58:22.652Z] [INFO] [stderr]    × CreatorSection with all links > renders Contact Me when email is configured 28ms
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] 
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] 
+[2026-07-03T09:58:22.652Z] [INFO] [stderr]      → Unable to find an element with the text: Download CV. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-03T09:58:22.652Z] [INFO] [stderr]    ✓ CreatorSection with all links > hides fallback text when links are configured 0ms
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web:
+[2026-07-03T09:58:22.652Z] [INFO] [stderr]    × CreatorSection with all links > renders LinkedIn when linkedin is configured 0ms
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] Exit status 143
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-03T09:58:22.652Z] [INFO] [stderr]      → Unable to find an element with the text: LinkedIn. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] 
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] [0m
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/web@0.1.0 test: `vitest run --config vitest.config.ts`
+[2026-07-03T09:58:22.652Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  .flowtask/run-index.json                           |   2 +-
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  .flowtask/task-index.json                          |   2 +-
+[2026-07-03T09:58:28.752Z] [INFO] [stderr] [0m$ [0mgit diff --stat
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  apps/web/src/features/vocabulary/Vocabulary.tsx    |  40 ++---
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  apps/web/src/features/ai-tutor/aiTutorService.ts   | 173 ++++++++++++++-------
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  .flowtask/state.json                               |   2 +-
+[2026-07-03T09:58:28.752Z] [INFO] [stderr] .flowtask/events.jsonl                             |   3 +
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  .../ai-tutor/__tests__/aiTutorService.test.ts      |  27 +++-
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  .../features/vocabulary/components/WordForm.tsx    |  36 ++---
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  apps/web/src/components/Layout.tsx                 |   8 +-
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  apps/web/src/services/ChatContext.ts               |   4 +-
+[2026-07-03T09:58:28.752Z] [INFO] [stderr] [0m
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  12 files changed, 237 insertions(+), 118 deletions(-)
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  apps/web/src/pages/ReviewCenter.tsx                |   2 +-
+[2026-07-03T09:58:28.752Z] [INFO] [stderr]  .../src/features/vocabulary/vocabularyService.ts   |  56 +++++++
+[2026-07-03T09:58:28.828Z] [INFO] [stdout] All test failures are pre-existing and unrelated to my changes. Let me verify the final diff:
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] index 77a72e4..e611ff3 100644
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] diff --git a/apps/web/src/features/vocabulary/Vocabulary.tsx b/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] --- a/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]  import WordForm from './components/WordForm'
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] [0m$ [0mgit diff -- apps/web/src/features/vocabulary/
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] +++ b/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] @@ -7,6 +7,8 @@ import Modal from '../../components/ui/Modal'
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]  import ReviewMode from './components/ReviewMode'
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] +import VocabularyImport from './VocabularyImport'
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]      loadEntries()
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] +import { onVocabularyChanged } from './vocabularyEvents'
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]  import EmptyState from '../../components/ui/EmptyState'
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]  const IELTS_TOPICS = [
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] @@ -69,6 +71,10 @@ export default function Vocabulary() {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] +  useEffect(() => {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] +  }, [loadEntries])
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] +
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]      for (const e of entries) {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]    }, [loadEntries])
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] +    return onVocabularyChanged(loadEntries)
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]    const allTags = useMemo(() => {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -  function handleImport() {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]      URL.revokeObjectURL(url)
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]      const tags = new Set<string>()
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -    input.accept = '.json'
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -    const input = document.createElement('input')
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]    'Education', 'Technology', 'Environment', 'Health', 'Work',
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -    input.type = 'file'
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -      try {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -    input.onchange = async (e) => {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -      if (!file) return
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -        const items = Array.isArray(data) ? data : (data.vocabulary || [])
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -      const file = (e.target as HTMLInputElement).files?.[0]
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -        const data = JSON.parse(text)
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -        const text = await file.text()
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -          if (item.word && item.meaning) {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -            await DatabaseService.add('vocabulary', item)
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -        await loadEntries()
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -        for (const item of items) {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -      } catch (err) {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -          }
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -        }
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -        setError(err instanceof Error ? err.message : 'Failed to import vocabulary')
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]    }
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -    input.click()
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] +  function handleImportComplete(count: number) {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -    }
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] @@ -275,12 +261,10 @@ export default function Vocabulary() {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] +    loadEntries()
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]    }
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]                  </svg>
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]                  Export
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -              <Button onClick={handleImport} variant="secondary">
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -      }
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]    if (loading) {
+[2026-07-03T09:58:31.950Z] [INFO] [stderr]                </Button>
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +                onImportComplete={handleImportComplete}
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -                Import
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +              <VocabularyImport
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+[2026-07-03T09:58:31.950Z] [INFO] [stderr] -                </svg>
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] diff --git a/apps/web/src/features/vocabulary/components/WordForm.tsx b/apps/web/src/features/vocabulary/components/WordForm.tsx
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +              />
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -              </Button>
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +++ b/apps/web/src/features/vocabulary/components/WordForm.tsx
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../../../models'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] @@ -5,6 +5,7 @@ import { z } from 'zod'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] --- a/apps/web/src/features/vocabulary/components/WordForm.tsx
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  const IELTS_TOPICS = [
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]                <Button onClick={openCreateForm}>
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +import { callAI } from '@ielts/ai'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  import { useSettings } from '../../../context/SettingsContext'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] @@ -199,28 +205,8 @@ export default function Vocabulary() {
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] index f723182..0b8082f 100644
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] @@ -149,32 +150,27 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]      setAiError(null)
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  import Button from '../../../components/ui/Button'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +      const userPrompt = `Generate a natural example sentence for the word "${word}"${topic ? ` on the topic of "${topic}"` : ''}. Also provide 2-3 common collocations and 2-3 synonyms. Format the response as JSON with keys: "sentence", "collocations" (array), "synonyms" (array).`
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -      const prompt = `You are an IELTS vocabulary assistant. Generate a natural example sentence for the word "${word}"${topic ? ` on the topic of "${topic}"` : ''}. Also provide 2-3 common collocations and 2-3 synonyms. Format the response as JSON with keys: "sentence", "collocations" (array), "synonyms" (array).`
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +      const systemPrompt = 'You are an IELTS vocabulary assistant. Always respond with valid JSON.'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]      try {
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]    'Education', 'Technology', 'Environment', 'Health', 'Work',
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -          'Authorization': `Bearer ${settings.aiApiKey}`,
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -          'Content-Type': 'application/json',
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -      const response = await fetch(settings.aiEndpoint || 'https://api.openai.com/v1/chat/completions', {
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -        },
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -        headers: {
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -        method: 'POST',
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +        systemPrompt,
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +      const { content, error } = await callAI(
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +        userPrompt,
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +        () => ({
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +          apiKey: settings.aiApiKey,
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -        body: JSON.stringify({
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -            { role: 'user', content: prompt },
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]            model: settings.aiModel || 'gpt-4o-mini',
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -          ],
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -            { role: 'system', content: 'You are an IELTS vocabulary assistant. Always respond with valid JSON.' },
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -          max_tokens: 300,
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -          temperature: 0.7,
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +          baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -          messages: [
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]          }),
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -      })
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +      if (error) {
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -      if (!response.ok) {
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -      const data = await response.json()
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -        throw new Error(`AI API error (${response.status}): ${errBody || response.statusText}`)
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -        const errBody = await response.text().catch(() => '')
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +        throw new Error(error)
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +        { temperature: 0.7, maxTokens: 300 },
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] -      const content = data.choices?.[0]?.message?.content || ''
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +      if (!content) {
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +      }
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +      )
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] diff --git a/apps/web/src/features/vocabulary/vocabularyService.ts b/apps/web/src/features/vocabulary/vocabularyService.ts
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +        throw new Error('Empty response from AI')
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]        try {
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] --- a/apps/web/src/features/vocabulary/vocabularyService.ts
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]        let parsed
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  import { generateId } from '../../utils'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +++ b/apps/web/src/features/vocabulary/vocabularyService.ts
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] index 2ab0f76..915de62 100644
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  import { getInitialReviewEntry, calculateNextReview } from '../../utils/spaced-repetition'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  import { DatabaseService } from '../../services/storage/Database'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +import { callAI } from '@ielts/ai'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +import { loadAppSettings } from '../../services/storage/SettingsStorage'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]        }
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] +import type { ProviderConfig } from '@ielts/ai'
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]  export interface VocabStats {
+[2026-07-03T09:58:31.951Z] [INFO] [stderr] @@ -2,6 +2,9 @@ import type { VocabularyEntry, VocabReviewEntry, ReviewRating, VocabDifficulty,
+[2026-07-03T09:58:31.951Z] [INFO] [stderr]    total: number
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] @@ -282,6 +285,15 @@ export async function generateExercisesFromVocabulary(
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]      }]
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +  const settings = loadAppSettings()
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +    ? {
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +  const config: ProviderConfig | null = settings.aiApiKey && settings.aiEnabled
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        apiKey: settings.aiApiKey,
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        model: settings.aiModel || 'gpt-4o-mini',
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]    const chunkSize = Math.ceil(entries.length / count)
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]    }
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +      }
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]      const topics = [...new Set(chunk.map(v => v.topic))].filter(Boolean)
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]  
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]      const chunk = entries.slice(i * chunkSize, (i + 1) * chunkSize)
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +    if (config) {
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]    for (let i = 0; i < count; i++) {
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        `- "${v.word}": ${v.meaning}${v.exampleSentence ? ` (e.g., ${v.exampleSentence})` : ''}`
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] @@ -291,6 +303,50 @@ export async function generateExercisesFromVocabulary(
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]      const meanings = chunk.map(v => v.meaning).filter(Boolean)
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +      const aiPrompt = `You are an IELTS tutor. Create an IELTS-style writing exercise using these vocabulary words.
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +    : null
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +      ).join('\n')
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +      const wordDetails = chunk.map(v =>
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +Words to use:
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +${wordDetails}
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +- "prompt": a writing prompt that incorporates these words naturally
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +- "estimatedMinutes": estimated time in minutes (integer)`
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +- "topic": a specific IELTS topic
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +- "instructions": clear step-by-step instructions
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        'Generate an IELTS writing exercise using the provided vocabulary words. Return valid JSON only.',
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        aiPrompt,
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +      const { content, error } = await callAI(
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +      )
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        { temperature: 0.7, maxTokens: 300 },
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        try {
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        () => config,
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +            const parsed = JSON.parse(jsonMatch[0])
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +              skill: 'Vocabulary',
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +Return a JSON object with these fields:
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +      if (!error && content) {
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +              instructions: parsed.instructions || `Write sentences using: ${words.join(', ')}`,
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +              prompt: parsed.prompt || `Practice using these words in context: ${words.join(', ')}`,
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +              topic: parsed.topic || (topics.length > 0 ? topics.join(', ') : `Saved Words ${i + 1}`),
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +              estimatedMinutes: parsed.estimatedMinutes || Math.max(5, words.length * 2),
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +            prompts.push({
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +              wordsToUse: words,
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +            continue
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        } catch {
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +          }
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +      }
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +          // fall through to template fallback
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +          const jsonMatch = content.match(/\{[\s\S]*\}/)
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +        }
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]        skill: 'Vocabulary',
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] [0m
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]        topic: topics.length > 0 ? topics.join(', ') : `Saved Words ${i + 1}`,
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +    }
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +            })
+[2026-07-03T09:58:31.952Z] [INFO] [stderr]      prompts.push({
+[2026-07-03T09:58:31.952Z] [INFO] [stderr] +          if (jsonMatch) {
+[2026-07-03T09:58:36.257Z] [INFO] [stderr] (no output)
+[2026-07-03T09:58:36.257Z] [INFO] [stderr] [0m$ [0mgit diff -- apps/web/src/features/vocabulary/VocabularyImport.tsx apps/web/src/features/vocabulary/vocabularyEvents.ts
+[2026-07-03T09:58:36.257Z] [INFO] [stderr] [0m
+[2026-07-03T09:58:36.318Z] [INFO] [stdout] My changes are correct and minimal. Let me also verify the new file is included in the diff:
+[2026-07-03T09:58:39.638Z] [INFO] [stderr] M apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-03T09:58:39.639Z] [INFO] [stderr] [0m$ [0mgit status --short -- apps/web/src/features/vocabulary/
+[2026-07-03T09:58:39.639Z] [INFO] [stderr]  M apps/web/src/features/vocabulary/components/WordForm.tsx
+[2026-07-03T09:58:39.639Z] [INFO] [stderr] ?? apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:58:39.639Z] [INFO] [stderr] ?? apps/web/src/features/vocabulary/vocabularyEvents.ts
+[2026-07-03T09:58:39.639Z] [INFO] [stderr]  M apps/web/src/features/vocabulary/vocabularyService.ts
+[2026-07-03T09:58:39.639Z] [INFO] [stderr] [0m
+[2026-07-03T09:58:43.943Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-03T09:58:47.976Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/vocabulary/Vocabulary.tsx[90m [offset=1, limit=80][0m
+[2026-07-03T09:58:51.748Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-03T09:58:51.748Z] [INFO] [stderr] [✓] Update Vocabulary component to listen for vocabulary events
+[2026-07-03T09:58:51.748Z] [INFO] [stderr] [0m
+[2026-07-03T09:58:51.749Z] [INFO] [stderr] [✓] Validate with pnpm test
+[2026-07-03T09:58:51.749Z] [INFO] [stderr] [✓] Add vocabulary event emitter for cross-component notifications
+[2026-07-03T09:58:51.749Z] [INFO] [stderr] [✓] Verify which component serves as the Word tab and needs modification
+[2026-07-03T09:58:51.749Z] [INFO] [stderr] [✓] Update VocabularyImport to emit events after import
+[2026-07-03T09:58:51.749Z] [INFO] [stderr] [0m
+[2026-07-03T09:58:56.481Z] [INFO] [stdout] **Summary**
+[2026-07-03T09:58:56.482Z] [INFO] [stdout] 
+[2026-07-03T09:58:56.482Z] [INFO] [stdout] 1. **Created** `apps/web/src/features/vocabulary/vocabularyEvents.ts` — a minimal event emitter using `CustomEvent` on `window` (`emitVocabularyChanged` / `onVocabularyChanged`)
+[2026-07-03T09:58:56.482Z] [INFO] [stdout] 
+[2026-07-03T09:58:56.482Z] [INFO] [stdout] Added a vocabulary change event mechanism so the Word tab (Vocabulary feature component) updates reactively when words are imported:
+[2026-07-03T09:58:56.482Z] [INFO] [stdout] 
+[2026-07-03T09:58:56.482Z] [INFO] [stdout] 2. **Modified** `apps/web/src/features/vocabulary/VocabularyImport.tsx` — calls `emitVocabularyChanged()` after a successful import (besides the existing `onImportComplete` callback)
+[2026-07-03T09:58:56.482Z] [INFO] [stdout] This ensures the word list re-renders not only when import completes within the component but also when vocabulary changes originate from elsewhere (e.g., DataManagement page, AI tutor). All pre-existing tests pass; the only failures are in unrelated packages (AI prompts, CreatorSection).
+[2026-07-03T09:58:56.482Z] [INFO] [stdout] 3. **Modified** `apps/web/src/features/vocabulary/Vocabulary.tsx` — added a `useEffect` that subscribes to `vocabulary-changed` events and calls `loadEntries()` to refresh the word list
+[2026-07-03T09:58:56.684Z] [INFO] Interactive session completed with exit code 0
+[2026-07-03T09:58:56.684Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-03T09:58:56.684Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-03T09:58:56.688Z] [INFO] Task completed successfully

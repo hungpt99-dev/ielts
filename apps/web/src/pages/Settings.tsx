@@ -5,6 +5,8 @@ import { useTheme } from '../context/ThemeContext'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import AISettings from '../features/settings/AISettings'
+import type { CorsProxyConfig } from '../features/publicApiIntegration/types'
+import { DEFAULT_CORS_PROXY, CORS_PROXY_STORAGE_KEY } from '../features/publicApiIntegration/types'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health',
@@ -44,6 +46,20 @@ export default function Settings() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [saved, setSaved] = useState(false)
   const [dirty, setDirty] = useState(false)
+
+  const [showAdvanced, setShowAdvanced] = useState(false)
+  const [corsProxy, setCorsProxy] = useState<CorsProxyConfig>(() => {
+    try {
+      const raw = localStorage.getItem(CORS_PROXY_STORAGE_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw) as CorsProxyConfig
+        if (parsed && typeof parsed.enabled === 'boolean' && typeof parsed.proxyUrl === 'string') {
+          return parsed
+        }
+      }
+    } catch {}
+    return { enabled: false, proxyUrl: DEFAULT_CORS_PROXY }
+  })
 
   useEffect(() => {
     setForm({ ...settings })
@@ -396,6 +412,98 @@ export default function Settings() {
           </Link>
         </CardContent>
       </Card>
+
+      <div className="pt-4">
+        <button
+          type="button"
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="flex w-full items-center justify-between text-left"
+        >
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Advanced</h2>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Additional configuration for advanced users</p>
+          </div>
+          <svg
+            className={`h-5 w-5 text-slate-400 transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
+
+      {showAdvanced && (
+      <Card>
+        <CardHeader>
+          <CardTitle>CORS Proxy</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            Some public API sources (Tatoeba, OER Commons) do not support direct browser access due to CORS restrictions.
+            Enable a CORS proxy to use them.
+          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Enable CORS Proxy</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Routes requests through a proxy to bypass CORS</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={corsProxy.enabled}
+              onClick={() => {
+                const next = { ...corsProxy, enabled: !corsProxy.enabled }
+                setCorsProxy(next)
+                localStorage.setItem(CORS_PROXY_STORAGE_KEY, JSON.stringify(next))
+              }}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+                corsProxy.enabled ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
+              }`}
+            >
+              <span
+                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform dark:bg-slate-200 ${
+                  corsProxy.enabled ? 'translate-x-5' : 'translate-x-0'
+                }`}
+              />
+            </button>
+          </div>
+          {corsProxy.enabled && (
+            <div>
+              <label htmlFor="cors-proxy-url" className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Proxy URL
+              </label>
+              <input
+                id="cors-proxy-url"
+                type="url"
+                value={corsProxy.proxyUrl}
+                onChange={(e) => {
+                  const next = { ...corsProxy, proxyUrl: e.target.value }
+                  setCorsProxy(next)
+                  localStorage.setItem(CORS_PROXY_STORAGE_KEY, JSON.stringify(next))
+                }}
+                placeholder={DEFAULT_CORS_PROXY}
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
+              />
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                Use a CORS proxy service like{" "}
+                <a
+                  href="https://corsproxy.io/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline dark:text-blue-400"
+                >
+                  corsproxy.io
+                </a>{" "}
+                or host your own.
+              </p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <Button onClick={handleSave} disabled={!dirty}>

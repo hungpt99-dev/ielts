@@ -1,0 +1,164 @@
+{
+  "title": "Display imported word in Word tab",
+  "summary": "Ensure that imported vocabulary words appear in the Word tab UI",
+  "tasks": [
+    {
+      "title": "Modify vocabulary import logic to update Word tab state",
+      "description": "Update the vocabulary import function to trigger an update or refresh of the Word tab's displayed word list. This involves modifying the import handler to dispatch an event or update the relevant React state/store that the Word tab listens to, ensuring the newly imported words appear immediately.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Imported words trigger a UI update in the Word tab",
+        "No regression in vocabulary import functionality"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "After importing vocabulary, the Word tab UI immediately shows the newly imported words without requiring a manual refresh.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/vocabulary/VocabularyImport.tsx",
+          "description": "Update import handler to notify Word tab of new words",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Current vocabulary import logic and Word tab state management",
+      "targetFiles": [
+        "apps/web/src/features/vocabulary/VocabularyImport.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "file modified",
+        "test passed",
+        "imported words appear in Word tab UI"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures imported words are visible in the Word tab, improving user experience."
+    },
+    {
+      "title": "Modify Word tab component to listen for vocabulary updates",
+      "description": "Update the Word tab React component to listen for vocabulary import events or state changes. Implement necessary hooks or subscriptions to the vocabulary store or context so that the component re-renders and displays the updated list of words when new words are imported.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Modify vocabulary import logic to update Word tab state"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Word tab updates its displayed word list when vocabulary changes",
+        "No UI regressions in Word tab"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Word tab component dynamically updates to show newly imported words without manual refresh.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/vocabulary/WordTab.tsx",
+          "description": "Add state subscription or event listener to update word list on vocabulary import",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Vocabulary import update mechanism from previous task",
+      "targetFiles": [
+        "apps/web/src/features/vocabulary/WordTab.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "file modified",
+        "test passed",
+        "Word tab UI updates on vocabulary import"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Makes Word tab reactive to vocabulary imports, ensuring UI consistency."
+    },
+    {
+      "title": "Add integration test for vocabulary import and Word tab update",
+      "description": "Create or extend an integration test that imports vocabulary words and verifies that the Word tab UI displays the imported words. This test should simulate the import process and check the rendered output of the Word tab component for the presence of the new words.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Modify Word tab component to listen for vocabulary updates"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Integration test covers vocabulary import and Word tab update",
+        "Test passes reliably"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test -- tests/integration/vocabulary-import-wordtab.test.tsx"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Automated test verifies that importing vocabulary results in updated Word tab display.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "tests/integration/vocabulary-import-wordtab.test.tsx",
+          "description": "Integration test for vocabulary import and Word tab UI update",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "create",
+      "inputContext": "Vocabulary import and Word tab update implementation",
+      "targetFiles": [
+        "tests/integration/vocabulary-import-wordtab.test.tsx"
+      ],
+      "targetArtifacts": [
+        "integration test report"
+      ],
+      "evidence": [
+        "test file created",
+        "test passes"
+      ],
+      "verificationCommand": "pnpm test -- tests/integration/vocabulary-import-wordtab.test.tsx",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides automated verification that imported words appear in Word tab."
+    }
+  ]
+}
