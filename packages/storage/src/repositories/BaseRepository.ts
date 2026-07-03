@@ -8,6 +8,19 @@ export interface RepositoryItem {
   [key: string]: unknown
 }
 
+export interface PaginationParams {
+  page?: number
+  pageSize?: number
+}
+
+export interface PaginatedResult<T> {
+  data: T[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
+}
+
 export class BaseRepository<T extends RepositoryItem> {
   protected tableName: string
   protected schema: z.ZodType<T>
@@ -38,6 +51,20 @@ export class BaseRepository<T extends RepositoryItem> {
   async findAll(): Promise<T[]> {
     return safeDb(async () => {
       return (await this.getTable().toArray()) as T[]
+    })
+  }
+
+  async findAllPaginated(params: PaginationParams = {}): Promise<PaginatedResult<T>> {
+    return safeDb(async () => {
+      const page = Math.max(1, params.page ?? 1)
+      const pageSize = Math.max(1, Math.min(100, params.pageSize ?? 20))
+      const total = await this.getTable().count()
+      const totalPages = Math.ceil(total / pageSize)
+      const data = (await this.getTable()
+        .offset((page - 1) * pageSize)
+        .limit(pageSize)
+        .toArray()) as T[]
+      return { data, total, page, pageSize, totalPages }
     })
   }
 

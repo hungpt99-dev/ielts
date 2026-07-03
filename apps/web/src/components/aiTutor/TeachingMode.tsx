@@ -550,14 +550,14 @@ export function detectLessonFromMessage(
   const lower = message.toLowerCase()
   const lessons = type === 'grammar' ? GRAMMAR_LESSONS : VOCABULARY_LESSONS
 
+  const stopWords = new Set(['and', 'the', 'for', 'are', 'but', 'not', 'you', 'all', 'can', 'had', 'her', 'was', 'one', 'our', 'out', 'has', 'have', 'been', 'some', 'same', 'part', 'very', 'each', 'just', 'than', 'them', 'then', 'were', 'what', 'when', 'which', 'will', 'with', 'about', 'into', 'over', 'such', 'that', 'this', 'your'])
+
   for (const [, lesson] of Object.entries(lessons)) {
-    const keywords = lesson.title.toLowerCase().split(' ').concat(
-      lesson.examples.some(e => lower.includes(e.toLowerCase().slice(0, 15))) ? [lesson.topic] : [],
-    )
-    if (keywords.some(k => lower.includes(k))) {
+    const keywords = lesson.title.toLowerCase().split(/\s+/).filter(k => k.length > 3 && !stopWords.has(k))
+    if (keywords.some(k => new RegExp('\\b' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(lower))) {
       return { lesson, confidence: 'high' }
     }
-    if (lesson.rules.some(r => lower.includes(r.toLowerCase().slice(0, 20)))) {
+    if (lesson.rules.some(r => new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(lower))) {
       return { lesson, confidence: 'medium' }
     }
   }
@@ -651,7 +651,7 @@ export function generateFeedbackMessage(
 ): string {
   const correct = exerciseResults.filter(r => r.isCorrect).length
   const total = exerciseResults.length
-  const score = Math.round((correct / total) * 100)
+  const score = total > 0 ? Math.round((correct / total) * 100) : 0
 
   const engSuggest = `**Suggested next topic:** ${getLessonTitle(lesson.nextTopic, lesson.type !== 'grammar') ??
     lesson.nextTopic.replace('-', ' ')}`

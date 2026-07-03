@@ -31,7 +31,7 @@ export default function ToggleSwitch({ enabled, onChange, label, description, id
         }`}
       >
         <span
-          className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform ${
+          className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform dark:bg-slate-200 ${
             enabled ? 'translate-x-5' : 'translate-x-0'
           }`}
         />

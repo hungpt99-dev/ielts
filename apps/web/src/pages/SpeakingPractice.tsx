@@ -98,6 +98,7 @@ export default function SpeakingPractice() {
   const [timerSeconds, setTimerSeconds] = useState(CUE_CARD_PREP_TIME)
   const [timerRunning, setTimerRunning] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const timerPhaseRef = useRef(timerPhase)
 
   const loadSessions = useCallback(async () => {
     try {
@@ -115,6 +116,10 @@ export default function SpeakingPractice() {
   useEffect(() => {
     loadSessions()
   }, [loadSessions])
+
+  useEffect(() => {
+    timerPhaseRef.current = timerPhase
+  }, [timerPhase])
 
   useEffect(() => {
     return () => {
@@ -210,8 +215,8 @@ export default function SpeakingPractice() {
     setModalOpen(true)
   }
 
-  function handleDelete(id: string) {
-    DatabaseService.remove('speakingSessions', id)
+  async function handleDelete(id: string) {
+    await DatabaseService.remove('speakingSessions', id)
     setSessions(prev => prev.filter(s => s.id !== id))
   }
 
@@ -289,14 +294,17 @@ export default function SpeakingPractice() {
       setTimerRunning(false)
     } else {
       setTimerRunning(true)
+      timerPhaseRef.current = timerPhase
       timerRef.current = setInterval(() => {
         setTimerSeconds(prev => {
           if (prev <= 1) {
-            if (timerPhase === 'prep') {
+            if (timerPhaseRef.current === 'prep') {
               setTimerPhase('speak')
+              timerPhaseRef.current = 'speak'
               return CUE_CARD_SPEAK_TIME
             } else {
               setTimerPhase('done')
+              timerPhaseRef.current = 'done'
               if (timerRef.current) clearInterval(timerRef.current)
               setTimerRunning(false)
               return 0

@@ -199,8 +199,8 @@ export default function ListeningJournal() {
     setModalOpen(true)
   }
 
-  function handleDelete(id: string) {
-    DatabaseService.remove('listeningSessions', id)
+  async function handleDelete(id: string) {
+    await DatabaseService.remove('listeningSessions', id)
     setSessions(prev => prev.filter(s => s.id !== id))
   }
 

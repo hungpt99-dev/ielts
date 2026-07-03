@@ -105,7 +105,7 @@ export default function ProactiveSettings({ onClose }: ProactiveSettingsProps) {
       <div className="flex-1 space-y-5 p-4 text-sm">
         <div className="rounded-lg border px-4 py-3 text-xs leading-relaxed" style={{
           borderColor: 'var(--color-info)',
-          backgroundColor: 'color-mix(in srgb, var(--color-info) 8%, transparent)',
+          backgroundColor: 'var(--color-info-light)',
           color: 'var(--color-text-secondary)',
         }}>
           <p className="font-medium" style={{ color: 'var(--color-text)' }}>Local-First Notice</p>
@@ -143,7 +143,7 @@ export default function ProactiveSettings({ onClose }: ProactiveSettingsProps) {
             {settings.aiEnhanced && (
               <div className="rounded-lg border px-4 py-3 text-xs leading-relaxed" style={{
                 borderColor: 'var(--color-warning)',
-                backgroundColor: 'color-mix(in srgb, var(--color-warning) 8%, transparent)',
+                backgroundColor: 'var(--color-warning-light)',
                 color: 'var(--color-text-secondary)',
               }}>
                 <p className="font-medium" style={{ color: 'var(--color-text)' }}>Privacy Notice</p>

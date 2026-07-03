@@ -1,10 +1,12 @@
+import { useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDashboard } from '../../hooks/useDashboard'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import LoadingSpinner from '../../components/ui/LoadingSpinner'
-
+import EmptyState from '../../components/ui/EmptyState'
+import Button from '../../components/ui/Button'
 import ProgressChart from './components/ProgressChart'
-import type { DashboardData, WeeklyStudyDay } from '../../models'
+import type { DashboardData, WeeklyStudyDay, TaskEntry } from '../../models'
 
 const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -23,14 +25,26 @@ const MOTIVATIONAL_QUOTES = [
   'Every expert was once a beginner.',
 ]
 
-const QUICK_ACTIONS = [
-  { label: 'Reading', path: '/reading', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', color: 'var(--color-primary)' },
-  { label: 'Listening', path: '/listening', icon: 'M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z', color: 'var(--color-success)' },
-  { label: 'Writing', path: '/writing', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', color: 'var(--color-warning)' },
-  { label: 'Speaking', path: '/speaking', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'var(--color-danger)' },
-  { label: 'Vocabulary', path: '/vocabulary', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', color: '#8b5cf6' },
-  { label: 'Grammar', path: '/grammar', icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4', color: '#ec4899' },
-]
+const SKILL_BG: Record<string, string> = {
+  Vocabulary: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+  Reading: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+  Writing: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  'Writing Task 2': 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  'Writing Task 1': 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  Listening: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  Speaking: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  'Speaking Part 1': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  'Speaking Part 2': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  'Speaking Part 3': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  Grammar: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300',
+}
+
+function getSkillBg(category: string): string {
+  for (const [key, cls] of Object.entries(SKILL_BG)) {
+    if (category.toLowerCase().includes(key.toLowerCase())) return cls
+  }
+  return 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
+}
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', {
@@ -79,14 +93,27 @@ function computeSkillProgress(data: DashboardData): Array<{ name: string; value:
 export default function Dashboard() {
   const { data, weeklyChart, loading, error } = useDashboard()
   const navigate = useNavigate()
+  const tasksRef = useRef<HTMLUListElement>(null)
+
+  const handleTaskKeyDown = useCallback(
+    (e: React.KeyboardEvent, task: TaskEntry) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        if (!task.isDone) {
+          navigate(`/study/${encodeURIComponent(task.title)}`)
+        }
+      }
+    },
+    [navigate],
+  )
 
   if (loading) {
-    return <LoadingSpinner size="lg" fullPage />
+    return <LoadingSpinner size="lg" fullPage message="Loading your dashboard..." />
   }
 
   if (error) {
     return (
-      <div className="flex h-full items-center justify-center">
+      <div role="alert" className="flex h-full items-center justify-center">
         <Card className="max-w-md text-center">
           <CardContent>
             <p style={{ color: 'var(--color-danger)' }}>{error}</p>
@@ -101,6 +128,9 @@ export default function Dashboard() {
   const {
     todayTasks, studyStreak, weeklyProgress, totalStudyHours,
     targetBand, currentBand, weakSkills, dueReviews, todayFocus,
+    examDate, studyGoal, dailyStudyMinutes,
+    recentMistakes, savedVocabularyCount, aiSuggestion,
+    roadmapProgress, nextTask, examCountdown,
   } = data
 
   const todayUnfinished = todayTasks.filter(t => !t.isDone)
@@ -114,27 +144,100 @@ export default function Dashboard() {
     value: d.minutes,
   }))
   const skillProgress = computeSkillProgress(data)
+  const hasExamDate = examDate && examCountdown > 0
+
+  function getTodayAnswer(): string {
+    if (todayUnfinished.length > 0) {
+      const cats = [...new Set(todayUnfinished.map(t => t.category))]
+      return `Complete your ${cats.slice(0, 2).join(' and ')} tasks today`
+    }
+    if (dueReviews > 0) return 'Review your saved vocabulary'
+    if (weakSkills.length > 0) return `Practice your weakest skill: ${weakSkills[0]}`
+    return 'Great job! Review your progress or explore new content.'
+  }
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      {/* Header */}
-      <div>
-        <h1
-          className="text-2xl font-bold"
-          style={{ color: 'var(--color-text)' }}
+      {/* Header + Today's Answer */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
+            {getGreeting()}, IELTS Learner
+          </h1>
+          <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
+            {formatDate(new Date())}
+          </p>
+          <div
+            className="mt-3 flex items-center gap-2"
+            role="status"
+            aria-live="polite"
+            aria-label="Today's study recommendation"
+          >
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs dark:bg-blue-900/40" style={{ color: 'var(--color-primary)' }} aria-hidden="true">
+              ?
+            </span>
+            <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+              <span style={{ color: 'var(--color-muted)' }}>What should I study today?</span>{' '}
+              {getTodayAnswer()}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {studyGoal && (
+            <span className="rounded-lg border px-2.5 py-1 text-xs font-medium capitalize" style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}>
+              {studyGoal === 'academic' ? 'IELTS Academic' : 'IELTS General'}
+            </span>
+          )}
+          {hasExamDate && (
+            <span className={`rounded-lg px-2.5 py-1 text-xs font-medium ${examCountdown <= 30 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'}`}>
+              {examCountdown} days to exam
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Continue Learning + Action Buttons */}
+      <div className="flex flex-wrap gap-3">
+        {nextTask ? (
+          <Button
+            size="lg"
+            onClick={() => navigate(`/study/${encodeURIComponent(nextTask.title)}`)}
+          >
+            Continue Learning: {nextTask.title}
+          </Button>
+        ) : todayUnfinished.length > 0 ? (
+          <Button
+            size="lg"
+            onClick={() => navigate(`/study/${encodeURIComponent(todayUnfinished[0].title)}`)}
+          >
+            Continue Learning ({todayUnfinished.length} tasks left)
+          </Button>
+        ) : (
+          <Button
+            size="lg"
+            onClick={() => navigate('/vocabulary')}
+          >
+            Review Vocabulary
+          </Button>
+        )}
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => navigate('/roadmap')}
         >
-          {getGreeting()}, IELTS Learner
-        </h1>
-        <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-          {formatDate(new Date())}
-        </p>
+          View Roadmap
+        </Button>
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => navigate('/ai-tutor')}
+        >
+          Ask AI Tutor
+        </Button>
       </div>
 
       {/* Motivation Banner */}
-      <Card
-        className="border-l-4"
-        style={{ borderLeftColor: 'var(--color-primary)' }}
-      >
+      <Card role="region" aria-label="Motivational quote" className="border-l-4" style={{ borderLeftColor: 'var(--color-primary)' }}>
         <CardContent>
           <div className="flex items-start gap-3">
             <span className="text-xl" aria-hidden="true">💡</span>
@@ -147,23 +250,23 @@ export default function Dashboard() {
 
       {/* Summary cards row */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card aria-label={`Study streak: ${studyStreak} days`}>
           <CardContent>
-            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-streak">
               Study Streak
             </p>
-            <p className="mt-2 text-3xl font-bold text-orange-500">
+            <p className="mt-2 text-3xl font-bold text-orange-500" aria-labelledby="stat-streak">
               {studyStreak}
               <span className="ml-1 text-sm font-normal" style={{ color: 'var(--color-muted)' }}>days</span>
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card aria-label={`Weekly progress: ${progressPercent} percent`}>
           <CardContent>
-            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-progress">
               Weekly Progress
             </p>
-            <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-primary)' }}>
+            <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-primary)' }} aria-labelledby="stat-progress">
               {progressPercent}%
             </p>
             <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
@@ -171,23 +274,23 @@ export default function Dashboard() {
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card aria-label={`Study hours: ${totalStudyHours}`}>
           <CardContent>
-            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-              Total Study Hours
+            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-hours">
+              Study Hours
             </p>
-            <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-success)' }}>
+            <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-success)' }} aria-labelledby="stat-hours">
               {totalStudyHours}
               <span className="ml-1 text-sm font-normal" style={{ color: 'var(--color-muted)' }}>hrs</span>
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card aria-label={`Target band: ${targetBand}, Current: ${currentBand}`}>
           <CardContent>
-            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-band">
               Target Band
             </p>
-            <p className="mt-2 text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+            <p className="mt-2 text-3xl font-bold text-indigo-600 dark:text-indigo-400" aria-labelledby="stat-band">
               {targetBand}
             </p>
             <p className={`text-xs font-medium ${bandColor(currentBand)}`}>
@@ -198,139 +301,140 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Practice</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-            {QUICK_ACTIONS.map(action => (
-              <button
-                key={action.label}
-                onClick={() => navigate(action.path)}
-                className="flex flex-col items-center gap-2 rounded-xl border p-4 text-sm font-medium transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2"
-                style={{
-                  backgroundColor: 'var(--color-surface)',
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--color-text-secondary)',
-                  '--action-color': action.color,
-                } as React.CSSProperties}
-              >
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  style={{ color: action.color }}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d={action.icon} />
-                </svg>
-                <span>{action.label}</span>
-              </button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Middle section */}
+      {/* Main grid: Today's Tasks + Sidebar */}
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Today's Plan / Checklist */}
-        <Card className="lg:col-span-2">
+        {/* Today's Tasks */}
+        <Card role="region" aria-label="Today's study tasks" className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Today's Checklist</CardTitle>
-            <span className="text-sm" style={{ color: 'var(--color-muted)' }}>
-              {todayDone.length}/{todayTasks.length} done
-            </span>
+            <div className="flex items-center justify-between">
+              <CardTitle>Today's Study Tasks</CardTitle>
+              <span
+                className="text-sm font-medium"
+                style={{ color: todayDone.length === todayTasks.length && todayTasks.length > 0 ? 'var(--color-success)' : 'var(--color-muted)' }}
+                aria-live="polite"
+              >
+                {todayDone.length}/{todayTasks.length} done
+              </span>
+            </div>
           </CardHeader>
           <CardContent>
             {todayTasks.length === 0 ? (
-              <p className="py-8 text-center text-sm" style={{ color: 'var(--color-muted)' }}>
-                No tasks planned for today. Add some in the Daily Plan.
-              </p>
+              <EmptyState
+                title="No tasks planned for today"
+                description="Go to the roadmap to plan your study session."
+                action={{ label: 'View Roadmap', onClick: () => navigate('/roadmap') }}
+              />
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-2" ref={tasksRef} aria-label="Today's tasks list">
                 {todayTasks.map(task => (
                   <li
                     key={task.id}
-                    className={`flex items-center gap-3 rounded-lg border px-3 py-2 text-sm ${
+                    role={task.isDone ? 'listitem' : 'button'}
+                    tabIndex={task.isDone ? undefined : 0}
+                    aria-disabled={task.isDone}
+                    aria-label={task.isDone ? `${task.title} — completed` : `Start task: ${task.title}`}
+                    className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
                       task.isDone
                         ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
-                        : ''
+                        : 'cursor-pointer hover:border-blue-200 dark:hover:border-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-1'
                     }`}
                     style={{
                       borderColor: task.isDone ? undefined : 'var(--color-border)',
                       backgroundColor: task.isDone ? undefined : 'var(--color-surface)',
                     }}
+                    onClick={() => !task.isDone && navigate(`/study/${encodeURIComponent(task.title)}`)}
+                    onKeyDown={(e) => handleTaskKeyDown(e, task)}
                   >
                     <span
-                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold ${
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold transition-colors ${
                         task.isDone
                           ? 'border-green-500 bg-green-500 text-white'
-                          : ''
+                          : 'border-[var(--color-border)]'
                       }`}
-                      style={{
-                        borderColor: task.isDone ? undefined : 'var(--color-border)',
-                        color: task.isDone ? undefined : 'var(--color-muted)',
-                      }}
+                      style={{ color: task.isDone ? undefined : 'var(--color-muted)' }}
+                      aria-hidden="true"
                     >
-                      {task.isDone ? '✓' : task.category.slice(0, 2)}
+                      {task.isDone ? '✓' : ''}
                     </span>
-                    <span
-                      className="flex-1"
-                      style={{
-                        color: task.isDone ? 'var(--color-muted)' : 'var(--color-text-secondary)',
-                        textDecoration: task.isDone ? 'line-through' : 'none',
-                      }}
-                    >
-                      {task.title}
-                    </span>
-                    {task.timeMinutes > 0 && (
-                      <span className="shrink-0 text-xs" style={{ color: 'var(--color-muted)' }}>
-                        {task.timeMinutes}m
+                    <div className="min-w-0 flex-1">
+                      <span
+                        className="block truncate font-medium"
+                        style={{
+                          color: task.isDone ? 'var(--color-muted)' : 'var(--color-text)',
+                          textDecoration: task.isDone ? 'line-through' : 'none',
+                        }}
+                      >
+                        {task.title}
                       </span>
-                    )}
+                      <div className="mt-0.5 flex items-center gap-2">
+                        <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${getSkillBg(task.category)}`}>
+                          {task.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
+                      {task.timeMinutes > 0 && (
+                        <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
+                          {task.timeMinutes}m
+                        </span>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>
             )}
             {todayUnfinished.length > 0 && (
-              <p className="mt-3 text-xs" style={{ color: 'var(--color-muted)' }}>
-                {todayUnfinished.length} task{todayUnfinished.length > 1 ? 's' : ''} remaining
-              </p>
+              <div className="mt-4 flex items-center justify-between" role="status" aria-live="polite">
+                <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
+                  {todayUnfinished.length} task{todayUnfinished.length > 1 ? 's' : ''} remaining
+                </p>
+                <Button size="sm" onClick={() => navigate(`/study/${encodeURIComponent(todayUnfinished[0].title)}`)}>
+                  Start Next Task
+                </Button>
+              </div>
+            )}
+            {todayTasks.length > 0 && todayUnfinished.length === 0 && (
+              <div className="mt-4 rounded-lg bg-green-50 p-3 text-center dark:bg-green-900/20" role="status" aria-live="polite">
+                <p className="text-sm font-medium text-green-700 dark:text-green-300">
+                  All tasks complete! Great work today.
+                </p>
+              </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Right column */}
-        <div className="space-y-4">
-          {/* Reviews Due */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Reviews Due</CardTitle>
-            </CardHeader>
+        {/* Right sidebar */}
+        <div className="space-y-4" role="region" aria-label="Dashboard sidebar: suggestions and stats">
+          {/* AI Tutor Suggestion */}
+          <Card className="border-l-4" style={{ borderLeftColor: 'var(--color-primary)' }}>
             <CardContent>
-              {dueReviews > 0 ? (
-                <div className="text-center">
-                  <p className="text-4xl font-bold text-purple-600 dark:text-purple-400">
-                    {dueReviews}
+              <div className="flex items-start gap-2">
+                <svg className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                </svg>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-primary)' }}>
+                    AI Tutor Suggestion
                   </p>
-                  <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-                    items need review
+                  <p className="mt-1.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                    {aiSuggestion}
                   </p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => navigate('/ai-tutor')}
+                    className="mt-1"
+                  >
+                    Ask AI Tutor →
+                  </Button>
                 </div>
-              ) : (
-                <p className="py-4 text-center text-sm" style={{ color: 'var(--color-muted)' }}>
-                  All caught up! No reviews due.
-                </p>
-              )}
+              </div>
             </CardContent>
           </Card>
 
-          {/* Weak Skills */}
+          {/* Weak Skills Reminder */}
           {weakSkills.length > 0 && (
-            <Card>
+            <Card role="region" aria-label="Weak skills reminder">
               <CardHeader>
                 <CardTitle>Weak Skills</CardTitle>
               </CardHeader>
@@ -349,15 +453,75 @@ export default function Dashboard() {
                     </span>
                   ))}
                 </div>
+                <p className="mt-2 text-xs" style={{ color: 'var(--color-muted)' }}>
+                  Focus on these skills to improve your band score faster.
+                </p>
               </CardContent>
             </Card>
           )}
 
+          {/* Quick Stats */}
+          <Card role="region" aria-label="Quick statistics">
+            <CardHeader>
+              <CardTitle>Quick Stats</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center justify-between">
+                  <span style={{ color: 'var(--color-muted)' }}>Saved Words</span>
+                  <span className="font-semibold" style={{ color: 'var(--color-text)' }}>{savedVocabularyCount}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: 'var(--color-muted)' }}>Reviews Due</span>
+                  <span className="font-semibold" style={{ color: dueReviews > 0 ? 'var(--color-warning)' : 'var(--color-text)' }}>{dueReviews}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: 'var(--color-muted)' }}>Recent Mistakes</span>
+                  <span className="font-semibold" style={{ color: recentMistakes > 0 ? 'var(--color-danger)' : 'var(--color-text)' }}>{recentMistakes}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: 'var(--color-muted)' }}>Daily Study Time</span>
+                  <span className="font-semibold" style={{ color: 'var(--color-text)' }}>{dailyStudyMinutes} min</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span style={{ color: 'var(--color-muted)' }}>Roadmap</span>
+                  <span className="font-semibold" style={{ color: 'var(--color-text)' }}>{roadmapProgress}%</span>
+                </div>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {savedVocabularyCount > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/vocabulary')}
+                  >
+                    Review Words
+                  </Button>
+                )}
+                {dueReviews > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/vocabulary')}
+                  >
+                    Due Reviews
+                  </Button>
+                )}
+                {recentMistakes > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate('/mistakes')}
+                  >
+                    View Mistakes
+                  </Button>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Today's Focus */}
-          <Card
-            className="border-l-4"
-            style={{ borderLeftColor: 'var(--color-primary)' }}
-          >
+          <Card className="border-l-4" style={{ borderLeftColor: 'var(--color-primary)' }}>
             <CardContent>
               <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-primary)' }}>
                 Today's Focus
@@ -372,7 +536,6 @@ export default function Dashboard() {
 
       {/* Charts row */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Weekly study time */}
         <Card>
           <CardHeader>
             <CardTitle>This Week</CardTitle>
@@ -390,7 +553,6 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Skill Progress */}
         <Card>
           <CardHeader>
             <CardTitle>Skill Progress</CardTitle>
@@ -413,11 +575,7 @@ export default function Dashboard() {
 
       {/* Bottom section */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Progress Summary */}
-        <Card
-          className="border-l-4"
-          style={{ borderLeftColor: 'var(--color-success)' }}
-        >
+        <Card className="border-l-4" style={{ borderLeftColor: 'var(--color-success)' }}>
           <CardContent>
             <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-success)' }}>
               Progress Summary
@@ -432,11 +590,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Band info */}
-        <Card
-          className="border-l-4"
-          style={{ borderLeftColor: 'var(--color-warning)' }}
-        >
+        <Card className="border-l-4" style={{ borderLeftColor: 'var(--color-warning)' }}>
           <CardContent>
             <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-warning)' }}>
               Band Progress

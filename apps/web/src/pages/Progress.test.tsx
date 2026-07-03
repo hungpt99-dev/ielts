@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 const mockGetAll = vi.fn()
 
@@ -27,47 +27,22 @@ vi.mock('recharts', () => ({
 
 import Progress from './Progress'
 
-function makeProgressTopic(overrides: Record<string, unknown> = {}) {
-  return {
-    id: crypto.randomUUID(),
-    topicId: crypto.randomUUID(),
-    topic: 'Education',
-    progressPercent: 50,
-    vocabularyCount: 5,
-    readingCount: 3,
-    listeningCount: 2,
-    writingCount: 1,
-    speakingCount: 0,
-    weakPoints: [],
-    lastReviewedAt: '2025-06-01T00:00:00.000Z',
-    updatedAt: '2025-06-01T00:00:00.000Z',
-    ...overrides,
-  }
-}
-
-const noDataMocks = () => {
-  mockGetAll.mockImplementation((store: string) => {
-    if (store === 'topicsProgress') return Promise.resolve([])
+const emptyStoreMock = () => {
+  mockGetAll.mockImplementation((_store: string) => {
     return Promise.resolve([])
   })
 }
 
-const topicDataMocks = () => {
-  mockGetAll.mockImplementation((store: string) => {
-    if (store === 'topicsProgress') return Promise.resolve([
-      makeProgressTopic({ topic: 'Education', progressPercent: 90 }),
-      makeProgressTopic({ topic: 'Environment', progressPercent: 65 }),
-      makeProgressTopic({ topic: 'Technology', progressPercent: 45 }),
-      makeProgressTopic({ topic: 'Health', progressPercent: 25 }),
-      makeProgressTopic({ topic: 'Travel', progressPercent: 10 }),
-    ])
-    return Promise.resolve([])
-  })
-}
+const today = new Date().toISOString().slice(0, 10)
 
-describe('Progress page topics progress sections', () => {
+describe('Progress page', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    localStorage.clear()
+  })
+
+  afterEach(() => {
+    localStorage.clear()
   })
 
   it('shows loading state initially', () => {
@@ -77,26 +52,71 @@ describe('Progress page topics progress sections', () => {
     expect(spinner).toBeInTheDocument()
   })
 
-  it('shows empty state for topic sections when no data', async () => {
-    noDataMocks()
+  it('renders content after data loads', async () => {
+    emptyStoreMock()
     render(<Progress />)
 
-    await screen.findByText('Progress Analytics')
-
-    expect(screen.getByText('No topic progress data yet.')).toBeInTheDocument()
-    expect(screen.getByText('Study different topics to see progress.')).toBeInTheDocument()
-    expect(screen.getByText('No topic trend data yet.')).toBeInTheDocument()
+    await screen.findByText('Total Study Hours')
+    expect(screen.getByText('Total Study Hours')).toBeInTheDocument()
+    expect(screen.getByText('Tasks Completed')).toBeInTheDocument()
+    expect(screen.getByText('Study Streak')).toBeInTheDocument()
+    expect(screen.getByText('Vocabulary')).toBeInTheDocument()
   })
 
-  it('renders topic status distribution section with data', async () => {
-    topicDataMocks()
+  it('shows roadmap progress section', async () => {
+    emptyStoreMock()
     render(<Progress />)
 
-    await screen.findByText('Topics Progress Overview')
+    await screen.findByText('Roadmap Progress')
+    expect(screen.getByText('Roadmap Progress')).toBeInTheDocument()
+  })
 
-    expect(screen.getByText('Topic Status Distribution')).toBeInTheDocument()
-    expect(screen.getByText('Top Topics by Progress')).toBeInTheDocument()
-    expect(screen.getByText('Topics Progress Trend')).toBeInTheDocument()
+  it('shows weekly activity section', async () => {
+    emptyStoreMock()
+    render(<Progress />)
+
+    await screen.findByText('Weekly Activity')
+    expect(screen.getByText('Weekly Activity')).toBeInTheDocument()
+  })
+
+  it('shows skill progress section', async () => {
+    emptyStoreMock()
+    render(<Progress />)
+
+    await screen.findByText('Skill Progress')
+    expect(screen.getByText('Skill Progress')).toBeInTheDocument()
+  })
+
+  it('shows skill balance section', async () => {
+    emptyStoreMock()
+    render(<Progress />)
+
+    await screen.findByText('Skill Balance')
+    expect(screen.getByText('Skill Balance')).toBeInTheDocument()
+  })
+
+  it('shows weak skills section', async () => {
+    emptyStoreMock()
+    render(<Progress />)
+
+    await screen.findByText('Weak Skills')
+    expect(screen.getByText('Weak Skills')).toBeInTheDocument()
+  })
+
+  it('shows recent activity section', async () => {
+    emptyStoreMock()
+    render(<Progress />)
+
+    await screen.findByText('Recent Activity')
+    expect(screen.getByText('Recent Activity')).toBeInTheDocument()
+  })
+
+  it('shows monthly summary section', async () => {
+    emptyStoreMock()
+    render(<Progress />)
+
+    await screen.findByText('Monthly Summary')
+    expect(screen.getByText('Monthly Summary')).toBeInTheDocument()
   })
 
   it('shows error state when database fails', async () => {
@@ -107,47 +127,60 @@ describe('Progress page topics progress sections', () => {
     expect(errorText).toBeInTheDocument()
   })
 
-  it('handles large number of topics correctly', async () => {
-    const manyTopics = Array.from({ length: 25 }, (_, i) =>
-      makeProgressTopic({ topic: `Topic ${i + 1}`, progressPercent: Math.floor(Math.random() * 100) })
-    )
-    mockGetAll.mockImplementation((store: string) => {
-      if (store === 'topicsProgress') return Promise.resolve(manyTopics)
-      return Promise.resolve([])
-    })
-    render(<Progress />)
-
-    await screen.findByText('Topics Progress Overview')
-    expect(screen.getByText('Topics Progress Overview')).toBeInTheDocument()
-  })
-
-  it('handles topics at boundary progress values', async () => {
-    mockGetAll.mockImplementation((store: string) => {
-      if (store === 'topicsProgress') return Promise.resolve([
-        makeProgressTopic({ topic: 'Mastered', progressPercent: 100 }),
-        makeProgressTopic({ topic: 'Zero Progress', progressPercent: 0 }),
-      ])
-      return Promise.resolve([])
-    })
-    render(<Progress />)
-
-    await screen.findByText('Topics Progress Overview')
-    expect(screen.getByText('Topics Progress Overview')).toBeInTheDocument()
-  })
-
-  it('handles tasks with recent dates exercising getWeekLabel slice guard', async () => {
-    const today = new Date().toISOString().slice(0, 10)
+  it('renders with sample task data', async () => {
     mockGetAll.mockImplementation((store: string) => {
       if (store === 'tasks') return Promise.resolve([
-        { id: '1', date: today, title: 'Task', isDone: true, timeMinutes: 30 },
+        { id: '1', date: today, title: 'Task 1', isDone: true, timeMinutes: 30, completedAt: new Date().toISOString() },
+        { id: '2', date: today, title: 'Task 2', isDone: false, timeMinutes: 20, completedAt: null },
       ])
       return Promise.resolve([])
     })
     render(<Progress />)
-    await screen.findByText('Progress Analytics')
+
+    await screen.findByText('Total Study Hours')
+    expect(screen.getByText('Total Study Hours')).toBeInTheDocument()
   })
 
-  it('handles mistakes with null skill field', async () => {
+  it('handles vocabulary data', async () => {
+    mockGetAll.mockImplementation((store: string) => {
+      if (store === 'vocabulary') return Promise.resolve([
+        { id: '1', word: 'test', meaning: 'a test', createdAt: new Date().toISOString() },
+        { id: '2', word: 'example', meaning: 'an example', createdAt: new Date().toISOString() },
+      ])
+      return Promise.resolve([])
+    })
+    render(<Progress />)
+
+    await screen.findByText('Total Study Hours')
+    expect(screen.getByText('Vocabulary')).toBeInTheDocument()
+  })
+
+  it('renders from cached snapshot without database calls', async () => {
+    const snapshot = {
+      version: 2,
+      totalTasksCompleted: 10,
+      totalStudyMinutes: 600,
+      currentStreak: 3,
+      longestStreak: 5,
+      weeklyProgress: [],
+      skillProgress: [],
+      vocabLearned: 25,
+      vocabReviewed: 5,
+      monthlySummary: [],
+      roadmapProgress: 50,
+      weakSkills: [],
+      recentActivity: [],
+      generatedAt: new Date().toISOString(),
+    }
+    localStorage.setItem('ielts-progress-snapshot-v2', JSON.stringify(snapshot))
+    mockGetAll.mockRejectedValue(new Error('should not be called'))
+    render(<Progress />)
+
+    await screen.findByText('Total Study Hours')
+    expect(screen.getByText('10.0')).toBeInTheDocument()
+  })
+
+  it('handles mistakes with null skill', async () => {
     mockGetAll.mockImplementation((store: string) => {
       if (store === 'mistakes') return Promise.resolve([
         { id: '1', skill: null, count: 1 },
@@ -155,22 +188,12 @@ describe('Progress page topics progress sections', () => {
       return Promise.resolve([])
     })
     render(<Progress />)
-    await screen.findByText('Progress Analytics')
+
+    await screen.findByText('Weak Skills')
+    expect(screen.getByText('Weak Skills')).toBeInTheDocument()
   })
 
-  it('handles topics with null or empty topic name', async () => {
-    mockGetAll.mockImplementation((store: string) => {
-      if (store === 'topicsProgress') return Promise.resolve([
-        makeProgressTopic({ topic: null }),
-        makeProgressTopic({ topic: '' }),
-      ])
-      return Promise.resolve([])
-    })
-    render(<Progress />)
-    await screen.findByText('Progress Analytics')
-  })
-
-  it('handles vocabulary with missing createdAt date', async () => {
+  it('handles vocabulary with missing createdAt', async () => {
     mockGetAll.mockImplementation((store: string) => {
       if (store === 'vocabulary') return Promise.resolve([
         { id: '1', word: 'test', meaning: 'a test' },
@@ -178,17 +201,23 @@ describe('Progress page topics progress sections', () => {
       return Promise.resolve([])
     })
     render(<Progress />)
-    await screen.findByText('Progress Analytics')
+
+    await screen.findByText('Total Study Hours')
   })
 
-  it('handles vocabulary reviews with missing lastReviewDate', async () => {
-    mockGetAll.mockImplementation((store: string) => {
-      if (store === 'vocabularyReviews') return Promise.resolve([
-        { id: '1', word: 'test' },
-      ])
-      return Promise.resolve([])
-    })
+  it('handles empty recent activity', async () => {
+    emptyStoreMock()
     render(<Progress />)
-    await screen.findByText('Progress Analytics')
+
+    await screen.findByText('Recent Activity')
+    expect(screen.getByText('No recent activity. Start studying to track your progress.')).toBeInTheDocument()
+  })
+
+  it('handles empty weak skills', async () => {
+    emptyStoreMock()
+    render(<Progress />)
+
+    await screen.findByText('Weak Skills')
+    expect(screen.getByText('No mistakes logged yet. Keep practicing!')).toBeInTheDocument()
   })
 })

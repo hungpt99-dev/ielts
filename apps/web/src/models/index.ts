@@ -52,6 +52,8 @@ export type QuestionType =
   | 'Matching Information'
 
 
+export type StudyGoal = 'academic' | 'general'
+
 export interface AppSettings {
   targetBand: number
   currentBand: number
@@ -60,12 +62,13 @@ export interface AppSettings {
   weakSkills: string[]
   preferredTopics: string[]
   studyReminder: string
+  studyGoal: StudyGoal
+  preferredSchedule: ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[]
   aiApiKey: string
   aiProvider: 'openai' | 'custom'
   aiEndpoint: string
   aiModel: string
   darkMode: boolean
-  sampleDataLoaded: boolean
   aiEnabled: boolean
 }
 
@@ -77,12 +80,13 @@ export const DEFAULT_SETTINGS: AppSettings = {
   weakSkills: [],
   preferredTopics: [],
   studyReminder: 'Time to study IELTS!',
+  studyGoal: 'academic',
+  preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
   aiApiKey: '',
   aiProvider: 'openai',
   aiEndpoint: '',
   aiModel: 'gpt-4o-mini',
   darkMode: false,
-  sampleDataLoaded: false,
   aiEnabled: false,
 }
 
@@ -615,6 +619,20 @@ export interface DashboardData {
     writing: number
     speaking: number
   }
+  examDate: string
+  studyGoal: StudyGoal
+  dailyStudyMinutes: number
+  recentMistakes: number
+  savedVocabularyCount: number
+  aiSuggestion: string
+  roadmapProgress: number
+  nextTask: {
+    title: string
+    skillFocus: string
+    objective: string
+    id: string
+  } | null
+  examCountdown: number
 }
 
 export interface WeeklyStudyDay {
@@ -646,6 +664,8 @@ export interface SearchResult {
   snippet: string
   skill?: string
   topic?: string
+  difficulty?: VocabDifficulty
+  status?: string
   date: ISOString
   url: string
 }
@@ -717,25 +737,4 @@ export interface AppExportData {
 }
 
 
-export interface SeedData {
-  vocabulary: Array<Omit<VocabularyEntry, 'id' | 'createdAt' | 'updatedAt'>>
-  tasks: Array<Omit<TaskEntry, 'id' | 'createdAt' | 'updatedAt'>>
-  grammarNotes: Array<Omit<GrammarNote, 'id' | 'createdAt' | 'updatedAt'>>
-  readingSessions: Array<Omit<ReadingSession, 'id' | 'createdAt'>>
-  listeningSessions: Array<Omit<ListeningSession, 'id' | 'createdAt'>>
-  writingSessions: Array<Omit<WritingSession, 'id' | 'createdAt'>>
-  speakingSessions: Array<Omit<SpeakingSession, 'id' | 'createdAt'>>
-  mockTests: Array<Omit<MockTestEntry, 'id' | 'createdAt'>>
-  passages: Array<Omit<PassageEntry, 'id' | 'createdAt' | 'updatedAt'>>
-  ieltsTopics: Array<Omit<IeltsTopic, 'id' | 'createdAt' | 'updatedAt'>>
-  exampleSentences: Array<Omit<ExampleSentence, 'id' | 'createdAt' | 'updatedAt'>>
-  readingPassages: Array<Omit<ReadingPassage, 'id' | 'createdAt' | 'updatedAt'>>
-  listeningTranscripts: Array<Omit<ListeningTranscript, 'id' | 'createdAt' | 'updatedAt'>>
-  writingPrompts: Array<Omit<WritingPrompt, 'id' | 'createdAt' | 'updatedAt'>>
-  speakingQuestions: Array<Omit<SpeakingQuestion, 'id' | 'createdAt' | 'updatedAt'>>
-  studyNotes: Array<Omit<StudyNote, 'id' | 'createdAt' | 'updatedAt'>>
-  customStudyPlans: Array<Omit<CustomStudyPlan, 'id' | 'createdAt' | 'updatedAt'>>
-  usefulPhrases: Array<Omit<UsefulPhrase, 'id' | 'createdAt' | 'updatedAt'>>
-  aiContents: Array<Omit<AiContent, 'id' | 'createdAt'>>
-  progressRecords: Array<Omit<ProgressRecord, 'id' | 'createdAt'>>
-}
+

@@ -70,11 +70,15 @@ export const ProactiveMessageService = {
   },
 
   loadMessages(): ProactiveMessage[] {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    if (!raw) return []
-    const parsed = safeJsonParse<unknown>(raw, null)
-    if (!Array.isArray(parsed)) return []
-    return parsed as ProactiveMessage[]
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      if (!raw) return []
+      const parsed = safeJsonParse<unknown>(raw, null)
+      if (!Array.isArray(parsed)) return []
+      return parsed as ProactiveMessage[]
+    } catch {
+      return []
+    }
   },
 
   saveMessages(messages: ProactiveMessage[]): void {

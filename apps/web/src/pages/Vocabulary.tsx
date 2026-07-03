@@ -7,6 +7,7 @@ import Card, { CardContent } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
 import ErrorDisplay from '../components/ui/ErrorDisplay'
+import Pagination from '../components/ui/Pagination'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -102,6 +103,8 @@ export default function Vocabulary() {
 
   const [detailEntry, setDetailEntry] = useState<VocabularyEntry | null>(null)
   const [detailOpen, setDetailOpen] = useState(false)
+  const [page, setPage] = useState(1)
+  const pageSize = 20
 
   const loadEntries = useCallback(async () => {
     try {
@@ -170,6 +173,17 @@ export default function Vocabulary() {
 
     return filtered.sort((a, b) => a.word.localeCompare(b.word))
   }, [entries, search, topicFilter, statusFilter, difficultyFilter, tagFilter, view])
+
+  const totalFilteredPages = Math.max(1, Math.ceil(filteredEntries.length / pageSize))
+
+  const paginatedEntries = useMemo(() => {
+    const start = (page - 1) * pageSize
+    return filteredEntries.slice(start, start + pageSize)
+  }, [filteredEntries, page, pageSize])
+
+  useEffect(() => {
+    setPage(1)
+  }, [search, topicFilter, statusFilter, difficultyFilter, tagFilter, view])
 
   const stats = useMemo(() => {
     const total = entries.length
@@ -514,7 +528,7 @@ export default function Vocabulary() {
         </Card>
       ) : (
         <div className="space-y-2">
-          {filteredEntries.map(entry => (
+          {paginatedEntries.map(entry => (
             <div
               key={entry.id}
               className="rounded-lg border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600"
@@ -657,6 +671,15 @@ export default function Vocabulary() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {filteredEntries.length > pageSize && (
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, filteredEntries.length)} of {filteredEntries.length}
+          </p>
+          <Pagination page={page} totalPages={totalFilteredPages} onPageChange={setPage} />
         </div>
       )}
 

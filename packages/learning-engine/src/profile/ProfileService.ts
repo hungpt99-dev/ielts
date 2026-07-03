@@ -13,15 +13,16 @@ export class ProfileService {
   getProfileData(
     settings: ProfileSettings,
     sessionDates: ISOString[],
+    taskDates: ISOString[] = [],
   ): ProfileData {
     const targetBand = settings.targetBand
     const currentBand = settings.currentBand
     const bandProgress = this.calculateBandProgress(currentBand, targetBand)
     const examDate = settings.examDate || null
     const examCountdownDays = examDate ? this.getExamCountdown(examDate) : null
-    const studyStreak = this.calculateStudyStreak(sessionDates)
+    const studyStreak = this.calculateStudyStreak(sessionDates, taskDates)
     const lastStudyDate = sessionDates.length > 0
-      ? sessionDates.sort().reverse()[0]
+      ? [...sessionDates].sort().reverse()[0]
       : null
 
     return {
@@ -44,18 +45,20 @@ export class ProfileService {
   }
 
   getExamCountdown(examDate: string): number {
-    const exam = new Date(examDate)
-    const today = new Date()
-    exam.setHours(0, 0, 0, 0)
-    today.setHours(0, 0, 0, 0)
-    return Math.max(0, daysBetween(exam, today))
+    const examDateOnly = examDate.slice(0, 10)
+    const exam = new Date(examDateOnly + 'T00:00:00.000Z')
+    if (isNaN(exam.getTime())) return 0
+    const now = new Date()
+    const todayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+    return Math.max(0, daysBetween(exam, todayStart))
   }
 
-  calculateStudyStreak(sessionDates: ISOString[]): number {
-    if (sessionDates.length === 0) return 0
+  calculateStudyStreak(sessionDates: ISOString[], taskDates: ISOString[] = []): number {
+    const allDates = [...sessionDates, ...taskDates]
+    if (allDates.length === 0) return 0
 
     const uniqueDays = new Set<string>()
-    for (const date of sessionDates) {
+    for (const date of allDates) {
       uniqueDays.add(date.slice(0, 10))
     }
 

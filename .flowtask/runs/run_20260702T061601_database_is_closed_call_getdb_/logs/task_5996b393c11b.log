@@ -1,0 +1,32 @@
+[2026-07-02T06:39:09.083Z] [INFO] Task started: Run full test suite to validate no regressions after DB connection fixes
+[2026-07-02T06:39:11.276Z] [INFO] Executor finished with status: failed, exit code: 1
+[2026-07-02T06:39:11.277Z] [INFO] Output:
+Scope: 11 of 12 workspace projects
+packages/ai test$ vitest run --passWithNoTests
+packages/ai-tutor test$ vitest run --passWithNoTests
+packages/exercises test$ vitest run --passWithNoTests
+packages/storage test$ vitest run --passWithNoTests
+packages/ai-tutor test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+packages/ai test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai
+packages/exercises test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises
+packages/storage test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage
+packages/exercises test:  ✓ src/__tests__/generationStrategies.ai.test.ts (8 tests) 7ms
+packages/exercises test:  ✓ src/__tests__/scoringStrategies.test.ts (33 tests) 3ms
+packages/ai test:  ✓ src/__tests__/errors.test.ts (9 tests) 4ms
+packages/ai test:  ❯ src/__tests__/adapters.test.ts (16 tests | 1 failed) 12ms
+packages/ai test:    ✓ OpenAIAdapter > complete > makes a POST request with correct headers and body 3ms
+packages/ai test:    ✓ OpenAIAdapter > complete > returns content from successful response 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > returns usage data when present 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > returns undefined usage when absent 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIAuthError on 401 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIRateLimitError on 429 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIError on other errors 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when content is empty 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when choices is empty 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AINetworkError on network failure 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIError on other network errors 0ms
+packages/ai test:    ✓ OpenAIAdapte
+[2026-07-02T06:39:11.277Z] [INFO] Error:
+$ pnpm -r test
+[2026-07-02T06:39:11.280Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-02T06:39:11.287Z] [INFO] Task completed successfully

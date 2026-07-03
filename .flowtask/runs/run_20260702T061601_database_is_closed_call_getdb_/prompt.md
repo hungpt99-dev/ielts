@@ -1,0 +1,1 @@
+Database is closed. Call getDb() to open a connection first. check root cause then fix all

@@ -19,13 +19,13 @@ function getBandColor(band: number): string {
 
 function getSkillColor(skill: string): string {
   const colors: Record<string, string> = {
-    listening: '#6366f1',
-    reading: '#34d399',
-    writing: '#f59e0b',
-    speaking: '#ec4899',
-    overall: '#3b82f6',
+    listening: 'var(--color-primary)',
+    reading: 'var(--color-success)',
+    writing: 'var(--color-warning)',
+    speaking: 'var(--color-danger)',
+    overall: 'var(--color-primary)',
   }
-  return colors[skill] ?? '#94a3b8'
+  return colors[skill] ?? 'var(--color-muted)'
 }
 
 interface FormData {
@@ -146,9 +146,13 @@ export default function MockTests() {
     setModalOpen(true)
   }
 
-  function handleDelete(id: string) {
-    DatabaseService.remove('mockTests', id)
-    setTests(prev => prev.filter(t => t.id !== id))
+  async function handleDelete(id: string) {
+    try {
+      await DatabaseService.remove('mockTests', id)
+      setTests(prev => prev.filter(t => t.id !== id))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete mock test')
+    }
   }
 
   async function handleSave() {
@@ -207,8 +211,8 @@ export default function MockTests() {
     setEditingTest(null)
   }
 
-  function calculateOverall(listening: number, reading: number, writing: number, speaking: number): string {
-    return ((listening + reading + writing + speaking) / 4).toFixed(1)
+  function calculateOverall(listening: number, reading: number, writing: number, speaking: number): number {
+    return (listening + reading + writing + speaking) / 4
   }
 
   if (loading) {

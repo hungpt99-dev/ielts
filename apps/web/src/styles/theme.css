@@ -2,6 +2,7 @@
   --color-background: #f8fafc;
   --color-surface: #ffffff;
   --color-surface-alt: #f1f5f9;
+  --color-surface-secondary: #f1f5f9;
   --color-primary: #2563eb;
   --color-primary-hover: #1d4ed8;
   --color-primary-light: #dbeafe;
@@ -15,6 +16,8 @@
   --color-warning-light: #fef3c7;
   --color-danger: #ef4444;
   --color-danger-light: #fee2e2;
+  --color-on-danger: #ffffff;
+  --color-on-primary: #ffffff;
   --color-info: #3b82f6;
   --color-info-light: #dbeafe;
 
@@ -44,6 +47,7 @@
   --color-background: #0f172a;
   --color-surface: #1e293b;
   --color-surface-alt: #0f172a;
+  --color-surface-secondary: #334155;
   --color-primary: #3b82f6;
   --color-primary-hover: #60a5fa;
   --color-primary-light: #1e3a5f;
@@ -57,6 +61,8 @@
   --color-warning-light: #78350f;
   --color-danger: #ef4444;
   --color-danger-light: #7f1d1d;
+  --color-on-danger: #ffffff;
+  --color-on-primary: #ffffff;
   --color-info: #3b82f6;
   --color-info-light: #1e3a5f;
 
@@ -91,12 +97,12 @@ body {
   color: var(--color-primary);
 }
 
-a {
+:where(a) {
   color: var(--color-primary);
   text-decoration: none;
 }
 
-a:hover {
+:where(a):hover {
   color: var(--color-primary-hover);
   text-decoration: underline;
 }

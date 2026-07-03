@@ -1,0 +1,1 @@
+check all bug css, bug code, bug logic then fix all then selftest

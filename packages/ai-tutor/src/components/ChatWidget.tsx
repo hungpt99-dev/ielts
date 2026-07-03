@@ -135,11 +135,14 @@ export function ChatWidget({
       const msg = proactive.messages.find(m => m.id === msgId)
       if (!msg) return
       proactive.markAsRead(msgId)
+      proactive.dismissMessage(msgId)
       if (msg.action?.type === 'navigate' && msg.action.payload?.path) {
         window.location.href = msg.action.payload.path as string
+      } else if (msg.action?.type === 'action' && msg.action.payload?.action) {
+        handleQuickAction(msg.action.payload.action as string)
       }
     },
-    [proactive],
+    [proactive, handleQuickAction],
   )
 
   const handleSuggestionDismiss = useCallback(() => {
@@ -477,15 +480,15 @@ const ChatInput = React.forwardRef<HTMLInputElement, {
       <button
         onClick={onSend}
         disabled={!value.trim() || disabled}
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm transition-colors hover:opacity-80 disabled:opacity-40"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm transition-colors hover:opacity-80 disabled:opacity-40"
         style={{
           backgroundColor: 'var(--color-primary)',
-          color: '#fff',
+          color: 'var(--color-on-primary)',
         }}
         aria-label="Send message"
         title="Send"
       >
-        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" />
         </svg>
       </button>
@@ -498,15 +501,16 @@ const popupContainerStyle: React.CSSProperties = {
   flexDirection: 'column',
   borderRadius: '16px',
   border: '1px solid',
-  overflow: 'hidden',
   zIndex: 9999,
   position: 'fixed',
+  overflow: 'hidden',
 }
 
 const desktopStyle: React.CSSProperties = {
   width: '380px',
   height: '560px',
-  bottom: '24px',
+  maxHeight: 'calc(100vh - 120px)',
+  bottom: 'calc(24px + 56px + 16px)',
   right: '24px',
 }
 

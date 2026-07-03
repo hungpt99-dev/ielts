@@ -1,0 +1,192 @@
+{
+  "title": "Fix chat button popup toggle behavior",
+  "summary": "Ensure chat button opens popup on every click, not just the first",
+  "tasks": [
+    {
+      "title": "Investigate chat button click handler in popup UI component",
+      "description": "Locate the React component or module responsible for the chat button in the popup UI (likely in apps/extension/src or packages/ai-tutor/src). Analyze the click handler logic to understand why the popup opens only on the first click and not on subsequent clicks. Identify state variables or event listeners controlling the popup visibility.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "The chat button click handler code is located and understood",
+        "Root cause for popup not opening on second click is identified"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Clear understanding of the current chat button click handler and the cause of the popup toggle issue",
+      "outputPlan": [],
+      "taskType": "analysis",
+      "actionType": "read",
+      "inputContext": "Project source code for chat button and popup UI",
+      "targetFiles": [],
+      "targetArtifacts": [],
+      "evidence": [
+        "Code inspection notes",
+        "Identified problematic logic or missing state update"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundation for fixing the popup toggle behavior"
+    },
+    {
+      "title": "Modify chat button click handler to toggle popup visibility correctly",
+      "description": "In the identified chat button component file, modify the click handler logic to toggle the popup open state on every click. Ensure that the popup opens if closed and closes if open. Use React state or context appropriately to track popup visibility. Remove any logic that disables opening after the first click.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Investigate chat button click handler in popup UI component"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Popup opens on first click",
+        "Popup closes on second click",
+        "Popup toggles correctly on repeated clicks"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Chat popup toggles open and closed correctly on every button click",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/ChatButton.tsx",
+          "description": "Update click handler to toggle popup visibility state",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Chat button click handler code and popup visibility state logic",
+      "targetFiles": [
+        "apps/extension/src/popup/components/ChatButton.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "File modified with toggle logic",
+        "Tests pass with popup toggle behavior"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Fixes the core popup toggle behavior for chat button"
+    },
+    {
+      "title": "Add unit test for chat button popup toggle behavior",
+      "description": "Create or update unit tests for the chat button component to verify that clicking the button toggles the popup open and closed correctly. Use React Testing Library or equivalent. Test initial state, first click opens popup, second click closes popup, and repeated clicks toggle state.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Modify chat button click handler to toggle popup visibility correctly"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Unit test covers popup toggle on chat button clicks",
+        "Test passes successfully"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test -- -t 'ChatButton popup toggle'"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Reliable automated test coverage for chat button popup toggle behavior",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/ChatButton.test.tsx",
+          "description": "Add tests for popup toggle on button clicks",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "create",
+      "inputContext": "Modified chat button component with toggle logic",
+      "targetFiles": [
+        "apps/extension/src/popup/components/ChatButton.test.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Test file updated",
+        "Test passes with popup toggle verified"
+      ],
+      "verificationCommand": "pnpm test -- -t 'ChatButton popup toggle'",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures future stability of popup toggle behavior"
+    },
+    {
+      "title": "Perform manual QA to verify chat button popup behavior in extension popup",
+      "description": "Manually test the chat button in the browser extension popup UI. Verify that clicking the chat button opens the popup on first click, closes it on second click, and toggles correctly on repeated clicks. Confirm no errors or unexpected behavior occur.",
+      "executor": "shell",
+      "dependsOn": [
+        "Add unit test for chat button popup toggle behavior"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Popup opens and closes correctly on chat button clicks",
+        "No console errors during interaction"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Verified correct popup toggle behavior in real usage scenario",
+      "outputPlan": [],
+      "taskType": "qa",
+      "actionType": "validate",
+      "inputContext": "Modified chat button component and tests",
+      "targetFiles": [],
+      "targetArtifacts": [],
+      "evidence": [
+        "Manual test report or notes"
+      ],
+      "verificationCommand": "",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 0,
+        "retryDelayMs": 0,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "skip"
+      },
+      "finalOutputContribution": "Confirms fix works in actual extension popup environment"
+    }
+  ]
+}

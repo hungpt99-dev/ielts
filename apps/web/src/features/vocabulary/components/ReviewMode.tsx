@@ -15,10 +15,10 @@ const REVIEW_MODES: { value: ReviewMode; label: string }[] = [
 ]
 
 const RATING_BUTTONS: { rating: ReviewRating; label: string; color: string }[] = [
-  { rating: 'again', label: 'Again', color: 'bg-red-500 hover:bg-red-600 focus-visible:ring-red-400' },
-  { rating: 'hard', label: 'Hard', color: 'bg-orange-500 hover:bg-orange-600 focus-visible:ring-orange-400' },
-  { rating: 'good', label: 'Good', color: 'bg-blue-500 hover:bg-blue-600 focus-visible:ring-blue-400' },
-  { rating: 'easy', label: 'Easy', color: 'bg-green-500 hover:bg-green-600 focus-visible:ring-green-400' },
+  { rating: 'again', label: 'Again', color: 'bg-red-500 hover:bg-red-600 focus-visible:ring-red-400 dark:bg-red-700 dark:hover:bg-red-800' },
+  { rating: 'hard', label: 'Hard', color: 'bg-orange-500 hover:bg-orange-600 focus-visible:ring-orange-400 dark:bg-orange-700 dark:hover:bg-orange-800' },
+  { rating: 'good', label: 'Good', color: 'bg-blue-500 hover:bg-blue-600 focus-visible:ring-blue-400 dark:bg-blue-700 dark:hover:bg-blue-800' },
+  { rating: 'easy', label: 'Easy', color: 'bg-green-500 hover:bg-green-600 focus-visible:ring-green-400 dark:bg-green-700 dark:hover:bg-green-800' },
 ]
 
 function getToday(): string {
@@ -98,6 +98,7 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
 
       const vocabStatus: VocabStatus =
         rating === 'again' ? 'learning' :
+        (rating === 'good' || rating === 'easy') && currentItem.vocab.status === 'reviewing' ? 'mastered' :
         currentItem.vocab.status === 'new' || currentItem.vocab.status === 'learning' ? 'learning' :
         currentItem.vocab.status
 

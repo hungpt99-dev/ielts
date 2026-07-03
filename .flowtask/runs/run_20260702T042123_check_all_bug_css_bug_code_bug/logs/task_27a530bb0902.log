@@ -1,0 +1,32 @@
+[2026-07-02T05:08:16.912Z] [INFO] Task started: Run Full Self-Test Suite to Verify Bug Fixes
+[2026-07-02T05:08:19.236Z] [INFO] Executor finished with status: failed, exit code: 1
+[2026-07-02T05:08:19.238Z] [INFO] Output:
+Scope: 11 of 12 workspace projects
+packages/ai test$ vitest run --passWithNoTests
+packages/ai-tutor test$ vitest run --passWithNoTests
+packages/exercises test$ vitest run --passWithNoTests
+packages/storage test$ vitest run --passWithNoTests
+packages/ai-tutor test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+packages/ai test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai
+packages/exercises test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises
+packages/storage test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage
+packages/exercises test:  ✓ src/__tests__/difficulty.test.ts (13 tests) 6ms
+packages/ai-tutor test:  ✓ src/tests/chatHelpers.test.ts (12 tests) 79ms
+packages/ai-tutor test:  ✓ src/tests/proactiveMessageEngine.test.ts (25 tests) 91ms
+packages/exercises test:  ✓ src/__tests__/generationStrategies.ai.test.ts (8 tests) 12ms
+packages/exercises test:  ✓ src/__tests__/scoringStrategies.test.ts (33 tests) 7ms
+packages/ai test:  ❯ src/__tests__/adapters.test.ts (16 tests | 1 failed) 40ms
+packages/ai test:    ✓ OpenAIAdapter > complete > makes a POST request with correct headers and body 7ms
+packages/ai test:    ✓ OpenAIAdapter > complete > returns content from successful response 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > returns usage data when present 3ms
+packages/ai test:    ✓ OpenAIAdapter > complete > returns undefined usage when absent 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIAuthError on 401 1ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIRateLimitError on 429 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIError on other errors 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when content is empty 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when choices is empty 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > thr
+[2026-07-02T05:08:19.239Z] [INFO] Error:
+$ pnpm -r test
+[2026-07-02T05:08:19.240Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-02T05:08:19.257Z] [INFO] Task completed successfully

@@ -478,10 +478,11 @@ interface WritingAnalysis {
 function detectGrammarIssues(text: string): GrammarIssue[] {
   const issues: GrammarIssue[] = []
 
-  const subjVerbMatches = text.match(/\b(He|She|It|The (child|student|person|government|company|country)) (are|were|have|do|don't)\b/gi)
+  const subjVerbMatches = text.match(/\b(The\s+\w+|\bHe|She|It)\s+(are|were|have|do|don't)\b/gi)
   if (subjVerbMatches) {
     subjVerbMatches.forEach(m => {
-      const subject = m.split(' ')[0]
+      const match = m.match(/\b(He|She|It|The (\w+)) (are|were|have|do|don't)\b/i)
+      const subject = match ? match[1] : m.split(' ')[0]
       issues.push({
         original: m,
         suggestion: m.replace(/\bare\b/i, 'is').replace(/\bwere\b/i, 'was').replace(/\bhave\b/i, 'has').replace(/\bdo\b/i, 'does').replace(/\bdon't\b/i, "doesn't"),
@@ -501,7 +502,7 @@ function detectGrammarIssues(text: string): GrammarIssue[] {
     })
   }
 
-  const articleMatches = text.match(/\ba (apple|hour|honest|umbrella|heir|herb)\b/gi)
+  const articleMatches = text.match(/\ba (apple|hour|honest|umbrella|heir)\b/gi)
   if (articleMatches) {
     articleMatches.forEach(m => {
       const word = m.replace(/^a\s+/i, '')
@@ -716,8 +717,8 @@ function improveVocabulary(text: string): string {
     .replace(/\bbad\b/gi, 'detrimental')
     .replace(/\bbig\b/gi, 'significant')
     .replace(/\bsmall\b/gi, 'minor')
-    .replace(/\bvery\b/gi, '')
-    .replace(/\breally\b/gi, '')
+    .replace(/\bvery\b/gi, 'extremely')
+    .replace(/\breally\b/gi, 'extremely')
     .replace(/\ba lot\b/gi, 'significantly')
     .replace(/\bpeople\b/gi, 'individuals')
     .replace(/\bthings?\b/gi, 'aspects')

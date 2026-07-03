@@ -11,9 +11,9 @@ export default function FloatingTutorButton() {
           50% { transform: translateY(-4px); }
         }
         @keyframes tutor-pulse {
-          0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
-          70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+          0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 50%, transparent); }
+          70% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--color-primary) 0%, transparent); }
+          100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 0%, transparent); }
         }
       `}</style>
       <div style={wrapperStyle}>
@@ -50,7 +50,7 @@ const wrapperStyle: React.CSSProperties = {
   position: 'fixed',
   bottom: '24px',
   right: '24px',
-  zIndex: 9999,
+  zIndex: 100,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-end',
@@ -62,19 +62,19 @@ const buttonStyle: React.CSSProperties = {
   height: '56px',
   borderRadius: '50%',
   border: 'none',
-  background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
-  color: '#fff',
+  background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-hover))',
+  color: 'var(--color-on-primary, #ffffff)',
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  boxShadow: '0 4px 16px rgba(59, 130, 246, 0.4)',
-  transition: 'all 0.2s ease',
+  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
+  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
 }
 
 const tooltipStyle: React.CSSProperties = {
-  background: '#1e293b',
-  color: '#fff',
+  background: 'var(--color-surface-alt)',
+  color: 'var(--color-text)',
   padding: '8px 14px',
   borderRadius: '10px',
   fontSize: '13px',

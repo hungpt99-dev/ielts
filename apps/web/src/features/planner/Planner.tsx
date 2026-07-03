@@ -232,19 +232,19 @@ export default function Planner() {
 
   const missedCount = missedTasks.length
 
-  function handleToggleDone(task: TaskEntry) {
+  async function handleToggleDone(task: TaskEntry) {
     const updated: TaskEntry = {
       ...task,
       isDone: !task.isDone,
       completedAt: !task.isDone ? new Date().toISOString() : null,
       updatedAt: new Date().toISOString(),
     }
-    DatabaseService.put('tasks', updated)
+    await DatabaseService.put('tasks', updated)
     setTasks(prev => prev.map(t => t.id === updated.id ? updated : t))
   }
 
-  function handleDelete(id: string) {
-    DatabaseService.remove('tasks', id)
+  async function handleDelete(id: string) {
+    await DatabaseService.remove('tasks', id)
     setTasks(prev => prev.filter(t => t.id !== id))
   }
 
@@ -264,14 +264,14 @@ export default function Planner() {
     setShowNotesModal(true)
   }
 
-  function saveNotes() {
+  async function saveNotes() {
     if (!notesTask) return
     const updated: TaskEntry = {
       ...notesTask,
       notes: notesText,
       updatedAt: new Date().toISOString(),
     }
-    DatabaseService.put('tasks', updated)
+    await DatabaseService.put('tasks', updated)
     setTasks(prev => prev.map(t => t.id === updated.id ? updated : t))
     setShowNotesModal(false)
     setNotesTask(null)
@@ -315,11 +315,12 @@ export default function Planner() {
     setGenerating(true)
     setGeneratedCount(0)
     try {
+      const existingTasks = await DatabaseService.getAll<TaskEntry>('tasks')
       const schedule = generateSchedule(scheduleConfig)
       const now = new Date().toISOString()
       let count = 0
       for (const day of schedule) {
-        const dateHasTasks = tasks.some(t => t.date.slice(0, 10) === day.date)
+        const dateHasTasks = existingTasks.some(t => t.date.slice(0, 10) === day.date)
         if (dateHasTasks) continue
         for (const item of day.items) {
           const task: TaskEntry = {
@@ -338,10 +339,10 @@ export default function Planner() {
             completedAt: null,
           }
           await DatabaseService.add('tasks', task)
-          setTasks(prev => [...prev, task])
           count++
         }
       }
+      setTasks(await DatabaseService.getAll<TaskEntry>('tasks'))
       setGeneratedCount(count)
       setShowGenerateModal(false)
     } catch (err) {
@@ -351,7 +352,7 @@ export default function Planner() {
     }
   }
 
-  function handleResetMissed(id: string) {
+  async function handleResetMissed(id: string) {
     const task = tasks.find(t => t.id === id)
     if (!task) return
     const updated: TaskEntry = {
@@ -359,11 +360,11 @@ export default function Planner() {
       date: today() + 'T00:00:00.000Z',
       updatedAt: new Date().toISOString(),
     }
-    DatabaseService.put('tasks', updated)
+    await DatabaseService.put('tasks', updated)
     setTasks(prev => prev.map(t => t.id === id ? updated : t))
   }
 
-  function handleRescheduleMissed(id: string) {
+  async function handleRescheduleMissed(id: string) {
     const task = tasks.find(t => t.id === id)
     if (!task) return
     const tomorrow = addDays(today(), 1)
@@ -372,7 +373,7 @@ export default function Planner() {
       date: tomorrow + 'T00:00:00.000Z',
       updatedAt: new Date().toISOString(),
     }
-    DatabaseService.put('tasks', updated)
+    await DatabaseService.put('tasks', updated)
     setTasks(prev => prev.map(t => t.id === id ? updated : t))
   }
 

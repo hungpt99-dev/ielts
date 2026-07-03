@@ -27,7 +27,7 @@ export class DailyPlanService {
 
     return {
       date: now.toISOString(),
-      totalMinutes: Math.max(totalMinutes, dailyStudyMinutes),
+      totalMinutes,
       studyPriority,
       items,
       focusSkills,
@@ -53,10 +53,10 @@ export class DailyPlanService {
   ): Array<{ date: ISOString; items: number }> {
     const weekStart = this.getWeekStart(now)
     const schedule: Array<{ date: ISOString; items: number }> = []
+    const startMs = new Date(weekStart + 'T00:00:00.000Z').getTime()
 
     for (let i = 0; i < 7; i++) {
-      const d = new Date(weekStart)
-      d.setDate(d.getDate() + i)
+      const d = new Date(startMs + i * 86400000)
       const dateStr = d.toISOString().slice(0, 10)
       const dayTasks = tasks.filter(t => t.date.slice(0, 10) === dateStr)
       schedule.push({
@@ -66,6 +66,14 @@ export class DailyPlanService {
     }
 
     return schedule
+  }
+
+  private getWeekStart(now: Date): string {
+    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
+    const day = d.getUTCDay()
+    const diff = d.getUTCDate() - day + (day === 0 ? -6 : 1)
+    d.setUTCDate(diff)
+    return d.toISOString().slice(0, 10)
   }
 
   private buildPlanItems(
@@ -180,11 +188,4 @@ export class DailyPlanService {
     return priority
   }
 
-  private getWeekStart(now: Date): string {
-    const d = new Date(now)
-    const day = d.getDay()
-    const diff = d.getDate() - day + (day === 0 ? -6 : 1)
-    d.setDate(diff)
-    return d.toISOString().slice(0, 10)
-  }
 }

@@ -201,7 +201,7 @@ export class ProgressService {
     while (current <= end) {
       const dayStr = current.toISOString().slice(0, 10)
       const dayTasks = tasksByDay.get(dayStr) || []
-      const totalMinutes = dayTasks.reduce((s, t) => s + (t.timeMinutes || 0), 0) + (sessionCountByDay.get(dayStr) || 0) * 30
+      const totalMinutes = dayTasks.reduce((s, t) => s + (t.timeMinutes || 0), 0)
       days.push({
         date: dayStr,
         minutes: totalMinutes,

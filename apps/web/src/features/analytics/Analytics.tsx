@@ -43,8 +43,8 @@ const SKILL_COLORS: Record<string, string> = {
   Listening: 'var(--color-success)',
   Writing: 'var(--color-warning)',
   Speaking: 'var(--color-danger)',
-  Vocabulary: '#8b5cf6',
-  Grammar: '#ec4899',
+  Vocabulary: 'var(--color-info)',
+  Grammar: 'var(--color-danger)',
 }
 
 function getMonthLabel(dateStr: string): string {
@@ -53,6 +53,18 @@ function getMonthLabel(dateStr: string): string {
 }
 
 function getWeekLabel(dateStr: string): string {
+  const match = dateStr.match(/^(\d{4})-W(\d{1,2})$/)
+  if (match) {
+    const year = parseInt(match[1], 10)
+    const week = parseInt(match[2], 10)
+    const jan1 = new Date(year, 0, 1)
+    const days = (week - 1) * 7
+    const start = new Date(jan1)
+    start.setDate(jan1.getDate() + days - jan1.getDay() + 1)
+    const end = new Date(start)
+    end.setDate(start.getDate() + 6)
+    return `${MONTHS[start.getMonth()].slice(0, 3)}${start.getDate()}-${MONTHS[end.getMonth()].slice(0, 3)}${end.getDate()}`
+  }
   const d = new Date(dateStr)
   const start = new Date(d)
   start.setDate(d.getDate() - d.getDay() + 1)
@@ -380,7 +392,7 @@ export default function Analytics() {
               className="rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
               style={{
                 backgroundColor: range === opt.value ? 'var(--color-primary)' : 'var(--color-surface-alt)',
-                color: range === opt.value ? '#fff' : 'var(--color-text-secondary)',
+                color: range === opt.value ? 'var(--color-on-primary, #ffffff)' : 'var(--color-text-secondary)',
               }}
             >
               {opt.label}
@@ -551,14 +563,13 @@ export default function Analytics() {
               <p className="text-4xl font-bold" style={{ color: 'var(--color-primary)' }}>
                 {(() => {
                   let streak = 0
-                  const today = new Date().toISOString().slice(0, 10)
                   for (let i = 0; i < 365; i++) {
                     const d = new Date()
                     d.setDate(d.getDate() - i)
                     const key = d.toISOString().slice(0, 10)
                     if (data.streakDays.includes(key)) {
                       streak++
-                    } else if (key !== today) {
+                    } else {
                       break
                     }
                   }
@@ -649,7 +660,7 @@ export default function Analytics() {
                       allowDecimals={false}
                     />
                     <Tooltip content={<AnalyticsTooltip />} />
-                    <Bar dataKey="count" fill="#8b5cf6" radius={[3, 3, 0, 0]} maxBarSize={40} name="Reviews" />
+                    <Bar dataKey="count" fill="var(--color-primary)" radius={[3, 3, 0, 0]} maxBarSize={40} name="Reviews" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

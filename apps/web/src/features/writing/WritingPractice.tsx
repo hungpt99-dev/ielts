@@ -175,7 +175,7 @@ export default function WritingPractice() {
     setView('practice')
   }
 
-  function saveDraft() {
+  async function saveDraft() {
     if (!essayText.trim() || !questionText.trim()) return
     const session: WritingSession = {
       id: sessionId || generateId(),
@@ -195,11 +195,14 @@ export default function WritingPractice() {
       personalReflection: '',
       createdAt: new Date().toISOString(),
     }
-    DatabaseService.put('writingSessions', session).then(() => {
+    try {
+      await DatabaseService.put('writingSessions', session)
       setSessionId(session.id)
       setDraftSaved(true)
       loadHistory()
-    }).catch(() => {})
+    } catch {
+      console.error('Failed to save draft')
+    }
   }
 
   async function handleGetAiFeedback() {
@@ -346,8 +349,8 @@ Be specific and constructive. Provide a realistic band score between 1.0 and 9.0
     setView('history')
   }
 
-  function handleDeleteSession(id: string) {
-    DatabaseService.remove('writingSessions', id)
+  async function handleDeleteSession(id: string) {
+    await DatabaseService.remove('writingSessions', id)
     setHistory(prev => prev.filter(s => s.id !== id))
     setDeleteConfirmId(null)
   }

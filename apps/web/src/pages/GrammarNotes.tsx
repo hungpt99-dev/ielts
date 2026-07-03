@@ -146,20 +146,20 @@ export default function GrammarNotes() {
     setModalOpen(true)
   }
 
-  function handleDelete(id: string) {
+  async function handleDelete(id: string) {
     const note = notes.find(n => n.id === id)
-    DatabaseService.remove('grammarNotes', id)
+    await DatabaseService.remove('grammarNotes', id)
     setNotes(prev => prev.filter(n => n.id !== id))
     showToast('info', note ? `"${note.topic}" deleted` : 'Grammar note deleted')
   }
 
-  function handleStatusChange(note: GrammarNote, status: GrammarStatus) {
+  async function handleStatusChange(note: GrammarNote, status: GrammarStatus) {
     const updated: GrammarNote = {
       ...note,
       status,
       updatedAt: new Date().toISOString(),
     }
-    DatabaseService.put('grammarNotes', updated)
+    await DatabaseService.put('grammarNotes', updated)
     setNotes(prev => prev.map(n => n.id === updated.id ? updated : n))
     showToast('success', `"${note.topic}" marked as ${status}`)
   }

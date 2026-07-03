@@ -1,0 +1,823 @@
+[2026-07-03T07:51:19.424Z] [INFO] Task started: Refine UX Flow and Accessibility Across Core Features
+[2026-07-03T07:51:19.426Z] [INFO] [info] [output-plan] [{"action":"modify","target":"src/features/dashboard/DashboardPage.tsx","description":"Improve dashboard UX and accessibility","validationMethod":"file_diff"},{"action":"modify","target":"src/features/tasks/TaskList.tsx","description":"Enhance task list UX and accessibility","validationMethod":"file_diff"},{"action":"modify","target":"src/features/content/StudyContentPage.tsx","description":"Improve study content page UX and accessibility","validationMethod":"file_diff"}]
+[2026-07-03T07:51:19.965Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-03T07:51:19.966Z] [INFO] [stderr] [0m
+[2026-07-03T07:51:19.965Z] [INFO] [stderr] [0m
+[2026-07-03T07:51:24.604Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/features/dashboard/DashboardPage.tsx","includeCode":true}
+[2026-07-03T07:51:24.898Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/features/tasks/TaskList.tsx","includeCode":true}
+[2026-07-03T07:51:25.200Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"src/features/content/StudyContentPage.tsx","includeCode":true}
+[2026-07-03T07:51:28.632Z] [INFO] [stderr] [0m✱ [0mGlob "**/DashboardPage.tsx"[90m 0 matches[0m
+[2026-07-03T07:51:28.775Z] [INFO] [stderr] [0m✱ [0mGlob "**/TaskList.tsx"[90m 0 matches[0m
+[2026-07-03T07:51:28.975Z] [INFO] [stderr] [0m✱ [0mGlob "**/dashboard/**/*.tsx"[90m 2 matches[0m
+[2026-07-03T07:51:29.181Z] [INFO] [stderr] [0m✱ [0mGlob "**/tasks/TaskList*.tsx"[90m 0 matches[0m
+[2026-07-03T07:51:31.909Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T07:51:32.122Z] [INFO] [stderr] [0m✱ [0mGlob "**/features/tasks/**/*.tsx"[90m 0 matches[0m
+[2026-07-03T07:51:32.319Z] [INFO] [stderr] [0m✱ [0mGlob "**/features/roadmap/**/*.tsx"[90m 1 match[0m
+[2026-07-03T07:51:36.508Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"useDashboard","includeCode":true}
+[2026-07-03T07:51:36.751Z] [INFO] [stderr] [0m✱ [0mGlob "**/accessibility*.test.*"[90m 0 matches[0m
+[2026-07-03T07:51:37.133Z] [INFO] [stderr] [0m✱ [0mGlob "**/__tests__/**/*.{test,spec}.{ts,tsx}"[90m 54 matches[0m
+[2026-07-03T07:51:37.464Z] [INFO] [stderr] [0m✱ [0mGrep "accessibility"[90m 0 matches[0m
+[2026-07-03T07:51:42.865Z] [INFO] [stderr] [ ] Run validation tests to verify changes
+[2026-07-03T07:51:42.865Z] [INFO] [stderr] [0m
+[2026-07-03T07:51:42.865Z] [INFO] [stderr] [ ] Improve task list in Dashboard.tsx accessibility (keyboard interaction, ARIA roles/labels)
+[2026-07-03T07:51:42.865Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-03T07:51:42.865Z] [INFO] [stderr] [•] Audit Dashboard.tsx UX flow and accessibility (ARIA labels, keyboard nav, semantic HTML, focus management)
+[2026-07-03T07:51:42.865Z] [INFO] [stderr] [ ] Audit StudyContentPage.tsx UX flow and accessibility
+[2026-07-03T07:51:42.865Z] [INFO] [stderr] [0m
+[2026-07-03T07:51:45.739Z] [INFO] [stderr] [0m• [0mFind UI components and accessibility patterns[90m Explore Agent[0m
+[2026-07-03T08:08:13.233Z] [INFO] [stderr] [0m✓ [0mFind UI components and accessibility patterns[90m Explore Agent[0m
+[2026-07-03T08:12:29.413Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:12:29.477Z] [INFO] [stdout] Now I have a clear picture of the current state and accessibility gaps. Let me implement the improvements.
+[2026-07-03T08:12:35.297Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"DashboardData","kind":"type"}
+[2026-07-03T08:12:35.821Z] [INFO] [stderr] [0m✱ [0mGrep "interface Task | type Task "[90m in apps/web/src · 0 matches[0m
+[2026-07-03T08:12:38.626Z] [INFO] [stderr] [0m✱ [0mGrep "DashboardData"[90m in apps/web/src · 13 matches[0m
+[2026-07-03T08:12:39.005Z] [INFO] [stderr] [0m✱ [0mGrep "export.*interface.*Task"[90m in apps/web/src · 8 matches[0m
+[2026-07-03T08:12:42.008Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/models/index.ts[90m [offset=606, limit=100][0m
+[2026-07-03T08:12:42.421Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/models/index.ts[90m [offset=125, limit=60][0m
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] ===================================================================
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  import { useNavigate } from 'react-router-dom'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] +import { useCallback, useRef } from 'react'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  import LoadingSpinner from '../../components/ui/LoadingSpinner'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] @@ -1,12 +1,13 @@
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  import ProgressChart from './components/ProgressChart'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  import EmptyState from '../../components/ui/EmptyState'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  import { useDashboard } from '../../hooks/useDashboard'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] -import type { DashboardData, WeeklyStudyDay } from '../../models'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] +import type { DashboardData, WeeklyStudyDay, TaskEntry } from '../../models'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  import Button from '../../components/ui/Button'
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] [0m
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  const MOTIVATIONAL_QUOTES = [
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] [0m
+[2026-07-03T08:12:49.382Z] [INFO] [stderr]  
+[2026-07-03T08:12:49.382Z] [INFO] [stderr] 
+[2026-07-03T08:12:49.444Z] [INFO] [stdout] Now I'll implement the accessibility improvements. Let me start with the Dashboard:
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] ===================================================================
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] @@ -92,16 +92,29 @@
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]  
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]    const navigate = useNavigate()
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]  
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +  const tasksRef = useRef<HTMLUListElement>(null)
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]    const { data, weeklyChart, loading, error } = useDashboard()
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +    (e: React.KeyboardEvent, task: TaskEntry) => {
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]  export default function Dashboard() {
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +          navigate(`/study/${encodeURIComponent(task.title)}`)
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +        if (!task.isDone) {
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +  const handleTaskKeyDown = useCallback(
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +      if (e.key === 'Enter' || e.key === ' ') {
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +      }
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +    },
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]    if (loading) {
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] -    return <LoadingSpinner size="lg" fullPage />
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +    [navigate],
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]    }
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +    return <LoadingSpinner size="lg" fullPage message="Loading your dashboard..." />
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +        }
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]    if (error) {
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]  
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +      <div role="alert" className="flex h-full items-center justify-center">
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]          <Card className="max-w-md text-center">
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] -      <div className="flex h-full items-center justify-center">
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]            <CardContent>
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]      return (
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]              <p style={{ color: 'var(--color-danger)' }}>{error}</p>
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +        e.preventDefault()
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] +  )
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] 
+[2026-07-03T08:12:54.582Z] [INFO] [stderr] [0m
+[2026-07-03T08:12:54.582Z] [INFO] [stderr]            </CardContent>
+[2026-07-03T08:13:02.791Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] ===================================================================
+[2026-07-03T08:13:02.792Z] [INFO] [stderr]  </h1>
+[2026-07-03T08:13:02.792Z] [INFO] [stderr]  <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:02.791Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:02.792Z] [INFO] [stderr]    {formatDate(new Date())}
+[2026-07-03T08:13:02.792Z] [INFO] [stderr]  </p>
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] -  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs dark:bg-blue-900/40" style={{ color: 'var(--color-primary)' }}>
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] +<div
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] @@ -166,10 +166,15 @@
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] +  className="mt-3 flex items-center gap-2"
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] +  aria-label="Today's study recommendation"
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] +>
+[2026-07-03T08:13:02.792Z] [INFO] [stderr]      ?
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] +  aria-live="polite"
+[2026-07-03T08:13:02.792Z] [INFO] [stderr]    </span>
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] +  role="status"
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] [0m
+[2026-07-03T08:13:02.792Z] [INFO] [stderr]      <span style={{ color: 'var(--color-muted)' }}>What should I study today?</span>{' '}
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] +  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs dark:bg-blue-900/40" style={{ color: 'var(--color-primary)' }} aria-hidden="true">
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] -<div className="mt-3 flex items-center gap-2">
+[2026-07-03T08:13:02.792Z] [INFO] [stderr] 
+[2026-07-03T08:13:02.792Z] [INFO] [stderr]    <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:07.271Z] [INFO] [stderr]    </Button>
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] @@ -236,9 +236,9 @@
+[2026-07-03T08:13:07.271Z] [INFO] [stderr]  </div>
+[2026-07-03T08:13:07.271Z] [INFO] [stderr]  {/* Motivation Banner */}
+[2026-07-03T08:13:07.271Z] [INFO] [stderr]  
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] +<Card role="region" aria-label="Motivational quote" className="border-l-4" style={{ borderLeftColor: 'var(--color-primary)' }}>
+[2026-07-03T08:13:07.271Z] [INFO] [stderr]    <CardContent>
+[2026-07-03T08:13:07.271Z] [INFO] [stderr]        <p className="text-sm italic" style={{ color: 'var(--color-text-secondary)' }}>
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:07.271Z] [INFO] [stderr]        <span className="text-xl" aria-hidden="true">💡</span>
+[2026-07-03T08:13:07.271Z] [INFO] [stderr]      <div className="flex items-start gap-3">
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] [0m
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] -<Card className="border-l-4" style={{ borderLeftColor: 'var(--color-primary)' }}>
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] 
+[2026-07-03T08:13:07.271Z] [INFO] [stderr] ===================================================================
+[2026-07-03T08:13:16.630Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] @@ -249,49 +249,49 @@
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]  </Card>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] ===================================================================
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +  <Card aria-label={`Study streak: ${studyStreak} days`}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -  <Card>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-streak">
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]      <CardContent>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]        </p>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]  
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          Study Streak
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          {studyStreak}
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +      <p className="mt-2 text-3xl font-bold text-orange-500" aria-labelledby="stat-streak">
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          <span className="ml-1 text-sm font-normal" style={{ color: 'var(--color-muted)' }}>days</span>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]  {/* Summary cards row */}
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]        </p>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]      </CardContent>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -      <p className="mt-2 text-3xl font-bold text-orange-500">
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -  <Card>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +  <Card aria-label={`Weekly progress: ${progressPercent} percent`}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]        </p>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]    </Card>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-progress">
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          {progressPercent}%
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]        </p>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +      <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-primary)' }} aria-labelledby="stat-progress">
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          {weeklyProgress.done} / {weeklyProgress.total} tasks
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -      <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-primary)' }}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]      <CardContent>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          Weekly Progress
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]        </p>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]        <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +  <Card aria-label={`Study hours: ${totalStudyHours}`}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]      </CardContent>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]    </Card>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -  <Card>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          Study Hours
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-hours">
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]      <CardContent>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -      <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-success)' }}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]        </p>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +      <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-success)' }} aria-labelledby="stat-hours">
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]    </Card>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          {totalStudyHours}
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -  <Card>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          <span className="ml-1 text-sm font-normal" style={{ color: 'var(--color-muted)' }}>hrs</span>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]      </CardContent>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]        </p>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-band">
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]        </p>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] +  <Card aria-label={`Target band: ${targetBand}, Current: ${currentBand}`}>
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]          Target Band
+[2026-07-03T08:13:16.631Z] [INFO] [stderr] -      <p className="mt-2 text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+[2026-07-03T08:13:16.632Z] [INFO] [stderr] 
+[2026-07-03T08:13:16.632Z] [INFO] [stderr]          {targetBand}
+[2026-07-03T08:13:16.632Z] [INFO] [stderr] [0m
+[2026-07-03T08:13:16.631Z] [INFO] [stderr]      <CardContent>
+[2026-07-03T08:13:16.632Z] [INFO] [stderr]          Current: {currentBand}
+[2026-07-03T08:13:16.632Z] [INFO] [stderr]        </p>
+[2026-07-03T08:13:16.632Z] [INFO] [stderr]        <p className={`text-xs font-medium ${bandColor(currentBand)}`}>
+[2026-07-03T08:13:16.632Z] [INFO] [stderr] +      <p className="mt-2 text-3xl font-bold text-indigo-600 dark:text-indigo-400" aria-labelledby="stat-band">
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] ===================================================================
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] @@ -303,13 +303,17 @@
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:30.179Z] [INFO] [stderr]  
+[2026-07-03T08:13:30.179Z] [INFO] [stderr]  {/* Main grid: Today's Tasks + Sidebar */}
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] +  <Card role="region" aria-label="Today's study tasks" className="lg:col-span-2">
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] -  <Card className="lg:col-span-2">
+[2026-07-03T08:13:30.179Z] [INFO] [stderr]    {/* Today's Tasks */}
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] +          style={{ color: todayDone.length === todayTasks.length && todayTasks.length > 0 ? 'var(--color-success)' : 'var(--color-muted)' }}
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] +        <span
+[2026-07-03T08:13:30.179Z] [INFO] [stderr]      <CardHeader>
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +          aria-live="polite"
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] -        <span className="text-sm font-medium" style={{ color: todayDone.length === todayTasks.length && todayTasks.length > 0 ? 'var(--color-success)' : 'var(--color-muted)' }}>
+[2026-07-03T08:13:30.179Z] [INFO] [stderr]          <CardTitle>Today's Study Tasks</CardTitle>
+[2026-07-03T08:13:30.179Z] [INFO] [stderr] +          className="text-sm font-medium"
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]      </CardHeader>
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +        >
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]            {todayDone.length}/{todayTasks.length} done
+[2026-07-03T08:13:30.179Z] [INFO] [stderr]        <div className="flex items-center justify-between">
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] @@ -320,30 +324,36 @@
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]        </div>
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]        ) : (
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] -        <ul className="space-y-2">
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]          />
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]            action={{ label: 'View Roadmap', onClick: () => navigate('/roadmap') }}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +        <ul className="space-y-2" ref={tasksRef} aria-label="Today's tasks list">
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]            description="Go to the roadmap to plan your study session."
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +              aria-disabled={task.isDone}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]            {todayTasks.map(task => (
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]              <li
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]          </span>
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +              role={task.isDone ? 'listitem' : 'button'}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                key={task.id}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] -                  : 'cursor-pointer hover:border-blue-200 dark:hover:border-blue-800'
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+[2026-07-03T08:13:30.179Z] [INFO] [stderr]  <div className="grid gap-6 lg:grid-cols-3">
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +              tabIndex={task.isDone ? undefined : 0}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +              aria-label={task.isDone ? `${task.title} — completed` : `Start task: ${task.title}`}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                    ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                  task.isDone
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +                  : 'cursor-pointer hover:border-blue-200 dark:hover:border-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-1'
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                style={{
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                }`}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                }}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                  borderColor: task.isDone ? undefined : 'var(--color-border)',
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +              onKeyDown={(e) => handleTaskKeyDown(e, task)}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]              >
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                onClick={() => !task.isDone && navigate(`/study/${encodeURIComponent(task.title)}`)}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                      ? 'border-green-500 bg-green-500 text-white'
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                  backgroundColor: task.isDone ? undefined : 'var(--color-surface)',
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold transition-colors ${
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                <span
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                      : 'border-[var(--color-border)]'
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                  {task.isDone ? '✓' : ''}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                  }`}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                >
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] @@ -373,9 +383,9 @@
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                    task.isDone
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                </span>
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                  style={{ color: task.isDone ? undefined : 'var(--color-muted)' }}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr] +                aria-hidden="true"
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]            ))}
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]                <div className="min-w-0 flex-1">
+[2026-07-03T08:13:30.180Z] [INFO] [stderr]          </ul>
+[2026-07-03T08:13:30.181Z] [INFO] [stderr] +        <div className="mt-4 flex items-center justify-between" role="status" aria-live="polite">
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]            </p>
+[2026-07-03T08:13:30.181Z] [INFO] [stderr] -        <div className="mt-4 flex items-center justify-between">
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]            <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]              {todayUnfinished.length} task{todayUnfinished.length > 1 ? 's' : ''} remaining
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]        {todayUnfinished.length > 0 && (
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]            <Button size="sm" onClick={() => navigate(`/study/${encodeURIComponent(todayUnfinished[0].title)}`)}>
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]        )}
+[2026-07-03T08:13:30.181Z] [INFO] [stderr] @@ -383,9 +393,9 @@
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]            </Button>
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]        )}
+[2026-07-03T08:13:30.181Z] [INFO] [stderr] -        <div className="mt-4 rounded-lg bg-green-50 p-3 text-center dark:bg-green-900/20">
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]              All tasks complete! Great work today.
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]        {todayTasks.length > 0 && todayUnfinished.length === 0 && (
+[2026-07-03T08:13:30.181Z] [INFO] [stderr] 
+[2026-07-03T08:13:30.181Z] [INFO] [stderr] +        <div className="mt-4 rounded-lg bg-green-50 p-3 text-center dark:bg-green-900/20" role="status" aria-live="polite">
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]            <p className="text-sm font-medium text-green-700 dark:text-green-300">
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]          </div>
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]            </p>
+[2026-07-03T08:13:30.181Z] [INFO] [stderr]          </div>
+[2026-07-03T08:13:30.181Z] [INFO] [stderr] [0m
+[2026-07-03T08:13:47.134Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] ===================================================================
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]    </CardContent>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]  
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]  </Card>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] @@ -403,14 +403,14 @@
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] -<div className="space-y-4">
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]  {/* Right sidebar */}
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]      <CardContent>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +<div className="space-y-4" role="region" aria-label="Dashboard sidebar: suggestions and stats">
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] -        <svg className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]    <Card className="border-l-4" style={{ borderLeftColor: 'var(--color-primary)' }}>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]    {/* AI Tutor Suggestion */}
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +        <svg className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]            <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]          </svg>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]          <div className="min-w-0 flex-1">
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] @@ -418,23 +418,24 @@
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]            <p className="mt-1.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]            </p>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] -          <button
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]            </p>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]              {aiSuggestion}
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-primary)' }}>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +            size="sm"
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +            variant="ghost"
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +          <Button
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]            >
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] -            className="mt-2 text-xs font-medium transition-colors"
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +            className="mt-1"
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]              Ask AI Tutor →
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] -            style={{ color: 'var(--color-primary)' }}
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]        <div className="flex items-start gap-2">
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] -          </button>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]              onClick={() => navigate('/ai-tutor')}
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]    {/* Weak Skills Reminder */}
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]  
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]    {weakSkills.length > 0 && (
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]          </div>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]    </Card>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]        </div>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +          </Button>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]      </CardContent>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]        <CardHeader>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +    <Card role="region" aria-label="Weak skills reminder">
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]          <CardTitle>Weak Skills</CardTitle>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]        <CardContent>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]        </CardHeader>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] @@ -459,9 +460,9 @@
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]  
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]      </Card>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] -    <Card>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]    )}
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]      <CardHeader>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]    {/* Quick Stats */}
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] -  <Card>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]          </div>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]      </CardHeader>
+[2026-07-03T08:13:47.135Z] [INFO] [stderr] +  <Card role="region" aria-label="Quick statistics">
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] @@ -488,33 +489,33 @@
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]        <div className="mt-3 flex flex-wrap gap-2">
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -          <button
+[2026-07-03T08:13:47.135Z] [INFO] [stderr]      <CardContent>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +            variant="outline"
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]          {savedVocabularyCount > 0 && (
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]              onClick={() => navigate('/vocabulary')}
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +            size="sm"
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]        <CardTitle>Quick Stats</CardTitle>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -            className="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors hover:brightness-95"
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]        </div>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]            >
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +          </Button>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]          )}
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +          <Button
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -          <button
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +          <Button
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]          {dueReviews > 0 && (
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +            size="sm"
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -            style={{ borderColor: 'var(--color-border)', color: 'var(--color-warning)' }}
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]              onClick={() => navigate('/vocabulary')}
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +            variant="outline"
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -          </button>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +          </Button>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]              Review Words
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -            className="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors hover:brightness-95"
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -          </button>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -          <button
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]            >
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]          {recentMistakes > 0 && (
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]              onClick={() => navigate('/mistakes')}
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]              Due Reviews
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -            style={{ borderColor: 'var(--color-border)', color: 'var(--color-danger)' }}
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]            >
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]          )}
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +            variant="outline"
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +          <Button
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -            className="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors hover:brightness-95"
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] -          </button>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]              View Mistakes
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]      </CardContent>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] 
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]    </Card>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]          )}
+[2026-07-03T08:13:47.136Z] [INFO] [stderr]        </div>
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +            size="sm"
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] [0m
+[2026-07-03T08:13:47.136Z] [INFO] [stderr] +          </Button>
+[2026-07-03T08:24:00.982Z] [INFO] Executor finished with status: failed, exit code: undefined
+[2026-07-03T08:24:00.983Z] [INFO] Output:
+Now I have a clear picture of the current state and accessibility gaps. Let me implement the improvements.
+Now I'll implement the accessibility improvements. Let me start with the Dashboard:
+[2026-07-03T08:24:00.983Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/features/dashboard/DashboardPage.tsx","includeCode":true}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/features/tasks/TaskList.tsx","includeCode":true}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"src/features/content/StudyContentPage.tsx","includeCode":true}
+[0m✱ [0mGlob "**/DashboardPage.tsx"[90m 0 matches[0m
+[0m✱ [0mGlob "**/TaskList.tsx"[90m 0 matches[0m
+[0m✱ [0mGlob "**/dashboard/**/*.tsx"[90m 2 matches[0m
+[0m✱ [0mGlob "**/tasks/TaskList*.tsx"[90m 0 matches[0m
+[0m→ [0mRead apps/web/src/features/dashboard/Dashboard.tsx
+[0m✱ [0mGlob "**/features/tasks/**/*.tsx"[90m 0 matches[0m
+[0m✱ [0mGlob "**/features/roadmap/**/*.tsx"[90m 1 match[0m
+[0m⚙ [0mcodegraph_codegraph_node {"symbol":"useDashboard","includeCode":true}
+[0m✱ [0mGlob "**/accessibility*.test.*"[90m 0 matches[0m
+[0m✱ [0mGlob "**/__tests__/**/*.{test,spec}.{ts,tsx}"[90m 54 matches[0m
+[0m✱ [0mGrep "accessibility"[90m 0 matches[0m
+[0m
+[0m# [0mTodos
+[•] Audit Dashboard.tsx UX flow and accessibility (ARIA labels, keyboard nav, semantic HTML, focus management)
+[ ] Improve task list in Dashboard.tsx accessibility (keyboard interaction, ARIA roles/labels)
+[ ] Audit StudyContentPage.tsx UX flow and accessibility
+[ ] Run validation tests to verify changes
+[0m
+[0m• [0mFind UI components and accessibility patterns[90m Explore Agent[0m
+[0m✓ [0mFind UI components and accessibility patterns[90m Explore Agent[0m
+[0m→ [0mRead apps/web/src/features/dashboard/Dashboard.tsx
+[0m⚙ [0mcodegraph_codegraph_search {"query":"DashboardData","kind":"type"}
+[0m✱ [0mGrep "interface Task | type Task "[90m in apps/web/src · 0 matches[0m
+[0m✱ [0mGrep "DashboardData"[90m in apps/web/src · 13 matches[0m
+[0m✱ [0mGrep "export.*interface.*Task"[90m in apps/web/src · 8 matches[0m
+[0m→ [0mRead apps/web/src/models/index.ts[90m [offset=606, limit=100][0m
+[0m→ [0mRead apps/web/src/models/index.ts[90m [offset=125, limit=60][0m
+[0m
+[0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+@@ -1,12 +1,13 @@
++import { useCallback, useRef } from 'react'
+ import { useNavigate } from 'react-router-dom'
+ import { useDashboard } from '../../hooks/useDashboard'
+ import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
+ import LoadingSpinner from '../../components/ui/LoadingSpinner'
+ import EmptyState from '../../components/ui/EmptyState'
+ import Button from '../../components/ui/Button'
+ import ProgressChart from './components/ProgressChart'
+-import type { DashboardData, WeeklyStudyDay } from '../../models'
++import type { DashboardData, WeeklyStudyDay, TaskEntry } from '../../models'
+ 
+ const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+ 
+ const MOTIVATIONAL_QUOTES = [
+
+[0m
+[0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+@@ -92,16 +92,29 @@
+ 
+ export default function Dashboard() {
+   const { data, weeklyChart, loading, error } = useDashboard()
+   const navigate = useNavigate()
++  const tasksRef = useRef<HTMLUListElement>(null)
+ 
++  const handleTaskKeyDown = useCallback(
++    (e: React.KeyboardEvent, task: TaskEntry) => {
++      if (e.key === 'Enter' || e.key === ' ') {
++        e.preventDefault()
++        if (!task.isDone) {
++          navigate(`/study/${encodeURIComponent(task.title)}`)
++        }
++      }
++    },
++    [navigate],
++  )
++
+   if (loading) {
+-    return <LoadingSpinner size="lg" fullPage />
++    return <LoadingSpinner size="lg" fullPage message="Loading your dashboard..." />
+   }
+ 
+   if (error) {
+     return (
+-      <div className="flex h-full items-center justify-center">
++      <div role="alert" className="flex h-full items-center justify-center">
+         <Card className="max-w-md text-center">
+           <CardContent>
+             <p style={{ color: 'var(--color-danger)' }}>{error}</p>
+           </CardContent>
+
+[0m
+[0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+@@ -166,10 +166,15 @@
+ </h1>
+ <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
+   {formatDate(new Date())}
+ </p>
+-<div className="mt-3 flex items-center gap-2">
+-  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs dark:bg-blue-900/40" style={{ color: 'var(--color-primary)' }}>
++<div
++  className="mt-3 flex items-center gap-2"
++  role="status"
++  aria-live="polite"
++  aria-label="Today's study recommendation"
++>
++  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs dark:bg-blue-900/40" style={{ color: 'var(--color-primary)' }} aria-hidden="true">
+     ?
+   </span>
+   <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+     <span style={{ color: 'var(--color-muted)' }}>What should I study today?</span>{' '}
+
+[0m
+[0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+@@ -236,9 +236,9 @@
+   </Button>
+ </div>
+ 
+ {/* Motivation Banner */}
+-<Card className="border-l-4" style={{ borderLeftColor: 'var(--color-primary)' }}>
++<Card role="region" aria-label="Motivational quote" className="border-l-4" style={{ borderLeftColor: 'var(--color-primary)' }}>
+   <CardContent>
+     <div className="flex items-start gap-3">
+       <span className="text-xl" aria-hidden="true">💡</span>
+       <p className="text-sm italic" style={{ color: 'var(--color-text-secondary)' }}>
+
+[0m
+[0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+@@ -249,49 +249,49 @@
+ </Card>
+ 
+ {/* Summary cards row */}
+ <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+-  <Card>
++  <Card aria-label={`Study streak: ${studyStreak} days`}>
+     <CardContent>
+-      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
++      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-streak">
+         Study Streak
+       </p>
+-      <p className="mt-2 text-3xl font-bold text-orange-500">
++      <p className="mt-2 text-3xl font-bold text-orange-500" aria-labelledby="stat-streak">
+         {studyStreak}
+         <span className="ml-1 text-sm font-normal" style={{ color: 'var(--color-muted)' }}>days</span>
+       </p>
+     </CardContent>
+   </Card>
+-  <Card>
++  <Card aria-label={`Weekly progress: ${progressPercent} percent`}>
+     <CardContent>
+-      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
++      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-progress">
+         Weekly Progress
+       </p>
+-      <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-primary)' }}>
++      <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-primary)' }} aria-labelledby="stat-progress">
+         {progressPercent}%
+       </p>
+       <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
+         {weeklyProgress.done} / {weeklyProgress.total} tasks
+       </p>
+     </CardContent>
+   </Card>
+-  <Card>
++  <Card aria-label={`Study hours: ${totalStudyHours}`}>
+     <CardContent>
+-      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
++      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-hours">
+         Study Hours
+       </p>
+-      <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-success)' }}>
++      <p className="mt-2 text-3xl font-bold" style={{ color: 'var(--color-success)' }} aria-labelledby="stat-hours">
+         {totalStudyHours}
+         <span className="ml-1 text-sm font-normal" style={{ color: 'var(--color-muted)' }}>hrs</span>
+       </p>
+     </CardContent>
+   </Card>
+-  <Card>
++  <Card aria-label={`Target band: ${targetBand}, Current: ${currentBand}`}>
+     <CardContent>
+-      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
++      <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }} id="stat-band">
+         Target Band
+       </p>
+-      <p className="mt-2 text-3xl font-bold text-indigo-600 dark:text-indigo-400">
++      <p className="mt-2 text-3xl font-bold text-indigo-600 dark:text-indigo-400" aria-labelledby="stat-band">
+         {targetBand}
+       </p>
+       <p className={`text-xs font-medium ${bandColor(currentBand)}`}>
+         Current: {currentBand}
+
+[0m
+[0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+@@ -303,13 +303,17 @@
+ 
+ {/* Main grid: Today's Tasks + Sidebar */}
+ <div className="grid gap-6 lg:grid-cols-3">
+   {/* Today's Tasks */}
+-  <Card className="lg:col-span-2">
++  <Card role="region" aria-label="Today's study tasks" className="lg:col-span-2">
+     <CardHeader>
+       <div className="flex items-center justify-between">
+         <CardTitle>Today's Study Tasks</CardTitle>
+-        <span className="text-sm font-medium" style={{ color: todayDone.length === todayTasks.length && todayTasks.length > 0 ? 'var(--color-success)' : 'var(--color-muted)' }}>
++        <span
++          className="text-sm font-medium"
++          style={{ color: todayDone.length === todayTasks.length && todayTasks.length > 0 ? 'var(--color-success)' : 'var(--color-muted)' }}
++          aria-live="polite"
++        >
+           {todayDone.length}/{todayTasks.length} done
+         </span>
+       </div>
+     </CardHeader>
+@@ -320,30 +324,36 @@
+           description="Go to the roadmap to plan your study session."
+           action={{ label: 'View Roadmap', onClick: () => navigate('/roadmap') }}
+         />
+       ) : (
+-        <ul className="space-y-2">
++        <ul className="space-y-2" ref={tasksRef} aria-label="Today's tasks list">
+           {todayTasks.map(task => (
+             <li
+               key={task.id}
++              role={task.isDone ? 'listitem' : 'button'}
++              tabIndex={task.isDone ? undefined : 0}
++              aria-disabled={task.isDone}
++              aria-label={task.isDone ? `${task.title} — completed` : `Start task: ${task.title}`}
+               className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+                 task.isDone
+                   ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
+-                  : 'cursor-pointer hover:border-blue-200 dark:hover:border-blue-800'
++                  : 'cursor-pointer hover:border-blue-200 dark:hover:border-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-1'
+               }`}
+               style={{
+                 borderColor: task.isDone ? undefined : 'var(--color-border)',
+                 backgroundColor: task.isDone ? undefined : 'var(--color-surface)',
+               }}
+               onClick={() => !task.isDone && navigate(`/study/${encodeURIComponent(task.title)}`)}
++              onKeyDown={(e) => handleTaskKeyDown(e, task)}
+             >
+               <span
+                 className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold transition-colors ${
+                   task.isDone
+                     ? 'border-green-500 bg-green-500 text-white'
+                     : 'border-[var(--color-border)]'
+                 }`}
+                 style={{ color: task.isDone ? undefined : 'var(--color-muted)' }}
++                aria-hidden="true"
+               >
+                 {task.isDone ? '✓' : ''}
+               </span>
+               <div className="min-w-0 flex-1">
+@@ -373,9 +383,9 @@
+           ))}
+         </ul>
+       )}
+       {todayUnfinished.length > 0 && (
+-        <div className="mt-4 flex items-center justify-between">
++        <div className="mt-4 flex items-center justify-between" role="status" aria-live="polite">
+           <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
+             {todayUnfinished.length} task{todayUnfinished.length > 1 ? 's' : ''} remaining
+           </p>
+           <Button size="sm" onClick={() => navigate(`/study/${encodeURIComponent(todayUnfinished[0].title)}`)}>
+@@ -383,9 +393,9 @@
+           </Button>
+         </div>
+       )}
+       {todayTasks.length > 0 && todayUnfinished.length === 0 && (
+-        <div className="mt-4 rounded-lg bg-green-50 p-3 text-center dark:bg-green-900/20">
++        <div className="mt-4 rounded-lg bg-green-50 p-3 text-center dark:bg-green-900/20" role="status" aria-live="polite">
+           <p className="text-sm font-medium text-green-700 dark:text-green-300">
+             All tasks complete! Great work today.
+           </p>
+         </div>
+
+[0m
+[0m← [0mEdit apps/web/src/features/dashboard/Dashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/dashboard/Dashboard.tsx
+@@ -403,14 +403,14 @@
+   </CardContent>
+ </Card>
+ 
+ {/* Right sidebar */}
+-<div className="space-y-4">
++<div className="space-y-4" role="region" aria-label="Dashboard sidebar: suggestions and stats">
+   {/* AI Tutor Suggestion */}
+   <Card className="border-l-4" style={{ borderLeftColor: 'var(--color-primary)' }}>
+     <CardContent>
+       <div className="flex items-start gap-2">
+-        <svg className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
++        <svg className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+           <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+         </svg>
+         <div className="min-w-0 flex-1">
+           <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-primary)' }}>
+@@ -418,23 +418,24 @@
+           </p>
+           <p className="mt-1.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+             {aiSuggestion}
+           </p>
+-          <button
++          <Button
++            variant="ghost"
++            size="sm"
+             onClick={() => navigate('/ai-tutor')}
+-            className="mt-2 text-xs font-medium transition-colors"
+-            style={{ color: 'var(--color-primary)' }}
++            className="mt-1"
+           >
+             Ask AI Tutor →
+-          </button>
++          </Button>
+         </div>
+       </div>
+     </CardContent>
+   </Card>
+ 
+   {/* Weak Skills Reminder */}
+   {weakSkills.length > 0 && (
+-    <Card>
++    <Card role="region" aria-label="Weak skills reminder">
+       <CardHeader>
+         <CardTitle>Weak Skills</CardTitle>
+       </CardHeader>
+       <CardContent>
+@@ -459,9 +460,9 @@
+     </Card>
+   )}
+ 
+   {/* Quick Stats */}
+-  <Card>
++  <Card role="region" aria-label="Quick statistics">
+     <CardHeader>
+       <CardTitle>Quick Stats</CardTitle>
+     </CardHeader>
+     <CardContent>
+@@ -488,33 +489,33 @@
+         </div>
+       </div>
+       <div className="mt-3 flex flex-wrap gap-2">
+         {savedVocabularyCount > 0 && (
+-          <button
++          <Button
++            variant="outline"
++            size="sm"
+             onClick={() => navigate('/vocabulary')}
+-            className="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors hover:brightness-95"
+-            style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
+           >
+             Review Words
+-          </button>
++          </Button>
+         )}
+         {dueReviews > 0 && (
+-          <button
++          <Button
++            variant="outline"
++            size="sm"
+             onClick={() => navigate('/vocabulary')}
+-            className="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors hover:brightness-95"
+-            style={{ borderColor: 'var(--color-border)', color: 'var(--color-warning)' }}
+           >
+             Due Reviews
+-          </button>
++          </Button>
+         )}
+         {recentMistakes > 0 && (
+-          <button
++          <Button
++            variant="outline"
++            size="sm"
+             onClick={() => navigate('/mistakes')}
+-            className="rounded-lg border px-2.5 py-1 text-xs font-medium transition-colors hover:brightness-95"
+-            style={{ borderColor: 'var(--color-border)', color: 'var(--color-danger)' }}
+           >
+             View Mistakes
+-          </button>
++          </Button>
+         )}
+       </div>
+     </CardContent>
+   </Card>
+
+[0m
+[2026-07-03T08:24:00.984Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-03T08:24:00.989Z] [INFO] Task completed successfully

@@ -28,7 +28,7 @@ export function MissingKeyBanner({ onOpenSettings }: MissingKeyBannerProps) {
             className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
             style={{
               backgroundColor: 'var(--color-primary)',
-              color: '#ffffff',
+              color: 'var(--color-on-primary)',
             }}
             type="button"
           >

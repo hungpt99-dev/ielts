@@ -1,0 +1,1 @@
+if user the first time use this website please open landing page, and i want new tab about website info and info about me for recruit and donate or send feedback

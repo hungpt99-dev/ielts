@@ -115,10 +115,12 @@ export async function safeDb<T>(fn: () => Promise<T>): Promise<T> {
     if (error instanceof StorageError) {
       throw error
     }
-    throw new StorageError(
-      `Database operation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-      error,
-    )
+    const msg = error instanceof Error ? error.message : 'Unknown error'
+    if (msg.includes('Database is closed')) {
+      getDb()
+      return await fn()
+    }
+    throw new StorageError(`Database operation failed: ${msg}`, error)
   }
 }
 

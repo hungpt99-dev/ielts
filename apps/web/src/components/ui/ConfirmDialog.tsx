@@ -36,8 +36,11 @@ export default function ConfirmDialog({
         <Button
           variant={variant}
           onClick={async () => {
-            await onConfirm()
-            onClose()
+            try {
+              await onConfirm()
+            } finally {
+              onClose()
+            }
           }}
           loading={loading}
         >

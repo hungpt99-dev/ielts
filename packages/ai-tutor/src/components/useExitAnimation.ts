@@ -22,15 +22,16 @@ export function useExitAnimation({
     if (isOpen && !prevOpen.current) {
       setIsExiting(false)
       setShouldRender(true)
+      prevOpen.current = isOpen
     } else if (!isOpen && prevOpen.current) {
       setIsExiting(true)
+      prevOpen.current = isOpen
       const timer = setTimeout(() => {
         setIsExiting(false)
         setShouldRender(false)
       }, duration)
       return () => clearTimeout(timer)
     }
-    prevOpen.current = isOpen
   }, [isOpen, duration])
 
   const animationStyle: React.CSSProperties = isExiting

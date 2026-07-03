@@ -76,7 +76,7 @@ export function MissingKeyBanner({ onOpenSettings }: MissingKeyBannerProps) {
       className="mx-4 mb-3 mt-2 overflow-hidden rounded-xl border text-xs"
       style={{
         borderColor: 'var(--color-warning)',
-        backgroundColor: 'color-mix(in srgb, var(--color-warning) 8%, transparent)',
+        backgroundColor: 'var(--color-warning-light)',
       }}
     >
       <div className="p-3">
@@ -96,7 +96,7 @@ export function MissingKeyBanner({ onOpenSettings }: MissingKeyBannerProps) {
             className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
             style={{
               backgroundColor: 'var(--color-primary)',
-              color: '#ffffff',
+              color: 'var(--color-on-primary, #ffffff)',
             }}
             type="button"
           >
@@ -239,7 +239,7 @@ export function MessageBubble({ role, content, timestamp, formatTime }: MessageB
             role === 'user'
               ? {
                   backgroundColor: 'var(--color-primary)',
-                  color: '#ffffff',
+                  color: 'var(--color-on-primary, #ffffff)',
                   borderBottomRightRadius: '4px',
                 }
               : {
@@ -348,7 +348,7 @@ export function ProactiveMessagePreview({
         borderColor: priority === 'high' ? 'var(--color-warning)' : 'var(--color-border)',
         backgroundColor:
           priority === 'high'
-            ? 'color-mix(in srgb, var(--color-warning) 8%, transparent)'
+            ? 'var(--color-warning-light)'
             : 'var(--color-surface-alt)',
         animation: 'fade-in 0.3s ease-out',
       }}
@@ -393,7 +393,7 @@ export function ProactiveMessagePreview({
           className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
           style={{
             backgroundColor: 'var(--color-primary)',
-            color: '#ffffff',
+            color: 'var(--color-on-primary, #ffffff)',
           }}
           type="button"
         >
@@ -414,6 +414,22 @@ const uxKeyframes = `
 @keyframes typing-bounce {
   0%, 80%, 100% { transform: translateY(0); }
   40% { transform: translateY(-6px); }
+}
+@keyframes message-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes chat-popup-in {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes chat-popup-out {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to { opacity: 0; transform: scale(0.95) translateY(10px); }
 }
 `
 

@@ -1,0 +1,671 @@
+AI plan output validation failed: tasks.6.taskType: Invalid enum value. Expected 'general' | 'coding' | 'documentation' | 'research' | 'data' | 'writing' | 'design' | 'qa' | 'release' | 'operations' | 'testing' | 'analysis' | 'review' | 'approval' | 'validation', received 'planning'
+
+Raw output:
+{
+  "title": "Audit IELTS Journey Codebase for Completion and Production Readiness",
+  "summary": "Perform a comprehensive audit of the existing IELTS Journey codebase to identify incomplete features, broken flows, fake UI, TODOs, dead code, missing error handling, missing persistence, and missing tests, and produce a detailed implementation plan.",
+  "tasks": [
+    {
+      "title": "Audit apps/web/src/features for incomplete UI and broken flows",
+      "description": "Review all feature modules under apps/web/src/features/ including onboarding, dashboard, vocabulary notebook, article library, exercise center, writing idea bank, speaking practice bank, daily study plan, AI settings, import/export, progress tracking, privacy, and settings pages. Identify any placeholder UI, mock data usage outside tests, broken navigation or flows, missing loading/empty/error states, missing form validation, and missing persistence logic. Document all findings with file references and specific issues.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "All feature modules reviewed for UI completeness and flow correctness",
+        "List of incomplete UI components, broken flows, and missing states documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-feature-ui-and-flows.md",
+          "description": "Audit report listing incomplete UI, broken flows, missing states, and persistence issues in feature modules",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Existing feature modules in apps/web/src/features/",
+      "targetFiles": [
+        "reports/audit-feature-ui-and-flows.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-feature-ui-and-flows.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1800000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides detailed insight into UI and flow issues to guide targeted fixes"
+    },
+    {
+      "title": "Audit packages/learning-engine and packages/storage for incomplete or broken business logic",
+      "description": "Review core domain packages packages/learning-engine and packages/storage for incomplete features, dead code, missing error handling, missing persistence, and duplicated logic. Focus on key services like LearningEngine, ProfileService, VocabularyService, ReviewSchedulerService, and DatabaseService. Identify any TODOs, fake implementations, or missing validation. Document findings with code references and suggested improvements.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "All core domain packages audited for correctness and completeness",
+        "List of incomplete logic, dead code, missing error handling, and validation issues documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-domain-packages.md",
+          "description": "Audit report listing issues in core domain packages including missing error handling and dead code",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Core domain packages packages/learning-engine and packages/storage source code",
+      "targetFiles": [
+        "reports/audit-domain-packages.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-domain-packages.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1800000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Identifies core logic issues to ensure business rules are correct and robust"
+    },
+    {
+      "title": "Audit Chrome extension source for feature completeness and UI isolation",
+      "description": "Review all Chrome extension features including webpage IELTS word highlighting, word tooltip, save word/article, selected text action menu, sentence explanation, article-to-IELTS generation, floating IELTS assistant, extension popup, extension settings, and YouTube transcript support. Verify UI isolation from host page CSS, minimal DOM modifications, correct persistence syncing with local storage or IndexedDB, and handling of loading/error states. Document incomplete or broken features and UI issues.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "All extension features audited for completeness and UI isolation",
+        "List of broken or incomplete extension features documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-extension-features.md",
+          "description": "Audit report listing issues and missing features in Chrome extension",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Chrome extension source code and UI components",
+      "targetFiles": [
+        "reports/audit-extension-features.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-extension-features.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1800000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures extension features are production-ready and UI is properly isolated"
+    },
+    {
+      "title": "Audit AI integration for robust error handling and API key management",
+      "description": "Review all AI-related features and packages for handling missing API key, loading states, error states, invalid responses, and success states. Verify local storage usage for API keys, no logging of keys or private content, and clear user messaging about API key requirements. Document any missing error handling, unsafe logging, or incomplete state management.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "All AI features audited for error handling and API key management",
+        "List of missing or incomplete AI error handling documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-ai-integration.md",
+          "description": "Audit report listing AI integration error handling and API key management issues",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "AI feature source code and integration points",
+      "targetFiles": [
+        "reports/audit-ai-integration.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-ai-integration.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1200000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures AI features handle all states robustly and protect user privacy"
+    },
+    {
+      "title": "Audit tests for coverage gaps and broken tests",
+      "description": "Review unit, integration, and E2E tests for core logic, storage, AI prompt builders, vocabulary detection, article extraction, exercise parsing, daily task generation, onboarding, saving words/articles, highlighting, selected text actions, exercise generation, vocabulary review, data export/import, extension popup, and extension settings. Identify missing tests, broken tests, or flaky tests. Document coverage gaps and test failures.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Test suites reviewed for coverage and correctness",
+        "List of missing or broken tests documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-test-coverage.md",
+          "description": "Audit report listing test coverage gaps and broken tests",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Existing test suites and test results",
+      "targetFiles": [
+        "reports/audit-test-coverage.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-test-coverage.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1200000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Identifies testing gaps to ensure production quality and stability"
+    },
+    {
+      "title": "Audit build and lint configurations for errors and warnings",
+      "description": "Run build, lint, and typecheck commands to identify any errors or warnings. Verify that the web app and extension build successfully, Manifest V3 is valid, TypeScript passes with strict settings, and lint passes without errors. Document any build or lint issues and warnings.",
+      "executor": "shell",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Build completes without errors",
+        "Lint passes without errors",
+        "TypeScript typecheck passes"
+      ],
+      "commands": [
+        "pnpm build",
+        "pnpm lint",
+        "pnpm typecheck"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/build-lint-audit.log",
+          "description": "Log file capturing build, lint, and typecheck output",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "validation",
+      "actionType": "execute",
+      "inputContext": "Current project source and configuration",
+      "targetFiles": [
+        "reports/build-lint-audit.log"
+      ],
+      "targetArtifacts": [
+        "build and lint logs"
+      ],
+      "evidence": [
+        "build-lint-audit.log file exists",
+        "build command exited with 0",
+        "lint command exited with 0",
+        "typecheck command exited with 0"
+      ],
+      "verificationCommand": "cat reports/build-lint-audit.log",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Confirms build and lint readiness for production"
+    },
+    {
+      "title": "Create comprehensive implementation plan from audit reports",
+      "description": "Analyze all audit reports (feature UI and flows, domain packages, extension features, AI integration, tests, build/lint) to create a detailed implementation plan. The plan must list prioritized tasks to fix incomplete features, broken flows, missing error handling, missing persistence, missing tests, and build issues. Include task titles, descriptions, dependencies, and acceptance criteria for each fix or improvement.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows",
+        "Audit packages/learning-engine and packages/storage for incomplete or broken business logic",
+        "Audit Chrome extension source for feature completeness and UI isolation",
+        "Audit AI integration for robust error handling and API key management",
+        "Audit tests for coverage gaps and broken tests",
+        "Audit build and lint configurations for errors and warnings"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Implementation plan covers all identified issues from audits",
+        "Plan includes clear task breakdown with dependencies and acceptance criteria"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "plans/implementation-plan.json",
+          "description": "JSON implementation plan detailing tasks to complete and fix all features and quality issues",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "planning",
+      "actionType": "generate",
+      "inputContext": "Audit reports from all previous tasks",
+      "targetFiles": [
+        "plans/implementation-plan.json"
+      ],
+      "targetArtifacts": [
+        "implementation plan"
+      ],
+      "evidence": [
+        "implementation-plan.json file exists"
+      ],
+      "verificationCommand": "ls plans/implementation-plan.json",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 3600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a clear roadmap for completing and stabilizing the project"
+    }
+  ]
+}
+
+Extracted JSON:
+{
+  "title": "Audit IELTS Journey Codebase for Completion and Production Readiness",
+  "summary": "Perform a comprehensive audit of the existing IELTS Journey codebase to identify incomplete features, broken flows, fake UI, TODOs, dead code, missing error handling, missing persistence, and missing tests, and produce a detailed implementation plan.",
+  "tasks": [
+    {
+      "title": "Audit apps/web/src/features for incomplete UI and broken flows",
+      "description": "Review all feature modules under apps/web/src/features/ including onboarding, dashboard, vocabulary notebook, article library, exercise center, writing idea bank, speaking practice bank, daily study plan, AI settings, import/export, progress tracking, privacy, and settings pages. Identify any placeholder UI, mock data usage outside tests, broken navigation or flows, missing loading/empty/error states, missing form validation, and missing persistence logic. Document all findings with file references and specific issues.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "All feature modules reviewed for UI completeness and flow correctness",
+        "List of incomplete UI components, broken flows, and missing states documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-feature-ui-and-flows.md",
+          "description": "Audit report listing incomplete UI, broken flows, missing states, and persistence issues in feature modules",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Existing feature modules in apps/web/src/features/",
+      "targetFiles": [
+        "reports/audit-feature-ui-and-flows.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-feature-ui-and-flows.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1800000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides detailed insight into UI and flow issues to guide targeted fixes"
+    },
+    {
+      "title": "Audit packages/learning-engine and packages/storage for incomplete or broken business logic",
+      "description": "Review core domain packages packages/learning-engine and packages/storage for incomplete features, dead code, missing error handling, missing persistence, and duplicated logic. Focus on key services like LearningEngine, ProfileService, VocabularyService, ReviewSchedulerService, and DatabaseService. Identify any TODOs, fake implementations, or missing validation. Document findings with code references and suggested improvements.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "All core domain packages audited for correctness and completeness",
+        "List of incomplete logic, dead code, missing error handling, and validation issues documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-domain-packages.md",
+          "description": "Audit report listing issues in core domain packages including missing error handling and dead code",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Core domain packages packages/learning-engine and packages/storage source code",
+      "targetFiles": [
+        "reports/audit-domain-packages.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-domain-packages.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1800000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Identifies core logic issues to ensure business rules are correct and robust"
+    },
+    {
+      "title": "Audit Chrome extension source for feature completeness and UI isolation",
+      "description": "Review all Chrome extension features including webpage IELTS word highlighting, word tooltip, save word/article, selected text action menu, sentence explanation, article-to-IELTS generation, floating IELTS assistant, extension popup, extension settings, and YouTube transcript support. Verify UI isolation from host page CSS, minimal DOM modifications, correct persistence syncing with local storage or IndexedDB, and handling of loading/error states. Document incomplete or broken features and UI issues.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "All extension features audited for completeness and UI isolation",
+        "List of broken or incomplete extension features documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-extension-features.md",
+          "description": "Audit report listing issues and missing features in Chrome extension",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Chrome extension source code and UI components",
+      "targetFiles": [
+        "reports/audit-extension-features.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-extension-features.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1800000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures extension features are production-ready and UI is properly isolated"
+    },
+    {
+      "title": "Audit AI integration for robust error handling and API key management",
+      "description": "Review all AI-related features and packages for handling missing API key, loading states, error states, invalid responses, and success states. Verify local storage usage for API keys, no logging of keys or private content, and clear user messaging about API key requirements. Document any missing error handling, unsafe logging, or incomplete state management.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "All AI features audited for error handling and API key management",
+        "List of missing or incomplete AI error handling documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-ai-integration.md",
+          "description": "Audit report listing AI integration error handling and API key management issues",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "AI feature source code and integration points",
+      "targetFiles": [
+        "reports/audit-ai-integration.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-ai-integration.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1200000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures AI features handle all states robustly and protect user privacy"
+    },
+    {
+      "title": "Audit tests for coverage gaps and broken tests",
+      "description": "Review unit, integration, and E2E tests for core logic, storage, AI prompt builders, vocabulary detection, article extraction, exercise parsing, daily task generation, onboarding, saving words/articles, highlighting, selected text actions, exercise generation, vocabulary review, data export/import, extension popup, and extension settings. Identify missing tests, broken tests, or flaky tests. Document coverage gaps and test failures.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Test suites reviewed for coverage and correctness",
+        "List of missing or broken tests documented"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/audit-test-coverage.md",
+          "description": "Audit report listing test coverage gaps and broken tests",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Existing test suites and test results",
+      "targetFiles": [
+        "reports/audit-test-coverage.md"
+      ],
+      "targetArtifacts": [
+        "audit report"
+      ],
+      "evidence": [
+        "audit report file exists"
+      ],
+      "verificationCommand": "ls reports/audit-test-coverage.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 1200000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Identifies testing gaps to ensure production quality and stability"
+    },
+    {
+      "title": "Audit build and lint configurations for errors and warnings",
+      "description": "Run build, lint, and typecheck commands to identify any errors or warnings. Verify that the web app and extension build successfully, Manifest V3 is valid, TypeScript passes with strict settings, and lint passes without errors. Document any build or lint issues and warnings.",
+      "executor": "shell",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Build completes without errors",
+        "Lint passes without errors",
+        "TypeScript typecheck passes"
+      ],
+      "commands": [
+        "pnpm build",
+        "pnpm lint",
+        "pnpm typecheck"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/build-lint-audit.log",
+          "description": "Log file capturing build, lint, and typecheck output",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "validation",
+      "actionType": "execute",
+      "inputContext": "Current project source and configuration",
+      "targetFiles": [
+        "reports/build-lint-audit.log"
+      ],
+      "targetArtifacts": [
+        "build and lint logs"
+      ],
+      "evidence": [
+        "build-lint-audit.log file exists",
+        "build command exited with 0",
+        "lint command exited with 0",
+        "typecheck command exited with 0"
+      ],
+      "verificationCommand": "cat reports/build-lint-audit.log",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Confirms build and lint readiness for production"
+    },
+    {
+      "title": "Create comprehensive implementation plan from audit reports",
+      "description": "Analyze all audit reports (feature UI and flows, domain packages, extension features, AI integration, tests, build/lint) to create a detailed implementation plan. The plan must list prioritized tasks to fix incomplete features, broken flows, missing error handling, missing persistence, missing tests, and build issues. Include task titles, descriptions, dependencies, and acceptance criteria for each fix or improvement.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit apps/web/src/features for incomplete UI and broken flows",
+        "Audit packages/learning-engine and packages/storage for incomplete or broken business logic",
+        "Audit Chrome extension source for feature completeness and UI isolation",
+        "Audit AI integration for robust error handling and API key management",
+        "Audit tests for coverage gaps and broken tests",
+        "Audit build and lint configurations for errors and warnings"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Implementation plan covers all identified issues from audits",
+        "Plan includes clear task breakdown with dependencies and acceptance criteria"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "plans/implementation-plan.json",
+          "description": "JSON implementation plan detailing tasks to complete and fix all features and quality issues",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "planning",
+      "actionType": "generate",
+      "inputContext": "Audit reports from all previous tasks",
+      "targetFiles": [
+        "plans/implementation-plan.json"
+      ],
+      "targetArtifacts": [
+        "implementation plan"
+      ],
+      "evidence": [
+        "implementation-plan.json file exists"
+      ],
+      "verificationCommand": "ls plans/implementation-plan.json",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 3600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a clear roadmap for completing and stabilizing the project"
+    }
+  ]
+}

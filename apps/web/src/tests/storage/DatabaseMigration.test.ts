@@ -84,7 +84,6 @@ function createBackupData(overrides: Record<string, unknown> = {}): Record<strin
       aiEndpoint: '',
       aiModel: 'gpt-4o-mini',
       darkMode: false,
-      sampleDataLoaded: false,
       aiEnabled: false,
     },
     vocabulary: [],

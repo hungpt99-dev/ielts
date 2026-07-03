@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSettings } from '../../context/SettingsContext'
 import { useTheme } from '../../context/ThemeContext'
 import { DatabaseService } from '../../services/storage/Database'
-import { resetSampleData } from '../../data/seed'
 import {
   loadNotificationPrefs,
   saveNotificationPrefs,
@@ -27,6 +26,16 @@ const IELTS_TOPICS = [
 
 const SKILL_OPTIONS = [
   'Reading', 'Listening', 'Writing', 'Speaking', 'Vocabulary', 'Grammar',
+]
+
+const DAYS_OF_WEEK = [
+  { value: 'mon', label: 'Monday' },
+  { value: 'tue', label: 'Tuesday' },
+  { value: 'wed', label: 'Wednesday' },
+  { value: 'thu', label: 'Thursday' },
+  { value: 'fri', label: 'Friday' },
+  { value: 'sat', label: 'Saturday' },
+  { value: 'sun', label: 'Sunday' },
 ]
 
 const BAND_OPTIONS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
@@ -117,13 +126,14 @@ export default function Settings() {
           weakSkills: [],
           preferredTopics: [],
           studyReminder: 'Time to study IELTS!',
+          studyGoal: 'academic' as const,
+          preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const,
           aiApiKey: '',
           aiProvider: 'openai' as const,
           aiEndpoint: '',
           aiModel: 'gpt-4o-mini',
           aiEnabled: false,
           darkMode: false,
-          sampleDataLoaded: false,
         }
         setForm(defaults)
         updateSettings(defaults)
@@ -210,23 +220,6 @@ export default function Settings() {
         }
       },
       buttonLabel: 'Delete Everything',
-      buttonVariant: 'danger',
-    })
-  }
-
-  function handleResetSample() {
-    setConfirmAction({
-      title: 'Reset Sample Data',
-      message: 'Clear all current data and reload sample data? Export a backup first if you want to keep your data.',
-      action: async () => {
-        try {
-          await resetSampleData()
-          showFeedback('success', 'Sample data loaded.')
-        } catch (err) {
-          showFeedback('error', err instanceof Error ? err.message : 'Failed to load sample data')
-        }
-      },
-      buttonLabel: 'Reset Sample Data',
       buttonVariant: 'danger',
     })
   }
@@ -377,6 +370,65 @@ export default function Settings() {
 
       <Card>
         <CardHeader>
+          <CardTitle>Study Goal</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => { setForm(prev => ({ ...prev, studyGoal: 'academic' })); setDirty(true) }}
+              className={`rounded-xl border-2 p-4 text-left transition-all ${
+                form.studyGoal === 'academic'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                  : 'border-[var(--color-border)] hover:border-blue-300'
+              }`}
+            >
+              <p className="text-sm font-semibold text-[var(--color-text)]">IELTS Academic</p>
+              <p className="mt-1 text-xs text-[var(--color-text-secondary)]">For university admission</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => { setForm(prev => ({ ...prev, studyGoal: 'general' })); setDirty(true) }}
+              className={`rounded-xl border-2 p-4 text-left transition-all ${
+                form.studyGoal === 'general'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                  : 'border-[var(--color-border)] hover:border-blue-300'
+              }`}
+            >
+              <p className="text-sm font-semibold text-[var(--color-text)]">IELTS General</p>
+              <p className="mt-1 text-xs text-[var(--color-text-secondary)]">For work or migration</p>
+            </button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Study Schedule</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-3 text-sm text-[var(--color-text-secondary)]">Which days do you plan to study?</p>
+          <div className="flex flex-wrap gap-2">
+            {DAYS_OF_WEEK.map(day => (
+              <button
+                key={day.value}
+                type="button"
+                onClick={() => { setForm(prev => ({ ...prev, preferredSchedule: toggleArrayItem(prev.preferredSchedule, day.value) as typeof prev.preferredSchedule })); setDirty(true) }}
+                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                  form.preferredSchedule.includes(day.value as typeof form.preferredSchedule[number])
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-[var(--color-surface-alt)] text-[var(--color-text-secondary)] hover:brightness-95'
+                }`}
+              >
+                {day.label.slice(0, 3)}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>Study Reminder</CardTitle>
         </CardHeader>
         <CardContent>
@@ -511,12 +563,6 @@ export default function Settings() {
               Clear All Data
             </Button>
 
-            <Button variant="outline" onClick={handleResetSample}>
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              Reset Sample Data
-            </Button>
           </div>
 
           <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/50">

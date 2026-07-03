@@ -55,7 +55,6 @@ export type {
   ScheduleItem,
   MonthlyOverview,
   AppExportData,
-  SeedData,
 } from '../models'
 
 export type {

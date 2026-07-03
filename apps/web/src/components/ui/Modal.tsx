@@ -28,12 +28,17 @@ export default function Modal({ open, onClose, title, children, size = 'md' }: M
 
     document.addEventListener('keydown', handleKeyDown)
     document.body.style.overflow = 'hidden'
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`
+    }
 
     dialogRef.current?.focus()
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = ''
+      document.body.style.paddingRight = ''
     }
   }, [open, onClose])
 
@@ -53,7 +58,7 @@ export default function Modal({ open, onClose, title, children, size = 'md' }: M
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`w-full ${sizeClasses[size]} rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xl focus:outline-none`}
+        className={`w-full ${sizeClasses[size]} max-h-[85vh] overflow-y-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xl focus:outline-none`}
       >
         <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
           <h2 className="text-lg font-semibold text-[var(--color-text)]">

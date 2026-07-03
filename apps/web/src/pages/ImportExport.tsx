@@ -1,6 +1,5 @@
 import { useState, useRef, useCallback } from 'react'
 import { DatabaseService } from '../services/storage/Database'
-import { resetSampleData } from '../data/seed'
 import { useToast } from '../components/ui/Toast'
 import type { AppExportData } from '../models'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
@@ -153,25 +152,6 @@ export default function ImportExport() {
     }
   }
 
-  async function handleResetSample() {
-    const confirmed = window.confirm(
-      'Reset sample data?\n\n' +
-      'This will clear all your current data and load the sample data again. ' +
-      'Make sure you have exported a backup first if you want to keep your data.'
-    )
-    if (!confirmed) return
-
-    clearFeedback()
-    try {
-      await resetSampleData()
-      setSuccess('Sample data has been loaded. All previous data was replaced.')
-      showToast('success', 'Sample data loaded')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to reset sample data')
-      showToast('error', err instanceof Error ? err.message : 'Failed to reset sample data')
-    }
-  }
-
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
@@ -310,12 +290,7 @@ export default function ImportExport() {
             </svg>
             Clear All Data
           </Button>
-          <Button variant="outline" onClick={handleResetSample}>
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            Reset Sample Data
-          </Button>
+
         </CardContent>
       </Card>
 

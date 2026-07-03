@@ -1,0 +1,1838 @@
+[2026-07-02T07:22:20.698Z] [INFO] Task started: Fix chat popup open state management and event handlers in src/popup/main.tsx and ChatPopup.tsx
+[2026-07-02T07:22:20.700Z] [INFO] [info] [output-plan] [{"action":"modify","target":"src/popup/main.tsx","description":"Fix popup open state management and event handlers","validationMethod":"file_diff"},{"action":"modify","target":"src/popup/components/ChatPopup.tsx","description":"Fix popup visibility control logic","validationMethod":"file_diff"}]
+[2026-07-02T07:22:21.231Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-02T07:22:21.231Z] [INFO] [stderr] [0m
+[2026-07-02T07:22:21.231Z] [INFO] [stderr] [0m
+[2026-07-02T07:22:25.675Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"chat popup main.tsx ChatPopup open state visibility toggle","maxFiles":15}
+[2026-07-02T07:22:29.365Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/main.tsx"}
+[2026-07-02T07:22:29.556Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/components/aiTutor/ChatPopup.tsx"}
+[2026-07-02T07:22:29.875Z] [INFO] [stderr] [0m✱ [0mGlob "**/popup/**/*.{tsx,ts,html}"[90m 10 matches[0m
+[2026-07-02T07:22:32.845Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/App.tsx
+[2026-07-02T07:22:33.438Z] [INFO] [stderr] [0m✱ [0mGrep "ChatPopup|chat.*popup|popup.*chat|isOpen"[90m in apps/extension · 0 matches[0m
+[2026-07-02T07:22:39.098Z] [INFO] [stderr] [0m✱ [0mGlob "**/popup.html"[90m 1 match[0m
+[2026-07-02T07:22:39.468Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"ChatWidget popup isOpen onClose visibility","maxFiles":10}
+[2026-07-02T07:22:43.602Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/components/useExitAnimation.ts"}
+[2026-07-02T07:22:43.927Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/ChatIcon.tsx
+[2026-07-02T07:22:54.485Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/ChatWidget.tsx[90m [offset=1, limit=60][0m
+[2026-07-02T07:22:54.894Z] [INFO] [stderr] [0m✱ [0mGrep "popup-container-style|popupContainerStyle|desktopStyle|mobileFullscreenStyle"[90m 5 matches[0m
+[2026-07-02T07:22:57.464Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/ChatWidget.tsx[90m [offset=490][0m
+[2026-07-02T07:22:57.956Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/ChatWidget.tsx[90m [offset=160, limit=110][0m
+[2026-07-02T07:23:15.508Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-02T07:23:15.782Z] [INFO] [stderr] [0m→ [0mRead apps/extension/popup.html
+[2026-07-02T07:23:20.966Z] [INFO] [stderr] [0m✱ [0mGlob "packages/ai-tutor/src/index.ts"[90m 1 match[0m
+[2026-07-02T07:23:21.190Z] [INFO] [stderr] [0m✱ [0mGrep "export.*ChatPopup"[90m 1 match[0m
+[2026-07-02T07:23:27.395Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/tests/ChatIcon.test.tsx"}
+[2026-07-02T07:23:27.712Z] [INFO] [stderr] [0m✱ [0mGrep "import.*ChatIcon.*from"[90m 2 matches[0m
+[2026-07-02T07:23:30.297Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/Layout.tsx
+[2026-07-02T07:23:48.953Z] [INFO] [stderr] [0m✗ [0mRead packages/ai-tutor/src/types.ts failed
+[2026-07-02T07:23:48.953Z] [INFO] [stderr] 
+[2026-07-02T07:23:48.954Z] [INFO] [stderr] Did you mean one of these?
+[2026-07-02T07:23:48.954Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/types
+[2026-07-02T07:23:48.954Z] [INFO] [stderr] [91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/types.ts
+[2026-07-02T07:23:51.291Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/types
+[2026-07-02T07:23:53.870Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/types/index.ts
+[2026-07-02T07:24:26.625Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/components/ChatStyles.tsx","includeCode":true}
+[2026-07-02T07:24:38.215Z] [INFO] [stderr] [0m→ [0mRead apps/web/package.json
+[2026-07-02T07:24:38.464Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/package.json
+[2026-07-02T07:24:42.847Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/components/aiTutor/FloatingTutorButton.tsx","includeCode":true}
+[2026-07-02T07:34:56.344Z] [INFO] Task started: Fix chat popup open state management and event handlers in src/popup/main.tsx and ChatPopup.tsx
+[2026-07-02T07:34:56.349Z] [INFO] [info] [output-plan] [{"action":"modify","target":"src/popup/main.tsx","description":"Fix popup open state management and event handlers","validationMethod":"file_diff"},{"action":"modify","target":"src/popup/components/ChatPopup.tsx","description":"Fix popup visibility control logic","validationMethod":"file_diff"}]
+[2026-07-02T07:34:56.880Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-02T07:34:56.880Z] [INFO] [stderr] [0m
+[2026-07-02T07:34:56.880Z] [INFO] [stderr] [0m
+[2026-07-02T07:35:01.293Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"ChatPopup popup open state management event handlers src/popup/main.tsx","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-02T07:35:05.241Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/extension/src/popup/main.tsx"}
+[2026-07-02T07:35:05.634Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/web/src/components/aiTutor/ChatPopup.tsx"}
+[2026-07-02T07:35:09.576Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/extension/src/popup/App.tsx"}
+[2026-07-02T07:35:09.969Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/components/ChatWidget.tsx"}
+[2026-07-02T07:35:14.919Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/web/src/components/aiTutor/ChatIcon.tsx"}
+[2026-07-02T07:35:15.349Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_callers {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","symbol":"ChatPopup","limit":20}
+[2026-07-02T07:35:20.325Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/extension/src/popup/components/MiniTutor.tsx"}
+[2026-07-02T07:35:20.772Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","query":"ChatPopup","limit":20}
+[2026-07-02T07:35:30.556Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/components/useExitAnimation.tsx"}
+[2026-07-02T07:35:30.942Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/hooks/useChatWidget.ts"}
+[2026-07-02T07:35:31.312Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/index.ts"}
+[2026-07-02T07:35:34.127Z] [INFO] [stderr] [0m✗ [0mRead packages/ai-tutor/src/components/useExitAnimation.tsx failed
+[2026-07-02T07:35:34.127Z] [INFO] [stderr] [91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/components/useExitAnimation.tsx
+[2026-07-02T07:35:34.127Z] [INFO] [stderr] 
+[2026-07-02T07:35:34.127Z] [INFO] [stderr] Did you mean one of these?
+[2026-07-02T07:35:34.127Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/components/useExitAnimation.ts
+[2026-07-02T07:35:34.575Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/types/index.ts","symbolsOnly":true}
+[2026-07-02T07:35:37.368Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/useExitAnimation.ts
+[2026-07-02T07:35:37.711Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/types/index.ts[90m [offset=111][0m
+[2026-07-02T07:35:45.896Z] [INFO] [stderr] [0m• [0mSearch for popup chat state[90m Explore Agent[0m
+[2026-07-02T07:38:14.663Z] [INFO] [stderr] [0m✓ [0mSearch for popup chat state[90m Explore Agent[0m
+[2026-07-02T07:38:19.691Z] [INFO] [stderr] [0m✱ [0mGlob "**/popup/main.tsx"[90m 1 match[0m
+[2026-07-02T07:38:19.856Z] [INFO] [stderr] [0m✱ [0mGlob "**/ChatPopup.tsx"[90m 2 matches[0m
+[2026-07-02T07:38:20.041Z] [INFO] [stderr] [0m✱ [0mGlob "**/popup/components/ChatPopup.tsx"[90m 0 matches[0m
+[2026-07-02T07:38:27.549Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/web/src/components/Layout.tsx"}
+[2026-07-02T07:38:27.959Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/web/src/components/aiTutor/FloatingTutorButton.tsx"}
+[2026-07-02T07:38:41.376Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components
+[2026-07-02T07:38:41.605Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup
+[2026-07-02T07:38:47.603Z] [INFO] [stderr] [0m→ [0mRead .flowtask
+[2026-07-02T07:38:50.775Z] [INFO] [stderr] [0m→ [0mRead .flowtask/reports
+[2026-07-02T07:38:53.712Z] [INFO] [stderr] [0m→ [0mRead .flowtask/reports/code-logic-bug-report.md
+[2026-07-02T07:39:08.041Z] [INFO] [stderr] [0m→ [0mRead .flowtask/config.json
+[2026-07-02T07:39:08.276Z] [INFO] [stderr] [0m→ [0mRead .flowtask/project.json
+[2026-07-02T07:39:11.382Z] [INFO] [stderr] [0m→ [0mRead .flowtask/run-index.json
+[2026-07-02T07:39:14.567Z] [INFO] [stderr] [0m→ [0mRead .flowtask/state.json
+[2026-07-02T07:39:19.420Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs
+[2026-07-02T07:39:19.420Z] [INFO] [stderr] [0m→ [0mRead .flowtask/steps
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] drwxr-xr-x@ 37 phamthanhhung  staff    1184 Jul  2 13:40 ..
+[2026-07-02T07:39:22.167Z] [INFO] [stderr] [0m$ [0mls -la "/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/"
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff    5168 Jul  2 14:34 audit.jsonl
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] total 1792
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] drwxr-xr-x@  2 phamthanhhung  staff      64 Jul  2 13:40 artifacts
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] drwxr-xr-x@  8 phamthanhhung  staff     256 Jul  2 14:22 context
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] drwxr-xr-x@ 18 phamthanhhung  staff     576 Jul  2 14:34 .
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff  801875 Jul  2 14:39 events.jsonl
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] drwxr-xr-x@  2 phamthanhhung  staff      64 Jul  2 13:40 file-snapshots
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff    1866 Jul  2 13:41 plan.md
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] drwxr-xr-x@  2 phamthanhhung  staff      64 Jul  2 13:40 file-changes
+[2026-07-02T07:39:22.167Z] [INFO] [stderr] [0m
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] drwxr-xr-x@  6 phamthanhhung  staff     192 Jul  2 13:41 outputs
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff      52 Jul  2 13:40 prompt.md
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff     219 Jul  2 14:34 process.json
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] drwxr-xr-x@  2 phamthanhhung  staff      64 Jul  2 13:40 snapshots
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff    1124 Jul  2 13:40 rules-context.md
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff    2541 Jul  2 14:34 run.json
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff   11407 Jul  2 14:34 tasks.json
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] -rw-r--r--@  1 phamthanhhung  staff   17772 Jul  2 14:34 timeline.jsonl
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] [0m
+[2026-07-02T07:39:22.168Z] [INFO] [stderr] drwxr-xr-x@ 10 phamthanhhung  staff     320 Jul  2 14:22 logs
+[2026-07-02T07:39:24.780Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/plan.md
+[2026-07-02T07:39:25.143Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json
+[2026-07-02T07:39:28.335Z] [INFO] [stderr] [0m$ [0mwc -l "/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json"
+[2026-07-02T07:39:28.335Z] [INFO] [stderr] [0m
+[2026-07-02T07:39:28.335Z] [INFO] [stderr] [0m
+[2026-07-02T07:39:28.335Z] [INFO] [stderr] 0 /Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json
+[2026-07-02T07:39:32.185Z] [INFO] [stderr] import json
+[2026-07-02T07:39:32.185Z] [INFO] [stderr] [0m$ [0mpython3 -c "
+[2026-07-02T07:39:32.185Z] [INFO] [stderr] with open('/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json') as f:
+[2026-07-02T07:39:32.185Z] [INFO] [stderr] for t in data.get('tasks', []):
+[2026-07-02T07:39:32.185Z] [INFO] [stderr]     data = json.load(f)
+[2026-07-02T07:39:32.185Z] [INFO] [stderr]     print(f\"Title: {t['title']}\")
+[2026-07-02T07:39:32.185Z] [INFO] [stderr]     print(f\"Acceptance: {t.get('acceptanceCriteria', [])}")
+[2026-07-02T07:39:32.185Z] [INFO] [stderr]     print(f\"Depends on: {t.get('dependsOn', [])}")
+[2026-07-02T07:39:32.185Z] [INFO] [stderr]     print(f\"Status: {t['status']}")
+[2026-07-02T07:39:32.185Z] [INFO] [stderr]     print(f\"ID: {t['id']}\")
+[2026-07-02T07:39:32.185Z] [INFO] [stderr] " 2>&1 | head -80
+[2026-07-02T07:39:32.185Z] [INFO] [stderr] zsh:8: parse error near `)'
+[2026-07-02T07:39:32.185Z] [INFO] [stderr] [0m
+[2026-07-02T07:39:32.185Z] [INFO] [stderr]     print()
+[2026-07-02T07:39:35.475Z] [INFO] [stderr]     data = json.load(f)
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] with open('/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json') as f:
+[2026-07-02T07:39:35.475Z] [INFO] [stderr]     print(f"Status: {t['status']}")
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] for t in data.get('tasks', []):
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] [0m$ [0mpython3 << 'PYEOF'
+[2026-07-02T07:39:35.475Z] [INFO] [stderr]     print(f"ID: {t['id']}")
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] PYEOF
+[2026-07-02T07:39:35.475Z] [INFO] [stderr]     print()
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Status: done
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] ID: task_b4b200c246e6
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Depends on: []
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Title: Analyze chat popup entry point in apps/extension/popup.html and /src/popup/main.tsx
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] 
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] ID: task_3e9f14441b2e
+[2026-07-02T07:39:35.475Z] [INFO] [stderr]     print(f"Depends on: {t.get('dependsOn', [])}")
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Title: Investigate chat popup React component and state management in src/popup/main.tsx and related files
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Depends on: ['task_b4b200c246e6']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Acceptance: ['Identified any React component errors or missing state logic', 'Documented potential fixes or improvements']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] 
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Title: Check extension manifest and permissions related to popup in apps/extension/manifest.json
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Acceptance: ['Clear understanding of popup initialization flow', 'Identification of any missing or misconfigured elements in popup.html or main.tsx']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] ID: task_b6aa3dca4a77
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Status: done
+[2026-07-02T07:39:35.475Z] [INFO] [stderr]     print(f"Title: {t['title']}")
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] 
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] ID: task_6b526999cd9c
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Title: Inspect console logs and runtime errors when opening chat popup in development environment
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Status: done
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Acceptance: ['Console logs captured during popup open', 'Errors or warnings identified and documented']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr]     print(f"Acceptance: {t.get('acceptanceCriteria', [])}")
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Depends on: ['task_b4b200c246e6', 'task_3e9f14441b2e']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Title: Review chat popup state and visibility control logic in src/popup/components/ChatPopup.tsx or equivalent
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Status: done
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] 
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Acceptance: ['Manifest declares popup correctly', 'Required permissions for popup operation are present']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Depends on: ['task_3e9f14441b2e']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] ID: task_6d56c030a8cf
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Title: Fix chat popup open state management and event handlers in src/popup/main.tsx and ChatPopup.tsx
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Depends on: ['task_b4b200c246e6']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Status: running
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Acceptance: ['Identified state or props issues affecting popup visibility', 'Documented required fixes to state management']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] ID: task_78d629e9e9cc
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Status: done
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] 
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Acceptance: ['Popup opens and closes correctly on user interaction', 'No runtime errors related to popup state', 'Code changes follow project style and conventions']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Title: Verify chat popup open functionality with integration test in src/popup/__tests__/ChatPopup.test.tsx
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] 
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Depends on: ['task_6d56c030a8cf']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Acceptance: ['Test covers popup open and close user interactions', 'Test passes without errors']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] 
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] ID: task_c6534ce960ac
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] ID: task_79f347a62709
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Status: pending
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Acceptance: ['All tests pass successfully', 'No new errors or warnings introduced']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Status: pending
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Title: Run full test suite to validate no regressions after chat popup fix
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] [0m
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Depends on: ['task_78d629e9e9cc', 'task_c6534ce960ac']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] Depends on: ['task_78d629e9e9cc']
+[2026-07-02T07:39:35.475Z] [INFO] [stderr] import json
+[2026-07-02T07:39:38.362Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/run.json
+[2026-07-02T07:39:41.405Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context
+[2026-07-02T07:39:45.543Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_78d629e9e9cc.md
+[2026-07-02T07:39:49.047Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_6d56c030a8cf.md
+[2026-07-02T07:39:49.195Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_3e9f14441b2e.md
+[2026-07-02T07:39:49.641Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_6b526999cd9c.md
+[2026-07-02T07:39:50.091Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_b4b200c246e6.md
+[2026-07-02T07:39:50.505Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_b6aa3dca4a77.md
+[2026-07-02T07:39:54.364Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/logs
+[2026-07-02T07:40:00.708Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/logs/task_6d56c030a8cf.log[90m [limit=200][0m
+[2026-07-02T07:40:01.033Z] [INFO] [stderr] [0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/logs/task_3e9f14441b2e.log[90m [limit=200][0m
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] [0m$ [0mgit diff --name-only
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] .flowtask/events.jsonl
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] .flowtask/run-index.json
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] [0m
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/extension/src/content-script/sharedStyles.ts
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/extension/popup.html
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] .flowtask/task-index.json
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/extension/options.html
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/extension/src/popup/index.css
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/extension/src/options/index.css
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/Layout.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/aiTutor/ChatIcon.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/extension/src/popup/App.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/aiTutor/SpeakingPartner.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/aiTutor/NotificationCenter.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/ui/ErrorBoundary.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/ui/ErrorDisplay.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/ui/ToggleSwitch.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/aiTutor/WritingTutor.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/features/analytics/Analytics.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/extension/ProactiveAssistant.ts
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/features/planner/Planner.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/features/vocabulary/components/ReviewMode.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/aiTutor/TeachingMode.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/aiTutor/ProactiveSettings.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/features/vocabulary/components/WordForm.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/DailyPlan.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] .flowtask/state.json
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/features/writing/WritingPractice.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/features/writing/WritingPromptsPage.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/ui/Modal.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/Progress.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/MockTests.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/Dashboard.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/components/ui/ConfirmDialog.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/ReadingJournal.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/Settings.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/ListeningJournal.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/VocabularyReview.tsx
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/Search.tsx
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] apps/web/src/services/storage/Database.test.ts
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/models/index.ts
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/services/ProactiveMessageEngine.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] apps/web/src/services/storage/Database.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] apps/web/src/services/ai/AIService.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] apps/web/src/services/storage/LocalTutorStorage.ts
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/SpeakingPractice.tsx
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] apps/web/src/styles/theme.css
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ai-tutor/src/components/MissingKeyBanner.tsx
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ai-tutor/src/components/ProactiveMessagePreview.tsx
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ai-tutor/src/components/ContextSuggestionCard.tsx
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ai-tutor/src/components/NotificationCenter.tsx
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ai-tutor/src/hooks/useProactiveMessages.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/learning-engine/src/analytics/AnalyticsService.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ai-tutor/src/components/ChatBubble.tsx
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] apps/web/vite.config.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/learning-engine/src/daily-plan/DailyPlanService.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ai-tutor/src/services/proactiveMessageService.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/learning-engine/src/progress/ProgressService.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/storage/src/db.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/learning-engine/src/profile/ProfileService.ts
+[2026-07-02T07:40:12.470Z] [INFO] [stderr] apps/web/src/pages/GrammarNotes.tsx
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/theme/src/cssVariables.css
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/theme/src/utils.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] [0m
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ui/src/components/Toast.tsx
+[2026-07-02T07:40:12.471Z] [INFO] [stderr] packages/ai-tutor/src/components/ChatWidget.tsx
+[2026-07-02T07:40:18.709Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/App.tsx
+[2026-07-02T07:40:19.114Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/Layout.tsx[90m [offset=20, limit=10][0m
+[2026-07-02T07:40:19.556Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/Layout.tsx[90m [offset=137, limit=10][0m
+[2026-07-02T07:40:40.125Z] [INFO] [stderr] index 04e85bc..46c9a3d 100644
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] [0m$ [0mgit diff apps/extension/src/popup/App.tsx
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] --- a/apps/extension/src/popup/App.tsx
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] diff --git a/apps/extension/src/popup/App.tsx b/apps/extension/src/popup/App.tsx
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] +++ b/apps/extension/src/popup/App.tsx
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]  import BackupRestore from './components/BackupRestore'
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] -import { ChatPopup } from '@ielts/ai-tutor'
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] @@ -6,7 +6,7 @@ import VocabularyCollector from './components/VocabularyCollector'
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]  import VideoHelper from './components/VideoHelper'
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] +import MiniTutor from './components/MiniTutor'
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] [0m
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]    if (view === 'miniTutor') {
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]  import ArticleCollector from './components/ArticleCollector'
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]        <ToastProvider>
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]  
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]      return (
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] -        <ChatPopup isOpen={true} onClose={() => setView('dashboard')} />
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]        </ToastProvider>
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] @@ -72,7 +72,7 @@ function App() {
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]  
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]      )
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] +        <MiniTutor onBack={() => setView('dashboard')} />
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]    }
+[2026-07-02T07:40:40.126Z] [INFO] [stderr]  type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor'
+[2026-07-02T07:40:40.126Z] [INFO] [stderr] [0m
+[2026-07-02T07:40:40.294Z] [INFO] [stderr] diff --git a/apps/web/src/components/Layout.tsx b/apps/web/src/components/Layout.tsx
+[2026-07-02T07:40:40.294Z] [INFO] [stderr] [0m$ [0mgit diff apps/web/src/components/Layout.tsx
+[2026-07-02T07:40:40.294Z] [INFO] [stderr] index f7aa062..5cd72ef 100644
+[2026-07-02T07:40:40.294Z] [INFO] [stderr] --- a/apps/web/src/components/Layout.tsx
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] +import { useState } from 'react'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] +++ b/apps/web/src/components/Layout.tsx
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  import Headbar from './layout/Headbar'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] @@ -1,4 +1,4 @@
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] @@ -21,7 +21,7 @@ import ImportExport from '../pages/ImportExport'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  import { NavLink, Routes, Route, Navigate } from 'react-router-dom'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  import FloatingTutorButton from './aiTutor/FloatingTutorButton'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] +import ChatIcon from './aiTutor/ChatIcon'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -import { useState, useEffect, useCallback } from 'react'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -import ChatPopup from './aiTutor/ChatPopup'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  const navItems = [
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] @@ -45,19 +45,10 @@ const navItems = [
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  export default function AppLayout() {
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  import PublicApiImportPage from '../pages/PublicApiImportPage'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -  const [chatOpen, setChatOpen] = useState(false)
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]    { to: '/', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -  const handleCloseChat = useCallback(() => setChatOpen(false), [])
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -    return () => window.removeEventListener('toggle-ai-tutor-chat', handler)
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -    window.addEventListener('toggle-ai-tutor-chat', handler)
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -  }, [])
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]      <div
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  import TopicsProgress from '../pages/TopicsProgress'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]    const [sidebarOpen, setSidebarOpen] = useState(false)
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]    return (
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -  useEffect(() => {
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]        {sidebarOpen && (
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] @@ -148,7 +139,7 @@ export default function AppLayout() {
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]        style={{ backgroundColor: 'var(--color-background)' }}
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -      className="flex h-screen overflow-hidden"
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]      >
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -            <ChatPopup isOpen={chatOpen} onClose={handleCloseChat} />
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  import Dashboard from '../features/dashboard/Dashboard'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]            </Routes>
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] +      className="flex min-h-[100dvh] overflow-hidden"
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]          </main>
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]              <Route path="*" element={<Navigate to="/" replace />} />
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]              <FloatingTutorButton />
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]  
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]                    isActive
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]          <nav
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -    const handler = () => setChatOpen(prev => !prev)
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] +            <ChatIcon />
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] @@ -174,7 +165,7 @@ export default function AppLayout() {
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]                  `flex flex-col items-center gap-0.5 rounded-lg px-3 py-1 text-xs font-medium transition-colors ${
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]                      ? 'text-[var(--color-primary)]'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] +                    : 'text-[var(--color-text-secondary)]'
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]              >
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]                }
+[2026-07-02T07:40:40.295Z] [INFO] [stderr]                  }`
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] [0m
+[2026-07-02T07:40:40.295Z] [INFO] [stderr] -                    : 'text-[var(--color-muted)]'
+[2026-07-02T07:40:57.164Z] [INFO] [stderr] [0m✱ [0mGlob "**/ChatIcon.tsx"[90m 2 matches[0m
+[2026-07-02T07:41:00.567Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/ChatIcon.tsx
+[2026-07-02T07:41:18.432Z] [INFO] [stderr] [0m
+[2026-07-02T07:41:18.432Z] [INFO] [stderr] [ ] Check if ChatPopup.tsx visibility logic needs fixing
+[2026-07-02T07:41:18.432Z] [INFO] [stderr] [ ] Check if apps/extension/src/popup/main.tsx needs changes
+[2026-07-02T07:41:18.432Z] [INFO] [stderr] [ ] Run validation (lint/typecheck/test)
+[2026-07-02T07:41:18.432Z] [INFO] [stderr] [•] Verify current fixes are correct and complete in extension App.tsx and web Layout.tsx
+[2026-07-02T07:41:18.432Z] [INFO] [stderr] [0m
+[2026-07-02T07:41:18.432Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-02T07:41:23.519Z] [INFO] [stderr] (no output)
+[2026-07-02T07:41:23.519Z] [INFO] [stderr] [0m
+[2026-07-02T07:41:23.519Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx tsc --noEmit 2>&1 | head -30
+[2026-07-02T07:41:24.968Z] [INFO] [stderr] (no output)
+[2026-07-02T07:41:24.968Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension && npx tsc --noEmit 2>&1 | head -30
+[2026-07-02T07:41:24.968Z] [INFO] [stderr] [0m
+[2026-07-02T07:41:28.046Z] [INFO] [stderr] [0m✱ [0mGlob "**/*ChatPopup*test*"[90m 0 matches[0m
+[2026-07-02T07:41:28.255Z] [INFO] [stderr] [0m✱ [0mGlob "**/__tests__/ChatPopup*"[90m 0 matches[0m
+[2026-07-02T07:41:34.528Z] [INFO] [stderr] {
+[2026-07-02T07:41:34.528Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension && cat package.json | python3 -c "import sys,json; d=json.load(sys.stdin); print(json.dumps(d.get('scripts',{}), indent=2))"
+[2026-07-02T07:41:34.528Z] [INFO] [stderr]   "dev": "vite --port 5174 --strictPort",
+[2026-07-02T07:41:34.528Z] [INFO] [stderr]   "package": "pnpm build && node scripts/package.mjs",
+[2026-07-02T07:41:34.528Z] [INFO] [stderr] [0m
+[2026-07-02T07:41:34.528Z] [INFO] [stderr]   "build:production": "node scripts/build.mjs production",
+[2026-07-02T07:41:34.528Z] [INFO] [stderr]   "build": "node scripts/build.mjs",
+[2026-07-02T07:41:34.528Z] [INFO] [stderr]   "preview": "vite preview",
+[2026-07-02T07:41:34.528Z] [INFO] [stderr]   "lint": "echo 'no linter configured'",
+[2026-07-02T07:41:34.529Z] [INFO] [stderr]   "ai": "echo 'no tests configured'",
+[2026-07-02T07:41:34.528Z] [INFO] [stderr]   "test": "echo 'no tests configured'",
+[2026-07-02T07:41:34.528Z] [INFO] [stderr]   "typecheck": "tsc --noEmit",
+[2026-07-02T07:41:34.529Z] [INFO] [stderr] }
+[2026-07-02T07:41:34.529Z] [INFO] [stderr]   "clean": "rm -rf dist",
+[2026-07-02T07:41:34.529Z] [INFO] [stderr] [0m
+[2026-07-02T07:41:34.529Z] [INFO] [stderr]   "clean:all": "rm -rf dist *.zip"
+[2026-07-02T07:41:34.697Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/**/*.test.*"[90m 1 match[0m
+[2026-07-02T07:41:42.695Z] [INFO] [stderr] [0m
+[2026-07-02T07:41:42.695Z] [INFO] [stderr] [✓] Check if ChatPopup.tsx visibility logic needs fixing
+[2026-07-02T07:41:42.695Z] [INFO] [stderr] [•] Run validation (lint/typecheck/test)
+[2026-07-02T07:41:42.695Z] [INFO] [stderr] [✓] Verify current fixes are correct and complete in extension App.tsx and web Layout.tsx
+[2026-07-02T07:41:42.695Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-02T07:41:42.695Z] [INFO] [stderr] [0m
+[2026-07-02T07:41:42.695Z] [INFO] [stderr] [✓] Check if apps/extension/src/popup/main.tsx needs changes
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +++ b/apps/extension/src/popup/App.tsx
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] [0m$ [0mgit diff -- apps/extension/src/popup/ apps/web/src/components/Layout.tsx apps/web/src/components/aiTutor/
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] diff --git a/apps/extension/src/popup/App.tsx b/apps/extension/src/popup/App.tsx
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] @@ -6,7 +6,7 @@ import VocabularyCollector from './components/VocabularyCollector'
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] --- a/apps/extension/src/popup/App.tsx
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]  import ArticleCollector from './components/ArticleCollector'
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +import MiniTutor from './components/MiniTutor'
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] -import { ChatPopup } from '@ielts/ai-tutor'
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]  import BackupRestore from './components/BackupRestore'
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] index 04e85bc..46c9a3d 100644
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]  import VideoHelper from './components/VideoHelper'
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]  type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor'
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] -        <ChatPopup isOpen={true} onClose={() => setView('dashboard')} />
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] @@ -72,7 +72,7 @@ function App() {
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    if (view === 'miniTutor') {
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]      return (
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +        <MiniTutor onBack={() => setView('dashboard')} />
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]        </ToastProvider>
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] index ce89bfe..bdd3177 100644
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    }
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]        <ToastProvider>
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]      )
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-primary-hover: #1d4ed8;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] diff --git a/apps/extension/src/popup/index.css b/apps/extension/src/popup/index.css
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-text: #0f172a;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] --- a/apps/extension/src/popup/index.css
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +++ b/apps/extension/src/popup/index.css
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --color-surface-secondary: #f1f5f9;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-border: #e2e8f0;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --color-on-primary: #ffffff;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --color-success-light: #dcfce7;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-success: #16a34a;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-warning: #d97706;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-primary: #2563eb;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-primary-light: #dbeafe;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-text-secondary: #475569;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --color-danger-light: #fee2e2;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --color-on-danger: #ffffff;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-danger: #dc2626;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --color-warning-light: #fef3c7;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --radius-sm: 0.375rem;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --color-info-light: #dbeafe;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-info: #0891b2;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --spacing-xs: 0.25rem;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --radius-md: 0.5rem;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --color-muted: #94a3b8;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --spacing-sm: 0.5rem;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]    --radius-lg: 0.75rem;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --spacing-lg: 1.5rem;
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] @@ -5,26 +5,42 @@
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --spacing-xl: 2rem;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]    --font-sans: system-ui, -apple-system, sans-serif;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+[2026-07-02T07:41:45.992Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +  --transition-fast: 150ms ease;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  }
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +  --transition-normal: 200ms ease;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] @@ -36,11 +52,16 @@
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      --color-primary: #3b82f6;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  @media (prefers-color-scheme: dark) {
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      --color-primary-light: #1e3a5f;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]    --radius-xl: 1rem;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      --color-primary-hover: #60a5fa;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      --color-muted: #64748b;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      --color-border: #334155;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +    --color-on-primary: #ffffff;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      --color-text: #f1f5f9;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +    --color-warning-light: #78350f;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      --color-text-secondary: #94a3b8;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +    --color-surface-secondary: #334155;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -    --color-shadow: rgba(0, 0, 0, 0.3);
+[2026-07-02T07:41:45.992Z] [INFO] [stderr] +  --spacing-md: 1rem;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +    --color-success-light: #14532d;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] diff --git a/apps/web/src/components/Layout.tsx b/apps/web/src/components/Layout.tsx
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +    --color-info-light: #1e3a5f;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +++ b/apps/web/src/components/Layout.tsx
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] index f7aa062..5cd72ef 100644
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -import { useState, useEffect, useCallback } from 'react'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +    --color-danger-light: #7f1d1d;
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] --- a/apps/web/src/components/Layout.tsx
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] @@ -1,4 +1,4 @@
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  import { NavLink, Routes, Route, Navigate } from 'react-router-dom'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  import Headbar from './layout/Headbar'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  import TopicsProgress from '../pages/TopicsProgress'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  import PublicApiImportPage from '../pages/PublicApiImportPage'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] @@ -21,7 +21,7 @@ import ImportExport from '../pages/ImportExport'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +import ChatIcon from './aiTutor/ChatIcon'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -import ChatPopup from './aiTutor/ChatPopup'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  import FloatingTutorButton from './aiTutor/FloatingTutorButton'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  import Dashboard from '../features/dashboard/Dashboard'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] +import { useState } from 'react'
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] @@ -45,19 +45,10 @@ const navItems = [
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]    const [sidebarOpen, setSidebarOpen] = useState(false)
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  const navItems = [
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  export default function AppLayout() {
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -  useEffect(() => {
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -  const handleCloseChat = useCallback(() => setChatOpen(false), [])
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -    const handler = () => setChatOpen(prev => !prev)
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]    { to: '/', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]    return (
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -    return () => window.removeEventListener('toggle-ai-tutor-chat', handler)
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -      className="flex h-screen overflow-hidden"
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -  const [chatOpen, setChatOpen] = useState(false)
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]        {sidebarOpen && (
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] @@ -148,7 +139,7 @@ export default function AppLayout() {
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      <div
+[2026-07-02T07:41:45.993Z] [INFO] [stderr]      >
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] -    window.addEventListener('toggle-ai-tutor-chat', handler)
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              <FloatingTutorButton />
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] -            <ChatPopup isOpen={chatOpen} onClose={handleCloseChat} />
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]        style={{ backgroundColor: 'var(--color-background)' }}
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          </main>
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +      className="flex min-h-[100dvh] overflow-hidden"
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              <Route path="*" element={<Navigate to="/" replace />} />
+[2026-07-02T07:41:45.993Z] [INFO] [stderr] -  }, [])
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                    isActive
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +            <ChatIcon />
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]            </Routes>
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] -                    : 'text-[var(--color-muted)]'
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          <nav
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                }
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                  }`
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] --- a/apps/web/src/components/aiTutor/ChatIcon.tsx
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                      ? 'text-[var(--color-primary)]'
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +                    : 'text-[var(--color-text-secondary)]'
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] diff --git a/apps/web/src/components/aiTutor/ChatIcon.tsx b/apps/web/src/components/aiTutor/ChatIcon.tsx
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                  `flex flex-col items-center gap-0.5 rounded-lg px-3 py-1 text-xs font-medium transition-colors ${
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] @@ -174,7 +165,7 @@ export default function AppLayout() {
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] @@ -74,6 +74,7 @@ export default function ChatIcon({ onToggle, isOnline = true }: ChatIconProps) {
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +        aria-controls="ai-tutor-chat-popup"
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          aria-haspopup="dialog"
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          aria-expanded={isOpen}
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          <svg
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              >
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] diff --git a/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx b/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +++ b/apps/web/src/components/aiTutor/ChatIcon.tsx
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          aria-label={isOpen ? 'Close AI Tutor chat' : 'Open AI Tutor chat'}
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] --- a/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]        >
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +++ b/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] index bc6f125..c5007cc 100644
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] -        backgroundColor: 'color-mix(in srgb, var(--color-warning) 8%, transparent)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          borderColor: 'var(--color-warning)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]        }}
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]        style={{
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]      >
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +        backgroundColor: 'var(--color-warning-light)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          title="AI Tutor Assistant"
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]        <div className="p-3">
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              style={{
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                backgroundColor: 'var(--color-primary)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] index 5a0a3be..fa5faa9 100644
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +              color: 'var(--color-on-primary, #ffffff)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              }}
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] -              color: '#ffffff',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                ? {
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] @@ -239,7 +239,7 @@ export function MessageBubble({ role, content, timestamp, formatTime }: MessageB
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              type="button"
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]            >
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +                  color: 'var(--color-on-primary, #ffffff)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]        className="mx-4 mb-3 mt-2 overflow-hidden rounded-xl border text-xs"
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                    borderBottomRightRadius: '4px',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              role === 'user'
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] -                  color: '#ffffff',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] @@ -76,7 +76,7 @@ export function MissingKeyBanner({ onOpenSettings }: MissingKeyBannerProps) {
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          backgroundColor:
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] -            ? 'color-mix(in srgb, var(--color-warning) 8%, transparent)'
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]            priority === 'high'
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] @@ -96,7 +96,7 @@ export function MissingKeyBanner({ onOpenSettings }: MissingKeyBannerProps) {
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                    backgroundColor: 'var(--color-primary)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              : 'var(--color-surface-alt)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                  }
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] @@ -393,7 +393,7 @@ export function ProactiveMessagePreview({
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          borderColor: priority === 'high' ? 'var(--color-warning)' : 'var(--color-border)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +            ? 'var(--color-warning-light)'
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          animation: 'fade-in 0.3s ease-out',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]        }}
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] @@ -348,7 +348,7 @@ export function ProactiveMessagePreview({
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]              backgroundColor: 'var(--color-primary)',
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]            style={{
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]            }}
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]    0%, 80%, 100% { transform: translateY(0); }
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]            className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]                : {
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]          >
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] -            color: '#ffffff',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    40% { transform: translateY(-6px); }
+[2026-07-02T07:41:45.994Z] [INFO] [stderr]            type="button"
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] @@ -415,6 +415,22 @@ const uxKeyframes = `
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +@keyframes message-in {
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]  }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +}
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +@keyframes fade-in {
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  from { opacity: 0; }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  to { opacity: 1; transform: translateY(0); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +}
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  to { opacity: 1; }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  from { opacity: 0; transform: translateY(8px); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +@keyframes chat-popup-out {
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  to { opacity: 1; transform: scale(1) translateY(0); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +}
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +@keyframes chat-popup-in {
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]  `
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +}
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]  export function ChatUXStyles() {
+[2026-07-02T07:41:45.994Z] [INFO] [stderr] +            color: 'var(--color-on-primary, #ffffff)',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] diff --git a/apps/web/src/components/aiTutor/FloatingTutorButton.tsx b/apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] index fd5d033..d1fa158 100644
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] @@ -11,9 +11,9 @@ export default function FloatingTutorButton() {
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  from { opacity: 1; transform: scale(1) translateY(0); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  to { opacity: 0; transform: scale(0.95) translateY(10px); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +++ b/apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -          0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]          @keyframes tutor-pulse {
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] --- a/apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]          }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]          }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -          100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]        `}</style>
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +          0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 50%, transparent); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -          70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] @@ -50,7 +50,7 @@ const wrapperStyle: React.CSSProperties = {
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]            50% { transform: translateY(-4px); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    bottom: '24px',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -  zIndex: 9999,
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +          70% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--color-primary) 0%, transparent); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    position: 'fixed',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]        <div style={wrapperStyle}>
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +          100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 0%, transparent); }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    display: 'flex',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    flexDirection: 'column',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -  background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    height: '56px',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    alignItems: 'flex-end',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    border: 'none',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    borderRadius: '50%',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -  color: '#fff',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] @@ -62,19 +62,19 @@ const buttonStyle: React.CSSProperties = {
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    cursor: 'pointer',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-hover))',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    alignItems: 'center',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    right: '24px',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -  boxShadow: '0 4px 16px rgba(59, 130, 246, 0.4)',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  zIndex: 100,
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    display: 'flex',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    justifyContent: 'center',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -  transition: 'all 0.2s ease',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -  background: '#1e293b',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]  }
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  color: 'var(--color-on-primary, #ffffff)',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] -  color: '#fff',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]  const tooltipStyle: React.CSSProperties = {
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    padding: '8px 14px',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  background: 'var(--color-surface-alt)',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +++ b/apps/web/src/components/aiTutor/NotificationCenter.tsx
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    fontSize: '13px',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]              onClick={() => setActiveFilter(cat)}
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] diff --git a/apps/web/src/components/aiTutor/NotificationCenter.tsx b/apps/web/src/components/aiTutor/NotificationCenter.tsx
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] --- a/apps/web/src/components/aiTutor/NotificationCenter.tsx
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] index 246abf3..acaca33 100644
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] @@ -171,7 +171,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]              className="relative flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors hover:opacity-80"
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +              backgroundColor: activeFilter === cat ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                color: activeFilter === cat ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]              style={{
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                  className="flex gap-3 border-b px-4 py-3 transition-colors hover:opacity-90"
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]              type="button"
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] -              backgroundColor: activeFilter === cat ? 'color-mix(in srgb, var(--color-primary) 15%, transparent)' : 'var(--color-surface-alt)',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr]    borderRadius: '10px',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                  style={{
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] @@ -220,7 +220,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                    borderColor: 'var(--color-border)',
+[2026-07-02T07:41:45.995Z] [INFO] [stderr] +  color: 'var(--color-text)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                >
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                  }}
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +                  backgroundColor: msg.isRead ? 'transparent' : 'var(--color-primary-light)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] @@ -238,7 +238,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                        className="inline-block rounded px-1.5 py-0.5 text-[10px] font-medium leading-tight"
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                        style={{
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                  <div className="flex flex-col items-center gap-1 pt-1">
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] -                  backgroundColor: msg.isRead ? 'transparent' : 'color-mix(in srgb, var(--color-primary) 3%, transparent)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] -                        backgroundColor: 'color-mix(in srgb, var(--color-primary) 10%, transparent)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +                        backgroundColor: 'var(--color-primary-light)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]              }}
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] @@ -248,7 +248,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                        }}
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                          className="inline-block rounded px-1.5 py-0.5 text-[10px] font-medium leading-tight"
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                          style={{
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] -                          backgroundColor: 'color-mix(in srgb, var(--color-danger) 10%, transparent)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                      >
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                        >
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] @@ -274,7 +274,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                          className="rounded-lg px-2.5 py-1 text-xs font-medium transition-colors hover:opacity-80"
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                        <span
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                            color: 'var(--color-danger)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] -                          color: '#fff',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                          color: 'var(--color-primary)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                      <span
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                          }}
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                          style={{
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +                          backgroundColor: 'var(--color-danger-light)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                        >
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                            backgroundColor: 'var(--color-primary)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                          type="button"
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] diff --git a/apps/web/src/components/aiTutor/ProactiveSettings.tsx b/apps/web/src/components/aiTutor/ProactiveSettings.tsx
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +                          color: 'var(--color-on-primary, #ffffff)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] index dfdcf1f..8a6e4ce 100644
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]          <div className="rounded-lg border px-4 py-3 text-xs leading-relaxed" style={{
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                          }}
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +++ b/apps/web/src/components/aiTutor/ProactiveSettings.tsx
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] --- a/apps/web/src/components/aiTutor/ProactiveSettings.tsx
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]            borderColor: 'var(--color-info)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] @@ -105,7 +105,7 @@ export default function ProactiveSettings({ onClose }: ProactiveSettingsProps) {
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +          backgroundColor: 'var(--color-info-light)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]        <div className="flex-1 space-y-5 p-4 text-sm">
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]            color: 'var(--color-text-secondary)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]            <p className="font-medium" style={{ color: 'var(--color-text)' }}>Local-First Notice</p>
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]              {settings.aiEnhanced && (
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                <div className="rounded-lg border px-4 py-3 text-xs leading-relaxed" style={{
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] -                backgroundColor: 'color-mix(in srgb, var(--color-warning) 8%, transparent)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                  borderColor: 'var(--color-warning)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] -          backgroundColor: 'color-mix(in srgb, var(--color-info) 8%, transparent)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]          }}>
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] @@ -143,7 +143,7 @@ export default function ProactiveSettings({ onClose }: ProactiveSettingsProps) {
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +                backgroundColor: 'var(--color-warning-light)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                  color: 'var(--color-text-secondary)',
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] diff --git a/apps/web/src/components/aiTutor/SpeakingPartner.tsx b/apps/web/src/components/aiTutor/SpeakingPartner.tsx
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                }}>
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] index 2cd6586..8006317 100644
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +++ b/apps/web/src/components/aiTutor/SpeakingPartner.tsx
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] --- a/apps/web/src/components/aiTutor/SpeakingPartner.tsx
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] @@ -310,10 +310,17 @@ function analyzeText(text: string): AnalysisResult {
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]                  <p className="font-medium" style={{ color: 'var(--color-text)' }}>Privacy Notice</p>
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +          original: m,
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]        }
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +        errors.push({
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +          suggestion: `${parts[0]} ${verb === 'is' ? 'are' : verb === 'was' ? 'were' : verb === 'does' ? 'do' : "don't"}`,
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +        })
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +          explanation: `After "${parts[0]}", use "${verb === 'is' ? 'are' : verb === 'was' ? 'were' : verb === 'does' ? 'do' : "don't"}" for present simple.`,
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]            explanation: `After "${parts[0]}", use "${verb === 'are' ? 'is' : verb === 'were' ? 'was' : verb === 'do' ? 'does' : "doesn't"}" for present simple.`,
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]      })
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]          })
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +      }
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] -  const articleErrors = text.match(/\ba (apple|hour|honest|umbrella|university|one|european)/gi)
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +      if ((subject === 'we' || subject === 'they') && (verb === 'is' || verb === 'was' || verb === 'does' || verb === "doesn't")) {
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]      articleErrors.forEach(m => {
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] @@ -345,32 +352,32 @@ function estimateBand(_text: string, analysis: AnalysisResult): BandEstimate {
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]    if (articleErrors) {
+[2026-07-02T07:41:45.996Z] [INFO] [stderr] +  const articleErrors = text.match(/\ba (apple|hour|honest|umbrella)/gi)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    const errorCount = analysis.detectedErrors.length
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]        const word = m.toLowerCase().replace(/^a\s+/, '')
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (wordCount >= 120) fluency = 6.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (wordCount >= 80) fluency = 6.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (wordCount >= 180) fluency = 7.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    let fluency = 5.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (wordCount >= 250) fluency = 7.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (wordCount >= 400) fluency = 8.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (wordCount >= 320) fluency = 8.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (wordCount < 50) fluency = 5.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (wordCount < 30) fluency = 4.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (wordCount >= 320) fluency = 8.0
+[2026-07-02T07:41:45.996Z] [INFO] [stderr]    }
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (wordCount >= 80) fluency = 6.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (wordCount >= 120) fluency = 6.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (wordCount >= 250) fluency = 7.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (wordCount >= 50) fluency = 5.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else fluency = 4.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (uniqueRatio >= 0.55) vocabulary = 6.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (wordCount >= 180) fluency = 7.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (uniqueRatio >= 0.6) vocabulary = 7.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    let vocabulary = 5.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (uniqueRatio >= 0.65) vocabulary = 7.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (uniqueRatio >= 0.5) vocabulary = 6.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (uniqueRatio >= 0.65) vocabulary = 7.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (uniqueRatio < 0.4) vocabulary = 4.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (uniqueRatio >= 0.7) vocabulary = 8.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (uniqueRatio >= 0.5) vocabulary = 6.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (uniqueRatio < 0.4) vocabulary = 4.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (uniqueRatio >= 0.55) vocabulary = 6.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (linkingCount >= 3) vocabulary = Math.max(vocabulary, 6.5)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (linkingCount >= 5) vocabulary = Math.max(vocabulary, 7.0)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (uniqueRatio >= 0.6) vocabulary = 7.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (complexCount >= 4) grammar = 6.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (complexCount >= 2) grammar = 6.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    let grammar = 5.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (complexCount >= 6) grammar = 7.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (complexCount >= 8) grammar = 7.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (linkingCount >= 1) vocabulary = Math.max(vocabulary, 6.0)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  if (complexCount >= 6) grammar = 7.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (errorCount >= 3) grammar = Math.min(grammar, 5.5)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (errorCount >= 5) grammar = Math.min(grammar, 5.0)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] diff --git a/apps/web/src/components/aiTutor/TeachingMode.tsx b/apps/web/src/components/aiTutor/TeachingMode.tsx
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (errorCount === 0 && wordCount > 50) grammar = Math.max(grammar, 6.0)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (complexCount >= 4) grammar = 6.5
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  else if (complexCount >= 2) grammar = 6.0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] --- a/apps/web/src/components/aiTutor/TeachingMode.tsx
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    const lower = message.toLowerCase()
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] index fc03b10..55f87d1 100644
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] @@ -550,14 +550,14 @@ export function detectLessonFromMessage(
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    for (const [, lesson] of Object.entries(lessons)) {
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +++ b/apps/web/src/components/aiTutor/TeachingMode.tsx
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  const stopWords = new Set(['and', 'the', 'for', 'are', 'but', 'not', 'you', 'all', 'can', 'had', 'her', 'was', 'one', 'our', 'out', 'has', 'have', 'been', 'some', 'same', 'part', 'very', 'each', 'just', 'than', 'them', 'then', 'were', 'what', 'when', 'which', 'will', 'with', 'about', 'into', 'over', 'such', 'that', 'this', 'your'])
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -      lesson.examples.some(e => lower.includes(e.toLowerCase().slice(0, 15))) ? [lesson.topic] : [],
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -    )
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -    if (keywords.some(k => lower.includes(k))) {
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    const lessons = type === 'grammar' ? GRAMMAR_LESSONS : VOCABULARY_LESSONS
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]      }
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]        return { lesson, confidence: 'high' }
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +    const keywords = lesson.title.toLowerCase().split(/\s+/).filter(k => k.length > 3 && !stopWords.has(k))
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -    const keywords = lesson.title.toLowerCase().split(' ').concat(
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -    if (lesson.rules.some(r => lower.includes(r.toLowerCase().slice(0, 20)))) {
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +    if (lesson.rules.some(r => new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(lower))) {
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +    if (keywords.some(k => new RegExp('\\b' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(lower))) {
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    }
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] @@ -651,7 +651,7 @@ export function generateFeedbackMessage(
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]        return { lesson, confidence: 'medium' }
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]      }
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    const correct = exerciseResults.filter(r => r.isCorrect).length
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    const total = exerciseResults.length
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]  ): string {
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  const score = total > 0 ? Math.round((correct / total) * 100) : 0
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    const engSuggest = `**Suggested next topic:** ${getLessonTitle(lesson.nextTopic, lesson.type !== 'grammar') ??
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]      lesson.nextTopic.replace('-', ' ')}`
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] -  const score = Math.round((correct / total) * 100)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] diff --git a/apps/web/src/components/aiTutor/WritingTutor.tsx b/apps/web/src/components/aiTutor/WritingTutor.tsx
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] index c577264..9eff484 100644
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] @@ -478,10 +478,11 @@ interface WritingAnalysis {
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    const issues: GrammarIssue[] = []
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]  function detectGrammarIssues(text: string): GrammarIssue[] {
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] --- a/apps/web/src/components/aiTutor/WritingTutor.tsx
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +  const subjVerbMatches = text.match(/\b(The\s+\w+|\bHe|She|It)\s+(are|were|have|do|don't)\b/gi)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr] +++ b/apps/web/src/components/aiTutor/WritingTutor.tsx
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] -      const subject = m.split(' ')[0]
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]        issues.push({
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] -  const subjVerbMatches = text.match(/\b(He|She|It|The (child|student|person|government|company|country)) (are|were|have|do|don't)\b/gi)
+[2026-07-02T07:41:45.997Z] [INFO] [stderr]    if (subjVerbMatches) {
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]          suggestion: m.replace(/\bare\b/i, 'is').replace(/\bwere\b/i, 'was').replace(/\bhave\b/i, 'has').replace(/\bdo\b/i, 'does').replace(/\bdon't\b/i, "doesn't"),
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]          original: m,
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] +      const subject = match ? match[1] : m.split(' ')[0]
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]  
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]    }
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]      })
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] @@ -501,7 +502,7 @@ function detectGrammarIssues(text: string): GrammarIssue[] {
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]    if (articleMatches) {
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]      subjVerbMatches.forEach(m => {
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] +  const articleMatches = text.match(/\ba (apple|hour|honest|umbrella|heir)\b/gi)
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] -  const articleMatches = text.match(/\ba (apple|hour|honest|umbrella|heir|herb)\b/gi)
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] +      const match = m.match(/\b(He|She|It|The (\w+)) (are|were|have|do|don't)\b/i)
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]        const word = m.replace(/^a\s+/i, '')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]      articleMatches.forEach(m => {
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] -    .replace(/\bvery\b/gi, '')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]      .replace(/\bbad\b/gi, 'detrimental')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]      .replace(/\bsmall\b/gi, 'minor')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] +    .replace(/\bvery\b/gi, 'extremely')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]      .replace(/\bbig\b/gi, 'significant')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] -    .replace(/\breally\b/gi, '')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] @@ -716,8 +717,8 @@ function improveVocabulary(text: string): string {
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] +    .replace(/\breally\b/gi, 'extremely')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]      .replace(/\ba lot\b/gi, 'significantly')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]      .replace(/\bpeople\b/gi, 'individuals')
+[2026-07-02T07:41:45.998Z] [INFO] [stderr] [0m
+[2026-07-02T07:41:45.998Z] [INFO] [stderr]      .replace(/\bthings?\b/gi, 'aspects')
+[2026-07-02T07:41:56.283Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/ChatWidget.tsx[90m [offset=130, limit=30][0m
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension && npx vite build 2>&1 | tail -15
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] ✓ 166 modules transformed.
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] rendering chunks...
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] transforming...
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] vite v6.4.3 building for production...
+[2026-07-02T07:42:01.347Z] [INFO] [stderr] [0m
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] computing gzip size...
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] dist/assets/options.css         2.00 kB │ gzip:  0.78 kB
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] dist/assets/chunk-schemas.js  264.80 kB │ gzip: 79.86 kB
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] ✓ built in 537ms
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] dist/assets/popup.js          150.06 kB │ gzip: 36.06 kB
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] dist/options.html               0.63 kB │ gzip:  0.36 kB
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] dist/popup.html                 0.61 kB │ gzip:  0.35 kB
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] dist/assets/options.js         10.35 kB │ gzip:  3.49 kB
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] dist/assets/popup.css           2.19 kB │ gzip:  0.82 kB
+[2026-07-02T07:42:01.348Z] [INFO] [stderr] [0m
+[2026-07-02T07:42:13.527Z] [INFO] [stderr] dist/assets/index-CK3h5Scy.css     73.79 kB │ gzip:  12.45 kB
+[2026-07-02T07:42:13.527Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vite build 2>&1 | tail -15
+[2026-07-02T07:42:13.527Z] [INFO] [stderr] - Using dynamic import() to code-split the application
+[2026-07-02T07:42:13.528Z] [INFO] [stderr] - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+[2026-07-02T07:42:13.528Z] [INFO] [stderr] 
+[2026-07-02T07:42:13.528Z] [INFO] [stderr] files generated
+[2026-07-02T07:42:13.527Z] [INFO] [stderr] 
+[2026-07-02T07:42:13.528Z] [INFO] [stderr] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[2026-07-02T07:42:13.528Z] [INFO] [stderr] ✓ built in 1.54s
+[2026-07-02T07:42:13.527Z] [INFO] [stderr] dist/assets/index-Cl7UwYdC.js   1,540.87 kB │ gzip: 407.77 kB
+[2026-07-02T07:42:13.527Z] [INFO] [stderr] (!) Some chunks are larger than 500 kB after minification. Consider:
+[2026-07-02T07:42:13.528Z] [INFO] [stderr] mode      generateSW
+[2026-07-02T07:42:13.528Z] [INFO] [stderr] [0m
+[2026-07-02T07:42:13.528Z] [INFO] [stderr] PWA v1.3.0
+[2026-07-02T07:42:13.528Z] [INFO] [stderr]   dist/sw.js
+[2026-07-02T07:42:13.528Z] [INFO] [stderr] precache  7 entries (1578.08 KiB)
+[2026-07-02T07:42:13.528Z] [INFO] [stderr]   dist/workbox-9c191d2f.js
+[2026-07-02T07:42:21.025Z] [INFO] [stderr] [✓] Verify current fixes are correct and complete in extension App.tsx and web Layout.tsx
+[2026-07-02T07:42:21.025Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-02T07:42:21.025Z] [INFO] [stderr] [0m
+[2026-07-02T07:42:21.025Z] [INFO] [stderr] [✓] Check if ChatPopup.tsx visibility logic needs fixing
+[2026-07-02T07:42:21.025Z] [INFO] [stderr] [✓] Run validation (lint/typecheck/test)
+[2026-07-02T07:42:21.025Z] [INFO] [stderr] [✓] Check if apps/extension/src/popup/main.tsx needs changes
+[2026-07-02T07:42:25.995Z] [INFO] [stdout] All fixes are applied and validated. TypeScript and builds pass for both `apps/web` and `apps/extension`.
+[2026-07-02T07:42:25.995Z] [INFO] [stdout] 
+[2026-07-02T07:42:25.995Z] [INFO] [stdout] **Root causes and fixes:**
+[2026-07-02T07:42:25.995Z] [INFO] [stdout] 2. **Web app layout** (`apps/web/src/components/Layout.tsx`): Popup open state (`chatOpen`) and `toggle-ai-tutor-chat` event listener were managed directly in Layout, then the event listener was removed without moving it to `ChatIcon`. The `ChatIcon` component (which owns the event listener and renders `ChatPopup` internally) was not rendered. Replaced `ChatPopup` rendering + manual state with `<ChatIcon />` — consolidating state, event listening, and popup rendering in one component.
+[2026-07-02T07:42:25.995Z] [INFO] [stdout] 
+[2026-07-02T07:42:25.995Z] [INFO] [stdout] 1. **Extension popup** (`apps/extension/src/popup/App.tsx`): `ChatPopup` from `@ielts/ai-tutor` (a `createPortal`-based floating overlay) was used as the entire mini tutor view — wrong for the extension's full-page popup context. Replaced with the existing `MiniTutor` component.
+[2026-07-02T07:42:25.995Z] [INFO] [stdout] 
+[2026-07-02T07:42:26.191Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-02T07:42:26.191Z] [INFO] Output:
+All fixes are applied and validated. TypeScript and builds pass for both `apps/web` and `apps/extension`.
+
+**Root causes and fixes:**
+
+1. **Extension popup** (`apps/extension/src/popup/App.tsx`): `ChatPopup` from `@ielts/ai-tutor` (a `createPortal`-based floating overlay) was used as the entire mini tutor view — wrong for the extension's full-page popup context. Replaced with the existing `MiniTutor` component.
+
+2. **Web app layout** (`apps/web/src/components/Layout.tsx`): Popup open state (`chatOpen`) and `toggle-ai-tutor-chat` event listener were managed directly in Layout, then the event listener was removed without moving it to `ChatIcon`. The `ChatIcon` component (which owns the event listener and renders `ChatPopup` internally) was not rendered. Replaced `ChatPopup` rendering + manual state with `<ChatIcon />` — consolidating state, event listening, and popup rendering in one component.
+[2026-07-02T07:42:26.191Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"ChatPopup popup open state management event handlers src/popup/main.tsx","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/extension/src/popup/main.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/web/src/components/aiTutor/ChatPopup.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/extension/src/popup/App.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/components/ChatWidget.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/web/src/components/aiTutor/ChatIcon.tsx"}
+[0m⚙ [0mcodegraph_codegraph_callers {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","symbol":"ChatPopup","limit":20}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/extension/src/popup/components/MiniTutor.tsx"}
+[0m⚙ [0mcodegraph_codegraph_search {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","query":"ChatPopup","limit":20}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/components/useExitAnimation.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/hooks/useChatWidget.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/index.ts"}
+[0m✗ [0mRead packages/ai-tutor/src/components/useExitAnimation.tsx failed
+[91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/components/useExitAnimation.tsx
+
+Did you mean one of these?
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/components/useExitAnimation.ts
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"packages/ai-tutor/src/types/index.ts","symbolsOnly":true}
+[0m→ [0mRead packages/ai-tutor/src/components/useExitAnimation.ts
+[0m→ [0mRead packages/ai-tutor/src/types/index.ts[90m [offset=111][0m
+[0m• [0mSearch for popup chat state[90m Explore Agent[0m
+[0m✓ [0mSearch for popup chat state[90m Explore Agent[0m
+[0m✱ [0mGlob "**/popup/main.tsx"[90m 1 match[0m
+[0m✱ [0mGlob "**/ChatPopup.tsx"[90m 2 matches[0m
+[0m✱ [0mGlob "**/popup/components/ChatPopup.tsx"[90m 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/web/src/components/Layout.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS","file":"apps/web/src/components/aiTutor/FloatingTutorButton.tsx"}
+[0m→ [0mRead apps/extension/src/popup/components
+[0m→ [0mRead apps/extension/src/popup
+[0m→ [0mRead .flowtask
+[0m→ [0mRead .flowtask/reports
+[0m→ [0mRead .flowtask/reports/code-logic-bug-report.md
+[0m→ [0mRead .flowtask/config.json
+[0m→ [0mRead .flowtask/project.json
+[0m→ [0mRead .flowtask/run-index.json
+[0m→ [0mRead .flowtask/state.json
+[0m→ [0mRead .flowtask/steps
+[0m→ [0mRead .flowtask/runs
+[0m
+[0m$ [0mls -la "/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/"
+total 1792
+drwxr-xr-x@ 18 phamthanhhung  staff     576 Jul  2 14:34 .
+drwxr-xr-x@ 37 phamthanhhung  staff    1184 Jul  2 13:40 ..
+drwxr-xr-x@  2 phamthanhhung  staff      64 Jul  2 13:40 artifacts
+-rw-r--r--@  1 phamthanhhung  staff    5168 Jul  2 14:34 audit.jsonl
+drwxr-xr-x@  8 phamthanhhung  staff     256 Jul  2 14:22 context
+-rw-r--r--@  1 phamthanhhung  staff  801875 Jul  2 14:39 events.jsonl
+drwxr-xr-x@  2 phamthanhhung  staff      64 Jul  2 13:40 file-changes
+drwxr-xr-x@  2 phamthanhhung  staff      64 Jul  2 13:40 file-snapshots
+drwxr-xr-x@ 10 phamthanhhung  staff     320 Jul  2 14:22 logs
+drwxr-xr-x@  6 phamthanhhung  staff     192 Jul  2 13:41 outputs
+-rw-r--r--@  1 phamthanhhung  staff    1866 Jul  2 13:41 plan.md
+-rw-r--r--@  1 phamthanhhung  staff     219 Jul  2 14:34 process.json
+-rw-r--r--@  1 phamthanhhung  staff      52 Jul  2 13:40 prompt.md
+-rw-r--r--@  1 phamthanhhung  staff    1124 Jul  2 13:40 rules-context.md
+-rw-r--r--@  1 phamthanhhung  staff    2541 Jul  2 14:34 run.json
+drwxr-xr-x@  2 phamthanhhung  staff      64 Jul  2 13:40 snapshots
+-rw-r--r--@  1 phamthanhhung  staff   11407 Jul  2 14:34 tasks.json
+-rw-r--r--@  1 phamthanhhung  staff   17772 Jul  2 14:34 timeline.jsonl
+[0m
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/plan.md
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json
+[0m
+[0m$ [0mwc -l "/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json"
+0 /Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json
+[0m
+[0m$ [0mpython3 -c "
+import json
+with open('/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json') as f:
+    data = json.load(f)
+for t in data.get('tasks', []):
+    print(f\"ID: {t['id']}\")
+    print(f\"Title: {t['title']}\")
+    print(f\"Status: {t['status']}")
+    print(f\"Depends on: {t.get('dependsOn', [])}")
+    print(f\"Acceptance: {t.get('acceptanceCriteria', [])}")
+    print()
+" 2>&1 | head -80
+zsh:8: parse error near `)'
+[0m
+[0m$ [0mpython3 << 'PYEOF'
+import json
+with open('/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/tasks.json') as f:
+    data = json.load(f)
+for t in data.get('tasks', []):
+    print(f"ID: {t['id']}")
+    print(f"Title: {t['title']}")
+    print(f"Status: {t['status']}")
+    print(f"Depends on: {t.get('dependsOn', [])}")
+    print(f"Acceptance: {t.get('acceptanceCriteria', [])}")
+    print()
+PYEOF
+ID: task_b4b200c246e6
+Title: Analyze chat popup entry point in apps/extension/popup.html and /src/popup/main.tsx
+Status: done
+Depends on: []
+Acceptance: ['Clear understanding of popup initialization flow', 'Identification of any missing or misconfigured elements in popup.html or main.tsx']
+
+ID: task_3e9f14441b2e
+Title: Investigate chat popup React component and state management in src/popup/main.tsx and related files
+Status: done
+Depends on: ['task_b4b200c246e6']
+Acceptance: ['Identified any React component errors or missing state logic', 'Documented potential fixes or improvements']
+
+ID: task_b6aa3dca4a77
+Title: Check extension manifest and permissions related to popup in apps/extension/manifest.json
+Status: done
+Depends on: ['task_b4b200c246e6']
+Acceptance: ['Manifest declares popup correctly', 'Required permissions for popup operation are present']
+
+ID: task_6b526999cd9c
+Title: Inspect console logs and runtime errors when opening chat popup in development environment
+Status: done
+Depends on: ['task_b4b200c246e6', 'task_3e9f14441b2e']
+Acceptance: ['Console logs captured during popup open', 'Errors or warnings identified and documented']
+
+ID: task_6d56c030a8cf
+Title: Review chat popup state and visibility control logic in src/popup/components/ChatPopup.tsx or equivalent
+Status: done
+Depends on: ['task_3e9f14441b2e']
+Acceptance: ['Identified state or props issues affecting popup visibility', 'Documented required fixes to state management']
+
+ID: task_78d629e9e9cc
+Title: Fix chat popup open state management and event handlers in src/popup/main.tsx and ChatPopup.tsx
+Status: running
+Depends on: ['task_6d56c030a8cf']
+Acceptance: ['Popup opens and closes correctly on user interaction', 'No runtime errors related to popup state', 'Code changes follow project style and conventions']
+
+ID: task_c6534ce960ac
+Title: Verify chat popup open functionality with integration test in src/popup/__tests__/ChatPopup.test.tsx
+Status: pending
+Depends on: ['task_78d629e9e9cc']
+Acceptance: ['Test covers popup open and close user interactions', 'Test passes without errors']
+
+ID: task_79f347a62709
+Title: Run full test suite to validate no regressions after chat popup fix
+Status: pending
+Depends on: ['task_78d629e9e9cc', 'task_c6534ce960ac']
+Acceptance: ['All tests pass successfully', 'No new errors or warnings introduced']
+[0m
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/run.json
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_78d629e9e9cc.md
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_6d56c030a8cf.md
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_3e9f14441b2e.md
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_6b526999cd9c.md
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_b4b200c246e6.md
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/context/context-pack.task_b6aa3dca4a77.md
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/logs
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/logs/task_6d56c030a8cf.log[90m [limit=200][0m
+[0m→ [0mRead .flowtask/runs/run_20260702T064031_chat_popup_cannot_open_check_r/logs/task_3e9f14441b2e.log[90m [limit=200][0m
+[0m
+[0m$ [0mgit diff --name-only
+.flowtask/events.jsonl
+.flowtask/run-index.json
+.flowtask/state.json
+.flowtask/task-index.json
+apps/extension/options.html
+apps/extension/popup.html
+apps/extension/src/content-script/sharedStyles.ts
+apps/extension/src/options/index.css
+apps/extension/src/popup/App.tsx
+apps/extension/src/popup/index.css
+apps/web/src/components/Layout.tsx
+apps/web/src/components/aiTutor/ChatIcon.tsx
+apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+apps/web/src/components/aiTutor/NotificationCenter.tsx
+apps/web/src/components/aiTutor/ProactiveSettings.tsx
+apps/web/src/components/aiTutor/SpeakingPartner.tsx
+apps/web/src/components/aiTutor/TeachingMode.tsx
+apps/web/src/components/aiTutor/WritingTutor.tsx
+apps/web/src/components/ui/ConfirmDialog.tsx
+apps/web/src/components/ui/ErrorBoundary.tsx
+apps/web/src/components/ui/ErrorDisplay.tsx
+apps/web/src/components/ui/Modal.tsx
+apps/web/src/components/ui/ToggleSwitch.tsx
+apps/web/src/extension/ProactiveAssistant.ts
+apps/web/src/features/analytics/Analytics.tsx
+apps/web/src/features/planner/Planner.tsx
+apps/web/src/features/vocabulary/components/ReviewMode.tsx
+apps/web/src/features/vocabulary/components/WordForm.tsx
+apps/web/src/features/writing/WritingPractice.tsx
+apps/web/src/features/writing/WritingPromptsPage.tsx
+apps/web/src/models/index.ts
+apps/web/src/pages/DailyPlan.tsx
+apps/web/src/pages/Dashboard.tsx
+apps/web/src/pages/GrammarNotes.tsx
+apps/web/src/pages/ListeningJournal.tsx
+apps/web/src/pages/MockTests.tsx
+apps/web/src/pages/Progress.tsx
+apps/web/src/pages/ReadingJournal.tsx
+apps/web/src/pages/Search.tsx
+apps/web/src/pages/Settings.tsx
+apps/web/src/pages/SpeakingPractice.tsx
+apps/web/src/pages/VocabularyReview.tsx
+apps/web/src/services/ProactiveMessageEngine.ts
+apps/web/src/services/ai/AIService.ts
+apps/web/src/services/storage/Database.test.ts
+apps/web/src/services/storage/Database.ts
+apps/web/src/services/storage/LocalTutorStorage.ts
+apps/web/src/styles/theme.css
+apps/web/vite.config.ts
+packages/ai-tutor/src/components/ChatBubble.tsx
+packages/ai-tutor/src/components/ChatWidget.tsx
+packages/ai-tutor/src/components/ContextSuggestionCard.tsx
+packages/ai-tutor/src/components/MissingKeyBanner.tsx
+packages/ai-tutor/src/components/NotificationCenter.tsx
+packages/ai-tutor/src/components/ProactiveMessagePreview.tsx
+packages/ai-tutor/src/hooks/useProactiveMessages.ts
+packages/ai-tutor/src/services/proactiveMessageEngine.ts
+packages/ai-tutor/src/services/proactiveMessageService.ts
+packages/learning-engine/src/analytics/AnalyticsService.ts
+packages/learning-engine/src/daily-plan/DailyPlanService.ts
+packages/learning-engine/src/profile/ProfileService.ts
+packages/learning-engine/src/progress/ProgressService.ts
+packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+packages/storage/src/db.ts
+packages/theme/src/cssVariables.css
+packages/theme/src/utils.ts
+packages/ui/src/components/Toast.tsx
+[0m
+[0m→ [0mRead apps/extension/src/popup/App.tsx
+[0m→ [0mRead apps/web/src/components/Layout.tsx[90m [offset=20, limit=10][0m
+[0m→ [0mRead apps/web/src/components/Layout.tsx[90m [offset=137, limit=10][0m
+[0m
+[0m$ [0mgit diff apps/extension/src/popup/App.tsx
+diff --git a/apps/extension/src/popup/App.tsx b/apps/extension/src/popup/App.tsx
+index 04e85bc..46c9a3d 100644
+--- a/apps/extension/src/popup/App.tsx
++++ b/apps/extension/src/popup/App.tsx
+@@ -6,7 +6,7 @@ import VocabularyCollector from './components/VocabularyCollector'
+ import ArticleCollector from './components/ArticleCollector'
+ import VideoHelper from './components/VideoHelper'
+ import BackupRestore from './components/BackupRestore'
+-import { ChatPopup } from '@ielts/ai-tutor'
++import MiniTutor from './components/MiniTutor'
+ 
+ type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor'
+ 
+@@ -72,7 +72,7 @@ function App() {
+   if (view === 'miniTutor') {
+     return (
+       <ToastProvider>
+-        <ChatPopup isOpen={true} onClose={() => setView('dashboard')} />
++        <MiniTutor onBack={() => setView('dashboard')} />
+       </ToastProvider>
+     )
+   }
+[0m
+[0m$ [0mgit diff apps/web/src/components/Layout.tsx
+diff --git a/apps/web/src/components/Layout.tsx b/apps/web/src/components/Layout.tsx
+index f7aa062..5cd72ef 100644
+--- a/apps/web/src/components/Layout.tsx
++++ b/apps/web/src/components/Layout.tsx
+@@ -1,4 +1,4 @@
+-import { useState, useEffect, useCallback } from 'react'
++import { useState } from 'react'
+ import { NavLink, Routes, Route, Navigate } from 'react-router-dom'
+ import Headbar from './layout/Headbar'
+ import Dashboard from '../features/dashboard/Dashboard'
+@@ -21,7 +21,7 @@ import ImportExport from '../pages/ImportExport'
+ import PublicApiImportPage from '../pages/PublicApiImportPage'
+ import TopicsProgress from '../pages/TopicsProgress'
+ import FloatingTutorButton from './aiTutor/FloatingTutorButton'
+-import ChatPopup from './aiTutor/ChatPopup'
++import ChatIcon from './aiTutor/ChatIcon'
+ 
+ const navItems = [
+   { to: '/', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+@@ -45,19 +45,10 @@ const navItems = [
+ 
+ export default function AppLayout() {
+   const [sidebarOpen, setSidebarOpen] = useState(false)
+-  const [chatOpen, setChatOpen] = useState(false)
+-
+-  const handleCloseChat = useCallback(() => setChatOpen(false), [])
+-
+-  useEffect(() => {
+-    const handler = () => setChatOpen(prev => !prev)
+-    window.addEventListener('toggle-ai-tutor-chat', handler)
+-    return () => window.removeEventListener('toggle-ai-tutor-chat', handler)
+-  }, [])
+ 
+   return (
+     <div
+-      className="flex h-screen overflow-hidden"
++      className="flex min-h-[100dvh] overflow-hidden"
+       style={{ backgroundColor: 'var(--color-background)' }}
+     >
+       {sidebarOpen && (
+@@ -148,7 +139,7 @@ export default function AppLayout() {
+             <Route path="*" element={<Navigate to="/" replace />} />
+           </Routes>
+             <FloatingTutorButton />
+-            <ChatPopup isOpen={chatOpen} onClose={handleCloseChat} />
++            <ChatIcon />
+         </main>
+ 
+         <nav
+@@ -174,7 +165,7 @@ export default function AppLayout() {
+                 `flex flex-col items-center gap-0.5 rounded-lg px-3 py-1 text-xs font-medium transition-colors ${
+                   isActive
+                     ? 'text-[var(--color-primary)]'
+-                    : 'text-[var(--color-muted)]'
++                    : 'text-[var(--color-text-secondary)]'
+                 }`
+               }
+             >
+[0m
+[0m✱ [0mGlob "**/ChatIcon.tsx"[90m 2 matches[0m
+[0m→ [0mRead packages/ai-tutor/src/components/ChatIcon.tsx
+[0m
+[0m# [0mTodos
+[•] Verify current fixes are correct and complete in extension App.tsx and web Layout.tsx
+[ ] Check if apps/extension/src/popup/main.tsx needs changes
+[ ] Check if ChatPopup.tsx visibility logic needs fixing
+[ ] Run validation (lint/typecheck/test)
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx tsc --noEmit 2>&1 | head -30
+(no output)
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension && npx tsc --noEmit 2>&1 | head -30
+(no output)
+[0m
+[0m✱ [0mGlob "**/*ChatPopup*test*"[90m 0 matches[0m
+[0m✱ [0mGlob "**/__tests__/ChatPopup*"[90m 0 matches[0m
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension && cat package.json | python3 -c "import sys,json; d=json.load(sys.stdin); print(json.dumps(d.get('scripts',{}), indent=2))"
+{
+  "dev": "vite --port 5174 --strictPort",
+  "build": "node scripts/build.mjs",
+  "build:production": "node scripts/build.mjs production",
+  "package": "pnpm build && node scripts/package.mjs",
+  "preview": "vite preview",
+  "typecheck": "tsc --noEmit",
+  "lint": "echo 'no linter configured'",
+  "test": "echo 'no tests configured'",
+  "ai": "echo 'no tests configured'",
+  "clean": "rm -rf dist",
+  "clean:all": "rm -rf dist *.zip"
+}
+[0m
+[0m✱ [0mGlob "apps/extension/**/*.test.*"[90m 1 match[0m
+[0m
+[0m# [0mTodos
+[✓] Verify current fixes are correct and complete in extension App.tsx and web Layout.tsx
+[✓] Check if apps/extension/src/popup/main.tsx needs changes
+[✓] Check if ChatPopup.tsx visibility logic needs fixing
+[•] Run validation (lint/typecheck/test)
+[0m
+[0m$ [0mgit diff -- apps/extension/src/popup/ apps/web/src/components/Layout.tsx apps/web/src/components/aiTutor/
+diff --git a/apps/extension/src/popup/App.tsx b/apps/extension/src/popup/App.tsx
+index 04e85bc..46c9a3d 100644
+--- a/apps/extension/src/popup/App.tsx
++++ b/apps/extension/src/popup/App.tsx
+@@ -6,7 +6,7 @@ import VocabularyCollector from './components/VocabularyCollector'
+ import ArticleCollector from './components/ArticleCollector'
+ import VideoHelper from './components/VideoHelper'
+ import BackupRestore from './components/BackupRestore'
+-import { ChatPopup } from '@ielts/ai-tutor'
++import MiniTutor from './components/MiniTutor'
+ 
+ type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor'
+ 
+@@ -72,7 +72,7 @@ function App() {
+   if (view === 'miniTutor') {
+     return (
+       <ToastProvider>
+-        <ChatPopup isOpen={true} onClose={() => setView('dashboard')} />
++        <MiniTutor onBack={() => setView('dashboard')} />
+       </ToastProvider>
+     )
+   }
+diff --git a/apps/extension/src/popup/index.css b/apps/extension/src/popup/index.css
+index ce89bfe..bdd3177 100644
+--- a/apps/extension/src/popup/index.css
++++ b/apps/extension/src/popup/index.css
+@@ -5,26 +5,42 @@
+   --color-primary: #2563eb;
+   --color-primary-hover: #1d4ed8;
+   --color-primary-light: #dbeafe;
++  --color-on-primary: #ffffff;
++  --color-surface-secondary: #f1f5f9;
+   --color-text: #0f172a;
+   --color-text-secondary: #475569;
+   --color-muted: #94a3b8;
+   --color-border: #e2e8f0;
+   --color-success: #16a34a;
++  --color-success-light: #dcfce7;
+   --color-warning: #d97706;
++  --color-warning-light: #fef3c7;
+   --color-danger: #dc2626;
++  --color-danger-light: #fee2e2;
++  --color-on-danger: #ffffff;
+   --color-info: #0891b2;
++  --color-info-light: #dbeafe;
+ 
+   --radius-sm: 0.375rem;
+   --radius-md: 0.5rem;
+   --radius-lg: 0.75rem;
+   --radius-xl: 1rem;
+ 
++  --spacing-xs: 0.25rem;
++  --spacing-sm: 0.5rem;
++  --spacing-md: 1rem;
++  --spacing-lg: 1.5rem;
++  --spacing-xl: 2rem;
++
+   --font-sans: system-ui, -apple-system, sans-serif;
+   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+ 
+   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
++
++  --transition-fast: 150ms ease;
++  --transition-normal: 200ms ease;
+ }
+ 
+ @media (prefers-color-scheme: dark) {
+@@ -36,11 +52,16 @@
+     --color-primary: #3b82f6;
+     --color-primary-hover: #60a5fa;
+     --color-primary-light: #1e3a5f;
++    --color-on-primary: #ffffff;
++    --color-surface-secondary: #334155;
+     --color-text: #f1f5f9;
+     --color-text-secondary: #94a3b8;
+     --color-muted: #64748b;
+     --color-border: #334155;
+-    --color-shadow: rgba(0, 0, 0, 0.3);
++    --color-success-light: #14532d;
++    --color-warning-light: #78350f;
++    --color-danger-light: #7f1d1d;
++    --color-info-light: #1e3a5f;
+ 
+     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+diff --git a/apps/web/src/components/Layout.tsx b/apps/web/src/components/Layout.tsx
+index f7aa062..5cd72ef 100644
+--- a/apps/web/src/components/Layout.tsx
++++ b/apps/web/src/components/Layout.tsx
+@@ -1,4 +1,4 @@
+-import { useState, useEffect, useCallback } from 'react'
++import { useState } from 'react'
+ import { NavLink, Routes, Route, Navigate } from 'react-router-dom'
+ import Headbar from './layout/Headbar'
+ import Dashboard from '../features/dashboard/Dashboard'
+@@ -21,7 +21,7 @@ import ImportExport from '../pages/ImportExport'
+ import PublicApiImportPage from '../pages/PublicApiImportPage'
+ import TopicsProgress from '../pages/TopicsProgress'
+ import FloatingTutorButton from './aiTutor/FloatingTutorButton'
+-import ChatPopup from './aiTutor/ChatPopup'
++import ChatIcon from './aiTutor/ChatIcon'
+ 
+ const navItems = [
+   { to: '/', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+@@ -45,19 +45,10 @@ const navItems = [
+ 
+ export default function AppLayout() {
+   const [sidebarOpen, setSidebarOpen] = useState(false)
+-  const [chatOpen, setChatOpen] = useState(false)
+-
+-  const handleCloseChat = useCallback(() => setChatOpen(false), [])
+-
+-  useEffect(() => {
+-    const handler = () => setChatOpen(prev => !prev)
+-    window.addEventListener('toggle-ai-tutor-chat', handler)
+-    return () => window.removeEventListener('toggle-ai-tutor-chat', handler)
+-  }, [])
+ 
+   return (
+     <div
+-      className="flex h-screen overflow-hidden"
++      className="flex min-h-[100dvh] overflow-hidden"
+       style={{ backgroundColor: 'var(--color-background)' }}
+     >
+       {sidebarOpen && (
+@@ -148,7 +139,7 @@ export default function AppLayout() {
+             <Route path="*" element={<Navigate to="/" replace />} />
+           </Routes>
+             <FloatingTutorButton />
+-            <ChatPopup isOpen={chatOpen} onClose={handleCloseChat} />
++            <ChatIcon />
+         </main>
+ 
+         <nav
+@@ -174,7 +165,7 @@ export default function AppLayout() {
+                 `flex flex-col items-center gap-0.5 rounded-lg px-3 py-1 text-xs font-medium transition-colors ${
+                   isActive
+                     ? 'text-[var(--color-primary)]'
+-                    : 'text-[var(--color-muted)]'
++                    : 'text-[var(--color-text-secondary)]'
+                 }`
+               }
+             >
+diff --git a/apps/web/src/components/aiTutor/ChatIcon.tsx b/apps/web/src/components/aiTutor/ChatIcon.tsx
+index bc6f125..c5007cc 100644
+--- a/apps/web/src/components/aiTutor/ChatIcon.tsx
++++ b/apps/web/src/components/aiTutor/ChatIcon.tsx
+@@ -74,6 +74,7 @@ export default function ChatIcon({ onToggle, isOnline = true }: ChatIconProps) {
+         aria-label={isOpen ? 'Close AI Tutor chat' : 'Open AI Tutor chat'}
+         aria-expanded={isOpen}
+         aria-haspopup="dialog"
++        aria-controls="ai-tutor-chat-popup"
+         title="AI Tutor Assistant"
+       >
+         <svg
+diff --git a/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx b/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+index 5a0a3be..fa5faa9 100644
+--- a/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
++++ b/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+@@ -76,7 +76,7 @@ export function MissingKeyBanner({ onOpenSettings }: MissingKeyBannerProps) {
+       className="mx-4 mb-3 mt-2 overflow-hidden rounded-xl border text-xs"
+       style={{
+         borderColor: 'var(--color-warning)',
+-        backgroundColor: 'color-mix(in srgb, var(--color-warning) 8%, transparent)',
++        backgroundColor: 'var(--color-warning-light)',
+       }}
+     >
+       <div className="p-3">
+@@ -96,7 +96,7 @@ export function MissingKeyBanner({ onOpenSettings }: MissingKeyBannerProps) {
+             className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
+             style={{
+               backgroundColor: 'var(--color-primary)',
+-              color: '#ffffff',
++              color: 'var(--color-on-primary, #ffffff)',
+             }}
+             type="button"
+           >
+@@ -239,7 +239,7 @@ export function MessageBubble({ role, content, timestamp, formatTime }: MessageB
+             role === 'user'
+               ? {
+                   backgroundColor: 'var(--color-primary)',
+-                  color: '#ffffff',
++                  color: 'var(--color-on-primary, #ffffff)',
+                   borderBottomRightRadius: '4px',
+                 }
+               : {
+@@ -348,7 +348,7 @@ export function ProactiveMessagePreview({
+         borderColor: priority === 'high' ? 'var(--color-warning)' : 'var(--color-border)',
+         backgroundColor:
+           priority === 'high'
+-            ? 'color-mix(in srgb, var(--color-warning) 8%, transparent)'
++            ? 'var(--color-warning-light)'
+             : 'var(--color-surface-alt)',
+         animation: 'fade-in 0.3s ease-out',
+       }}
+@@ -393,7 +393,7 @@ export function ProactiveMessagePreview({
+           className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
+           style={{
+             backgroundColor: 'var(--color-primary)',
+-            color: '#ffffff',
++            color: 'var(--color-on-primary, #ffffff)',
+           }}
+           type="button"
+         >
+@@ -415,6 +415,22 @@ const uxKeyframes = `
+   0%, 80%, 100% { transform: translateY(0); }
+   40% { transform: translateY(-6px); }
+ }
++@keyframes message-in {
++  from { opacity: 0; transform: translateY(8px); }
++  to { opacity: 1; transform: translateY(0); }
++}
++@keyframes fade-in {
++  from { opacity: 0; }
++  to { opacity: 1; }
++}
++@keyframes chat-popup-in {
++  from { opacity: 0; transform: scale(0.95) translateY(10px); }
++  to { opacity: 1; transform: scale(1) translateY(0); }
++}
++@keyframes chat-popup-out {
++  from { opacity: 1; transform: scale(1) translateY(0); }
++  to { opacity: 0; transform: scale(0.95) translateY(10px); }
++}
+ `
+ 
+ export function ChatUXStyles() {
+diff --git a/apps/web/src/components/aiTutor/FloatingTutorButton.tsx b/apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+index fd5d033..d1fa158 100644
+--- a/apps/web/src/components/aiTutor/FloatingTutorButton.tsx
++++ b/apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+@@ -11,9 +11,9 @@ export default function FloatingTutorButton() {
+           50% { transform: translateY(-4px); }
+         }
+         @keyframes tutor-pulse {
+-          0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+-          70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+-          100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
++          0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 50%, transparent); }
++          70% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--color-primary) 0%, transparent); }
++          100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 0%, transparent); }
+         }
+       `}</style>
+       <div style={wrapperStyle}>
+@@ -50,7 +50,7 @@ const wrapperStyle: React.CSSProperties = {
+   position: 'fixed',
+   bottom: '24px',
+   right: '24px',
+-  zIndex: 9999,
++  zIndex: 100,
+   display: 'flex',
+   flexDirection: 'column',
+   alignItems: 'flex-end',
+@@ -62,19 +62,19 @@ const buttonStyle: React.CSSProperties = {
+   height: '56px',
+   borderRadius: '50%',
+   border: 'none',
+-  background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
+-  color: '#fff',
++  background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-hover))',
++  color: 'var(--color-on-primary, #ffffff)',
+   cursor: 'pointer',
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+-  boxShadow: '0 4px 16px rgba(59, 130, 246, 0.4)',
+-  transition: 'all 0.2s ease',
++  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
++  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+ }
+ 
+ const tooltipStyle: React.CSSProperties = {
+-  background: '#1e293b',
+-  color: '#fff',
++  background: 'var(--color-surface-alt)',
++  color: 'var(--color-text)',
+   padding: '8px 14px',
+   borderRadius: '10px',
+   fontSize: '13px',
+diff --git a/apps/web/src/components/aiTutor/NotificationCenter.tsx b/apps/web/src/components/aiTutor/NotificationCenter.tsx
+index 246abf3..acaca33 100644
+--- a/apps/web/src/components/aiTutor/NotificationCenter.tsx
++++ b/apps/web/src/components/aiTutor/NotificationCenter.tsx
+@@ -171,7 +171,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+             onClick={() => setActiveFilter(cat)}
+             className="relative flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors hover:opacity-80"
+             style={{
+-              backgroundColor: activeFilter === cat ? 'color-mix(in srgb, var(--color-primary) 15%, transparent)' : 'var(--color-surface-alt)',
++              backgroundColor: activeFilter === cat ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
+               color: activeFilter === cat ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+             }}
+             type="button"
+@@ -220,7 +220,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+                 className="flex gap-3 border-b px-4 py-3 transition-colors hover:opacity-90"
+                 style={{
+                   borderColor: 'var(--color-border)',
+-                  backgroundColor: msg.isRead ? 'transparent' : 'color-mix(in srgb, var(--color-primary) 3%, transparent)',
++                  backgroundColor: msg.isRead ? 'transparent' : 'var(--color-primary-light)',
+                 }}
+               >
+                 <div className="flex flex-col items-center gap-1 pt-1">
+@@ -238,7 +238,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+                     <span
+                       className="inline-block rounded px-1.5 py-0.5 text-[10px] font-medium leading-tight"
+                       style={{
+-                        backgroundColor: 'color-mix(in srgb, var(--color-primary) 10%, transparent)',
++                        backgroundColor: 'var(--color-primary-light)',
+                         color: 'var(--color-primary)',
+                       }}
+                     >
+@@ -248,7 +248,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+                       <span
+                         className="inline-block rounded px-1.5 py-0.5 text-[10px] font-medium leading-tight"
+                         style={{
+-                          backgroundColor: 'color-mix(in srgb, var(--color-danger) 10%, transparent)',
++                          backgroundColor: 'var(--color-danger-light)',
+                           color: 'var(--color-danger)',
+                         }}
+                       >
+@@ -274,7 +274,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
+                         className="rounded-lg px-2.5 py-1 text-xs font-medium transition-colors hover:opacity-80"
+                         style={{
+                           backgroundColor: 'var(--color-primary)',
+-                          color: '#fff',
++                          color: 'var(--color-on-primary, #ffffff)',
+                         }}
+                         type="button"
+                       >
+diff --git a/apps/web/src/components/aiTutor/ProactiveSettings.tsx b/apps/web/src/components/aiTutor/ProactiveSettings.tsx
+index dfdcf1f..8a6e4ce 100644
+--- a/apps/web/src/components/aiTutor/ProactiveSettings.tsx
++++ b/apps/web/src/components/aiTutor/ProactiveSettings.tsx
+@@ -105,7 +105,7 @@ export default function ProactiveSettings({ onClose }: ProactiveSettingsProps) {
+       <div className="flex-1 space-y-5 p-4 text-sm">
+         <div className="rounded-lg border px-4 py-3 text-xs leading-relaxed" style={{
+           borderColor: 'var(--color-info)',
+-          backgroundColor: 'color-mix(in srgb, var(--color-info) 8%, transparent)',
++          backgroundColor: 'var(--color-info-light)',
+           color: 'var(--color-text-secondary)',
+         }}>
+           <p className="font-medium" style={{ color: 'var(--color-text)' }}>Local-First Notice</p>
+@@ -143,7 +143,7 @@ export default function ProactiveSettings({ onClose }: ProactiveSettingsProps) {
+             {settings.aiEnhanced && (
+               <div className="rounded-lg border px-4 py-3 text-xs leading-relaxed" style={{
+                 borderColor: 'var(--color-warning)',
+-                backgroundColor: 'color-mix(in srgb, var(--color-warning) 8%, transparent)',
++                backgroundColor: 'var(--color-warning-light)',
+                 color: 'var(--color-text-secondary)',
+               }}>
+                 <p className="font-medium" style={{ color: 'var(--color-text)' }}>Privacy Notice</p>
+diff --git a/apps/web/src/components/aiTutor/SpeakingPartner.tsx b/apps/web/src/components/aiTutor/SpeakingPartner.tsx
+index 2cd6586..8006317 100644
+--- a/apps/web/src/components/aiTutor/SpeakingPartner.tsx
++++ b/apps/web/src/components/aiTutor/SpeakingPartner.tsx
+@@ -310,10 +310,17 @@ function analyzeText(text: string): AnalysisResult {
+           explanation: `After "${parts[0]}", use "${verb === 'are' ? 'is' : verb === 'were' ? 'was' : verb === 'do' ? 'does' : "doesn't"}" for present simple.`,
+         })
+       }
++      if ((subject === 'we' || subject === 'they') && (verb === 'is' || verb === 'was' || verb === 'does' || verb === "doesn't")) {
++        errors.push({
++          original: m,
++          suggestion: `${parts[0]} ${verb === 'is' ? 'are' : verb === 'was' ? 'were' : verb === 'does' ? 'do' : "don't"}`,
++          explanation: `After "${parts[0]}", use "${verb === 'is' ? 'are' : verb === 'was' ? 'were' : verb === 'does' ? 'do' : "don't"}" for present simple.`,
++        })
++      }
+     })
+   }
+ 
+-  const articleErrors = text.match(/\ba (apple|hour|honest|umbrella|university|one|european)/gi)
++  const articleErrors = text.match(/\ba (apple|hour|honest|umbrella)/gi)
+   if (articleErrors) {
+     articleErrors.forEach(m => {
+       const word = m.toLowerCase().replace(/^a\s+/, '')
+@@ -345,32 +352,32 @@ function estimateBand(_text: string, analysis: AnalysisResult): BandEstimate {
+   const errorCount = analysis.detectedErrors.length
+ 
+   let fluency = 5.0
+-  if (wordCount >= 80) fluency = 6.0
+-  if (wordCount >= 120) fluency = 6.5
+-  if (wordCount >= 180) fluency = 7.0
+-  if (wordCount >= 250) fluency = 7.5
+-  if (wordCount >= 320) fluency = 8.0
+   if (wordCount >= 400) fluency = 8.5
+-  if (wordCount < 30) fluency = 4.0
+-  if (wordCount < 50) fluency = 5.0
++  else if (wordCount >= 320) fluency = 8.0
++  else if (wordCount >= 250) fluency = 7.5
++  else if (wordCount >= 180) fluency = 7.0
++  else if (wordCount >= 120) fluency = 6.5
++  else if (wordCount >= 80) fluency = 6.0
++  else if (wordCount >= 50) fluency = 5.0
++  else fluency = 4.0
+ 
+   let vocabulary = 5.0
+-  if (uniqueRatio >= 0.5) vocabulary = 6.0
+-  if (uniqueRatio >= 0.55) vocabulary = 6.5
+-  if (uniqueRatio >= 0.6) vocabulary = 7.0
+-  if (uniqueRatio >= 0.65) vocabulary = 7.5
+   if (uniqueRatio >= 0.7) vocabulary = 8.0
+-  if (uniqueRatio < 0.4) vocabulary = 4.5
++  else if (uniqueRatio >= 0.65) vocabulary = 7.5
++  else if (uniqueRatio >= 0.6) vocabulary = 7.0
++  else if (uniqueRatio >= 0.55) vocabulary = 6.5
++  else if (uniqueRatio >= 0.5) vocabulary = 6.0
++  else if (uniqueRatio < 0.4) vocabulary = 4.5
+ 
+   if (linkingCount >= 1) vocabulary = Math.max(vocabulary, 6.0)
+   if (linkingCount >= 3) vocabulary = Math.max(vocabulary, 6.5)
+   if (linkingCount >= 5) vocabulary = Math.max(vocabulary, 7.0)
+ 
+   let grammar = 5.0
+-  if (complexCount >= 2) grammar = 6.0
+-  if (complexCount >= 4) grammar = 6.5
+-  if (complexCount >= 6) grammar = 7.0
+   if (complexCount >= 8) grammar = 7.5
++  else if (complexCount >= 6) grammar = 7.0
++  else if (complexCount >= 4) grammar = 6.5
++  else if (complexCount >= 2) grammar = 6.0
+   if (errorCount >= 3) grammar = Math.min(grammar, 5.5)
+   if (errorCount >= 5) grammar = Math.min(grammar, 5.0)
+   if (errorCount === 0 && wordCount > 50) grammar = Math.max(grammar, 6.0)
+diff --git a/apps/web/src/components/aiTutor/TeachingMode.tsx b/apps/web/src/components/aiTutor/TeachingMode.tsx
+index fc03b10..55f87d1 100644
+--- a/apps/web/src/components/aiTutor/TeachingMode.tsx
++++ b/apps/web/src/components/aiTutor/TeachingMode.tsx
+@@ -550,14 +550,14 @@ export function detectLessonFromMessage(
+   const lower = message.toLowerCase()
+   const lessons = type === 'grammar' ? GRAMMAR_LESSONS : VOCABULARY_LESSONS
+ 
++  const stopWords = new Set(['and', 'the', 'for', 'are', 'but', 'not', 'you', 'all', 'can', 'had', 'her', 'was', 'one', 'our', 'out', 'has', 'have', 'been', 'some', 'same', 'part', 'very', 'each', 'just', 'than', 'them', 'then', 'were', 'what', 'when', 'which', 'will', 'with', 'about', 'into', 'over', 'such', 'that', 'this', 'your'])
++
+   for (const [, lesson] of Object.entries(lessons)) {
+-    const keywords = lesson.title.toLowerCase().split(' ').concat(
+-      lesson.examples.some(e => lower.includes(e.toLowerCase().slice(0, 15))) ? [lesson.topic] : [],
+-    )
+-    if (keywords.some(k => lower.includes(k))) {
++    const keywords = lesson.title.toLowerCase().split(/\s+/).filter(k => k.length > 3 && !stopWords.has(k))
++    if (keywords.some(k => new RegExp('\\b' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i').test(lower))) {
+       return { lesson, confidence: 'high' }
+     }
+-    if (lesson.rules.some(r => lower.includes(r.toLowerCase().slice(0, 20)))) {
++    if (lesson.rules.some(r => new RegExp(r.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(lower))) {
+       return { lesson, confidence: 'medium' }
+     }
+   }
+@@ -651,7 +651,7 @@ export function generateFeedbackMessage(
+ ): string {
+   const correct = exerciseResults.filter(r => r.isCorrect).length
+   const total = exerciseResults.length
+-  const score = Math.round((correct / total) * 100)
++  const score = total > 0 ? Math.round((correct / total) * 100) : 0
+ 
+   const engSuggest = `**Suggested next topic:** ${getLessonTitle(lesson.nextTopic, lesson.type !== 'grammar') ??
+     lesson.nextTopic.replace('-', ' ')}`
+diff --git a/apps/web/src/components/aiTutor/WritingTutor.tsx b/apps/web/src/components/aiTutor/WritingTutor.tsx
+index c577264..9eff484 100644
+--- a/apps/web/src/components/aiTutor/WritingTutor.tsx
++++ b/apps/web/src/components/aiTutor/WritingTutor.tsx
+@@ -478,10 +478,11 @@ interface WritingAnalysis {
+ function detectGrammarIssues(text: string): GrammarIssue[] {
+   const issues: GrammarIssue[] = []
+ 
+-  const subjVerbMatches = text.match(/\b(He|She|It|The (child|student|person|government|company|country)) (are|were|have|do|don't)\b/gi)
++  const subjVerbMatches = text.match(/\b(The\s+\w+|\bHe|She|It)\s+(are|were|have|do|don't)\b/gi)
+   if (subjVerbMatches) {
+     subjVerbMatches.forEach(m => {
+-      const subject = m.split(' ')[0]
++      const match = m.match(/\b(He|She|It|The (\w+)) (are|were|have|do|don't)\b/i)
++      const subject = match ? match[1] : m.split(' ')[0]
+       issues.push({
+         original: m,
+         suggestion: m.replace(/\bare\b/i, 'is').replace(/\bwere\b/i, 'was').replace(/\bhave\b/i, 'has').replace(/\bdo\b/i, 'does').replace(/\bdon't\b/i, "doesn't"),
+@@ -501,7 +502,7 @@ function detectGrammarIssues(text: string): GrammarIssue[] {
+     })
+   }
+ 
+-  const articleMatches = text.match(/\ba (apple|hour|honest|umbrella|heir|herb)\b/gi)
++  const articleMatches = text.match(/\ba (apple|hour|honest|umbrella|heir)\b/gi)
+   if (articleMatches) {
+     articleMatches.forEach(m => {
+       const word = m.replace(/^a\s+/i, '')
+@@ -716,8 +717,8 @@ function improveVocabulary(text: string): string {
+     .replace(/\bbad\b/gi, 'detrimental')
+     .replace(/\bbig\b/gi, 'significant')
+     .replace(/\bsmall\b/gi, 'minor')
+-    .replace(/\bvery\b/gi, '')
+-    .replace(/\breally\b/gi, '')
++    .replace(/\bvery\b/gi, 'extremely')
++    .replace(/\breally\b/gi, 'extremely')
+     .replace(/\ba lot\b/gi, 'significantly')
+     .replace(/\bpeople\b/gi, 'individuals')
+     .replace(/\bthings?\b/gi, 'aspects')
+[0m
+[0m→ [0mRead packages/ai-tutor/src/components/ChatWidget.tsx[90m [offset=130, limit=30][0m
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension && npx vite build 2>&1 | tail -15
+vite v6.4.3 building for production...
+transforming...
+✓ 166 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/popup.html                 0.61 kB │ gzip:  0.35 kB
+dist/options.html               0.63 kB │ gzip:  0.36 kB
+dist/assets/options.css         2.00 kB │ gzip:  0.78 kB
+dist/assets/popup.css           2.19 kB │ gzip:  0.82 kB
+dist/assets/options.js         10.35 kB │ gzip:  3.49 kB
+dist/assets/popup.js          150.06 kB │ gzip: 36.06 kB
+dist/assets/chunk-schemas.js  264.80 kB │ gzip: 79.86 kB
+✓ built in 537ms
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vite build 2>&1 | tail -15
+dist/assets/index-CK3h5Scy.css     73.79 kB │ gzip:  12.45 kB
+dist/assets/index-Cl7UwYdC.js   1,540.87 kB │ gzip: 407.77 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.54s
+
+PWA v1.3.0
+mode      generateSW
+precache  7 entries (1578.08 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-9c191d2f.js
+[0m
+[0m# [0mTodos
+[✓] Verify current fixes are correct and complete in extension App.tsx and web Layout.tsx
+[✓] Check if apps/extension/src/popup/main.tsx needs changes
+[✓] Check if ChatPopup.tsx visibility logic needs fixing
+[✓] Run validation (lint/typecheck/test)
+[0m
+[2026-07-02T07:42:26.192Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-02T07:42:26.195Z] [INFO] Task completed successfully

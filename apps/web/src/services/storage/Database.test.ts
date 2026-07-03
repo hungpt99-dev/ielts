@@ -4,7 +4,9 @@ import {
   DatabaseService,
   ValidationError,
   destroyDb,
+  getDb,
 } from './Database'
+import { isDbOpen } from '@ielts/storage'
 import { removeAppSettings } from './SettingsStorage'
 import type { TopicProgress } from '../../models'
 
@@ -301,5 +303,58 @@ describe('TopicProgress export and import', () => {
     const all = await DatabaseService.getAll<TopicProgress>('topicsProgress')
     expect(all).toHaveLength(1)
     expect(all[0].id).toBe(tp.id as string)
+  })
+})
+
+describe('Database connection lifecycle', () => {
+  it('getDb() returns a usable connection after destroyDb()', async () => {
+    expect(isDbOpen()).toBe(false)
+    const db = getDb()
+    expect(db).toBeDefined()
+    expect(isDbOpen()).toBe(true)
+    await db.open()
+    expect(db.isOpen()).toBe(true)
+  })
+
+  it('isDbOpen tracks open/close state correctly', async () => {
+    expect(isDbOpen()).toBe(false)
+    const db = getDb()
+    expect(isDbOpen()).toBe(true)
+    destroyDb()
+    expect(isDbOpen()).toBe(false)
+    getDb()
+    expect(isDbOpen()).toBe(true)
+    destroyDb()
+    expect(isDbOpen()).toBe(false)
+  })
+
+  it('DatabaseService operations auto-reopen when DB is closed (no "Database is closed" error)', async () => {
+    const item = asRecord(makeTopicProgress({ topic: 'Auto Reopen' }))
+    const id = await DatabaseService.safeAdd('topicsProgress', item)
+    expect(id).toBeTruthy()
+    const fetched = await DatabaseService.safeGetById<TopicProgress>('topicsProgress', id)
+    expect(fetched).toBeDefined()
+    expect(fetched!.topic).toBe('Auto Reopen')
+  })
+
+  it('survives multiple close/reopen cycles without errors', async () => {
+    for (let i = 0; i < 3; i++) {
+      const item = asRecord(makeTopicProgress({ topic: `Cycle ${i}` }))
+      const id = await DatabaseService.safeAdd('topicsProgress', item)
+      expect(id).toBeTruthy()
+      const fetched = await DatabaseService.safeGetById<TopicProgress>('topicsProgress', id)
+      expect(fetched).toBeDefined()
+      expect(fetched!.topic).toBe(`Cycle ${i}`)
+      destroyDb()
+    }
+    const item = asRecord(makeTopicProgress({ topic: 'Final Cycle' }))
+    const id = await DatabaseService.safeAdd('topicsProgress', item)
+    expect(id).toBeTruthy()
+  })
+
+  it('reuses the same DB instance on repeated getDb() calls', async () => {
+    const db1 = getDb()
+    const db2 = getDb()
+    expect(db1).toBe(db2)
   })
 })

@@ -171,7 +171,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
             onClick={() => setActiveFilter(cat)}
             className="relative flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors hover:opacity-80"
             style={{
-              backgroundColor: activeFilter === cat ? 'color-mix(in srgb, var(--color-primary) 15%, transparent)' : 'var(--color-surface-alt)',
+              backgroundColor: activeFilter === cat ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
               color: activeFilter === cat ? 'var(--color-primary)' : 'var(--color-text-secondary)',
             }}
             type="button"
@@ -220,7 +220,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
                 className="flex gap-3 border-b px-4 py-3 transition-colors hover:opacity-90"
                 style={{
                   borderColor: 'var(--color-border)',
-                  backgroundColor: msg.isRead ? 'transparent' : 'color-mix(in srgb, var(--color-primary) 3%, transparent)',
+                  backgroundColor: msg.isRead ? 'transparent' : 'var(--color-primary-light)',
                 }}
               >
                 <div className="flex flex-col items-center gap-1 pt-1">
@@ -238,7 +238,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
                     <span
                       className="inline-block rounded px-1.5 py-0.5 text-[10px] font-medium leading-tight"
                       style={{
-                        backgroundColor: 'color-mix(in srgb, var(--color-primary) 10%, transparent)',
+                        backgroundColor: 'var(--color-primary-light)',
                         color: 'var(--color-primary)',
                       }}
                     >
@@ -248,7 +248,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
                       <span
                         className="inline-block rounded px-1.5 py-0.5 text-[10px] font-medium leading-tight"
                         style={{
-                          backgroundColor: 'color-mix(in srgb, var(--color-danger) 10%, transparent)',
+                          backgroundColor: 'var(--color-danger-light)',
                           color: 'var(--color-danger)',
                         }}
                       >
@@ -274,7 +274,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
                         className="rounded-lg px-2.5 py-1 text-xs font-medium transition-colors hover:opacity-80"
                         style={{
                           backgroundColor: 'var(--color-primary)',
-                          color: '#fff',
+                          color: 'var(--color-on-primary, #ffffff)',
                         }}
                         type="button"
                       >

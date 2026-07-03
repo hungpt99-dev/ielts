@@ -1,0 +1,327 @@
+{
+  "title": "Audit and Plan Completion of IELTS Journey Codebase",
+  "summary": "Audit existing IELTS Journey codebase for incomplete features, broken flows, and quality issues, then create a detailed implementation plan for completing all features with production-ready quality.",
+  "tasks": [
+    {
+      "title": "Audit existing architecture and core packages",
+      "description": "Review the overall project architecture including apps/web, packages (learning-engine, ai, storage, exercises, content, import-export), routes, and extension scripts. Document the current structure, dependencies, and integration points. Identify any architectural inconsistencies or potential improvements without rewriting working parts.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Documented architecture overview with package roles and integration",
+        "List of architectural inconsistencies or improvement opportunities"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/architecture-audit.md",
+          "description": "Architecture audit report describing project structure and integration",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "expectedResult": "A clear documented understanding of the current architecture and packages with notes on any inconsistencies or areas for improvement.",
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Project source code and existing documentation",
+      "targetFiles": [
+        "docs/architecture-audit.md"
+      ],
+      "targetArtifacts": [
+        "architecture-audit.md"
+      ],
+      "evidence": [
+        "docs/architecture-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/architecture-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundational understanding for targeted improvements and completion plan."
+    },
+    {
+      "title": "Audit existing feature modules and UI components",
+      "description": "Review all feature modules under apps/web/src/features/, including onboarding, dashboard, vocabulary, article library, exercise center, writing and speaking banks, daily plan, AI settings, import/export, progress tracking, privacy, and settings. Identify incomplete features, placeholder UI, mock data usage, missing logic connections, and broken flows. Document findings per feature.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing architecture and core packages"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Detailed report listing incomplete features, placeholder UI, mock data, and broken flows per feature module"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/feature-audit.md",
+          "description": "Feature audit report detailing incomplete or broken features and UI issues",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "expectedResult": "A comprehensive feature audit report identifying all incomplete or broken features and UI issues in the web app.",
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Project source code, especially apps/web/src/features/",
+      "targetFiles": [
+        "docs/feature-audit.md"
+      ],
+      "targetArtifacts": [
+        "feature-audit.md"
+      ],
+      "evidence": [
+        "docs/feature-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/feature-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Identifies UI and feature gaps to target for completion."
+    },
+    {
+      "title": "Audit Chrome extension features and content scripts",
+      "description": "Review all Chrome extension features including webpage IELTS word highlighting, word tooltip, save word/article, selected text action menu, sentence explanation, article-to-IELTS generation, floating IELTS assistant, extension popup and settings, YouTube transcript support, and sync with local storage or IndexedDB. Identify incomplete or broken flows, missing persistence, UI isolation issues, and manifest V3 compliance.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing architecture and core packages"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Documented audit report listing incomplete or broken extension features, UI isolation issues, and manifest compliance"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-audit.md",
+          "description": "Chrome extension audit report detailing incomplete features and compliance issues",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "expectedResult": "A detailed audit report of the Chrome extension features with identified issues and missing parts.",
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Project source code, especially extension scripts and manifest files",
+      "targetFiles": [
+        "docs/extension-audit.md"
+      ],
+      "targetArtifacts": [
+        "extension-audit.md"
+      ],
+      "evidence": [
+        "docs/extension-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/extension-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Identifies extension feature gaps and compliance issues for targeted fixes."
+    },
+    {
+      "title": "Audit storage layer and persistence logic",
+      "description": "Review the storage layer implementation in packages/storage and apps/web/src/services/storage/Database.ts. Identify missing persistence, error handling, validation, and test coverage. Check IndexedDB usage, localStorage for API keys, and sync mechanisms between extension and web app. Document issues and improvement points.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing architecture and core packages"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Storage audit report listing missing persistence, error handling gaps, and validation issues"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/storage-audit.md",
+          "description": "Storage layer audit report detailing persistence and error handling issues",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "expectedResult": "A clear report on storage layer issues and missing features to address for production readiness.",
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Storage package source code and database service code",
+      "targetFiles": [
+        "docs/storage-audit.md"
+      ],
+      "targetArtifacts": [
+        "storage-audit.md"
+      ],
+      "evidence": [
+        "docs/storage-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/storage-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures persistence and error handling are robust for production."
+    },
+    {
+      "title": "Audit AI integration and error handling",
+      "description": "Review AI integration points in packages/ai, packages/ai-tutor, and related web app features. Verify handling of missing API keys, loading states, error states, invalid responses, and success states. Identify missing validation, error handling, and user messaging. Document findings and improvement areas.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing architecture and core packages"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "AI integration audit report with identified missing error handling and validation"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/ai-integration-audit.md",
+          "description": "AI integration audit report detailing error handling and validation gaps",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "expectedResult": "A detailed report on AI integration robustness and user experience improvements needed.",
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "AI packages and web app AI feature source code",
+      "targetFiles": [
+        "docs/ai-integration-audit.md"
+      ],
+      "targetArtifacts": [
+        "ai-integration-audit.md"
+      ],
+      "evidence": [
+        "docs/ai-integration-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/ai-integration-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Improves AI feature reliability and user experience."
+    },
+    {
+      "title": "Audit test coverage and quality",
+      "description": "Review existing unit, integration, and E2E tests for core logic, storage, AI prompt builders, vocabulary detection, article extraction, exercise parsing, daily task generation, and key user flows. Identify missing or broken tests. Document test coverage gaps and flaky tests.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing architecture and core packages"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Test coverage audit report listing missing tests and flaky tests"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/test-coverage-audit.md",
+          "description": "Test coverage audit report detailing missing and flaky tests",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "expectedResult": "A comprehensive test audit report identifying gaps and flaky tests to fix.",
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Test source code and test results",
+      "targetFiles": [
+        "docs/test-coverage-audit.md"
+      ],
+      "targetArtifacts": [
+        "test-coverage-audit.md"
+      ],
+      "evidence": [
+        "docs/test-coverage-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/test-coverage-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures test quality and coverage for stable production release."
+    },
+    {
+      "title": "Create comprehensive implementation plan for completing all features",
+      "description": "Based on all audit reports (architecture, features, extension, storage, AI, tests), create a detailed step-by-step implementation plan. The plan must specify tasks to fix incomplete features, broken flows, missing persistence, error handling, validation, UI placeholders, and test gaps. Prioritize tasks to ensure incremental, safe improvements preserving existing working parts.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing architecture and core packages",
+        "Audit existing feature modules and UI components",
+        "Audit Chrome extension features and content scripts",
+        "Audit storage layer and persistence logic",
+        "Audit AI integration and error handling",
+        "Audit test coverage and quality"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "A detailed implementation plan with prioritized tasks and dependencies",
+        "Plan covers all core website and extension features",
+        "Plan includes testing and validation steps"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/implementation-plan.json",
+          "description": "JSON formatted detailed implementation plan for completing all features",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "expectedResult": "A clear, actionable implementation plan guiding the completion of all features with production-ready quality.",
+      "taskType": "planning",
+      "actionType": "generate",
+      "inputContext": "All audit reports generated in previous tasks",
+      "targetFiles": [
+        "docs/implementation-plan.json"
+      ],
+      "targetArtifacts": [
+        "implementation-plan.json"
+      ],
+      "evidence": [
+        "docs/implementation-plan.json file exists"
+      ],
+      "verificationCommand": "ls docs/implementation-plan.json",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a roadmap for completing the project to production quality."
+    }
+  ]
+}

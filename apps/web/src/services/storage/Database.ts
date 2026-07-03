@@ -32,6 +32,7 @@ import { saveAppSettings, removeAppSettings } from './SettingsStorage'
 
 import { ValidationError } from '@ielts/storage'
 export { ValidationError } from '@ielts/storage'
+export type { PaginationParams, PaginatedResult } from '@ielts/storage'
 
 export class DatabaseError extends Error {
   constructor(message: string, public cause?: unknown) {
@@ -173,6 +174,9 @@ function getRepo(table: keyof IDatabase) {
 
 async function safeDbLocal<T>(fn: () => Promise<T>): Promise<T> {
   try {
+    if (!isDbOpen()) {
+      getDb()
+    }
     return await safeDb(fn)
   } catch (error) {
     if (error instanceof DatabaseError || error instanceof ValidationError) throw error
@@ -188,6 +192,12 @@ export const DatabaseService = {
   async safeGetAll<T>(table: keyof IDatabase): Promise<T[]> {
     return safeDbLocal(async () => {
       return (await getRepo(table).findAll()) as unknown as T[]
+    })
+  },
+
+  async safeGetAllPaginated<T>(table: keyof IDatabase, params?: { page?: number; pageSize?: number }): Promise<PaginatedResult<T>> {
+    return safeDbLocal(async () => {
+      return (await getRepo(table).findAllPaginated(params)) as unknown as PaginatedResult<T>
     })
   },
 
@@ -269,7 +279,9 @@ export const DatabaseService = {
   },
 
   async updateVocabulary(id: string, changes: Partial<VocabularyEntry>): Promise<void> {
-    return repo.vocabulary.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.vocabulary.update(id, changes as never)
+    })
   },
 
   async addIeltsTopic(item: Omit<IeltsTopic, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<IeltsTopic> {
@@ -279,7 +291,9 @@ export const DatabaseService = {
   },
 
   async updateIeltsTopic(id: string, changes: Partial<IeltsTopic>): Promise<void> {
-    return repo.ieltsTopics.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.ieltsTopics.update(id, changes as never)
+    })
   },
 
   async addExampleSentence(item: Omit<ExampleSentence, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<ExampleSentence> {
@@ -289,7 +303,9 @@ export const DatabaseService = {
   },
 
   async updateExampleSentence(id: string, changes: Partial<ExampleSentence>): Promise<void> {
-    return repo.exampleSentences.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.exampleSentences.update(id, changes as never)
+    })
   },
 
   async addReadingPassage(item: Omit<ReadingPassage, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<ReadingPassage> {
@@ -299,7 +315,9 @@ export const DatabaseService = {
   },
 
   async updateReadingPassage(id: string, changes: Partial<ReadingPassage>): Promise<void> {
-    return repo.readingPassages.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.readingPassages.update(id, changes as never)
+    })
   },
 
   async addListeningTranscript(item: Omit<ListeningTranscript, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<ListeningTranscript> {
@@ -309,7 +327,9 @@ export const DatabaseService = {
   },
 
   async updateListeningTranscript(id: string, changes: Partial<ListeningTranscript>): Promise<void> {
-    return repo.listeningTranscripts.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.listeningTranscripts.update(id, changes as never)
+    })
   },
 
   async addWritingPrompt(item: Omit<WritingPrompt, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<WritingPrompt> {
@@ -319,7 +339,9 @@ export const DatabaseService = {
   },
 
   async updateWritingPrompt(id: string, changes: Partial<WritingPrompt>): Promise<void> {
-    return repo.writingPrompts.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.writingPrompts.update(id, changes as never)
+    })
   },
 
   async addSpeakingQuestion(item: Omit<SpeakingQuestion, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<SpeakingQuestion> {
@@ -329,7 +351,9 @@ export const DatabaseService = {
   },
 
   async updateSpeakingQuestion(id: string, changes: Partial<SpeakingQuestion>): Promise<void> {
-    return repo.speakingQuestions.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.speakingQuestions.update(id, changes as never)
+    })
   },
 
   async addStudyNote(item: Omit<StudyNote, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<StudyNote> {
@@ -339,7 +363,9 @@ export const DatabaseService = {
   },
 
   async updateStudyNote(id: string, changes: Partial<StudyNote>): Promise<void> {
-    return repo.studyNotes.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.studyNotes.update(id, changes as never)
+    })
   },
 
   async addCustomStudyPlan(item: Omit<CustomStudyPlan, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<CustomStudyPlan> {
@@ -349,7 +375,9 @@ export const DatabaseService = {
   },
 
   async updateCustomStudyPlan(id: string, changes: Partial<CustomStudyPlan>): Promise<void> {
-    return repo.customStudyPlans.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.customStudyPlans.update(id, changes as never)
+    })
   },
 
   async addUsefulPhrase(item: Omit<UsefulPhrase, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<UsefulPhrase> {
@@ -359,7 +387,9 @@ export const DatabaseService = {
   },
 
   async updateUsefulPhrase(id: string, changes: Partial<UsefulPhrase>): Promise<void> {
-    return repo.usefulPhrases.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.usefulPhrases.update(id, changes as never)
+    })
   },
 
   async addAiContent(item: Omit<AiContent, 'id' | 'createdAt'> & { id?: string }): Promise<AiContent> {
@@ -375,7 +405,9 @@ export const DatabaseService = {
   },
 
   async updatePublicApiContent(id: string, changes: Partial<PublicApiImportedContent>): Promise<void> {
-    return repo.publicApiContent.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.publicApiContent.update(id, changes as never)
+    })
   },
 
   async addProgressRecord(item: Omit<ProgressRecord, 'id' | 'createdAt'> & { id?: string }): Promise<ProgressRecord> {
@@ -391,7 +423,9 @@ export const DatabaseService = {
   },
 
   async updateGrammarNote(id: string, changes: Partial<GrammarNote>): Promise<void> {
-    return repo.grammarNotes.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.grammarNotes.update(id, changes as never)
+    })
   },
 
   async addMistake(item: Omit<MistakeEntry, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<MistakeEntry> {
@@ -401,7 +435,9 @@ export const DatabaseService = {
   },
 
   async updateMistake(id: string, changes: Partial<MistakeEntry>): Promise<void> {
-    return repo.mistakes.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.mistakes.update(id, changes as never)
+    })
   },
 
   async addTask(item: Omit<TaskEntry, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<TaskEntry> {
@@ -411,7 +447,9 @@ export const DatabaseService = {
   },
 
   async updateTask(id: string, changes: Partial<TaskEntry>): Promise<void> {
-    return repo.tasks.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.tasks.update(id, changes as never)
+    })
   },
 
   async addReadingSession(item: Omit<ReadingSession, 'id' | 'createdAt'> & { id?: string }): Promise<ReadingSession> {
@@ -445,7 +483,9 @@ export const DatabaseService = {
   },
 
   async updatePassageEntry(id: string, changes: Partial<PassageEntry>): Promise<void> {
-    return repo.passages.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.passages.update(id, changes as never)
+    })
   },
 
   async addVocabReviewEntry(item: Omit<VocabReviewEntry, 'id'> & { id?: string }): Promise<VocabReviewEntry> {
@@ -455,7 +495,9 @@ export const DatabaseService = {
   },
 
   async updateVocabReviewEntry(id: string, changes: Partial<VocabReviewEntry>): Promise<void> {
-    return repo.vocabularyReviews.update(id, changes as never)
+    return safeDbLocal(async () => {
+      await repo.vocabularyReviews.update(id, changes as never)
+    })
   },
 
   async addReadingPracticeSession(item: Omit<ReadingPracticeSession, 'id' | 'createdAt'> & { id?: string }): Promise<ReadingPracticeSession> {
@@ -483,14 +525,20 @@ export const DatabaseService = {
   },
 
   async updateTopicProgress(id: string, changes: Partial<TopicProgress>): Promise<void> {
-    return repo.topicsProgress.update(id, {
-      ...changes,
-      lastReviewedAt: new Date().toISOString(),
-    } as never)
+    return safeDbLocal(async () => {
+      await repo.topicsProgress.update(id, {
+        ...changes,
+        lastReviewedAt: new Date().toISOString(),
+      } as never)
+    })
   },
 
   async getAll<T>(table: keyof IDatabase): Promise<T[]> {
     return this.safeGetAll<T>(table)
+  },
+
+  async getAllPaginated<T>(table: keyof IDatabase, params?: { page?: number; pageSize?: number }): Promise<PaginatedResult<T>> {
+    return this.safeGetAllPaginated<T>(table, params)
   },
 
   async getById<T>(table: keyof IDatabase, id: string): Promise<T | undefined> {
@@ -666,7 +714,9 @@ export const DatabaseService = {
   },
 
   async getTasksForDate(date: string): Promise<TaskEntry[]> {
-    return repo.tasks.findByDate(date) as unknown as Promise<TaskEntry[]>
+    return safeDbLocal(async () => {
+      return repo.tasks.findByDate(date) as unknown as Promise<TaskEntry[]>
+    })
   },
 
   async getSessionsBetween(
@@ -678,65 +728,73 @@ export const DatabaseService = {
     writingSessions: WritingSession[]
     speakingSessions: SpeakingSession[]
   }> {
-    const [reading, listening, writing, speaking] = await Promise.all([
-      repo.readingSessions.findByDateRange('createdAt', start, end),
-      repo.listeningSessions.findByDateRange('createdAt', start, end),
-      repo.writingSessions.findByDateRange('createdAt', start, end),
-      repo.speakingSessions.findByDateRange('createdAt', start, end),
-    ])
-    return {
-      readingSessions: reading as unknown as ReadingSession[],
-      listeningSessions: listening as unknown as ListeningSession[],
-      writingSessions: writing as unknown as WritingSession[],
-      speakingSessions: speaking as unknown as SpeakingSession[],
-    }
+    return safeDbLocal(async () => {
+      const [reading, listening, writing, speaking] = await Promise.all([
+        repo.readingSessions.findByDateRange('createdAt', start, end),
+        repo.listeningSessions.findByDateRange('createdAt', start, end),
+        repo.writingSessions.findByDateRange('createdAt', start, end),
+        repo.speakingSessions.findByDateRange('createdAt', start, end),
+      ])
+      return {
+        readingSessions: reading as unknown as ReadingSession[],
+        listeningSessions: listening as unknown as ListeningSession[],
+        writingSessions: writing as unknown as WritingSession[],
+        speakingSessions: speaking as unknown as SpeakingSession[],
+      }
+    })
   },
 
   async getStats(): Promise<DatabaseStats> {
-    const entries = await Promise.all(
-      TABLE_NAMES.map(async (name) => ({
-        name,
-        count: await getRepo(name as TableName).count(),
-      })),
-    )
-    const stats: DatabaseStats = {}
-    for (const { name, count } of entries) {
-      stats[name] = count
-    }
-    return stats
+    return safeDbLocal(async () => {
+      const entries = await Promise.all(
+        TABLE_NAMES.map(async (name) => ({
+          name,
+          count: await getRepo(name as TableName).count(),
+        })),
+      )
+      const stats: DatabaseStats = {}
+      for (const { name, count } of entries) {
+        stats[name] = count
+      }
+      return stats
+    })
   },
 
   async exportAll(): Promise<AppExportData> {
-    const data = await exportAllData()
-    const result: Record<string, unknown> = {
-      version: data.meta.version,
-      exportedAt: data.meta.exportedAt,
-      settings: data.settings,
-    }
-    for (const name of TABLE_NAMES) {
-      result[name] = (data as unknown as Record<string, unknown>)[name]
-    }
-    return result as unknown as AppExportData
+    return safeDbLocal(async () => {
+      const data = await exportAllData()
+      const result: Record<string, unknown> = {
+        version: data.meta.version,
+        exportedAt: data.meta.exportedAt,
+        settings: data.settings,
+      }
+      for (const name of TABLE_NAMES) {
+        result[name] = (data as unknown as Record<string, unknown>)[name]
+      }
+      return result as unknown as AppExportData
+    })
   },
 
   async importAll(data: AppExportData, mode: 'merge' | 'replace' = 'replace'): Promise<{ added: number; updated: number; skipped: number; failed: number; errors: string[] }> {
-    if (!data || typeof data !== 'object') {
-      throw new DatabaseError('Invalid backup data: must be an object')
-    }
-    const obj = data as unknown as Record<string, unknown>
-    if (typeof obj.version !== 'number') throw new DatabaseError('Invalid backup data: version must be a number')
-    if (typeof obj.exportedAt !== 'string') throw new DatabaseError('Invalid backup data: exportedAt must be a string')
-    if (!obj.settings || typeof obj.settings !== 'object') throw new DatabaseError('Invalid backup data: settings is required')
-    for (const key of TABLE_NAMES) {
-      if (!Array.isArray(obj[key])) {
-        throw new DatabaseError(`Invalid backup data: ${key} must be an array`)
+    return safeDbLocal(async () => {
+      if (!data || typeof data !== 'object') {
+        throw new DatabaseError('Invalid backup data: must be an object')
       }
-    }
-    const result = await importBackup(data as never, mode)
-    if (data.settings) {
-      saveAppSettings(data.settings as never)
-    }
-    return result
+      const obj = data as unknown as Record<string, unknown>
+      if (typeof obj.version !== 'number') throw new DatabaseError('Invalid backup data: version must be a number')
+      if (typeof obj.exportedAt !== 'string') throw new DatabaseError('Invalid backup data: exportedAt must be a string')
+      if (!obj.settings || typeof obj.settings !== 'object') throw new DatabaseError('Invalid backup data: settings is required')
+      for (const key of TABLE_NAMES) {
+        if (!Array.isArray(obj[key])) {
+          throw new DatabaseError(`Invalid backup data: ${key} must be an array`)
+        }
+      }
+      const result = await importBackup(data as never, mode)
+      if (data.settings) {
+        saveAppSettings(data.settings as never)
+      }
+      return result
+    })
   },
 
   async importReplaceAll(data: AppExportData): Promise<{ added: number; updated: number; skipped: number; failed: number; errors: string[] }> {
@@ -762,43 +820,47 @@ export const DatabaseService = {
     tableNames: (keyof AppExportData)[],
     mode: 'merge' | 'replace' = 'merge',
   ): Promise<{ added: number; updated: number; skipped: number; failed: number; errors: string[] }> {
-    const result: { added: number; updated: number; skipped: number; failed: number; errors: string[] } = {
-      added: 0, updated: 0, skipped: 0, failed: 0, errors: [],
-    }
-    for (const key of tableNames as TableName[]) {
-      const items = (data as unknown as Record<string, unknown[]>)[key]
-      if (!items || !Array.isArray(items) || items.length === 0) continue
-      const repo = getRepo(key as keyof IDatabase)
-      if (mode === 'replace') {
-        await repo.clear()
+    return safeDbLocal(async () => {
+      const result: { added: number; updated: number; skipped: number; failed: number; errors: string[] } = {
+        added: 0, updated: 0, skipped: 0, failed: 0, errors: [],
       }
-      for (const item of items) {
-        try {
-          const itemRecord = item as Record<string, unknown>
-          const id = itemRecord.id as string | undefined
-          if (mode === 'merge' && id) {
-            const existing = await repo.findById(id)
-            if (existing) {
-              await repo.update(id, item as never)
-              result.updated++
+      for (const key of tableNames as TableName[]) {
+        const items = (data as unknown as Record<string, unknown[]>)[key]
+        if (!items || !Array.isArray(items) || items.length === 0) continue
+        const repo = getRepo(key as keyof IDatabase)
+        if (mode === 'replace') {
+          await repo.clear()
+        }
+        for (const item of items) {
+          try {
+            const itemRecord = item as Record<string, unknown>
+            const id = itemRecord.id as string | undefined
+            if (mode === 'merge' && id) {
+              const existing = await repo.findById(id)
+              if (existing) {
+                await repo.update(id, item as never)
+                result.updated++
+              } else {
+                await repo.create(item as never)
+                result.added++
+              }
             } else {
               await repo.create(item as never)
               result.added++
             }
-          } else {
-            await repo.create(item as never)
-            result.added++
+          } catch {
+            result.failed++
           }
-        } catch {
-          result.failed++
         }
       }
-    }
-    return result
+      return result
+    })
   },
 
   async clearAll(): Promise<void> {
-    await clearAllTables()
+    return safeDbLocal(async () => {
+      await clearAllTables()
+    })
   },
 
   async resetAll(): Promise<void> {

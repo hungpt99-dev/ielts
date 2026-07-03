@@ -48,7 +48,7 @@ export default function ErrorDisplay({
       <div
         className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm"
         style={{
-          backgroundColor: 'color-mix(in srgb, var(--color-danger) 10%, transparent)',
+          backgroundColor: 'var(--color-danger-light)',
           color: 'var(--color-danger)',
         }}
         role="alert"
@@ -71,7 +71,7 @@ export default function ErrorDisplay({
         className="flex items-center gap-3 rounded-lg border px-4 py-3"
         style={{
           borderColor: 'var(--color-danger)',
-          backgroundColor: 'color-mix(in srgb, var(--color-danger) 8%, transparent)',
+          backgroundColor: 'var(--color-danger-light)',
         }}
         role="alert"
       >
@@ -102,7 +102,7 @@ export default function ErrorDisplay({
         <div
           className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full"
           style={{
-            backgroundColor: 'color-mix(in srgb, var(--color-danger) 15%, transparent)',
+            backgroundColor: 'var(--color-danger-light)',
             color: 'var(--color-danger)',
           }}
         >

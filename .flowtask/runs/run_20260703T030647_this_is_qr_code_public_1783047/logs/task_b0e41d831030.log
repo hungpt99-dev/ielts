@@ -1,0 +1,32 @@
+[2026-07-03T03:19:36.053Z] [INFO] Task started: Validate PublicTabPage integration and run tests
+[2026-07-03T03:19:44.305Z] [INFO] Executor finished with status: failed, exit code: 1
+[2026-07-03T03:19:44.305Z] [INFO] Output:
+Scope: 11 of 12 workspace projects
+packages/ai test$ vitest run --passWithNoTests
+packages/ai-tutor test$ vitest run --passWithNoTests
+packages/exercises test$ vitest run --passWithNoTests
+packages/storage test$ vitest run --passWithNoTests
+packages/ai test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai
+packages/exercises test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises
+packages/ai-tutor test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+packages/storage test:  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage
+packages/ai test:  ❯ src/__tests__/adapters.test.ts (16 tests | 1 failed) 43ms
+packages/ai test:    ✓ OpenAIAdapter > complete > makes a POST request with correct headers and body 19ms
+packages/ai test:    ✓ OpenAIAdapter > complete > returns content from successful response 1ms
+packages/ai test:    ✓ OpenAIAdapter > complete > returns usage data when present 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > returns undefined usage when absent 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIAuthError on 401 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIRateLimitError on 429 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIError on other errors 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when content is empty 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when choices is empty 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AINetworkError on network failure 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > throws AIError on other network errors 0ms
+packages/ai test:    ✓ OpenAIAdapter > complete > handles trailing slash in base URL 0ms
+packages/ai test:    × OpenAIAdapter > complete > uses config defaults for missing request values 7ms
+packages/ai test:      → expected 0.5 to be undefined
+packages/ai test:    ✓ O
+[2026-07-03T03:19:44.305Z] [INFO] Error:
+$ pnpm -r test
+[2026-07-03T03:19:44.305Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-03T03:19:44.308Z] [INFO] Task completed successfully

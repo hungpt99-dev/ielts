@@ -1,12 +1,19 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import {
   APP_SCHEMA,
   CURRENT_DB_VERSION,
   getSchemaForVersion,
   getStoreNamesForVersion,
+  getAppliedVersion,
+  setAppliedVersion,
+  clearAppliedVersion,
 } from '../migrations'
 
 describe('Migrations', () => {
+  beforeEach(() => {
+    clearAppliedVersion()
+  })
+
   describe('APP_SCHEMA', () => {
     it('has correct current version', () => {
       expect(CURRENT_DB_VERSION).toBe(4)
@@ -20,6 +27,18 @@ describe('Migrations', () => {
       for (let i = 1; i < APP_SCHEMA.versions.length; i++) {
         expect(APP_SCHEMA.versions[i].number).toBeGreaterThan(APP_SCHEMA.versions[i - 1].number)
       }
+    })
+
+    it('all versions have store definitions', () => {
+      for (const v of APP_SCHEMA.versions) {
+        expect(Object.keys(v.stores).length).toBeGreaterThan(0)
+      }
+    })
+
+    it('version 4 includes all store names', () => {
+      const stores = getStoreNamesForVersion(4)
+      expect(stores).toContain('contentMeta')
+      expect(stores).toContain('userContentEdits')
     })
   })
 
@@ -63,6 +82,32 @@ describe('Migrations', () => {
     it('returns empty for non-existent version', () => {
       const stores = getStoreNamesForVersion(0)
       expect(stores).toEqual([])
+    })
+  })
+
+  describe('version tracking', () => {
+    it('returns 0 when no version is stored', async () => {
+      const version = await getAppliedVersion()
+      expect(version).toBe(0)
+    })
+
+    it('returns the stored version', async () => {
+      await setAppliedVersion(3)
+      const version = await getAppliedVersion()
+      expect(version).toBe(3)
+    })
+
+    it('returns 0 after clear', async () => {
+      await setAppliedVersion(4)
+      clearAppliedVersion()
+      const version = await getAppliedVersion()
+      expect(version).toBe(0)
+    })
+
+    it('handles invalid stored value gracefully', async () => {
+      localStorage.setItem('schema_version', 'invalid')
+      const version = await getAppliedVersion()
+      expect(version).toBe(0)
     })
   })
 })

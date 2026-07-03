@@ -1,0 +1,169 @@
+{
+  "title": "Fix chat button popup toggle behavior",
+  "summary": "Ensure chat button opens popup on every click, not just the first",
+  "tasks": [
+    {
+      "title": "Investigate chat button click handler in extension popup React component",
+      "description": "Locate the React component responsible for the chat button in the extension popup UI, likely in apps/extension/src/popup or related directories. Analyze the click handler logic and state management controlling the popup visibility. Identify why the popup opens only on the first click and not on subsequent clicks, focusing on event handlers, state toggling, or conditional rendering.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Chat button click handler code is located and understood",
+        "Root cause for popup not opening on second click is identified"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Clear understanding of the current chat button click handler and the cause of the popup toggle issue",
+      "outputPlan": [
+        {
+          "action": "read",
+          "target": "apps/extension/src/popup",
+          "description": "Analyze React components and event handlers related to chat button popup",
+          "validationMethod": "manual"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "read",
+      "inputContext": "Project source code for extension popup UI and chat button",
+      "targetFiles": [
+        "apps/extension/src/popup/main.tsx",
+        "apps/extension/src/popup/components/ChatButton.tsx"
+      ],
+      "targetArtifacts": [
+        "Investigation notes on chat button click handler and popup state"
+      ],
+      "evidence": [
+        "Code inspection notes",
+        "Identified problematic logic or missing state update"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundation for fixing the popup toggle behavior"
+    },
+    {
+      "title": "Modify chat button click handler to toggle popup visibility correctly in apps/extension/src/popup/components/ChatButton.tsx",
+      "description": "Update the chat button React component to fix the popup toggle behavior. Ensure the popup opens on every click by correctly managing the popup visibility state. Use React state hooks or context as appropriate to toggle the popup open/close on each click. Remove any logic that disables the popup after the first click or fails to update state properly.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Investigate chat button click handler in extension popup React component"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Chat button popup opens on every click",
+        "Popup visibility state toggles correctly",
+        "No regressions in popup UI behavior"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Chat button popup toggles open and closed correctly on every click",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/ChatButton.tsx",
+          "description": "Fix popup toggle logic to open popup on every click",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Investigation notes on chat button click handler and popup state",
+      "targetFiles": [
+        "apps/extension/src/popup/components/ChatButton.tsx"
+      ],
+      "targetArtifacts": [
+        "Updated ChatButton.tsx with corrected popup toggle logic"
+      ],
+      "evidence": [
+        "Git diff showing popup toggle fix",
+        "Passing tests verifying popup behavior"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Fixes the chat button popup toggle behavior"
+    },
+    {
+      "title": "Perform manual QA to verify chat button popup behavior in extension popup",
+      "description": "Manually test the extension popup UI in a development environment or browser extension context. Click the chat button multiple times to verify the popup opens on every click and closes correctly if toggle behavior is implemented. Confirm no UI glitches or errors occur. Document the test steps and results.",
+      "executor": "shell",
+      "dependsOn": [
+        "Modify chat button click handler to toggle popup visibility correctly in apps/extension/src/popup/components/ChatButton.tsx"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Popup opens on every chat button click",
+        "Popup closes correctly if toggle implemented",
+        "No UI errors or unexpected behavior observed"
+      ],
+      "commands": [
+        "echo 'Manual QA: Open extension popup, click chat button multiple times, observe popup behavior'"
+      ],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Verified chat button popup behavior works correctly on multiple clicks",
+      "outputPlan": [
+        {
+          "action": "read",
+          "target": "apps/extension/popup.html",
+          "description": "Manual QA of chat button popup behavior",
+          "validationMethod": "manual"
+        }
+      ],
+      "taskType": "qa",
+      "actionType": "execute",
+      "inputContext": "Updated extension popup with fixed chat button popup toggle",
+      "targetFiles": [
+        "apps/extension/popup.html"
+      ],
+      "targetArtifacts": [
+        "Manual QA test report"
+      ],
+      "evidence": [
+        "Manual test confirmation",
+        "No UI errors"
+      ],
+      "verificationCommand": "",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "skip"
+      },
+      "finalOutputContribution": "Confirms the fix works correctly in the UI"
+    }
+  ]
+}

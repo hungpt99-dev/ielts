@@ -43,7 +43,7 @@ export function ContextSuggestionCard({
         className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
         style={{
           backgroundColor: 'var(--color-primary)',
-          color: '#fff',
+          color: 'var(--color-on-primary)',
         }}
         type="button"
       >

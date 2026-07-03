@@ -166,6 +166,8 @@ export default function Search() {
           snippet: `${v.meaning}${v.exampleSentence ? ` — ${v.exampleSentence}` : ''}`,
           skill: 'vocabulary',
           topic: v.topic,
+          difficulty: v.difficulty,
+          status: v.status,
           date: v.createdAt,
           url: typeToLink('vocabulary', v.id),
         })
@@ -231,6 +233,7 @@ export default function Search() {
           snippet: g.explanation.slice(0, 200),
           skill: 'grammar',
           topic: g.relatedSkill,
+          status: g.status,
           date: g.createdAt,
           url: typeToLink('grammar', g.id),
         })
@@ -244,6 +247,7 @@ export default function Search() {
           snippet: m.correction.slice(0, 200),
           skill: m.skill,
           topic: m.source,
+          status: m.status,
           date: m.date,
           url: typeToLink('mistake', m.id),
         })
@@ -297,8 +301,13 @@ export default function Search() {
     if (filters.difficulties.size > 0) {
       results = results.filter(r => {
         if (r.type !== 'vocabulary') return true
-        const entry = allResults.find(e => e.id === r.id) as SearchResult | undefined
-        return entry ? filters.difficulties.has(entry.snippet) : true
+        return filters.difficulties.has((r as SearchResult).difficulty ?? '')
+      })
+    }
+
+    if (filters.statuses.size > 0) {
+      results = results.filter(r => {
+        return r.status ? filters.statuses.has(r.status) : true
       })
     }
 
@@ -402,6 +411,7 @@ export default function Search() {
             size="sm"
             onClick={() => setShowFilters(!showFilters)}
             aria-expanded={showFilters}
+            aria-controls="search-filters"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -421,7 +431,7 @@ export default function Search() {
       </div>
 
       {showFilters && (
-        <Card className="space-y-5">
+        <Card id="search-filters" className="space-y-5">
           <CardContent>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <fieldset>

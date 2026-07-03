@@ -29,7 +29,7 @@ function bandColor(band: number): string {
   return 'text-red-600 dark:text-red-400'
 }
 
-const PIE_COLORS = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444']
+const PIE_COLORS = ['var(--color-primary)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-danger)']
 
 export default function Dashboard() {
   const { data, weeklyChart, loading, error } = useDashboard()
@@ -188,7 +188,7 @@ export default function Dashboard() {
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {suggestions.slice(0, 3).map(s => (
-              <Card key={s.id} className="border-l-4" style={{ borderLeftColor: s.type === 'exam-prep' ? '#f59e0b' : s.type === 'weakness-practice' ? '#ef4444' : s.type === 'vocabulary-review' ? '#22c55e' : '#3b82f6' }}>
+              <Card key={s.id} className="border-l-4" style={{ borderLeftColor: s.type === 'exam-prep' ? 'var(--color-warning)' : s.type === 'weakness-practice' ? 'var(--color-danger)' : s.type === 'vocabulary-review' ? 'var(--color-success)' : 'var(--color-primary)' }}>
                 <CardContent className="p-4">
                   <div className="flex items-start gap-2">
                     <span className="mt-0.5 shrink-0 text-base">
@@ -332,18 +332,18 @@ export default function Dashboard() {
               <div className="h-48">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: -15 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                    <XAxis dataKey="day" tick={{ fontSize: 12 }} stroke="#94a3b8" />
-                    <YAxis tick={{ fontSize: 12 }} stroke="#94a3b8" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
+                    <XAxis dataKey="day" tick={{ fontSize: 12 }} stroke="var(--color-muted)" />
+                    <YAxis tick={{ fontSize: 12 }} stroke="var(--color-muted)" />
                     <Tooltip
                       contentStyle={{
                         borderRadius: 8,
-                        border: '1px solid #e2e8f0',
+                        border: '1px solid var(--color-border)',
                         fontSize: 13,
                       }}
                       formatter={(value: number) => [`${value}m`, 'Study time']}
                     />
-                    <Bar dataKey="minutes" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="minutes" fill="var(--color-primary)" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -381,7 +381,7 @@ export default function Dashboard() {
                     <Tooltip
                       contentStyle={{
                         borderRadius: 8,
-                        border: '1px solid #e2e8f0',
+                        border: '1px solid var(--color-border)',
                         fontSize: 13,
                       }}
                       formatter={(value: number) => [value, 'sessions']}

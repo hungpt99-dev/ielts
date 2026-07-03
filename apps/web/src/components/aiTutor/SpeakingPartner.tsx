@@ -310,10 +310,17 @@ function analyzeText(text: string): AnalysisResult {
           explanation: `After "${parts[0]}", use "${verb === 'are' ? 'is' : verb === 'were' ? 'was' : verb === 'do' ? 'does' : "doesn't"}" for present simple.`,
         })
       }
+      if ((subject === 'we' || subject === 'they') && (verb === 'is' || verb === 'was' || verb === 'does' || verb === "doesn't")) {
+        errors.push({
+          original: m,
+          suggestion: `${parts[0]} ${verb === 'is' ? 'are' : verb === 'was' ? 'were' : verb === 'does' ? 'do' : "don't"}`,
+          explanation: `After "${parts[0]}", use "${verb === 'is' ? 'are' : verb === 'was' ? 'were' : verb === 'does' ? 'do' : "don't"}" for present simple.`,
+        })
+      }
     })
   }
 
-  const articleErrors = text.match(/\ba (apple|hour|honest|umbrella|university|one|european)/gi)
+  const articleErrors = text.match(/\ba (apple|hour|honest|umbrella)/gi)
   if (articleErrors) {
     articleErrors.forEach(m => {
       const word = m.toLowerCase().replace(/^a\s+/, '')
@@ -345,32 +352,32 @@ function estimateBand(_text: string, analysis: AnalysisResult): BandEstimate {
   const errorCount = analysis.detectedErrors.length
 
   let fluency = 5.0
-  if (wordCount >= 80) fluency = 6.0
-  if (wordCount >= 120) fluency = 6.5
-  if (wordCount >= 180) fluency = 7.0
-  if (wordCount >= 250) fluency = 7.5
-  if (wordCount >= 320) fluency = 8.0
   if (wordCount >= 400) fluency = 8.5
-  if (wordCount < 30) fluency = 4.0
-  if (wordCount < 50) fluency = 5.0
+  else if (wordCount >= 320) fluency = 8.0
+  else if (wordCount >= 250) fluency = 7.5
+  else if (wordCount >= 180) fluency = 7.0
+  else if (wordCount >= 120) fluency = 6.5
+  else if (wordCount >= 80) fluency = 6.0
+  else if (wordCount >= 50) fluency = 5.0
+  else fluency = 4.0
 
   let vocabulary = 5.0
-  if (uniqueRatio >= 0.5) vocabulary = 6.0
-  if (uniqueRatio >= 0.55) vocabulary = 6.5
-  if (uniqueRatio >= 0.6) vocabulary = 7.0
-  if (uniqueRatio >= 0.65) vocabulary = 7.5
   if (uniqueRatio >= 0.7) vocabulary = 8.0
-  if (uniqueRatio < 0.4) vocabulary = 4.5
+  else if (uniqueRatio >= 0.65) vocabulary = 7.5
+  else if (uniqueRatio >= 0.6) vocabulary = 7.0
+  else if (uniqueRatio >= 0.55) vocabulary = 6.5
+  else if (uniqueRatio >= 0.5) vocabulary = 6.0
+  else if (uniqueRatio < 0.4) vocabulary = 4.5
 
   if (linkingCount >= 1) vocabulary = Math.max(vocabulary, 6.0)
   if (linkingCount >= 3) vocabulary = Math.max(vocabulary, 6.5)
   if (linkingCount >= 5) vocabulary = Math.max(vocabulary, 7.0)
 
   let grammar = 5.0
-  if (complexCount >= 2) grammar = 6.0
-  if (complexCount >= 4) grammar = 6.5
-  if (complexCount >= 6) grammar = 7.0
   if (complexCount >= 8) grammar = 7.5
+  else if (complexCount >= 6) grammar = 7.0
+  else if (complexCount >= 4) grammar = 6.5
+  else if (complexCount >= 2) grammar = 6.0
   if (errorCount >= 3) grammar = Math.min(grammar, 5.5)
   if (errorCount >= 5) grammar = Math.min(grammar, 5.0)
   if (errorCount === 0 && wordCount > 50) grammar = Math.max(grammar, 6.0)

@@ -205,7 +205,7 @@ export const LocalTutorStorage = {
   async getPinnedSessions(): Promise<ChatSession[]> {
     return safeTutorDb(async () => {
       const db = getTutorDb()
-      return await db.chatSessions.where('isPinned').equals(1).reverse().sortBy('lastMessageAt')
+      return await db.chatSessions.where('isPinned').equals(true).reverse().sortBy('lastMessageAt')
     })
   },
 
@@ -343,7 +343,7 @@ export const LocalTutorStorage = {
   async getEnabledReminders(): Promise<Reminder[]> {
     return safeTutorDb(async () => {
       const db = getTutorDb()
-      return await db.reminders.where('isEnabled').equals(1).toArray()
+      return await db.reminders.where('isEnabled').equals(true).toArray()
     })
   },
 

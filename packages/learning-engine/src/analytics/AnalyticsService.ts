@@ -86,6 +86,7 @@ export class AnalyticsService {
     skills: SkillProgress[],
     consistency: StudyConsistency,
     bandHistory: BandProgress[],
+    tasksCompleted: number = 0,
     now: Date = new Date(),
   ): WeeklyReflection {
     const weekStart = this.getWeekStart(now)
@@ -105,7 +106,7 @@ export class AnalyticsService {
       weekStart,
       weekEnd,
       totalStudyMinutes,
-      totalTasksCompleted: consistency.totalStudyDays,
+      totalTasksCompleted: tasksCompleted,
       activeDays: consistency.currentStreak,
       consistencyScore: consistency.consistencyPercent,
       skillBreakdown: recentSkills,
@@ -157,7 +158,7 @@ export class AnalyticsService {
   }
 
   getBandProgressHistory(mockTests: MockTestEntry[]): BandProgress[] {
-    return mockTests
+    return [...mockTests]
       .sort((a, b) => a.date.localeCompare(b.date))
       .map(m => ({
         date: m.date,

@@ -1,3 +1,5 @@
+import { DEFAULT_ACCENT_COLOR } from './tokens'
+
 export function getSystemTheme(): 'light' | 'dark' {
   if (typeof window === 'undefined') return 'light'
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
@@ -16,9 +18,15 @@ export function applyTheme(mode: 'light' | 'dark' | 'system'): void {
 
 export function applyAccentColor(color: string): void {
   const root = document.documentElement
-  root.style.setProperty('--color-primary', color)
-  root.style.setProperty('--color-primary-hover', adjustColor(color, -20))
-  root.style.setProperty('--color-primary-light', adjustColorLightness(color, 90))
+  if (color === DEFAULT_ACCENT_COLOR) {
+    root.style.removeProperty('--color-primary')
+    root.style.removeProperty('--color-primary-hover')
+    root.style.removeProperty('--color-primary-light')
+  } else {
+    root.style.setProperty('--color-primary', color)
+    root.style.setProperty('--color-primary-hover', adjustColor(color, -20))
+    root.style.setProperty('--color-primary-light', adjustColorLightness(color, 90))
+  }
 }
 
 export function getStoredThemeMode(): 'light' | 'dark' | 'system' {

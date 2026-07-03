@@ -91,12 +91,20 @@ export function extractJSON(text: string): unknown {
   const jsonStart = text.indexOf('{')
   const jsonEnd = text.lastIndexOf('}')
   if (jsonStart >= 0 && jsonEnd >= 0) {
-    return JSON.parse(text.slice(jsonStart, jsonEnd + 1))
+    try {
+      return JSON.parse(text.slice(jsonStart, jsonEnd + 1))
+    } catch {
+      throw new Error('Malformed JSON object in AI response')
+    }
   }
   const arrStart = text.indexOf('[')
   const arrEnd = text.lastIndexOf(']')
   if (arrStart >= 0 && arrEnd >= 0) {
-    return JSON.parse(text.slice(arrStart, arrEnd + 1))
+    try {
+      return JSON.parse(text.slice(arrStart, arrEnd + 1))
+    } catch {
+      throw new Error('Malformed JSON array in AI response')
+    }
   }
   throw new Error('No JSON found in AI response')
 }

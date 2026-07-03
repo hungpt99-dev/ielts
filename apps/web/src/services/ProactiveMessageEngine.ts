@@ -218,7 +218,7 @@ export class ProactiveMessageEngine {
     this.detectNotificationPermission()
 
     this.checkInterval = setInterval(() => {
-      this.checkAndGenerate()
+      this.checkAndGenerate().catch(e => console.error('Proactive check error:', e))
     }, 120_000)
 
     await this.checkAndGenerate()
@@ -314,15 +314,15 @@ export class ProactiveMessageEngine {
     if (this.isQuietHours()) return
 
     const messages = await this.analyzeAndGenerate()
-    const existing = loadMessages()
+    const accumulated: ProactiveMessage[] = []
 
     for (const msg of messages) {
       if (triggeredToday.has(msg.id)) continue
+      const existing = loadMessages()
       if (this.isDuplicateMessage(existing, msg)) continue
       if (!this.settings.categories[msg.category]) continue
 
-      const stored = [...existing, msg]
-      saveMessages(stored)
+      accumulated.push(msg)
       addTriggeredToday(msg.id)
 
       this.notifyListeners(msg)
@@ -331,8 +331,12 @@ export class ProactiveMessageEngine {
         this.showBrowserNotification(msg)
       }
 
-      // Also store as a ProactiveSuggestion for the suggestion system
       await this.storeAsSuggestion(msg)
+    }
+
+    if (accumulated.length > 0) {
+      const existing = loadMessages()
+      saveMessages([...existing, ...accumulated])
     }
   }
 
@@ -454,7 +458,7 @@ export class ProactiveMessageEngine {
         dailyStudyMinutes: 0, weakSkills: [], preferredTopics: [],
         studyReminder: '', aiApiKey: '', aiProvider: 'openai',
         aiEndpoint: '', aiModel: '', darkMode: false,
-        sampleDataLoaded: false, aiEnabled: false,
+        aiEnabled: false,
       }
     }
   }
@@ -1088,6 +1092,14 @@ export class ProactiveMessageEngine {
 
   getAllMessages(): ProactiveMessage[] {
     return loadMessages()
+  }
+
+  addExternalMessage(msg: ProactiveMessage): void {
+    const existing = loadMessages()
+    if (!existing.some(m => m.id === msg.id)) {
+      saveMessages([...existing, msg])
+      this.notifyListeners(msg)
+    }
   }
 
   getUnreadCount(): number {

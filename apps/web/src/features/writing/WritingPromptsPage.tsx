@@ -243,10 +243,14 @@ export default function WritingPromptsPage() {
     }
   }
 
-  function handleDelete(id: string) {
-    DatabaseService.remove('writingPrompts', id)
-    setEntries(prev => prev.filter(e => e.id !== id))
-    showToast('info', 'Writing prompt deleted')
+  async function handleDelete(id: string) {
+    try {
+      await DatabaseService.remove('writingPrompts', id)
+      setEntries(prev => prev.filter(e => e.id !== id))
+      showToast('info', 'Writing prompt deleted')
+    } catch (err) {
+      showToast('error', err instanceof Error ? err.message : 'Failed to delete')
+    }
   }
 
   function handleCloseModal() {

@@ -102,7 +102,9 @@ function generateWeakSkill(input: ProactiveEngineInput): ProactiveMessage | null
 function generateExamCountdown(input: ProactiveEngineInput): ProactiveMessage | null {
   const examDate = input.learnerProfile?.examDate
   if (!examDate) return null
-  const daysUntil = Math.ceil((new Date(examDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+  const examTime = new Date(examDate).getTime()
+  if (isNaN(examTime)) return null
+  const daysUntil = Math.ceil((examTime - Date.now()) / (1000 * 60 * 60 * 24))
   if (daysUntil < 0) return null
   if (daysUntil > 90) return null
   const urgency = daysUntil <= 7 ? 'high' : daysUntil <= 30 ? 'medium' : 'low'

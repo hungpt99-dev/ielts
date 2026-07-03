@@ -50,13 +50,17 @@ function ToastItem({
   onRemove: (id: string) => void
 }) {
   const [exiting, setExiting] = useState(false)
+  const removeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setExiting(true)
-      setTimeout(() => onRemove(toast.id), 200)
+      removeTimerRef.current = setTimeout(() => onRemove(toast.id), 200)
     }, 2800)
-    return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(timer)
+      if (removeTimerRef.current) clearTimeout(removeTimerRef.current)
+    }
   }, [toast.id, onRemove])
 
   return (
@@ -70,7 +74,7 @@ function ToastItem({
         padding: '10px 14px',
         borderRadius: 'var(--radius-md)',
         background: BG[toast.type],
-        color: '#ffffff',
+        color: 'var(--color-on-primary, #ffffff)',
         fontSize: '13px',
         lineHeight: '1.4',
         boxShadow: 'var(--shadow-md)',

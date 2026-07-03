@@ -7,6 +7,7 @@ import Modal from '../components/ui/Modal'
 import { generateId } from '../utils'
 import ErrorDisplay from '../components/ui/ErrorDisplay'
 import { useToast } from '../components/ui/Toast'
+import Pagination from '../components/ui/Pagination'
 
 const MISTAKE_SKILLS: { value: MistakeSkill; label: string; color: string }[] = [
   { value: 'vocabulary', label: 'Vocabulary', color: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300' },
@@ -76,6 +77,8 @@ export default function Mistakes() {
   const [saving, setSaving] = useState(false)
 
   const [detailEntry, setDetailEntry] = useState<MistakeEntry | null>(null)
+  const [page, setPage] = useState(1)
+  const pageSize = 20
 
   const loadEntries = useCallback(async () => {
     try {
@@ -125,6 +128,17 @@ export default function Mistakes() {
 
     return filtered
   }, [entries, search, skillFilter, statusFilter, sortBy])
+
+  const totalFilteredPages = Math.max(1, Math.ceil(filteredEntries.length / pageSize))
+
+  const paginatedEntries = useMemo(() => {
+    const start = (page - 1) * pageSize
+    return filteredEntries.slice(start, start + pageSize)
+  }, [filteredEntries, page, pageSize])
+
+  useEffect(() => {
+    setPage(1)
+  }, [search, skillFilter, statusFilter, sortBy])
 
   const stats = useMemo(() => {
     const total = entries.length
@@ -421,7 +435,7 @@ export default function Mistakes() {
         </Card>
       ) : (
         <div className="space-y-3">
-          {filteredEntries.map(entry => (
+          {paginatedEntries.map(entry => (
             <div
               key={entry.id}
               className="rounded-lg border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600"
@@ -522,6 +536,15 @@ export default function Mistakes() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {filteredEntries.length > pageSize && (
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
+            Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, filteredEntries.length)} of {filteredEntries.length}
+          </p>
+          <Pagination page={page} totalPages={totalFilteredPages} onPageChange={setPage} />
         </div>
       )}
 

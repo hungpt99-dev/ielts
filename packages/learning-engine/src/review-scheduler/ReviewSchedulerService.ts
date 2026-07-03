@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto'
 import type {
   VocabularyEntry,
   VocabReviewEntry,
@@ -169,7 +170,7 @@ export class ReviewSchedulerService {
     const now = new Date()
     const iso = now.toISOString()
     return {
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       vocabularyId,
       interval: 0,
       easeFactor: 2.5,

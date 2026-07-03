@@ -62,6 +62,7 @@ export function injectContentStyles(): void {
     .ielts-ai-panel,
     .ielts-toast {
       all: initial;
+      display: flex;
       font-family: system-ui, -apple-system, sans-serif;
     }
     .ielts-toolbar *,

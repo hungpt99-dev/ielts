@@ -1,0 +1,1 @@
+button chat can open popup when the first time i click into it, but the second it dont open

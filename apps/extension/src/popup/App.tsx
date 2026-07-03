@@ -6,7 +6,7 @@ import VocabularyCollector from './components/VocabularyCollector'
 import ArticleCollector from './components/ArticleCollector'
 import VideoHelper from './components/VideoHelper'
 import BackupRestore from './components/BackupRestore'
-import { ChatPopup } from '@ielts/ai-tutor'
+import MiniTutor from './components/MiniTutor'
 
 type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor'
 
@@ -72,7 +72,7 @@ function App() {
   if (view === 'miniTutor') {
     return (
       <ToastProvider>
-        <ChatPopup isOpen={true} onClose={() => setView('dashboard')} />
+        <MiniTutor onBack={() => setView('dashboard')} />
       </ToastProvider>
     )
   }

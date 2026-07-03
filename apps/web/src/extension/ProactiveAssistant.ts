@@ -261,8 +261,6 @@ export class ExtensionProactiveAssistant {
     if (!isLikelyEnglish(selectedText)) return null
     if (isOnCooldown('text_selected', this.settings)) return null
     if (getSessionSuggestionCount() >= this.settings.maxSuggestionsPerSession) return null
-    if (this.isRecentlyDismissed(`text-selected-${selectedText.slice(0, 30)}`)) return null
-
     const suggestion: ExtensionProactiveSuggestion = {
       id: generateId(),
       trigger: 'text_selected',
@@ -277,6 +275,8 @@ export class ExtensionProactiveAssistant {
       source: { text: selectedText.slice(0, 200) },
       createdAt: new Date().toISOString(),
     }
+
+    if (this.isRecentlyDismissed(suggestion.id)) return null
 
     this.seenSuggestions.add(suggestion.id)
     addToSuggestionLog('text_selected')
@@ -405,11 +405,7 @@ export class ExtensionProactiveAssistant {
       createdAt: suggestion.createdAt,
     }
 
-    const existing = proactiveMessageEngine.getAllMessages()
-    const isDuplicate = existing.some(m => m.id === msg.id)
-    if (!isDuplicate) {
-      proactiveMessageEngine.forceGenerate()
-    }
+    proactiveMessageEngine.addExternalMessage(msg)
   }
 
   // ── Dismissal tracking via LocalChatMemory ────────────────────

@@ -1,0 +1,210 @@
+[2026-07-02T12:02:51.066Z] [INFO] Task started: Identify and document CSS bugs affecting chat popup appearance
+[2026-07-02T12:02:51.618Z] [INFO] [stderr] [0m
+[2026-07-02T12:02:51.618Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-02T12:02:51.618Z] [INFO] [stderr] [0m
+[2026-07-02T12:02:57.947Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"chat popup component css styles"}
+[2026-07-02T12:03:00.011Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"ChatWidget","includeCode":true}
+[2026-07-02T12:03:00.338Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"ChatWidgetProps","includeCode":true}
+[2026-07-02T12:03:03.257Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"popupContainerStyle desktopStyle mobileFullscreenStyle ChatHeader ChatMessagesArea ChatInput QuickActionsRow packages/ai-tutor/src/components"}
+[2026-07-02T12:03:06.260Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_callers {"symbol":"ChatPopup"}
+[2026-07-02T12:03:06.379Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_callers {"symbol":"ChatWidget"}
+[2026-07-02T12:03:09.072Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/ChatPopup.tsx
+[2026-07-02T12:03:09.349Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/ChatIcon.tsx
+[2026-07-02T12:03:13.804Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"useExitAnimation","includeCode":true}
+[2026-07-02T12:03:16.790Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+[2026-07-02T12:03:17.234Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/aiExplain.ts[90m [offset=30, limit=40][0m
+[2026-07-02T12:03:22.671Z] [INFO] [stderr] [0m• [0mFind chat popup CSS issues[90m Explore Agent[0m
+[2026-07-02T12:04:26.659Z] [INFO] [stderr] [0m✓ [0mFind chat popup CSS issues[90m Explore Agent[0m
+[2026-07-02T12:04:29.994Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+[2026-07-02T12:04:30.441Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/Layout.tsx[90m [offset=130, limit=20][0m
+[2026-07-02T12:04:33.020Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"ChatWidget","kind":"function"}
+[2026-07-02T12:04:35.625Z] [INFO] [stderr] [0m✱ [0mGrep "ChatWidget|ChatPopup"[90m in apps/extension · 0 matches[0m
+[2026-07-02T12:04:35.943Z] [INFO] [stderr] [0m✱ [0mGlob "**/.flowtask/reports/*"[90m in . · 0 matches[0m
+[2026-07-02T12:04:41.704Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/index.ts"}
+[2026-07-02T12:04:53.466Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_callers {"symbol":"ChatUXStyles"}
+[2026-07-02T12:04:53.675Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_callers {"symbol":"ChatStyles"}
+[2026-07-02T12:05:02.553Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/styles/theme.css
+[2026-07-02T12:05:18.492Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/ChatBubble.tsx
+[2026-07-02T12:05:18.773Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/TutorAvatar.tsx
+[2026-07-02T12:05:19.089Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/QuickActions.tsx
+[2026-07-02T12:05:35.531Z] [INFO] [stderr] [0m→ [0mRead packages/theme/src/cssVariables.css
+[2026-07-02T12:05:35.783Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/index.css
+[2026-07-02T12:05:38.830Z] [INFO] [stderr] [0m✱ [0mGrep "theme\.css"[90m in apps/web/src · 1 match[0m
+[2026-07-02T12:05:41.469Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/main.tsx
+[2026-07-02T12:06:47.638Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"NotificationCenter","includeCode":true}
+[2026-07-02T12:06:47.976Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/ProactiveMessagePreview.tsx
+[2026-07-02T12:06:50.439Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/ChatIcon.tsx
+[2026-07-02T12:06:54.941Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/ChatWidget.tsx[90m [limit=30][0m
+[2026-07-02T12:06:59.651Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/components/NotificationCenter.tsx"}
+[2026-07-02T12:07:06.008Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/components/ContextSuggestionCard.tsx"}
+[2026-07-02T12:07:08.916Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/MissingKeyBanner.tsx
+[2026-07-02T12:07:09.214Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/WelcomeState.tsx
+[2026-07-02T12:07:09.458Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/components/TypingIndicator.tsx
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] ---
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] Now I have a thorough understanding of the CSS layers. Let me compile the documented CSS bugs.
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] ### Bug 1: `color-mix()` CSS function — unsupported in older browsers
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] - `ChatWidget.tsx:418-419` — error message background
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] **Files affected:** `packages/ai-tutor/src/components/`
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] - `NotificationCenter.tsx:185, 252, 270, 280` — filter tab active bg, unread row bg, category label bg, priority label bg
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] - `ProactiveMessagePreview.tsx:23` — high-priority message background
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] - `MissingKeyBanner.tsx:11` — warning banner background
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] ## CSS Bug Report: Chat Popup
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] - `ContextSuggestionCard.tsx:19` — suggestion card background
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] **Also in:** `apps/web/src/components/aiTutor/FloatingTutorButton.tsx:14-15` — pulse animation keyframes
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] **Recommendation:** Replace with `rgba()` or `hsla()` equivalents, or use CSS variables with fallback values (e.g., `var(--color-danger-light, rgba(239,68,68,0.08))`).
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] **Detail:** CSS `color-mix(in srgb, ...)` is widely supported only since Chrome 111 (Mar 2023), Firefox 113 (May 2023), Safari 16.2 (Dec 2022). In unsupported browsers, the value is treated as invalid, so the `background-color` falls back to `transparent`. This makes text unreadable against the popup surface (especially `var(--color-on-primary, #fff)` white text on a transparent background).
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] **Severity:** Medium — affects visual rendering in any browser without `color-mix` support.
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] ---
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] ### Bug 2: Fixed popup height overflows short viewports
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] const desktopStyle: React.CSSProperties = {
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] ```tsx
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] **File:** `packages/ai-tutor/src/components/ChatWidget.tsx:509-513`
+[2026-07-02T12:07:39.813Z] [INFO] [stdout]   height: '560px',
+[2026-07-02T12:07:39.813Z] [INFO] [stdout]   bottom: 'calc(24px + 56px + 16px)', // = 96px
+[2026-07-02T12:07:39.813Z] [INFO] [stdout]   width: '380px',
+[2026-07-02T12:07:39.813Z] [INFO] [stdout]   right: '24px',
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] }
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.813Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Detail:** The popup has a fixed height of 560px and is positioned 96px from the viewport bottom. On viewports shorter than 656px (560 + 96), the popup top extends above the viewport and gets clipped. The `overflow: hidden` on the container (`popupContainerStyle:503`) prevents scroll, so content above the fold is inaccessible. `isMobileFullscreen` only activates at `< 640px` *width*, not height, so landscape phones or small laptop screens are affected.
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ```
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Severity:** Medium — content loss on short viewports.
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ---
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ### Bug 3: No `animation-fill-mode` on entry animation
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **File:** `packages/ai-tutor/src/components/useExitAnimation.ts:42`
+[2026-07-02T12:07:39.814Z] [INFO] [stdout]   ? { animation: `chat-popup-out ${duration}ms ease-in forwards`, pointerEvents: 'none' }
+[2026-07-02T12:07:39.814Z] [INFO] [stdout]   : { animation: `chat-popup-in ${duration}ms ease-out` }
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ```
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ```tsx
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Detail:** The entry animation `chat-popup-in` lacks `animation-fill-mode: backwards`. The element's pre-animation state (default `opacity: 1`, `transform: none`) can flash before the animation applies the `from` keyframe (`opacity: 0`, `translateY(16px) scale(0.96)`). On some browsers this produces a visible flash of the fully-opaque popup before it fades in.
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Recommendation:** Change to `chat-popup-in ${duration}ms ease-out backwards`.
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Severity:** Low-Medium — affects perceived animation smoothness.
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Recommendation:** Add `max-height: calc(100vh - 120px)` and/or use `overflow-y: auto` on the popup container instead of `overflow: hidden`.
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] const animationStyle: React.CSSProperties = isExiting
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ---
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ### Bug 4: Duplicate keyframe definitions (dead code hazard)
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Files:** `packages/ai-tutor/src/components/ChatStyles.tsx:1-28` vs `apps/web/src/components/aiTutor/ChatUXEnhancements.tsx:409-434`
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Recommendation:** Remove the duplicate keyframes and unused `ChatUXStyles` export from `ChatUXEnhancements.tsx`.
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Detail:** `ChatUXEnhancements.tsx` defines the same keyframe names (`chat-popup-in`, `chat-popup-out`, `tutor-avatar-pulse`, `typing-bounce`) with slightly different transform values (`scale(0.95) translateY(10px)` vs `translateY(16px) scale(0.96)`). The `ChatUXStyles` component that injects these has zero callers, so this is dead code. However, if a future developer imports `ChatUXStyles`, the duplicate keyframes would overwrite the package versions (last `<style>` wins), breaking the intended animations.
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Severity:** Low (dead code, but a trap for future changes).
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ### Bug 5: `FloatingTutorButton` uses `--color-primary-hover` but `color-mix()` for pulse
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ```tsx
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **File:** `apps/web/src/components/aiTutor/FloatingTutorButton.tsx:65`
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ---
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-hover))',
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] ```
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] 
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Detail:** The gradient `--color-primary-hover` is defined in `theme.css`, so this is fine for the web app. However, the pulse animation (lines 14-16) uses `color-mix()` which, if unsupported, makes the entire `@keyframes tutor-pulse` rule invalid — the button loses its pulsing glow effect.
+[2026-07-02T12:07:39.814Z] [INFO] [stdout] **Severity:** Low (cosmetic, only affects FAB animation).
+[2026-07-02T12:07:40.005Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-02T12:07:40.005Z] [INFO] Output:
+Now I have a thorough understanding of the CSS layers. Let me compile the documented CSS bugs.
+
+---
+
+## CSS Bug Report: Chat Popup
+
+### Bug 1: `color-mix()` CSS function — unsupported in older browsers
+
+**Files affected:** `packages/ai-tutor/src/components/`
+- `ChatWidget.tsx:418-419` — error message background
+- `ProactiveMessagePreview.tsx:23` — high-priority message background
+- `NotificationCenter.tsx:185, 252, 270, 280` — filter tab active bg, unread row bg, category label bg, priority label bg
+- `ContextSuggestionCard.tsx:19` — suggestion card background
+- `MissingKeyBanner.tsx:11` — warning banner background
+
+**Also in:** `apps/web/src/components/aiTutor/FloatingTutorButton.tsx:14-15` — pulse animation keyframes
+
+**Detail:** CSS `color-mix(in srgb, ...)` is widely supported only since Chrome 111 (Mar 2023), Firefox 113 (May 2023), Safari 16.2 (Dec 2022). In unsupported browsers, the value is treated as invalid, so the `background-color` falls back to `transparent`. This makes text unreadable against the popup surface (especially `var(--color-on-primary, #fff)` white text on a transparent background).
+
+**Recommendation:** Replace with `rgba()` or `hsla()` equivalents, or use CSS variables with fallback values (e.g., `var(--color-danger-light, rgba(239,68,68,0.08))`).
+
+**Severity:** Medium — affects visual rendering in any browser without `color-mix` support.
+
+---
+
+### Bug 2: Fixed popup height overflows short viewports
+
+**File:** `packages/ai-tutor/src/components/ChatWidget.tsx:509-513`
+```tsx
+const desktopStyle: React.CSSProperties = {
+  width: '380px',
+  height: '560px',
+  bottom: 'calc(24px + 56px + 16px)', // = 96px
+  right: '24px',
+}
+```
+
+**Detail:** The popup has a fixed height of 560px and is positioned 96px from the viewport bottom. On viewports shorter than 656px (560 + 96), the popup top extends above the viewport and gets clipped. The `overflow: hidden` on the container (`popupContainerStyle:503`) prevents scroll, so content above the fold is inacce
+[2026-07-02T12:07:40.006Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"chat popup component css styles"}
+[0m⚙ [0mcodegraph_codegraph_node {"symbol":"ChatWidget","includeCode":true}
+[0m⚙ [0mcodegraph_codegraph_node {"symbol":"ChatWidgetProps","includeCode":true}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"popupContainerStyle desktopStyle mobileFullscreenStyle ChatHeader ChatMessagesArea ChatInput QuickActionsRow packages/ai-tutor/src/components"}
+[0m⚙ [0mcodegraph_codegraph_callers {"symbol":"ChatPopup"}
+[0m⚙ [0mcodegraph_codegraph_callers {"symbol":"ChatWidget"}
+[0m→ [0mRead apps/web/src/components/aiTutor/ChatPopup.tsx
+[0m→ [0mRead apps/web/src/components/aiTutor/ChatIcon.tsx
+[0m⚙ [0mcodegraph_codegraph_node {"symbol":"useExitAnimation","includeCode":true}
+[0m→ [0mRead apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+[0m→ [0mRead apps/extension/src/content-script/aiExplain.ts[90m [offset=30, limit=40][0m
+[0m• [0mFind chat popup CSS issues[90m Explore Agent[0m
+[0m✓ [0mFind chat popup CSS issues[90m Explore Agent[0m
+[0m→ [0mRead apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+[0m→ [0mRead apps/web/src/components/Layout.tsx[90m [offset=130, limit=20][0m
+[0m⚙ [0mcodegraph_codegraph_search {"query":"ChatWidget","kind":"function"}
+[0m✱ [0mGrep "ChatWidget|ChatPopup"[90m in apps/extension · 0 matches[0m
+[0m✱ [0mGlob "**/.flowtask/reports/*"[90m in . · 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/index.ts"}
+[0m⚙ [0mcodegraph_codegraph_callers {"symbol":"ChatUXStyles"}
+[0m⚙ [0mcodegraph_codegraph_callers {"symbol":"ChatStyles"}
+[0m→ [0mRead apps/web/src/styles/theme.css
+[0m→ [0mRead packages/ai-tutor/src/components/ChatBubble.tsx
+[0m→ [0mRead packages/ai-tutor/src/components/TutorAvatar.tsx
+[0m→ [0mRead packages/ai-tutor/src/components/QuickActions.tsx
+[0m→ [0mRead packages/theme/src/cssVariables.css
+[0m→ [0mRead apps/web/src/index.css
+[0m✱ [0mGrep "theme\.css"[90m in apps/web/src · 1 match[0m
+[0m→ [0mRead apps/web/src/main.tsx
+[0m⚙ [0mcodegraph_codegraph_node {"symbol":"NotificationCenter","includeCode":true}
+[0m→ [0mRead packages/ai-tutor/src/components/ProactiveMessagePreview.tsx
+[0m→ [0mRead packages/ai-tutor/src/components/ChatIcon.tsx
+[0m→ [0mRead packages/ai-tutor/src/components/ChatWidget.tsx[90m [limit=30][0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/components/NotificationCenter.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/components/ContextSuggestionCard.tsx"}
+[0m→ [0mRead packages/ai-tutor/src/components/MissingKeyBanner.tsx
+[0m→ [0mRead packages/ai-tutor/src/components/WelcomeState.tsx
+[0m→ [0mRead packages/ai-tutor/src/components/TypingIndicator.tsx
+[2026-07-02T12:07:40.006Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-02T12:07:40.008Z] [INFO] Task completed successfully

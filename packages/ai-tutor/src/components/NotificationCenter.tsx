@@ -303,7 +303,7 @@ function MessageRow({
               className="rounded-lg px-2.5 py-1 text-xs font-medium transition-colors hover:opacity-80"
               style={{
                 backgroundColor: 'var(--color-primary)',
-                color: '#fff',
+                color: 'var(--color-on-primary)',
               }}
               type="button"
             >

@@ -51,8 +51,12 @@ export default defineConfig({
     strictPort: true,
     open: false,
   },
+  optimizeDeps: {
+    include: ['@hookform/resolvers/zod'],
+  },
   resolve: {
     alias: {
+      'zod/v4/core': resolve(__dirname, '../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/index.js'),
       '@ielts/ai': resolve(__dirname, '../../packages/ai/src'),
       '@ielts/ai-tutor': resolve(__dirname, '../../packages/ai-tutor/src'),
       '@ielts/content': resolve(__dirname, '../../packages/content/src'),

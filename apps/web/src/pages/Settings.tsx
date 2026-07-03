@@ -17,6 +17,16 @@ const SKILL_OPTIONS = [
   'Reading', 'Listening', 'Writing', 'Speaking', 'Vocabulary', 'Grammar',
 ]
 
+const DAYS_OF_WEEK = [
+  { value: 'mon', label: 'Monday' },
+  { value: 'tue', label: 'Tuesday' },
+  { value: 'wed', label: 'Wednesday' },
+  { value: 'thu', label: 'Thursday' },
+  { value: 'fri', label: 'Friday' },
+  { value: 'sat', label: 'Saturday' },
+  { value: 'sun', label: 'Sunday' },
+]
+
 const BAND_OPTIONS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
 
 interface FormErrors {
@@ -80,13 +90,14 @@ export default function Settings() {
       weakSkills: [],
       preferredTopics: [],
       studyReminder: 'Time to study IELTS!',
+      studyGoal: 'academic' as const,
+      preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const,
       aiApiKey: '',
       aiProvider: 'openai' as const,
       aiEndpoint: '',
       aiModel: 'gpt-4o-mini',
       aiEnabled: false,
       darkMode: false,
-      sampleDataLoaded: false,
     }
     setForm(defaultSettings)
     updateSettings(defaultSettings)
@@ -250,6 +261,65 @@ export default function Settings() {
 
       <Card>
         <CardHeader>
+          <CardTitle>Study Goal</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => { setForm(prev => ({ ...prev, studyGoal: 'academic' })); setDirty(true) }}
+              className={`rounded-xl border-2 p-4 text-left transition-all ${
+                form.studyGoal === 'academic'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                  : 'border-slate-200 dark:border-slate-700 hover:border-blue-300'
+              }`}
+            >
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IELTS Academic</p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">For university admission</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => { setForm(prev => ({ ...prev, studyGoal: 'general' })); setDirty(true) }}
+              className={`rounded-xl border-2 p-4 text-left transition-all ${
+                form.studyGoal === 'general'
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                  : 'border-slate-200 dark:border-slate-700 hover:border-blue-300'
+              }`}
+            >
+              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IELTS General</p>
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">For work or migration</p>
+            </button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Study Schedule</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-3 text-sm text-slate-500 dark:text-slate-400">Which days do you plan to study?</p>
+          <div className="flex flex-wrap gap-2">
+            {DAYS_OF_WEEK.map(day => (
+              <button
+                key={day.value}
+                type="button"
+                onClick={() => { setForm(prev => ({ ...prev, preferredSchedule: toggleArrayItem(prev.preferredSchedule, day.value) as typeof prev.preferredSchedule })); setDirty(true) }}
+                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                  form.preferredSchedule.includes(day.value as typeof form.preferredSchedule[number])
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600'
+                }`}
+              >
+                {day.label.slice(0, 3)}
+              </button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>Study Reminder</CardTitle>
         </CardHeader>
         <CardContent>
@@ -298,7 +368,7 @@ export default function Settings() {
               }`}
             >
               <span
-                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform dark:bg-slate-200 ${
                   dark ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />

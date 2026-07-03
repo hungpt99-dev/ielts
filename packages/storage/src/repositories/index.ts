@@ -1,5 +1,5 @@
 export { BaseRepository } from './BaseRepository'
-export type { RepositoryItem } from './BaseRepository'
+export type { RepositoryItem, PaginationParams, PaginatedResult } from './BaseRepository'
 
 export {
   VocabularyRepository,

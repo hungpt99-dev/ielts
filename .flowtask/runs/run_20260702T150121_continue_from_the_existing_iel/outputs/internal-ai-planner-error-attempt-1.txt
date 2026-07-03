@@ -1,0 +1,268 @@
+Error: AI plan output validation failed: tasks.4.taskType: Invalid enum value. Expected 'general' | 'coding' | 'documentation' | 'research' | 'data' | 'writing' | 'design' | 'qa' | 'release' | 'operations' | 'testing' | 'analysis' | 'review' | 'approval' | 'validation', received 'planning'
+
+Raw output:
+{
+  "title": "Audit and Plan Completion of IELTS Journey Codebase",
+  "summary": "Audit the existing IELTS Journey codebase to identify incomplete features, broken flows, and quality gaps, then create a detailed implementation plan for completing all features with production-ready quality.",
+  "tasks": [
+    {
+      "title": "Audit existing architecture and core packages",
+      "description": "Review the existing architecture, including apps, packages, routes, components, storage layer, extension scripts, AI integration, and tests. Document the current structure, dependencies, and integration points. Identify any architectural inconsistencies or potential improvements without rewriting working parts.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Documented architecture overview with package and module relationships",
+        "List of architectural inconsistencies or improvement opportunities"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A comprehensive architecture audit document describing the current system structure and integration points.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/architecture-audit.md",
+          "description": "Architecture audit document describing apps, packages, routes, components, storage, AI integration, and tests",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Existing codebase files and project structure",
+      "targetFiles": [
+        "docs/architecture-audit.md"
+      ],
+      "targetArtifacts": [
+        "architecture-audit.md"
+      ],
+      "evidence": [
+        "docs/architecture-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/architecture-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundational understanding of the system to guide further audits and implementation planning."
+    },
+    {
+      "title": "Audit existing features and identify incomplete or broken flows",
+      "description": "Review all core website and Chrome extension features listed in the prompt. Identify incomplete features, broken flows, placeholder UI, mock data usage, missing error handling, missing persistence, and missing tests. Document findings with references to specific files or modules.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing architecture and core packages"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Complete list of incomplete or broken features with detailed descriptions",
+        "Identification of placeholder UI and mock data usage",
+        "List of missing error handling and persistence gaps",
+        "List of missing or failing tests"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A detailed audit report listing all incomplete or broken features, UI placeholders, mock data, error handling gaps, persistence issues, and test coverage gaps.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/feature-audit.md",
+          "description": "Feature audit report listing incomplete features, broken flows, UI placeholders, mock data, error handling, persistence, and test gaps",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Architecture audit document and existing codebase",
+      "targetFiles": [
+        "docs/feature-audit.md"
+      ],
+      "targetArtifacts": [
+        "feature-audit.md"
+      ],
+      "evidence": [
+        "docs/feature-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/feature-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a clear list of features and flows requiring completion or fixes."
+    },
+    {
+      "title": "Audit code quality and production readiness",
+      "description": "Analyze the codebase for TypeScript strictness, use of 'any', validation coverage, error handling, code duplication, dead code, naming conventions, and folder organization. Identify areas needing refactoring or cleanup to meet production quality standards without rewriting working parts.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing features and identify incomplete or broken flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "List of code quality issues including 'any' usage, missing validation, error handling gaps",
+        "List of duplicated or dead code to remove",
+        "Suggestions for naming and folder organization improvements"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Code quality audit report with actionable items for improving production readiness and maintainability.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/code-quality-audit.md",
+          "description": "Code quality audit report detailing strictness, validation, error handling, duplication, dead code, naming, and folder structure",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Feature audit report and existing codebase",
+      "targetFiles": [
+        "docs/code-quality-audit.md"
+      ],
+      "targetArtifacts": [
+        "code-quality-audit.md"
+      ],
+      "evidence": [
+        "docs/code-quality-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/code-quality-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Identifies code quality improvements needed for production readiness."
+    },
+    {
+      "title": "Audit testing coverage and quality",
+      "description": "Review existing unit, integration, and E2E tests for core logic, storage, AI prompt builders, vocabulary detection, article extraction, exercise parsing, daily task generation, and important user flows. Identify missing tests, flaky tests, or failing tests. Document test coverage gaps and quality issues.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit code quality and production readiness"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "List of missing or incomplete unit, integration, and E2E tests",
+        "List of flaky or failing tests",
+        "Recommendations for test improvements"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Testing audit report detailing coverage gaps, flaky/failing tests, and improvement recommendations.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/testing-audit.md",
+          "description": "Testing audit report with coverage gaps, flaky/failing tests, and recommendations",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Code quality audit report and existing test suites",
+      "targetFiles": [
+        "docs/testing-audit.md"
+      ],
+      "targetArtifacts": [
+        "testing-audit.md"
+      ],
+      "evidence": [
+        "docs/testing-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/testing-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures testing gaps and issues are identified for quality assurance."
+    },
+    {
+      "title": "Create comprehensive implementation plan for completing all features",
+      "description": "Based on the architecture, feature, code quality, and testing audits, create a detailed implementation plan. The plan must include prioritized tasks to complete all core website and extension features, fix broken flows, replace placeholder UI and mock data with real logic, add missing error handling and persistence, improve code quality, and add/fix tests. The plan must ensure production-ready quality and incremental safe changes.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit testing coverage and quality"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Implementation plan covering all core website and extension features",
+        "Plan includes tasks for UI completion, logic connection, persistence, error handling, validation, and testing",
+        "Plan respects existing structure and avoids rewriting working parts",
+        "Plan includes incremental and safe change steps"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A detailed, prioritized implementation plan document for completing the IELTS Journey project to production-ready quality.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/implementation-plan.md",
+          "description": "Detailed prioritized implementation plan for completing all features and quality improvements",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "planning",
+      "actionType": "generate",
+      "inputContext": "All audit reports (architecture, features, code quality, testing)",
+      "targetFiles": [
+        "docs/implementation-plan.md"
+      ],
+      "targetArtifacts": [
+        "implementation-plan.md"
+      ],
+      "evidence": [
+        "docs/implementation-plan.md file exists"
+      ],
+      "verificationCommand": "ls docs/implementation-plan.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a clear roadmap for completing the project with production-ready quality."
+    }
+  ]
+}

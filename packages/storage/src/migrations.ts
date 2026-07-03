@@ -1,4 +1,6 @@
 import type { IDatabase } from './db'
+import { getDb, safeDb } from './db'
+import { MigrationError } from './errors'
 
 export interface StorageVersion {
   number: number
@@ -132,6 +134,8 @@ export const APP_SCHEMA: AppDatabaseSchema = {
   ],
 }
 
+const STORED_VERSION_KEY = 'schema_version'
+
 export function getSchemaForVersion(version: number): StorageVersion | undefined {
   return APP_SCHEMA.versions.find(v => v.number === version)
 }
@@ -139,4 +143,56 @@ export function getSchemaForVersion(version: number): StorageVersion | undefined
 export function getStoreNamesForVersion(version: number): string[] {
   const schema = getSchemaForVersion(version)
   return schema ? Object.keys(schema.stores) : []
+}
+
+export async function getAppliedVersion(): Promise<number> {
+  try {
+    const raw = localStorage.getItem(STORED_VERSION_KEY)
+    if (raw !== null) {
+      const v = parseInt(raw, 10)
+      return isNaN(v) ? 0 : v
+    }
+  } catch {}
+  return 0
+}
+
+export async function setAppliedVersion(version: number): Promise<void> {
+  try {
+    localStorage.setItem(STORED_VERSION_KEY, String(version))
+  } catch (e) {
+    console.error('Failed to persist schema version:', e)
+  }
+}
+
+export async function applyMigrations(): Promise<void> {
+  const db = getDb()
+  const appliedVersion = await getAppliedVersion()
+
+  if (appliedVersion >= CURRENT_DB_VERSION) return
+
+  const pending = APP_SCHEMA.versions.filter(
+    v => v.number > appliedVersion && v.number <= CURRENT_DB_VERSION,
+  )
+
+  for (const version of pending) {
+    if (version.upgrade) {
+      try {
+        await safeDb(async () => {
+          await version.upgrade!(db)
+        })
+      } catch (error) {
+        throw new MigrationError(
+          `Migration to version ${version.number} failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          error,
+        )
+      }
+    }
+    await setAppliedVersion(version.number)
+  }
+}
+
+export function clearAppliedVersion(): void {
+  try {
+    localStorage.removeItem(STORED_VERSION_KEY)
+  } catch {}
 }

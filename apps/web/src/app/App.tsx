@@ -1,27 +1,11 @@
-import { useEffect, useState } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from '../context/ThemeContext'
 import { SettingsProvider } from '../context/SettingsContext'
 import AppLayout from '../components/Layout'
+import LandingPage from '../pages/LandingPage'
+import { isOnboardingComplete } from '../features/onboarding/onboardingService'
 import { ToastProvider } from '../components/ui/Toast'
-import { loadSeedData, isSeedDataLoaded } from '../data/seed'
-import LoadingSpinner from '../components/ui/LoadingSpinner'
 import ErrorBoundary from '../components/ui/ErrorBoundary'
-
-function SeedDataLoader({ children }: { children: React.ReactNode }) {
-  const [ready, setReady] = useState(isSeedDataLoaded)
-
-  useEffect(() => {
-    if (!ready) {
-      loadSeedData().then(() => setReady(true)).catch(() => setReady(true))
-    }
-  }, [ready])
-
-  if (!ready) {
-    return <LoadingSpinner size="lg" message="Loading your IELTS journey..." fullPage />
-  }
-
-  return <>{children}</>
-}
 
 export default function App() {
   return (
@@ -29,11 +13,17 @@ export default function App() {
       <ThemeProvider>
         <SettingsProvider>
           <ToastProvider>
-            <ErrorBoundary>
-              <SeedDataLoader>
-                <AppLayout />
-              </SeedDataLoader>
-            </ErrorBoundary>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  isOnboardingComplete()
+                    ? <Navigate to="/dashboard" replace />
+                    : <LandingPage />
+                }
+              />
+              <Route path="/*" element={<AppLayout />} />
+            </Routes>
           </ToastProvider>
         </SettingsProvider>
       </ThemeProvider>

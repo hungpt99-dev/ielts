@@ -121,19 +121,19 @@ export default function DailyPlan() {
   const totalCount = visibleTasks.length
   const progressPercent = totalCount > 0 ? Math.round((doneCount / totalCount) * 100) : 0
 
-  function handleToggleDone(task: TaskEntry) {
+  async function handleToggleDone(task: TaskEntry) {
     const updated: TaskEntry = {
       ...task,
       isDone: !task.isDone,
       completedAt: !task.isDone ? new Date().toISOString() : null,
       updatedAt: new Date().toISOString(),
     }
-    DatabaseService.put('tasks', updated)
+    await DatabaseService.put('tasks', updated)
     setTasks(prev => prev.map(t => t.id === updated.id ? updated : t))
   }
 
-  function handleDelete(id: string) {
-    DatabaseService.remove('tasks', id)
+  async function handleDelete(id: string) {
+    await DatabaseService.remove('tasks', id)
     setTasks(prev => prev.filter(t => t.id !== id))
   }
 
@@ -164,14 +164,14 @@ export default function DailyPlan() {
     setNotesModalOpen(true)
   }
 
-  function saveNotes() {
+  async function saveNotes() {
     if (!notesTask) return
     const updated: TaskEntry = {
       ...notesTask,
       notes: notesText,
       updatedAt: new Date().toISOString(),
     }
-    DatabaseService.put('tasks', updated)
+    await DatabaseService.put('tasks', updated)
     setTasks(prev => prev.map(t => t.id === updated.id ? updated : t))
     setNotesModalOpen(false)
     setNotesTask(null)
@@ -219,7 +219,7 @@ export default function DailyPlan() {
         if (form.isRecurring && form.recurringDays.length > 0) {
           for (let i = 1; i <= 7; i++) {
             const nextDate = addDays(form.date, i)
-            const nextDay = new Date(nextDate + 'T00:00:00').getDay()
+            const nextDay = new Date(nextDate + 'T00:00:00.000Z').getUTCDay()
             const adjustedDay = nextDay === 0 ? 6 : nextDay - 1
             if (form.recurringDays.includes(adjustedDay)) {
               const recurringTask: TaskEntry = {

@@ -1,0 +1,323 @@
+Error: AI plan output validation failed: tasks.5.taskType: Invalid enum value. Expected 'general' | 'coding' | 'documentation' | 'research' | 'data' | 'writing' | 'design' | 'qa' | 'release' | 'operations' | 'testing' | 'analysis' | 'review' | 'approval' | 'validation', received 'planning'
+
+Raw output:
+{
+  "title": "Audit and Plan Completion of IELTS Journey Codebase",
+  "summary": "Audit existing IELTS Journey codebase and create a detailed implementation plan for completing all features with production-ready quality.",
+  "tasks": [
+    {
+      "title": "Audit existing architecture and core packages",
+      "description": "Review the existing architecture, including apps, packages, routes, components, storage layer, extension scripts, AI integration, and tests. Document the current structure, dependencies, and integration points. Identify any architectural inconsistencies or outdated patterns.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Documented architecture overview with package and module relationships",
+        "List of architectural inconsistencies or outdated patterns identified"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A comprehensive architecture audit document describing the current codebase structure and integration points.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/architecture-audit.md",
+          "description": "Architecture audit document describing apps, packages, routes, components, storage, extension scripts, AI integration, and tests.",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Existing codebase source files and documentation",
+      "targetFiles": [
+        "docs/architecture-audit.md"
+      ],
+      "targetArtifacts": [
+        "architecture-audit.md"
+      ],
+      "evidence": [
+        "docs/architecture-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/architecture-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundational understanding of the codebase to guide further implementation and fixes."
+    },
+    {
+      "title": "Identify incomplete features, broken flows, and technical debt",
+      "description": "Perform a detailed code review to identify incomplete features, broken user flows, placeholder UI, mock data usage outside tests, TODO comments, dead code, missing error handling, missing persistence, and missing tests. Document all findings with file references and severity.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing architecture and core packages"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Comprehensive list of incomplete or broken features with file and line references",
+        "List of placeholder UI components and mock data usage",
+        "List of TODOs, dead code, and missing error handling",
+        "List of missing persistence and missing tests"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A detailed technical debt and incomplete feature report to guide prioritization and fixes.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/technical-debt-report.md",
+          "description": "Report listing incomplete features, broken flows, placeholder UI, mock data, TODOs, dead code, missing error handling, persistence, and tests.",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Architecture audit document and existing codebase",
+      "targetFiles": [
+        "docs/technical-debt-report.md"
+      ],
+      "targetArtifacts": [
+        "technical-debt-report.md"
+      ],
+      "evidence": [
+        "docs/technical-debt-report.md file exists"
+      ],
+      "verificationCommand": "ls docs/technical-debt-report.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Identifies all areas needing completion or fixes to achieve production readiness."
+    },
+    {
+      "title": "Audit AI features for API key handling and error states",
+      "description": "Review all AI-related features to verify they handle missing API key, loading state, error state, invalid response, and success state correctly. Document any missing or incomplete handling with file references and recommended fixes.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Identify incomplete features, broken flows, and technical debt"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "List of AI features with missing or incomplete API key and error state handling",
+        "Recommendations for improving AI feature robustness"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A report detailing AI feature robustness issues and improvement recommendations.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/ai-feature-audit.md",
+          "description": "Audit report on AI features' handling of API keys, loading, errors, invalid responses, and success states.",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Technical debt report and AI feature source code",
+      "targetFiles": [
+        "docs/ai-feature-audit.md"
+      ],
+      "targetArtifacts": [
+        "ai-feature-audit.md"
+      ],
+      "evidence": [
+        "docs/ai-feature-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/ai-feature-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures AI features meet production quality requirements for error and API key handling."
+    },
+    {
+      "title": "Audit Chrome extension features for completeness and integration",
+      "description": "Review all Chrome extension features including webpage IELTS word highlighting, word tooltip, save word/article, selected text action menu, sentence explanation, article-to-IELTS generation, floating IELTS assistant, extension popup, extension settings, YouTube transcript support, and sync with local storage or IndexedDB. Identify incomplete or broken features and integration issues.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Identify incomplete features, broken flows, and technical debt"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "List of incomplete or broken extension features with file references",
+        "List of integration issues with local storage or IndexedDB",
+        "Recommendations for fixes and improvements"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A detailed audit report of Chrome extension features and integration status.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-feature-audit.md",
+          "description": "Audit report on Chrome extension features completeness and integration.",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Technical debt report and extension source code",
+      "targetFiles": [
+        "docs/extension-feature-audit.md"
+      ],
+      "targetArtifacts": [
+        "extension-feature-audit.md"
+      ],
+      "evidence": [
+        "docs/extension-feature-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/extension-feature-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides clarity on extension feature gaps and integration issues for targeted fixes."
+    },
+    {
+      "title": "Audit testing coverage and quality for core logic and user flows",
+      "description": "Review existing unit, integration, and E2E tests for core logic, storage, AI prompt builders, vocabulary detection, article extraction, exercise parsing, daily task generation, onboarding, saving words/articles, highlighting, selected text actions, exercise generation, vocabulary review, data export/import, extension popup, and settings. Identify missing or broken tests and coverage gaps.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Identify incomplete features, broken flows, and technical debt"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Test coverage report for core logic and user flows",
+        "List of missing or broken tests with file references",
+        "Recommendations for test additions and fixes"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A comprehensive test coverage and quality audit report.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/test-coverage-audit.md",
+          "description": "Audit report on test coverage and quality for core logic and user flows.",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Technical debt report and test source code",
+      "targetFiles": [
+        "docs/test-coverage-audit.md"
+      ],
+      "targetArtifacts": [
+        "test-coverage-audit.md"
+      ],
+      "evidence": [
+        "docs/test-coverage-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/test-coverage-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures testing is sufficient to guarantee production readiness and stability."
+    },
+    {
+      "title": "Create comprehensive implementation plan for completing all features",
+      "description": "Based on all audit reports, create a detailed implementation plan that sequences tasks to complete all existing and planned features with production-ready quality. Include tasks for fixing incomplete features, replacing placeholder UI, connecting real logic, adding persistence, improving AI feature robustness, completing extension features, adding validation and error handling, refactoring for maintainability, and adding/fixing tests. Prioritize tasks to ensure incremental, safe changes preserving current structure.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Audit existing architecture and core packages",
+        "Identify incomplete features, broken flows, and technical debt",
+        "Audit AI features for API key handling and error states",
+        "Audit Chrome extension features for completeness and integration",
+        "Audit testing coverage and quality for core logic and user flows"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Detailed implementation plan with prioritized tasks and dependencies",
+        "Plan covers all core website features and extension features",
+        "Plan includes testing and build validation steps",
+        "Plan ensures incremental and safe changes preserving current structure"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A comprehensive implementation plan document guiding the completion of the IELTS Journey project to production readiness.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/implementation-plan.md",
+          "description": "Detailed prioritized implementation plan for completing all features with production-ready quality.",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "planning",
+      "actionType": "generate",
+      "inputContext": "All audit reports and existing codebase context",
+      "targetFiles": [
+        "docs/implementation-plan.md"
+      ],
+      "targetArtifacts": [
+        "implementation-plan.md"
+      ],
+      "evidence": [
+        "docs/implementation-plan.md file exists"
+      ],
+      "verificationCommand": "ls docs/implementation-plan.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a clear roadmap to complete the project with production-ready quality."
+    }
+  ]
+}

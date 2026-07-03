@@ -1,7 +1,9 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import { NavLink, Routes, Route, Navigate } from 'react-router-dom'
 import Headbar from './layout/Headbar'
 import Dashboard from '../features/dashboard/Dashboard'
+import OnboardingForm from '../features/onboarding/OnboardingForm'
+import { isOnboardingComplete } from '../features/onboarding/onboardingService'
 import Planner from '../features/planner/Planner'
 import Vocabulary from '../pages/Vocabulary'
 import VocabularyReview from '../pages/VocabularyReview'
@@ -18,13 +20,17 @@ import Settings from '../pages/Settings'
 import DataManagement from '../pages/Settings/DataManagement'
 import SearchPage from '../pages/Search'
 import ImportExport from '../pages/ImportExport'
-import PublicApiImportPage from '../pages/PublicApiImportPage'
 import TopicsProgress from '../pages/TopicsProgress'
+import PublicApiImportPage from '../pages/PublicApiImportPage'
+import PublicTabPage from '../components/PublicTabPage'
+import RoadmapPage from '../features/roadmap/RoadmapPage'
+import StudyContentPage from '../features/content/StudyContentPage'
 import FloatingTutorButton from './aiTutor/FloatingTutorButton'
-import ChatPopup from './aiTutor/ChatPopup'
+import ChatIcon from './aiTutor/ChatIcon'
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+  { to: '/dashboard', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+  { to: '/roadmap', label: 'Roadmap', icon: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z' },
   { to: '/plan', label: 'Daily Plan', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4' },
   { to: '/vocabulary', label: 'Vocabulary', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
   { to: '/vocabulary/review', label: 'Review', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
@@ -41,23 +47,19 @@ const navItems = [
   { to: '/settings', label: 'Settings', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z' },
   { to: '/import-export', label: 'Backup', icon: 'M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4' },
   { to: '/public-api', label: 'Public API', icon: 'M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7M10 12h4M12 8v8' },
+  { to: '/info', label: 'Info', icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
 ]
+
+function RedirectWithHash({ to, hash }: { to: string; hash: string }) {
+  return <Navigate to={`${to}#${hash}`} replace />
+}
 
 export default function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [chatOpen, setChatOpen] = useState(false)
-
-  const handleCloseChat = useCallback(() => setChatOpen(false), [])
-
-  useEffect(() => {
-    const handler = () => setChatOpen(prev => !prev)
-    window.addEventListener('toggle-ai-tutor-chat', handler)
-    return () => window.removeEventListener('toggle-ai-tutor-chat', handler)
-  }, [])
 
   return (
     <div
-      className="flex h-screen overflow-hidden"
+      className="flex min-h-[100dvh] overflow-hidden"
       style={{ backgroundColor: 'var(--color-background)' }}
     >
       {sidebarOpen && (
@@ -99,7 +101,7 @@ export default function AppLayout() {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.to === '/'}
+              end={item.to === '/dashboard'}
               onClick={() => setSidebarOpen(false)}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
@@ -126,7 +128,9 @@ export default function AppLayout() {
 
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/onboarding" element={<OnboardingForm />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/roadmap" element={<RoadmapPage />} />
             <Route path="/plan" element={<Planner />} />
             <Route path="/vocabulary" element={<Vocabulary />} />
             <Route path="/vocabulary/review" element={<VocabularyReview />} />
@@ -145,10 +149,21 @@ export default function AppLayout() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/settings/data" element={<DataManagement />} />
             <Route path="/import-export" element={<ImportExport />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/info" element={<PublicTabPage />} />
+            <Route path="/study/:taskId" element={<StudyContentPage />} />
+            <Route path="/website-info" element={<RedirectWithHash to="/info" hash="about-website" />} />
+            <Route path="/about-me" element={<RedirectWithHash to="/info" hash="about-me" />} />
+            <Route path="/recruit" element={<RedirectWithHash to="/info" hash="recruit" />} />
+            <Route path="/donate" element={<RedirectWithHash to="/info" hash="donate" />} />
+            <Route path="/feedback" element={<RedirectWithHash to="/info" hash="feedback" />} />
+            <Route path="*" element={
+              isOnboardingComplete()
+                ? <Navigate to="/dashboard" replace />
+                : <Navigate to="/onboarding" replace />
+            } />
           </Routes>
             <FloatingTutorButton />
-            <ChatPopup isOpen={chatOpen} onClose={handleCloseChat} />
+            <ChatIcon />
         </main>
 
         <nav
@@ -160,7 +175,7 @@ export default function AppLayout() {
           aria-label="Mobile navigation"
         >
           {[
-            { to: '/', label: 'Home', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+            { to: '/dashboard', label: 'Home', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
             { to: '/plan', label: 'Plan', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4' },
             { to: '/vocabulary', label: 'Vocab', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
             { to: '/vocabulary/review', label: 'Review', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
@@ -169,12 +184,12 @@ export default function AppLayout() {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.to === '/'}
+              end={item.to === '/dashboard'}
               className={({ isActive }) =>
                 `flex flex-col items-center gap-0.5 rounded-lg px-3 py-1 text-xs font-medium transition-colors ${
                   isActive
                     ? 'text-[var(--color-primary)]'
-                    : 'text-[var(--color-muted)]'
+                    : 'text-[var(--color-text-secondary)]'
                 }`
               }
             >

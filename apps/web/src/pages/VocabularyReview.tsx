@@ -15,10 +15,10 @@ const REVIEW_MODES: { value: ReviewMode; label: string }[] = [
 ]
 
 const RATING_BUTTONS: { rating: ReviewRating; label: string; color: string }[] = [
-  { rating: 'again', label: 'Again', color: 'bg-red-500 hover:bg-red-600 focus-visible:ring-red-400' },
-  { rating: 'hard', label: 'Hard', color: 'bg-orange-500 hover:bg-orange-600 focus-visible:ring-orange-400' },
-  { rating: 'good', label: 'Good', color: 'bg-blue-500 hover:bg-blue-600 focus-visible:ring-blue-400' },
-  { rating: 'easy', label: 'Easy', color: 'bg-green-500 hover:bg-green-600 focus-visible:ring-green-400' },
+  { rating: 'again', label: 'Again', color: 'bg-red-500 hover:bg-red-600 focus-visible:ring-red-400 dark:bg-red-700 dark:hover:bg-red-800' },
+  { rating: 'hard', label: 'Hard', color: 'bg-orange-500 hover:bg-orange-600 focus-visible:ring-orange-400 dark:bg-orange-700 dark:hover:bg-orange-800' },
+  { rating: 'good', label: 'Good', color: 'bg-blue-500 hover:bg-blue-600 focus-visible:ring-blue-400 dark:bg-blue-700 dark:hover:bg-blue-800' },
+  { rating: 'easy', label: 'Easy', color: 'bg-green-500 hover:bg-green-600 focus-visible:ring-green-400 dark:bg-green-700 dark:hover:bg-green-800' },
 ]
 
 function getToday(): string {
@@ -26,8 +26,8 @@ function getToday(): string {
 }
 
 function maskWord(word: string): string {
-  if (word.length <= 2) return '_ '.repeat(word.length).trim()
-  return word[0] + '_ '.repeat(word.length - 2).trim() + word[word.length - 1]
+  if (word.length <= 2) return '\u200B' + '_'.repeat(word.length)
+  return word[0] + '\u200B' + '_'.repeat(word.length - 2) + '\u200B' + word[word.length - 1]
 }
 
 function generateGapFill(sentence: string, word: string): { before: string; blank: string; after: string } {

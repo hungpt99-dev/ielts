@@ -36,7 +36,7 @@ export function ChatBubble({ message }: ChatBubbleProps) {
             isUser
               ? {
                   backgroundColor: 'var(--color-primary)',
-                  color: '#ffffff',
+                  color: 'var(--color-on-primary)',
                   borderBottomRightRadius: '4px',
                 }
               : {

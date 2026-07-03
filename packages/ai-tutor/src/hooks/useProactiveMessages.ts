@@ -13,9 +13,11 @@ export function useProactiveMessages() {
   const [settings, setSettingsState] = useState<ProactiveMessageSettings>(ProactiveMessageService.loadSettings)
   const [unreadCount, setUnreadCount] = useState(0)
   const listenersRef = useRef<Set<ProactiveMessageCallback>>(new Set())
+  const messagesRef = useRef(messages)
 
   useEffect(() => {
     setUnreadCount(messages.filter(m => !m.isRead && !m.isDismissed).length)
+    messagesRef.current = messages
   }, [messages])
 
   useEffect(() => {
@@ -42,11 +44,11 @@ export function useProactiveMessages() {
   }, [])
 
   const getPendingMessages = useCallback((): ProactiveMessage[] => {
-    return messages.filter(m => !m.isDismissed && !m.isSnoozed)
-      .filter(m => {
-        if (!m.snoozedUntil) return true
-        return new Date(m.snoozedUntil) <= new Date()
-      })
+    return messages.filter(m => {
+      if (m.isDismissed) return false
+      if (m.snoozedUntil && new Date(m.snoozedUntil) > new Date()) return false
+      return true
+    })
   }, [messages])
 
   const getMessagesByCategory = useCallback((category: ProactiveMessageCategory): ProactiveMessage[] => {
@@ -74,7 +76,8 @@ export function useProactiveMessages() {
     const engineMessages = generateProactiveMessages(input)
     if (engineMessages.length === 0) return []
     const now = new Date().toISOString()
-    const todayCount = ProactiveMessageService.getMessagesForToday(messages)
+    const currentMessages = messagesRef.current
+    const todayCount = ProactiveMessageService.getMessagesForToday(currentMessages)
     const maxAllowed = settings.maxMessagesPerDay - todayCount
     const toAdd = engineMessages.slice(0, Math.max(0, maxAllowed))
     if (toAdd.length === 0) return []
@@ -90,10 +93,9 @@ export function useProactiveMessages() {
     })
     newMsgs.forEach(msg => {
       listenersRef.current.forEach(fn => fn(msg))
-      ProactiveEventBus.emitNewMessage(msg)
     })
     return newMsgs
-  }, [messages, settings.maxMessagesPerDay])
+  }, [settings.maxMessagesPerDay])
 
   const getContextSuggestionsForInput = useCallback((
     input: Parameters<typeof getContextSuggestions>[0],

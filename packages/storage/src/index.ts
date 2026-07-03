@@ -1,7 +1,15 @@
 export { initDb, getDb, destroyDb, isDbOpen, safeDb, TABLE_NAMES, DB_NAME, AppDatabase } from './db'
 export type { IDatabase } from './db'
 
-export { APP_SCHEMA, CURRENT_DB_VERSION, getSchemaForVersion, getStoreNamesForVersion } from './migrations'
+export {
+  APP_SCHEMA,
+  CURRENT_DB_VERSION,
+  getSchemaForVersion,
+  getStoreNamesForVersion,
+  applyMigrations,
+  getAppliedVersion,
+  clearAppliedVersion,
+} from './migrations'
 export type { AppDatabaseSchema, StorageVersion } from './migrations'
 
 export {
@@ -45,7 +53,7 @@ export {
   ContentMetaRepository,
   UserContentEditRepository,
 } from './repositories'
-export type { RepositoryItem } from './repositories'
+export type { RepositoryItem, PaginationParams, PaginatedResult } from './repositories'
 export type {
   VocabularyEntry,
   VocabReviewEntry,
