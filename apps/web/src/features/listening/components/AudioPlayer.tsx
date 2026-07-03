@@ -3,9 +3,142 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 interface AudioPlayerProps {
   audioUrl: string
   audioType: 'audio' | 'youtube'
+  transcript?: string
 }
 
-export default function AudioPlayer({ audioUrl, audioType }: AudioPlayerProps) {
+function cleanTranscript(text: string): string {
+  return text.replace(/\[blank-\d+\]/g, '________')
+}
+
+function TtsPlayer({ transcript }: { transcript: string }) {
+  const cleanText = cleanTranscript(transcript)
+  const [playing, setPlaying] = useState(false)
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
+  const [selectedVoice, setSelectedVoice] = useState<string>('')
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
+
+  useEffect(() => {
+    const updateVoices = () => {
+      const available = speechSynthesis.getVoices()
+      setVoices(available)
+      if (!selectedVoice && available.length > 0) {
+        const english = available.find(v => v.lang.startsWith('en'))
+        setSelectedVoice(english?.voiceURI || available[0].voiceURI)
+      }
+    }
+    updateVoices()
+    speechSynthesis.addEventListener('voiceschanged', updateVoices)
+    return () => speechSynthesis.removeEventListener('voiceschanged', updateVoices)
+  }, [selectedVoice])
+
+  useEffect(() => {
+    return () => {
+      speechSynthesis.cancel()
+    }
+  }, [])
+
+  function speak() {
+    speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(cleanText)
+    if (selectedVoice) {
+      const voice = voices.find(v => v.voiceURI === selectedVoice)
+      if (voice) utterance.voice = voice
+    }
+    utterance.rate = 0.85
+    utterance.pitch = 1
+    utterance.onend = () => setPlaying(false)
+    utterance.onerror = () => setPlaying(false)
+    utteranceRef.current = utterance
+    speechSynthesis.speak(utterance)
+    setPlaying(true)
+  }
+
+  function pause() {
+    speechSynthesis.pause()
+    setPlaying(false)
+  }
+
+  function resume() {
+    speechSynthesis.resume()
+    setPlaying(true)
+  }
+
+  function stop() {
+    speechSynthesis.cancel()
+    setPlaying(false)
+  }
+
+  function togglePlayPause() {
+    if (playing) {
+      if (speechSynthesis.speaking) {
+        pause()
+      } else {
+        stop()
+      }
+    } else {
+      if (speechSynthesis.paused) {
+        resume()
+      } else {
+        speak()
+      }
+    }
+  }
+
+  return (
+    <div className="rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
+      <div className="flex items-center gap-4">
+        <button
+          onClick={togglePlayPause}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors hover:opacity-80"
+          style={{ backgroundColor: 'var(--color-primary)' }}
+          aria-label={playing ? 'Pause' : 'Play'}
+        >
+          {playing ? (
+            <svg className="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+            </svg>
+          ) : (
+            <svg className="ml-0.5 h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          )}
+        </button>
+
+        <div className="flex flex-1 items-center gap-3">
+          <select
+            value={selectedVoice}
+            onChange={(e) => setSelectedVoice(e.target.value)}
+            className="max-w-[200px] rounded-lg border px-2 py-1 text-xs"
+            style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+            aria-label="Select voice"
+          >
+            {voices.filter(v => v.lang.startsWith('en')).map(v => (
+              <option key={v.voiceURI} value={v.voiceURI}>
+                {v.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          onClick={stop}
+          className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:opacity-80"
+          style={{ color: 'var(--color-muted)' }}
+          aria-label="Stop"
+        >
+          <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 6h12v12H6z" />
+          </svg>
+        </button>
+      </div>
+      <p className="mt-2 text-xs" style={{ color: 'var(--color-muted)' }}>
+        AI-generated audio — browser text-to-speech
+      </p>
+    </div>
+  )
+}
+
+export default function AudioPlayer({ audioUrl, audioType, transcript }: AudioPlayerProps) {
   const [playing, setPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -99,6 +232,9 @@ export default function AudioPlayer({ audioUrl, audioType }: AudioPlayerProps) {
   }
 
   if (!audioUrl) {
+    if (transcript) {
+      return <TtsPlayer transcript={transcript} />
+    }
     return (
       <div
         className="rounded-xl border p-4 text-sm"

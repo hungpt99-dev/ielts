@@ -14,6 +14,7 @@ import { DatabaseService } from '../../services/storage/Database'
 import type { TaskEntry, StudyNote } from '../../models'
 import { useToast } from '../../components/ui/Toast'
 import { loadRoadmap, recalculateProgress, saveRoadmap } from '../roadmap/roadmapService'
+import { buildPersonalizationContext } from '../personalization/personalizationService'
 
 const SKILL_COLORS: Record<string, { bg: string; text: string }> = {
   Vocabulary: { bg: 'bg-purple-100 dark:bg-purple-900/30', text: 'text-purple-700 dark:text-purple-300' },
@@ -342,50 +343,9 @@ export default function StudyContentPage() {
           return
         }
 
-        // Content not found — generate with AI based on user profile
-        setGeneratingAI(true)
-
-        const settings = JSON.parse(localStorage.getItem('ielts-settings') || '{}')
-        const skill = settings.weakSkills?.[0] || 'Vocabulary'
-        const difficulty = 'medium'
-
-        const aiContent = await aiGenerateStudyContent({ title, skill, difficulty })
-        if (cancelled) return
-
-        const generatedTemplate: ContentTemplate = {
-          skill: skill as StudySkill,
-          title,
-          objective: aiContent.objective,
-          difficulty: difficulty as Difficulty,
-          estimatedMinutes: aiContent.estimatedMinutes,
-          getContent: () => ({
-            sections: aiContent.sections,
-            questions: aiContent.questions,
-            tips: aiContent.tips,
-            whyItMatters: aiContent.whyItMatters,
-            topic: aiContent.topic,
-          }),
-        }
-
-        setContent(generatedTemplate)
-        setContentData(generatedTemplate.getContent())
-        setGeneratingAI(false)
+        // Content not found — show error with generate option
         setLoading(false)
-
-        // Save AI-generated content as a study note for persistence
-        try {
-          await DatabaseService.addStudyNote({
-            title: `AI Generated: ${title}`,
-            content: JSON.stringify(aiContent, null, 2),
-            topic: aiContent.topic,
-            skill: skill,
-            tags: ['ai-generated', skill.toLowerCase(), 'study-content'],
-            isFavorite: false,
-            isDraft: false,
-          })
-        } catch {
-          // Non-critical
-        }
+        setError(`Content not found: "${title}". Click "Generate with AI" to create personalized content.`)
       } catch (err) {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : `Content not found: "${title}"`)
@@ -502,6 +462,98 @@ export default function StudyContentPage() {
     }
   }, [notesText, title, contentData, content, showToast])
 
+  const handleAiGenerateStudyContent = useCallback(async () => {
+    setError(null)
+    setGeneratingAI(true)
+
+    try {
+      const ctx = await buildPersonalizationContext()
+      const skill = ctx.profile.weakSkills[0] || 'Vocabulary'
+      const difficulty = 'medium'
+
+      const userContext = {
+        targetBand: ctx.profile.targetBand || undefined,
+        currentBand: ctx.profile.currentBand || undefined,
+        weakSkills: ctx.profile.weakSkills.length > 0 ? ctx.profile.weakSkills : undefined,
+        studyStreak: ctx.progress.studyStreak || undefined,
+        totalStudyHours: ctx.progress.totalStudyHours || undefined,
+        weeklyTasksDone: ctx.progress.weeklyTasksDone,
+        weeklyTasksTotal: ctx.progress.weeklyTasksTotal,
+        todayUnfinished: ctx.progress.todayUnfinished || undefined,
+        completedTasks: ctx.tasks.completedCount || undefined,
+        examCountdownDays: ctx.exam.countdownDays || undefined,
+        studyGoal: ctx.profile.studyGoal || undefined,
+        vocabularyCount: ctx.vocabulary.totalWords || undefined,
+        vocabDueForReview: ctx.vocabulary.dueForReview || undefined,
+        mistakeCount: ctx.mistakes.total || undefined,
+        recentMistakes: ctx.mistakes.recent || undefined,
+        topMistakeSkill: ctx.mistakes.topSkill || undefined,
+      }
+
+      const aiContent = await aiGenerateStudyContent({ title, skill, difficulty, userContext })
+
+      setContent({
+        skill: skill as StudySkill,
+        title,
+        objective: aiContent.objective,
+        difficulty: difficulty as Difficulty,
+        estimatedMinutes: aiContent.estimatedMinutes,
+        getContent: () => ({
+          sections: aiContent.sections,
+          questions: aiContent.questions,
+          tips: aiContent.tips,
+          whyItMatters: aiContent.whyItMatters,
+          topic: aiContent.topic,
+        }),
+      })
+      setContentData({
+        sections: aiContent.sections,
+        questions: aiContent.questions,
+        tips: aiContent.tips,
+        whyItMatters: aiContent.whyItMatters,
+        topic: aiContent.topic,
+      })
+      setGeneratingAI(false)
+
+      // Save as study note
+      try {
+        await DatabaseService.addStudyNote({
+          title: `AI Generated: ${title}`,
+          content: JSON.stringify(aiContent, null, 2),
+          topic: aiContent.topic,
+          skill: skill,
+          tags: ['ai-generated', skill.toLowerCase(), 'study-content'],
+          isFavorite: false,
+          isDraft: false,
+        })
+      } catch {}
+
+      // Save each question as exercise result
+      if (aiContent.questions.length > 0) {
+        try {
+          const { LocalTutorStorage } = await import('../../services/storage/LocalTutorStorage')
+          await LocalTutorStorage.addExerciseResult({
+            sessionId: '',
+            type: 'multiple-choice',
+            topic: aiContent.topic || title,
+            questions: aiContent.questions.map(q => ({
+              question: q.question,
+              userAnswer: '',
+              correctAnswer: q.correctAnswer || '',
+              isCorrect: false,
+              explanation: '',
+            })),
+            score: 0,
+            total: aiContent.questions.length,
+          })
+        } catch {}
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to generate study content')
+      setGeneratingAI(false)
+    }
+  }, [title])
+
   const handleReviewLater = useCallback(async () => {
     setSaving(true)
     try {
@@ -527,19 +579,30 @@ export default function StudyContentPage() {
     return <LoadingSpinner size="lg" fullPage message={generatingAI ? 'Generating study content with AI...' : 'Loading study content...'} />
   }
 
-  if (error) {
+  if (error && !generatingAI) {
+    const isContentNotFound = error.includes('Content not found')
     return (
       <div className="mx-auto max-w-3xl">
         <EmptyState
           title="Content Not Found"
           description={error}
-          action={{ label: 'Back to Dashboard', onClick: () => navigate('/dashboard') }}
+          action={isContentNotFound ? undefined : { label: 'Back to Dashboard', onClick: () => navigate('/dashboard') }}
         />
+        {isContentNotFound && (
+          <div className="mt-4 flex justify-center gap-3">
+            <Button onClick={handleAiGenerateStudyContent}>
+              Generate with AI
+            </Button>
+            <Button variant="secondary" onClick={() => navigate('/dashboard')}>
+              Back to Dashboard
+            </Button>
+          </div>
+        )}
       </div>
     )
   }
 
-  if (!content || !contentData) {
+  if (!content || !contentData && !generatingAI) {
     return (
       <div className="mx-auto max-w-3xl">
         <EmptyState

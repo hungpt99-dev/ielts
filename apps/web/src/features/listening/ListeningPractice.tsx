@@ -121,6 +121,7 @@ export default function ListeningPractice() {
   const [aiGenerating, setAiGenerating] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
 
+  const [showTranscript, setShowTranscript] = useState(false)
   const [historyDetail, setHistoryDetail] = useState<ListeningPracticeSession | null>(null)
 
   const loadHistory = useCallback(async () => {
@@ -600,27 +601,46 @@ export default function ListeningPractice() {
             </div>
           </div>
 
-          <AudioPlayer audioUrl={currentExercise.audioUrl} audioType={currentExercise.audioType} />
+          <AudioPlayer audioUrl={currentExercise.audioUrl} audioType={currentExercise.audioType} transcript={currentExercise.transcript} />
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Transcript</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div
-                className="whitespace-pre-wrap rounded-lg border p-4 text-sm leading-relaxed"
-                style={{
-                  borderColor: 'var(--color-border)',
-                  backgroundColor: 'var(--color-surface-alt)',
-                  color: 'var(--color-text-secondary)',
-                  maxHeight: '300px',
-                  overflowY: 'auto',
-                }}
-              >
-                {currentExercise.transcript}
-              </div>
-            </CardContent>
-          </Card>
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowTranscript(!showTranscript)}
+            >
+              <svg className="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                {showTranscript ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                )}
+              </svg>
+              {showTranscript ? 'Hide Transcript' : 'Show Transcript'}
+            </Button>
+          </div>
+
+          {showTranscript && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Transcript</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div
+                  className="whitespace-pre-wrap rounded-lg border p-4 text-sm leading-relaxed"
+                  style={{
+                    borderColor: 'var(--color-border)',
+                    backgroundColor: 'var(--color-surface-alt)',
+                    color: 'var(--color-text-secondary)',
+                    maxHeight: '300px',
+                    overflowY: 'auto',
+                  }}
+                >
+                  {currentExercise.transcript}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <div>
             <h2 className="mb-4 text-lg font-semibold" style={{ color: 'var(--color-text)' }}>

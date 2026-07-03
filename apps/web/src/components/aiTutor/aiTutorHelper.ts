@@ -834,6 +834,24 @@ export async function aiGenerateStudyContent(params: {
   title: string
   skill: string
   difficulty: string
+  userContext?: {
+    targetBand?: number
+    currentBand?: number
+    weakSkills?: string[]
+    studyStreak?: number
+    examCountdownDays?: number
+    studyGoal?: string
+    totalStudyHours?: number
+    vocabularyCount?: number
+    vocabDueForReview?: number
+    mistakeCount?: number
+    recentMistakes?: number
+    topMistakeSkill?: string
+    weeklyTasksDone?: number
+    weeklyTasksTotal?: number
+    todayUnfinished?: number
+    completedTasks?: number
+  }
 }): Promise<{
   sections: { heading: string; body: string; type: string }[]
   questions: { id: string; question: string; options?: string[]; correctAnswer?: string; type: string }[]
@@ -843,47 +861,59 @@ export async function aiGenerateStudyContent(params: {
   objective: string
   estimatedMinutes: number
 }> {
-  const { title, skill, difficulty } = params
+  const { title, skill, difficulty, userContext } = params
 
-  const systemPrompt = `You are an expert IELTS ${skill} teacher. Create a comprehensive study lesson titled "${title}".
-The lesson should be at ${difficulty} difficulty level for IELTS preparation.
+  const profileLines: string[] = []
+  if (userContext) {
+    if (userContext.targetBand) profileLines.push(`- Target band: ${userContext.targetBand}`)
+    if (userContext.currentBand) profileLines.push(`- Current band: ${userContext.currentBand}`)
+    if (userContext.weakSkills?.length) profileLines.push(`- Weak skills: ${userContext.weakSkills.join(', ')}`)
+    if (userContext.studyStreak) profileLines.push(`- Study streak: ${userContext.studyStreak} days`)
+    if (userContext.totalStudyHours) profileLines.push(`- Total study hours: ${userContext.totalStudyHours}`)
+    if (userContext.weeklyTasksDone !== undefined) profileLines.push(`- Weekly tasks: ${userContext.weeklyTasksDone}/${userContext.weeklyTasksTotal || '?'} done`)
+    if (userContext.todayUnfinished) profileLines.push(`- ${userContext.todayUnfinished} unfinished task(s) today`)
+    if (userContext.completedTasks) profileLines.push(`- ${userContext.completedTasks} tasks completed overall`)
+    if (userContext.examCountdownDays) profileLines.push(`- Exam in ${userContext.examCountdownDays} days${userContext.examCountdownDays <= 30 ? ' (URGENT)' : ''}`)
+    if (userContext.studyGoal) profileLines.push(`- Study goal: ${userContext.studyGoal}`)
+    if (userContext.vocabularyCount) profileLines.push(`- Vocabulary saved: ${userContext.vocabularyCount} words${userContext.vocabDueForReview ? ` (${userContext.vocabDueForReview} due for review)` : ''}`)
+    if (userContext.mistakeCount) profileLines.push(`- Total mistakes: ${userContext.mistakeCount}${userContext.recentMistakes ? ` (${userContext.recentMistakes} recent)` : ''}`)
+    if (userContext.topMistakeSkill) profileLines.push(`- Most mistakes in: ${userContext.topMistakeSkill}`)
+  }
 
-Respond with valid JSON ONLY, no other text. Use this exact structure:
+  const userProfile = profileLines.join('\n')
+  const profileSection = userProfile
+    ? `\n\nStudent profile:\n${userProfile}\n\nPersonalize the lesson content to their current level, weak areas, and study progress.`
+    : ''
+
+  const systemPrompt = `You are an expert IELTS ${skill} teacher. Create a brief study lesson titled "${title}".
+The lesson should be at ${difficulty} difficulty level for IELTS preparation.${profileSection}
+
+Respond with valid JSON ONLY. Use this exact structure:
 {
-  "topic": "The main topic (e.g. Environment, Education, Technology)",
-  "objective": "A clear 1-sentence learning objective",
-  "whyItMatters": "Why this topic matters for IELTS (2-3 sentences)",
-  "estimatedMinutes": number (estimated study time in minutes, 15-45),
+  "topic": "Main topic (one word)",
+  "objective": "One sentence learning objective",
+  "whyItMatters": "Why this matters for IELTS (2-3 sentences)",
+  "estimatedMinutes": 20,
   "sections": [
-    {
-      "heading": "Section heading",
-      "body": "Section content with explanations, examples, or lists",
-      "type": "instruction | list | example | tip | text"
-    }
+    { "heading": "Section title", "body": "Section content with explanations, examples", "type": "instruction" },
+    { "heading": "Section title", "body": "More content", "type": "text" }
   ],
   "questions": [
-    {
-      "id": "unique-id-1",
-      "question": "The question text",
-      "options": ["Option A", "Option B", "Option C", "Option D"] (for multiple-choice, optional),
-      "correctAnswer": "The correct answer",
-      "type": "multiple-choice | fill-blank | short-answer | open-ended"
-    }
+    { "id": "q1", "question": "Question text", "options": ["A", "B", "C", "D"], "correctAnswer": "A", "type": "multiple-choice" },
+    { "id": "q2", "question": "Question text", "correctAnswer": "answer", "type": "short-answer" }
   ],
-  "tips": ["Tip 1", "Tip 2", "Tip 3"]
+  "tips": ["Practical tip 1", "Practical tip 2"]
 }
 
 Guidelines:
-- Create 3-5 sections with clear explanations
-- Create 3-5 practice questions (mix of multiple-choice and open-ended)
-- Include 3-5 practical tips
-- Make content specific, accurate, and immediately useful for IELTS learners
-- For multiple-choice questions, provide exactly 4 options
-- Use the ${skill} skill focus naturally throughout`
+- 3-4 sections with clear explanations
+- 3-4 practice questions (mix multiple-choice and short-answer)
+- 3-4 practical tips
+- Make content specific and immediately useful for IELTS learners`
 
-  const { content, error } = await makeAIRequest(systemPrompt, `Create a study lesson titled "${title}" for ${skill} at ${difficulty} level.`, {
+  const { content, error } = await makeAIRequest(systemPrompt, `Create a short study lesson titled "${title}" for ${skill} at ${difficulty} level.`, {
     temperature: 0.7,
-    maxTokens: 2500,
+    maxTokens: 1500,
   })
 
   if (content && !error) {

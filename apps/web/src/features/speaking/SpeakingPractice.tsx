@@ -102,6 +102,8 @@ export default function SpeakingPractice() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const recordingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
+  const recognitionRef = useRef<SpeechRecognition | null>(null)
+  const transcriptRef = useRef('')
 
   const [phrasesOpen, setPhrasesOpen] = useState(false)
   const [phrasesFilter, setPhrasesFilter] = useState('')
@@ -236,6 +238,32 @@ export default function SpeakingPractice() {
       mediaRecorder.start()
       setRecording(true)
       setRecordingTime(0)
+      transcriptRef.current = ''
+
+      const SpeechRecognitionConstructor = (window as unknown as Record<string, unknown>).SpeechRecognition
+        || (window as unknown as Record<string, unknown>).webkitSpeechRecognition
+      if (SpeechRecognitionConstructor) {
+        const recognition = new (SpeechRecognitionConstructor as new () => SpeechRecognition)()
+        recognition.continuous = true
+        recognition.interimResults = true
+        recognition.lang = 'en-US'
+        recognition.onresult = (event: SpeechRecognitionEvent) => {
+          let final = ''
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            if (event.results[i].isFinal) {
+              final += event.results[i][0].transcript + ' '
+            }
+          }
+          if (final) {
+            transcriptRef.current += final
+            setAnswerNotes(prev => (prev + final).trim())
+          }
+        }
+        recognition.onerror = () => {}
+        recognition.start()
+        recognitionRef.current = recognition
+      }
+
       recordingTimerRef.current = setInterval(() => {
         setRecordingTime(prev => prev + 1)
       }, 1000)
@@ -245,6 +273,10 @@ export default function SpeakingPractice() {
   }
 
   function stopRecording() {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop()
+      recognitionRef.current = null
+    }
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop()
     }
@@ -271,16 +303,10 @@ export default function SpeakingPractice() {
     setCustomTopic(question.topic)
     setView('practice')
 
-    if (question.part === 2) {
-      setTimerMode('countdown')
-      setCountdownTotal(CUE_CARD_PREP_TIME)
-      setTimerSeconds(CUE_CARD_PREP_TIME)
-      setTimerRunning(false)
-    } else {
-      setTimerMode('stopwatch')
-      setTimerSeconds(0)
-      setTimerRunning(true)
-    }
+    setTimerMode(question.part === 2 ? 'countdown' : 'stopwatch')
+    setCountdownTotal(question.part === 2 ? CUE_CARD_PREP_TIME : PRACTICE_TIME)
+    setTimerSeconds(question.part === 2 ? CUE_CARD_PREP_TIME : 0)
+    setTimerRunning(false)
   }
 
   function startCustomPractice() {
@@ -300,7 +326,7 @@ export default function SpeakingPractice() {
     setView('practice')
     setTimerMode('stopwatch')
     setTimerSeconds(0)
-    setTimerRunning(true)
+    setTimerRunning(false)
   }
 
   function saveSession() {
@@ -308,7 +334,7 @@ export default function SpeakingPractice() {
     const now = new Date().toISOString()
     const part = selectedQuestion?.part ?? 1
     const duration = timerMode === 'countdown'
-      ? (timerMode === 'countdown' ? countdownTotal - timerSeconds : timerSeconds)
+      ? countdownTotal - timerSeconds
       : timerSeconds
 
     const session: SpeakingSession = {
@@ -340,32 +366,75 @@ export default function SpeakingPractice() {
     }
   }
 
-  async function handleGetAiFeedback() {
-    const textForFeedback = improvedAnswer.trim() || answerNotes.trim()
-    if (!textForFeedback) return
+  async function handleGetAiFeedback(text?: string) {
+    const textForFeedback = text || improvedAnswer.trim() || answerNotes.trim() || transcriptRef.current.trim()
+    if (!textForFeedback) {
+      setAiError('Record your answer first or type it in the "Your Answer" field.')
+      return
+    }
 
     setAiLoading(true)
     setAiError(null)
     setAiFeedback(null)
 
+    let aiContent = ''
     try {
       const questionText = selectedQuestion?.question || 'Custom practice'
       const part = (selectedQuestion?.part || 1) as 1 | 2 | 3
 
       const { content, error } = await getSpeakingFeedback(textForFeedback, questionText, part)
 
-      if (error) {
-        throw new Error(error)
+      if (error) throw new Error(error)
+      if (!content) throw new Error('AI returned an empty response. Try again.')
+
+      aiContent = content
+
+      const jsonStart = content.indexOf('{')
+      const jsonEnd = content.lastIndexOf('}')
+      const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
+      const parsed = JSON.parse(jsonStr) as Record<string, unknown>
+
+      const textFields = ['fluencyNotes', 'vocabularyNotes', 'grammarNotes', 'pronunciationNotes', 'betterExpressions', 'improvedAnswer'] as const
+      for (const field of textFields) {
+        const val = parsed[field]
+        if (typeof val === 'string') {
+          const setters: Record<string, (v: string) => void> = {
+            fluencyNotes: setFluencyNotes,
+            vocabularyNotes: setVocabularyNotes,
+            grammarNotes: setGrammarNotes,
+            pronunciationNotes: setPronunciationNotes,
+            betterExpressions: setBetterExpressions,
+            improvedAnswer: setImprovedAnswer,
+          }
+          setters[field](val)
+        }
       }
 
-      if (!content) {
-        throw new Error('AI returned an empty response. Try again.')
+      if (parsed.scores && typeof parsed.scores === 'object') {
+        const scores = parsed.scores as Record<string, unknown>
+        setEvaluation(prev => {
+          const next = { ...prev }
+          for (const key of Object.keys(next) as (keyof EvaluationResult)[]) {
+            const score = scores[key]
+            if (typeof score === 'number' && score >= 1 && score <= 10) {
+              next[key] = Math.round(score)
+            }
+          }
+          return next
+        })
       }
 
-      setAiFeedback(content)
+      const bandScore = parsed.bandScore
+      const bandMsg = typeof bandScore === 'number' ? `\n\nEstimated Band: ${bandScore.toFixed(1)}` : ''
+      setAiFeedback(content + bandMsg)
       saveSession()
     } catch (err) {
-      setAiError(err instanceof Error ? err.message : 'Failed to get AI feedback')
+      if (err instanceof SyntaxError && aiContent) {
+        setAiFeedback(aiContent)
+        saveSession()
+      } else {
+        setAiError(err instanceof Error ? err.message : 'Failed to get AI feedback')
+      }
     } finally {
       setAiLoading(false)
     }
@@ -747,7 +816,7 @@ export default function SpeakingPractice() {
                 </Card>
               )}
 
-              {/* Timer */}
+              {/* Timer & Recording */}
               <Card>
                 <CardHeader>
                   <CardTitle>Timer</CardTitle>
@@ -859,51 +928,50 @@ export default function SpeakingPractice() {
                         {Math.floor(timerSeconds / 60)}:{String(timerSeconds % 60).padStart(2, '0')}
                       </span>
                     </div>
-                    <div className="flex gap-3">
-                      <Button onClick={toggleTimer} variant={timerRunning ? 'secondary' : 'primary'} size="sm">
-                        {timerRunning ? 'Pause' : 'Start'}
+                    <div className="flex items-center gap-3">
+                      <Button
+                        onClick={() => {
+                          if (timerRunning || recording) {
+                            stopTimer()
+                            if (recording) {
+                              stopRecording()
+                            }
+                          } else {
+                            startTimer(timerMode, timerMode === 'countdown' ? timerSeconds || countdownTotal : undefined)
+                            if (recordingSupported) startRecording()
+                          }
+                        }}
+                        variant={timerRunning || recording ? 'secondary' : 'primary'}
+                        size="sm"
+                      >
+                        {recording ? (
+                          <>
+                            <span className="mr-1.5 h-2 w-2 animate-pulse rounded-full bg-red-500" />
+                            Stop
+                          </>
+                        ) : timerRunning ? (
+                          'Pause'
+                        ) : (
+                          <>
+                            <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                            </svg>
+                            Start
+                          </>
+                        )}
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={resetTimer} disabled={timerRunning}>
+                      <Button variant="ghost" size="sm" onClick={resetTimer} disabled={timerRunning || recording}>
                         Reset
                       </Button>
                     </div>
+                    {recording && (
+                      <p className="mt-2 text-xs" style={{ color: 'var(--color-danger)' }}>
+                        Recording... {Math.floor(recordingTime / 60)}:{String(recordingTime % 60).padStart(2, '0')}
+                      </p>
+                    )}
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Recording */}
-              {recordingSupported && (
-                <Card>
-                  <CardContent className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`h-3 w-3 rounded-full ${recording ? 'animate-pulse' : ''}`}
-                        style={{ backgroundColor: recording ? 'var(--color-danger)' : 'var(--color-muted)' }}
-                      />
-                      <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                        {recording ? `Recording... ${Math.floor(recordingTime / 60)}:${String(recordingTime % 60).padStart(2, '0')}` : 'Microphone'}
-                      </span>
-                    </div>
-                    <div className="flex gap-2">
-                      {!recording ? (
-                        <Button size="sm" onClick={startRecording} variant="secondary">
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                          </svg>
-                          Record
-                        </Button>
-                      ) : (
-                        <Button size="sm" onClick={stopRecording} variant="danger">
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-                          </svg>
-                          Stop
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
 
               {/* Answer Notes */}
               <Card>
@@ -1072,7 +1140,6 @@ export default function SpeakingPractice() {
                     <Button
                       onClick={handleGetAiFeedback}
                       loading={aiLoading}
-                      disabled={!(improvedAnswer.trim() || answerNotes.trim())}
                       className="w-full"
                       size="sm"
                     >
@@ -1145,11 +1212,61 @@ export default function SpeakingPractice() {
                   <CardTitle>AI Feedback</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div
-                    className="whitespace-pre-wrap text-sm leading-relaxed"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    {aiFeedback}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                      {([
+                        ['fluency', 'Fluency'],
+                        ['vocabulary', 'Vocab'],
+                        ['grammar', 'Grammar'],
+                        ['pronunciation', 'Pronun.'],
+                        ['coherence', 'Coherence'],
+                        ['taskAchievement', 'Task'],
+                      ] as const).map(([key, label]) => (
+                        <div key={key} className="rounded-lg border p-3 text-center" style={{ borderColor: 'var(--color-border)' }}>
+                          <p className="text-[10px] font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>{label}</p>
+                          <p className="mt-1 text-lg font-bold" style={{ color: getScoreColor(evaluation[key]) }}>
+                            {evaluation[key]}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="space-y-3 text-sm leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                      {[
+                        ['fluencyNotes', 'Fluency & Coherence'],
+                        ['vocabularyNotes', 'Lexical Resource'],
+                        ['grammarNotes', 'Grammatical Range & Accuracy'],
+                        ['pronunciationNotes', 'Pronunciation'],
+                        ['betterExpressions', 'Better Expressions'],
+                      ].map(([field, label]) => {
+                        const val = ({
+                          fluencyNotes,
+                          vocabularyNotes,
+                          grammarNotes,
+                          pronunciationNotes,
+                          betterExpressions,
+                        } as Record<string, string>)[field]
+                        if (!val) return null
+                        return (
+                          <div key={field}>
+                            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+                              {label}
+                            </p>
+                            <p className="mt-1 whitespace-pre-wrap">{val}</p>
+                          </div>
+                        )
+                      })}
+                      {improvedAnswer && (
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+                            Improved Answer
+                          </p>
+                          <p className="mt-1 whitespace-pre-wrap" style={{ color: 'var(--color-success)' }}>{improvedAnswer}</p>
+                        </div>
+                      )}
+                      {fluencyNotes || vocabularyNotes || grammarNotes || pronunciationNotes || betterExpressions || improvedAnswer ? null : (
+                        <p className="whitespace-pre-wrap">{aiFeedback}</p>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>

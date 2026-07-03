@@ -358,6 +358,15 @@ ${answer}
 
 Respond with valid JSON:
 {
+  "scores": {
+    "fluency": 6,
+    "vocabulary": 6,
+    "grammar": 6,
+    "pronunciation": 6,
+    "coherence": 6,
+    "taskAchievement": 6
+  },
+  "bandScore": 6.0,
   "fluencyNotes": "Feedback on fluency and coherence (2-3 sentences)",
   "vocabularyNotes": "Feedback on lexical resource (2-3 sentences)",
   "grammarNotes": "Feedback on grammatical range and accuracy (2-3 sentences)",
@@ -366,6 +375,7 @@ Respond with valid JSON:
   "improvedAnswer": "A model improved version of the answer"
 }
 
+Each score in "scores" must be an integer between 1 and 10. "bandScore" must be a number between 1.0 and 9.0.
 Be constructive and specific. Do not include any text outside the JSON object.`
 
   return makeAIRequest(systemPrompt, prompt, { maxTokens: 2000 })
