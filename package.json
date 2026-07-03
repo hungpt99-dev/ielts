@@ -26,6 +26,9 @@
 
     "ai": "VITEST_MAX_WORKERS=2 pnpm -r exec -- vitest run --passWithNoTests --reporter verbose",
 
+    "deploy:web": "pnpm build:web && wrangler pages deploy apps/web/dist --branch main",
+    "deploy:web:prod": "pnpm build:web && wrangler pages deploy apps/web/dist --branch main --production",
+
     "clean": "pnpm -r clean"
   },
   "pnpm": {}
