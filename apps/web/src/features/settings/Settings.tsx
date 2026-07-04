@@ -523,7 +523,7 @@ export default function Settings() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Data Management</CardTitle>
+          <CardTitle style={{ color: 'var(--color-danger)' }}>Data Management</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-slate-600 dark:text-slate-400">
