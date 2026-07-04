@@ -381,3 +381,50 @@ export async function searchVocabulary(query: string): Promise<VocabularyEntry[]
       e.exampleSentence.toLowerCase().includes(q),
   )
 }
+
+export async function generateWordFamily(
+  word: string,
+  meaning: string,
+): Promise<{ wordFamily: string[]; error: string | null }> {
+  const { makeAIRequest } = await import('../../services/ai/AIService')
+
+  const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON.'
+  const prompt = `For the word "${word}" (${meaning}), generate a list of related word forms across different parts of speech.
+
+Include as many of these forms as exist for this word:
+- noun form
+- verb form
+- adjective form
+- adverb form
+
+For each form, include the word and its part of speech in parentheses like "ubiquity (noun)", "ubiquitous (adjective)", "ubiquitously (adverb)".
+
+If a form does not commonly exist for this word, omit it. Only include real, commonly used English words.
+
+Respond with valid JSON in this exact format:
+{
+  "wordFamily": ["word1 (noun)", "word2 (verb)", "word3 (adjective)", "word4 (adverb)"]
+}
+
+Do not include any text outside the JSON object.`
+
+  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 500 })
+
+  if (result.error) {
+    return { wordFamily: [], error: result.error }
+  }
+
+  try {
+    const jsonStart = result.content.indexOf('{')
+    const jsonEnd = result.content.lastIndexOf('}')
+    if (jsonStart >= 0 && jsonEnd >= 0) {
+      const parsed = JSON.parse(result.content.slice(jsonStart, jsonEnd + 1))
+      if (Array.isArray(parsed.wordFamily)) {
+        return { wordFamily: parsed.wordFamily, error: null }
+      }
+    }
+    return { wordFamily: [], error: 'Unexpected response format from AI.' }
+  } catch {
+    return { wordFamily: [], error: 'Failed to parse AI response.' }
+  }
+}

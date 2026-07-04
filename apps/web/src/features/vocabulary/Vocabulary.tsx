@@ -11,6 +11,8 @@ import VocabularyImport from './VocabularyImport'
 import { onVocabularyChanged } from './vocabularyEvents'
 import { onVocabSavedFromExtension, notifyExtensionVocabSaved } from '../../services/storage/VocabularySync'
 import PronounceButton from '../../components/ui/PronounceButton'
+import WordFamilyDisplay from './components/WordFamilyDisplay'
+import { generateWordFamily } from './vocabularyService'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -53,6 +55,7 @@ export default function Vocabulary() {
 
   const [detailEntry, setDetailEntry] = useState<VocabularyEntry | null>(null)
   const [detailOpen, setDetailOpen] = useState(false)
+  const [generatingFamily, setGeneratingFamily] = useState(false)
 
   const [tab, setTab] = useState<'browse' | 'review'>('browse')
 
@@ -215,6 +218,23 @@ export default function Vocabulary() {
   function handleImportComplete(count: number) {
     loadEntries()
   }
+
+  const handleGenerateFamily = useCallback(async () => {
+    if (!detailEntry) return
+    setGeneratingFamily(true)
+    const result = await generateWordFamily(detailEntry.word, detailEntry.meaning)
+    if (result.wordFamily.length > 0) {
+      const updated: VocabularyEntry = {
+        ...detailEntry,
+        wordFamily: [...new Set([...detailEntry.wordFamily, ...result.wordFamily])],
+        updatedAt: new Date().toISOString(),
+      }
+      await DatabaseService.put('vocabulary', updated)
+      setDetailEntry(updated)
+      setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
+    }
+    setGeneratingFamily(false)
+  }, [detailEntry])
 
   if (loading) {
     return (
@@ -715,25 +735,11 @@ export default function Vocabulary() {
               </div>
             )}
 
-            {detailEntry.wordFamily.length > 0 && (
-              <div>
-                <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>Word Family</p>
-                <div className="mt-1 flex flex-wrap gap-1.5">
-                  {detailEntry.wordFamily.map((wf, i) => (
-                    <span
-                      key={i}
-                      className="rounded-lg px-2.5 py-1 text-xs font-medium"
-                      style={{
-                        backgroundColor: 'var(--color-surface-alt)',
-                        color: 'var(--color-text-secondary)',
-                      }}
-                    >
-                      {wf}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+            <WordFamilyDisplay
+              wordFamily={detailEntry.wordFamily}
+              onGenerate={handleGenerateFamily}
+              generating={generatingFamily}
+            />
 
             {detailEntry.personalNote && (
               <div>
