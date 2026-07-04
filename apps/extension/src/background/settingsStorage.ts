@@ -23,6 +23,7 @@ export const extensionSettingsSchema = z.object({
   themeMode: z.enum(THEME_MODES).default('system'),
   floatingToolbar: z.boolean().default(true),
   autoSaveSelected: z.boolean().default(false),
+  autoHighlightSavedVocabulary: z.boolean().default(true),
   defaultCategory: z.enum(SAVE_CATEGORIES).default('vocabulary'),
   defaultTopic: z.string().default('general'),
 })
@@ -37,6 +38,7 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   themeMode: 'system',
   floatingToolbar: true,
   autoSaveSelected: false,
+  autoHighlightSavedVocabulary: true,
   defaultCategory: 'vocabulary',
   defaultTopic: 'general',
 }
@@ -48,6 +50,7 @@ interface SyncSettings {
   themeMode: 'light' | 'dark' | 'system'
   floatingToolbar: boolean
   autoSaveSelected: boolean
+  autoHighlightSavedVocabulary: boolean
   defaultCategory: typeof SAVE_CATEGORIES[number]
   defaultTopic: string
 }
@@ -64,6 +67,7 @@ function toSyncSettings(s: ExtensionSettings): SyncSettings {
     themeMode: s.themeMode,
     floatingToolbar: s.floatingToolbar,
     autoSaveSelected: s.autoSaveSelected,
+    autoHighlightSavedVocabulary: s.autoHighlightSavedVocabulary,
     defaultCategory: s.defaultCategory,
     defaultTopic: s.defaultTopic,
   }

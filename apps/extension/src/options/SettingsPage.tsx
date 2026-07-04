@@ -200,6 +200,12 @@ export default function SettingsPage() {
           checked={settings.autoSaveSelected}
           onChange={(v) => update({ autoSaveSelected: v })}
         />
+        <ToggleField
+          label="Auto-highlight Saved Vocabulary"
+          description="Automatically highlight your saved vocabulary words and phrases on every webpage you visit"
+          checked={settings.autoHighlightSavedVocabulary}
+          onChange={(v) => update({ autoHighlightSavedVocabulary: v })}
+        />
       </Section>
 
       {/* Defaults */}

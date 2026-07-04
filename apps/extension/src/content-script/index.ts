@@ -1,8 +1,8 @@
 import './saveSelectedText'
-import './floatingToolbar'
+import './selectionPanel'
 import './aiExplain'
 import './videoHelper'
-import './dictionaryPanel'
 import './miniTutor'
+import './highlighter/savedKeywordHighlighter'
 
 export {}
