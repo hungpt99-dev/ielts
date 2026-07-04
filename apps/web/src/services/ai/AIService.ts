@@ -1,3 +1,5 @@
+import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
+
 const STORAGE_KEY = 'ielts-settings'
 
 export interface AIProviderConfig {
@@ -76,8 +78,8 @@ function getSettings(): Record<string, unknown> | null {
 function getProviderConfig(): AIProviderConfig {
   const settings = getSettings()
   const apiKey = (settings?.aiApiKey as string) || ''
-  const baseUrl = (settings?.aiEndpoint as string) || 'https://api.openai.com/v1'
-  const model = (settings?.aiModel as string) || 'gpt-4o-mini'
+  const baseUrl = (settings?.aiEndpoint as string) || OPENAI_BASE_URL
+  const model = (settings?.aiModel as string) || DEFAULT_MODEL
   return { apiKey, baseUrl, model }
 }
 
@@ -113,8 +115,9 @@ export async function makeAIRequest(
   systemPrompt: string,
   userPrompt: string,
   options?: { temperature?: number; maxTokens?: number },
+  configOverride?: AIProviderConfig,
 ): Promise<AIRequestResult> {
-  const { apiKey, baseUrl, model } = getProviderConfig()
+  const { apiKey, baseUrl, model } = configOverride ?? getProviderConfig()
 
   if (!apiKey) {
     return { content: '', error: 'API key not configured. Go to Settings to add your AI API key.' }
@@ -174,11 +177,22 @@ export async function makeAIRequest(
   }
 }
 
-export async function testConnection(): Promise<{ ok: boolean; message: string; model?: string }> {
+export async function testConnection(
+  overrides?: Partial<AIProviderConfig>,
+): Promise<{ ok: boolean; message: string; model?: string }> {
+  const config = overrides
+    ? { ...getProviderConfig(), ...overrides }
+    : getProviderConfig()
+
+  if (!config.apiKey) {
+    return { ok: false, message: 'Enter an API key first.' }
+  }
+
   const result = await makeAIRequest(
     'You are a helpful assistant.',
     'Reply with exactly the word "ok" and nothing else.',
     { maxTokens: 10, temperature: 0 },
+    config,
   )
 
   if (result.error) {
@@ -187,8 +201,7 @@ export async function testConnection(): Promise<{ ok: boolean; message: string; 
 
   const trimmed = result.content.trim().toLowerCase()
   if (trimmed.includes('ok')) {
-    const { model } = getProviderConfig()
-    return { ok: true, message: 'Connection successful!', model }
+    return { ok: true, message: 'Connection successful!', model: config.model }
   }
 
   return { ok: false, message: 'Unexpected response from AI API.' }

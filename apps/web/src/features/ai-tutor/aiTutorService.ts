@@ -4,6 +4,7 @@ import { loadRoadmap, getTodayTask } from '../roadmap/roadmapService'
 import type { TaskEntry, VocabularyEntry, VocabReviewEntry, MistakeEntry } from '../../models'
 import type { PersonalizationContext, SkillType, RecommendationReason } from '../personalization/types'
 import { buildPersonalizationContext } from '../personalization/personalizationService'
+import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { callAI } from '@ielts/ai'
 import type { ProviderConfig } from '@ielts/ai'
 
@@ -619,8 +620,8 @@ Skill: ${skill}`
     if (!settings.aiApiKey) return null
     return {
       apiKey: settings.aiApiKey,
-      baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
-      model: settings.aiModel || 'gpt-4o-mini',
+      baseUrl: settings.aiEndpoint || OPENAI_BASE_URL,
+      model: settings.aiModel || DEFAULT_MODEL,
     }
   }
 

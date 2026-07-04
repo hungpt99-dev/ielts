@@ -96,10 +96,9 @@ export interface MistakeReviewResult {
 
 // ── Helpers ──────────────────────────────────────────────────
 
-const APP_SETTINGS_KEY = 'ielts-settings'
+import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 
-const DEFAULT_BASE_URL = 'https://api.openai.com/v1'
-const DEFAULT_MODEL = 'gpt-4o-mini'
+const APP_SETTINGS_KEY = 'ielts-settings'
 
 function readAppSettings(): Record<string, unknown> | null {
   try {
@@ -114,11 +113,10 @@ export function getStoredAiConfig(): AiProviderConfig {
     const settings = readAppSettings()
     return {
       apiKey: (settings?.aiApiKey as string) ?? '',
-      baseUrl: (settings?.aiEndpoint as string) || DEFAULT_BASE_URL,
+      baseUrl: (settings?.aiEndpoint as string) || OPENAI_BASE_URL,
       model: (settings?.aiModel as string) || DEFAULT_MODEL,
     }
-  } catch {
-    return { apiKey: '', baseUrl: DEFAULT_BASE_URL, model: DEFAULT_MODEL }
+    return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_MODEL }
   }
 }
 

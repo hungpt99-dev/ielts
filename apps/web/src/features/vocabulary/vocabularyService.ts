@@ -5,6 +5,7 @@ import { getInitialReviewEntry, calculateNextReview } from '../../utils/spaced-r
 import { loadAppSettings } from '../../services/storage/SettingsStorage'
 import { callAI } from '@ielts/ai'
 import type { ProviderConfig } from '@ielts/ai'
+import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 
 export interface VocabStats {
   total: number
@@ -289,8 +290,8 @@ export async function generateExercisesFromVocabulary(
   const config: ProviderConfig | null = settings.aiApiKey
     ? {
         apiKey: settings.aiApiKey,
-        baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
-        model: settings.aiModel || 'gpt-4o-mini',
+        baseUrl: settings.aiEndpoint || OPENAI_BASE_URL,
+        model: settings.aiModel || DEFAULT_MODEL,
       }
     : null
 

@@ -5,6 +5,8 @@ export {
   THEME_MODES,
   themeModeSchema,
   sharedSettingsSchema,
+  OPENAI_BASE_URL,
+  DEFAULT_MODEL,
 } from './schemas'
 
 export { DEFAULT_AI_SETTINGS, DEFAULT_SHARED_SETTINGS } from './defaults'

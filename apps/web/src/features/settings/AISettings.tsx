@@ -5,6 +5,7 @@ import Button from '../../components/ui/Button'
 import ToggleSwitch from '../../components/ui/ToggleSwitch'
 import Input from '../../components/ui/Input'
 import Select from '../../components/ui/Select'
+import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { testConnection } from '../../services/ai/AIService'
 
 export default function AISettings() {
@@ -56,7 +57,11 @@ export default function AISettings() {
     }
     setTesting(true)
     setTestResult(null)
-    const result = await testConnection()
+    const result = await testConnection({
+      apiKey,
+      baseUrl: endpoint || OPENAI_BASE_URL,
+      model: model || DEFAULT_MODEL,
+    })
     setTestResult({ ok: result.ok, message: result.message })
     setTesting(false)
   }

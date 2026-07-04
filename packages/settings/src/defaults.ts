@@ -1,10 +1,11 @@
 import type { AISettings, SharedSettings } from './types'
+import { DEFAULT_MODEL } from './schemas'
 
 export const DEFAULT_AI_SETTINGS: AISettings = {
   aiProvider: 'openai',
   aiBaseUrl: '',
   aiApiKey: '',
-  aiModel: 'gpt-4o-mini',
+  aiModel: DEFAULT_MODEL,
 }
 
 export const DEFAULT_SHARED_SETTINGS: SharedSettings = {

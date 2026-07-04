@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 
 const CONTEXT_INVALIDATED = 'Extension context invalidated'
 
@@ -118,11 +119,11 @@ export function safeFetchProviderConfig(): Promise<{
       const settings = syncResult.extensionSettings || {}
       return {
         apiKey: localResult.aiApiKey || '',
-        baseUrl: settings.aiBaseUrl || 'https://api.openai.com/v1',
-        model: settings.aiModel || 'gpt-4o-mini',
+        baseUrl: settings.aiBaseUrl || OPENAI_BASE_URL,
+        model: settings.aiModel || DEFAULT_MODEL,
       }
     } catch {
-      return { apiKey: '', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini' }
+      return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_MODEL }
     }
   })()
 }
