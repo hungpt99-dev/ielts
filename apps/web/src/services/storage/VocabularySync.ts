@@ -110,10 +110,32 @@ async function handleVocabMessage(event: MessageEvent): Promise<void> {
   } catch { /* ignore */ }
 }
 
+const VOCAB_CHANGED_EVENT = 'vocabulary-changed'
+
+function handleVocabChanged(): void {
+  DatabaseService.getAll<VocabularyEntry>('vocabulary').then((all) => {
+    try {
+      window.postMessage(
+        { source: 'ielts-page', action: 'VOCAB_LIST_SYNC', data: all },
+        window.location.origin,
+      )
+    } catch { /* ignore */ }
+  }).catch(() => {})
+}
+
+export function sendLatestVocabToExtension(): void {
+  handleVocabChanged()
+}
+
 export function initVocabSync(): void {
   if (initialized) return
   initialized = true
   window.addEventListener('message', handleVocabMessage)
+  window.addEventListener(VOCAB_CHANGED_EVENT, handleVocabChanged)
+
+  // Send latest vocabulary to the extension (extension will update its
+  // chrome.storage.local via VOCAB_LIST_SYNC handler in bridge-client).
+  handleVocabChanged()
 
   // Request vocabulary saved in the extension's chrome.storage.local
   // while the web app was not open (bootstrap sync).

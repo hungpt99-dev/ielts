@@ -1,4 +1,4 @@
-import { safeSendMessage, safeStorageGet } from '../utils/safe-chrome'
+import { safeSendMessage, safeStorageGet, safeStorageSet } from '../utils/safe-chrome'
 
 interface BridgeMessage {
   source: 'ielts-extension' | 'ielts-page'
@@ -81,6 +81,25 @@ function handlePageMessage(event: MessageEvent): void {
 
   if (event.data.action === 'REQUEST_EXTENSION_VOCAB') {
     forwardVocabToPage()
+  }
+
+  if (event.data.action === 'VOCAB_SAVED_BY_WEB' && event.data.data) {
+    const data = event.data.data as Record<string, unknown>
+    safeStorageGet<any[]>('vocabulary').then((result) => {
+      const items = result.vocabulary || []
+      const exists = items.some(
+        (i: Record<string, unknown>) => i.word === data.word && i.meaning === data.meaning,
+      )
+      if (!exists) {
+        items.unshift(data)
+        safeStorageSet({ vocabulary: items })
+      }
+    })
+  }
+
+  if (event.data.action === 'VOCAB_LIST_SYNC' && Array.isArray(event.data.data)) {
+    const list = event.data.data as Record<string, unknown>[]
+    safeStorageSet({ vocabulary: list })
   }
 }
 

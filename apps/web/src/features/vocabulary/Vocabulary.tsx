@@ -9,7 +9,7 @@ import WordForm from './components/WordForm'
 import ReviewMode from './components/ReviewMode'
 import VocabularyImport from './VocabularyImport'
 import { onVocabularyChanged } from './vocabularyEvents'
-import { onVocabSavedFromExtension } from '../../services/storage/VocabularySync'
+import { onVocabSavedFromExtension, notifyExtensionVocabSaved } from '../../services/storage/VocabularySync'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -165,6 +165,7 @@ export default function Vocabulary() {
         await DatabaseService.add('vocabulary', entry)
         setEntries(prev => [...prev, entry])
       }
+      notifyExtensionVocabSaved(entry)
       setModalOpen(false)
       setEditingEntry(null)
     } catch (err) {
