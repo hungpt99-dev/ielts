@@ -81,5 +81,6 @@ export {
   WritingExerciseRepository,
   ReadingExerciseRepository,
   ListeningExerciseRepository,
+  ArtifactRepository,
 } from './ContentRepository'
-export type { ExerciseEntry } from './ContentRepository'
+export type { ExerciseEntry, Artifact } from './ContentRepository'

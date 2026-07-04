@@ -72,6 +72,12 @@ function createContextMenus(): void {
         parentId: 'ai-explain',
       })
     }
+
+    chrome.contextMenus.create({
+      id: 'save-as-artifact',
+      title: 'Save page as Artifact',
+      contexts: ['page'],
+    })
   })
 }
 
@@ -85,7 +91,28 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 })
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (!info.selectionText || !tab?.id) return
+  if (!tab?.id) return
+
+  if (info.menuItemId === 'save-as-artifact') {
+    const artifact = {
+      url: tab.url || '',
+      title: tab.title || '',
+      description: '',
+      favicon: tab.url ? `https://www.google.com/s2/favicons?domain=${new URL(tab.url).hostname}&sz=32` : '',
+      tags: [],
+      isFavorite: false,
+      category: 'article',
+    }
+    chrome.tabs.sendMessage(tab.id, {
+      type: 'SAVE_ARTIFACT',
+      payload: artifact,
+    }).catch(() => {
+      // Content script not available on this tab — silently ignore
+    })
+    return
+  }
+
+  if (!info.selectionText) return
 
   const category = CATEGORY_MAP[info.menuItemId as string]
   if (category) {

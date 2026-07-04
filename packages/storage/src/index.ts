@@ -56,9 +56,10 @@ export {
   WritingExerciseRepository,
   ReadingExerciseRepository,
   ListeningExerciseRepository,
+  ArtifactRepository,
 } from './repositories'
 export type { RepositoryItem, PaginationParams, PaginatedResult } from './repositories'
-export type { ExerciseEntry } from './repositories'
+export type { ExerciseEntry, Artifact } from './repositories'
 export type {
   VocabularyEntry,
   VocabReviewEntry,

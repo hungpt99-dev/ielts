@@ -63,6 +63,30 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return false
   }
 
+  if (message.type === 'SAVE_ARTIFACT') {
+    const payload = message.payload as Record<string, unknown>
+    chrome.storage.local.get(['artifacts'], (result) => {
+      const items = result.artifacts || []
+      items.unshift({
+        id: crypto.randomUUID(),
+        url: payload.url || window.location.href,
+        title: payload.title || document.title,
+        description: (payload.description as string) || '',
+        favicon: (payload.favicon as string) || '',
+        tags: (payload.tags as string[]) || [],
+        isFavorite: false,
+        category: (payload.category as string) || 'article',
+        source: 'extension',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      })
+      chrome.storage.local.set({ artifacts: items })
+    })
+    showToast('Page saved as Artifact')
+    sendResponse({ success: true })
+    return false
+  }
+
   if (message.type === 'SAVE_SELECTION_FULL') {
     const payload = message.payload as SaveSelectionPayload
     chrome.storage.local.get(['savedItems'], (result) => {

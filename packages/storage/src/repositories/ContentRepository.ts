@@ -12,6 +12,7 @@ import {
   aiContentSchema,
   publicApiContentSchema,
   passageEntrySchema,
+  artifactSchema,
 } from '../schema'
 import type { z } from 'zod'
 
@@ -229,6 +230,32 @@ export class ListeningExerciseRepository extends BaseRepository<ExerciseEntry> {
 
   async findByTopic(topic: string): Promise<ExerciseEntry[]> {
     return this.queryByIndex('topic', topic)
+  }
+}
+
+export type Artifact = z.infer<typeof artifactSchema>
+
+export class ArtifactRepository extends BaseRepository<Artifact> {
+  constructor() {
+    super('artifacts', artifactSchema)
+  }
+
+  async findByUrl(url: string): Promise<Artifact | undefined> {
+    const results = await this.queryByIndex('url', url)
+    return results[0]
+  }
+
+  async findFavorites(): Promise<Artifact[]> {
+    const all = await this.findAll()
+    return all.filter(a => a.isFavorite)
+  }
+
+  async findByCategory(category: Artifact['category']): Promise<Artifact[]> {
+    return this.queryByIndex('category', category)
+  }
+
+  async findByTag(tag: string): Promise<Artifact[]> {
+    return this.queryByIndex('tags', tag)
   }
 }
 

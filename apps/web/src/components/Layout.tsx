@@ -25,6 +25,7 @@ import PublicApiImportPage from '../pages/PublicApiImportPage'
 import PublicTabPage from '../components/PublicTabPage'
 import RoadmapPage from '../features/roadmap/RoadmapPage'
 import StudyContentPage from '../features/content/StudyContentPage'
+import ArtifactsPage from '../features/artifacts/ArtifactsPage'
 import FloatingTutorButton from './aiTutor/FloatingTutorButton'
 import ChatIcon from './aiTutor/ChatIcon'
 
@@ -43,6 +44,7 @@ const navItems = [
   { to: '/mock-tests', label: 'Mock Tests', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
   { to: '/topics', label: 'Topics', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
   { to: '/progress', label: 'Progress', icon: 'M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z' },
+  { to: '/artifacts', label: 'Artifacts', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
   { to: '/search', label: 'Search', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' },
   { to: '/settings', label: 'Settings', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z' },
   { to: '/import-export', label: 'Backup', icon: 'M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4' },
@@ -144,6 +146,7 @@ export default function AppLayout() {
             <Route path="/mock-tests" element={<MockTests />} />
             <Route path="/topics" element={<TopicsProgress />} />
             <Route path="/progress" element={<Progress />} />
+            <Route path="/artifacts" element={<ArtifactsPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/public-api" element={<PublicApiImportPage />} />
             <Route path="/settings" element={<Settings />} />

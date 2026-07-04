@@ -28,6 +28,22 @@ export const contentTypeSchema = z.enum([
   'dictionary', 'vocabulary-list', 'reading', 'listening', 'article',
   'video', 'exercise', 'writing-prompt', 'speaking-topic', 'reference',
 ])
+export const artifactCategorySchema = z.enum(['article', 'video', 'reference', 'tool', 'other'])
+
+export const artifactSchema = z.object({
+  id: z.string().min(1),
+  url: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().default(''),
+  favicon: z.string().default(''),
+  tags: z.array(z.string()).default([]),
+  isFavorite: z.boolean().default(false),
+  category: artifactCategorySchema.default('article'),
+  source: z.string().default('manual'),
+  createdAt: isoStringSchema,
+  updatedAt: isoStringSchema,
+})
+
 export const sourceNameSchema = z.enum([
   'wiktionary', 'datamuse', 'tatoeba', 'oer-commons', 'wikipedia', 'gutendex', 'youtube',
 ])

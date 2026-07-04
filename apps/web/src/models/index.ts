@@ -688,6 +688,22 @@ export interface SearchResult {
 }
 
 
+export type ArtifactCategory = 'article' | 'video' | 'reference' | 'tool' | 'other'
+
+export interface Artifact {
+  id: string
+  url: string
+  title: string
+  description: string
+  favicon: string
+  tags: string[]
+  isFavorite: boolean
+  category: ArtifactCategory
+  source: string
+  createdAt: string
+  updatedAt: string
+}
+
 export interface WeeklySchedule {
   id: string
   weekStart: ISOString
