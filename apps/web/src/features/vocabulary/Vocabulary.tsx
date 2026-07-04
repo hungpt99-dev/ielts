@@ -506,6 +506,35 @@ export default function Vocabulary() {
                             {entry.word}
                           </h3>
                         </button>
+                        <button
+                          onClick={() => setExpandedWordId(isExpanded ? null : entry.id)}
+                          className="flex items-center justify-center rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
+                          style={{
+                            width: '24px',
+                            height: '24px',
+                            border: 'none',
+                            background: 'transparent',
+                            color: isExpanded ? 'var(--color-primary)' : 'var(--color-muted)',
+                            cursor: 'pointer',
+                            flexShrink: 0,
+                          }}
+                          title={isExpanded ? 'Hide word forms' : 'Show word forms'}
+                          aria-label={isExpanded ? 'Hide word forms' : 'Show word forms'}
+                        >
+                          <svg
+                            className={`transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M9 18l6-6-6-6" />
+                          </svg>
+                        </button>
                         <PronounceButton word={entry.word} />
                         {entry.pronunciation && (
                           <span className="text-sm" style={{ color: 'var(--color-muted)' }}>
@@ -525,25 +554,6 @@ export default function Vocabulary() {
                         </p>
                       )}
                       <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <button
-                          onClick={() => setExpandedWordId(isExpanded ? null : entry.id)}
-                          className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors"
-                          style={{
-                            backgroundColor: isExpanded ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
-                            color: isExpanded ? 'var(--color-primary)' : 'var(--color-text-secondary)',
-                            border: 'none',
-                            cursor: 'pointer',
-                          }}
-                          title={isExpanded ? 'Hide word forms' : 'Show word forms'}
-                        >
-                          <svg className={`h-3 w-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                          </svg>
-                          Forms
-                          {(entry.wordFamily.length > 0) && (
-                            <span className="ml-0.5">({entry.wordFamily.length})</span>
-                          )}
-                        </button>
                         <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_COLORS[entry.status]}`}>
                           {entry.status}
                         </span>
