@@ -508,32 +508,24 @@ export default function Vocabulary() {
                         </button>
                         <button
                           onClick={() => setExpandedWordId(isExpanded ? null : entry.id)}
-                          className="flex items-center justify-center rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
+                          className="flex items-center justify-center rounded-lg transition-colors"
                           style={{
-                            width: '24px',
-                            height: '24px',
-                            border: 'none',
-                            background: 'transparent',
-                            color: isExpanded ? 'var(--color-primary)' : 'var(--color-muted)',
+                            width: '28px',
+                            height: '28px',
+                            border: '1px solid var(--color-border)',
+                            background: isExpanded ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
+                            color: isExpanded ? 'var(--color-primary)' : 'var(--color-text-secondary)',
                             cursor: 'pointer',
                             flexShrink: 0,
+                            fontSize: '13px',
+                            lineHeight: 1,
                           }}
                           title={isExpanded ? 'Hide word forms' : 'Show word forms'}
                           aria-label={isExpanded ? 'Hide word forms' : 'Show word forms'}
                         >
-                          <svg
-                            className={`transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M9 18l6-6-6-6" />
-                          </svg>
+                          <span className={`inline-block transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}>
+                            ▶
+                          </span>
                         </button>
                         <PronounceButton word={entry.word} />
                         {entry.pronunciation && (
