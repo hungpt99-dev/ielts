@@ -382,6 +382,37 @@ export async function searchVocabulary(query: string): Promise<VocabularyEntry[]
   )
 }
 
+export interface WordFormEntry {
+  word: string
+  pos: string
+  meaning: string
+  pronunciation: string
+}
+
+function encodeWordForm(form: WordFormEntry): string {
+  return JSON.stringify(form)
+}
+
+function isEncodedForm(s: string): boolean {
+  return s.startsWith('{') && s.includes('"word"') && s.includes('"pos"')
+}
+
+export function parseWordForm(s: string): WordFormEntry | null {
+  if (!isEncodedForm(s)) return null
+  try {
+    const parsed = JSON.parse(s)
+    if (parsed.word && parsed.pos) {
+      return {
+        word: parsed.word,
+        pos: parsed.pos,
+        meaning: parsed.meaning || '',
+        pronunciation: parsed.pronunciation || '',
+      }
+    }
+  } catch { /* ignore */ }
+  return null
+}
+
 export async function generateWordFamily(
   word: string,
   meaning: string,
@@ -389,7 +420,7 @@ export async function generateWordFamily(
   const { makeAIRequest } = await import('../../services/ai/AIService')
 
   const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON.'
-  const prompt = `For the word "${word}" (${meaning}), generate a list of related word forms across different parts of speech.
+  const prompt = `For the word "${word}" (${meaning}), generate detailed information about related word forms across different parts of speech.
 
 Include as many of these forms as exist for this word:
 - noun form
@@ -397,18 +428,25 @@ Include as many of these forms as exist for this word:
 - adjective form
 - adverb form
 
-For each form, include the word and its part of speech in parentheses like "ubiquity (noun)", "ubiquitous (adjective)", "ubiquitously (adverb)".
+For each form, provide:
+1. The word itself
+2. Its part of speech (noun, verb, adjective, adverb)
+3. A clear English meaning/definition specific to this form
+4. IPA pronunciation
 
 If a form does not commonly exist for this word, omit it. Only include real, commonly used English words.
 
 Respond with valid JSON in this exact format:
 {
-  "wordFamily": ["word1 (noun)", "word2 (verb)", "word3 (adjective)", "word4 (adverb)"]
+  "wordFamily": [
+    {"word": "ubiquity", "pos": "noun", "meaning": "The state of being found everywhere", "pronunciation": "/juːˈbɪk.wɪ.ti/"},
+    {"word": "ubiquitous", "pos": "adjective", "meaning": "Present, appearing, or found everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs/"}
+  ]
 }
 
 Do not include any text outside the JSON object.`
 
-  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 500 })
+  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 800 })
 
   if (result.error) {
     return { wordFamily: [], error: result.error }
@@ -420,7 +458,12 @@ Do not include any text outside the JSON object.`
     if (jsonStart >= 0 && jsonEnd >= 0) {
       const parsed = JSON.parse(result.content.slice(jsonStart, jsonEnd + 1))
       if (Array.isArray(parsed.wordFamily)) {
-        return { wordFamily: parsed.wordFamily, error: null }
+        const encoded: string[] = parsed.wordFamily.map((f: Record<string, unknown>) => {
+          if (typeof f === 'string') return f
+          if (f.word && f.pos) return encodeWordForm(f as WordFormEntry)
+          return String(f.word || '')
+        }).filter(Boolean)
+        return { wordFamily: encoded, error: null }
       }
     }
     return { wordFamily: [], error: 'Unexpected response format from AI.' }

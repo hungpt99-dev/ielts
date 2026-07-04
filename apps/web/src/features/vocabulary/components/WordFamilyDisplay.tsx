@@ -4,6 +4,8 @@ import PronounceButton from '../../../components/ui/PronounceButton'
 interface ParsedWordForm {
   word: string
   pos: string | null
+  meaning: string
+  pronunciation: string
 }
 
 interface WordFamilyDisplayProps {
@@ -32,12 +34,29 @@ const POS_COLORS: Record<string, string> = {
   conjunction: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300',
 }
 
-function parseFamilyEntry(entry: string): ParsedWordForm {
-  const match = entry.match(/^(.+?)\s*\((.+?)\)\s*$/)
-  if (match) {
-    return { word: match[1].trim(), pos: match[2].trim().toLowerCase() }
+function isEncodedJson(s: string): boolean {
+  return s.startsWith('{') && s.includes('"word"') && s.includes('"pos"')
+}
+
+function parseEntry(s: string, word: string): ParsedWordForm {
+  if (isEncodedJson(s)) {
+    try {
+      const parsed = JSON.parse(s)
+      if (parsed.word && parsed.pos) {
+        return {
+          word: parsed.word,
+          pos: parsed.pos,
+          meaning: parsed.meaning || '',
+          pronunciation: parsed.pronunciation || '',
+        }
+      }
+    } catch { /* ignore */ }
   }
-  return { word: entry.trim(), pos: null }
+  const match = s.match(/^(.+?)\s*\((.+?)\)\s*$/)
+  if (match) {
+    return { word: match[1].trim(), pos: match[2].trim().toLowerCase(), meaning: '', pronunciation: '' }
+  }
+  return { word: s.trim(), pos: null, meaning: '', pronunciation: '' }
 }
 
 function formatPosLabel(pos: string | null): string {
@@ -46,15 +65,15 @@ function formatPosLabel(pos: string | null): string {
 }
 
 export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }: WordFamilyDisplayProps) {
+  const hasAnyData = wordFamily.length > 0
+  const hasRichData = wordFamily.some(isEncodedJson)
+
   const grouped = useMemo(() => {
-    const hasLabels = wordFamily.some(e => /\(.+\)/.test(e))
-    if (!hasLabels) {
-      return null
-    }
+    if (wordFamily.length === 0) return null
 
     const groups = new Map<string, ParsedWordForm[]>()
     for (const entry of wordFamily) {
-      const parsed = parseFamilyEntry(entry)
+      const parsed = parseEntry(entry, entry)
       const key = parsed.pos || 'other'
       if (!groups.has(key)) groups.set(key, [])
       groups.get(key)!.push(parsed)
@@ -68,7 +87,7 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
       })
   }, [wordFamily])
 
-  if (wordFamily.length === 0 && !onGenerate) return null
+  if (!hasAnyData && !onGenerate) return null
 
   return (
     <div>
@@ -82,7 +101,7 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
             disabled={generating}
             className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
             style={{
-              backgroundColor: 'var(--color-primary-light)',
+              backgroundColor: generating ? 'transparent' : 'var(--color-primary-light)',
               color: 'var(--color-primary)',
               border: 'none',
               cursor: generating ? 'not-allowed' : 'pointer',
@@ -99,36 +118,54 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
                 <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                Generate Forms
+                Generate
               </>
             )}
           </button>
         )}
       </div>
 
-      {grouped ? (
+      {generating && !hasAnyData && (
+        <div className="flex items-center gap-3 rounded-lg px-4 py-3" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+          <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
+          <span className="text-sm" style={{ color: 'var(--color-muted)' }}>Generating word forms...</span>
+        </div>
+      )}
+
+      {grouped && (
         <div className="space-y-3">
           {grouped.map(([pos, forms]) => (
             <div key={pos}>
               <p className="text-xs font-medium mb-1.5" style={{ color: 'var(--color-muted)' }}>
                 {formatPosLabel(pos)}
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div className="space-y-2">
                 {forms.map((form, i) => (
                   <div
                     key={i}
-                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm"
-                    style={{
-                      backgroundColor: 'var(--color-surface-alt)',
-                      color: 'var(--color-text)',
-                    }}
+                    className="rounded-lg px-3 py-2"
+                    style={{ backgroundColor: 'var(--color-surface-alt)' }}
                   >
-                    <span className="font-medium">{form.word}</span>
-                    <PronounceButton word={form.word} size="sm" />
-                    {form.pos && (
-                      <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-medium ${POS_COLORS[form.pos] || 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'}`}>
-                        {form.pos}
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                        {form.word}
                       </span>
+                      <PronounceButton word={form.word} size="sm" />
+                      {form.pos && (
+                        <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-medium ${POS_COLORS[form.pos] || 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'}`}>
+                          {form.pos}
+                        </span>
+                      )}
+                      {form.pronunciation && (
+                        <span className="text-[11px]" style={{ color: 'var(--color-muted)' }}>
+                          {form.pronunciation}
+                        </span>
+                      )}
+                    </div>
+                    {form.meaning && (
+                      <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                        {form.meaning}
+                      </p>
                     )}
                   </div>
                 ))}
@@ -136,33 +173,43 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
             </div>
           ))}
         </div>
-      ) : wordFamily.length > 0 ? (
+      )}
+
+      {!grouped && hasAnyData && (
         <div className="flex flex-wrap gap-2">
           {wordFamily.map((wf, i) => {
-            const parsed = parseFamilyEntry(wf)
+            const parsed = parseEntry(wf, wf)
             return (
               <div
                 key={i}
-                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm"
-                style={{
-                  backgroundColor: 'var(--color-surface-alt)',
-                  color: 'var(--color-text)',
-                }}
+                className="flex flex-col gap-1 rounded-lg px-3 py-2"
+                style={{ backgroundColor: 'var(--color-surface-alt)' }}
               >
-                <span className="font-medium">{parsed.word}</span>
-                <PronounceButton word={parsed.word} size="sm" />
-                {parsed.pos && (
-                  <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-medium ${POS_COLORS[parsed.pos] || 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'}`}>
-                    {parsed.pos}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                    {parsed.word}
                   </span>
+                  <PronounceButton word={parsed.word} size="sm" />
+                  {parsed.pos && (
+                    <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-medium ${POS_COLORS[parsed.pos] || 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400'}`}>
+                      {parsed.pos}
+                    </span>
+                  )}
+                </div>
+                {parsed.meaning && (
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                    {parsed.meaning}
+                  </p>
                 )}
               </div>
             )
           })}
         </div>
-      ) : (
+      )}
+
+      {!hasAnyData && !generating && (
         <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
-          No word forms yet. Click "Generate Forms" to find related word forms.
+          No word forms yet.
         </p>
       )}
     </div>
