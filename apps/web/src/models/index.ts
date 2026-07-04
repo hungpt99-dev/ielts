@@ -52,6 +52,9 @@ export type QuestionType =
   | 'Matching Information'
 
 
+import type { AISettings } from '@ielts/settings'
+import { DEFAULT_AI_SETTINGS } from '@ielts/settings'
+
 export type StudyGoal = 'academic' | 'general'
 
 export interface AppSettings {
@@ -64,10 +67,11 @@ export interface AppSettings {
   studyReminder: string
   studyGoal: StudyGoal
   preferredSchedule: ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[]
-  aiApiKey: string
-  aiProvider: 'openai' | 'custom'
+  aiApiKey: AISettings['aiApiKey']
+  aiProvider: AISettings['aiProvider']
+  aiBaseUrl: AISettings['aiBaseUrl']
   aiEndpoint: string
-  aiModel: string
+  aiModel: AISettings['aiModel']
   darkMode: boolean
   aiEnabled: boolean
 }
@@ -82,10 +86,11 @@ export const DEFAULT_SETTINGS: AppSettings = {
   studyReminder: 'Time to study IELTS!',
   studyGoal: 'academic',
   preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
-  aiApiKey: '',
-  aiProvider: 'openai',
+  aiApiKey: DEFAULT_AI_SETTINGS.aiApiKey,
+  aiProvider: DEFAULT_AI_SETTINGS.aiProvider,
+  aiBaseUrl: DEFAULT_AI_SETTINGS.aiBaseUrl,
   aiEndpoint: '',
-  aiModel: 'gpt-4o-mini',
+  aiModel: DEFAULT_AI_SETTINGS.aiModel,
   darkMode: false,
   aiEnabled: false,
 }
@@ -336,6 +341,15 @@ export interface ReadingPracticeSession {
 export type ListeningQuestionType =
   | 'multiple-choice'
   | 'gap-fill'
+  | 'true-false'
+  | 'short-answer'
+  | 'multiple-answer'
+  | 'table-completion'
+
+export interface TableRow {
+  label: string
+  blanks: string[]
+}
 
 export interface ListeningQuestion {
   id: string
@@ -343,6 +357,9 @@ export interface ListeningQuestion {
   question: string
   options?: string[]
   correctAnswer: string | number | string[]
+  acceptableAnswers?: string[]
+  tableHeaders?: string[]
+  tableRows?: TableRow[]
   explanation: string
   blanks?: string[]
 }
