@@ -4,7 +4,7 @@ import Headbar from './layout/Headbar'
 import Dashboard from '../features/dashboard/Dashboard'
 import OnboardingForm from '../features/onboarding/OnboardingForm'
 import { isOnboardingComplete } from '../features/onboarding/onboardingService'
-import Planner from '../features/planner/Planner'
+import StudyPlan from '../features/study-plan/StudyPlan'
 import Vocabulary from '../pages/Vocabulary'
 import VocabularyReview from '../pages/VocabularyReview'
 import ReviewCenter from '../pages/ReviewCenter'
@@ -31,8 +31,7 @@ import ChatIcon from './aiTutor/ChatIcon'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
-  { to: '/roadmap', label: 'Roadmap', icon: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z' },
-  { to: '/plan', label: 'Daily Plan', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4' },
+  { to: '/plan', label: 'Study Plan', icon: 'M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z' },
   { to: '/vocabulary', label: 'Vocabulary', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
             { to: '/review', label: 'Review', icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15' },
   { to: '/reading', label: 'Reading', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
@@ -132,8 +131,8 @@ export default function AppLayout() {
           <Routes>
             <Route path="/onboarding" element={<OnboardingForm />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/roadmap" element={<RoadmapPage />} />
-            <Route path="/plan" element={<Planner />} />
+            <Route path="/plan" element={<StudyPlan />} />
+            <Route path="/roadmap" element={<Navigate to="/plan" replace />} />
             <Route path="/vocabulary" element={<Vocabulary />} />
             <Route path="/review" element={<VocabularyReview />} />
             <Route path="/review-center" element={<ReviewCenter />} />
