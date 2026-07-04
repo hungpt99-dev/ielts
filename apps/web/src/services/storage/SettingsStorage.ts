@@ -96,6 +96,7 @@ export function patchAppSettings(patch: Partial<AppSettings>): AppSettings {
 
 let _applyingRemote = false
 let _notifyTimer: ReturnType<typeof setTimeout> | null = null
+let _bridgeInitialized = false
 
 function overlappingFromApp(settings: AppSettings): SharedSettingsPatch {
   return {
@@ -154,7 +155,19 @@ function handleBridgeMessage(event: MessageEvent): void {
 }
 
 export function initSettingsBridge(): void {
+  if (_bridgeInitialized) return
+  _bridgeInitialized = true
   window.addEventListener('message', handleBridgeMessage)
+}
+
+export function destroySettingsBridge(): void {
+  if (!_bridgeInitialized) return
+  _bridgeInitialized = false
+  window.removeEventListener('message', handleBridgeMessage)
+  if (_notifyTimer) {
+    clearTimeout(_notifyTimer)
+    _notifyTimer = null
+  }
 }
 
 export function getThemeMode(): string {
@@ -163,6 +176,7 @@ export function getThemeMode(): string {
 
 export function setThemeMode(mode: string): void {
   setSetting(KEYS.THEME_MODE, mode)
+  debouncedNotifyExtension()
 }
 
 export function getAccentColor(): string {
@@ -197,4 +211,5 @@ export function getDarkMode(): boolean {
 
 export function setDarkMode(dark: boolean): void {
   setSetting(KEYS.DARK_MODE, dark)
+  debouncedNotifyExtension()
 }

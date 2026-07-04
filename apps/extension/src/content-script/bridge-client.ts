@@ -1,3 +1,5 @@
+import { safeSendMessage } from '../utils/safe-chrome'
+
 interface BridgeMessage {
   source: 'ielts-extension' | 'ielts-page'
   action: string
@@ -14,29 +16,27 @@ function isValidBridgeMessage(data: unknown): data is BridgeMessage {
   )
 }
 
-function createBridgeMessage(action: string, data?: unknown): BridgeMessage {
-  return {
-    source: 'ielts-extension',
-    action,
-    data,
-    requestId: crypto.randomUUID(),
-  }
-}
+let initialized = false
 
 function forwardToBackground(settings: Record<string, unknown>): void {
-  chrome.runtime.sendMessage({
+  safeSendMessage({
     type: 'SETTINGS_SYNC',
     payload: settings,
-  }).catch((err) => {
-    console.warn('[bridge-client] Failed to forward settings to background:', err)
   })
 }
 
 function forwardToPage(data: unknown): void {
-  window.postMessage(
-    createBridgeMessage('SETTINGS_SYNC', data),
-    window.location.origin,
-  )
+  try {
+    window.postMessage(
+      {
+        source: 'ielts-extension',
+        action: 'SETTINGS_SYNC',
+        data,
+        requestId: crypto.randomUUID(),
+      },
+      window.location.origin,
+    )
+  } catch { /* ignore */ }
 }
 
 function handlePageMessage(event: MessageEvent): void {
@@ -58,8 +58,16 @@ function handleBackgroundMessage(message: unknown): void {
 }
 
 export function initBridgeClient(): void {
+  if (initialized) return
+  initialized = true
   window.addEventListener('message', handlePageMessage)
   chrome.runtime.onMessage.addListener((message) => {
     handleBackgroundMessage(message)
   })
+}
+
+export function destroyBridgeClient(): void {
+  if (!initialized) return
+  initialized = false
+  window.removeEventListener('message', handlePageMessage)
 }

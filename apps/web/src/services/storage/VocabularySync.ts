@@ -1,17 +1,59 @@
+import { isValidBridgeMessage } from '@ielts/storage'
 import type { VocabularyEntry } from '../../models'
 import { DatabaseService } from './Database'
-import { isValidBridgeMessage } from '@ielts/storage'
 
 const BRIDGE_SOURCE = 'ielts-extension'
 const BRIDGE_ACTION = 'VOCAB_SAVED'
 
 type VocabSyncCallback = (entry: VocabularyEntry) => void
 let listeners: VocabSyncCallback[] = []
+let initialized = false
 
 export function onVocabSavedFromExtension(callback: VocabSyncCallback): () => void {
   listeners.push(callback)
   return () => {
     listeners = listeners.filter(l => l !== callback)
+  }
+}
+
+function isFullVocabEntry(data: Record<string, unknown>): data is Record<string, unknown> & { word: string; meaning: string } {
+  return typeof data.word === 'string' && data.word.length > 0 && typeof data.meaning === 'string'
+}
+
+function isTextSnippet(data: Record<string, unknown>): data is Record<string, unknown> & { text: string } {
+  return typeof data.text === 'string' && data.text.length > 0
+}
+
+function buildVocabFromText(data: Record<string, unknown>): VocabularyEntry | null {
+  const text = (data.text as string) || ''
+  if (!text.trim()) return null
+
+  const title = (data.pageTitle as string) || ''
+  const url = (data.pageUrl as string) || ''
+  const topic = (data.topic as string) || 'general'
+  const tags = (data.tags as string[]) || []
+  const now = new Date().toISOString()
+  const firstWord = text.trim().split(/\s+/)[0] || 'unknown'
+
+  return {
+    id: crypto.randomUUID(),
+    word: firstWord,
+    meaning: text,
+    meaningVi: '',
+    pronunciation: '',
+    partOfSpeech: '',
+    topic,
+    exampleSentence: url ? `"${text}" — from "${title}" (${url})` : text,
+    collocations: [],
+    synonyms: [],
+    antonyms: [],
+    wordFamily: [],
+    personalNote: title ? `Saved from: ${title}` : '',
+    difficulty: 'medium',
+    status: 'new',
+    tags,
+    createdAt: now,
+    updatedAt: now,
   }
 }
 
@@ -27,8 +69,28 @@ async function handleVocabMessage(event: MessageEvent): Promise<void> {
   let vocabEntry: VocabularyEntry | null = null
 
   if (isFullVocabEntry(data)) {
-    vocabEntry = data as unknown as VocabularyEntry
-  } else if (typeof data.text === 'string') {
+    const now = new Date().toISOString()
+    vocabEntry = {
+      id: data.id as string || crypto.randomUUID(),
+      word: data.word,
+      meaning: data.meaning,
+      meaningVi: (data.meaningVi as string) || '',
+      pronunciation: (data.pronunciation as string) || '',
+      partOfSpeech: (data.partOfSpeech as string) || '',
+      topic: (data.topic as string) || 'general',
+      exampleSentence: (data.exampleSentence as string) || '',
+      collocations: (data.collocations as string[]) || [],
+      synonyms: (data.synonyms as string[]) || [],
+      antonyms: (data.antonyms as string[]) || [],
+      wordFamily: (data.wordFamily as string[]) || [],
+      personalNote: (data.personalNote as string) || '',
+      difficulty: (data.difficulty as VocabularyEntry['difficulty']) || 'medium',
+      status: (data.status as VocabularyEntry['status']) || 'new',
+      tags: (data.tags as string[]) || [],
+      createdAt: (data.createdAt as string) || now,
+      updatedAt: now,
+    }
+  } else if (isTextSnippet(data)) {
     vocabEntry = buildVocabFromText(data)
   }
 
@@ -37,7 +99,7 @@ async function handleVocabMessage(event: MessageEvent): Promise<void> {
   try {
     const existing = await DatabaseService.getAll<VocabularyEntry>('vocabulary')
     const alreadySaved = existing.some(
-      v => v.word.toLowerCase() === (vocabEntry!.word || vocabEntry!.id).toLowerCase(),
+      v => v.word.toLowerCase() === vocabEntry!.word.toLowerCase(),
     )
     if (alreadySaved) return
 
@@ -48,45 +110,15 @@ async function handleVocabMessage(event: MessageEvent): Promise<void> {
   } catch { /* ignore */ }
 }
 
-function isFullVocabEntry(data: Record<string, unknown>): boolean {
-  return typeof data.word === 'string' && typeof data.meaning === 'string'
-}
-
-function buildVocabFromText(data: Record<string, unknown>): VocabularyEntry {
-  const now = new Date().toISOString()
-  const text = (data.text as string) || ''
-  const title = (data.pageTitle as string) || ''
-  const url = (data.pageUrl as string) || ''
-  const topic = (data.topic as string) || 'general'
-  const tags = (data.tags as string[]) || []
-
-  return {
-    id: crypto.randomUUID(),
-    word: text.trim().split(/\s+/)[0] || 'unknown',
-    meaning: text,
-    meaningVi: '',
-    pronunciation: '',
-    partOfSpeech: '',
-    topic,
-    exampleSentence: `"${text}" — from "${title}" (${url})`,
-    collocations: [],
-    synonyms: [],
-    antonyms: [],
-    wordFamily: [],
-    personalNote: `Saved from: ${title}`,
-    difficulty: 'medium',
-    status: 'new',
-    tags,
-    createdAt: now,
-    updatedAt: now,
-  }
-}
-
 export function initVocabSync(): void {
+  if (initialized) return
+  initialized = true
   window.addEventListener('message', handleVocabMessage)
 }
 
 export function destroyVocabSync(): void {
+  if (!initialized) return
+  initialized = false
   window.removeEventListener('message', handleVocabMessage)
   listeners = []
 }

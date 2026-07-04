@@ -16,7 +16,7 @@ export interface VideoPageInfo {
 
 export interface SyncStatus {
   lastSyncAt: string | null
-  pendingItems: Array<{ id: string; type: string; timestamp: string }>
+  pendingItems: Array<{ id: string; type: string; savedAt: string }>
   lastSyncResult: 'success' | 'failed' | null
 }
 
