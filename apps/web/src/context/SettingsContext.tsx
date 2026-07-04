@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import type { AppSettings } from '../models'
 import { loadAppSettings, saveAppSettings, initSettingsBridge } from '../services/storage/SettingsStorage'
+import { initVocabSync } from '../services/storage/VocabularySync'
 
 interface SettingsContextValue {
   settings: AppSettings
@@ -17,6 +18,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     initSettingsBridge()
+    initVocabSync()
   }, [])
 
   useEffect(() => {

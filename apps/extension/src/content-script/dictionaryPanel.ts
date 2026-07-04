@@ -347,6 +347,14 @@ async function saveWord(): Promise<void> {
     payload: { wordsAdded: 1 },
   })
 
+  try {
+    window.postMessage({
+      source: 'ielts-extension',
+      action: 'VOCAB_SAVED',
+      data: entry,
+    }, window.location.origin)
+  } catch { /* ignore */ }
+
   showToast(`"${currentWord}" saved to vocabulary`)
   panelManualDismiss = true
   hidePanel()

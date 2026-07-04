@@ -295,6 +295,16 @@ async function saveText(text: string, category: SaveCategory): Promise<void> {
     },
   })
 
+  if (category === 'vocabulary') {
+    try {
+      window.postMessage({
+        source: 'ielts-extension',
+        action: 'VOCAB_SAVED',
+        data: entry,
+      }, window.location.origin)
+    } catch { /* ignore */ }
+  }
+
   showToast(`Saved as ${category}`)
 }
 

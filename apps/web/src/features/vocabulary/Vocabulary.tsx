@@ -9,6 +9,7 @@ import WordForm from './components/WordForm'
 import ReviewMode from './components/ReviewMode'
 import VocabularyImport from './VocabularyImport'
 import { onVocabularyChanged } from './vocabularyEvents'
+import { onVocabSavedFromExtension } from '../../services/storage/VocabularySync'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -73,6 +74,10 @@ export default function Vocabulary() {
 
   useEffect(() => {
     return onVocabularyChanged(loadEntries)
+  }, [loadEntries])
+
+  useEffect(() => {
+    return onVocabSavedFromExtension(loadEntries)
   }, [loadEntries])
 
   const allTags = useMemo(() => {
