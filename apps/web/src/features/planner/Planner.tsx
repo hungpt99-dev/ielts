@@ -9,6 +9,7 @@ import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import CalendarView from './components/CalendarView'
 import { taskFormSchema, type TaskFormData } from './validation'
+import { generateAISchedule } from './aiPlannerService'
 
 const CATEGORIES: TaskCategory[] = [
   'Vocabulary', 'Reading', 'Listening',
@@ -314,9 +315,30 @@ export default function Planner() {
   async function confirmGenerateSchedule() {
     setGenerating(true)
     setGeneratedCount(0)
+    setError(null)
     try {
+      let schedule: Array<{
+        date: string
+        items: Array<{ category: TaskCategory; title: string; minutes: number; description?: string }>
+      }>
+
+      const aiResult = await generateAISchedule()
+      if (aiResult.usedAi && !aiResult.error) {
+        schedule = aiResult.days
+      } else {
+        const template = generateSchedule(scheduleConfig)
+        schedule = template.map(d => ({
+          date: d.date,
+          items: d.items.map(i => ({
+            category: i.category,
+            title: i.title,
+            minutes: i.minutes,
+            description: i.description,
+          })),
+        }))
+      }
+
       const existingTasks = await DatabaseService.getAll<TaskEntry>('tasks')
-      const schedule = generateSchedule(scheduleConfig)
       const now = new Date().toISOString()
       let count = 0
       for (const day of schedule) {
@@ -326,7 +348,7 @@ export default function Planner() {
           const task: TaskEntry = {
             id: generateId(),
             title: item.title,
-            description: item.description,
+            description: item.description ?? '',
             category: item.category,
             date: day.date + 'T00:00:00.000Z',
             isDone: false,
@@ -887,7 +909,7 @@ export default function Planner() {
       <Modal open={showGenerateModal} onClose={() => setShowGenerateModal(false)} title="Generate Study Schedule" size="md">
         <div className="space-y-4">
           <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            This will generate a personalized study schedule based on your target band and available study time.
+            AI will generate a personalised daily study schedule based on your target band, current level, weak areas, and available study time. Falls back to template-based scheduling if AI is not configured.
           </p>
           <div className="space-y-2 rounded-lg border p-3" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-alt)' }}>
             <div className="flex justify-between text-sm">
