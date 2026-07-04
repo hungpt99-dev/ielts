@@ -80,6 +80,7 @@ import {
   WritingExerciseRepository,
   ReadingExerciseRepository,
   ListeningExerciseRepository,
+  ArtifactRepository,
   exportAllData,
   importBackup,
   clearAllTables,
@@ -174,6 +175,7 @@ const repo = {
   writingExercises: new WritingExerciseRepository(),
   readingExercises: new ReadingExerciseRepository(),
   listeningExercises: new ListeningExerciseRepository(),
+  artifacts: new ArtifactRepository(),
 }
 
 type RepoMap = typeof repo
