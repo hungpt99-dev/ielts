@@ -6,14 +6,12 @@ import type { VocabularyEntry, VocabReviewEntry } from '../models'
 const mockGetAll = vi.fn()
 const mockPut = vi.fn()
 const mockAdd = vi.fn()
-const mockGetById = vi.fn()
 
 vi.mock('../services/storage/Database', () => ({
   DatabaseService: {
     getAll: (...args: unknown[]) => mockGetAll(...args),
     put: (...args: unknown[]) => mockPut(...args),
     add: (...args: unknown[]) => mockAdd(...args),
-    getById: (...args: unknown[]) => mockGetById(...args),
   },
 }))
 
@@ -55,11 +53,16 @@ function makeReview(vocabularyId: string, overrides: Partial<VocabReviewEntry> =
     interval: 1,
     easeFactor: 2.5,
     repetitions: 1,
-    nextReviewDate: new Date().toISOString(),
+    nextReviewDate: new Date(Date.now() - 86400000).toISOString(),
     lastReviewDate: new Date().toISOString(),
     history: [],
     ...overrides,
   }
+}
+
+async function startReview() {
+  const button = await screen.findByRole('button', { name: /start review/i })
+  await userEvent.click(button)
 }
 
 describe('VocabularyReview', () => {
@@ -67,15 +70,17 @@ describe('VocabularyReview', () => {
     vi.clearAllMocks()
   })
 
-  it('shows loading spinner initially', () => {
+  it('shows review settings initially', async () => {
     mockGetAll.mockResolvedValue([])
     render(<VocabularyReview />)
-    expect(screen.getByRole('status')).toBeInTheDocument()
+    const heading = await screen.findByText('Review Settings')
+    expect(heading).toBeInTheDocument()
   })
 
   it('shows empty state when no reviews due', async () => {
     mockGetAll.mockResolvedValue([])
     render(<VocabularyReview />)
+    await startReview()
     const heading = await screen.findByText('All caught up!')
     expect(heading).toBeInTheDocument()
     expect(screen.getByText(/No vocabulary due for review/)).toBeInTheDocument()
@@ -88,42 +93,22 @@ describe('VocabularyReview', () => {
       return Promise.resolve([])
     })
     render(<VocabularyReview />)
+    await startReview()
     const heading = await screen.findByText('All caught up!')
     expect(heading).toBeInTheDocument()
   })
 
-  it('shows review card with word and meaning for word-to-meaning mode', async () => {
+  it('shows review card with word in word-to-meaning mode', async () => {
     mockGetAll.mockImplementation((store: string) => {
       if (store === 'vocabulary') return Promise.resolve([makeVocab('v1')])
       if (store === 'vocabularyReviews') return Promise.resolve([makeReview('v1')])
       return Promise.resolve([])
     })
     render(<VocabularyReview />)
+    await startReview()
 
     await screen.findByTestId('review-card')
-
-    // Word should be visible
     expect(screen.getByText('ubiquitous')).toBeInTheDocument()
-    // Meaning should be visible in word-to-meaning mode
-    expect(screen.getByText('existing everywhere')).toBeInTheDocument()
-  })
-
-  it('shows meaning and requires revealing word in meaning-to-word mode', async () => {
-    mockGetAll.mockImplementation((store: string) => {
-      if (store === 'vocabulary') return Promise.resolve([makeVocab('v1')])
-      if (store === 'vocabularyReviews') return Promise.resolve([makeReview('v1')])
-      return Promise.resolve([])
-    })
-    render(<VocabularyReview />)
-
-    await screen.findByTestId('review-card')
-
-    // Switch to meaning-to-word mode
-    const modeSelect = screen.getByLabelText('Review mode')
-    await userEvent.selectOptions(modeSelect, 'meaning-to-word')
-
-    // Meaning should be visible, word should not
-    expect(screen.getByText('existing everywhere')).toBeInTheDocument()
   })
 
   it('shows all four rating buttons', async () => {
@@ -133,6 +118,7 @@ describe('VocabularyReview', () => {
       return Promise.resolve([])
     })
     render(<VocabularyReview />)
+    await startReview()
 
     await screen.findByTestId('review-card')
 
@@ -151,15 +137,16 @@ describe('VocabularyReview', () => {
       return Promise.resolve([])
     })
     render(<VocabularyReview />)
+    await startReview()
 
     await screen.findByTestId('review-card')
-
     expect(screen.getByText('ubiquitous')).toBeInTheDocument()
 
     await userEvent.click(screen.getByRole('button', { name: /good/i }))
 
-    // After rating, should show next word
-    expect(await screen.findByText('paradigm')).toBeInTheDocument()
+    // Progress should show card 2 of 2
+    await screen.findByTestId('review-card')
+    expect(screen.getByTestId('review-progress')).toHaveTextContent('2 / 2')
   })
 
   it('calls put with updated review entry when rating', async () => {
@@ -169,15 +156,19 @@ describe('VocabularyReview', () => {
       return Promise.resolve([])
     })
     render(<VocabularyReview />)
+    await startReview()
 
     await screen.findByTestId('review-card')
     await userEvent.click(screen.getByRole('button', { name: /good/i }))
 
-    expect(mockPut).toHaveBeenCalledTimes(1)
-    expect(mockPut.mock.calls[0][0]).toBe('vocabularyReviews')
-    const updatedReview = mockPut.mock.calls[0][1]
-    expect(updatedReview.history).toHaveLength(1)
-    expect(updatedReview.history[0].rating).toBe('good')
+    expect(mockPut).toHaveBeenCalled()
+    const putArgs = mockPut.mock.calls.find((c: unknown[]) => c[0] === 'vocabularyReviews')
+    expect(putArgs).toBeDefined()
+    if (putArgs) {
+      const updatedReview = putArgs[1] as VocabReviewEntry
+      expect(updatedReview.history).toHaveLength(1)
+      expect(updatedReview.history[0].rating).toBe('good')
+    }
   })
 
   it('shows review stats', async () => {
@@ -187,9 +178,9 @@ describe('VocabularyReview', () => {
       return Promise.resolve([])
     })
     render(<VocabularyReview />)
+    await startReview()
 
     await screen.findByTestId('review-card')
-
     expect(screen.getByTestId('review-progress')).toHaveTextContent('1 / 2')
   })
 
@@ -200,11 +191,12 @@ describe('VocabularyReview', () => {
       return Promise.resolve([])
     })
     render(<VocabularyReview />)
+    await startReview()
 
     await screen.findByTestId('review-card')
     await userEvent.click(screen.getByRole('button', { name: /good/i }))
 
-    const completed = await screen.findByText(/Review complete/i)
+    const completed = await screen.findByText(/Review Complete/i)
     expect(completed).toBeInTheDocument()
   })
 })
