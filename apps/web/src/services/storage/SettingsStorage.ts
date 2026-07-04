@@ -69,6 +69,23 @@ export function removeAppSettings(): void {
   removeSetting(KEYS.APP_SETTINGS)
 }
 
+const APP_PREFIX = 'ielts-'
+
+export function clearAllLocalStorage(): void {
+  const toRemove: string[] = []
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key && key.startsWith(APP_PREFIX)) {
+      toRemove.push(key)
+    }
+  }
+  for (const key of toRemove) {
+    try {
+      localStorage.removeItem(key)
+    } catch { /* ignore */ }
+  }
+}
+
 export function patchAppSettings(patch: Partial<AppSettings>): AppSettings {
   const current = loadAppSettings()
   const merged = { ...current, ...patch }

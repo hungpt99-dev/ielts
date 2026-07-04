@@ -28,7 +28,7 @@ import type {
   PublicApiImportedContent,
   AppExportData,
 } from '../../models'
-import { saveAppSettings, removeAppSettings } from './SettingsStorage'
+import { saveAppSettings, removeAppSettings, clearAllLocalStorage } from './SettingsStorage'
 
 import { ValidationError } from '@ielts/storage'
 export { ValidationError } from '@ielts/storage'
@@ -76,11 +76,16 @@ import {
   StudyNoteRepository,
   UsefulPhraseRepository,
   WritingPromptRepository,
+  SpeakingExerciseRepository,
+  WritingExerciseRepository,
+  ReadingExerciseRepository,
+  ListeningExerciseRepository,
   exportAllData,
   importBackup,
   clearAllTables,
 } from '@ielts/storage'
 import { AppDatabase as StorageAppDatabase } from '@ielts/storage'
+import { LocalTutorStorage } from './LocalTutorStorage'
 
 export interface IDatabase {
   vocabulary: Table<VocabularyEntry, string>
@@ -109,6 +114,10 @@ export interface IDatabase {
   aiContents: Table<AiContent, string>
   publicApiContent: Table<PublicApiImportedContent, string>
   progressRecords: Table<ProgressRecord, string>
+  speakingExercises: Table<AiContent, string>
+  writingExercises: Table<AiContent, string>
+  readingExercises: Table<AiContent, string>
+  listeningExercises: Table<AiContent, string>
 }
 
 export class AppDatabase extends StorageAppDatabase {
@@ -161,6 +170,10 @@ const repo = {
   aiContents: new AiContentRepository(),
   publicApiContent: new PublicApiContentRepository(),
   progressRecords: new ProgressRecordRepository(),
+  speakingExercises: new SpeakingExerciseRepository(),
+  writingExercises: new WritingExerciseRepository(),
+  readingExercises: new ReadingExerciseRepository(),
+  listeningExercises: new ListeningExerciseRepository(),
 }
 
 type RepoMap = typeof repo
@@ -865,7 +878,8 @@ export const DatabaseService = {
 
   async resetAll(): Promise<void> {
     await this.clearAll()
-    removeAppSettings()
+    await LocalTutorStorage.clearAll()
+    clearAllLocalStorage()
   },
 }
 
