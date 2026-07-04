@@ -65,6 +65,7 @@ export default function Settings() {
     action: () => Promise<void> | void
     buttonLabel: string
     buttonVariant: 'danger' | 'primary'
+    loading?: boolean
   } | null>(null)
 
   useEffect(() => {
@@ -212,12 +213,8 @@ export default function Settings() {
       title: 'Clear All Data',
       message: 'Delete ALL your data including vocabulary, tasks, sessions, notes, mistakes, and mock tests. This action cannot be undone. Export a backup first.',
       action: async () => {
-        try {
-          await DatabaseService.resetAll()
-          showFeedback('success', 'All data has been cleared.')
-        } catch (err) {
-          showFeedback('error', err instanceof Error ? err.message : 'Failed to clear data')
-        }
+        await DatabaseService.resetAll()
+        window.location.reload()
       },
       buttonLabel: 'Delete Everything',
       buttonVariant: 'danger',
