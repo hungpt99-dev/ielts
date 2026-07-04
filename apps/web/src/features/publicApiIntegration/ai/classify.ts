@@ -116,6 +116,7 @@ export function getStoredAiConfig(): AiProviderConfig {
       baseUrl: (settings?.aiEndpoint as string) || OPENAI_BASE_URL,
       model: (settings?.aiModel as string) || DEFAULT_MODEL,
     }
+  } catch {
     return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_MODEL }
   }
 }
