@@ -77,4 +77,9 @@ export type {
 export {
   ContentMetaRepository,
   UserContentEditRepository,
+  SpeakingExerciseRepository,
+  WritingExerciseRepository,
+  ReadingExerciseRepository,
+  ListeningExerciseRepository,
 } from './ContentRepository'
+export type { ExerciseEntry } from './ContentRepository'

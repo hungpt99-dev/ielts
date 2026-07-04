@@ -1,0 +1,351 @@
+Error: Internal AI plan task "Perform manual testing of extension settings synchronization" uses executor "shell" but has no commands defined. Shell tasks must have non-empty commands.
+
+Raw output:
+{
+  "title": "Sync Extension Settings with Website Settings",
+  "summary": "Modify the browser extension to use the same settings as the website for consistent user experience",
+  "tasks": [
+    {
+      "title": "Analyze current extension settings loading and usage",
+      "description": "Review the extension's settings loading mechanism in apps/extension/src/background/settingsStorage.ts and identify how settings are loaded, stored, and applied. Document key functions like loadSettings, saveSettings, and how themeMode and other settings are applied in the extension.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear understanding of extension settings loading and usage",
+        "List of settings keys that need to be synced with website"
+      ],
+      "outputPlan": [],
+      "taskType": "analysis",
+      "actionType": "read",
+      "inputContext": "Project source code in apps/extension/src/background/settingsStorage.ts",
+      "targetFiles": [
+        "apps/extension/src/background/settingsStorage.ts"
+      ],
+      "targetArtifacts": [
+        "analysis notes on extension settings loading"
+      ],
+      "evidence": [
+        "Reviewed settingsStorage.ts",
+        "Documented settings keys and usage"
+      ],
+      "verificationCommand": "ls apps/extension/src/background/settingsStorage.ts",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundation for syncing extension settings with website"
+    },
+    {
+      "title": "Analyze website settings loading and storage mechanism",
+      "description": "Review the website's settings loading and storage code, likely in apps/web/src/services/SettingsStorage.ts or similar, to understand how website settings are stored and accessed. Identify the settings keys and formats to be shared with the extension.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current extension settings loading and usage"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear understanding of website settings loading and usage",
+        "Mapping of website settings keys to extension settings keys"
+      ],
+      "outputPlan": [],
+      "taskType": "analysis",
+      "actionType": "read",
+      "inputContext": "Project source code in apps/web/src/services related to settings",
+      "targetFiles": [
+        "apps/web/src/services/SettingsStorage.ts"
+      ],
+      "targetArtifacts": [
+        "analysis notes on website settings loading"
+      ],
+      "evidence": [
+        "Reviewed website settings storage code",
+        "Documented settings keys and usage"
+      ],
+      "verificationCommand": "ls apps/web/src/services/SettingsStorage.ts",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundation for syncing website settings with extension"
+    },
+    {
+      "title": "Design shared settings synchronization mechanism between extension and website",
+      "description": "Design a synchronization mechanism that allows the extension to use the same settings as the website. This may involve using chrome.storage.sync, a shared IndexedDB, or a messaging bridge. Define the data flow, update triggers, and fallback behavior when the website is not open.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current extension settings loading and usage",
+        "Analyze website settings loading and storage mechanism"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Documented synchronization design with data flow diagrams",
+        "Defined update triggers and fallback strategies"
+      ],
+      "outputPlan": [],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Analysis of extension and website settings loading and storage",
+      "targetFiles": [
+        "docs/extension-settings-sync-design.md"
+      ],
+      "targetArtifacts": [
+        "extension-settings-sync-design.md"
+      ],
+      "evidence": [
+        "Created design document for settings sync"
+      ],
+      "verificationCommand": "ls docs/extension-settings-sync-design.md",
+      "approvalRequired": true,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 2000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides blueprint for implementation of settings sync"
+    },
+    {
+      "title": "Implement settings synchronization bridge in extension background script",
+      "description": "Modify apps/extension/src/background/settingsStorage.ts to implement the designed synchronization mechanism. Add code to listen for settings updates from the website via messaging or shared storage, and update extension settings accordingly. Ensure settings like themeMode, aiProvider, and others are kept in sync.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design shared settings synchronization mechanism between extension and website"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Extension background script receives and applies website settings updates",
+        "Settings persist correctly in extension storage",
+        "No regressions in extension settings loading"
+      ],
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/settingsStorage.ts",
+          "description": "Add synchronization code to keep extension settings in sync with website",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Settings sync design document",
+      "targetFiles": [
+        "apps/extension/src/background/settingsStorage.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Modified settingsStorage.ts with sync code",
+        "Code compiles without errors"
+      ],
+      "verificationCommand": "pnpm build --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables extension to use website settings dynamically"
+    },
+    {
+      "title": "Modify extension UI components to use synchronized settings",
+      "description": "Update extension UI components (e.g., popup, options page) to read and react to the synchronized settings from the background script. Ensure themeMode and other settings are applied consistently in UI rendering and behavior.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement settings synchronization bridge in extension background script"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Extension UI reflects current synchronized settings",
+        "Theme mode changes apply correctly",
+        "No UI regressions"
+      ],
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/App.tsx",
+          "description": "Update to use synchronized settings from background",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/options/App.tsx",
+          "description": "Update to use synchronized settings from background",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Synchronized settings available in background script",
+      "targetFiles": [
+        "apps/extension/src/popup/App.tsx",
+        "apps/extension/src/options/App.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "UI components updated to use synced settings",
+        "UI renders correctly with synced theme"
+      ],
+      "verificationCommand": "pnpm build --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures extension UI uses consistent settings with website"
+    },
+    {
+      "title": "Implement fallback to extension default settings when website settings unavailable",
+      "description": "Add logic in extension settings loading to fallback to extension default settings if website settings are not available or sync fails. This ensures extension remains functional standalone.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement settings synchronization bridge in extension background script"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Extension loads default settings if website settings are missing",
+        "No errors occur on missing sync data"
+      ],
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/settingsStorage.ts",
+          "description": "Add fallback logic for default settings",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Extension settings loading code",
+      "targetFiles": [
+        "apps/extension/src/background/settingsStorage.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "Fallback logic added",
+        "Extension runs standalone without errors"
+      ],
+      "verificationCommand": "pnpm build --filter extension",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures extension robustness when website is closed"
+    },
+    {
+      "title": "Add integration tests for extension settings synchronization",
+      "description": "Create automated tests to verify that extension settings correctly synchronize with website settings. Tests should simulate website sending updated settings and verify extension applies them correctly.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Modify extension UI components to use synchronized settings",
+        "Implement fallback to extension default settings when website settings unavailable"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Tests cover settings sync scenarios",
+        "Tests pass without errors"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "apps/extension/src/background/__tests__/settingsSync.test.ts",
+          "description": "Integration tests for settings synchronization",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "create",
+      "inputContext": "Synchronized settings implementation",
+      "targetFiles": [
+        "apps/extension/src/background/__tests__/settingsSync.test.ts"
+      ],
+      "targetArtifacts": [
+        "settings synchronization test suite"
+      ],
+      "evidence": [
+        "Test file created",
+        "Tests run and pass"
+      ],
+      "verificationCommand": "pnpm test --filter settingsSync.test.ts",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Validates correct synchronization of settings"
+    },
+    {
+      "title": "Perform manual testing of extension settings synchronization",
+      "description": "Manually test the extension and website running side-by-side to verify that changes in website settings propagate to the extension and that the extension UI updates accordingly. Test fallback behavior when website is closed.",
+      "executor": "shell",
+      "dependsOn": [
+        "Add integration tests for extension settings synchronization"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Extension settings update when website settings change",
+        "Extension UI reflects updated settings",
+        "Extension uses default settings when website is closed"
+      ],
+      "commands": [],
+      "outputPlan": [],
+      "taskType": "qa",
+      "actionType": "validate",
+      "inputContext": "Completed implementation and integration tests",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "manual test report"
+      ],
+      "evidence": [
+        "Manual test checklist completed",
+        "Observed correct sync behavior"
+      ],
+      "verificationCommand": "",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 0,
+        "retryDelayMs": 0,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 900000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Confirms real-world correctness of settings sync"
+    }
+  ]
+}

@@ -1,15 +1,8 @@
-import { useState, useEffect, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { useToast } from '../../../../../packages/ui/src/components/Toast'
-import { getTodayEntries } from '../../storage/indexedDB'
+import { usePopupData } from '../hooks/usePopupData'
+import DashboardCard from './DashboardCard'
 import type { LearningEntry } from '../../types'
-
-interface DailyProgress {
-  wordsAdded: number
-  notesAdded: number
-  articlesSaved: number
-  reviewDue: number
-  streak: number
-}
 
 interface PopupDashboardProps {
   onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor') => void
@@ -29,7 +22,7 @@ const STREET_ICON = (
   </svg>
 )
 
-function StreakBadge({ streak }: { streak: number }) {
+const StreakBadge = memo(function StreakBadge({ streak }: { streak: number }) {
   return (
     <div
       style={{
@@ -48,71 +41,45 @@ function StreakBadge({ streak }: { streak: number }) {
       <span>{streak} day{streak !== 1 ? 's' : ''}</span>
     </div>
   )
-}
+})
 
-function StatCard({
-  label,
-  value,
-  icon,
-  accent,
-}: {
-  label: string
-  value: number
-  icon: string
-  accent?: boolean
-}) {
-  return (
-    <div
-      style={{
-        background: 'var(--color-surface)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '12px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-        border: accent ? '2px solid var(--color-primary)' : '1px solid var(--color-border)',
-        transition: 'border-color 0.15s',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <span style={{ fontSize: '20px' }}>{icon}</span>
-        <span
-          style={{
-            fontSize: '20px',
-            fontWeight: 700,
-            color: accent ? 'var(--color-primary)' : 'var(--color-text)',
-            fontVariantNumeric: 'tabular-nums',
-          }}
-        >
-          {value}
-        </span>
-      </div>
-      <span
-        style={{
-          fontSize: '11px',
-          color: 'var(--color-text-secondary)',
-          fontWeight: 500,
-        }}
-      >
-        {label}
-      </span>
-    </div>
-  )
-}
-
-function ActionButton({
+const ActionButton = memo(function ActionButton({
   icon,
   label,
   description,
   onClick,
   color,
 }: ActionItem) {
+  const handleMouseEnter = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.background = 'var(--color-surface-alt)'
+      e.currentTarget.style.borderColor = color
+    },
+    [color],
+  )
+
+  const handleMouseLeave = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.background = 'var(--color-surface)'
+      e.currentTarget.style.borderColor = 'var(--color-border)'
+    },
+    [],
+  )
+
+  const handleFocus = useCallback(
+    (e: React.FocusEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.borderColor = color
+    },
+    [color],
+  )
+
+  const handleBlur = useCallback(
+    (e: React.FocusEvent<HTMLButtonElement>) => {
+      e.currentTarget.style.borderColor = 'var(--color-border)'
+    },
+    [],
+  )
+
   return (
     <button
       onClick={onClick}
@@ -134,20 +101,10 @@ function ActionButton({
         fontSize: '13px',
         lineHeight: '1.3',
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = 'var(--color-surface-alt)'
-        e.currentTarget.style.borderColor = color
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = 'var(--color-surface)'
-        e.currentTarget.style.borderColor = 'var(--color-border)'
-      }}
-      onFocus={(e) => {
-        e.currentTarget.style.borderColor = color
-      }}
-      onBlur={(e) => {
-        e.currentTarget.style.borderColor = 'var(--color-border)'
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
     >
       <span
         style={{
@@ -168,16 +125,25 @@ function ActionButton({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', minWidth: 0 }}>
         <span style={{ fontWeight: 600, fontSize: '13px' }}>{label}</span>
         {description && (
-          <span id={`${label}-desc`} style={{ fontSize: '11px', color: 'var(--color-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          <span
+            id={`${label}-desc`}
+            style={{
+              fontSize: '11px',
+              color: 'var(--color-muted)',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             {description}
           </span>
         )}
       </div>
     </button>
   )
-}
+})
 
-function ActivityItem({ entry }: { entry: LearningEntry }) {
+const ActivityItem = memo(function ActivityItem({ entry }: { entry: LearningEntry }) {
   const MAX_TEXT_LENGTH = 60
   const truncated = entry.text.length > MAX_TEXT_LENGTH
     ? entry.text.slice(0, MAX_TEXT_LENGTH) + '…'
@@ -231,63 +197,21 @@ function ActivityItem({ entry }: { entry: LearningEntry }) {
       </div>
     </div>
   )
-}
+})
 
 export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
   const { showToast } = useToast()
-  const [progress, setProgress] = useState<DailyProgress>({
-    wordsAdded: 0,
-    notesAdded: 0,
-    articlesSaved: 0,
-    reviewDue: 0,
-    streak: 0,
-  })
-  const [recentEntries, setRecentEntries] = useState<LearningEntry[]>([])
-  const [darkMode, setDarkMode] = useState(false)
+  const {
+    progress,
+    recentEntries,
+    darkMode,
+    loading,
+    toggleDarkMode,
+    refreshProgress,
+    refreshRecent,
+  } = usePopupData()
 
-  const refreshProgress = useCallback(() => {
-    chrome.storage.local.get(['dailyProgress'], (result) => {
-      if (result.dailyProgress) {
-        setProgress(result.dailyProgress)
-      }
-    })
-  }, [])
-
-  const refreshRecent = useCallback(async () => {
-    const today = await getTodayEntries()
-    const sorted = today.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-    setRecentEntries(sorted.slice(0, 5))
-  }, [])
-
-  useEffect(() => {
-    refreshProgress()
-    refreshRecent()
-
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const saved = localStorage.getItem('popup-dark-mode')
-    const isDark = saved !== null ? saved === 'true' : prefersDark
-    setDarkMode(isDark)
-    document.documentElement.classList.toggle('dark', isDark)
-
-    const listener = () => {
-      chrome.storage.local.get(['dailyProgress'], (result) => {
-        if (result.dailyProgress) setProgress(result.dailyProgress)
-      })
-    }
-    chrome.storage.onChanged.addListener(listener)
-    return () => chrome.storage.onChanged.removeListener(listener)
-  }, [refreshProgress, refreshRecent])
-
-  const toggleDarkMode = () => {
-    const next = !darkMode
-    setDarkMode(next)
-    localStorage.setItem('popup-dark-mode', String(next))
-    document.documentElement.classList.toggle('dark', next)
-  }
-
-  const handleQuickSavePage = () => {
+  const handleQuickSavePage = useCallback(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tab = tabs[0]
       if (!tab?.url || !tab?.title) {
@@ -326,71 +250,97 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
       refreshProgress()
       refreshRecent()
     })
-  }
+  }, [showToast, refreshProgress, refreshRecent])
 
-  const handleStartReview = () => {
+  const handleStartReview = useCallback(() => {
     showToast('info', 'Opening vocabulary review…')
-  }
+  }, [showToast])
 
-  const handleOpenDashboard = () => {
+  const handleOpenDashboard = useCallback(() => {
     chrome.tabs.create({ url: 'http://localhost:5173' })
-  }
+  }, [])
 
-  const handleQuickAddNote = () => {
+  const handleQuickAddNote = useCallback(() => {
     onNavigate('saveForm')
-  }
+  }, [onNavigate])
 
-  const actions: ActionItem[] = [
-    {
-      icon: '🤖',
-      label: 'AI Tutor',
-      description: 'Explain, simplify, and learn from any text',
-      onClick: () => onNavigate('miniTutor'),
-      color: '#6366f1',
-    },
-    {
-      icon: '📖',
-      label: 'Collect Vocabulary',
-      description: 'Save new words with AI enrichment',
-      onClick: () => onNavigate('vocabularyCollector'),
-      color: '#3b82f6',
-    },
-    {
-      icon: '✏️',
-      label: 'Save Selected Text',
-      description: 'Categorize and save text from web',
-      onClick: () => onNavigate('saveForm'),
-      color: '#8b5cf6',
-    },
-    {
-      icon: '📰',
-      label: 'Save Article',
-      description: 'Save page as reading material',
-      onClick: () => onNavigate('articleCollector'),
-      color: '#10b981',
-    },
-    {
-      icon: '🎬',
-      label: 'Video Helper',
-      description: 'Save YouTube & video content',
-      onClick: () => onNavigate('videoHelper'),
-      color: '#ec4899',
-    },
-    {
-      icon: '🔄',
-      label: 'Start Review',
-      description: `${progress.reviewDue} pending review${progress.reviewDue !== 1 ? 's' : ''}`,
-      onClick: handleStartReview,
-      color: '#f59e0b',
-    },
-    {
-      icon: '🌐',
-      label: 'Public API',
-      description: 'Search and import open content',
-      onClick: () => chrome.tabs.create({ url: 'http://localhost:5173/public-api' }),
-      color: '#06b6d4',
-    },
-  ]
+  const handleOpenSettings = useCallback(() => {
+    chrome.tabs.create({ url: chrome.runtime.getURL('options.html') })
+  }, [])
+
+  const handleBackup = useCallback(() => {
+    onNavigate('backupRestore')
+  }, [onNavigate])
+
+  const actions = useMemo<ActionItem[]>(
+    () => [
+      {
+        icon: '🤖',
+        label: 'AI Tutor',
+        description: 'Explain, simplify, and learn from any text',
+        onClick: () => onNavigate('miniTutor'),
+        color: '#6366f1',
+      },
+      {
+        icon: '📖',
+        label: 'Collect Vocabulary',
+        description: 'Save new words with AI enrichment',
+        onClick: () => onNavigate('vocabularyCollector'),
+        color: '#3b82f6',
+      },
+      {
+        icon: '✏️',
+        label: 'Save Selected Text',
+        description: 'Categorize and save text from web',
+        onClick: () => onNavigate('saveForm'),
+        color: '#8b5cf6',
+      },
+      {
+        icon: '📰',
+        label: 'Save Article',
+        description: 'Save page as reading material',
+        onClick: () => onNavigate('articleCollector'),
+        color: '#10b981',
+      },
+      {
+        icon: '🎬',
+        label: 'Video Helper',
+        description: 'Save YouTube & video content',
+        onClick: () => onNavigate('videoHelper'),
+        color: '#ec4899',
+      },
+      {
+        icon: '🔄',
+        label: 'Start Review',
+        description: `${progress.reviewDue} pending review${progress.reviewDue !== 1 ? 's' : ''}`,
+        onClick: handleStartReview,
+        color: '#f59e0b',
+      },
+      {
+        icon: '🌐',
+        label: 'Public API',
+        description: 'Search and import open content',
+        onClick: () => chrome.tabs.create({ url: 'http://localhost:5173/public-api' }),
+        color: '#06b6d4',
+      },
+    ],
+    [onNavigate, progress.reviewDue, handleStartReview],
+  )
+
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '500px',
+        fontSize: '14px',
+        color: 'var(--color-muted)',
+      }}>
+        Loading...
+      </div>
+    )
+  }
 
   return (
     <div
@@ -402,7 +352,6 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         minHeight: '500px',
       }}
     >
-      {/* Header */}
       <header
         style={{
           display: 'flex',
@@ -460,15 +409,12 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
               transition: 'background 0.15s',
               padding: 0,
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-surface-alt)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'var(--color-surface)'}
           >
             {darkMode ? '☀️' : '🌙'}
           </button>
         </div>
       </header>
 
-      {/* Progress Stats */}
       <section
         style={{
           display: 'grid',
@@ -476,10 +422,10 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
           gap: '8px',
         }}
       >
-        <StatCard label="Words Today" value={progress.wordsAdded} icon="📖" />
-        <StatCard label="Notes Today" value={progress.notesAdded} icon="✏️" />
-        <StatCard label="Articles" value={progress.articlesSaved} icon="📰" />
-        <StatCard
+        <DashboardCard label="Words Today" value={progress.wordsAdded} icon="📖" />
+        <DashboardCard label="Notes Today" value={progress.notesAdded} icon="✏️" />
+        <DashboardCard label="Articles" value={progress.articlesSaved} icon="📰" />
+        <DashboardCard
           label="Review Due"
           value={progress.reviewDue}
           icon="🔄"
@@ -487,7 +433,6 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         />
       </section>
 
-      {/* Quick Actions */}
       <section>
         <h2
           style={{
@@ -508,7 +453,6 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         </div>
       </section>
 
-      {/* Quick Utility Row */}
       <div
         style={{
           display: 'grid',
@@ -519,8 +463,6 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         <button
           onClick={handleQuickSavePage}
           style={quickBtnStyle}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-alt)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-surface)' }}
           aria-label="Save current page as reading material"
         >
           <span style={{ fontSize: '14px' }} aria-hidden="true">💾</span>
@@ -529,8 +471,6 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         <button
           onClick={handleQuickAddNote}
           style={quickBtnStyle}
-          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-alt)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-surface)' }}
           aria-label="Quick add a note"
         >
           <span style={{ fontSize: '14px' }} aria-hidden="true">📝</span>
@@ -538,7 +478,6 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         </button>
       </div>
 
-      {/* Recent Activity */}
       <section style={{ flex: 1 }}>
         <h2
           style={{
@@ -579,7 +518,6 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         )}
       </section>
 
-      {/* Footer */}
       <footer
         style={{
           display: 'flex',
@@ -591,14 +529,14 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
       >
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
-            onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('options.html') })}
+            onClick={handleOpenSettings}
             style={footerLinkStyle}
             aria-label="Open extension settings"
           >
             Settings
           </button>
           <button
-            onClick={() => onNavigate('backupRestore')}
+            onClick={handleBackup}
             style={footerLinkStyle}
             aria-label="Backup and restore data"
           >

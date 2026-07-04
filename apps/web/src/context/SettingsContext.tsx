@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import type { AppSettings } from '../models'
-import { loadAppSettings, saveAppSettings } from '../services/storage/SettingsStorage'
+import { loadAppSettings, saveAppSettings, initSettingsBridge } from '../services/storage/SettingsStorage'
 
 interface SettingsContextValue {
   settings: AppSettings
@@ -14,6 +14,10 @@ const SettingsContext = createContext<SettingsContextValue>({
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<AppSettings>(loadAppSettings)
+
+  useEffect(() => {
+    initSettingsBridge()
+  }, [])
 
   useEffect(() => {
     saveAppSettings(settings)

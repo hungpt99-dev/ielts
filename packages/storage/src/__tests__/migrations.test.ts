@@ -16,11 +16,11 @@ describe('Migrations', () => {
 
   describe('APP_SCHEMA', () => {
     it('has correct current version', () => {
-      expect(CURRENT_DB_VERSION).toBe(4)
+      expect(CURRENT_DB_VERSION).toBe(5)
     })
 
-    it('has 4 versions defined', () => {
-      expect(APP_SCHEMA.versions).toHaveLength(4)
+    it('has 5 versions defined', () => {
+      expect(APP_SCHEMA.versions).toHaveLength(5)
     })
 
     it('has versions in ascending order', () => {
@@ -39,6 +39,14 @@ describe('Migrations', () => {
       const stores = getStoreNamesForVersion(4)
       expect(stores).toContain('contentMeta')
       expect(stores).toContain('userContentEdits')
+    })
+
+    it('version 5 includes exercise store names', () => {
+      const stores = getStoreNamesForVersion(5)
+      expect(stores).toContain('speakingExercises')
+      expect(stores).toContain('writingExercises')
+      expect(stores).toContain('readingExercises')
+      expect(stores).toContain('listeningExercises')
     })
   })
 
@@ -77,6 +85,15 @@ describe('Migrations', () => {
       expect(stores).toContain('contentMeta')
       expect(stores).toContain('userContentEdits')
       expect(stores).toHaveLength(28)
+    })
+
+    it('returns store names for version 5', () => {
+      const stores = getStoreNamesForVersion(5)
+      expect(stores).toContain('speakingExercises')
+      expect(stores).toContain('writingExercises')
+      expect(stores).toContain('readingExercises')
+      expect(stores).toContain('listeningExercises')
+      expect(stores).toHaveLength(32)
     })
 
     it('returns empty for non-existent version', () => {

@@ -1,0 +1,22 @@
+[2026-07-04T04:59:49.281Z] [INFO] Task started: Validate full AI-driven plan generation workflow with end-to-end testing
+[2026-07-04T04:59:49.820Z] [INFO] Executor finished with status: failed, exit code: 1
+[2026-07-04T04:59:49.820Z] [INFO] Output:
+Scope: 11 of 12 workspace projects
+packages/ai test$ vitest run --passWithNoTests --filter=roadmap-e2e
+packages/ai-tutor test$ vitest run --passWithNoTests --filter=roadmap-e2e
+packages/exercises test$ vitest run --passWithNoTests --filter=roadmap-e2e
+packages/storage test$ vitest run --passWithNoTests --filter=roadmap-e2e
+packages/ai-tutor test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/ai-tutor test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/ai-tutor test:                 ^
+packages/ai-tutor test: CACError: Unknown option `--filter`
+packages/ai-tutor test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/ai-tutor test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/ai-tutor test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/ai-tutor test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/ai-tutor test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/ai-tutor test:     at async onImport.tracePromise.__proto__ (node:internal/mo
+[2026-07-04T04:59:49.820Z] [INFO] Error:
+$ pnpm -r test --filter=roadmap-e2e
+[2026-07-04T04:59:49.820Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-04T04:59:49.823Z] [INFO] Task completed successfully

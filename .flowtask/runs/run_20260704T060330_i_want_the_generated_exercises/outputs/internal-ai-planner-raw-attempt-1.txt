@@ -1,0 +1,260 @@
+{
+  "title": "Expand Listening Exercises with More Questions",
+  "summary": "Increase the length and number of questions in generated listening exercises",
+  "tasks": [
+    {
+      "title": "Analyze current listening exercises structure in apps/web/src/features/listening/data/exercises.ts",
+      "description": "Read and analyze the existing listening exercises in apps/web/src/features/listening/data/exercises.ts to understand the current structure, question types, and content length. Identify how questions are defined and linked to transcripts.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear understanding of the data structure for listening exercises and questions",
+        "Documented notes on question types and how questions relate to transcripts"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A documented analysis of the listening exercise data structure and question format",
+      "outputPlan": [],
+      "taskType": "research",
+      "actionType": "read",
+      "inputContext": "None",
+      "targetFiles": [
+        "apps/web/src/features/listening/data/exercises.ts"
+      ],
+      "targetArtifacts": [
+        "listening_exercise_structure_analysis.txt"
+      ],
+      "evidence": [
+        "analysis notes created",
+        "understanding of question format confirmed"
+      ],
+      "verificationCommand": "ls apps/web/src/features/listening/data/exercises.ts",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundation for expanding exercises with more questions"
+    },
+    {
+      "title": "Design additional question templates for listening exercises",
+      "description": "Create a set of new question templates and types to increase the number and variety of questions per listening exercise. Include question types such as multiple choice, true/false, short answer, and extended gap-fill. Define question formats and example questions to be added.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current listening exercises structure in apps/web/src/features/listening/data/exercises.ts"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "At least 3 new question types designed",
+        "Example questions created for each new question type",
+        "Templates compatible with existing exercise data structure"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A documented set of new question templates and example questions for listening exercises",
+      "outputPlan": [],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Analysis of current listening exercise question structure",
+      "targetFiles": [
+        "docs/listening_question_templates.md"
+      ],
+      "targetArtifacts": [
+        "listening_question_templates.md"
+      ],
+      "evidence": [
+        "new question templates documented",
+        "examples provided"
+      ],
+      "verificationCommand": "cat docs/listening_question_templates.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides new question formats to enrich listening exercises"
+    },
+    {
+      "title": "Expand existing listening exercises with additional questions in apps/web/src/features/listening/data/exercises.ts",
+      "description": "Modify the existing listening exercises in apps/web/src/features/listening/data/exercises.ts to include more questions per exercise. Add at least 3 new questions per exercise using the newly designed question templates. Ensure questions are relevant to the transcript and maintain consistent formatting.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design additional question templates for listening exercises"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Each listening exercise has at least 3 additional questions",
+        "New questions use varied question types",
+        "Questions are relevant and answerable from the transcript",
+        "Code compiles and passes linting"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm lint",
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Listening exercises file updated with longer exercises containing more questions",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/listening/data/exercises.ts",
+          "description": "Expanded listening exercises with additional questions",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "New question templates and existing listening exercises data",
+      "targetFiles": [
+        "apps/web/src/features/listening/data/exercises.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "file modified with new questions",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter listening",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enhances listening exercises with more comprehensive question sets"
+    },
+    {
+      "title": "Update listening exercise rendering components to support new question types",
+      "description": "Modify the React components responsible for rendering listening exercises and their questions to support the newly added question types (e.g., multiple choice, true/false). Ensure UI elements and interaction handlers are implemented for all question types.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Expand existing listening exercises with additional questions in apps/web/src/features/listening/data/exercises.ts"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "UI renders all question types correctly",
+        "User can interact with new question types as expected",
+        "No UI regressions in existing question types",
+        "Code passes lint and tests"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm lint",
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Listening exercise UI updated to handle and display new question types properly",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/listening/components/ListeningExercise.tsx",
+          "description": "Updated component to render new question types",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Expanded listening exercises with new question types",
+      "targetFiles": [
+        "apps/web/src/features/listening/components/ListeningExercise.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "component updated",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter listening",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables UI support for longer and more varied listening exercises"
+    },
+    {
+      "title": "Add automated tests for new listening question types and expanded exercises",
+      "description": "Create or update unit and integration tests to cover the new question types and the expanded listening exercises. Include tests for question rendering, user interaction, and validation logic.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Update listening exercise rendering components to support new question types"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Tests cover all new question types",
+        "Tests verify correct rendering and interaction",
+        "Test coverage for listening exercises increased",
+        "All tests pass"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --coverage"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Comprehensive test suite covering expanded listening exercises and new question types",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx",
+          "description": "Added tests for new question types and expanded exercises",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "create",
+      "inputContext": "Updated listening exercise components and data",
+      "targetFiles": [
+        "apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "tests added",
+        "test coverage increased",
+        "all tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter listening",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 90000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures quality and correctness of expanded listening exercises"
+    }
+  ]
+}

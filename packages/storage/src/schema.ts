@@ -548,6 +548,32 @@ export const appExportDataSchema = z.object({
   progressRecords: z.array(progressRecordSchema).default([]),
 })
 
+export const exerciseSkillSchema = z.enum(['reading', 'listening', 'writing', 'speaking', 'vocabulary', 'grammar'])
+export const exerciseDifficultySchema = z.enum(['beginner', 'intermediate', 'advanced'])
+export const exerciseSourceSchema = z.enum(['built-in', 'user-created', 'ai-generated', 'web-content', 'mistake-review', 'vocabulary-practice'])
+
+export const exerciseEntrySchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  description: z.string().default(''),
+  skill: exerciseSkillSchema,
+  topic: z.string().default(''),
+  source: exerciseSourceSchema,
+  difficulty: exerciseDifficultySchema,
+  content: z.string().default(''),
+  questions: z.string().default('[]'),
+  totalPoints: z.number().default(0),
+  estimatedMinutes: z.number().default(0),
+  status: z.enum(['draft', 'published', 'archived']).default('published'),
+  tags: z.array(z.string()).default([]),
+  sourceId: z.string().optional(),
+  contentVersion: z.number().optional(),
+  metadata: z.string().default('{}'),
+  isFavorite: z.boolean().default(false),
+  createdAt: isoStringSchema,
+  updatedAt: isoStringSchema,
+})
+
 export const tableSchemas: Record<string, z.ZodTypeAny> = {
   vocabulary: vocabularyEntrySchema,
   vocabularyReviews: vocabReviewEntrySchema,
@@ -577,4 +603,8 @@ export const tableSchemas: Record<string, z.ZodTypeAny> = {
   progressRecords: progressRecordSchema,
   contentMeta: contentMetaSchema,
   userContentEdits: userContentEditSchema,
+  speakingExercises: exerciseEntrySchema,
+  writingExercises: exerciseEntrySchema,
+  readingExercises: exerciseEntrySchema,
+  listeningExercises: exerciseEntrySchema,
 }

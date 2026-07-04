@@ -97,19 +97,19 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     } else {
       sendResponse({ success: true, panelOpened: false })
     }
-    return true
+    return false
   }
 
   if (message.type === 'MINI_TUTOR_GET_SELECTION') {
     const selection = getActiveSelection()
     sendResponse(selection)
-    return true
+    return false
   }
 
   if (message.type === 'MINI_TUTOR_GET_SELECTION_FULL') {
     const context = getSelectionContext()
     sendResponse(context)
-    return true
+    return false
   }
 
   if (message.type === 'MINI_TUTOR_TRIGGER') {
@@ -118,7 +118,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     if (!selection.text) {
       sendResponse({ success: false, error: 'No text selected' })
-      return true
+      return false
     }
 
     const aiType = ACTION_TO_AI_TYPE[action]
@@ -129,7 +129,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       showExplainPanel(selection.text, 'simple')
       sendResponse({ success: true, panelOpened: true })
     }
-    return true
+    return false
   }
 })
 

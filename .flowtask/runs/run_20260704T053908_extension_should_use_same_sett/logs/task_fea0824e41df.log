@@ -1,0 +1,1012 @@
+[2026-07-04T05:56:45.218Z] [INFO] Task started: Add unit tests for website settings loading and saving with unified source
+[2026-07-04T05:56:45.220Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/web/src/services/__tests__/SettingsStorage.test.ts","description":"Add tests for unified settings loading and saving","validationMethod":"file_diff"}]
+[2026-07-04T05:56:45.789Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-04T05:56:45.789Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:45.789Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:50.117Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"SettingsStorage apps/web/src/services/SettingsStorage.ts unified settings loading saving"}
+[2026-07-04T05:56:50.264Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/services/__tests__/SettingsStorage*"[90m 0 matches[0m
+[2026-07-04T05:56:52.356Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/services/SettingsStorage.ts"}
+[2026-07-04T05:56:52.528Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/**/__tests__/**"[90m 20 matches[0m
+[2026-07-04T05:56:52.732Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/**/*.test.*"[90m 31 matches[0m
+[2026-07-04T05:56:55.341Z] [INFO] [stderr] [91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/SettingsStorage.ts
+[2026-07-04T05:56:55.340Z] [INFO] [stderr] [0m✗ [0mRead apps/web/src/services/SettingsStorage.ts failed
+[2026-07-04T05:56:55.341Z] [INFO] [stderr] Did you mean one of these?
+[2026-07-04T05:56:55.340Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage
+[2026-07-04T05:56:55.341Z] [INFO] [stderr] 
+[2026-07-04T05:56:55.510Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/services/SettingsStorage*"[90m 0 matches[0m
+[2026-07-04T05:56:57.827Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/**/*[Ss]ettings*"[90m 7 matches[0m
+[2026-07-04T05:56:58.068Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage
+[2026-07-04T05:57:00.382Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage/SettingsStorage.ts
+[2026-07-04T05:57:00.630Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/settingsStorage.ts
+[2026-07-04T05:57:03.432Z] [INFO] [stderr] [0m✱ [0mGrep "export (interface|type) AppSettings"[90m 1 match[0m
+[2026-07-04T05:57:03.729Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/__tests__/ExerciseGenerator.test.ts
+[2026-07-04T05:57:06.393Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/models/index.ts[90m [offset=50, limit=40][0m
+[2026-07-04T05:57:06.654Z] [INFO] [stderr] [0m✱ [0mGrep "DEFAULT_SETTINGS"[90m 1 match[0m
+[2026-07-04T05:57:09.412Z] [INFO] [stderr] [0m✱ [0mGrep "isValidBridgeMessage"[90m 14 matches[0m
+[2026-07-04T05:57:09.772Z] [INFO] [stderr] [0m✱ [0mGrep "export.*SETTINGS_SYNC|SETTINGS_CHANGED"[90m 2 matches[0m
+[2026-07-04T05:57:12.237Z] [INFO] [stderr] [0m✱ [0mGlob "**/SettingsStorage.test*"[90m 0 matches[0m
+[2026-07-04T05:57:12.658Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/models/index.ts[90m [offset=86, limit=10][0m
+[2026-07-04T05:57:15.682Z] [INFO] [stderr] [0m→ [0mRead apps/web/package.json[90m [limit=30][0m
+[2026-07-04T05:57:34.397Z] [INFO] [stderr] [0m
+[2026-07-04T05:57:34.397Z] [INFO] [stderr] [0m
+[2026-07-04T05:57:34.397Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/services/storage/__tests__/SettingsStorage.test.ts
+[2026-07-04T05:57:34.397Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T05:57:38.186Z] [INFO] [stderr] packages/ai test$ vitest run --passWithNoTests --filter SettingsStorage.test.ts
+[2026-07-04T05:57:38.186Z] [INFO] [stderr] packages/ai-tutor test$ vitest run --passWithNoTests --filter SettingsStorage.test.ts
+[2026-07-04T05:57:38.186Z] [INFO] [stderr] $ pnpm -r test --filter SettingsStorage.test.ts
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test:                 ^
+[2026-07-04T05:57:38.186Z] [INFO] [stderr] [0m$ [0mpnpm test --filter SettingsStorage.test.ts 2>&1
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-04T05:57:38.186Z] [INFO] [stderr] packages/storage test$ vitest run --passWithNoTests --filter SettingsStorage.test.ts
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test: CACError: Unknown option `--filter`
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-04T05:57:38.186Z] [INFO] [stderr] packages/exercises test$ vitest run --passWithNoTests --filter SettingsStorage.test.ts
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/ai@0.1.0 test: `vitest run --passWithNoTests --filter SettingsStorage.test.ts`
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test: Failed
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] Scope: 11 of 12 workspace projects
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test: Node.js v24.13.0
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test:                 ^
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test: CACError: Unknown option `--filter`
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] Exit status 1
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/theme test$ vitest run --passWithNoTests --filter SettingsStorage.test.ts
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test: Node.js v24.13.0
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai:
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test:                 ^
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test: CACError: Unknown option `--filter`
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test: Node.js v24.13.0
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test:                 ^
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test: Failed
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test: CACError: Unknown option `--filter`
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ai-tutor test: Failed
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/exercises test: Failed
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/ui test$ vitest run --passWithNoTests --filter SettingsStorage.test.ts
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] [0m
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test: Node.js v24.13.0
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/storage test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-04T05:57:38.187Z] [INFO] [stderr] packages/utils test$ vitest run --passWithNoTests --filter SettingsStorage.test.ts
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/web test -- --reporter verbose SettingsStorage 2>&1
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] ...output truncated...
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Full output saved to: /Users/phamthanhhung/.local/share/opencode/tool-output/tool_f2bb4b05e001o3uUTCw9Eu17dh
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × LandingPage > renders the FAQSection heading 11ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: Frequently asked questions. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × LandingPage > renders the FinalCTASection heading 12ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × LandingPage > renders a Start Learning Free CTA link 19ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: Start Learning Free. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: Start your IELTS learning journey today. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × LandingPage > renders an Install Chrome Extension link 11ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: Install Chrome Extension. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    ✓ ChatPopup > renders nothing when isOpen is false 1ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → expected 'IELTS Journey - Learn IELTS with a Cl…' to be 'IELTS Journey - Free IELTS Learning f…' // Object.is equality
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × ChatPopup > renders chat popup when isOpen is true 3ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]  ❯ ../../packages/ai-tutor/src/popup/__tests__/ChatPopup.test.tsx (9 tests | 6 failed) 17ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find a label with the text of: AI Tutor chat
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × ChatPopup > shows default title in header when open 2ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: AI Tutor Assistant. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find a label with the text of: Close chat
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × ChatPopup > calls onClose when close button is clicked 2ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × LandingPage > sets the document title 12ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: AI Key Not Configured. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    ✓ ChatPopup > reads AI key from localStorage when hasAiKey prop is not provided 2ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × ChatPopup > shows MissingKeyBanner when localStorage has no AI key 2ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × ChatPopup > uses hasAiKey prop over localStorage 2ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: AI Key Not Configured. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × ChatPopup > calls onClose via default onOpenSettings when settings is triggered 2ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: Open Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/__tests__/publicApiIntegration.test.ts (72 tests) 31ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/ProblemSection.test.tsx (4 tests | 4 failed) 4ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × ProblemSection > renders the section heading 1ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    ✓ ChatPopup > closes on Escape key 2ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × ProblemSection > renders all seven problems as list items 1ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: They do not know where to start.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]    × ProblemSection > renders a semantic section with heading level 2 1ms
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: /The struggle is real/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an accessible element with the role "heading"
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]      → Unable to find an element with the text: The struggle is real. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.397Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.397Z] [INFO] [stderr]  ❯ src/components/aiTutor/FloatingTutorButton.test.tsx (2 tests | 2 failed) 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × ProblemSection > has an id attribute for navigation 1ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × FloatingTutorButton > renders chat icon SVG 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Unable to find an accessible element with the role "button" and name `/open ai tutor assistant/i`
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Unable to find an accessible element with the role "button" and name `/open ai tutor assistant/i`
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > extractAiPlanInput > should extract all fields from AppSettings 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × FloatingTutorButton > dispatches toggle-ai-tutor-chat event on click 1ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > extractAiPlanInput > should set examCountdownDays to null when no exam date 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ❯ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts (38 tests | 6 failed) 17ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > enrichWithLearningData > should override studyStreak and lastStudyDate 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > extractAiPlanInput > should use default weak skills when settings have none 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > buildPlanUserPrompt > should include all learner profile fields 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > extractAiPlanInput > should set bandGap to 0 when target <= current 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > buildPlanUserPrompt > should include weak areas section 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > enrichWithLearningData > should handle optional extras being undefined 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > buildPlanUserPrompt > should mention no exam date when not set 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > buildPlanSystemPrompt > should return the system prompt string 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > buildPlanUserPrompt > should respect daily study minutes in the output 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > buildPlanUserPrompt > should include preferred topics when available 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > buildPlanUserPrompt > should include study streak when > 0 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI returns an error 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiPlanPrompts > buildPlanUserPrompt > should mention available study days when fewer than 7 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI response is unparseable 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > generatePlanWithAI > should return roadmap from AI when response is valid 1ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > generatePlanWithAI > should catch exceptions and return fallback roadmap 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI returns empty content 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > generatePlanWithAI > should generate fallback roadmap with phases when AI is off 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > generatePlanWithAI > should pass extras to enrichWithLearningData 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > generatePlanWithAI > should call with correct AI options 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should call AI with custom endpoint when configured 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should not call AI when aiEnabled is false 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should not call AI when apiKey is empty 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should parse JSON embedded in markdown code fence 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI is not configured 4ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should convert AI result to roadmap with correct structure 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should detect JSON without phases and return fallback roadmap 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should detect invalid JSON and return fallback roadmap 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should store timestamps on generated roadmap 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should handle multiple phases with week offset 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × roadmapService integration with AI generator > should return cached roadmap if generated recently 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Cannot read properties of undefined (reading 'filter')
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Cannot read properties of undefined (reading 'filter')
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × roadmapService integration with AI generator > should fall back to static generation when AI generation throws 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × roadmapService integration with AI generator > should call generatePlanWithAI when ensureRoadmap has no existing roadmap 1ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Cannot read properties of undefined (reading 'filter')
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × roadmapService integration with AI generator > should generate a static roadmap when AI is disabled 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Cannot read properties of undefined (reading 'filter')
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Cannot read properties of undefined (reading 'filter')
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × roadmapService integration with AI generator > should save the roadmap to localStorage after AI generation 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ ContentMetaRepository > findByPackId > finds content meta by pack id 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ ContentMetaRepository > findByPackId > returns undefined for unknown pack 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/ContentRepository.test.ts (14 tests | 3 failed) 37ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Cannot read properties of undefined (reading 'filter')
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × ContentMetaRepository > findSeededPacks > returns all seeded packs 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ ContentMetaRepository > isPackSeeded > returns false if pack version is below minimum 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × roadmapService integration with AI generator > should recalculate progress on existing roadmap 0ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ ContentMetaRepository > isPackSeeded > returns true if pack version is >= minimum 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ ContentMetaRepository > markPackSeeded > creates new meta entry 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ UserContentEditRepository > findByOriginalId > finds edit by original id 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ UserContentEditRepository > findByOriginalId > returns undefined when not edited 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × UserContentEditRepository > findByContentType > filters by content type 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ ContentMetaRepository > isPackSeeded > returns false if pack not seeded 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ UserContentEditRepository > hasUserEdit > returns true if edit exists 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ ContentMetaRepository > markPackSeeded > updates existing meta entry 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × UserContentEditRepository > findUserEditsByTable > filters by table name 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ UserContentEditRepository > hasUserEdit > returns false if no edit 5ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/VocabularyRepository.test.ts (11 tests | 6 failed) 32ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × VocabularyRepository > findByStatus > filters vocabulary by status 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × VocabularyRepository > findByTopic > filters vocabulary by topic 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × VocabularyRepository > findByDifficulty > filters vocabulary by difficulty 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × VocabularyRepository > getStats > returns stats with counts by status and difficulty 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ VocabularyRepository > getStats > returns empty stats when no vocabulary 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ VocabReviewRepository > findByVocabularyId > finds review by vocabulary id 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × VocabReviewRepository > findDueReviews > returns reviews with past due date 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ VocabReviewRepository > findDueReviews > returns empty when no reviews due 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    × VocabReviewRepository > getReviewStats > returns review statistics 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ VocabReviewRepository > findByVocabularyId > returns undefined when no review exists 2ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]    ✓ VocabReviewRepository > getDueCount > returns count of due reviews 6ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/chatHelpers.test.ts (12 tests) 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ✓ ../../packages/exercises/src/__tests__/difficulty.test.ts (13 tests) 3ms
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/useProactiveMessages.test.ts (12 tests) 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ❯ tests/integration/vocabulary-import-wordtab.test.tsx (3 tests | 3 failed) 3019ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × Vocabulary import → Word tab integration > shows empty state when no vocabulary exists 1004ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.398Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveMessageService.test.ts (13 tests) 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Unable to find an element with the text: Your vocabulary notebook is empty.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × Vocabulary import → Word tab integration > displays imported vocabulary words in the Word tab 1007ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ✓ ../extension/src/content-script/highlighter/__tests__/highlightMatcher.test.ts (16 tests) 4ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Unable to find an element with the text: Your vocabulary notebook is empty.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × Vocabulary import → Word tab integration > refreshes the word list when vocabulary-changed event fires (simulating import) 1007ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] stderr | ../extension/src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ✓ ../extension/src/popup/components/__tests__/ChatButton.test.tsx (2 tests) 7ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] stderr | ../extension/src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/TaskRepository.test.ts (7 tests | 4 failed) 18ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Unable to find an element with the text: ubiquitous. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × TaskRepository > findByDate > finds tasks by date (ignores time) 4ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ TaskRepository > findByDate > returns empty for no tasks on date 2ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × TaskRepository > findByCategory > filters by category 2ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ TaskRepository > markAsNotDone > marks task as not done and clears completedAt 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ TaskRepository > markAsDone > marks task as done and sets completedAt 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/ProgressRepository.test.ts (6 tests | 3 failed) 19ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ TopicProgressRepository > findByTopicId > finds by topic ID (via direct table query) 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × TaskRepository > findPending > returns only incomplete tasks 2ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × GrammarNoteRepository > findByStatus > filters by status 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × ProgressRecordRepository > findBySkill > filters by skill 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × ProgressRecordRepository > findByDateRange > finds records within date range 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ GrammarNoteRepository > findByTopic > finds by topic 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ MockTestRepository > creates and retrieves mock tests 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/MistakeRepository.test.ts (6 tests | 4 failed) 14ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × MistakeRepository > search > searches across text fields 2ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × MistakeRepository > findBySkill > filters by skill 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × MistakeRepository > findByStatus > filters by status 2ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ MistakeRepository > search > returns empty for no matches 2ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × MistakeRepository > getStats > returns correct stats for mixed statuses 2ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    × TaskRepository > getStats > returns task statistics 2ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ MistakeRepository > getStats > returns zeros for empty table 2ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ❯ src/services/__tests__/ExerciseGenerator.test.ts (50 tests | 21 failed) 33ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates speaking exercise for category "Speaking Part 1" 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates speaking exercise for category "Speaking Part 2" 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ✓ ../../packages/storage/src/__tests__/reviewService.test.ts (12 tests) 3ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates speaking exercise for category "Speaking Part 3" 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates writing exercise for category "Writing Task 2" 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]  ✓ src/features/ai-tutor/__tests__/aiTutorService.test.ts (26 tests) 7ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates reading exercise for category "Reading" 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates listening exercise for category "Listening" 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > speaking exercise generation > generates speaking exercise for all speaking parts 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > writing exercise generation > generates writing exercise for Task 1 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates writing exercise for category "Writing Task 1" 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > writing exercise generation > generates writing exercise for Task 2 0ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > infers topic from task title when available 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > speaking exercise generation > marks speaking questions with speaking tags 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > reading exercise generation > generates reading comprehension questions 0ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > vocabulary and grammar > generates vocabulary exercise for vocabulary category 0ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > listening exercise generation > generates listening practice questions 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > question structure > generates questions with all required fields 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > sets source to user-created 0ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > does not generate random exercises unrelated to the task 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > vocabulary and grammar > generates grammar exercise for grammar category 0ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > sets status to published 0ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > speaking exercise generation > generates speaking questions with part references 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > uses task time for estimated minutes 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > infers difficulty from task time 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > handles edge cases > handles unknown category gracefully 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > handles edge cases > handles empty title by falling back to description 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > links exercise to task via sourceId 3ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves speaking exercise to "speakingExercises" table 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves speaking exercise to "speakingExercises" table 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves speaking exercise to "speakingExercises" table 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves writing exercise to "writingExercises" table 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves writing exercise to "writingExercises" table 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves reading exercise to "readingExercises" table 1ms
+[2026-07-04T05:58:41.399Z] [INFO] [stderr]    ✓ generateExercise > question structure > calculates total points from questions 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'listeningExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves listening exercise to "listeningExercises" table 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > speaking exercise saving > stores speaking exercise with serialized content and questions 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → Cannot read properties of undefined (reading '1')
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called at least once
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'readingExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > speaking exercise saving > saves speaking exercise to speakingExercises table 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > upsert logic > calls add when no existing exercise with same sourceId exists 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > upsert logic > calls update when an existing exercise with same sourceId exists 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ saveExercise > edge cases > does not save when skill has no matching table 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > entry structure > saves entry with serialized content and questions 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → Cannot read properties of undefined (reading '1')
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → Cannot read properties of undefined (reading '1')
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × generateExercise saves for review > saves speaking exercise to "speakingExercises" after generation 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × saveExercise > entry structure > includes createdAt and updatedAt timestamps 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × generateExercise saves for review > saves speaking exercise to "speakingExercises" after generation 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × generateExercise saves for review > saves speaking exercise to "speakingExercises" after generation 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ saveExercise > edge cases > does not throw when DatabaseService throws 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × generateExercise saves for review > saves writing exercise to "writingExercises" after generation 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × generateExercise saves for review > saves writing exercise to "writingExercises" after generation 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'listeningExercises', …(2) ][90m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × generateExercise saves for review > saves reading exercise to "readingExercises" after generation 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × generateExercise saves for review > saves listening exercise to "listeningExercises" after generation 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] [39m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > supports speaking exercise type 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > returns an exercise object matching the task topic and type 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × generateExercise saves for review > calls add exactly once per exercise generation 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called once, but got 0 times
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]  ✓ ../../packages/storage/src/__tests__/syncService.test.ts (16 tests) 4ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > supports listening exercise type 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > does not generate random unrelated exercises 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > supports writing exercise type 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]      → expected "spy" to be called at least once
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > supports reading exercise type 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    × generateExercise > saves exercise for review 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > handles reading category correctly 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > handles listening category correctly 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > generates questions with proper structure 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > handles writing categories correctly 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]  ❯ src/services/ExerciseGenerator.test.ts (17 tests | 1 failed) 15ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ parseExerciseFromAiContent > parses a valid AiContent back to an Exercise 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ parseExerciseFromAiContent > returns null for invalid content 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ getSavedExercisesForReview > returns empty array when no saved exercises 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > includes task id as sourceId 6ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]  ✓ src/features/personalization/__tests__/personalizationService.test.ts (17 tests) 5ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]  ❯ ../../packages/ai/src/__tests__/utils.test.ts (19 tests | 2 failed) 5ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > has estimated minutes based on task time 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ extractJSON > extracts JSON from plain text 1ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ generateExercise > handles unknown category gracefully 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]  ✓ src/utils/spaced-repetition.test.ts (12 tests) 3ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ extractJSON > extracts JSON from text with markdown code blocks 0ms
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]    ✓ extractJSON > extracts JSON from text with surrounding content 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × extractJSON > extracts only the first JSON object from multiple 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ extractJSON > throws AIError when no JSON found 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → expected '{"first": true} some text {"second": …' to be '{"first": true}' // Object.is equality
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ parseAndValidate > returns error for invalid JSON 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ extractJSON > throws AIError for empty string 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ parseAndValidate > returns error for invalid schema 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ parseAndValidate > extracts and validates JSON from text prefix 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ parseAndValidate > returns error for empty content 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ extractJSON > extracts JSON from multiline content 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ parseAndValidate > parses and validates valid JSON 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ AiCache > stores and retrieves values 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × AiCache > returns null for expired entries 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ AiCache > returns null for missing key 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ AiCache > clears all entries 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ AiCache > reports correct size 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → expected 'value' to be null
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ AiCache > handles complex data types 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [TaskCompletion] Generated speaking exercise for task "Practice Speaking About Hobbies"
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] stdout | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > returns exercise with speaking skill for speaking tasks
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [TaskCompletion] Generated speaking exercise for task "Practice Speaking About Hobbies"
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] stdout | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > generates exercise on task completion
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.400Z] [INFO] [stderr]  ✓ ../extension/src/__tests__/storageService.test.ts (18 tests) 8ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    ✓ parseAndValidate > returns error for missing fields 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] stderr | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > returns error on generation failure
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [TaskCompletion] Failed to generate exercise for task "Practice Speaking About Hobbies": Unknown error generating exercise
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../../packages/storage/src/__tests__/migrations.test.ts (17 tests) 4ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] stderr | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > handles unknown errors gracefully
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/AnalyticsService.test.ts (7 tests) 3ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [TaskCompletion] Failed to generate exercise for task "Practice Speaking About Hobbies": Generation failed
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../extension/src/__tests__/saveSelectedText.test.ts (3 tests) 2ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ src/components/__tests__/TaskCompletionHandler.test.ts (4 tests) 2ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/WeaknessDetectionService.test.ts (4 tests) 1ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/LearningEngine.test.ts (5 tests) 2ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/messageStorage.test.ts (10 tests) 3ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../../packages/ai/src/__tests__/errors.test.ts (9 tests) 2ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../../packages/storage/src/__tests__/errors.test.ts (9 tests) 2ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ❯ ../../packages/ai-tutor/src/tests/ChatIcon.test.tsx (8 tests | 8 failed) 5ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → Unable to find a label with the text of: Open AI Tutor chat
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/ProfileService.test.ts (7 tests) 2ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/NextBestActionService.test.ts (7 tests) 2ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × ChatIcon > renders with correct aria label when closed 2ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → Unable to find a label with the text of: Close AI Tutor chat
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × ChatIcon > renders with correct aria label when open 1ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × ChatIcon > shows unread badge when count > 0 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → Unable to find an element with the text: 99+. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × ChatIcon > caps unread badge at 99+ 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → Unable to find an accessible element with the role "button"
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × ChatIcon > calls onToggle when clicked 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × ChatIcon > calls onToggle on Enter key 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → Unable to find an accessible element with the role "button"
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → Unable to find a label with the text of: AI Tutor is online
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × ChatIcon > shows online status indicator by default 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × ChatIcon > shows away status when isOnline is false 0ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → Unable to find a label with the text of: AI Tutor is away
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]      → Unable to find an element with the text: 3. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/FeatureGrid.test.tsx (5 tests | 5 failed) 6ms
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.401Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]    × FeatureGrid > renders the free tagline 1ms
+[2026-07-04T05:58:41.401Z] [INFO] [stderr]    × FeatureGrid > renders the section heading 2ms
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]      → Unable to find an element with the text: All features are free. No hidden limits.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]      → Unable to find an element with the text: IELTS word highlighter. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]    × FeatureGrid > renders all feature items 1ms
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]      → Unable to find an accessible element with the role "heading"
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]    × FeatureGrid > renders a semantic section with heading level 2 1ms
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]      → Unable to find an element with the text: /Everything you need/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]    × FeatureGrid > has an id attribute for navigation 1ms
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] stderr | process.env.NODE_ENV.reportGlobalError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25513:23)
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveEventBus.test.ts (5 tests) 2ms
+[2026-07-04T05:58:41.402Z] [INFO] [stderr]      → Unable to find an element with the text: Everything you need to master IELTS. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] stderr | defaultOnUncaughtError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:9362:15)
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] stderr | process.env.NODE_ENV.reportGlobalError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25513:23)
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T05:58:41.402Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] stderr | defaultOnUncaughtError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:9362:15)
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] stderr | process.env.NODE_ENV.reportGlobalError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25513:23)
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] stderr | defaultOnUncaughtError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:9362:15)
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.403Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] DOMException {}
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T05:58:41.404Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx (4 tests | 3 failed) 38ms
+[2026-07-04T05:58:41.404Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T05:58:41.405Z] [INFO] [stderr]    × CreatorSection with all links > renders Contact Me when email is configured 35ms
+[2026-07-04T05:58:41.405Z] [INFO] [stderr]    × CreatorSection with all links > renders Download CV when cv is configured 2ms
+[2026-07-04T05:58:41.405Z] [INFO] [stderr]      → 
+[2026-07-04T05:58:41.406Z] [INFO] [stderr]      → Unable to find an element with the text: Download CV. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.406Z] [INFO] [stderr]    × CreatorSection with all links > renders LinkedIn when linkedin is configured 1ms
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T05:58:41.406Z] [INFO] [stderr]      → Unable to find an element with the text: LinkedIn. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T05:58:41.406Z] [INFO] [stderr]    ✓ CreatorSection with all links > hides fallback text when links are configured 1ms
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web:
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] 
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/web@0.1.0 test: `vitest run --config vitest.config.ts -- --reporter verbose SettingsStorage`
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] <shell_metadata>
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] </shell_metadata>
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] [0m
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] shell tool terminated command after exceeding timeout 60000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+[2026-07-04T05:58:41.406Z] [INFO] [stderr] Exit status 143
+[2026-07-04T05:58:41.441Z] [INFO] Task waiting for input: 
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   ✓ CreatorSection with all links > hides fallback text when links are configured 1ms
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web:
+[2026-07-04T05:58:44.102Z] [INFO] [stderr] [0m→ [0mRead apps/web/vitest.config.ts
+[2026-07-04T05:58:44.512Z] [INFO] User input provided via TTY prompt
+[2026-07-04T05:58:48.566Z] [INFO] [stderr] [0m
+[2026-07-04T05:58:48.566Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/web exec vitest run --config vitest.config.ts --reporter verbose "SettingsStorage" 2>&1
+[2026-07-04T05:58:48.566Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > constants > SAVE_CATEGORIES has expected values 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr] 
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > constants > THEME_MODES has expected values 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > constants > DEFAULT_SETTINGS matches schema defaults 1ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > loadSettings > falls back to defaults when stored sync data is invalid 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > loadSettings > returns defaults when no settings stored 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey with empty string clears the key 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > constants > AI_PROVIDERS has expected values 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > saveSettings > saves settings to sync storage without apiKey 1ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey stores and getApiKey retrieves the key 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > loadSettings > returns stored sync settings merged with defaults 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > loadSettings > loads apiKey from local storage 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > saveSettings > saves apiKey separately to local storage 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > getApiKey returns empty string when no key stored 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > patchSettings > preserves existing field values not in the patch 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > clearAllSettings > removes settings from sync and local storage 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > clearAllSettings > clears stored values 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > patchSettings > loads current settings, merges patch, and saves 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > saveSettings > notifies listeners after saving 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > extracts only overlapping fields 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > saves apiKey from website to local storage 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > saveSettings > saves backup to local storage 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > importSettingsData saves the provided settings 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > settings change listeners > supports multiple listeners 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > exportSettingsData returns settings and timestamp 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > settings change listeners > addSettingsChangeListener registers a listener 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > returns default on corrupt JSON 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > settings change listeners > does not throw when a listener throws 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > removes a key via removeSetting 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > applies overlapping settings from website 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > returns parsed value when key exists 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > returns DEFAULT_SETTINGS when nothing is stored 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > returns default when key does not exist 1ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > stores and retrieves a value via setSetting 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > merges stored settings over defaults 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > migrates aiEndpoint to aiBaseUrl when aiBaseUrl is missing 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > prefers aiBaseUrl over aiEndpoint when both exist 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > ignores undefined website settings 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > theme mode > setThemeMode stores the value 0ms
+[2026-07-04T05:58:48.566Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > does not include aiApiKey or extension-only fields 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > accent color > getAccentColor returns default blue 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > saveAppSettings > posts a message to the extension bridge 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > saveAppSettings > persists settings to localStorage 1ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > accent color > setAccentColor stores the value 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > settings change listeners > removeSettingsChangeListener unregisters a listener 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > theme mode > getThemeMode returns default "system" 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > dark mode > getDarkMode defaults to false 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > returns defaults when stored JSON is corrupt 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > dark mode > setDarkMode stores the value 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  × src/services/storage/__tests__/SettingsStorage.test.ts > notification prefs > loadNotificationPrefs merges stored values over defaults 3ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]    → expected { enabled: true } to deeply equal { Object (enabled, reminderTime) }
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > notification prefs > loadNotificationPrefs returns defaults when not stored 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > patchAppSettings > merges patch with existing and persists 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > notification prefs > saveNotificationPrefs persists 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > removeAppSettings > removes settings from localStorage 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > ignores messages without valid bridge structure 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > listens for SETTINGS_SYNC messages from extension 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > ignores SETTINGS_SYNC from non-extension source 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > ignores messages from different origin 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] 
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > ignores SETTINGS_SYNC with wrong action 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] 
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] 
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] [31m+ Received[39m
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] AssertionError: expected { enabled: true } to deeply equal { Object (enabled, reminderTime) }
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] 
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] [2m    "enabled": true,[22m
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] [2m  {[22m
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  FAIL  src/services/storage/__tests__/SettingsStorage.test.ts > notification prefs > loadNotificationPrefs merges stored values over defaults
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] [32m- Expected[39m
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > applies SETTINGS_SYNC data from extension 0ms
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] 
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]     219|       [NOTIFICATION_PREFS_KEY]: JSON.stringify({ enabled: true }),
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]     220|     })
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] [32m-   "reminderTime": "09:00",[39m
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]     221|     expect(loadNotificationPrefs()).toEqual({ enabled: true, reminderT…
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] [2m  }[22m
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] 
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]     222|   })
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  Test Files  1 failed | 1 passed (2)
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]        |                                     ^
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] 
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]    Start at  12:58:47
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]       Tests  1 failed | 58 passed (59)
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]    Duration  477ms (transform 64ms, setup 39ms, collect 108ms, tests 18ms, environment 205ms, prepare 31ms)
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]     223| 
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run --config vitest.config.ts --reporter verbose SettingsStorage
+[2026-07-04T05:58:48.567Z] [INFO] [stderr]  ❯ src/services/storage/__tests__/SettingsStorage.test.ts:221:37
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] undefined
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web:
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] [0m
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] 
+[2026-07-04T05:58:48.567Z] [INFO] [stderr] 
+[2026-07-04T05:58:54.553Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/services/storage/__tests__/SettingsStorage.test.ts
+[2026-07-04T05:58:54.553Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/__tests__/SettingsStorage.test.ts
+[2026-07-04T05:58:54.554Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:58:54.554Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/__tests__/SettingsStorage.test.ts
+[2026-07-04T05:58:54.553Z] [INFO] [stderr] @@ -213,13 +213,13 @@
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]    mockStorage({})
+[2026-07-04T05:58:54.554Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/__tests__/SettingsStorage.test.ts
+[2026-07-04T05:58:54.554Z] [INFO] [stderr] +it('loadNotificationPrefs returns exactly the stored value', () => {
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]  })
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]    })
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]  
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]      [NOTIFICATION_PREFS_KEY]: JSON.stringify({ enabled: true }),
+[2026-07-04T05:58:54.554Z] [INFO] [stderr] -  expect(loadNotificationPrefs()).toEqual({ enabled: true, reminderTime: '09:00' })
+[2026-07-04T05:58:54.554Z] [INFO] [stderr] +  expect(loadNotificationPrefs()).toEqual({ enabled: true })
+[2026-07-04T05:58:54.554Z] [INFO] [stderr] -it('loadNotificationPrefs merges stored values over defaults', () => {
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]  })
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]  
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]    const store = mockStorage({})
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]  it('saveNotificationPrefs persists', () => {
+[2026-07-04T05:58:54.554Z] [INFO] [stderr] 
+[2026-07-04T05:58:54.554Z] [INFO] [stderr] [0m
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]    mockStorage({
+[2026-07-04T05:58:54.554Z] [INFO] [stderr]    expect(loadNotificationPrefs()).toEqual({ enabled: false, reminderTime: '09:00' })
+[2026-07-04T05:58:58.091Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > returns default on corrupt JSON 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > stores and retrieves a value via setSetting 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > returns defaults when stored JSON is corrupt 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > removes a key via removeSetting 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > returns DEFAULT_SETTINGS when nothing is stored 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr] 
+[2026-07-04T05:58:58.091Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/web exec vitest run --config vitest.config.ts --reporter verbose "SettingsStorage" 2>&1
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > merges stored settings over defaults 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > saveAppSettings > posts a message to the extension bridge 1ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > migrates aiEndpoint to aiBaseUrl when aiBaseUrl is missing 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > loadAppSettings > prefers aiBaseUrl over aiEndpoint when both exist 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > removeAppSettings > removes settings from localStorage 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > patchAppSettings > merges patch with existing and persists 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > returns parsed value when key exists 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > theme mode > getThemeMode returns default "system" 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > theme mode > setThemeMode stores the value 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > accent color > setAccentColor stores the value 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > dark mode > getDarkMode defaults to false 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > saveAppSettings > persists settings to localStorage 1ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > notification prefs > loadNotificationPrefs returns defaults when not stored 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > accent color > getAccentColor returns default blue 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > notification prefs > saveNotificationPrefs persists 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > applies SETTINGS_SYNC data from extension 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > ignores messages without valid bridge structure 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > listens for SETTINGS_SYNC messages from extension 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > notification prefs > loadNotificationPrefs returns exactly the stored value 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > ignores SETTINGS_SYNC from non-extension source 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > getSetting / setSetting / removeSetting > returns default when key does not exist 1ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > constants > SAVE_CATEGORIES has expected values 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > constants > DEFAULT_SETTINGS matches schema defaults 1ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > constants > THEME_MODES has expected values 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey with empty string clears the key 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > loadSettings > returns defaults when no settings stored 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > constants > AI_PROVIDERS has expected values 0ms
+[2026-07-04T05:58:58.091Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > dark mode > setDarkMode stores the value 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > getApiKey returns empty string when no key stored 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > ignores SETTINGS_SYNC with wrong action 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > loadSettings > loads apiKey from local storage 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > saveSettings > saves settings to sync storage without apiKey 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > saveSettings > saves apiKey separately to local storage 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > saveSettings > saves backup to local storage 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > patchSettings > loads current settings, merges patch, and saves 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey stores and getApiKey retrieves the key 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > patchSettings > preserves existing field values not in the patch 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > saves apiKey from website to local storage 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > loadSettings > falls back to defaults when stored sync data is invalid 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > applies overlapping settings from website 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > saveSettings > notifies listeners after saving 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > does not include aiApiKey or extension-only fields 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts > initSettingsBridge > ignores messages from different origin 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > clearAllSettings > removes settings from sync and local storage 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > ignores undefined website settings 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > settings change listeners > addSettingsChangeListener registers a listener 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > extracts only overlapping fields 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > clearAllSettings > clears stored values 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > importSettingsData saves the provided settings 1ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > settings change listeners > supports multiple listeners 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > exportSettingsData returns settings and timestamp 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]    Start at  12:58:57
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  Test Files  2 passed (2)
+[2026-07-04T05:58:58.092Z] [INFO] [stderr] 
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > settings change listeners > does not throw when a listener throws 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]    Duration  380ms (transform 64ms, setup 24ms, collect 100ms, tests 16ms, environment 134ms, prepare 29ms)
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > settings change listeners > removeSettingsChangeListener unregisters a listener 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]       Tests  59 passed (59)
+[2026-07-04T05:58:58.092Z] [INFO] [stderr]  ✓ ../extension/src/background/__tests__/settingsStorage.test.ts > loadSettings > returns stored sync settings merged with defaults 0ms
+[2026-07-04T05:58:58.092Z] [INFO] [stderr] [0m
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] 
+[2026-07-04T05:59:02.155Z] [INFO] [stdout] All 59 tests pass (29 in the new web SettingsStorage test suite, 30 in the existing extension one).
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] - `getSetting` / `setSetting` / `removeSetting`: default fallback, parse, corrupt JSON, store/retrieve, remove
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] **Created:** `apps/web/src/services/storage/__tests__/SettingsStorage.test.ts`
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] **Covers:**
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] - `loadAppSettings`: default values, merge over defaults, corrupt JSON, `aiEndpoint`→`aiBaseUrl` migration
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] - `removeAppSettings`, `patchAppSettings`
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] - `initSettingsBridge` / bridge handler: listens, applies `SETTINGS_SYNC`, ignores wrong origin/invalid structure/wrong source/wrong action
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] 
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] - `saveAppSettings`: persistence, extension bridge `postMessage`
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] - Notification prefs: defaults, stored values, save
+[2026-07-04T05:59:02.156Z] [INFO] [stdout] - Theme mode, accent color, dark mode getters/setters
+[2026-07-04T05:59:02.385Z] [INFO] Interactive session completed with exit code 0
+[2026-07-04T05:59:02.386Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-04T05:59:02.386Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-04T05:59:02.389Z] [INFO] Task completed successfully

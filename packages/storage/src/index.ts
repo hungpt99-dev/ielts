@@ -52,8 +52,13 @@ export {
   WritingPromptRepository,
   ContentMetaRepository,
   UserContentEditRepository,
+  SpeakingExerciseRepository,
+  WritingExerciseRepository,
+  ReadingExerciseRepository,
+  ListeningExerciseRepository,
 } from './repositories'
 export type { RepositoryItem, PaginationParams, PaginatedResult } from './repositories'
+export type { ExerciseEntry } from './repositories'
 export type {
   VocabularyEntry,
   VocabReviewEntry,

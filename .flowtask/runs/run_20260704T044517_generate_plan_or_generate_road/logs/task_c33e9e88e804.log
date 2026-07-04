@@ -1,0 +1,483 @@
+[2026-07-04T04:55:07.739Z] [INFO] Task started: Create unit and integration tests for AI-driven plan generation modules
+[2026-07-04T04:55:07.742Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts","description":"Unit and integration tests for AI roadmap generator and related modules","validationMethod":"file_exists"}]
+[2026-07-04T04:55:08.268Z] [INFO] [stderr] [0m
+[2026-07-04T04:55:08.268Z] [INFO] [stderr] [0m
+[2026-07-04T04:55:08.268Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-04T04:55:13.048Z] [INFO] [stderr] [ ] Create integration tests for modified roadmapService.ts
+[2026-07-04T04:55:13.048Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T04:55:13.048Z] [INFO] [stderr] [•] Analyze existing source modules (aiRoadmapGenerator, aiPlanPrompts, roadmapService)
+[2026-07-04T04:55:13.048Z] [INFO] [stderr] [ ] Create unit tests for aiRoadmapGenerator.ts
+[2026-07-04T04:55:13.048Z] [INFO] [stderr] [ ] Run tests and verify coverage
+[2026-07-04T04:55:13.048Z] [INFO] [stderr] [0m
+[2026-07-04T04:55:13.048Z] [INFO] [stderr] [ ] Create unit tests for aiPlanPrompts.ts
+[2026-07-04T04:55:15.641Z] [INFO] [stderr] [0m✗ [0mRead src/features/roadmap failed
+[2026-07-04T04:55:15.641Z] [INFO] [stderr] [91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/roadmap
+[2026-07-04T04:55:17.760Z] [INFO] [stderr] [0m• [0mExplore roadmap test setup[90m Explore Agent[0m
+[2026-07-04T04:56:04.553Z] [INFO] [stderr] [0m✓ [0mExplore roadmap test setup[90m Explore Agent[0m
+[2026-07-04T04:56:06.701Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/roadmap/aiRoadmapGenerator.ts
+[2026-07-04T04:56:06.970Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/roadmap/aiPlanPrompts.ts
+[2026-07-04T04:56:07.254Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/roadmap/roadmapService.ts
+[2026-07-04T04:56:10.192Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"callAI","kind":"function","limit":5}
+[2026-07-04T04:56:10.538Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"AppSettings","kind":"interface","limit":5}
+[2026-07-04T04:56:10.653Z] [INFO] [stdout] Now let me examine the AI module interface and the models to understand the types being used.
+[2026-07-04T04:56:13.183Z] [INFO] [stderr] [0m→ [0mRead packages/ai/src/client/index.ts
+[2026-07-04T04:56:13.576Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/models/index.ts[90m [offset=1, limit=120][0m
+[2026-07-04T04:56:13.868Z] [INFO] [stderr] [91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__
+[2026-07-04T04:56:13.868Z] [INFO] [stderr] [0m✗ [0mRead apps/web/src/features/roadmap/__tests__ failed
+[2026-07-04T04:56:16.400Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai/src/client/types.ts"}
+[2026-07-04T04:56:16.808Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/ai-tutor/__tests__/aiTutorService.test.ts[90m [limit=80][0m
+[2026-07-04T04:56:35.140Z] [INFO] [stderr] [ ] Run tests and verify coverage
+[2026-07-04T04:56:35.140Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T04:56:35.140Z] [INFO] [stderr] [0m
+[2026-07-04T04:56:35.140Z] [INFO] [stderr] [0m
+[2026-07-04T04:56:35.140Z] [INFO] [stderr] [✓] Analyze existing source modules (aiRoadmapGenerator, aiPlanPrompts, roadmapService)
+[2026-07-04T04:56:35.140Z] [INFO] [stderr] [•] Create test file with unit and integration tests for all three modules
+[2026-07-04T04:56:37.710Z] [INFO] [stderr] (no output)
+[2026-07-04T04:56:37.710Z] [INFO] [stderr] [0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__
+[2026-07-04T04:56:37.710Z] [INFO] [stderr] [0m
+[2026-07-04T04:57:13.431Z] [INFO] [stderr] [0m
+[2026-07-04T04:57:13.431Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T04:57:13.431Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] @@ -357,139 +357,84 @@
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]        expect(result.roadmap!.totalTasks).toBeGreaterThan(0)
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] ===================================================================
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]    })
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -    it('should parse valid JSON with phases', async () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const result = tryParseAiResponse(makeValidAiResponse())
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      expect(result!.phases).toHaveLength(1)
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +  describe('AI config / parse / conversion (tested through generatePlanWithAI)', () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      expect(result).not.toBeNull()
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const { tryParseAiResponse } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      const { generatePlanWithAI } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +    it('should not call AI when apiKey is empty', async () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      expect(mockCallAI).not.toHaveBeenCalled()
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      await generatePlanWithAI(makeSettings({ aiApiKey: '' }))
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const content = 'Here is your plan:\n\n```json\n' + makeValidAiResponse() + '\n```'
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      expect(result).not.toBeNull()
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -    it('should parse JSON embedded in markdown', async () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const { tryParseAiResponse } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      expect(result!.phases).toHaveLength(1)
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      const { generatePlanWithAI } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const result = tryParseAiResponse(content)
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      await generatePlanWithAI(makeSettings({ aiEnabled: false }))
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +    it('should not call AI when aiEnabled is false', async () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      expect(mockCallAI).not.toHaveBeenCalled()
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      mockCallAI.mockResolvedValue({ content: makeValidAiResponse(), error: null })
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -    it('should return null for invalid JSON', async () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +    it('should call AI with custom endpoint when configured', async () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const result = tryParseAiResponse('not json')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -  describe('tryParseAiResponse', () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      const { generatePlanWithAI } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      expect(mockCallAI).toHaveBeenCalledTimes(1)
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      await generatePlanWithAI(makeSettings({ aiEndpoint: 'https://custom.ai/v1', aiModel: 'custom-model' }))
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -    it('should return null when JSON lacks phases array', async () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      expect(result).toBeNull()
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const { tryParseAiResponse } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      mockCallAI.mockResolvedValue({ content, error: null })
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const result = tryParseAiResponse(JSON.stringify({ foo: 'bar' }))
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      expect(result).toBeNull()
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      const content = 'Here is your plan:\n\n```json\n' + makeValidAiResponse() + '\n```'
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      const result = await generatePlanWithAI(makeSettings())
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -    })
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const { tryParseAiResponse } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      const { generatePlanWithAI } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const { tryParseAiResponse } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      const result = tryParseAiResponse('')
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -    it('should return null for empty string', async () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -      expect(result).toBeNull()
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      expect(result.usedAi).toBe(true)
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      expect(result.error).toBeNull()
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +    it('should parse JSON embedded in markdown code fence', async () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -  describe('getAiConfig', () => {
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] +      expect(result.roadmap).not.toBeNull()
+[2026-07-04T04:57:34.410Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -  })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      const { getAiConfig } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      expect(config).toBeNull()
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -    })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] +      mockCallAI.mockResolvedValue({ content: 'not json', error: null })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      const config = getAiConfig(makeSettings({ aiApiKey: '' }))
+[2026-07-04T04:57:34.411Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      const config = getAiConfig(makeSettings({ aiEnabled: false }))
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] +    it('should detect invalid JSON and return fallback roadmap', async () => {
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      expect(config).toBeNull()
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -    })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] +      const result = await generatePlanWithAI(makeSettings())
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      const { getAiConfig } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.411Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] +      const { generatePlanWithAI } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -    it('should return null when aiEnabled is false', async () => {
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      const config = getAiConfig(makeSettings())
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -    it('should return provider config when properly configured', async () => {
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      const { getAiConfig } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -        model: 'gpt-4o-mini',
+[2026-07-04T04:57:34.410Z] [INFO] [stderr] -    it('should return null when apiKey is empty', async () => {
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] +      expect(result.usedAi).toBe(true)
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      expect(config).toEqual({
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -        apiKey: 'sk-test-key',
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] +      expect(result.error).toContain('Failed to parse')
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -        baseUrl: 'https://api.openai.com/v1',
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] +      expect(result.roadmap).not.toBeNull()
+[2026-07-04T04:57:34.411Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.411Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      const config = getAiConfig(makeSettings({
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      expect(config).toEqual({
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -    it('should use custom endpoint and model when provided', async () => {
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -        aiEndpoint: 'https://custom.ai/v1',
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -        aiModel: 'custom-model',
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      }))
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -        model: 'custom-model',
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -    })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -        baseUrl: 'https://custom.ai/v1',
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -  describe('aiRoadmapResultToRoadmapData', () => {
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -      const { getAiConfig } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -        apiKey: 'sk-test-key',
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] -  })
+[2026-07-04T04:57:34.411Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -    it('should convert AI result to RoadmapData with correct structure', async () => {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +    it('should detect JSON without phases and return fallback roadmap', async () => {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const result = JSON.parse(makeValidAiResponse())
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const data = aiRoadmapResultToRoadmapData(result)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const { aiRoadmapResultToRoadmapData } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      const result = await generatePlanWithAI(makeSettings())
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].weeks).toHaveLength(1)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases).toHaveLength(1)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].weeks[0].days[1].skillFocus).toBe('Reading')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      expect(result.usedAi).toBe(true)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      expect(result.error).toContain('Failed to parse')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      const { generatePlanWithAI } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -    it('should calculate overall progress as 0 when no tasks completed', async () => {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].weeks[0].days).toHaveLength(2)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const { aiRoadmapResultToRoadmapData } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.411Z] [INFO] [stderr] +      mockCallAI.mockResolvedValue({ content: JSON.stringify({ foo: 'bar' }), error: null })
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].weeks[0].days[0].skillFocus).toBe('Vocabulary')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const result = JSON.parse(makeValidAiResponse())
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      mockCallAI.mockResolvedValue({ content: makeValidAiResponse(), error: null })
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const data = aiRoadmapResultToRoadmapData(result)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.overallProgress).toBe(0)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -    })
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      const { generatePlanWithAI } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.completedTasks).toBe(0)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +    it('should convert AI result to roadmap with correct structure', async () => {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      const result = await generatePlanWithAI(makeSettings())
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const result = JSON.parse(makeValidAiResponse())
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -    it('should assign unique IDs to phases, weeks, and days', async () => {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const { aiRoadmapResultToRoadmapData } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const data = aiRoadmapResultToRoadmapData(result)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      expect(result.roadmap!.phases[0].weeks).toHaveLength(1)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].id).toBe(mockId)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      expect(result.roadmap!.phases[0].weeks[0].days).toHaveLength(2)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].weeks[0].days[0].id).toBe(mockId)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      expect(result.roadmap!.phases).toHaveLength(1)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      expect(result.roadmap!.completedTasks).toBe(0)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      expect(result.roadmap!.overallProgress).toBe(0)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -    it('should set generatedAt and updatedAt timestamps', async () => {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const result = JSON.parse(makeValidAiResponse())
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].weeks[0].id).toBe(mockId)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.generatedAt).toBeTruthy()
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const { aiRoadmapResultToRoadmapData } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -    })
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.updatedAt).toBeTruthy()
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const result = {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const { aiRoadmapResultToRoadmapData } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +    it('should handle multiple phases with week offset', async () => {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const data = aiRoadmapResultToRoadmapData(result)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]          phases: [
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]              name: 'Phase 1', description: 'First', order: 0, targetRange: 'Band 5-6',
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]            {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -    it('should handle multiple phases with correct phase offset', async () => {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]                { weekNumber: 1, label: 'Week 1', focus: 'A', goal: 'G', days: [
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      const multiPhase = {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]                ]},
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]                  { dayNumber: 1, skillFocus: 'Vocabulary', objective: 'O', task: { title: 'T', description: 'D', estimatedMinutes: 20 } },
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]              weeks: [
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]              ],
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -              { weekNumber: 2, label: 'Week 2', focus: 'B', goal: 'G2', days: [
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -              ]},
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]            {
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]              name: 'Phase 2', description: 'Second', order: 1, targetRange: 'Band 6-7',
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]            },
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]              ],
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]            },
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] @@ -500,25 +445,26 @@
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      const data = aiRoadmapResultToRoadmapData(result)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]          ],
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]        }
+[2026-07-04T04:57:34.412Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].weeks).toHaveLength(2)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      mockCallAI.mockResolvedValue({ content: JSON.stringify(multiPhase), error: null })
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[1].weeks).toHaveLength(1)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].weeks[1].weekNumber).toBe(2)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases[0].weeks[0].weekNumber).toBe(1)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -      expect(data.phases).toHaveLength(2)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      const { generatePlanWithAI } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +      const result = await generatePlanWithAI(makeSettings())
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] -      expect(data.phases[1].weeks[0].weekNumber).toBe(3)
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +      expect(result.roadmap!.phases[0].weeks[0].weekNumber).toBe(1)
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] +
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +      expect(result.roadmap!.phases[1].weeks[0].weekNumber).toBe(2)
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +      expect(result.roadmap!.phases).toHaveLength(2)
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] -  })
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] -  describe('generateId', () => {
+[2026-07-04T04:57:34.413Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] -      const { generateId } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] -    it('should generate a string ID', async () => {
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] -      const id = generateId()
+[2026-07-04T04:57:34.412Z] [INFO] [stderr] -                { dayNumber: 1, skillFocus: 'Reading', objective: 'O2', task: { title: 'T2', description: 'D2', estimatedMinutes: 25 } },
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] -      expect(id.length).toBeGreaterThan(0)
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] -      expect(typeof id).toBe('string')
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +    it('should store timestamps on generated roadmap', async () => {
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +      const result = await generatePlanWithAI(makeSettings())
+[2026-07-04T04:57:34.413Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +
+[2026-07-04T04:57:34.413Z] [INFO] [stderr]      })
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +      expect(result.roadmap!.updatedAt).toBeTruthy()
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +      const { generatePlanWithAI } = await import('../aiRoadmapGenerator')
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +      mockCallAI.mockResolvedValue({ content: makeValidAiResponse(), error: null })
+[2026-07-04T04:57:34.413Z] [INFO] [stderr]  
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] +      expect(result.roadmap!.generatedAt).toBeTruthy()
+[2026-07-04T04:57:34.413Z] [INFO] [stderr]    })
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] [0m
+[2026-07-04T04:57:34.413Z] [INFO] [stderr]  })
+[2026-07-04T04:57:34.413Z] [INFO] [stderr] 
+[2026-07-04T04:57:34.429Z] [INFO] Task waiting for input: ApiKey:
+[2026-07-04T04:57:39.558Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:42.581Z] [INFO] User input provided via TTY prompt
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] [0m
+[2026-07-04T04:57:47.916Z] [INFO] [stderr]  })
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:47.916Z] [INFO] [stderr]  const mockCallAI = vi.hoisted(() => vi.fn<(...args: any[]) => Promise<{ content: string | null; error: string | null }>>())
+[2026-07-04T04:57:47.916Z] [INFO] [stderr]  
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +const mockSettings = vi.hoisted(() => ({
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    targetBand: 7.0,
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] ===================================================================
+[2026-07-04T04:57:47.916Z] [INFO] [stderr]  
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    currentBand: 5.5,
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +  value: {
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    examDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    studyReminder: 'Time to study!',
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    preferredTopics: ['Environment', 'Education'],
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    studyGoal: 'academic' as const,
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    dailyStudyMinutes: 60,
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri'] as ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[],
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    weakSkills: ['Writing', 'Speaking'],
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    aiEndpoint: '',
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    aiModel: 'gpt-4o-mini',
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +  },
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    darkMode: false,
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +}))
+[2026-07-04T04:57:47.917Z] [INFO] [stderr]  }))
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    aiEnabled: true,
+[2026-07-04T04:57:47.916Z] [INFO] [stderr]  vi.mock('@ielts/ai', () => ({
+[2026-07-04T04:57:47.917Z] [INFO] [stderr]    callAI: mockCallAI,
+[2026-07-04T04:57:47.917Z] [INFO] [stderr] +
+[2026-07-04T04:57:47.917Z] [INFO] [stderr] -  loadAppSettings: vi.fn(() => null),
+[2026-07-04T04:57:47.917Z] [INFO] [stderr]  vi.mock('../../../services/storage/SettingsStorage', () => ({
+[2026-07-04T04:57:47.917Z] [INFO] [stderr]  
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    aiApiKey: 'sk-test-key',
+[2026-07-04T04:57:47.917Z] [INFO] [stderr] +  loadAppSettings: vi.fn(() => mockSettings.value),
+[2026-07-04T04:57:47.917Z] [INFO] [stderr]  vi.mock('../../../services/storage/Database', () => ({
+[2026-07-04T04:57:47.917Z] [INFO] [stderr]  
+[2026-07-04T04:57:47.917Z] [INFO] [stderr]    DatabaseService: {
+[2026-07-04T04:57:47.917Z] [INFO] [stderr] [0m
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] @@ -7,14 +7,34 @@
+[2026-07-04T04:57:47.916Z] [INFO] [stderr] +    aiProvider: 'openai' as const,
+[2026-07-04T04:57:47.917Z] [INFO] [stderr] 
+[2026-07-04T04:57:47.917Z] [INFO] [stderr]  }))
+[2026-07-04T04:57:52.343Z] [INFO] [stderr] [✓] Create test file with unit and integration tests for all three modules
+[2026-07-04T04:57:52.343Z] [INFO] [stderr] [•] Run tests and verify coverage
+[2026-07-04T04:57:52.343Z] [INFO] [stderr] [✓] Analyze existing source modules (aiRoadmapGenerator, aiPlanPrompts, roadmapService)
+[2026-07-04T04:57:52.343Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T04:57:52.343Z] [INFO] [stderr] [0m
+[2026-07-04T04:57:56.288Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/web exec -- vitest run --config vitest.config.ts --reporter verbose src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts 2>&1
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > extractAiPlanInput > should set examCountdownDays to null when no exam date 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr] 
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > enrichWithLearningData > should override studyStreak and lastStudyDate 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > extractAiPlanInput > should extract all fields from AppSettings 7ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > enrichWithLearningData > should handle optional extras being undefined 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanSystemPrompt > should return the system prompt string 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should mention no exam date when not set 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should include all learner profile fields 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should include weak areas section 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should respect daily study minutes in the output 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should include preferred topics when available 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI is not configured 14ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > extractAiPlanInput > should set bandGap to 0 when target <= current 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should include study streak when > 0 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI returns empty content 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should mention available study days when fewer than 7 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return roadmap from AI when response is valid 1ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should catch exceptions and return fallback roadmap 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI returns an error 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > extractAiPlanInput > should use default weak skills when settings have none 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should generate fallback roadmap with phases when AI is off 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should not call AI when aiEnabled is false 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should call AI with custom endpoint when configured 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI response is unparseable 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should not call AI when apiKey is empty 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should parse JSON embedded in markdown code fence 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should detect JSON without phases and return fallback roadmap 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should store timestamps on generated roadmap 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should call generatePlanWithAI when ensureRoadmap has no existing roadmap 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]  × src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should recalculate progress on existing roadmap 2ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should convert AI result to roadmap with correct structure 0ms
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should call with correct AI options 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]    → expected '2026-07-04T04:57:56.174Z' not to be '2026-07-04T04:57:56.174Z' // Object.is equality
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should detect invalid JSON and return fallback roadmap 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should generate a static roadmap when AI is disabled 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] 
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should save the roadmap to localStorage after AI generation 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should return cached roadmap if generated recently 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]  FAIL  src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should recalculate progress on existing roadmap
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]     543|     expect(roadmap.updatedAt).not.toBe(staticRoadmap.updatedAt)
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] 
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]  ❯ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts:543:35
+[2026-07-04T04:57:56.288Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should fall back to static generation when AI generation throws 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]     541|     const roadmap = await ensureRoadmap()
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should pass extras to enrichWithLearningData 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]        |                                   ^
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] 
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] AssertionError: expected '2026-07-04T04:57:56.174Z' not to be '2026-07-04T04:57:56.174Z' // Object.is equality
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]     544|   })
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] 
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]     545| 
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]  Test Files  1 failed (1)
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] 
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]    Start at  11:57:55
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]     542| 
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run --config vitest.config.ts --reporter verbose src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]       Tests  1 failed | 37 passed (38)
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should handle multiple phases with week offset 0ms
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] 
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web:
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] undefined
+[2026-07-04T04:57:56.289Z] [INFO] [stderr] [0m
+[2026-07-04T04:57:56.289Z] [INFO] [stderr]    Duration  434ms (transform 58ms, setup 46ms, collect 33ms, tests 29ms, environment 212ms, prepare 35ms)
+[2026-07-04T04:58:04.445Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]  
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] ===================================================================
+[2026-07-04T04:58:04.445Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] @@ -534,14 +534,15 @@
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]  it('should recalculate progress on existing roadmap', async () => {
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] -  staticRoadmap.generatedAt = new Date(Date.now() - 1000).toISOString()
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]    saveRoadmap(staticRoadmap)
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]    const staticRoadmap = generateRoadmap(makeSettings(), [])
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]    const roadmap = await ensureRoadmap()
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]  
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] +  staticRoadmap.updatedAt = new Date(Date.now() - 86400000).toISOString()
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]  
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]    const { ensureRoadmap, saveRoadmap, generateRoadmap } = await import('../roadmapService')
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] -  expect(roadmap.updatedAt).not.toBe(staticRoadmap.updatedAt)
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] +  expect(roadmap.updatedAt).toBeTruthy()
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]  
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] 
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] [0m
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]  it('should generate a static roadmap when AI is disabled', async () => {
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]    const { ensureRoadmap } = await import('../roadmapService')
+[2026-07-04T04:58:04.446Z] [INFO] [stderr]  })
+[2026-07-04T04:58:04.446Z] [INFO] [stderr] +  expect(new Date(roadmap.updatedAt).getTime()).toBeGreaterThan(new Date(staticRoadmap.updatedAt).getTime())
+[2026-07-04T04:58:10.929Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/web exec -- vitest run --config vitest.config.ts --reporter verbose src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts 2>&1
+[2026-07-04T04:58:10.929Z] [INFO] [stderr] 
+[2026-07-04T04:58:10.929Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > extractAiPlanInput > should use default weak skills when settings have none 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > enrichWithLearningData > should override studyStreak and lastStudyDate 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should include all learner profile fields 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > extractAiPlanInput > should set examCountdownDays to null when no exam date 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanSystemPrompt > should return the system prompt string 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should mention no exam date when not set 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > enrichWithLearningData > should handle optional extras being undefined 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should include preferred topics when available 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should mention available study days when fewer than 7 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > extractAiPlanInput > should extract all fields from AppSettings 6ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should include weak areas section 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI is not configured 13ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should include study streak when > 0 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return roadmap from AI when response is valid 1ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > extractAiPlanInput > should set bandGap to 0 when target <= current 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should generate fallback roadmap with phases when AI is off 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiPlanPrompts > buildPlanUserPrompt > should respect daily study minutes in the output 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI returns empty content 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI returns an error 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should pass extras to enrichWithLearningData 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should call AI with custom endpoint when configured 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should not call AI when apiKey is empty 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should return fallback roadmap when AI response is unparseable 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should detect invalid JSON and return fallback roadmap 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should not call AI when aiEnabled is false 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should detect JSON without phases and return fallback roadmap 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should convert AI result to roadmap with correct structure 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should call with correct AI options 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should store timestamps on generated roadmap 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should recalculate progress on existing roadmap 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should fall back to static generation when AI generation throws 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > generatePlanWithAI > should catch exceptions and return fallback roadmap 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should return cached roadmap if generated recently 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should handle multiple phases with week offset 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  Test Files  1 passed (1)
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]       Tests  38 passed (38)
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should generate a static roadmap when AI is disabled 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should save the roadmap to localStorage after AI generation 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > roadmapService integration with AI generator > should call generatePlanWithAI when ensureRoadmap has no existing roadmap 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr] 
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]    Start at  11:58:10
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]  ✓ src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts > aiRoadmapGenerator > AI config / parse / conversion (tested through generatePlanWithAI) > should parse JSON embedded in markdown code fence 0ms
+[2026-07-04T04:58:10.929Z] [INFO] [stderr]    Duration  401ms (transform 43ms, setup 40ms, collect 24ms, tests 25ms, environment 205ms, prepare 31ms)
+[2026-07-04T04:58:10.929Z] [INFO] [stderr] [0m
+[2026-07-04T04:58:13.980Z] [INFO] [stderr] [0m$ [0mtest -f /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts && echo "file_exists"
+[2026-07-04T04:58:13.980Z] [INFO] [stderr] file_exists
+[2026-07-04T04:58:13.980Z] [INFO] [stderr] [0m
+[2026-07-04T04:58:14.068Z] [INFO] [stdout] All 38 tests pass. Let me verify the test file exists as expected.
+[2026-07-04T04:58:17.051Z] [INFO] [stderr] [✓] Create test file with unit and integration tests for all three modules
+[2026-07-04T04:58:17.051Z] [INFO] [stderr] [✓] Analyze existing source modules (aiRoadmapGenerator, aiPlanPrompts, roadmapService)
+[2026-07-04T04:58:17.051Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T04:58:17.051Z] [INFO] [stderr] [✓] Run tests and verify coverage
+[2026-07-04T04:58:17.051Z] [INFO] [stderr] [0m
+[2026-07-04T04:58:21.988Z] [INFO] [stdout] - **roadmapService integration** (6 tests): `ensureRoadmap` with AI generation, fallback-to-static, cached roadmap, recalculate progress, static generation, localStorage persistence
+[2026-07-04T04:58:21.988Z] [INFO] [stdout] - **aiRoadmapGenerator** (18 tests): `generatePlanWithAI` (AI not configured, AI error, empty response, unparseable response, valid response, extras passthrough, exception handling, AI options, fallback structure), plus config/parse/conversion scenarios tested through public API (API key disabled, AI disabled, custom endpoint, markdown JSON, invalid JSON, missing phases, multi-phase week offset, timestamps)
+[2026-07-04T04:58:21.988Z] [INFO] [stdout] **Completed** — Created `src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts` with 38 passing tests covering:
+[2026-07-04T04:58:21.988Z] [INFO] [stdout] - **aiPlanPrompts** (14 tests): `extractAiPlanInput` (field extraction, default weak skills, null exam date, band gap boundary), `enrichWithLearningData` (override, partial extras), `buildPlanSystemPrompt` (content verification), `buildPlanUserPrompt` (field inclusion, weak areas, topics, no-exam-date, partial schedule, daily minutes, streak display)
+[2026-07-04T04:58:21.987Z] [INFO] [stdout] 
+[2026-07-04T04:58:22.184Z] [INFO] Interactive session completed with exit code 0
+[2026-07-04T04:58:22.185Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-04T04:58:22.185Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-04T04:58:22.188Z] [INFO] Task completed successfully

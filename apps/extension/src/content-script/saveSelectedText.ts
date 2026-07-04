@@ -51,7 +51,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     const payload = message.payload as SaveSelectionPayload
     showToast(`Saved as ${payload.category}`)
     sendResponse({ success: true })
-    return true
+    return false
   }
 
   if (message.type === 'GET_PAGE_INFO') {
@@ -60,7 +60,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       url: window.location.href,
       selectedText: getSelectedText(),
     })
-    return true
+    return false
   }
 
   if (message.type === 'SAVE_SELECTION_FULL') {
@@ -91,7 +91,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     })
     showToast(`Saved as ${payload.category}`)
     sendResponse({ success: true })
-    return true
+    return false
   }
 })
 

@@ -423,6 +423,18 @@ export async function ensureRoadmap(): Promise<RoadmapData> {
     }
   }
 
+  try {
+    const { generatePlanWithAI } = await import('./aiRoadmapGenerator')
+    const completedTaskCount = tasks.filter(t => t.isDone).length
+    const result = await generatePlanWithAI(settings, { completedTaskCount })
+    if (result.roadmap) {
+      saveRoadmap(result.roadmap)
+      return result.roadmap
+    }
+  } catch {
+    // AI generation failed; fall through to static generation
+  }
+
   const roadmap = generateRoadmap(settings, tasks)
   saveRoadmap(roadmap)
   return roadmap

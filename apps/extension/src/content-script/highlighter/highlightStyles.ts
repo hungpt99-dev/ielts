@@ -31,7 +31,7 @@ export function injectHighlightStyles(): void {
       }
     }
 
-    .ielts-journey-tooltip {
+    #ielts-journey-tooltip {
       all: initial;
       position: fixed;
       z-index: 2147483647;

@@ -1,0 +1,2023 @@
+[2026-07-04T06:11:00.624Z] [INFO] Task started: Add automated tests for new listening question types and expanded exercises
+[2026-07-04T06:11:00.627Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx","description":"Added tests for new question types and expanded exercises","validationMethod":"file_diff"}]
+[2026-07-04T06:11:01.211Z] [INFO] [stderr] [0m
+[2026-07-04T06:11:01.211Z] [INFO] [stderr] [0m
+[2026-07-04T06:11:01.211Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-04T06:11:05.480Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"listening exercises tests question types ListeningExercise","maxFiles":20}
+[2026-07-04T06:11:05.540Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/listening/**/*.test.*"[90m 0 matches[0m
+[2026-07-04T06:11:08.580Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/listening"}
+[2026-07-04T06:11:08.837Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/**/*listening*test*"[90m 0 matches[0m
+[2026-07-04T06:11:09.036Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/**/__tests__/**"[90m 21 matches[0m
+[2026-07-04T06:11:09.121Z] [INFO] [stdout] Let me look at the current listening exercise data and any existing test patterns in the project.
+[2026-07-04T06:11:11.463Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/listening/data/exercises.ts"}
+[2026-07-04T06:11:11.851Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","symbol":"ListeningQuestion","includeCode":true}
+[2026-07-04T06:11:12.115Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/__tests__/ExerciseGenerator.test.ts
+[2026-07-04T06:11:15.513Z] [INFO] [stderr] [91m[1mError: [0msymbol must be a non-empty string
+[2026-07-04T06:11:15.513Z] [INFO] [stderr] [0m✗ [0mcodegraph_codegraph_node {"query":"ListeningQuestionType in apps/web/src/models"} failed
+[2026-07-04T06:11:15.740Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/listening/ListeningPractice.tsx
+[2026-07-04T06:11:19.216Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","symbol":"ListeningQuestionType","includeCode":true}
+[2026-07-04T06:11:19.398Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/listening/components/ListeningQuestion.tsx
+[2026-07-04T06:11:22.666Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","symbol":"ListeningExercise","includeCode":true}
+[2026-07-04T06:11:23.021Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","symbol":"TableRow","includeCode":true}
+[2026-07-04T06:11:23.337Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/landing/__tests__/HeroSection.test.tsx[90m [limit=60][0m
+[2026-07-04T06:11:26.920Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/package.json"[90m 1 match[0m
+[2026-07-04T06:11:27.084Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/vitest*"[90m 1 match[0m
+[2026-07-04T06:11:29.801Z] [INFO] [stderr] [0m→ [0mRead apps/web/vitest.config.ts
+[2026-07-04T06:11:30.103Z] [INFO] [stderr] [0m✱ [0mGrep ""test""[90m 1 match[0m
+[2026-07-04T06:11:32.715Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/test/setup.ts
+[2026-07-04T06:11:32.909Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/listening/__tests__"[90m 0 matches[0m
+[2026-07-04T06:12:00.673Z] [INFO] [stderr] (no output)
+[2026-07-04T06:12:00.673Z] [INFO] [stderr] [0m$ [0mmkdir -p apps/web/src/features/listening/__tests__
+[2026-07-04T06:12:00.673Z] [INFO] [stderr] [0m
+[2026-07-04T06:12:00.673Z] [INFO] [stderr] [0m
+[2026-07-04T06:12:00.799Z] [INFO] [stdout] Now I have a full understanding of the codebase. Let me create the test file.
+[2026-07-04T06:12:29.282Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:12:29.282Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T06:12:29.282Z] [INFO] [stderr] [0m
+[2026-07-04T06:13:32.387Z] [INFO] [stderr] ...output truncated...
+[2026-07-04T06:13:32.387Z] [INFO] [stderr] [0m$ [0mcd apps/web && pnpm test -- --reporter verbose src/features/listening/__tests__/ListeningExercise.test.tsx 2>&1
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > complete > throws AIRateLimitError on 429 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.387Z] [INFO] [stderr] Full output saved to: /Users/phamthanhhung/.local/share/opencode/tool-output/tool_f2bc28fa3001vFDpdI5NzXFFwn
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > complete > throws AIError on other network errors 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > complete > throws AIError on other errors 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > complete > throws AINetworkError on network failure 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when content is empty 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when choices is empty 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > testConnection > returns false on failed connection 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > complete > handles trailing slash in base URL 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > testConnection > returns true on successful connection 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    × OpenAIAdapter > complete > uses config defaults for missing request values 1ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    ✓ OpenAIAdapter > testConnection > returns false on network error 0ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]      → expected 0.5 to be undefined
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/VocabularyRepository.test.ts (11 tests | 6 failed) 33ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    × VocabularyRepository > findByTopic > filters vocabulary by topic 4ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    × VocabularyRepository > findByStatus > filters vocabulary by status 3ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    × VocabularyRepository > getStats > returns stats with counts by status and difficulty 3ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]    × VocabularyRepository > findByDifficulty > filters vocabulary by difficulty 3ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ VocabReviewRepository > findByVocabularyId > returns undefined when no review exists 2ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ VocabReviewRepository > findByVocabularyId > finds review by vocabulary id 3ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ VocabularyRepository > getStats > returns empty stats when no vocabulary 2ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ VocabReviewRepository > findDueReviews > returns empty when no reviews due 2ms
+[2026-07-04T06:13:32.387Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    × VocabReviewRepository > findDueReviews > returns reviews with past due date 3ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    × VocabReviewRepository > getReviewStats > returns review statistics 3ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ VocabReviewRepository > getDueCount > returns count of due reviews 2ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    × ProgressRecordRepository > findBySkill > filters by skill 4ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    × ProgressRecordRepository > findByDateRange > finds records within date range 4ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/ProgressRepository.test.ts (6 tests | 3 failed) 22ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ TopicProgressRepository > findByTopicId > finds by topic ID (via direct table query) 3ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ✓ src/services/storage/__tests__/SettingsStorage.test.ts (29 tests) 11ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ MockTestRepository > creates and retrieves mock tests 3ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    × GrammarNoteRepository > findByStatus > filters by status 4ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ❯ src/services/__tests__/ExerciseGenerator.test.ts (50 tests | 21 failed) 31ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ GrammarNoteRepository > findByTopic > finds by topic 3ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates speaking exercise for category "Speaking Part 1" 2ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates speaking exercise for category "Speaking Part 2" 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates writing exercise for category "Writing Task 1" 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates writing exercise for category "Writing Task 2" 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates reading exercise for category "Reading" 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > does not generate random exercises unrelated to the task 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > infers topic from task title when available 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > speaking exercise generation > generates speaking questions with part references 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > speaking exercise generation > marks speaking questions with speaking tags 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates listening exercise for category "Listening" 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]  ✓ ../../packages/storage/src/__tests__/reviewService.test.ts (12 tests) 3ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > speaking exercise generation > generates speaking exercise for all speaking parts 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > writing exercise generation > generates writing exercise for Task 1 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > topic and type matching > generates speaking exercise for category "Speaking Part 3" 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > reading exercise generation > generates reading comprehension questions 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > writing exercise generation > generates writing exercise for Task 2 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > listening exercise generation > generates listening practice questions 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > vocabulary and grammar > generates grammar exercise for grammar category 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > vocabulary and grammar > generates vocabulary exercise for vocabulary category 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > sets source to user-created 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > sets status to published 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > uses task time for estimated minutes 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > links exercise to task via sourceId 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > exercise metadata > infers difficulty from task time 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > handles edge cases > handles empty title by falling back to description 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves speaking exercise to "speakingExercises" table 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > question structure > calculates total points from questions 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves speaking exercise to "speakingExercises" table 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves speaking exercise to "speakingExercises" table 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    ✓ generateExercise > handles edge cases > handles unknown category gracefully 0ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves writing exercise to "writingExercises" table 1ms
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.388Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.389Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves writing exercise to "writingExercises" table 1ms
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.389Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves reading exercise to "readingExercises" table 1ms
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr]    × saveExercise > saves to correct IndexedDB stores > saves listening exercise to "listeningExercises" table 1ms
+[2026-07-04T06:13:32.389Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'listeningExercises', …(2) ][90m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.389Z] [INFO] [stderr]    × saveExercise > speaking exercise saving > saves speaking exercise to speakingExercises table 1ms
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → Cannot read properties of undefined (reading '1')
+[2026-07-04T06:13:32.389Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called at least once
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × saveExercise > upsert logic > calls update when an existing exercise with same sourceId exists 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × saveExercise > upsert logic > calls add when no existing exercise with same sourceId exists 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'readingExercises', …(2) ][90m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × saveExercise > speaking exercise saving > stores speaking exercise with serialized content and questions 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ saveExercise > edge cases > does not save when skill has no matching table 0ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ saveExercise > edge cases > does not throw when DatabaseService throws 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → Cannot read properties of undefined (reading '1')
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × saveExercise > entry structure > includes createdAt and updatedAt timestamps 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × generateExercise saves for review > saves speaking exercise to "speakingExercises" after generation 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ generateExercise > question structure > generates questions with all required fields 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × saveExercise > entry structure > saves entry with serialized content and questions 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → Cannot read properties of undefined (reading '1')
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × generateExercise saves for review > saves speaking exercise to "speakingExercises" after generation 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × generateExercise saves for review > saves speaking exercise to "speakingExercises" after generation 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × generateExercise saves for review > saves writing exercise to "writingExercises" after generation 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × generateExercise saves for review > saves writing exercise to "writingExercises" after generation 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × generateExercise saves for review > saves reading exercise to "readingExercises" after generation 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × generateExercise saves for review > saves listening exercise to "listeningExercises" after generation 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'listeningExercises', …(2) ][90m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called once, but got 0 times
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] [39m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × generateExercise saves for review > calls add exactly once per exercise generation 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] Number of calls: [1m0[22m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ ../../packages/storage/src/__tests__/syncService.test.ts (16 tests) 5ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ src/features/personalization/__tests__/personalizationService.test.ts (17 tests) 5ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests) 8ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ ../../packages/exercises/src/__tests__/reviewScheduler.test.ts (21 tests) 4ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ ../extension/src/content-script/highlighter/__tests__/highlightEngine.test.ts (27 tests) 22ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/ProgressService.test.ts (7 tests) 2ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ❯ ../../packages/learning-engine/src/__tests__/DailyPlanService.test.ts (8 tests | 1 failed) 2ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ ../../packages/exercises/src/__tests__/generationStrategies.test.ts (16 tests) 4ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ DailyPlanService > includes vocabulary review when due reviews exist 0ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected 20 to be greater than or equal to 60
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ DailyPlanService > provides fallback item when no other items exist 0ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ DailyPlanService > includes mistake review when mistakes due 0ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × DailyPlanService > generates daily plan with weak skill focus 1ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ DailyPlanService > includes tasks for today 0ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ DailyPlanService > returns recurring tasks matching today 0ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ DailyPlanService > gets tasks for today correctly 0ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ DailyPlanService > calculates study priority based on due reviews and weaknesses 0ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/ContentRepository.test.ts (14 tests | 3 failed) 43ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ ContentMetaRepository > findByPackId > finds content meta by pack id 4ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ ../../packages/exercises/src/__tests__/generationStrategies.ai.test.ts (8 tests) 2ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × ContentMetaRepository > findSeededPacks > returns all seeded packs 3ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts (10 tests) 2ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ✓ ../../packages/ai/src/__tests__/client.test.ts (12 tests) 5ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ ContentMetaRepository > findByPackId > returns undefined for unknown pack 3ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ ContentMetaRepository > markPackSeeded > creates new meta entry 3ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ ContentMetaRepository > isPackSeeded > returns true if pack version is >= minimum 3ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ ContentMetaRepository > isPackSeeded > returns false if pack version is below minimum 3ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ ContentMetaRepository > isPackSeeded > returns false if pack not seeded 2ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ Array(3) ][90m
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ UserContentEditRepository > findByOriginalId > finds edit by original id 6ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ ContentMetaRepository > markPackSeeded > updates existing meta entry 3ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ UserContentEditRepository > hasUserEdit > returns false if no edit 2ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]      → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ UserContentEditRepository > hasUserEdit > returns true if edit exists 3ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    × UserContentEditRepository > findByContentType > filters by content type 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × UserContentEditRepository > findUserEditsByTable > filters by table name 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ✓ ../../packages/exercises/src/__tests__/difficulty.test.ts (13 tests) 3ms
+[2026-07-04T06:13:32.390Z] [INFO] [stderr]    ✓ UserContentEditRepository > findByOriginalId > returns undefined when not edited 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ extractJSON > extracts JSON from multiline content 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveMessageService.test.ts (13 tests) 4ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ❯ ../../packages/ai/src/__tests__/utils.test.ts (19 tests | 2 failed) 5ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ extractJSON > extracts JSON from text with markdown code blocks 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ extractJSON > extracts JSON from plain text 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ extractJSON > throws AIError when no JSON found 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × extractJSON > extracts only the first JSON object from multiple 1ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ extractJSON > throws AIError for empty string 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ parseAndValidate > returns error for invalid JSON 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ extractJSON > extracts JSON from text with surrounding content 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ parseAndValidate > returns error for missing fields 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ parseAndValidate > parses and validates valid JSON 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ AiCache > stores and retrieves values 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ parseAndValidate > extracts and validates JSON from text prefix 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ parseAndValidate > returns error for empty content 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → expected 'value' to be null
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ parseAndValidate > returns error for invalid schema 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × AiCache > returns null for expired entries 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ AiCache > returns null for missing key 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/TaskRepository.test.ts (7 tests | 4 failed) 21ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ AiCache > reports correct size 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → expected '{"first": true} some text {"second": …' to be '{"first": true}' // Object.is equality
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ AiCache > handles complex data types 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ✓ ../extension/src/content-script/highlighter/__tests__/highlightMatcher.test.ts (16 tests) 5ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ AiCache > clears all entries 0ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × TaskRepository > findByCategory > filters by category 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × TaskRepository > findByDate > finds tasks by date (ignores time) 4ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ TaskRepository > findByDate > returns empty for no tasks on date 2ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × TaskRepository > findPending > returns only incomplete tasks 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ TaskRepository > markAsDone > marks task as done and sets completedAt 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ TaskRepository > markAsNotDone > marks task as not done and clears completedAt 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × MistakeRepository > findBySkill > filters by skill 4ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × TaskRepository > getStats > returns task statistics 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × MistakeRepository > findByStatus > filters by status 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ❯ ../../packages/storage/src/__tests__/MistakeRepository.test.ts (6 tests | 4 failed) 20ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × MistakeRepository > search > searches across text fields 3ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ MistakeRepository > search > returns empty for no matches 2ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × MistakeRepository > getStats > returns correct stats for mixed statuses 7ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] stdout | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > generates exercise on task completion
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/AnalyticsService.test.ts (7 tests) 2ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    ✓ MistakeRepository > getStats > returns zeros for empty table 2ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] stderr | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > returns error on generation failure
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] stderr | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > handles unknown errors gracefully
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] [TaskCompletion] Failed to generate exercise for task "Practice Speaking About Hobbies": Unknown error generating exercise
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] stdout | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > returns exercise with speaking skill for speaking tasks
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/NextBestActionService.test.ts (7 tests) 2ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ✓ src/components/__tests__/TaskCompletionHandler.test.ts (4 tests) 2ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/CreatorSection.test.tsx (12 tests | 9 failed) 11ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ✓ ../extension/src/__tests__/saveSelectedText.test.ts (3 tests) 2ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] [TaskCompletion] Generated speaking exercise for task "Practice Speaking About Hobbies"
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]  ✓ ../../packages/storage/src/__tests__/migrations.test.ts (17 tests) 4ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Unable to find an element with the text: Built by one developer. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] [TaskCompletion] Generated speaking exercise for task "Practice Speaking About Hobbies"
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] [TaskCompletion] Failed to generate exercise for task "Practice Speaking About Hobbies": Generation failed
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × CreatorSection > renders the section heading 2ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × CreatorSection > renders creator name and role 1ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Unable to find an element with the text: Phạm Thanh Hưng. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × CreatorSection > renders creator background 1ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × CreatorSection > renders current focus 1ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Unable to find an element with the text: /Building useful AI tools/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]    × CreatorSection > renders open to text 1ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr]      → Unable to find an element with the text: /Java\/Spring Boot backend developer/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: View GitHub. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: /Software Engineer, Backend Engineer/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × CreatorSection > renders GitHub link 1ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    ✓ CreatorSection > does not render LinkedIn when linkedin is empty 1ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    ✓ CreatorSection > does not render Download CV when cv is empty 1ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    ✓ CreatorSection > does not render Contact Me when email is empty 1ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × CreatorSection > shows fallback text when all optional links are missing 1ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: /Contact links coming soon/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an accessible element with the role "heading"
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × CreatorSection > renders a semantic section with heading level 2 1ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × CreatorSection > has an id attribute 1ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/WeaknessDetectionService.test.ts (4 tests) 1ms
+[2026-07-04T06:13:32.391Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/LandingPage.test.tsx (14 tests | 14 failed) 178ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: IELTS Journey. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Learning IELTS shouldn't feel like a struggle. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Built by one developer. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the ProblemSection heading 9ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the SolutionSection heading 10ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Turn the real internet into your IELTS classroom. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the HeroSection with product name 11ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Everything you need to master IELTS. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the FeatureGrid heading 10ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Learn while you browse. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the ExtensionSection heading 10ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the PrivacySection heading 11ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: How it works. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the HowItWorksSection heading 16ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Built by one developer. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the CreatorSection heading 12ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Free, private, and transparent. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the DonationSection heading 12ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Support the project. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the FAQSection heading 14ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Frequently asked questions. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders a Start Learning Free CTA link 22ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders the FinalCTASection heading 13ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Start Learning Free. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Start your IELTS learning journey today. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > renders an Install Chrome Extension link 14ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → expected 'IELTS Journey - Learn IELTS with a Cl…' to be 'IELTS Journey - Free IELTS Learning f…' // Object.is equality
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Install Chrome Extension. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/chatHelpers.test.ts (12 tests) 3ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/LearningEngine.test.ts (5 tests) 2ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/useProactiveMessages.test.ts (12 tests) 3ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × LandingPage > sets the document title 14ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × FAQSection > renders all six FAQ questions 1ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Frequently asked questions. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/FAQSection.test.tsx (9 tests | 8 failed) 11ms
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]    × FAQSection > renders the section heading 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.392Z] [INFO] [stderr]      → Unable to find an element with the text: Is IELTS Journey free?. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an accessible element with the role "button"
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × FAQSection > renders all FAQ buttons with aria-expanded attribute 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × FAQSection > toggles answer visibility on click 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × FAQSection > renders a semantic section with heading level 2 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    ✓ FAQSection > starts with all answers hidden 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an element with the text: Is IELTS Journey free?. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an accessible element with the role "heading"
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × FAQSection > has an id attribute 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × FAQSection > renders dd element when answer is toggled open 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × FAQSection > uses semantic dl, dt, dd elements 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → expected …(48) to have a length of 6 but got 48
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an element with the text: Is IELTS Journey free?. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an element with the text: Frequently asked questions. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]  ❯ ../../packages/ai-tutor/src/popup/__tests__/ChatPopup.test.tsx (9 tests | 6 failed) 21ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    ✓ ChatPopup > renders nothing when isOpen is false 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an element with the text: AI Tutor Assistant. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatPopup > shows default title in header when open 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatPopup > renders chat popup when isOpen is true 3ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find a label with the text of: Close chat
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find a label with the text of: AI Tutor chat
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatPopup > calls onClose when close button is clicked 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    ✓ ChatPopup > reads AI key from localStorage when hasAiKey prop is not provided 3ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatPopup > shows MissingKeyBanner when localStorage has no AI key 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an element with the text: AI Key Not Configured. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatPopup > calls onClose via default onOpenSettings when settings is triggered 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatPopup > uses hasAiKey prop over localStorage 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an element with the text: AI Key Not Configured. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an element with the text: Open Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]  ✓ ../../packages/learning-engine/src/__tests__/ProfileService.test.ts (7 tests) 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/messageStorage.test.ts (10 tests) 3ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    ✓ ChatPopup > closes on Escape key 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]  ✓ ../../packages/storage/src/__tests__/errors.test.ts (9 tests) 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatIcon > renders with correct aria label when closed 2ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]  ❯ ../../packages/ai-tutor/src/tests/ChatIcon.test.tsx (8 tests | 8 failed) 7ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatIcon > renders with correct aria label when open 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find a label with the text of: Open AI Tutor chat
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]  ✓ ../../packages/ai/src/__tests__/errors.test.ts (9 tests) 3ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an element with the text: 99+. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatIcon > shows unread badge when count > 0 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find a label with the text of: Close AI Tutor chat
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatIcon > caps unread badge at 99+ 1ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]      → Unable to find an accessible element with the role "button"
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatIcon > calls onToggle on Enter key 0ms
+[2026-07-04T06:13:32.393Z] [INFO] [stderr]    × ChatIcon > calls onToggle when clicked 1ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]      → Unable to find an accessible element with the role "button"
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T06:13:32.393Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]    × ChatIcon > shows online status indicator by default 0ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/FeatureGrid.test.tsx (5 tests | 5 failed) 7ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]      → Unable to find a label with the text of: AI Tutor is away
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]    × ChatIcon > shows away status when isOnline is false 0ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]      → Unable to find an element with the text: 3. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]      → Unable to find a label with the text of: AI Tutor is online
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]      → Unable to find an element with the text: Everything you need to master IELTS. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]    × FeatureGrid > renders the section heading 2ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]    × FeatureGrid > renders the free tagline 1ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]    × FeatureGrid > renders all feature items 1ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]      → Unable to find an accessible element with the role "heading"
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]    × FeatureGrid > renders a semantic section with heading level 2 1ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]      → Unable to find an element with the text: All features are free. No hidden limits.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]      → Unable to find an element with the text: /Everything you need/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]    × FeatureGrid > has an id attribute for navigation 1ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]      → Unable to find an element with the text: IELTS word highlighter. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] stderr | process.env.NODE_ENV.reportGlobalError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25513:23)
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] stderr | defaultOnUncaughtError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:9362:15)
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveEventBus.test.ts (5 tests) 2ms
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.394Z] [INFO] [stderr] stderr | defaultOnUncaughtError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:9362:15)
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] stderr | process.env.NODE_ENV.reportGlobalError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25513:23)
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] stderr | defaultOnUncaughtError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:9362:15)
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] stderr | process.env.NODE_ENV.reportGlobalError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25513:23)
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.395Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] An error occurred in the <style> component.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] An error occurred in the <div> component.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] Consider adding an error boundary to your tree to customize error handling behavior.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx (4 tests | 3 failed) 35ms
+[2026-07-04T06:13:32.396Z] [INFO] [stderr]    × CreatorSection with all links > renders Download CV when cv is configured 1ms
+[2026-07-04T06:13:32.396Z] [INFO] [stderr]    × CreatorSection with all links > renders Contact Me when email is configured 33ms
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.396Z] [INFO] [stderr]      → 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] DOMException {}
+[2026-07-04T06:13:32.396Z] [INFO] [stderr]      → Unable to find an element with the text: LinkedIn. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr]    × CreatorSection with all links > renders LinkedIn when linkedin is configured 1ms
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr]      → Unable to find an element with the text: Download CV. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:32.396Z] [INFO] [stderr]    ✓ CreatorSection with all links > hides fallback text when links are configured 1ms
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] <shell_metadata>
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] shell tool terminated command after exceeding timeout 60000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+[2026-07-04T06:13:32.396Z] [INFO] [stderr] 
+[2026-07-04T06:13:32.404Z] [INFO] [stderr] </shell_metadata>
+[2026-07-04T06:13:32.404Z] [INFO] [stderr] [0m
+[2026-07-04T06:13:37.313Z] [INFO] [stderr] [0m$ [0mcd apps/web && npx vitest run --config vitest.config.ts src/features/listening/__tests__/ListeningExercise.test.tsx --reporter verbose 2>&1 | head -100
+[2026-07-04T06:13:37.313Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders question number and text 13ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for gap-fill 2ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for multiple-answer 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge with label 2ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] 
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for true-false 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for table-completion 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for short-answer 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > shows unknown type message for unsupported type 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > highlights selected option 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > calls onAnswer with index when option clicked 3ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > calls onAnswer with array when input changes 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > disables buttons when showResult is true 22ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  × src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > renders True, False, Not Given options by default 4ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > shows correct feedback when all blanks match 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] [36m<body>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > disables inputs when showResult is true 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [33mclass[39m=[32m"rounded-xl border p-4 sm:p-6 border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]     [36m<div[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > renders all options 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > renders input for each blank 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]     [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [33mstyle[39m=[32m"background-color: var(--color-surface); border-color: var(--color-border);"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]   [36m<div>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [33mclass[39m=[32m"mb-3 flex items-start justify-between gap-2"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [33mclass[39m=[32m"flex items-center gap-2"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] 
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m<div[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m<div[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]    → Unable to find an element with the text: True. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [36m</span>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [36m<span[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]             [33mstyle[39m=[32m"background-color: var(--color-primary);"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]             [33mclass[39m=[32m"flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [36m<span[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [36m</span>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]             [33mstyle[39m=[32m"background-color: var(--color-primary-light); color: var(--color-primary);"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]             [0mTrue / False / Not Given[0m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m</div>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [33mstyle[39m=[32m"color: var(--color-text);"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [33mclass[39m=[32m"mb-3 text-sm font-medium"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]             [0m1[0m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]             [33mclass[39m=[32m"rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m</div>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [33mclass[39m=[32m"flex flex-wrap gap-2"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m</p>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m<div[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [33mclass[39m=[32m"rounded-lg border px-4 py-2 text-sm font-medium transition-colors border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700/50"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [0mLondon[0m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m<button[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m</button>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m<button[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m<p[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m</button>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [33mclass[39m=[32m"rounded-lg border px-4 py-2 text-sm font-medium transition-colors border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700/50"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m<button[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [0mParis[0m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m</button>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [0mBerlin[0m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m<button[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] [36m</body>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [0mMadrid[0m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [33mclass[39m=[32m"rounded-lg border px-4 py-2 text-sm font-medium transition-colors border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700/50"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [33mclass[39m=[32m"rounded-lg border px-4 py-2 text-sm font-medium transition-colors border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700/50"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m</div>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [0mWhat is the capital of France?[0m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]    → Unable to find an element with the text: True. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m</button>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]   [36m</div>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]   [36m<div>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [33mclass[39m=[32m"rounded-xl border p-4 sm:p-6 border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]     [36m</div>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] [36m<body>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]  × src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > calls onAnswer with index when option clicked 1ms
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m<div[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]     [36m<div[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]     [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] 
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [33mclass[39m=[32m"mb-3 flex items-start justify-between gap-2"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [33mstyle[39m=[32m"background-color: var(--color-surface); border-color: var(--color-border);"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]       [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]             [33mclass[39m=[32m"flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr] [0m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m<div[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [36m<span[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]         [36m>[39m
+[2026-07-04T06:13:37.314Z] [INFO] [stderr]           [33mclass[39m=[32m"flex items-center gap-2"[39m
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] ===================================================================
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:42.723Z] [INFO] [stderr]  it('renders type badge for true-false', () => {
+[2026-07-04T06:13:42.723Z] [INFO] [stderr]      <ListeningQuestion
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] @@ -56,9 +56,9 @@
+[2026-07-04T06:13:42.723Z] [INFO] [stderr]  
+[2026-07-04T06:13:42.723Z] [INFO] [stderr]        answer={undefined}
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] +      question={makeQuestion({ type: 'true-false', correctAnswer: 0, options: ['True', 'False', 'Not Given'] })}
+[2026-07-04T06:13:42.723Z] [INFO] [stderr]        index={0}
+[2026-07-04T06:13:42.723Z] [INFO] [stderr]        onAnswer={() => {}}
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] 
+[2026-07-04T06:13:42.723Z] [INFO] [stderr]      />
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] [0m
+[2026-07-04T06:13:42.723Z] [INFO] [stderr] -      question={makeQuestion({ type: 'true-false', correctAnswer: 0 })}
+[2026-07-04T06:13:42.723Z] [INFO] [stderr]    render(
+[2026-07-04T06:13:42.810Z] [INFO] [stdout] The true-false test inherits the default `options` from `makeQuestion()`. Let me fix that.
+[2026-07-04T06:13:47.872Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:47.872Z] [INFO] [stderr] ===================================================================
+[2026-07-04T06:13:47.872Z] [INFO] [stderr]  })
+[2026-07-04T06:13:47.872Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:47.872Z] [INFO] [stderr]    })
+[2026-07-04T06:13:47.872Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:47.872Z] [INFO] [stderr]  
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] @@ -243,12 +243,16 @@
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]  describe('True-false interaction', () => {
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] +  function trueFalseQuestion() {
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] +    return makeQuestion({ type: 'true-false', correctAnswer: 0, options: ['True', 'False', 'Not Given'] })
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] +  }
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]      render(
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] +
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] +        question={trueFalseQuestion()}
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]    it('renders True, False, Not Given options by default', () => {
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]          answer={undefined}
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]          onAnswer={() => {}}
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]    it('calls onAnswer with index when option clicked', () => {
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] @@ -261,9 +265,9 @@
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]        />
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]        <ListeningQuestion
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]          index={0}
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]      const onAnswer = vi.fn()
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]          index={0}
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]        <ListeningQuestion
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]          answer={undefined}
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]          onAnswer={onAnswer}
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] -        question={makeQuestion({ type: 'true-false', correctAnswer: 0 })}
+[2026-07-04T06:13:47.872Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] [0m
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] 
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]      render(
+[2026-07-04T06:13:47.873Z] [INFO] [stderr]        />
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] +        question={trueFalseQuestion()}
+[2026-07-04T06:13:47.873Z] [INFO] [stderr] -        question={makeQuestion({ type: 'true-false', correctAnswer: 0 })}
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] ===================================================================
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] @@ -243,13 +243,13 @@
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]  
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]    })
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]  })
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] -    return makeQuestion({ type: 'true-false', correctAnswer: 0, options: ['True', 'False', 'Not Given'] })
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]  describe('True-false interaction', () => {
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] -  function trueFalseQuestion() {
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]  
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]      render(
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]    }
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] -  it('renders True, False, Not Given options by default', () => {
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +  function trueFalseQuestion(overrides = {}) {
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +    return makeQuestion({ type: 'true-false', correctAnswer: 0, options: ['True', 'False', 'Not Given'], ...overrides })
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +  it('renders True, False, Not Given options', () => {
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]      )
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]          question={trueFalseQuestion()}
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]      fireEvent.click(screen.getByText('True'))
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]    })
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]      expect(onAnswer).toHaveBeenCalledWith('test-q-1', 0)
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]          index={0}
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] @@ -274,8 +274,22 @@
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +  it('uses default options when none provided', () => {
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +    render(
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +        answer={undefined}
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +        index={0}
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +        question={makeQuestion({ type: 'true-false', correctAnswer: 0, options: undefined })}
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +      />
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +      <ListeningQuestion
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +        onAnswer={() => {}}
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +    )
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +    expect(screen.getByText('True')).toBeInTheDocument()
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +    expect(screen.getByText('False')).toBeInTheDocument()
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]  
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]  })
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] 
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +  })
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]    it('renders text input', () => {
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]  describe('Short-answer interaction', () => {
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] +    expect(screen.getByText('Not Given')).toBeInTheDocument()
+[2026-07-04T06:13:55.692Z] [INFO] [stderr] [0m
+[2026-07-04T06:13:55.692Z] [INFO] [stderr]        <ListeningQuestion
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge with label 3ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-04T06:14:00.743Z] [INFO] [stderr] 
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for gap-fill 2ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for short-answer 1ms
+[2026-07-04T06:14:00.742Z] [INFO] [stderr] [0m$ [0mcd apps/web && npx vitest run --config vitest.config.ts src/features/listening/__tests__/ListeningExercise.test.tsx --reporter verbose 2>&1
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > calls onAnswer with index when option clicked 3ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > disables buttons when showResult is true 24ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders question number and text 14ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > highlights selected option 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for multiple-answer 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > renders all options 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for table-completion 2ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > renders True, False, Not Given options 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > shows correct feedback when all blanks match 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for true-false 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > shows unknown type message for unsupported type 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > uses default options when none provided 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > calls onAnswer with array when input changes 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > calls onAnswer with index when option clicked 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Short-answer interaction > shows correct feedback for acceptable answer 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > disables inputs when showResult is true 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Short-answer interaction > renders text input 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > renders input for each blank 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-answer interaction > toggles selection on click 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Short-answer interaction > shows correct feedback for exact match 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Table-completion interaction > calls onAnswer with row data when cell changes 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Short-answer interaction > calls onAnswer with string value on change 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Table-completion interaction > renders input for each cell 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-answer interaction > removes selection on second click 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Table-completion interaction > renders table headers 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Show result mode > shows Correct label when answer is correct 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Show result mode > highlights correct option in green 2ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Show result mode > shows explanation in result mode 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Show result mode > shows Incorrect label when answer is wrong 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Table-completion interaction > renders row labels 1ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > each exercise has required fields 0ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > multiple-choice questions have options and valid correctAnswer 0ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > each exercise has at least 7 questions 0ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > each question has required fields 1ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-answer interaction > renders all options 2ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > gap-fill questions have blanks array 0ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > short-answer questions have correctAnswer as string 0ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > true-false questions have correctAnswer as number 0ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > exercises are spread across topics 0ms
+[2026-07-04T06:14:00.743Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > exports five sample exercises 0ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > exercises include all question types 0ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > multiple-answer questions have comma-separated correctAnswer 0ms
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]    Duration  595ms (transform 50ms, setup 42ms, collect 106ms, tests 81ms, environment 231ms, prepare 41ms)
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]       Tests  45 passed (45)
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]  Test Files  1 passed (1)
+[2026-07-04T06:14:00.744Z] [INFO] [stderr]    Start at  13:14:00
+[2026-07-04T06:14:00.744Z] [INFO] [stderr] 
+[2026-07-04T06:14:00.744Z] [INFO] [stderr] [0m
+[2026-07-04T06:14:03.538Z] [INFO] [stderr] [0m
+[2026-07-04T06:14:03.538Z] [INFO] [stderr] [0m$ [0mwc -l apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:14:03.538Z] [INFO] [stderr] 667 apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[2026-07-04T06:14:03.551Z] [INFO] [stdout] All 45 tests pass. Let me verify the final state:
+[2026-07-04T06:14:08.410Z] [INFO] [stdout] Tests created at `apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx` — **45 tests passing** across 8 describe blocks:
+[2026-07-04T06:14:08.410Z] [INFO] [stdout] 
+[2026-07-04T06:14:08.410Z] [INFO] [stdout] - **Rendering** — all 6 question types display correctly (multiple-choice, gap-fill, true-false, short-answer, multiple-answer, table-completion), type badges, unknown type fallback
+[2026-07-04T06:14:08.410Z] [INFO] [stdout] - **Data integrity** — all 5 exercises validated: required fields, ≥7 questions each, valid question types, proper `correctAnswer` format per type, all topics covered
+[2026-07-04T06:14:08.410Z] [INFO] [stdout] - **Show result** — correct/incorrect labels, explanation display, green highlight on correct options, disabled inputs/buttons
+[2026-07-04T06:14:08.410Z] [INFO] [stdout] - **Interaction** — click-to-select for multi-choice/true-false, input change for gap-fill/short-answer, toggle for multiple-answer, cell input for table-completion; all call `onAnswer` with correct shape
+[2026-07-04T06:14:08.657Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-04T06:14:08.657Z] [INFO] Output:
+Let me look at the current listening exercise data and any existing test patterns in the project.
+Now I have a full understanding of the codebase. Let me create the test file.
+The true-false test inherits the default `options` from `makeQuestion()`. Let me fix that.
+All 45 tests pass. Let me verify the final state:
+Tests created at `apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx` — **45 tests passing** across 8 describe blocks:
+
+- **Rendering** — all 6 question types display correctly (multiple-choice, gap-fill, true-false, short-answer, multiple-answer, table-completion), type badges, unknown type fallback
+- **Interaction** — click-to-select for multi-choice/true-false, input change for gap-fill/short-answer, toggle for multiple-answer, cell input for table-completion; all call `onAnswer` with correct shape
+- **Show result** — correct/incorrect labels, explanation display, green highlight on correct options, disabled inputs/buttons
+- **Data integrity** — all 5 exercises validated: required fields, ≥7 questions each, valid question types, proper `correctAnswer` format per type, all topics covered
+[2026-07-04T06:14:08.657Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"listening exercises tests question types ListeningExercise","maxFiles":20}
+[0m✱ [0mGlob "apps/web/src/features/listening/**/*.test.*"[90m 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/listening"}
+[0m✱ [0mGlob "apps/web/src/**/*listening*test*"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/web/src/**/__tests__/**"[90m 21 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/listening/data/exercises.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","symbol":"ListeningQuestion","includeCode":true}
+[0m→ [0mRead apps/web/src/services/__tests__/ExerciseGenerator.test.ts
+[0m✗ [0mcodegraph_codegraph_node {"query":"ListeningQuestionType in apps/web/src/models"} failed
+[91m[1mError: [0msymbol must be a non-empty string
+[0m→ [0mRead apps/web/src/features/listening/ListeningPractice.tsx
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","symbol":"ListeningQuestionType","includeCode":true}
+[0m→ [0mRead apps/web/src/features/listening/components/ListeningQuestion.tsx
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","symbol":"ListeningExercise","includeCode":true}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","symbol":"TableRow","includeCode":true}
+[0m→ [0mRead apps/web/src/pages/landing/__tests__/HeroSection.test.tsx[90m [limit=60][0m
+[0m✱ [0mGlob "apps/web/package.json"[90m 1 match[0m
+[0m✱ [0mGlob "apps/web/vitest*"[90m 1 match[0m
+[0m→ [0mRead apps/web/vitest.config.ts
+[0m✱ [0mGrep ""test""[90m 1 match[0m
+[0m→ [0mRead apps/web/src/test/setup.ts
+[0m✱ [0mGlob "apps/web/src/features/listening/__tests__"[90m 0 matches[0m
+[0m
+[0m$ [0mmkdir -p apps/web/src/features/listening/__tests__
+(no output)
+[0m
+[0m← [0mWrite apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+Wrote file successfully.
+[0m
+[0m$ [0mcd apps/web && pnpm test -- --reporter verbose src/features/listening/__tests__/ListeningExercise.test.tsx 2>&1
+...output truncated...
+
+Full output saved to: /Users/phamthanhhung/.local/share/opencode/tool-output/tool_f2bc28fa3001vFDpdI5NzXFFwn
+
+   ✓ OpenAIAdapter > complete > throws AIRateLimitError on 429 0ms
+   ✓ OpenAIAdapter > complete > throws AIError on other errors 0ms
+   ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when content is empty 0ms
+   ✓ OpenAIAdapter > complete > throws AIEmptyResponseError when choices is empty 0ms
+   ✓ OpenAIAdapter > complete > throws AINetworkError on network failure 0ms
+   ✓ OpenAIAdapter > complete > throws AIError on other network errors 0ms
+   ✓ OpenAIAdapter > complete > handles trailing slash in base URL 0ms
+   × OpenAIAdapter > complete > uses config defaults for missing request values 1ms
+     → expected 0.5 to be undefined
+   ✓ OpenAIAdapter > testConnection > returns true on successful connection 0ms
+   ✓ OpenAIAdapter > testConnection > returns false on failed connection 0ms
+   ✓ OpenAIAdapter > testConnection > returns false on network error 0ms
+ ❯ ../../packages/storage/src/__tests__/VocabularyRepository.test.ts (11 tests | 6 failed) 33ms
+   × VocabularyRepository > findByTopic > filters vocabulary by topic 4ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   × VocabularyRepository > findByStatus > filters vocabulary by status 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   × VocabularyRepository > findByDifficulty > filters vocabulary by difficulty 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   × VocabularyRepository > getStats > returns stats with counts by status and difficulty 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   ✓ VocabularyRepository > getStats > returns empty stats when no vocabulary 2ms
+   ✓ VocabReviewRepository > findByVocabularyId > finds review by vocabulary id 3ms
+   ✓ VocabReviewRepository > findByVocabularyId > returns undefined when no review exists 2ms
+   × VocabReviewRepository > findDueReviews > returns reviews with past due date 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   ✓ VocabReviewRepository > findDueReviews > returns empty when no reviews due 2ms
+   ✓ VocabReviewRepository > getDueCount > returns count of due reviews 2ms
+   × VocabReviewRepository > getReviewStats > returns review statistics 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ❯ ../../packages/storage/src/__tests__/ProgressRepository.test.ts (6 tests | 3 failed) 22ms
+   × ProgressRecordRepository > findByDateRange > finds records within date range 4ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   × ProgressRecordRepository > findBySkill > filters by skill 4ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   ✓ TopicProgressRepository > findByTopicId > finds by topic ID (via direct table query) 3ms
+   ✓ MockTestRepository > creates and retrieves mock tests 3ms
+   ✓ GrammarNoteRepository > findByTopic > finds by topic 3ms
+   × GrammarNoteRepository > findByStatus > filters by status 4ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ✓ src/services/storage/__tests__/SettingsStorage.test.ts (29 tests) 11ms
+ ✓ ../../packages/storage/src/__tests__/reviewService.test.ts (12 tests) 3ms
+ ❯ src/services/__tests__/ExerciseGenerator.test.ts (50 tests | 21 failed) 31ms
+   ✓ generateExercise > topic and type matching > generates speaking exercise for category "Speaking Part 1" 2ms
+   ✓ generateExercise > topic and type matching > generates speaking exercise for category "Speaking Part 2" 1ms
+   ✓ generateExercise > topic and type matching > generates speaking exercise for category "Speaking Part 3" 1ms
+   ✓ generateExercise > topic and type matching > generates writing exercise for category "Writing Task 2" 1ms
+   ✓ generateExercise > topic and type matching > generates writing exercise for category "Writing Task 1" 1ms
+   ✓ generateExercise > topic and type matching > generates reading exercise for category "Reading" 1ms
+   ✓ generateExercise > topic and type matching > generates listening exercise for category "Listening" 1ms
+   ✓ generateExercise > topic and type matching > does not generate random exercises unrelated to the task 1ms
+   ✓ generateExercise > topic and type matching > infers topic from task title when available 1ms
+   ✓ generateExercise > speaking exercise generation > generates speaking questions with part references 1ms
+   ✓ generateExercise > speaking exercise generation > marks speaking questions with speaking tags 0ms
+   ✓ generateExercise > speaking exercise generation > generates speaking exercise for all speaking parts 1ms
+   ✓ generateExercise > writing exercise generation > generates writing exercise for Task 1 0ms
+   ✓ generateExercise > writing exercise generation > generates writing exercise for Task 2 0ms
+   ✓ generateExercise > reading exercise generation > generates reading comprehension questions 1ms
+   ✓ generateExercise > listening exercise generation > generates listening practice questions 1ms
+   ✓ generateExercise > vocabulary and grammar > generates vocabulary exercise for vocabulary category 0ms
+   ✓ generateExercise > vocabulary and grammar > generates grammar exercise for grammar category 0ms
+   ✓ generateExercise > question structure > generates questions with all required fields 1ms
+   ✓ generateExercise > question structure > calculates total points from questions 0ms
+   ✓ generateExercise > exercise metadata > sets source to user-created 0ms
+   ✓ generateExercise > exercise metadata > sets status to published 0ms
+   ✓ generateExercise > exercise metadata > links exercise to task via sourceId 0ms
+   ✓ generateExercise > exercise metadata > uses task time for estimated minutes 0ms
+   ✓ generateExercise > exercise metadata > infers difficulty from task time 1ms
+   ✓ generateExercise > handles edge cases > handles unknown category gracefully 0ms
+   ✓ generateExercise > handles edge cases > handles empty title by falling back to description 0ms
+   × saveExercise > saves to correct IndexedDB stores > saves speaking exercise to "speakingExercises" table 1ms
+     → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × saveExercise > saves to correct IndexedDB stores > saves speaking exercise to "speakingExercises" table 1ms
+     → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × saveExercise > saves to correct IndexedDB stores > saves speaking exercise to "speakingExercises" table 1ms
+     → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × saveExercise > saves to correct IndexedDB stores > saves writing exercise to "writingExercises" table 1ms
+     → expected "spy" to be called with arguments: [ Array(3) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × saveExercise > saves to correct IndexedDB stores > saves writing exercise to "writingExercises" table 1ms
+     → expected "spy" to be called with arguments: [ Array(3) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × saveExercise > saves to correct IndexedDB stores > saves reading exercise to "readingExercises" table 1ms
+     → expected "spy" to be called with arguments: [ Array(3) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × saveExercise > saves to correct IndexedDB stores > saves listening exercise to "listeningExercises" table 1ms
+     → expected "spy" to be called with arguments: [ 'listeningExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × saveExercise > speaking exercise saving > saves speaking exercise to speakingExercises table 1ms
+     → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × saveExercise > speaking exercise saving > stores speaking exercise with serialized content and questions 1ms
+     → Cannot read properties of undefined (reading '1')
+   × saveExercise > upsert logic > calls add when no existing exercise with same sourceId exists 1ms
+     → expected "spy" to be called at least once
+   × saveExercise > upsert logic > calls update when an existing exercise with same sourceId exists 1ms
+     → expected "spy" to be called with arguments: [ 'readingExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   ✓ saveExercise > edge cases > does not save when skill has no matching table 0ms
+   ✓ saveExercise > edge cases > does not throw when DatabaseService throws 1ms
+   × saveExercise > entry structure > saves entry with serialized content and questions 1ms
+     → Cannot read properties of undefined (reading '1')
+   × saveExercise > entry structure > includes createdAt and updatedAt timestamps 1ms
+     → Cannot read properties of undefined (reading '1')
+   × generateExercise saves for review > saves speaking exercise to "speakingExercises" after generation 1ms
+     → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × generateExercise saves for review > saves speaking exercise to "speakingExercises" after generation 1ms
+     → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × generateExercise saves for review > saves speaking exercise to "speakingExercises" after generation 1ms
+     → expected "spy" to be called with arguments: [ 'speakingExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × generateExercise saves for review > saves writing exercise to "writingExercises" after generation 1ms
+     → expected "spy" to be called with arguments: [ Array(3) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × generateExercise saves for review > saves writing exercise to "writingExercises" after generation 1ms
+     → expected "spy" to be called with arguments: [ Array(3) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × generateExercise saves for review > saves reading exercise to "readingExercises" after generation 1ms
+     → expected "spy" to be called with arguments: [ Array(3) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × generateExercise saves for review > saves listening exercise to "listeningExercises" after generation 1ms
+     → expected "spy" to be called with arguments: [ 'listeningExercises', …(2) ][90m
+
+Number of calls: [1m0[22m
+[39m
+   × generateExercise saves for review > calls add exactly once per exercise generation 1ms
+     → expected "spy" to be called once, but got 0 times
+ ✓ ../../packages/storage/src/__tests__/syncService.test.ts (16 tests) 5ms
+ ✓ src/features/personalization/__tests__/personalizationService.test.ts (17 tests) 5ms
+ ✓ ../../packages/exercises/src/__tests__/generationStrategies.test.ts (16 tests) 4ms
+ ✓ ../extension/src/content-script/highlighter/__tests__/highlightEngine.test.ts (27 tests) 22ms
+ ✓ ../../packages/exercises/src/__tests__/reviewScheduler.test.ts (21 tests) 4ms
+ ✓ src/features/publicApiIntegration/utils/errorHandling.test.ts (42 tests) 8ms
+ ✓ ../../packages/learning-engine/src/__tests__/ProgressService.test.ts (7 tests) 2ms
+ ❯ ../../packages/learning-engine/src/__tests__/DailyPlanService.test.ts (8 tests | 1 failed) 2ms
+   × DailyPlanService > generates daily plan with weak skill focus 1ms
+     → expected 20 to be greater than or equal to 60
+   ✓ DailyPlanService > includes vocabulary review when due reviews exist 0ms
+   ✓ DailyPlanService > includes mistake review when mistakes due 0ms
+   ✓ DailyPlanService > includes tasks for today 0ms
+   ✓ DailyPlanService > provides fallback item when no other items exist 0ms
+   ✓ DailyPlanService > calculates study priority based on due reviews and weaknesses 0ms
+   ✓ DailyPlanService > gets tasks for today correctly 0ms
+   ✓ DailyPlanService > returns recurring tasks matching today 0ms
+ ✓ ../../packages/learning-engine/src/__tests__/ReviewSchedulerService.test.ts (10 tests) 2ms
+ ✓ ../../packages/ai/src/__tests__/client.test.ts (12 tests) 5ms
+ ✓ ../../packages/exercises/src/__tests__/generationStrategies.ai.test.ts (8 tests) 2ms
+ ❯ ../../packages/storage/src/__tests__/ContentRepository.test.ts (14 tests | 3 failed) 43ms
+   ✓ ContentMetaRepository > findByPackId > finds content meta by pack id 4ms
+   ✓ ContentMetaRepository > findByPackId > returns undefined for unknown pack 3ms
+   × ContentMetaRepository > findSeededPacks > returns all seeded packs 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   ✓ ContentMetaRepository > isPackSeeded > returns true if pack version is >= minimum 3ms
+   ✓ ContentMetaRepository > isPackSeeded > returns false if pack version is below minimum 3ms
+   ✓ ContentMetaRepository > isPackSeeded > returns false if pack not seeded 2ms
+   ✓ ContentMetaRepository > markPackSeeded > creates new meta entry 3ms
+   ✓ ContentMetaRepository > markPackSeeded > updates existing meta entry 3ms
+   ✓ UserContentEditRepository > findByOriginalId > finds edit by original id 6ms
+   ✓ UserContentEditRepository > findByOriginalId > returns undefined when not edited 3ms
+   × UserContentEditRepository > findByContentType > filters by content type 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   ✓ UserContentEditRepository > hasUserEdit > returns true if edit exists 3ms
+   ✓ UserContentEditRepository > hasUserEdit > returns false if no edit 2ms
+   × UserContentEditRepository > findUserEditsByTable > filters by table name 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ✓ ../../packages/exercises/src/__tests__/difficulty.test.ts (13 tests) 3ms
+ ✓ ../../packages/ai-tutor/src/tests/proactiveMessageService.test.ts (13 tests) 4ms
+ ❯ ../../packages/ai/src/__tests__/utils.test.ts (19 tests | 2 failed) 5ms
+   ✓ extractJSON > extracts JSON from plain text 0ms
+   ✓ extractJSON > extracts JSON from text with surrounding content 0ms
+   ✓ extractJSON > extracts JSON from text with markdown code blocks 0ms
+   ✓ extractJSON > extracts JSON from multiline content 0ms
+   ✓ extractJSON > throws AIError when no JSON found 0ms
+   ✓ extractJSON > throws AIError for empty string 0ms
+   × extractJSON > extracts only the first JSON object from multiple 1ms
+     → expected '{"first": true} some text {"second": …' to be '{"first": true}' // Object.is equality
+   ✓ parseAndValidate > parses and validates valid JSON 0ms
+   ✓ parseAndValidate > returns error for invalid JSON 0ms
+   ✓ parseAndValidate > returns error for invalid schema 0ms
+   ✓ parseAndValidate > returns error for missing fields 0ms
+   ✓ parseAndValidate > extracts and validates JSON from text prefix 0ms
+   ✓ parseAndValidate > returns error for empty content 0ms
+   ✓ AiCache > stores and retrieves values 0ms
+   ✓ AiCache > returns null for missing key 0ms
+   × AiCache > returns null for expired entries 0ms
+     → expected 'value' to be null
+   ✓ AiCache > clears all entries 0ms
+   ✓ AiCache > reports correct size 0ms
+   ✓ AiCache > handles complex data types 0ms
+ ✓ ../extension/src/content-script/highlighter/__tests__/highlightMatcher.test.ts (16 tests) 5ms
+ ❯ ../../packages/storage/src/__tests__/TaskRepository.test.ts (7 tests | 4 failed) 21ms
+   × TaskRepository > findByDate > finds tasks by date (ignores time) 4ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   ✓ TaskRepository > findByDate > returns empty for no tasks on date 2ms
+   × TaskRepository > findByCategory > filters by category 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   × TaskRepository > findPending > returns only incomplete tasks 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   ✓ TaskRepository > markAsDone > marks task as done and sets completedAt 3ms
+   ✓ TaskRepository > markAsNotDone > marks task as not done and clears completedAt 3ms
+   × TaskRepository > getStats > returns task statistics 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ❯ ../../packages/storage/src/__tests__/MistakeRepository.test.ts (6 tests | 4 failed) 20ms
+   × MistakeRepository > findBySkill > filters by skill 4ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   × MistakeRepository > findByStatus > filters by status 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   × MistakeRepository > search > searches across text fields 3ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   ✓ MistakeRepository > search > returns empty for no matches 2ms
+   × MistakeRepository > getStats > returns correct stats for mixed statuses 7ms
+     → Database operation failed: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+ ConstraintError: A mutation operation in the transaction failed because a constraint was not satisfied. For example, an object such as an object store or index already exists and a request attempted to create a new one.
+   ✓ MistakeRepository > getStats > returns zeros for empty table 2ms
+ ✓ ../../packages/learning-engine/src/__tests__/AnalyticsService.test.ts (7 tests) 2ms
+stdout | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > generates exercise on task completion
+[TaskCompletion] Generated speaking exercise for task "Practice Speaking About Hobbies"
+
+stdout | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > returns exercise with speaking skill for speaking tasks
+[TaskCompletion] Generated speaking exercise for task "Practice Speaking About Hobbies"
+
+stderr | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > returns error on generation failure
+[TaskCompletion] Failed to generate exercise for task "Practice Speaking About Hobbies": Generation failed
+
+stderr | src/components/__tests__/TaskCompletionHandler.test.ts > handleTaskCompletion > handles unknown errors gracefully
+[TaskCompletion] Failed to generate exercise for task "Practice Speaking About Hobbies": Unknown error generating exercise
+
+ ✓ src/components/__tests__/TaskCompletionHandler.test.ts (4 tests) 2ms
+ ✓ ../../packages/storage/src/__tests__/migrations.test.ts (17 tests) 4ms
+ ✓ ../../packages/learning-engine/src/__tests__/NextBestActionService.test.ts (7 tests) 2ms
+ ✓ ../extension/src/__tests__/saveSelectedText.test.ts (3 tests) 2ms
+ ❯ src/pages/landing/__tests__/CreatorSection.test.tsx (12 tests | 9 failed) 11ms
+   × CreatorSection > renders the section heading 2ms
+     → Unable to find an element with the text: Built by one developer. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × CreatorSection > renders creator name and role 1ms
+     → Unable to find an element with the text: Phạm Thanh Hưng. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × CreatorSection > renders creator background 1ms
+     → Unable to find an element with the text: /Java\/Spring Boot backend developer/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × CreatorSection > renders current focus 1ms
+     → Unable to find an element with the text: /Building useful AI tools/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × CreatorSection > renders open to text 1ms
+     → Unable to find an element with the text: /Software Engineer, Backend Engineer/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × CreatorSection > renders GitHub link 1ms
+     → Unable to find an element with the text: View GitHub. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   ✓ CreatorSection > does not render Contact Me when email is empty 1ms
+   ✓ CreatorSection > does not render Download CV when cv is empty 1ms
+   ✓ CreatorSection > does not render LinkedIn when linkedin is empty 1ms
+   × CreatorSection > shows fallback text when all optional links are missing 1ms
+     → Unable to find an element with the text: /Contact links coming soon/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × CreatorSection > renders a semantic section with heading level 2 1ms
+     → Unable to find an accessible element with the role "heading"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × CreatorSection > has an id attribute 1ms
+     → Unable to find an element with the text: Built by one developer. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+ ✓ ../../packages/learning-engine/src/__tests__/WeaknessDetectionService.test.ts (4 tests) 1ms
+ ❯ src/pages/landing/__tests__/LandingPage.test.tsx (14 tests | 14 failed) 178ms
+   × LandingPage > renders the HeroSection with product name 11ms
+     → Unable to find an element with the text: IELTS Journey. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the ProblemSection heading 9ms
+     → Unable to find an element with the text: Learning IELTS shouldn't feel like a struggle. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the SolutionSection heading 10ms
+     → Unable to find an element with the text: Turn the real internet into your IELTS classroom. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the FeatureGrid heading 10ms
+     → Unable to find an element with the text: Everything you need to master IELTS. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the ExtensionSection heading 10ms
+     → Unable to find an element with the text: Learn while you browse. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the PrivacySection heading 11ms
+     → Unable to find an element with the text: Free, private, and transparent. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the HowItWorksSection heading 16ms
+     → Unable to find an element with the text: How it works. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the CreatorSection heading 12ms
+     → Unable to find an element with the text: Built by one developer. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the DonationSection heading 12ms
+     → Unable to find an element with the text: Support the project. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the FAQSection heading 14ms
+     → Unable to find an element with the text: Frequently asked questions. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders the FinalCTASection heading 13ms
+     → Unable to find an element with the text: Start your IELTS learning journey today. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders a Start Learning Free CTA link 22ms
+     → Unable to find an element with the text: Start Learning Free. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > renders an Install Chrome Extension link 14ms
+     → Unable to find an element with the text: Install Chrome Extension. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × LandingPage > sets the document title 14ms
+     → expected 'IELTS Journey - Learn IELTS with a Cl…' to be 'IELTS Journey - Free IELTS Learning f…' // Object.is equality
+ ✓ ../../packages/ai-tutor/src/tests/useProactiveMessages.test.ts (12 tests) 3ms
+ ✓ ../../packages/ai-tutor/src/tests/chatHelpers.test.ts (12 tests) 3ms
+ ✓ ../../packages/learning-engine/src/__tests__/LearningEngine.test.ts (5 tests) 2ms
+ ❯ src/pages/landing/__tests__/FAQSection.test.tsx (9 tests | 8 failed) 11ms
+   × FAQSection > renders the section heading 2ms
+     → Unable to find an element with the text: Frequently asked questions. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × FAQSection > renders all six FAQ questions 1ms
+     → Unable to find an element with the text: Is IELTS Journey free?. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × FAQSection > renders all FAQ buttons with aria-expanded attribute 1ms
+     → Unable to find an accessible element with the role "button"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   ✓ FAQSection > starts with all answers hidden 1ms
+   × FAQSection > toggles answer visibility on click 1ms
+     → Unable to find an element with the text: Is IELTS Journey free?. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × FAQSection > renders a semantic section with heading level 2 1ms
+     → Unable to find an accessible element with the role "heading"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × FAQSection > has an id attribute 1ms
+     → Unable to find an element with the text: Frequently asked questions. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × FAQSection > uses semantic dl, dt, dd elements 1ms
+     → expected …(48) to have a length of 6 but got 48
+   × FAQSection > renders dd element when answer is toggled open 1ms
+     → Unable to find an element with the text: Is IELTS Journey free?. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+ ❯ ../../packages/ai-tutor/src/popup/__tests__/ChatPopup.test.tsx (9 tests | 6 failed) 21ms
+   ✓ ChatPopup > renders nothing when isOpen is false 2ms
+   × ChatPopup > renders chat popup when isOpen is true 3ms
+     → Unable to find a label with the text of: AI Tutor chat
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatPopup > shows default title in header when open 2ms
+     → Unable to find an element with the text: AI Tutor Assistant. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatPopup > calls onClose when close button is clicked 2ms
+     → Unable to find a label with the text of: Close chat
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   ✓ ChatPopup > reads AI key from localStorage when hasAiKey prop is not provided 3ms
+   × ChatPopup > shows MissingKeyBanner when localStorage has no AI key 2ms
+     → Unable to find an element with the text: AI Key Not Configured. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatPopup > uses hasAiKey prop over localStorage 2ms
+     → Unable to find an element with the text: AI Key Not Configured. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatPopup > calls onClose via default onOpenSettings when settings is triggered 2ms
+     → Unable to find an element with the text: Open Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   ✓ ChatPopup > closes on Escape key 2ms
+ ✓ ../../packages/storage/src/__tests__/errors.test.ts (9 tests) 2ms
+ ✓ ../../packages/ai-tutor/src/tests/messageStorage.test.ts (10 tests) 3ms
+ ✓ ../../packages/learning-engine/src/__tests__/ProfileService.test.ts (7 tests) 2ms
+ ✓ ../../packages/ai/src/__tests__/errors.test.ts (9 tests) 3ms
+ ❯ ../../packages/ai-tutor/src/tests/ChatIcon.test.tsx (8 tests | 8 failed) 7ms
+   × ChatIcon > renders with correct aria label when closed 2ms
+     → Unable to find a label with the text of: Open AI Tutor chat
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatIcon > renders with correct aria label when open 1ms
+     → Unable to find a label with the text of: Close AI Tutor chat
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatIcon > shows unread badge when count > 0 1ms
+     → Unable to find an element with the text: 3. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatIcon > caps unread badge at 99+ 1ms
+     → Unable to find an element with the text: 99+. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatIcon > calls onToggle when clicked 1ms
+     → Unable to find an accessible element with the role "button"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatIcon > calls onToggle on Enter key 0ms
+     → Unable to find an accessible element with the role "button"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatIcon > shows online status indicator by default 0ms
+     → Unable to find a label with the text of: AI Tutor is online
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ChatIcon > shows away status when isOnline is false 0ms
+     → Unable to find a label with the text of: AI Tutor is away
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+ ❯ src/pages/landing/__tests__/FeatureGrid.test.tsx (5 tests | 5 failed) 7ms
+   × FeatureGrid > renders the section heading 2ms
+     → Unable to find an element with the text: Everything you need to master IELTS. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × FeatureGrid > renders the free tagline 1ms
+     → Unable to find an element with the text: All features are free. No hidden limits.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × FeatureGrid > renders all feature items 1ms
+     → Unable to find an element with the text: IELTS word highlighter. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × FeatureGrid > renders a semantic section with heading level 2 1ms
+     → Unable to find an accessible element with the role "heading"
+
+There are no accessible roles. But there might be some inaccessible roles. If you wish to access them, then set the `hidden` option to `true`. Learn more about this here: https://testing-library.com/docs/dom-testing-library/api-queries#byrole
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × FeatureGrid > has an id attribute for navigation 1ms
+     → Unable to find an element with the text: /Everything you need/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+ ✓ ../../packages/ai-tutor/src/tests/proactiveEventBus.test.ts (5 tests) 2ms
+stderr | process.env.NODE_ENV.reportGlobalError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25513:23)
+DOMException {}
+DOMException {}
+
+stderr | defaultOnUncaughtError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:9362:15)
+An error occurred in the <style> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+
+stderr | process.env.NODE_ENV.reportGlobalError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25513:23)
+DOMException {}
+DOMException {}
+
+stderr | defaultOnUncaughtError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:9362:15)
+An error occurred in the <style> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+
+stderr | process.env.NODE_ENV.reportGlobalError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:25513:23)
+DOMException {}
+DOMException {}
+
+stderr | defaultOnUncaughtError (/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/react-dom@19.2.7_react@19.2.7/node_modules/react-dom/cjs/react-dom-client.development.js:9362:15)
+An error occurred in the <style> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+
+stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+DOMException {}
+An error occurred in the <style> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+DOMException {}
+An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+
+stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+DOMException {}
+An error occurred in the <style> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+DOMException {}
+An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+
+stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+DOMException {}
+An error occurred in the <style> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+DOMException {}
+An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+
+stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+DOMException {}
+An error occurred in the <style> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+DOMException {}
+An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+
+stderr | src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx
+DOMException {}
+An error occurred in the <style> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+DOMException {}
+An error occurred in the <div> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+
+ ❯ src/pages/landing/__tests__/CreatorSectionWithLinks.test.tsx (4 tests | 3 failed) 35ms
+   × CreatorSection with all links > renders Contact Me when email is configured 33ms
+     → 
+   × CreatorSection with all links > renders Download CV when cv is configured 1ms
+     → Unable to find an element with the text: Download CV. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × CreatorSection with all links > renders LinkedIn when linkedin is configured 1ms
+     → Unable to find an element with the text: LinkedIn. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   ✓ CreatorSection with all links > hides fallback text when links are configured 1ms
+[ELIFECYCLE] Test failed. See above for more details.
+
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 60000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd apps/web && npx vitest run --config vitest.config.ts src/features/listening/__tests__/ListeningExercise.test.tsx --reporter verbose 2>&1 | head -100
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders question number and text 13ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge with label 2ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for gap-fill 2ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for true-false 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for short-answer 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for multiple-answer 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for table-completion 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > shows unknown type message for unsupported type 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > renders all options 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > calls onAnswer with index when option clicked 3ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > highlights selected option 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > disables buttons when showResult is true 22ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > renders input for each blank 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > calls onAnswer with array when input changes 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > shows correct feedback when all blanks match 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > disables inputs when showResult is true 1ms
+ × src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > renders True, False, Not Given options by default 4ms
+   → Unable to find an element with the text: True. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"rounded-xl border p-4 sm:p-6 border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800"[39m
+      [33mstyle[39m=[32m"background-color: var(--color-surface); border-color: var(--color-border);"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"mb-3 flex items-start justify-between gap-2"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex items-center gap-2"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"[39m
+            [33mstyle[39m=[32m"background-color: var(--color-primary);"[39m
+          [36m>[39m
+            [0m1[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider"[39m
+            [33mstyle[39m=[32m"background-color: var(--color-primary-light); color: var(--color-primary);"[39m
+          [36m>[39m
+            [0mTrue / False / Not Given[0m
+          [36m</span>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"mb-3 text-sm font-medium"[39m
+        [33mstyle[39m=[32m"color: var(--color-text);"[39m
+      [36m>[39m
+        [0mWhat is the capital of France?[0m
+      [36m</p>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-wrap gap-2"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border px-4 py-2 text-sm font-medium transition-colors border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700/50"[39m
+        [36m>[39m
+          [0mLondon[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border px-4 py-2 text-sm font-medium transition-colors border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700/50"[39m
+        [36m>[39m
+          [0mParis[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border px-4 py-2 text-sm font-medium transition-colors border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700/50"[39m
+        [36m>[39m
+          [0mBerlin[0m
+        [36m</button>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"rounded-lg border px-4 py-2 text-sm font-medium transition-colors border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700/50"[39m
+        [36m>[39m
+          [0mMadrid[0m
+        [36m</button>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ × src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > calls onAnswer with index when option clicked 1ms
+   → Unable to find an element with the text: True. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"rounded-xl border p-4 sm:p-6 border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800"[39m
+      [33mstyle[39m=[32m"background-color: var(--color-surface); border-color: var(--color-border);"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"mb-3 flex items-start justify-between gap-2"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex items-center gap-2"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"[39m
+[0m
+[0m← [0mEdit apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+@@ -56,9 +56,9 @@
+ 
+ it('renders type badge for true-false', () => {
+   render(
+     <ListeningQuestion
+-      question={makeQuestion({ type: 'true-false', correctAnswer: 0 })}
++      question={makeQuestion({ type: 'true-false', correctAnswer: 0, options: ['True', 'False', 'Not Given'] })}
+       index={0}
+       answer={undefined}
+       onAnswer={() => {}}
+     />
+
+[0m
+[0m← [0mEdit apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+@@ -243,12 +243,16 @@
+   })
+ })
+ 
+ describe('True-false interaction', () => {
++  function trueFalseQuestion() {
++    return makeQuestion({ type: 'true-false', correctAnswer: 0, options: ['True', 'False', 'Not Given'] })
++  }
++
+   it('renders True, False, Not Given options by default', () => {
+     render(
+       <ListeningQuestion
+-        question={makeQuestion({ type: 'true-false', correctAnswer: 0 })}
++        question={trueFalseQuestion()}
+         index={0}
+         answer={undefined}
+         onAnswer={() => {}}
+       />
+@@ -261,9 +265,9 @@
+   it('calls onAnswer with index when option clicked', () => {
+     const onAnswer = vi.fn()
+     render(
+       <ListeningQuestion
+-        question={makeQuestion({ type: 'true-false', correctAnswer: 0 })}
++        question={trueFalseQuestion()}
+         index={0}
+         answer={undefined}
+         onAnswer={onAnswer}
+       />
+
+[0m
+[0m← [0mEdit apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+@@ -243,13 +243,13 @@
+   })
+ })
+ 
+ describe('True-false interaction', () => {
+-  function trueFalseQuestion() {
+-    return makeQuestion({ type: 'true-false', correctAnswer: 0, options: ['True', 'False', 'Not Given'] })
++  function trueFalseQuestion(overrides = {}) {
++    return makeQuestion({ type: 'true-false', correctAnswer: 0, options: ['True', 'False', 'Not Given'], ...overrides })
+   }
+ 
+-  it('renders True, False, Not Given options by default', () => {
++  it('renders True, False, Not Given options', () => {
+     render(
+       <ListeningQuestion
+         question={trueFalseQuestion()}
+         index={0}
+@@ -274,8 +274,22 @@
+     )
+     fireEvent.click(screen.getByText('True'))
+     expect(onAnswer).toHaveBeenCalledWith('test-q-1', 0)
+   })
++
++  it('uses default options when none provided', () => {
++    render(
++      <ListeningQuestion
++        question={makeQuestion({ type: 'true-false', correctAnswer: 0, options: undefined })}
++        index={0}
++        answer={undefined}
++        onAnswer={() => {}}
++      />
++    )
++    expect(screen.getByText('True')).toBeInTheDocument()
++    expect(screen.getByText('False')).toBeInTheDocument()
++    expect(screen.getByText('Not Given')).toBeInTheDocument()
++  })
+ })
+ 
+ describe('Short-answer interaction', () => {
+   it('renders text input', () => {
+
+[0m
+[0m$ [0mcd apps/web && npx vitest run --config vitest.config.ts src/features/listening/__tests__/ListeningExercise.test.tsx --reporter verbose 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders question number and text 14ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge with label 3ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for gap-fill 2ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for true-false 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for short-answer 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for multiple-answer 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > renders type badge for table-completion 2ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > ListeningQuestion rendering > shows unknown type message for unsupported type 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > renders all options 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > calls onAnswer with index when option clicked 3ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > highlights selected option 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-choice interaction > disables buttons when showResult is true 24ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > renders input for each blank 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > calls onAnswer with array when input changes 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > shows correct feedback when all blanks match 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Gap-fill interaction > disables inputs when showResult is true 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > renders True, False, Not Given options 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > calls onAnswer with index when option clicked 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > True-false interaction > uses default options when none provided 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Short-answer interaction > renders text input 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Short-answer interaction > calls onAnswer with string value on change 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Short-answer interaction > shows correct feedback for exact match 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Short-answer interaction > shows correct feedback for acceptable answer 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-answer interaction > renders all options 2ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-answer interaction > toggles selection on click 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Multiple-answer interaction > removes selection on second click 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Table-completion interaction > renders table headers 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Table-completion interaction > renders row labels 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Table-completion interaction > renders input for each cell 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Table-completion interaction > calls onAnswer with row data when cell changes 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Show result mode > shows Correct label when answer is correct 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Show result mode > shows Incorrect label when answer is wrong 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Show result mode > shows explanation in result mode 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Show result mode > highlights correct option in green 2ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > exports five sample exercises 0ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > each exercise has required fields 0ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > each exercise has at least 7 questions 0ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > each question has required fields 1ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > multiple-choice questions have options and valid correctAnswer 0ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > gap-fill questions have blanks array 0ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > true-false questions have correctAnswer as number 0ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > short-answer questions have correctAnswer as string 0ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > multiple-answer questions have comma-separated correctAnswer 0ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > exercises include all question types 0ms
+ ✓ src/features/listening/__tests__/ListeningExercise.test.tsx > Exercise data integrity > exercises are spread across topics 0ms
+
+ Test Files  1 passed (1)
+      Tests  45 passed (45)
+   Start at  13:14:00
+   Duration  595ms (transform 50ms, setup 42ms, collect 106ms, tests 81ms, environment 231ms, prepare 41ms)
+[0m
+[0m$ [0mwc -l apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+667 apps/web/src/features/listening/__tests__/ListeningExercise.test.tsx
+[0m
+[2026-07-04T06:14:08.658Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-04T06:14:08.662Z] [INFO] Task completed successfully

@@ -1,0 +1,1 @@
+generate plan or generate roadmap should use AI and user profile user data config, dont hard code, implement best practice, highest qualiticode

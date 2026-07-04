@@ -530,6 +530,6 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       showExplainPanel(text, action)
     }
     sendResponse({ success: true })
-    return true
+    return false
   }
 })

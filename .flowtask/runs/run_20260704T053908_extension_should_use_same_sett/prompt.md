@@ -1,0 +1,1 @@
+extension should use same setting with website

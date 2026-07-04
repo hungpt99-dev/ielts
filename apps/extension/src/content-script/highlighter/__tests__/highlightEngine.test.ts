@@ -1,9 +1,17 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { highlightMatches, removeHighlights, removeAllHighlights, setActive, isActive } from '../highlightEngine'
+import {
+  highlightMatches,
+  removeHighlights,
+  removeAllHighlights,
+  setActive,
+  isActive,
+  setWordIds,
+  getHighlightWordFromElement,
+} from '../highlightEngine'
 import type { HighlightWord } from '../highlightMatcher'
 
-function word(id: string, text: string): HighlightWord {
-  return { id, text, meaning: 'test meaning', exampleSentence: '', personalNote: '' }
+function word(id: string, text: string, overrides?: Partial<HighlightWord>): HighlightWord {
+  return { id, text, meaning: 'test meaning', exampleSentence: '', personalNote: '', ...overrides }
 }
 
 beforeEach(() => {
@@ -19,6 +27,21 @@ describe('highlightEngine', () => {
       expect(isActive()).toBe(false)
       setActive(true)
       expect(isActive()).toBe(true)
+    })
+
+    it('defaults to inactive before first set', () => {
+      setActive(false)
+      setActive(true)
+      setActive(false)
+      expect(isActive()).toBe(false)
+    })
+  })
+
+  describe('setWordIds', () => {
+    it('stores and replaces word IDs', () => {
+      const ids = new Set(['a', 'b', 'c'])
+      setWordIds(ids)
+      setWordIds(new Set(['x']))
     })
   })
 
@@ -65,9 +88,21 @@ describe('highlightEngine', () => {
       expect(count).toBe(0)
     })
 
-    it('highlights multiple matches', () => {
+    it('highlights multiple matches of the same word', () => {
       document.body.innerHTML = '<p>the cat and the dog</p>'
       const count = highlightMatches(document.body, [word('1', 'the')])
+      expect(count).toBe(2)
+
+      const highlights = document.querySelectorAll('.ielts-journey-saved-keyword-highlight')
+      expect(highlights).toHaveLength(2)
+    })
+
+    it('highlights multiple different words', () => {
+      document.body.innerHTML = '<p>the cat and the dog</p>'
+      const count = highlightMatches(document.body, [
+        word('1', 'cat'),
+        word('2', 'dog'),
+      ])
       expect(count).toBe(2)
 
       const highlights = document.querySelectorAll('.ielts-journey-saved-keyword-highlight')
@@ -85,6 +120,41 @@ describe('highlightEngine', () => {
       expect(data.text).toBe('environment')
       expect(data.meaning).toBe('test meaning')
     })
+
+    it('stores full word data including example and note', () => {
+      document.body.innerHTML = '<p>perseverance</p>'
+      const w = word('2', 'perseverance', {
+        meaning: 'kiên trì',
+        exampleSentence: 'She showed great perseverance.',
+        personalNote: 'My favorite word',
+      })
+      highlightMatches(document.body, [w])
+      const el = document.querySelector('.ielts-journey-saved-keyword-highlight') as HTMLElement
+      const data = JSON.parse(el.dataset.highlight || '{}')
+      expect(data.meaning).toBe('kiên trì')
+      expect(data.exampleSentence).toBe('She showed great perseverance.')
+      expect(data.personalNote).toBe('My favorite word')
+    })
+
+    it('does not highlight inside already highlighted elements', () => {
+      document.body.innerHTML = '<p>environment climate</p>'
+      highlightMatches(document.body, [word('1', 'environment')])
+      highlightMatches(document.body, [word('2', 'climate')])
+      const highlights = document.querySelectorAll('.ielts-journey-saved-keyword-highlight')
+      expect(highlights).toHaveLength(2)
+    })
+
+    it('handles text with no matching words gracefully', () => {
+      document.body.innerHTML = '<p>nothing to see here</p>'
+      const count = highlightMatches(document.body, [word('1', 'missing')])
+      expect(count).toBe(0)
+    })
+
+    it('handles root with no text nodes', () => {
+      const div = document.createElement('div')
+      const count = highlightMatches(div, [word('1', 'test')])
+      expect(count).toBe(0)
+    })
   })
 
   describe('removeHighlights', () => {
@@ -97,6 +167,32 @@ describe('highlightEngine', () => {
       expect(document.querySelectorAll('.ielts-journey-saved-keyword-highlight')).toHaveLength(0)
       expect(document.body.textContent).toContain('environment')
     })
+
+    it('removes multiple highlight spans and restores text order', () => {
+      document.body.innerHTML = '<p>the cat and the dog</p>'
+      highlightMatches(document.body, [word('1', 'cat'), word('2', 'dog')])
+      expect(document.querySelectorAll('.ielts-journey-saved-keyword-highlight')).toHaveLength(2)
+
+      removeHighlights(document.body)
+      expect(document.querySelectorAll('.ielts-journey-saved-keyword-highlight')).toHaveLength(0)
+      expect(document.body.textContent).toBe('the cat and the dog')
+    })
+
+    it('is a no-op when root is not an Element', () => {
+      removeHighlights(document.createTextNode('text') as unknown as Node)
+      expect(document.querySelectorAll('.ielts-journey-saved-keyword-highlight')).toHaveLength(0)
+    })
+
+    it('is a no-op when root has no highlights', () => {
+      document.body.innerHTML = '<p>plain text</p>'
+      removeHighlights(document.body)
+      expect(document.body.textContent).toBe('plain text')
+    })
+
+    it('is a no-op on empty body', () => {
+      removeHighlights(document.body)
+      expect(document.body.innerHTML).toBe('')
+    })
   })
 
   describe('removeAllHighlights', () => {
@@ -107,6 +203,41 @@ describe('highlightEngine', () => {
 
       removeAllHighlights()
       expect(document.querySelectorAll('.ielts-journey-saved-keyword-highlight')).toHaveLength(0)
+    })
+
+    it('is a no-op when no highlights exist', () => {
+      document.body.innerHTML = '<p>plain text</p>'
+      removeAllHighlights()
+      expect(document.body.textContent).toBe('plain text')
+    })
+  })
+
+  describe('getHighlightWordFromElement', () => {
+    it('returns the word from element data', () => {
+      document.body.innerHTML = '<p>environment</p>'
+      highlightMatches(document.body, [word('1', 'environment')])
+      const el = document.querySelector('.ielts-journey-saved-keyword-highlight') as HTMLElement
+      const result = getHighlightWordFromElement(el)
+      expect(result).not.toBeNull()
+      expect(result!.id).toBe('1')
+      expect(result!.text).toBe('environment')
+    })
+
+    it('returns null when element has no data', () => {
+      const el = document.createElement('span')
+      expect(getHighlightWordFromElement(el)).toBeNull()
+    })
+
+    it('returns null when element data is invalid JSON', () => {
+      const el = document.createElement('span')
+      el.dataset.highlight = 'not-valid-json'
+      expect(getHighlightWordFromElement(el)).toBeNull()
+    })
+
+    it('returns null when element data is empty string', () => {
+      const el = document.createElement('span')
+      el.dataset.highlight = ''
+      expect(getHighlightWordFromElement(el)).toBeNull()
     })
   })
 })

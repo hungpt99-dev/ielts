@@ -1,0 +1,1508 @@
+[2026-07-04T05:08:26.041Z] [INFO] Task started: Fix Background Service Worker Messaging and Storage Bridge Logic
+[2026-07-04T05:08:26.049Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/extension/src/background/messaging.ts","description":"Fixed message routing and event handling","validationMethod":"file_diff"},{"action":"modify","target":"apps/extension/src/background/storage-bridge.ts","description":"Improved data sync and storage bridge reliability","validationMethod":"file_diff"}]
+[2026-07-04T05:08:26.622Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-04T05:08:26.622Z] [INFO] [stderr] [0m
+[2026-07-04T05:08:26.622Z] [INFO] [stderr] [0m
+[2026-07-04T05:08:31.593Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"background messaging.ts storage-bridge.ts apps/extension/src/background/","maxFiles":10}
+[2026-07-04T05:08:31.799Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background
+[2026-07-04T05:08:34.614Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/**/*.ts"[90m 28 matches[0m
+[2026-07-04T05:08:34.781Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/**/*messaging*"[90m 0 matches[0m
+[2026-07-04T05:08:34.993Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/**/*storage-bridge*"[90m 0 matches[0m
+[2026-07-04T05:08:35.220Z] [INFO] [stderr] [0m✱ [0mGlob "packages/storage/**/*.ts"[90m 30 matches[0m
+[2026-07-04T05:08:38.041Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/index.ts
+[2026-07-04T05:08:38.275Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/securityAudit.ts
+[2026-07-04T05:08:38.571Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/syncService.ts
+[2026-07-04T05:08:45.547Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/types.ts
+[2026-07-04T05:08:45.830Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/index.ts
+[2026-07-04T05:08:46.129Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/storage/indexedDB.ts
+[2026-07-04T05:08:49.525Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/**/*.ts?(x)"[90m 0 matches[0m
+[2026-07-04T05:08:49.729Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/options/**/*.ts?(x)"[90m 0 matches[0m
+[2026-07-04T05:08:50.367Z] [INFO] [stderr] [0m✱ [0mGrep "chrome\.runtime\.sendMessage|chrome\.runtime\.connect|chrome\.tabs\.sendMessage"[90m in apps/extension/src · 10 matches[0m
+[2026-07-04T05:08:50.453Z] [INFO] [stdout] Now let me look at the popup and how messages are used across the codebase:
+[2026-07-04T05:08:53.518Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/floatingToolbar.ts[90m [offset=315, limit=25][0m
+[2026-07-04T05:08:53.801Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/dictionaryPanel.ts[90m [offset=345, limit=20][0m
+[2026-07-04T05:08:54.238Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/selectionPanel.ts[90m [offset=280, limit=20][0m
+[2026-07-04T05:08:54.629Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/videoHelper.ts[90m [offset=130, limit=50][0m
+[2026-07-04T05:08:55.074Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/saveSelectedText.ts[90m [offset=75, limit=25][0m
+[2026-07-04T05:08:58.056Z] [INFO] [stderr] [0m✱ [0mGrep "storage-bridge|StorageBridge|storageBridge"[90m in . · 12 matches[0m
+[2026-07-04T05:08:58.491Z] [INFO] [stderr] [0m✱ [0mGrep "createBridgeMessage|isValidBridgeMessage|BridgeMessage"[90m in . · 18 matches[0m
+[2026-07-04T05:09:07.710Z] [INFO] [stderr] [•] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[2026-07-04T05:09:07.710Z] [INFO] [stderr] [0m
+[2026-07-04T05:09:07.710Z] [INFO] [stderr] [ ] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[2026-07-04T05:09:07.710Z] [INFO] [stderr] [0m
+[2026-07-04T05:09:07.710Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:09:07.710Z] [INFO] [stderr] [ ] Run lint and typecheck to verify correctness
+[2026-07-04T05:09:07.710Z] [INFO] [stderr] [ ] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[2026-07-04T05:09:11.048Z] [INFO] [stderr] [0m→ [0mRead docs/extension-architecture.md
+[2026-07-04T05:09:11.424Z] [INFO] [stderr] [0m✱ [0mGlob ".flowtask/runs/run_20260704T050052_check_all_feature_and_code_of_/outputs/*.txt"[90m 0 matches[0m
+[2026-07-04T05:09:11.505Z] [INFO] [stdout] Let me check the architecture doc and previous bug analysis outputs to guide the implementation:
+[2026-07-04T05:09:14.379Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/**/*storage-bridge*"[90m 0 matches[0m
+[2026-07-04T05:09:14.539Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/**/*messaging*"[90m 0 matches[0m
+[2026-07-04T05:09:14.868Z] [INFO] [stderr] [0m→ [0mRead apps/extension/tsconfig.json
+[2026-07-04T05:09:29.667Z] [INFO] [stderr] [0m
+[2026-07-04T05:09:29.667Z] [INFO] [stderr] [0m
+[2026-07-04T05:09:29.667Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/background/messaging.ts
+[2026-07-04T05:09:29.667Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T05:09:29.741Z] [INFO] [stdout] Now I have a complete picture. The files `messaging.ts` and `storage-bridge.ts` are documented in the architecture but don't exist yet — they need to be created. The message routing logic currently lives in `background/index.ts` with several bugs. Let me create both files and refactor the index.
+[2026-07-04T05:09:33.175Z] [INFO] [stderr] [ ] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[2026-07-04T05:09:33.175Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:09:33.175Z] [INFO] [stderr] [ ] Run lint and typecheck to verify correctness
+[2026-07-04T05:09:33.175Z] [INFO] [stderr] [✓] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[2026-07-04T05:09:33.176Z] [INFO] [stderr] [0m
+[2026-07-04T05:09:33.175Z] [INFO] [stderr] [•] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[2026-07-04T05:09:52.011Z] [INFO] [stderr] [0m
+[2026-07-04T05:09:52.010Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T05:09:52.011Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:09:56.662Z] [INFO] [stderr] [✓] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[2026-07-04T05:09:56.662Z] [INFO] [stderr] [0m
+[2026-07-04T05:09:56.662Z] [INFO] [stderr] [✓] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[2026-07-04T05:09:56.662Z] [INFO] [stderr] [•] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[2026-07-04T05:09:56.662Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:09:56.662Z] [INFO] [stderr] [ ] Run lint and typecheck to verify correctness
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+[2026-07-04T05:10:13.143Z] [INFO] [stderr]  import type { SaveCategory } from '../types'
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] -import {
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] @@ -1,21 +1,15 @@
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/index.ts
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] -  setPendingVideoInfo,
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] +import { updateDailyProgress } from '../services/storage'
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] -  addSavedItem,
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] -  setVideoPageInfo,
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] -} from '../services/storage'
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] -  initializeOnInstall,
+[2026-07-04T05:10:13.143Z] [INFO] [stderr]  
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] +import { initializeStorageBridge } from './storage-bridge'
+[2026-07-04T05:10:13.143Z] [INFO] [stderr]  interface AiExplainItem {
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -  updateDailyProgress,
+[2026-07-04T05:10:13.143Z] [INFO] [stderr] +import { initMessaging } from './messaging'
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] +  action: string
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]  
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]    title: string
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -type AiExplainType = 'simple' | 'vietnamese' | 'ielts-vocab' | 'grammar' | 'rewrite' | 'example-sentences' | 'quiz'
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]    id: string
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] @@ -82,8 +76,9 @@
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]    { id: 'ai-explain-vietnamese', title: 'Explain in Vietnamese', action: 'vietnamese' },
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]    { id: 'ai-explain-simple', title: 'Explain in Simple English', action: 'simple' },
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]  }
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]  
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]      await updateDailyProgress({ streak: 1 })
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]  chrome.runtime.onInstalled.addListener(async (details) => {
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]    { id: 'ai-explain-ielts-vocab', title: 'IELTS Vocabulary', action: 'ielts-vocab' },
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]    if (details.reason === 'install') {
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -  action: AiExplainType
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]  const AI_EXPLAIN_ITEMS: AiExplainItem[] = [
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] +    const { initializeOnInstall } = await import('../services/storage')
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]      await initializeOnInstall()
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]  }
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]    }
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] @@ -117,64 +112,8 @@
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]    createContextMenus()
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]  
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]    }
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]      })
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]  })
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      return true
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -  switch (message.type) {
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] +initMessaging()
+[2026-07-04T05:10:13.144Z] [INFO] [stderr]  
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -    case 'OPEN_OPTIONS':
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      getDailyProgressHandler(sendResponse)
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -    case 'UPDATE_PROGRESS':
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      chrome.runtime.openOptionsPage()
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] +initializeStorageBridge()
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      break
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      break
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -    case 'VIDEO_PAGE_DETECTED':
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -    case 'GET_DAILY_PROGRESS':
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      }
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -        setVideoPageInfo(message.payload)
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      updateDailyProgress(message.payload)
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      if (message.payload?.isVideoPage) {
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      setPendingVideoInfo(message.payload)
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      break
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -    case 'VIDEO_HELPER_OPEN':
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -    case 'MINI_TUTOR_SAVE_RESULT':
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      addSavedItem(message.payload)
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      const { action, text } = message.payload as { action: string; text: string }
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -          })
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      sendResponse({ success: true })
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -          chrome.tabs.sendMessage(tab.id, {
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -            payload: { action, text },
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -        if (tab?.id) {
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -      })
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      break
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -      return true
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -        }
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -    }
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -      return true
+[2026-07-04T05:10:13.144Z] [INFO] [stderr] -    case 'MINI_TUTOR_OPEN_PAGE': {
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -})
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -      sendResponse({ success: true })
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -function getDailyProgressHandler(sendResponse: (response: unknown) => void): void {
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -  chrome.storage.local.get(['dailyProgress'], (result) => {
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -      result.dailyProgress || {
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -        notesAdded: 0,
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -        articlesSaved: 0,
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -    sendResponse(
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -        reviewDue: 0,
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -  })
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -  }
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -        streak: 0,
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -      },
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -            type: 'MINI_TUTOR_TRIGGER',
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] 
+[2026-07-04T05:10:13.145Z] [INFO] [stderr]  export {}
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -    )
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -        wordsAdded: 0,
+[2026-07-04T05:10:13.145Z] [INFO] [stderr] -}
+[2026-07-04T05:10:16.151Z] [INFO] [stderr] [✓] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[2026-07-04T05:10:16.151Z] [INFO] [stderr] [•] Run lint and typecheck to verify correctness
+[2026-07-04T05:10:16.151Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:10:16.151Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:16.151Z] [INFO] [stderr] [✓] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[2026-07-04T05:10:16.151Z] [INFO] [stderr] [✓] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] src/background/storage-bridge.ts(162,11): error TS6133: 'count' is declared but its value is never read.
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] src/background/storage-bridge.ts(23,7): error TS6133: 'DB_STORE_NAMES' is declared but its value is never read.
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] src/background/storage-bridge.ts(233,28): error TS2339: Property 'createdAt' does not exist on type '{ updatedAt: {}; }'.
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] src/background/storage-bridge.ts(1,1): error TS6192: All imports in import declaration are unused.
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] src/background/storage-bridge.ts(7,6): error TS6196: 'StorageKey' is declared but never used.
+[2026-07-04T05:10:20.776Z] [INFO] [stderr]   Index signature for type 'string' is missing in type 'MiniTutorSavePayload'.
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] src/background/storage-bridge.ts(53,16): error TS6133: 'getFromIDB' is declared but its value is never read.
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] [0m$ [0mpnpm typecheck 2>&1
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] src/background/storage-bridge.ts(234,25): error TS2339: Property 'createdAt' does not exist on type '{ updatedAt: {}; }'.
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] src/background/storage-bridge.ts(104,16): error TS6133: 'deleteFromIDB' is declared but its value is never read.
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:20.776Z] [INFO] [stderr] src/background/messaging.ts(180,24): error TS2345: Argument of type 'MiniTutorSavePayload' is not assignable to parameter of type 'Record<string, unknown>'.
+[2026-07-04T05:10:20.777Z] [INFO] [stderr] [ELIFECYCLE] Command failed with exit code 2.
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-04T05:10:24.886Z] [INFO] [stderr]  })
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] @@ -176,9 +176,9 @@
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] -  await addSavedItem(msg.payload)
+[2026-07-04T05:10:24.886Z] [INFO] [stderr]  registerHandler('MINI_TUTOR_OPEN_PAGE', async (_msg, _sender) => {
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/messaging.ts
+[2026-07-04T05:10:24.886Z] [INFO] [stderr]    const msg = _msg as ExtensionMessage<'MINI_TUTOR_SAVE_RESULT'>
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] +  await addSavedItem(msg.payload as unknown as Record<string, unknown>)
+[2026-07-04T05:10:24.886Z] [INFO] [stderr]  registerHandler('MINI_TUTOR_SAVE_RESULT', async (_msg) => {
+[2026-07-04T05:10:24.886Z] [INFO] [stderr]  
+[2026-07-04T05:10:24.886Z] [INFO] [stderr]    const msg = _msg as ExtensionMessage<'MINI_TUTOR_OPEN_PAGE'>
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] 
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:24.886Z] [INFO] [stderr]  })
+[2026-07-04T05:10:24.886Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:10:24.886Z] [INFO] [stderr]  
+[2026-07-04T05:10:24.970Z] [INFO] [stdout] Several TypeScript errors. Let me fix them all.
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] -
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:28.400Z] [INFO] [stderr]  const DEBOUNCE_MS = 500
+[2026-07-04T05:10:28.400Z] [INFO] [stderr]  const STORAGE_KEYS = ['savedItems', 'vocabulary', 'mistakes', 'articles'] as const
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] @@ -1,12 +1,8 @@
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] -type StorageKey = typeof STORAGE_KEYS[number]
+[2026-07-04T05:10:28.400Z] [INFO] [stderr]  const SYNC_STATUS_KEY = 'extension.syncStatus'
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] -
+[2026-07-04T05:10:28.400Z] [INFO] [stderr]  
+[2026-07-04T05:10:28.400Z] [INFO] [stderr]    id: string
+[2026-07-04T05:10:28.400Z] [INFO] [stderr]    type: string
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] -import type { LearningEntry, SaveCategory } from '../types'
+[2026-07-04T05:10:28.400Z] [INFO] [stderr] 
+[2026-07-04T05:10:28.400Z] [INFO] [stderr]  interface SyncStatusItem {
+[2026-07-04T05:10:28.400Z] [INFO] [stderr]    savedAt: string
+[2026-07-04T05:10:31.655Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:31.655Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:31.655Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:31.655Z] [INFO] [stderr] @@ -15,9 +15,8 @@
+[2026-07-04T05:10:31.656Z] [INFO] [stderr]  function openDB(): Promise<IDBDatabase> {
+[2026-07-04T05:10:31.655Z] [INFO] [stderr]  }
+[2026-07-04T05:10:31.655Z] [INFO] [stderr]  const DB_VERSION = 1
+[2026-07-04T05:10:31.655Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:31.656Z] [INFO] [stderr]  
+[2026-07-04T05:10:31.656Z] [INFO] [stderr] -const DB_STORE_NAMES = ['learningEntries', 'vocabulary', 'articles', 'mistakes', 'videos'] as const
+[2026-07-04T05:10:31.656Z] [INFO] [stderr]      const request = indexedDB.open(DB_NAME, DB_VERSION)
+[2026-07-04T05:10:31.656Z] [INFO] [stderr]    return new Promise((resolve, reject) => {
+[2026-07-04T05:10:31.655Z] [INFO] [stderr]  const DB_NAME = 'ielts-journey-extension'
+[2026-07-04T05:10:31.656Z] [INFO] [stderr]  
+[2026-07-04T05:10:31.656Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:31.656Z] [INFO] [stderr] 
+[2026-07-04T05:10:31.656Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:35.757Z] [INFO] [stderr]      request.onerror = () => reject(request.error)
+[2026-07-04T05:10:35.757Z] [INFO] [stderr]    })
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] @@ -44,25 +44,8 @@
+[2026-07-04T05:10:35.757Z] [INFO] [stderr]  
+[2026-07-04T05:10:35.757Z] [INFO] [stderr]  }
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -    const tx = db.transaction(storeName, 'readonly')
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -    req.onsuccess = () => {
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -async function getFromIDB<T>(storeName: string, id: string): Promise<T | undefined> {
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -  const db = await openDB()
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -  return new Promise((resolve, reject) => {
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -      db.close()
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -    }
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -      resolve(req.result as T | undefined)
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -    const store = tx.objectStore(storeName)
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -      reject(req.error)
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -    const req = store.get(id)
+[2026-07-04T05:10:35.758Z] [INFO] [stderr] -  })
+[2026-07-04T05:10:35.758Z] [INFO] [stderr] -
+[2026-07-04T05:10:35.758Z] [INFO] [stderr] -      db.close()
+[2026-07-04T05:10:35.758Z] [INFO] [stderr] -    }
+[2026-07-04T05:10:35.757Z] [INFO] [stderr] -    req.onerror = () => {
+[2026-07-04T05:10:35.758Z] [INFO] [stderr]  async function putInIDB<T>(storeName: string, entry: T): Promise<void> {
+[2026-07-04T05:10:35.758Z] [INFO] [stderr] 
+[2026-07-04T05:10:35.758Z] [INFO] [stderr] -}
+[2026-07-04T05:10:35.758Z] [INFO] [stderr]      const tx = db.transaction(storeName, 'readwrite')
+[2026-07-04T05:10:35.758Z] [INFO] [stderr]    return new Promise((resolve, reject) => {
+[2026-07-04T05:10:35.758Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:35.758Z] [INFO] [stderr]    const db = await openDB()
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:39.185Z] [INFO] [stderr]      }
+[2026-07-04T05:10:39.185Z] [INFO] [stderr]    })
+[2026-07-04T05:10:39.185Z] [INFO] [stderr]  }
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:39.185Z] [INFO] [stderr]  
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -    const tx = db.transaction(storeName, 'readwrite')
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -  return new Promise((resolve, reject) => {
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -async function deleteFromIDB(storeName: string, id: string): Promise<void> {
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -    store.delete(id)
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -  const db = await openDB()
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -    tx.oncomplete = () => {
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -    const store = tx.objectStore(storeName)
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -      resolve()
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -      db.close()
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -    tx.onerror = () => {
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -      db.close()
+[2026-07-04T05:10:39.186Z] [INFO] [stderr] -}
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] @@ -78,25 +78,8 @@
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -  })
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -    }
+[2026-07-04T05:10:39.186Z] [INFO] [stderr] -
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -    }
+[2026-07-04T05:10:39.185Z] [INFO] [stderr] -      reject(tx.error)
+[2026-07-04T05:10:39.186Z] [INFO] [stderr]        resolve((result[key] as T) ?? null)
+[2026-07-04T05:10:39.186Z] [INFO] [stderr]  function chromeStorageGet<T>(key: string): Promise<T | null> {
+[2026-07-04T05:10:39.186Z] [INFO] [stderr]    return new Promise((resolve) => {
+[2026-07-04T05:10:39.186Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:39.186Z] [INFO] [stderr]      chrome.storage.local.get([key], (result) => {
+[2026-07-04T05:10:39.186Z] [INFO] [stderr] 
+[2026-07-04T05:10:42.268Z] [INFO] [stderr] @@ -119,9 +119,8 @@
+[2026-07-04T05:10:42.268Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:42.268Z] [INFO] [stderr]  pendingChanges++
+[2026-07-04T05:10:42.268Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:42.268Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:42.268Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:10:42.268Z] [INFO] [stderr]  syncTimer = setTimeout(async () => {
+[2026-07-04T05:10:42.268Z] [INFO] [stderr]    pendingChanges = 0
+[2026-07-04T05:10:42.268Z] [INFO] [stderr]  if (syncTimer) return
+[2026-07-04T05:10:42.268Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:42.268Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:42.268Z] [INFO] [stderr] -  const count = pendingChanges
+[2026-07-04T05:10:42.268Z] [INFO] [stderr]    syncTimer = null
+[2026-07-04T05:10:42.268Z] [INFO] [stderr]      await updateSyncStatus({ lastSyncResult: 'success' })
+[2026-07-04T05:10:42.268Z] [INFO] [stderr] 
+[2026-07-04T05:10:42.268Z] [INFO] [stderr]      await syncToIndexedDB()
+[2026-07-04T05:10:42.268Z] [INFO] [stderr]    try {
+[2026-07-04T05:10:45.834Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/storage-bridge.ts[90m [offset=215, limit=25][0m
+[2026-07-04T05:10:51.274Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:51.274Z] [INFO] [stderr] @@ -227,13 +227,14 @@
+[2026-07-04T05:10:51.274Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:51.274Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:51.274Z] [INFO] [stderr]  export async function syncSingleEntry(entry: Record<string, unknown>): Promise<void> {
+[2026-07-04T05:10:51.274Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:51.274Z] [INFO] [stderr]    if (!entry?.id) return
+[2026-07-04T05:10:51.274Z] [INFO] [stderr] +    const toSave: Record<string, unknown> = {
+[2026-07-04T05:10:51.275Z] [INFO] [stderr] -    await putInIDB(storeName, {
+[2026-07-04T05:10:51.274Z] [INFO] [stderr]    const storeName = mapEntryToStore(entry)
+[2026-07-04T05:10:51.275Z] [INFO] [stderr]        updatedAt: entry.updatedAt || new Date().toISOString(),
+[2026-07-04T05:10:51.275Z] [INFO] [stderr]    try {
+[2026-07-04T05:10:51.275Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:10:51.275Z] [INFO] [stderr] -    })
+[2026-07-04T05:10:51.274Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:10:51.275Z] [INFO] [stderr]    } catch (err) {
+[2026-07-04T05:10:51.275Z] [INFO] [stderr] +    }
+[2026-07-04T05:10:51.275Z] [INFO] [stderr]        ...entry,
+[2026-07-04T05:10:51.275Z] [INFO] [stderr] +    await putInIDB(storeName, toSave)
+[2026-07-04T05:10:51.275Z] [INFO] [stderr]      console.error(`[storage-bridge] Failed to sync entry ${entry.id}:`, err)
+[2026-07-04T05:10:51.275Z] [INFO] [stderr]      throw err
+[2026-07-04T05:10:51.275Z] [INFO] [stderr] 
+[2026-07-04T05:10:51.275Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:51.275Z] [INFO] [stderr]        createdAt: entry.createdAt || new Date().toISOString(),
+[2026-07-04T05:10:51.275Z] [INFO] [stderr]    }
+[2026-07-04T05:10:58.645Z] [INFO] [stderr] [0m$ [0mpnpm typecheck 2>&1
+[2026-07-04T05:10:58.645Z] [INFO] [stderr] src/background/storage-bridge.ts(194,25): error TS2339: Property 'createdAt' does not exist on type '{ updatedAt: {}; }'.
+[2026-07-04T05:10:58.645Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-04T05:10:58.645Z] [INFO] [stderr] src/background/storage-bridge.ts(193,28): error TS2339: Property 'createdAt' does not exist on type '{ updatedAt: {}; }'.
+[2026-07-04T05:10:58.645Z] [INFO] [stderr] [0m
+[2026-07-04T05:10:58.645Z] [INFO] [stderr] [ELIFECYCLE] Command failed with exit code 2.
+[2026-07-04T05:11:01.682Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/storage-bridge.ts[90m [offset=185, limit=25][0m
+[2026-07-04T05:11:06.205Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:11:06.205Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] @@ -185,15 +185,13 @@
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]  const storeName = mapEntryToStore(entry as Record<string, unknown>)
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]  if (!entry || !entry.id) continue
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]  try {
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] +  const entryToSave: Record<string, unknown> = {
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] -  const entryToSave = {
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]  
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]      updatedAt: entry.updatedAt || new Date().toISOString(),
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] -  if (!entryToSave.createdAt) {
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] -  }
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]      ...entry,
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]    await putInIDB(storeName, entryToSave)
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] -    entryToSave.createdAt = new Date().toISOString()
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]  } catch (putErr) {
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]    errors.push(`Failed to save ${storeName}.${entry.id}: ${putErr}`)
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]    }
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:06.206Z] [INFO] [stderr]  }
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] +    createdAt: entry.createdAt || new Date().toISOString(),
+[2026-07-04T05:11:06.206Z] [INFO] [stderr] 
+[2026-07-04T05:11:11.451Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:11.451Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-04T05:11:11.451Z] [INFO] [stderr] [0m$ [0mpnpm typecheck 2>&1
+[2026-07-04T05:11:14.504Z] [INFO] [stderr] $ echo 'no linter configured'
+[2026-07-04T05:11:14.504Z] [INFO] [stderr] no linter configured
+[2026-07-04T05:11:14.504Z] [INFO] [stderr] [0m$ [0mpnpm lint 2>&1
+[2026-07-04T05:11:14.504Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:20.023Z] [INFO] [stderr] Scope: 11 of 12 workspace projects
+[2026-07-04T05:11:20.023Z] [INFO] [stderr] packages/ai-tutor lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/exercises lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.023Z] [INFO] [stderr] [0m$ [0mpnpm lint 2>&1
+[2026-07-04T05:11:20.023Z] [INFO] [stderr] $ pnpm -r lint
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/ai lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/ai-tutor lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/exercises lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/storage lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/ai lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/ai-tutor lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/ui lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/ai lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/storage lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/storage lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/theme lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/extension lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/ui lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/theme lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/utils lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/utils lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/utils lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/extension lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/learning-engine lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/extension lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/ui lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/content lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/content lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/content lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/learning-engine lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/theme lint$ echo 'no linter configured'
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/exercises lint: Done
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] packages/learning-engine lint: no linter configured
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/NotificationCenter.tsx
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   288:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:    86:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:    66:6  warning  React Hook useEffect has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   106:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint$ eslint .
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/ReadingListeningTutor.tsx
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:    81:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:    96:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:    91:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:    49:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   221:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   232:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   101:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   214:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   280:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   411:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   603:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   246:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   349:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   467:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   181:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   670:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   635:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   227:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   707:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   702:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:    79:53  warning  Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   714:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/SpeakingPartner.tsx
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   294:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   290:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   320:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   306:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   313:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   336:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   327:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   331:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.024Z] [INFO] [stderr] apps/web lint:   286:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   568:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   626:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   995:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   731:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    525:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    531:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   707:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   982:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    546:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/TeachingMode.tsx
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    631:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    521:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    594:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    687:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    647:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    726:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    569:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   1005:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   1066:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    741:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   103:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   111:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/WritingTutor.tsx
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   134:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:   1035:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   182:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   119:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   200:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.025Z] [INFO] [stderr] apps/web lint:    87:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   140:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   204:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   220:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   208:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   212:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   216:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   774:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   392:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   123:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   835:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   226:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   402:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   454:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/ui/Toast.tsx
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   950:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/context/SettingsContext.tsx
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   19:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   969:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/context/ThemeContext.tsx
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   3:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:    15:10  warning  'getTimeBasedGreeting' is defined but never used        @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/AITutorChat.tsx
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   108:9   warning  'handleQuickAction' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/__tests__/aiTutorService.test.ts
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:    10:55   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   869:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:    24:10  warning  'briefing' is assigned a value but never used           @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:    12:58   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   185:127  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   33:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   186:130  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   189:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:    11:56   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:     3:10  warning  'loadRoadmap' is defined but never used                                      @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:     3:23  warning  'getTodayTask' is defined but never used                                     @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:     4:43  warning  'VocabReviewEntry' is defined but never used                                 @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/aiTutorService.ts
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   190:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   102:11  warning  'settings' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:    73:10  warning  'computeStreak' is defined but never used                                    @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:    63:10  warning  'getExamCountdown' is defined but never used                                 @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:    59:10  warning  'getToday' is defined but never used                                         @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   348:11  warning  'context' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   143:66  warning  'dayOfWeek' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:    38:10  warning  'generateId' is defined but never used         @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   516:55  warning  'mistake' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/content/StudyContentPage.tsx
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   309:9   warning  'location' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   434:14  warning  'err' is defined but never used                @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   434:11  warning  'context' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   232:38  warning  'onNext' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/mistakes/MistakeNotebook.tsx
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   31:7  warning  'SORT_OPTIONS' is assigned a value but only used as a type  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   241:14  warning  'err' is defined but never used                                           @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   60:9   warning  'needsVocab' is assigned a value but never used                      @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/onboarding/onboardingService.ts
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   82:27  warning  'i' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   79:12  warning  'getSkillTasks' is defined but never used                            @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   174:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   170:127  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   101:6   warning  React Hook useEffect has a missing dependency: 'keySources'. Either include it or remove the dependency array                   react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/publicApiIntegration/components/ApiKeySettings.tsx
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/personalization/__tests__/personalizationService.test.ts
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/onboarding/OnboardingForm.tsx
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   593:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   175:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.026Z] [INFO] [stderr] apps/web lint:   593:27  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   171:130  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   593:40  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/RoadmapPage.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   26:10  warning  'getSkillColor' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   593:51  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   13:3   warning  'saveRoadmap' is defined but never used    @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   452:14  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   9:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/roadmapService.ts
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    83:45  warning  'targetBand' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    75:38  warning  'targetBand' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   192:62  warning  'objective' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   256:10  warning  'getTaskDescription' is defined but never used                                @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   282:9   warning  'doneTaskIds' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/speaking/SpeakingPractice.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   260:10  warning  'getTaskMinutes' is defined but never used                                    @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   203:12  warning  'toggleTimer' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   276:9   warning  'totalWeeks' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   1:15  warning  'TaskDetail' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/tasks/types.ts
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/tasks/ieltsContent.ts
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   1:15  warning  'TaskEntry' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   32:7  error  Unnecessary catch clause  no-useless-catch
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   208:33  warning  'count' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    14:3   warning  'getAllTags' is defined but never used                 @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   201:18  warning  'handleToggleTag' is defined but never used            @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyManager.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/vocabularyService.ts
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   772:10  warning  'selectedWords' is assigned a value but never used     @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   772:25  warning  'setSelectedWords' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   136:9  warning  'newWords' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   296:6  warning  React Hook useCallback has an unnecessary dependency: 'showToast'. Either exclude it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:     24:3    warning  'ExerciseFeedbackCard' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:     20:3    warning  'evaluateExerciseAnswer' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:     21:3    warning  'suggestNextTopics' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:     19:3    warning  'evaluateCheckingAnswer' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/writing/WritingPromptsPage.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:     27:3    warning  'generateMistakeReviewAI' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:     74:3    warning  'saveWritingFeedback' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:     73:28   warning  'formatWritingFeedbackMessage' is defined but never used                                                              @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:     75:3    warning  'saveWritingMistakesToNotebook' is defined but never used                                                             @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    402:77   warning  'userAnswer' is defined but never used. Allowed unused args must match /^_/u                                          @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    212:10   warning  'getGentleCorrections' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    402:62   warning  'topic' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    351:10   warning  'generateSocraticFollowUp' is defined but never used                                                                  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    402:97   warning  'language' is defined but never used. Allowed unused args must match /^_/u                                            @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    246:10   warning  'formatCorrectionsAsText' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    668:10   warning  'generateResponse' is defined but never used                                                                          @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    577:10   warning  'getDailyCheckInMessage' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    789:10   warning  'suggestionsLoading' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    742:10   warning  'friendCorrections' is assigned a value but never used                                                                @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    423:54   warning  'qType' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   1735:171  warning  Unexpected any. Specify a different type                                                                              @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/DailyPlan.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   90:9  warning  The 'visibleDates' conditional could make the dependencies of useMemo Hook (at line 108) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'visibleDates' in its own useMemo() Hook  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   1534:6    warning  React Hook useCallback has a missing dependency: 'socraticHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    439:61   warning  'topic' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/landing/__tests__/CreatorSection.test.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   3:13  warning  'config' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   27:7  warning  'SORT_OPTIONS' is assigned a value but only used as a type  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/ExerciseGenerator.test.ts
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   121:6  warning  React Hook useCallback has a missing dependency: 'showToast'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Mistakes.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Vocabulary.tsx
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/ExerciseGenerator.ts
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   321:11  warning  'db' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    33:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/tests/onboarding.test.ts
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/Database.test.ts
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   113:11  warning  'exercise' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   183:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   197:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   107:10  warning  'inferDifficultyFromUser' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web:
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint: Failed
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/web@0.1.0 lint: `eslint .`
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:   204:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.028Z] [INFO] [stderr] apps/web lint: ✖ 176 problems (1 error, 175 warnings)
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] apps/web lint:    26:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] [ELIFECYCLE] Command failed with exit code 1.
+[2026-07-04T05:11:20.027Z] [INFO] [stderr] Exit status 1
+[2026-07-04T05:11:23.943Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/index.ts
+[2026-07-04T05:11:24.213Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:24.474Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:11:24.565Z] [INFO] [stdout] Good — typecheck passes cleanly, and lint is not configured for the extension (the only failures are pre-existing issues in `apps/web`). Let me verify the final files:
+[2026-07-04T05:11:30.482Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:30.483Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:30.483Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:11:30.483Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:30.483Z] [INFO] [stderr]  import type { SaveCategory } from '../types'
+[2026-07-04T05:11:30.483Z] [INFO] [stderr]  import {
+[2026-07-04T05:11:30.483Z] [INFO] [stderr]    setVideoPageInfo,
+[2026-07-04T05:11:30.483Z] [INFO] [stderr] @@ -1,7 +1,6 @@
+[2026-07-04T05:11:30.483Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:30.483Z] [INFO] [stderr]    updateDailyProgress,
+[2026-07-04T05:11:30.483Z] [INFO] [stderr]    setPendingVideoInfo,
+[2026-07-04T05:11:30.483Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:30.483Z] [INFO] [stderr]    addSavedItem,
+[2026-07-04T05:11:30.483Z] [INFO] [stderr] -  initializeOnInstall,
+[2026-07-04T05:11:30.483Z] [INFO] [stderr] 
+[2026-07-04T05:11:30.483Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:30.586Z] [INFO] [stdout] I notice a bug — both `index.ts` and `messaging.ts` register `chrome.runtime.onInstalled` listeners, causing duplicate installation. Let me fix `messaging.ts`:
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:34.111Z] [INFO] [stderr]  
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:34.111Z] [INFO] [stderr]    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] -
+[2026-07-04T05:11:34.111Z] [INFO] [stderr]      return handleMessage(message, sender, sendResponse)
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] -      await initializeOnInstall()
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] -      await updateDailyProgress({ streak: 1 })
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] @@ -193,12 +193,5 @@
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] -  chrome.runtime.onInstalled.addListener(async (details) => {
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] -    }
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] -  })
+[2026-07-04T05:11:34.111Z] [INFO] [stderr]    })
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] 
+[2026-07-04T05:11:34.111Z] [INFO] [stderr] -    if (details.reason === 'install') {
+[2026-07-04T05:11:34.111Z] [INFO] [stderr]  }
+[2026-07-04T05:11:39.092Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:39.092Z] [INFO] [stderr] [0m$ [0mpnpm typecheck 2>&1
+[2026-07-04T05:11:39.092Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-04T05:11:42.193Z] [INFO] [stderr] .flowtask/events.jsonl                             |   3 +
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  .flowtask/run-index.json                           |   2 +-
+[2026-07-04T05:11:42.193Z] [INFO] [stderr] [0m$ [0mgit diff --stat 2>&1
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  .../content-script/highlighter/highlightEngine.ts  | 160 +++++++++------------
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  apps/web/src/features/roadmap/roadmapService.ts    |  12 ++
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  .../content-script/highlighter/highlightStyles.ts  |   2 +-
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  packages/storage/src/__tests__/migrations.test.ts  |  23 ++-
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  .flowtask/task-index.json                          |   2 +-
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  .../content-script/highlighter/highlightTooltip.ts | 155 ++++++++++----------
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  apps/web/src/services/storage/Database.ts          |  12 ++
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  packages/storage/src/index.ts                      |   5 +
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  packages/storage/src/migrations.ts                 |  39 ++++-
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  packages/storage/src/repositories/index.ts         |   5 +
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  packages/storage/src/schema.ts                     |  30 ++++
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  .../content-script/highlighter/highlightMatcher.ts |   8 ++
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  18 files changed, 347 insertions(+), 248 deletions(-)
+[2026-07-04T05:11:42.194Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  packages/storage/src/db.ts                         |  12 ++
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  .flowtask/state.json                               |   2 +-
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  .../storage/src/repositories/ContentRepository.ts  |  48 ++++++-
+[2026-07-04T05:11:42.194Z] [INFO] [stderr]  apps/extension/src/background/index.ts             |  75 +---------
+[2026-07-04T05:11:45.527Z] [INFO] [stderr] [0m$ [0mgit status --short apps/extension/src/background/ 2>&1
+[2026-07-04T05:11:45.528Z] [INFO] [stderr] ?? apps/extension/src/background/messaging.ts
+[2026-07-04T05:11:45.528Z] [INFO] [stderr] ?? apps/extension/src/background/storage-bridge.ts
+[2026-07-04T05:11:45.528Z] [INFO] [stderr] M apps/extension/src/background/index.ts
+[2026-07-04T05:11:45.528Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:48.891Z] [INFO] [stderr] [✓] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[2026-07-04T05:11:48.891Z] [INFO] [stderr] [✓] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[2026-07-04T05:11:48.891Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:11:48.891Z] [INFO] [stderr] [✓] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[2026-07-04T05:11:48.891Z] [INFO] [stderr] [✓] Run lint and typecheck to verify correctness
+[2026-07-04T05:11:48.891Z] [INFO] [stderr] [0m
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] ## Completion Summary
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Centralized handler registry** (`registerHandler`/`unregisterHandler`) replacing the fragile `switch` statement in `index.ts`
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Proper async MV3 protocol** — `handleMessage` correctly `return true` for async handlers (promises), `return false` for sync ones, eliminating the bug where async `UPDATE_PROGRESS` was fire-and-forget
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Error boundary** — all handler errors caught, logged with `[messaging]` prefix, and return structured `{ success: false, error, message }` responses instead of silent failures
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Unknown message logging** — warns on unrecognized message types instead of silently dropping them
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **`initMessaging()`** — single call to register all handlers and attach the `onMessage` listener
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] ### Created: `apps/extension/src/background/storage-bridge.ts`
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] ### Created: `apps/extension/src/background/messaging.ts`
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Debounced sync** (500ms coalescing) — prevents cascading writes from content scripts triggering excessive IndexedDB operations
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Bi-directional sync** between `chrome.storage.local` (used by content scripts for fast writes) and IndexedDB (primary persistent store with `learningEntries`, `vocabulary`, `articles`, `mistakes`, `videos`)
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] ### Modified: `apps/extension/src/background/index.ts`
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **`chrome.storage.onChanged` listener** — automatically triggers sync when content scripts write to relevant keys (`savedItems`, `vocabulary`, `mistakes`, `articles`)
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Sync status tracking** (`extension.syncStatus` in `chrome.storage.local`) — `markItemPending`, `markItemsSynced`, `getSyncStatus`, `getPendingItems`
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Removed** the inline `chrome.runtime.onMessage` listener and `getDailyProgressHandler` (delegated to `messaging.ts`)
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Individual entry sync** (`syncSingleEntry`) — for immediate writes from the service worker
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Kept** context menu creation and `onClicked` handling (communicates via `chrome.tabs.sendMessage` — different channel)
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Dynamic import** for `initializeOnInstall` in the `onInstalled` handler to keep the module-scoped import minimal
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Removed** unused imports (`setVideoPageInfo`, `setPendingVideoInfo`, `addSavedItem`, `initializeOnInstall`)
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Typed message map** (`ExtensionMessage`) with discriminated union — all supported message types declared with their payload shapes
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **`initializeStorageBridge()`** — single call to set up the listener and run initial sync
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 1. **`UPDATE_PROGRESS`** was fire-and-forget (async never awaited) → now properly awaited with promise handling
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 5. **Inconsistent `sendResponse` usage** → standardized through a single `handleMessage` function
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 3. **`MINI_TUTOR_OPEN_PAGE`** used callback-style `chrome.tabs.query` → now uses async/await with `chrome.tabs.query`
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - **Calls** `initMessaging()` and `initializeStorageBridge()` at module level
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 2. **`VIDEO_PAGE_DETECTED`/`VIDEO_HELPER_OPEN`** had no error handling → now wrapped in try/catch
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 6. **No storage → IndexedDB sync** → storage bridge now bridges `chrome.storage.local` writes to IndexedDB automatically
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] ### Fixed bugs
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 4. **No message type validation** → now validates messages against a typed message map with warnings for unknown types
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] ### Validation
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - `pnpm typecheck` — passes with zero errors
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] - `pnpm lint` — extension has no linter configured (all failures pre-existing in `apps/web`)
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 7. **No sync status tracking** → storage bridge tracks pending items, last sync time, and result status
+[2026-07-04T05:11:58.862Z] [INFO] [stdout] 
+[2026-07-04T05:11:59.060Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-04T05:11:59.060Z] [INFO] Output:
+Now let me look at the popup and how messages are used across the codebase:
+Let me check the architecture doc and previous bug analysis outputs to guide the implementation:
+Now I have a complete picture. The files `messaging.ts` and `storage-bridge.ts` are documented in the architecture but don't exist yet — they need to be created. The message routing logic currently lives in `background/index.ts` with several bugs. Let me create both files and refactor the index.
+Several TypeScript errors. Let me fix them all.
+Good — typecheck passes cleanly, and lint is not configured for the extension (the only failures are pre-existing issues in `apps/web`). Let me verify the final files:
+I notice a bug — both `index.ts` and `messaging.ts` register `chrome.runtime.onInstalled` listeners, causing duplicate installation. Let me fix `messaging.ts`:
+## Completion Summary
+
+### Created: `apps/extension/src/background/messaging.ts`
+- **Typed message map** (`ExtensionMessage`) with discriminated union — all supported message types declared with their payload shapes
+- **Centralized handler registry** (`registerHandler`/`unregisterHandler`) replacing the fragile `switch` statement in `index.ts`
+- **Proper async MV3 protocol** — `handleMessage` correctly `return true` for async handlers (promises), `return false` for sync ones, eliminating the bug where async `UPDATE_PROGRESS` was fire-and-forget
+- **Error boundary** — all handler errors caught, logged with `[messaging]` prefix, and return structured `{ success: false, error, message }` responses instead of silent failures
+- **Unknown message logging** — warns on unrecognized message types instead of silently dropping them
+- **`initMessaging()`** — single call to register all handlers and attach the `onMessage` listener
+
+### Created: `apps/extension/src/background/storage-bridge.ts`
+- **Bi-directional sync** between `chrome.storage.local` (used by content scripts for fast writes) and IndexedDB (primary persistent store with `learningEntri
+[2026-07-04T05:11:59.060Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"background messaging.ts storage-bridge.ts apps/extension/src/background/","maxFiles":10}
+[0m→ [0mRead apps/extension/src/background
+[0m✱ [0mGlob "apps/extension/src/**/*.ts"[90m 28 matches[0m
+[0m✱ [0mGlob "apps/extension/**/*messaging*"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/**/*storage-bridge*"[90m 0 matches[0m
+[0m✱ [0mGlob "packages/storage/**/*.ts"[90m 30 matches[0m
+[0m→ [0mRead apps/extension/src/background/index.ts
+[0m→ [0mRead apps/extension/src/background/securityAudit.ts
+[0m→ [0mRead packages/storage/src/syncService.ts
+[0m→ [0mRead apps/extension/src/types.ts
+[0m→ [0mRead packages/storage/src/index.ts
+[0m→ [0mRead apps/extension/src/storage/indexedDB.ts
+[0m✱ [0mGlob "apps/extension/src/popup/**/*.ts?(x)"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/src/options/**/*.ts?(x)"[90m 0 matches[0m
+[0m✱ [0mGrep "chrome\.runtime\.sendMessage|chrome\.runtime\.connect|chrome\.tabs\.sendMessage"[90m in apps/extension/src · 10 matches[0m
+[0m→ [0mRead apps/extension/src/content-script/floatingToolbar.ts[90m [offset=315, limit=25][0m
+[0m→ [0mRead apps/extension/src/content-script/dictionaryPanel.ts[90m [offset=345, limit=20][0m
+[0m→ [0mRead apps/extension/src/content-script/selectionPanel.ts[90m [offset=280, limit=20][0m
+[0m→ [0mRead apps/extension/src/content-script/videoHelper.ts[90m [offset=130, limit=50][0m
+[0m→ [0mRead apps/extension/src/content-script/saveSelectedText.ts[90m [offset=75, limit=25][0m
+[0m✱ [0mGrep "storage-bridge|StorageBridge|storageBridge"[90m in . · 12 matches[0m
+[0m✱ [0mGrep "createBridgeMessage|isValidBridgeMessage|BridgeMessage"[90m in . · 18 matches[0m
+[0m
+[0m# [0mTodos
+[•] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[ ] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[ ] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[ ] Run lint and typecheck to verify correctness
+[0m
+[0m→ [0mRead docs/extension-architecture.md
+[0m✱ [0mGlob ".flowtask/runs/run_20260704T050052_check_all_feature_and_code_of_/outputs/*.txt"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/src/**/*storage-bridge*"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/src/**/*messaging*"[90m 0 matches[0m
+[0m→ [0mRead apps/extension/tsconfig.json
+[0m
+[0m← [0mWrite apps/extension/src/background/messaging.ts
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[•] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[ ] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[ ] Run lint and typecheck to verify correctness
+[0m
+[0m← [0mWrite apps/extension/src/background/storage-bridge.ts
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[✓] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[•] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[ ] Run lint and typecheck to verify correctness
+[0m
+[0m← [0mEdit apps/extension/src/background/index.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+@@ -1,21 +1,15 @@
+ import type { SaveCategory } from '../types'
+-import {
+-  initializeOnInstall,
+-  updateDailyProgress,
+-  setVideoPageInfo,
+-  setPendingVideoInfo,
+-  addSavedItem,
+-} from '../services/storage'
++import { updateDailyProgress } from '../services/storage'
++import { initMessaging } from './messaging'
++import { initializeStorageBridge } from './storage-bridge'
+ 
+ interface AiExplainItem {
+   id: string
+   title: string
+-  action: AiExplainType
++  action: string
+ }
+ 
+-type AiExplainType = 'simple' | 'vietnamese' | 'ielts-vocab' | 'grammar' | 'rewrite' | 'example-sentences' | 'quiz'
+-
+ const AI_EXPLAIN_ITEMS: AiExplainItem[] = [
+   { id: 'ai-explain-simple', title: 'Explain in Simple English', action: 'simple' },
+   { id: 'ai-explain-vietnamese', title: 'Explain in Vietnamese', action: 'vietnamese' },
+   { id: 'ai-explain-ielts-vocab', title: 'IELTS Vocabulary', action: 'ielts-vocab' },
+@@ -82,8 +76,9 @@
+ }
+ 
+ chrome.runtime.onInstalled.addListener(async (details) => {
+   if (details.reason === 'install') {
++    const { initializeOnInstall } = await import('../services/storage')
+     await initializeOnInstall()
+     await updateDailyProgress({ streak: 1 })
+   }
+   createContextMenus()
+@@ -117,64 +112,8 @@
+     })
+   }
+ })
+ 
+-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+-  switch (message.type) {
+-    case 'GET_DAILY_PROGRESS':
+-      getDailyProgressHandler(sendResponse)
+-      return true
++initMessaging()
++initializeStorageBridge()
+ 
+-    case 'UPDATE_PROGRESS':
+-      updateDailyProgress(message.payload)
+-      break
+-
+-    case 'OPEN_OPTIONS':
+-      chrome.runtime.openOptionsPage()
+-      break
+-
+-    case 'VIDEO_PAGE_DETECTED':
+-      if (message.payload?.isVideoPage) {
+-        setVideoPageInfo(message.payload)
+-      }
+-      break
+-
+-    case 'VIDEO_HELPER_OPEN':
+-      setPendingVideoInfo(message.payload)
+-      break
+-
+-    case 'MINI_TUTOR_SAVE_RESULT':
+-      addSavedItem(message.payload)
+-      sendResponse({ success: true })
+-      return true
+-
+-    case 'MINI_TUTOR_OPEN_PAGE': {
+-      const { action, text } = message.payload as { action: string; text: string }
+-      chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
+-        if (tab?.id) {
+-          chrome.tabs.sendMessage(tab.id, {
+-            type: 'MINI_TUTOR_TRIGGER',
+-            payload: { action, text },
+-          })
+-        }
+-      })
+-      sendResponse({ success: true })
+-      return true
+-    }
+-  }
+-})
+-
+-function getDailyProgressHandler(sendResponse: (response: unknown) => void): void {
+-  chrome.storage.local.get(['dailyProgress'], (result) => {
+-    sendResponse(
+-      result.dailyProgress || {
+-        wordsAdded: 0,
+-        notesAdded: 0,
+-        articlesSaved: 0,
+-        reviewDue: 0,
+-        streak: 0,
+-      },
+-    )
+-  })
+-}
+-
+ export {}
+
+[0m
+[0m# [0mTodos
+[✓] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[✓] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[✓] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[•] Run lint and typecheck to verify correctness
+[0m
+[0m$ [0mpnpm typecheck 2>&1
+$ tsc --noEmit
+src/background/messaging.ts(180,24): error TS2345: Argument of type 'MiniTutorSavePayload' is not assignable to parameter of type 'Record<string, unknown>'.
+  Index signature for type 'string' is missing in type 'MiniTutorSavePayload'.
+src/background/storage-bridge.ts(1,1): error TS6192: All imports in import declaration are unused.
+src/background/storage-bridge.ts(7,6): error TS6196: 'StorageKey' is declared but never used.
+src/background/storage-bridge.ts(23,7): error TS6133: 'DB_STORE_NAMES' is declared but its value is never read.
+src/background/storage-bridge.ts(53,16): error TS6133: 'getFromIDB' is declared but its value is never read.
+src/background/storage-bridge.ts(104,16): error TS6133: 'deleteFromIDB' is declared but its value is never read.
+src/background/storage-bridge.ts(162,11): error TS6133: 'count' is declared but its value is never read.
+src/background/storage-bridge.ts(233,28): error TS2339: Property 'createdAt' does not exist on type '{ updatedAt: {}; }'.
+src/background/storage-bridge.ts(234,25): error TS2339: Property 'createdAt' does not exist on type '{ updatedAt: {}; }'.
+[ELIFECYCLE] Command failed with exit code 2.
+[0m
+[0m← [0mEdit apps/extension/src/background/messaging.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+@@ -176,9 +176,9 @@
+ })
+ 
+ registerHandler('MINI_TUTOR_SAVE_RESULT', async (_msg) => {
+   const msg = _msg as ExtensionMessage<'MINI_TUTOR_SAVE_RESULT'>
+-  await addSavedItem(msg.payload)
++  await addSavedItem(msg.payload as unknown as Record<string, unknown>)
+ })
+ 
+ registerHandler('MINI_TUTOR_OPEN_PAGE', async (_msg, _sender) => {
+   const msg = _msg as ExtensionMessage<'MINI_TUTOR_OPEN_PAGE'>
+
+[0m
+[0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+@@ -1,12 +1,8 @@
+-import type { LearningEntry, SaveCategory } from '../types'
+-
+ const SYNC_STATUS_KEY = 'extension.syncStatus'
+ const DEBOUNCE_MS = 500
+ const STORAGE_KEYS = ['savedItems', 'vocabulary', 'mistakes', 'articles'] as const
+ 
+-type StorageKey = typeof STORAGE_KEYS[number]
+-
+ interface SyncStatusItem {
+   id: string
+   type: string
+   savedAt: string
+
+[0m
+[0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+@@ -15,9 +15,8 @@
+ }
+ 
+ const DB_NAME = 'ielts-journey-extension'
+ const DB_VERSION = 1
+-const DB_STORE_NAMES = ['learningEntries', 'vocabulary', 'articles', 'mistakes', 'videos'] as const
+ 
+ function openDB(): Promise<IDBDatabase> {
+   return new Promise((resolve, reject) => {
+     const request = indexedDB.open(DB_NAME, DB_VERSION)
+
+[0m
+[0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+@@ -44,25 +44,8 @@
+     request.onerror = () => reject(request.error)
+   })
+ }
+ 
+-async function getFromIDB<T>(storeName: string, id: string): Promise<T | undefined> {
+-  const db = await openDB()
+-  return new Promise((resolve, reject) => {
+-    const tx = db.transaction(storeName, 'readonly')
+-    const store = tx.objectStore(storeName)
+-    const req = store.get(id)
+-    req.onsuccess = () => {
+-      db.close()
+-      resolve(req.result as T | undefined)
+-    }
+-    req.onerror = () => {
+-      db.close()
+-      reject(req.error)
+-    }
+-  })
+-}
+-
+ async function putInIDB<T>(storeName: string, entry: T): Promise<void> {
+   const db = await openDB()
+   return new Promise((resolve, reject) => {
+     const tx = db.transaction(storeName, 'readwrite')
+
+[0m
+[0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+@@ -78,25 +78,8 @@
+     }
+   })
+ }
+ 
+-async function deleteFromIDB(storeName: string, id: string): Promise<void> {
+-  const db = await openDB()
+-  return new Promise((resolve, reject) => {
+-    const tx = db.transaction(storeName, 'readwrite')
+-    const store = tx.objectStore(storeName)
+-    store.delete(id)
+-    tx.oncomplete = () => {
+-      db.close()
+-      resolve()
+-    }
+-    tx.onerror = () => {
+-      db.close()
+-      reject(tx.error)
+-    }
+-  })
+-}
+-
+ function chromeStorageGet<T>(key: string): Promise<T | null> {
+   return new Promise((resolve) => {
+     chrome.storage.local.get([key], (result) => {
+       resolve((result[key] as T) ?? null)
+
+[0m
+[0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+@@ -119,9 +119,8 @@
+ pendingChanges++
+ if (syncTimer) return
+ syncTimer = setTimeout(async () => {
+   syncTimer = null
+-  const count = pendingChanges
+   pendingChanges = 0
+   try {
+     await syncToIndexedDB()
+     await updateSyncStatus({ lastSyncResult: 'success' })
+
+[0m
+[0m→ [0mRead apps/extension/src/background/storage-bridge.ts[90m [offset=215, limit=25][0m
+[0m
+[0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+@@ -227,13 +227,14 @@
+ export async function syncSingleEntry(entry: Record<string, unknown>): Promise<void> {
+   if (!entry?.id) return
+   const storeName = mapEntryToStore(entry)
+   try {
+-    await putInIDB(storeName, {
++    const toSave: Record<string, unknown> = {
+       ...entry,
+       createdAt: entry.createdAt || new Date().toISOString(),
+       updatedAt: entry.updatedAt || new Date().toISOString(),
+-    })
++    }
++    await putInIDB(storeName, toSave)
+   } catch (err) {
+     console.error(`[storage-bridge] Failed to sync entry ${entry.id}:`, err)
+     throw err
+   }
+
+[0m
+[0m$ [0mpnpm typecheck 2>&1
+$ tsc --noEmit
+src/background/storage-bridge.ts(193,28): error TS2339: Property 'createdAt' does not exist on type '{ updatedAt: {}; }'.
+src/background/storage-bridge.ts(194,25): error TS2339: Property 'createdAt' does not exist on type '{ updatedAt: {}; }'.
+[ELIFECYCLE] Command failed with exit code 2.
+[0m
+[0m→ [0mRead apps/extension/src/background/storage-bridge.ts[90m [offset=185, limit=25][0m
+[0m
+[0m← [0mEdit apps/extension/src/background/storage-bridge.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/storage-bridge.ts
+@@ -185,15 +185,13 @@
+ if (!entry || !entry.id) continue
+ const storeName = mapEntryToStore(entry as Record<string, unknown>)
+ 
+ try {
+-  const entryToSave = {
++  const entryToSave: Record<string, unknown> = {
+     ...entry,
+     updatedAt: entry.updatedAt || new Date().toISOString(),
++    createdAt: entry.createdAt || new Date().toISOString(),
+   }
+-  if (!entryToSave.createdAt) {
+-    entryToSave.createdAt = new Date().toISOString()
+-  }
+   await putInIDB(storeName, entryToSave)
+ } catch (putErr) {
+   errors.push(`Failed to save ${storeName}.${entry.id}: ${putErr}`)
+ }
+
+[0m
+[0m$ [0mpnpm typecheck 2>&1
+$ tsc --noEmit
+[0m
+[0m$ [0mpnpm lint 2>&1
+$ echo 'no linter configured'
+no linter configured
+[0m
+[0m$ [0mpnpm lint 2>&1
+$ pnpm -r lint
+Scope: 11 of 12 workspace projects
+packages/ai lint$ echo 'no linter configured'
+packages/ai-tutor lint$ echo 'no linter configured'
+packages/exercises lint$ echo 'no linter configured'
+packages/storage lint$ echo 'no linter configured'
+packages/ai lint: no linter configured
+packages/ai-tutor lint: no linter configured
+packages/ai lint: Done
+packages/ai-tutor lint: Done
+packages/theme lint$ echo 'no linter configured'
+packages/exercises lint: no linter configured
+packages/ui lint$ echo 'no linter configured'
+packages/exercises lint: Done
+packages/storage lint: no linter configured
+packages/storage lint: Done
+packages/utils lint$ echo 'no linter configured'
+packages/theme lint: no linter configured
+packages/theme lint: Done
+packages/ui lint: no linter configured
+packages/ui lint: Done
+packages/utils lint: no linter configured
+packages/utils lint: Done
+apps/extension lint$ echo 'no linter configured'
+packages/content lint$ echo 'no linter configured'
+packages/learning-engine lint$ echo 'no linter configured'
+apps/extension lint: no linter configured
+apps/extension lint: Done
+packages/content lint: no linter configured
+packages/content lint: Done
+packages/learning-engine lint: no linter configured
+packages/learning-engine lint: Done
+apps/web lint$ eslint .
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+apps/web lint:   288:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/NotificationCenter.tsx
+apps/web lint:    66:6  warning  React Hook useEffect has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+apps/web lint:    81:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:    86:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:    91:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:    96:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:   101:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:   106:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/ReadingListeningTutor.tsx
+apps/web lint:    49:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   181:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   214:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   221:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   227:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   232:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   246:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   280:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   349:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   411:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   467:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   603:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   635:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   670:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   702:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   707:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   714:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/SpeakingPartner.tsx
+apps/web lint:    79:53  warning  Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+apps/web lint:   286:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   290:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   294:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   306:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   313:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   320:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   327:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   331:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   336:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   568:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   626:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   707:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   731:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   982:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   995:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/TeachingMode.tsx
+apps/web lint:    521:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    525:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    531:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    546:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    569:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    594:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    631:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    647:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    687:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    726:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    741:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   1005:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   1035:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   1066:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/WritingTutor.tsx
+apps/web lint:    87:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   103:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   111:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   119:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   123:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   134:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   140:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   182:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   200:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   204:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   208:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   212:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   216:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   220:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   226:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   392:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   402:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   454:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   774:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   835:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   869:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   950:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   969:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/ui/Toast.tsx
+apps/web lint:   19:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/context/SettingsContext.tsx
+apps/web lint:   33:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/context/ThemeContext.tsx
+apps/web lint:   3:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/AITutorChat.tsx
+apps/web lint:    15:10  warning  'getTimeBasedGreeting' is defined but never used        @typescript-eslint/no-unused-vars
+apps/web lint:    24:10  warning  'briefing' is assigned a value but never used           @typescript-eslint/no-unused-vars
+apps/web lint:   108:9   warning  'handleQuickAction' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/__tests__/aiTutorService.test.ts
+apps/web lint:    10:55   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:    11:56   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:    12:58   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   185:127  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   186:130  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   189:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   190:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/aiTutorService.ts
+apps/web lint:     3:10  warning  'loadRoadmap' is defined but never used                                      @typescript-eslint/no-unused-vars
+apps/web lint:     3:23  warning  'getTodayTask' is defined but never used                                     @typescript-eslint/no-unused-vars
+apps/web lint:     4:43  warning  'VocabReviewEntry' is defined but never used                                 @typescript-eslint/no-unused-vars
+apps/web lint:    59:10  warning  'getToday' is defined but never used                                         @typescript-eslint/no-unused-vars
+apps/web lint:    63:10  warning  'getExamCountdown' is defined but never used                                 @typescript-eslint/no-unused-vars
+apps/web lint:    73:10  warning  'computeStreak' is defined but never used                                    @typescript-eslint/no-unused-vars
+apps/web lint:   102:11  warning  'settings' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+apps/web lint:   143:66  warning  'dayOfWeek' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:   348:11  warning  'context' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+apps/web lint:   434:11  warning  'context' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+apps/web lint:   516:55  warning  'mistake' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/content/StudyContentPage.tsx
+apps/web lint:    38:10  warning  'generateId' is defined but never used         @typescript-eslint/no-unused-vars
+apps/web lint:   309:9   warning  'location' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint:   434:14  warning  'err' is defined but never used                @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/mistakes/MistakeNotebook.tsx
+apps/web lint:   31:7  warning  'SORT_OPTIONS' is assigned a value but only used as a type  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/onboarding/OnboardingForm.tsx
+apps/web lint:   232:38  warning  'onNext' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:   241:14  warning  'err' is defined but never used                                           @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/onboarding/onboardingService.ts
+apps/web lint:   60:9   warning  'needsVocab' is assigned a value but never used                      @typescript-eslint/no-unused-vars
+apps/web lint:   79:12  warning  'getSkillTasks' is defined but never used                            @typescript-eslint/no-unused-vars
+apps/web lint:   82:27  warning  'i' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/personalization/__tests__/personalizationService.test.ts
+apps/web lint:   170:127  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   171:130  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   174:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   175:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/publicApiIntegration/components/ApiKeySettings.tsx
+apps/web lint:   101:6   warning  React Hook useEffect has a missing dependency: 'keySources'. Either include it or remove the dependency array                   react-hooks/exhaustive-deps
+apps/web lint:   593:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   593:27  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   593:40  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   593:51  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+apps/web lint:   452:14  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/RoadmapPage.tsx
+apps/web lint:   13:3   warning  'saveRoadmap' is defined but never used    @typescript-eslint/no-unused-vars
+apps/web lint:   26:10  warning  'getSkillColor' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+apps/web lint:   9:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/roadmapService.ts
+apps/web lint:    75:38  warning  'targetBand' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:    83:45  warning  'targetBand' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:   192:62  warning  'objective' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+apps/web lint:   256:10  warning  'getTaskDescription' is defined but never used                                @typescript-eslint/no-unused-vars
+apps/web lint:   260:10  warning  'getTaskMinutes' is defined but never used                                    @typescript-eslint/no-unused-vars
+apps/web lint:   276:9   warning  'totalWeeks' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+apps/web lint:   282:9   warning  'doneTaskIds' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/speaking/SpeakingPractice.tsx
+apps/web lint:   203:12  warning  'toggleTimer' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/tasks/ieltsContent.ts
+apps/web lint:   1:15  warning  'TaskDetail' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/tasks/types.ts
+apps/web lint:   1:15  warning  'TaskEntry' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+apps/web lint:   208:33  warning  'count' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+apps/web lint:   32:7  error  Unnecessary catch clause  no-useless-catch
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyManager.tsx
+apps/web lint:    14:3   warning  'getAllTags' is defined but never used                 @typescript-eslint/no-unused-vars
+apps/web lint:   201:18  warning  'handleToggleTag' is defined but never used            @typescript-eslint/no-unused-vars
+apps/web lint:   772:10  warning  'selectedWords' is assigned a value but never used     @typescript-eslint/no-unused-vars
+apps/web lint:   772:25  warning  'setSelectedWords' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/vocabularyService.ts
+apps/web lint:   136:9  warning  'newWords' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/writing/WritingPromptsPage.tsx
+apps/web lint:   296:6  warning  React Hook useCallback has an unnecessary dependency: 'showToast'. Either exclude it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
+apps/web lint:     19:3    warning  'evaluateCheckingAnswer' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+apps/web lint:     20:3    warning  'evaluateExerciseAnswer' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+apps/web lint:     21:3    warning  'suggestNextTopics' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+apps/web lint:     24:3    warning  'ExerciseFeedbackCard' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+apps/web lint:     27:3    warning  'generateMistakeReviewAI' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+apps/web lint:     73:28   warning  'formatWritingFeedbackMessage' is defined but never used                                                              @typescript-eslint/no-unused-vars
+apps/web lint:     74:3    warning  'saveWritingFeedback' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+apps/web lint:     75:3    warning  'saveWritingMistakesToNotebook' is defined but never used                                                             @typescript-eslint/no-unused-vars
+apps/web lint:    212:10   warning  'getGentleCorrections' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+apps/web lint:    246:10   warning  'formatCorrectionsAsText' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+apps/web lint:    351:10   warning  'generateSocraticFollowUp' is defined but never used                                                                  @typescript-eslint/no-unused-vars
+apps/web lint:    402:62   warning  'topic' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+apps/web lint:    402:77   warning  'userAnswer' is defined but never used. Allowed unused args must match /^_/u                                          @typescript-eslint/no-unused-vars
+apps/web lint:    402:97   warning  'language' is defined but never used. Allowed unused args must match /^_/u                                            @typescript-eslint/no-unused-vars
+apps/web lint:    423:54   warning  'qType' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+apps/web lint:    439:61   warning  'topic' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+apps/web lint:    577:10   warning  'getDailyCheckInMessage' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+apps/web lint:    668:10   warning  'generateResponse' is defined but never used                                                                          @typescript-eslint/no-unused-vars
+apps/web lint:    742:10   warning  'friendCorrections' is assigned a value but never used                                                                @typescript-eslint/no-unused-vars
+apps/web lint:    789:10   warning  'suggestionsLoading' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+apps/web lint:   1534:6    warning  React Hook useCallback has a missing dependency: 'socraticHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:   1735:171  warning  Unexpected any. Specify a different type                                                                              @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/DailyPlan.tsx
+apps/web lint:   90:9  warning  The 'visibleDates' conditional could make the dependencies of useMemo Hook (at line 108) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'visibleDates' in its own useMemo() Hook  react-hooks/exhaustive-deps
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Mistakes.tsx
+apps/web lint:   27:7  warning  'SORT_OPTIONS' is assigned a value but only used as a type  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Vocabulary.tsx
+apps/web lint:   121:6  warning  React Hook useCallback has a missing dependency: 'showToast'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/landing/__tests__/CreatorSection.test.tsx
+apps/web lint:   3:13  warning  'config' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/ExerciseGenerator.test.ts
+apps/web lint:   113:11  warning  'exercise' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/ExerciseGenerator.ts
+apps/web lint:   107:10  warning  'inferDifficultyFromUser' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/Database.test.ts
+apps/web lint:   321:11  warning  'db' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/tests/onboarding.test.ts
+apps/web lint:    26:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:    33:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   183:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   197:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   204:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint: ✖ 176 problems (1 error, 175 warnings)
+apps/web lint: Failed
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/web@0.1.0 lint: `eslint .`
+Exit status 1
+[ELIFECYCLE] Command failed with exit code 1.
+[0m
+[0m→ [0mRead apps/extension/src/background/index.ts
+[0m→ [0mRead apps/extension/src/background/messaging.ts
+[0m→ [0mRead apps/extension/src/background/storage-bridge.ts
+[0m
+[0m← [0mEdit apps/extension/src/background/messaging.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+@@ -1,7 +1,6 @@
+ import type { SaveCategory } from '../types'
+ import {
+-  initializeOnInstall,
+   updateDailyProgress,
+   setVideoPageInfo,
+   setPendingVideoInfo,
+   addSavedItem,
+
+[0m
+[0m← [0mEdit apps/extension/src/background/messaging.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+@@ -193,12 +193,5 @@
+ 
+   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+     return handleMessage(message, sender, sendResponse)
+   })
+-
+-  chrome.runtime.onInstalled.addListener(async (details) => {
+-    if (details.reason === 'install') {
+-      await initializeOnInstall()
+-      await updateDailyProgress({ streak: 1 })
+-    }
+-  })
+ }
+
+[0m
+[0m$ [0mpnpm typecheck 2>&1
+$ tsc --noEmit
+[0m
+[0m$ [0mgit diff --stat 2>&1
+.flowtask/events.jsonl                             |   3 +
+ .flowtask/run-index.json                           |   2 +-
+ .flowtask/state.json                               |   2 +-
+ .flowtask/task-index.json                          |   2 +-
+ apps/extension/src/background/index.ts             |  75 +---------
+ .../content-script/highlighter/highlightEngine.ts  | 160 +++++++++------------
+ .../content-script/highlighter/highlightMatcher.ts |   8 ++
+ .../content-script/highlighter/highlightStyles.ts  |   2 +-
+ .../content-script/highlighter/highlightTooltip.ts | 155 ++++++++++----------
+ apps/web/src/features/roadmap/roadmapService.ts    |  12 ++
+ apps/web/src/services/storage/Database.ts          |  12 ++
+ packages/storage/src/__tests__/migrations.test.ts  |  23 ++-
+ packages/storage/src/db.ts                         |  12 ++
+ packages/storage/src/index.ts                      |   5 +
+ packages/storage/src/migrations.ts                 |  39 ++++-
+ .../storage/src/repositories/ContentRepository.ts  |  48 ++++++-
+ packages/storage/src/repositories/index.ts         |   5 +
+ packages/storage/src/schema.ts                     |  30 ++++
+ 18 files changed, 347 insertions(+), 248 deletions(-)
+[0m
+[0m$ [0mgit status --short apps/extension/src/background/ 2>&1
+M apps/extension/src/background/index.ts
+?? apps/extension/src/background/messaging.ts
+?? apps/extension/src/background/storage-bridge.ts
+[0m
+[0m# [0mTodos
+[✓] Create apps/extension/src/background/messaging.ts with typed message routing and proper async handling
+[✓] Create apps/extension/src/background/storage-bridge.ts with reliable data sync between chrome.storage and IndexedDB
+[✓] Refactor background/index.ts to delegate to messaging.ts and remove inline handler logic
+[✓] Run lint and typecheck to verify correctness
+[0m
+[2026-07-04T05:11:59.061Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-04T05:11:59.064Z] [INFO] Task completed successfully

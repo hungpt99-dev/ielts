@@ -1,0 +1,672 @@
+{
+  "title": "Automate and streamline text processing features",
+  "summary": "Enhance features for explaining, simplifying, vocabulary collection, text saving, article saving, video saving, and review starting to reduce manual user effort",
+  "tasks": [
+    {
+      "title": "Analyze current explain and simplify text feature implementations in packages/ai",
+      "description": "Review the explain.ts, schemas/explain.ts, and services/explain.ts files in packages/ai to understand how text explanation, simplification, and vocabulary extraction are currently implemented using AI prompts and schemas. Document the flow from input text to AI response parsing and caching.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear understanding of current explain and simplify feature architecture",
+        "Documented flow of input text through AI prompt generation, AI call, response parsing, and caching"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A documented analysis of the current explain and simplify text features in the codebase",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/feature-analysis/explain-simplify-feature.md",
+          "description": "Documentation of current explain and simplify text feature implementation",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "read",
+      "inputContext": "Project source code in packages/ai related to explain and simplify features",
+      "targetFiles": [
+        "packages/ai/src/prompts/explain.ts",
+        "packages/ai/src/schemas/explain.ts",
+        "packages/ai/src/services/explain.ts"
+      ],
+      "targetArtifacts": [
+        "docs/feature-analysis/explain-simplify-feature.md"
+      ],
+      "evidence": [
+        "docs/feature-analysis/explain-simplify-feature.md file exists",
+        "pnpm test passes"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundational understanding for automating text explanation and simplification"
+    },
+    {
+      "title": "Analyze current vocabulary collection and enrichment feature",
+      "description": "Examine the code handling vocabulary collection and AI enrichment, focusing on how new words are saved with meanings, examples, synonyms, and collocations. Identify integration points with AI explain services and storage mechanisms.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current explain and simplify text feature implementations in packages/ai"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Detailed understanding of vocabulary collection and enrichment flow",
+        "Identification of AI enrichment usage and storage methods"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Documented analysis of vocabulary collection and enrichment feature",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/feature-analysis/vocabulary-collection.md",
+          "description": "Documentation of vocabulary collection and AI enrichment implementation",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "read",
+      "inputContext": "Codebase related to vocabulary collection and AI enrichment",
+      "targetFiles": [
+        "packages/ai/src/prompts/explain.ts",
+        "packages/ai/src/schemas/explain.ts",
+        "packages/ai/src/services/explain.ts"
+      ],
+      "targetArtifacts": [
+        "docs/feature-analysis/vocabulary-collection.md"
+      ],
+      "evidence": [
+        "docs/feature-analysis/vocabulary-collection.md file exists",
+        "pnpm test passes"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides insight into automating vocabulary collection and enrichment"
+    },
+    {
+      "title": "Analyze current selected text saving and categorization feature",
+      "description": "Investigate how selected text from the web is saved and categorized in the system. Identify UI components, storage mechanisms, and any AI assistance used for categorization or enrichment.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current vocabulary collection and enrichment feature"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear understanding of selected text saving and categorization flow",
+        "Documentation of involved components and data flow"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Documented analysis of selected text saving and categorization feature",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/feature-analysis/selected-text-saving.md",
+          "description": "Documentation of selected text saving and categorization implementation",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "read",
+      "inputContext": "Codebase related to selected text saving and categorization",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/feature-analysis/selected-text-saving.md"
+      ],
+      "evidence": [
+        "docs/feature-analysis/selected-text-saving.md file exists",
+        "pnpm test passes"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundation for automating selected text saving and categorization"
+    },
+    {
+      "title": "Analyze current article saving as reading material feature",
+      "description": "Review how web pages are saved as reading materials. Identify data extraction, storage format, and UI components involved. Assess any AI assistance for summarization or metadata extraction.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current selected text saving and categorization feature"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Comprehensive understanding of article saving feature",
+        "Documented data flow and components"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Documented analysis of article saving as reading material feature",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/feature-analysis/article-saving.md",
+          "description": "Documentation of article saving implementation",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "read",
+      "inputContext": "Codebase related to article saving and reading materials",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/feature-analysis/article-saving.md"
+      ],
+      "evidence": [
+        "docs/feature-analysis/article-saving.md file exists",
+        "pnpm test passes"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides basis for automating article saving and reading material management"
+    },
+    {
+      "title": "Analyze current video helper feature for saving YouTube and video content",
+      "description": "Examine how YouTube and other video content is saved or linked in the system. Identify UI components, storage, and any AI processing for metadata or transcript extraction.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current article saving as reading material feature"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Detailed understanding of video helper feature",
+        "Documentation of video content saving flow and components"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Documented analysis of video helper feature",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/feature-analysis/video-helper.md",
+          "description": "Documentation of video helper implementation",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "read",
+      "inputContext": "Codebase related to video helper and video content saving",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/feature-analysis/video-helper.md"
+      ],
+      "evidence": [
+        "docs/feature-analysis/video-helper.md file exists",
+        "pnpm test passes"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundation for automating video content saving and management"
+    },
+    {
+      "title": "Analyze current review starting and pending review management",
+      "description": "Investigate how the system tracks pending reviews and initiates review sessions. Identify UI triggers, data flow, and any automation or AI assistance involved.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current video helper feature for saving YouTube and video content"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear understanding of review starting and pending review management",
+        "Documentation of review workflow and automation points"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Documented analysis of review starting and pending review management",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/feature-analysis/review-management.md",
+          "description": "Documentation of review starting and pending review management",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "read",
+      "inputContext": "Codebase related to review starting and pending review tracking",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/feature-analysis/review-management.md"
+      ],
+      "evidence": [
+        "docs/feature-analysis/review-management.md file exists",
+        "pnpm test passes"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides insight for automating review session initiation and management"
+    },
+    {
+      "title": "Design automation enhancements for explain and simplify text features",
+      "description": "Based on analysis, design improvements to automate explain and simplify text features to reduce manual user input. Specify enhancements such as automatic text detection, background processing, and UI updates to show results without manual triggers.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current explain and simplify text feature implementations in packages/ai"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Detailed design document specifying automation improvements for explain and simplify features",
+        "Clear description of UI and backend changes needed"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Design document outlining automation enhancements for explain and simplify text features",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/automation-explain-simplify.md",
+          "description": "Design document for automation of explain and simplify text features",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Analysis documents of explain and simplify features",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/design/automation-explain-simplify.md"
+      ],
+      "evidence": [
+        "docs/design/automation-explain-simplify.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/automation-explain-simplify.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides blueprint for automating explain and simplify text features"
+    },
+    {
+      "title": "Design automation enhancements for vocabulary collection and enrichment",
+      "description": "Create a design plan to automate vocabulary collection and AI enrichment, including automatic detection of new words, background enrichment calls, and seamless saving without manual user actions.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current vocabulary collection and enrichment feature"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Comprehensive design document for automating vocabulary collection and enrichment",
+        "Specification of UI and backend changes"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Design document detailing automation improvements for vocabulary collection",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/automation-vocabulary-collection.md",
+          "description": "Design document for automating vocabulary collection and enrichment",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Vocabulary collection analysis document",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/design/automation-vocabulary-collection.md"
+      ],
+      "evidence": [
+        "docs/design/automation-vocabulary-collection.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/automation-vocabulary-collection.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Blueprint for automating vocabulary collection and enrichment"
+    },
+    {
+      "title": "Design automation enhancements for selected text saving and categorization",
+      "description": "Develop a design plan to automate saving and categorizing selected text from the web, including automatic category suggestions using AI, background saving, and minimal user interaction.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current selected text saving and categorization feature"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Detailed design document for automating selected text saving and categorization",
+        "Clear UI and backend change specifications"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Design document for automating selected text saving and categorization",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/automation-selected-text-saving.md",
+          "description": "Design document for automating selected text saving and categorization",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Selected text saving analysis document",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/design/automation-selected-text-saving.md"
+      ],
+      "evidence": [
+        "docs/design/automation-selected-text-saving.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/automation-selected-text-saving.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Blueprint for automating selected text saving and categorization"
+    },
+    {
+      "title": "Design automation enhancements for article saving as reading materials",
+      "description": "Create a design plan to automate article saving, including automatic page content extraction, metadata enrichment, background saving, and UI updates to reduce manual effort.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current article saving as reading material feature"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Comprehensive design document for automating article saving",
+        "Specification of UI and backend changes"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Design document for automating article saving as reading materials",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/automation-article-saving.md",
+          "description": "Design document for automating article saving",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Article saving analysis document",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/design/automation-article-saving.md"
+      ],
+      "evidence": [
+        "docs/design/automation-article-saving.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/automation-article-saving.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Blueprint for automating article saving and reading material management"
+    },
+    {
+      "title": "Design automation enhancements for video helper feature",
+      "description": "Design improvements to automate saving and managing YouTube and video content, including automatic metadata extraction, transcript generation, and background saving with minimal user input.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current video helper feature for saving YouTube and video content"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Detailed design document for automating video helper feature",
+        "Clear UI and backend change specifications"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Design document for automating video helper feature",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/automation-video-helper.md",
+          "description": "Design document for automating video helper feature",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Video helper analysis document",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/design/automation-video-helper.md"
+      ],
+      "evidence": [
+        "docs/design/automation-video-helper.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/automation-video-helper.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Blueprint for automating video content saving and management"
+    },
+    {
+      "title": "Design automation enhancements for review starting and pending review management",
+      "description": "Develop a design plan to automate review session initiation and pending review tracking, including proactive notifications, automatic review scheduling, and UI improvements to reduce manual user effort.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze current review starting and pending review management"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Comprehensive design document for automating review management",
+        "Specification of UI and backend changes"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Design document for automating review starting and pending review management",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/automation-review-management.md",
+          "description": "Design document for automating review management",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Review management analysis document",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/design/automation-review-management.md"
+      ],
+      "evidence": [
+        "docs/design/automation-review-management.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/automation-review-management.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Blueprint for automating review session initiation and management"
+    },
+    {
+      "title": "Consolidate all automation design documents into a single roadmap",
+      "description": "Combine all individual automation design documents into a comprehensive roadmap document that prioritizes features, outlines implementation phases, and identifies dependencies and risks.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design automation enhancements for explain and simplify text features",
+        "Design automation enhancements for vocabulary collection and enrichment",
+        "Design automation enhancements for selected text saving and categorization",
+        "Design automation enhancements for article saving as reading materials",
+        "Design automation enhancements for video helper feature",
+        "Design automation enhancements for review starting and pending review management"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "A single roadmap document consolidating all automation designs",
+        "Clear prioritization and implementation plan"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A consolidated automation roadmap document",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/automation-roadmap.md",
+          "description": "Consolidated automation roadmap for all text processing features",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "All individual automation design documents",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/design/automation-roadmap.md"
+      ],
+      "evidence": [
+        "docs/design/automation-roadmap.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/automation-roadmap.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a prioritized plan for implementing automation features"
+    }
+  ]
+}

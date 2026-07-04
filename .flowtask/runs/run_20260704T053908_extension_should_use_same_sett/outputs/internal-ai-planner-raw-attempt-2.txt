@@ -1,0 +1,439 @@
+{
+  "title": "Sync Extension Settings with Website Settings",
+  "summary": "Modify the browser extension to use the same settings as the website for consistent user experience",
+  "tasks": [
+    {
+      "title": "Analyze extension settings loading and saving in apps/extension/src/background/settingsStorage.ts",
+      "description": "Review the extension's settings loading and saving logic in apps/extension/src/background/settingsStorage.ts. Identify how settings are loaded from chrome.storage, how defaults are applied, and how settings are saved. Document key functions such as loadSettings, saveSettings, and the schema used.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear understanding of extension settings loading and saving",
+        "List of settings keys and their types",
+        "Identification of storage keys used"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-settings-analysis.md",
+          "description": "Analysis notes on extension settings loading and saving",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "read",
+      "inputContext": "Project source code in apps/extension/src/background/settingsStorage.ts",
+      "targetFiles": [
+        "apps/extension/src/background/settingsStorage.ts"
+      ],
+      "targetArtifacts": [
+        "extension settings analysis notes"
+      ],
+      "evidence": [
+        "File apps/extension/src/background/settingsStorage.ts exists",
+        "Analysis document created"
+      ],
+      "verificationCommand": "ls apps/extension/src/background/settingsStorage.ts && test -f docs/extension-settings-analysis.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundation for syncing extension settings with website"
+    },
+    {
+      "title": "Analyze website settings loading and saving in apps/web/src/services/SettingsStorage.ts",
+      "description": "Review the website's settings loading and saving logic in apps/web/src/services/SettingsStorage.ts or equivalent. Identify how website settings are stored, loaded, and what keys and defaults are used. Document key functions and storage mechanisms.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze extension settings loading and saving in apps/extension/src/background/settingsStorage.ts"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear understanding of website settings loading and saving",
+        "List of website settings keys and types",
+        "Identification of storage keys used"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/website-settings-analysis.md",
+          "description": "Analysis notes on website settings loading and saving",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "read",
+      "inputContext": "Project source code in apps/web/src/services/SettingsStorage.ts",
+      "targetFiles": [
+        "apps/web/src/services/SettingsStorage.ts"
+      ],
+      "targetArtifacts": [
+        "website settings analysis notes"
+      ],
+      "evidence": [
+        "File apps/web/src/services/SettingsStorage.ts exists",
+        "Analysis document created"
+      ],
+      "verificationCommand": "ls apps/web/src/services/SettingsStorage.ts && test -f docs/website-settings-analysis.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundation for syncing website settings with extension"
+    },
+    {
+      "title": "Design synchronization strategy for extension and website settings",
+      "description": "Based on the analyses of extension and website settings, design a synchronization strategy to unify settings usage. Decide whether to share storage keys, use a messaging bridge, or unify storage access. Document the approach, including fallback and conflict resolution.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze extension settings loading and saving in apps/extension/src/background/settingsStorage.ts",
+        "Analyze website settings loading and saving in apps/web/src/services/SettingsStorage.ts"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Clear documented synchronization strategy",
+        "Mapping of settings keys between extension and website",
+        "Plan for implementation steps"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/settings-sync-strategy.md",
+          "description": "Documented synchronization strategy for extension and website settings",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "create",
+      "inputContext": "Extension and website settings analysis documents",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "settings synchronization strategy document"
+      ],
+      "evidence": [
+        "Strategy document created"
+      ],
+      "verificationCommand": "test -f docs/settings-sync-strategy.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides implementation blueprint for syncing settings"
+    },
+    {
+      "title": "Implement unified settings loading in extension background script",
+      "description": "Modify apps/extension/src/background/settingsStorage.ts to load settings from the unified source as per the synchronization strategy. Adjust loadSettings and saveSettings functions to reflect the shared storage or bridge communication with the website. Ensure defaults and schema validation remain intact.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design synchronization strategy for extension and website settings"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Extension loads settings from unified source",
+        "Settings schema validation preserved",
+        "No regressions in extension settings usage"
+      ],
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/settingsStorage.ts",
+          "description": "Unified settings loading and saving logic",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Settings synchronization strategy document",
+      "targetFiles": [
+        "apps/extension/src/background/settingsStorage.ts"
+      ],
+      "targetArtifacts": [
+        "Modified extension settings loading code"
+      ],
+      "evidence": [
+        "Code changes in settingsStorage.ts",
+        "Passes lint and type checks"
+      ],
+      "verificationCommand": "pnpm lint && pnpm typecheck",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Extension uses unified settings source"
+    },
+    {
+      "title": "Implement unified settings loading in website settings service",
+      "description": "Modify apps/web/src/services/SettingsStorage.ts to load and save settings from the unified source as per the synchronization strategy. Ensure compatibility with extension settings and maintain existing website functionality.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design synchronization strategy for extension and website settings"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Website loads settings from unified source",
+        "Settings schema validation preserved",
+        "No regressions in website settings usage"
+      ],
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/services/SettingsStorage.ts",
+          "description": "Unified settings loading and saving logic",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Settings synchronization strategy document",
+      "targetFiles": [
+        "apps/web/src/services/SettingsStorage.ts"
+      ],
+      "targetArtifacts": [
+        "Modified website settings loading code"
+      ],
+      "evidence": [
+        "Code changes in SettingsStorage.ts",
+        "Passes lint and type checks"
+      ],
+      "verificationCommand": "pnpm lint && pnpm typecheck",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Website uses unified settings source"
+    },
+    {
+      "title": "Implement communication bridge for settings synchronization between extension and website",
+      "description": "If the synchronization strategy requires runtime communication, implement a messaging bridge between the extension content/background scripts and the website scripts to synchronize settings changes. Use window.postMessage or chrome.runtime messaging as appropriate. Ensure bidirectional sync and conflict resolution.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement unified settings loading in extension background script",
+        "Implement unified settings loading in website settings service"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Settings changes propagate between extension and website",
+        "No infinite loops or race conditions",
+        "Robust error handling"
+      ],
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/storage-bridge.ts",
+          "description": "Add settings sync messaging logic",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/content/bridge-client.ts",
+          "description": "Add settings sync messaging logic",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/services/SettingsStorage.ts",
+          "description": "Add messaging listener for settings sync",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Unified settings loading implementation",
+      "targetFiles": [
+        "apps/extension/src/background/storage-bridge.ts",
+        "apps/extension/src/content/bridge-client.ts",
+        "apps/web/src/services/SettingsStorage.ts"
+      ],
+      "targetArtifacts": [
+        "Messaging bridge code for settings sync"
+      ],
+      "evidence": [
+        "Code changes in messaging bridge and settings service",
+        "Passes lint and type checks"
+      ],
+      "verificationCommand": "pnpm lint && pnpm typecheck",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 90000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables runtime settings synchronization"
+    },
+    {
+      "title": "Add unit tests for extension settings loading and saving with unified source",
+      "description": "Add or update unit tests in apps/extension/src/background/__tests__/settingsStorage.test.ts (or equivalent) to cover the new unified settings loading and saving logic. Test default values, loading from storage, saving, and error cases.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement unified settings loading in extension background script"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Unit tests cover all new or changed code paths",
+        "Tests pass without errors"
+      ],
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/__tests__/settingsStorage.test.ts",
+          "description": "Add tests for unified settings loading and saving",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "modify",
+      "inputContext": "Unified settings loading implementation",
+      "targetFiles": [
+        "apps/extension/src/background/__tests__/settingsStorage.test.ts"
+      ],
+      "targetArtifacts": [
+        "Unit tests for extension settings"
+      ],
+      "evidence": [
+        "Tests added or updated",
+        "Test suite passes"
+      ],
+      "verificationCommand": "pnpm test --filter settingsStorage.test.ts",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures extension settings code correctness"
+    },
+    {
+      "title": "Add unit tests for website settings loading and saving with unified source",
+      "description": "Add or update unit tests in apps/web/src/services/__tests__/SettingsStorage.test.ts (or equivalent) to cover the new unified settings loading and saving logic. Test default values, loading from storage, saving, and error cases.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement unified settings loading in website settings service"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Unit tests cover all new or changed code paths",
+        "Tests pass without errors"
+      ],
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/services/__tests__/SettingsStorage.test.ts",
+          "description": "Add tests for unified settings loading and saving",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "modify",
+      "inputContext": "Unified settings loading implementation",
+      "targetFiles": [
+        "apps/web/src/services/__tests__/SettingsStorage.test.ts"
+      ],
+      "targetArtifacts": [
+        "Unit tests for website settings"
+      ],
+      "evidence": [
+        "Tests added or updated",
+        "Test suite passes"
+      ],
+      "verificationCommand": "pnpm test --filter SettingsStorage.test.ts",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 60000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures website settings code correctness"
+    },
+    {
+      "title": "Perform manual testing of extension and website settings synchronization",
+      "description": "Manually test the extension and website to verify that settings changes in one are reflected in the other. Test themeMode, AI provider, toolbar visibility, and other key settings. Verify persistence across reloads and browser restarts.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement communication bridge for settings synchronization between extension and website",
+        "Add unit tests for extension settings loading and saving with unified source",
+        "Add unit tests for website settings loading and saving with unified source"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Settings changes in extension reflect in website immediately or on reload",
+        "Settings changes in website reflect in extension immediately or on reload",
+        "No errors or warnings in console",
+        "Settings persist after browser restart"
+      ],
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/manual-testing-settings-sync.md",
+          "description": "Manual testing report for settings synchronization",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "execute",
+      "inputContext": "Completed implementation and unit tests",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "Manual testing report"
+      ],
+      "evidence": [
+        "Manual test steps documented",
+        "Screenshots or logs if applicable"
+      ],
+      "verificationCommand": "test -f docs/manual-testing-settings-sync.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 0,
+        "retryDelayMs": 0,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 90000,
+        "action": "skip"
+      },
+      "finalOutputContribution": "Verifies end-to-end settings synchronization"
+    }
+  ]
+}

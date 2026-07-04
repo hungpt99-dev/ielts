@@ -1,19 +1,13 @@
 import type { SaveCategory } from '../types'
-import {
-  initializeOnInstall,
-  updateDailyProgress,
-  setVideoPageInfo,
-  setPendingVideoInfo,
-  addSavedItem,
-} from '../services/storage'
+import { updateDailyProgress } from '../services/storage'
+import { initMessaging } from './messaging'
+import { initializeStorageBridge } from './storage-bridge'
 
 interface AiExplainItem {
   id: string
   title: string
-  action: AiExplainType
+  action: string
 }
-
-type AiExplainType = 'simple' | 'vietnamese' | 'ielts-vocab' | 'grammar' | 'rewrite' | 'example-sentences' | 'quiz'
 
 const AI_EXPLAIN_ITEMS: AiExplainItem[] = [
   { id: 'ai-explain-simple', title: 'Explain in Simple English', action: 'simple' },
@@ -83,6 +77,7 @@ function createContextMenus(): void {
 
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === 'install') {
+    const { initializeOnInstall } = await import('../services/storage')
     await initializeOnInstall()
     await updateDailyProgress({ streak: 1 })
   }
@@ -102,6 +97,8 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         pageTitle: tab.title,
         pageUrl: tab.url,
       },
+    }).catch(() => {
+      // Content script not available on this tab — silently ignore
     })
     return
   }
@@ -114,67 +111,13 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         text: info.selectionText,
         action: aiItem.action,
       },
+    }).catch(() => {
+      // Content script not available on this tab — silently ignore
     })
   }
 })
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  switch (message.type) {
-    case 'GET_DAILY_PROGRESS':
-      getDailyProgressHandler(sendResponse)
-      return true
-
-    case 'UPDATE_PROGRESS':
-      updateDailyProgress(message.payload)
-      break
-
-    case 'OPEN_OPTIONS':
-      chrome.runtime.openOptionsPage()
-      break
-
-    case 'VIDEO_PAGE_DETECTED':
-      if (message.payload?.isVideoPage) {
-        setVideoPageInfo(message.payload)
-      }
-      break
-
-    case 'VIDEO_HELPER_OPEN':
-      setPendingVideoInfo(message.payload)
-      break
-
-    case 'MINI_TUTOR_SAVE_RESULT':
-      addSavedItem(message.payload)
-      sendResponse({ success: true })
-      return true
-
-    case 'MINI_TUTOR_OPEN_PAGE': {
-      const { action, text } = message.payload as { action: string; text: string }
-      chrome.tabs.query({ active: true, currentWindow: true }, ([tab]) => {
-        if (tab?.id) {
-          chrome.tabs.sendMessage(tab.id, {
-            type: 'MINI_TUTOR_TRIGGER',
-            payload: { action, text },
-          })
-        }
-      })
-      sendResponse({ success: true })
-      return true
-    }
-  }
-})
-
-function getDailyProgressHandler(sendResponse: (response: unknown) => void): void {
-  chrome.storage.local.get(['dailyProgress'], (result) => {
-    sendResponse(
-      result.dailyProgress || {
-        wordsAdded: 0,
-        notesAdded: 0,
-        articlesSaved: 0,
-        reviewDue: 0,
-        streak: 0,
-      },
-    )
-  })
-}
+initMessaging()
+initializeStorageBridge()
 
 export {}

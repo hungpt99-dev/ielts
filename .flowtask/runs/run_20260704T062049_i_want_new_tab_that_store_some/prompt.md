@@ -1,0 +1,1 @@
+i want new tab that store something such as link, ... that user save for study

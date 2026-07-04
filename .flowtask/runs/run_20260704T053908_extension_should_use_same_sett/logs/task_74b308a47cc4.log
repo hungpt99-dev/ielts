@@ -1,0 +1,514 @@
+[2026-07-04T05:55:27.545Z] [INFO] Task started: Add unit tests for extension settings loading and saving with unified source
+[2026-07-04T05:55:27.548Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/extension/src/background/__tests__/settingsStorage.test.ts","description":"Add tests for unified settings loading and saving","validationMethod":"file_diff"}]
+[2026-07-04T05:55:28.085Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-04T05:55:28.085Z] [INFO] [stderr] [0m
+[2026-07-04T05:55:28.085Z] [INFO] [stderr] [0m
+[2026-07-04T05:55:32.565Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"extension settingsStorage background settings","maxFiles":15}
+[2026-07-04T05:55:32.706Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/background/**/__tests__/**"[90m 0 matches[0m
+[2026-07-04T05:55:35.007Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/background/**/*.test.*"[90m 0 matches[0m
+[2026-07-04T05:55:35.154Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/**/__tests__/**"[90m 7 matches[0m
+[2026-07-04T05:55:35.350Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/**/*.test.*"[90m 7 matches[0m
+[2026-07-04T05:55:37.789Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/settingsStorage.ts
+[2026-07-04T05:55:38.076Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/__tests__/backgroundMessaging.test.ts
+[2026-07-04T05:55:40.720Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/vitest*"[90m 1 match[0m
+[2026-07-04T05:55:40.872Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/package.json"[90m 1 match[0m
+[2026-07-04T05:55:43.111Z] [INFO] [stderr] [0m→ [0mRead apps/extension/vitest.config.ts
+[2026-07-04T05:55:43.387Z] [INFO] [stderr] [0m→ [0mRead apps/extension/package.json
+[2026-07-04T05:55:49.600Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:55:49.600Z] [INFO] [stderr] [•] Create test file at apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:55:49.600Z] [INFO] [stderr] [✓] Study existing test patterns (backgroundMessaging.test.ts)
+[2026-07-04T05:55:49.600Z] [INFO] [stderr] [0m
+[2026-07-04T05:55:49.600Z] [INFO] [stderr] [ ] Run tests to verify they pass
+[2026-07-04T05:55:49.600Z] [INFO] [stderr] [✓] Read the full settingsStorage.ts implementation
+[2026-07-04T05:55:49.600Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:09.676Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T05:56:09.676Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:09.676Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:09.796Z] [INFO] [stdout] Now I'll create the test file covering all exported functions from `settingsStorage.ts`.
+[2026-07-04T05:56:12.275Z] [INFO] [stderr] [✓] Study existing test patterns (backgroundMessaging.test.ts)
+[2026-07-04T05:56:12.275Z] [INFO] [stderr] [✓] Read the full settingsStorage.ts implementation
+[2026-07-04T05:56:12.275Z] [INFO] [stderr] [✓] Create test file at apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:12.275Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:56:12.275Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:12.275Z] [INFO] [stderr] [•] Run tests to verify they pass
+[2026-07-04T05:56:14.307Z] [INFO] [stderr] [0m$ [0mpnpm test -- --reporter verbose 2>&1 | head -200
+[2026-07-04T05:56:14.307Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.307Z] [INFO] [stderr] $ vitest run --reporter verbose -- --reporter verbose
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > shows toast notification when SAVE_SELECTION message is received 2ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > deduplicates case-insensitive duplicates 1ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > sorts by length descending 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > responds to GET_PAGE_INFO with page title, url, and selected text 1ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches phrases exactly 0ms
+[2026-07-04T05:56:14.307Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > removes empty strings 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > handles SAVE_SELECTION_FULL message with chrome.storage.local 3ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches with surrounding punctuation 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches single word case-insensitively 1ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > prefers longer phrases over shorter words 1ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches whole words only 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles regex special characters in words 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches multiple occurrences of the same word 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > highlights both when they do not overlap 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > does not highlight inside other words 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty text 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty word list 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles Unicode characters 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > creates from defaults when nothing stored 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns stored progress 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by default amount 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns default progress when nothing stored 2ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > returns empty array when nothing stored 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setVideoPageInfo stores and getVideoPageInfo retrieves 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > adds and retrieves saved items 1ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > returns empty array for empty input 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > getVideoPageInfo returns null when not set 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > returns null before install 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setPendingVideoInfo stores and getPendingVideoInfo retrieves 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by custom amount 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > starts from zero when no stored progress 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > clearAllExtensionData > clears all stored data 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > returns null when no status stored 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > is a no-op when no sync status exists 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > removes pending items and updates sync status 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] [messaging] Unknown message type: TEST_ACTION
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > sets progress and install timestamp 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] [messaging] Unknown message type: UNKNOWN
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly 1ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling 4ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow 1ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] [messaging] Handler error for FAIL: Error: something went wrong
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > merges patch with existing progress 0ms
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:153:20
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:149:13
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]     at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]     at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]     at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]     at new Promise (<anonymous>)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value 14ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.308Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks 29ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > tracks active state 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside script tags 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes 3ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights matching text in body 31ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setWordIds > stores and replaces word IDs 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight when active is false 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > defaults to inactive before first set 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight with empty word list 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight hidden elements 7ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple different words 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple matches of the same word 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores full word data including example and note 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside style tags 2ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles root with no text nodes 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes highlight spans and restores text 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles text with no matching words gracefully 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root is not an Element 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside already highlighted elements 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores word data in dataset 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > is a no-op when no highlights exist 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element has no data 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > removes all highlights from document 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes multiple highlight spans and restores text order 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op on empty body 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root has no highlights 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler 2ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is invalid JSON 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles non-object message 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles null/undefined message 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is empty string 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler returning data 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] [messaging] Sync handler error for FAIL: Error: sync error
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that resolves 51ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:171:20
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > registers and invokes a handler 3ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:167:13
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 51ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 1ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 51ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at new Promise (<anonymous>)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 0ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 52ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 51ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   Plugin: vite:esbuild
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts:176:37: ERROR: Expected "}" but found "-"
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 51ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  FAIL  src/background/__tests__/settingsStorage.test.ts [ src/background/__tests__/settingsStorage.test.ts ]
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   File: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts:176:37
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] Error: Transform failed with 1 error:
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   175|      expect(localStore.set).toHaveBeenCalledWith(
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   174|  
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   176|        expect.objectContaining({ ielts-settings-backup: expect.any(Object) }),
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   177|        expect.any(Function),
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   Expected "}" but found "-"
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]      |                                       ^
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   178|      )
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]   
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ❯ handleIncomingPacket ../../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:658:12
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ❯ failureErrorWithLog ../../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:1467:15
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ❯ ../../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:736:50
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ❯ responseCallbacks.<computed> ../../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:603:9
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ❯ Socket.readFromStdout ../../node_modules/.pnpm/esbuild@0.25.12/node_modules/esbuild/lib/main.js:581:7
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]       Tests  86 passed (86)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] 
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns the word from element data 2ms
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]    Duration  975ms (transform 140ms, setup 0ms, collect 328ms, tests 449ms, environment 3.44s, prepare 455ms)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]  Test Files  1 failed | 7 passed (8)
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]    Start at  12:56:13
+[2026-07-04T05:56:14.309Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+[2026-07-04T05:56:14.309Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] @@ -172,9 +172,9 @@
+[2026-07-04T05:56:17.750Z] [INFO] [stderr]  it('saves backup to local storage', async () => {
+[2026-07-04T05:56:17.750Z] [INFO] [stderr]    await saveSettings(DEFAULT_SETTINGS)
+[2026-07-04T05:56:17.750Z] [INFO] [stderr]  
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] -    expect.objectContaining({ ielts-settings-backup: expect.any(Object) }),
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] +      expect.objectContaining({ 'ielts-settings-backup': expect.any(Object) }),
+[2026-07-04T05:56:17.750Z] [INFO] [stderr]      expect.any(Function),
+[2026-07-04T05:56:17.750Z] [INFO] [stderr]  })
+[2026-07-04T05:56:17.750Z] [INFO] [stderr]    )
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:17.750Z] [INFO] [stderr]    expect(localStore.set).toHaveBeenCalledWith(
+[2026-07-04T05:56:17.750Z] [INFO] [stderr]  
+[2026-07-04T05:56:17.750Z] [INFO] [stderr] 
+[2026-07-04T05:56:17.833Z] [INFO] [stdout] The hyphen in `ielts-settings-backup` needs to be quoted. Let me fix that.
+[2026-07-04T05:56:21.844Z] [INFO] [stderr] [0m$ [0mpnpm test -- --reporter verbose 2>&1 | grep -E '(FAIL|PASS|✓|×|settingsStorage)' -A 2
+[2026-07-04T05:56:21.844Z] [INFO] [stderr] ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > shows toast notification when SAVE_SELECTION message is received 4ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by default amount 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > merges patch with existing progress 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns default progress when nothing stored 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > responds to GET_PAGE_INFO with page title, url, and selected text 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > handles SAVE_SELECTION_FULL message with chrome.storage.local 2ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by custom amount 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > adds and retrieves saved items 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > creates from defaults when nothing stored 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > starts from zero when no stored progress 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setPendingVideoInfo stores and getPendingVideoInfo retrieves 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > returns null before install 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns stored progress 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > getVideoPageInfo returns null when not set 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > clearAllExtensionData > clears all stored data 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > returns empty array when nothing stored 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > sets progress and install timestamp 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > is a no-op when no sync status exists 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setVideoPageInfo stores and getVideoPageInfo retrieves 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > removes pending items and updates sync status 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > returns null when no status stored 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > sorts by length descending 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > returns empty array for empty input 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches single word case-insensitively 2ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches whole words only 2ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > deduplicates case-insensitive duplicates 2ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches with surrounding punctuation 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > prefers longer phrases over shorter words 2ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches phrases exactly 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > removes empty strings 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > highlights both when they do not overlap 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches multiple occurrences of the same word 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > DEFAULT_SETTINGS matches schema defaults 4ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > does not highlight inside other words 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr] [messaging] Unknown message type: TEST_ACTION
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > SAVE_CATEGORIES has expected values 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty word list 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles regex special characters in words 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles Unicode characters 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > THEME_MODES has expected values 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey with empty string clears the key 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty text 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > getApiKey returns empty string when no key stored 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > AI_PROVIDERS has expected values 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns defaults when no settings stored 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > falls back to defaults when stored sync data is invalid 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves settings to sync storage without apiKey 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns stored sync settings merged with defaults 1ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > loads apiKey from local storage 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves apiKey separately to local storage 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  × src/background/__tests__/settingsStorage.test.ts > saveSettings > saves backup to local storage 4ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > loads current settings, merges patch, and saves 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > preserves existing field values not in the patch 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > notifies listeners after saving 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.844Z] [INFO] [stderr] 
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > ignores undefined website settings 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > saves apiKey from website to local storage 0ms
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]    → expected "spy" to be called with arguments: [ ObjectContaining{…}, Any<Function> ][90m
+[2026-07-04T05:56:21.844Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey stores and getApiKey retrieves the key 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > does not include aiApiKey or extension-only fields 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] 
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > extracts only overlapping fields 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > clearAllSettings > clears stored values 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > importSettingsData saves the provided settings 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  × src/background/__tests__/settingsStorage.test.ts > clearAllSettings > removes settings from sync and local storage 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > applies overlapping settings from website 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > removeSettingsChangeListener unregisters a listener 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > addSettingsChangeListener registers a listener 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > supports multiple listeners 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]    → expected "spy" to be called with arguments: [ 'extensionSettings', Any<Function> ][90m
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > exportSettingsData returns settings and timestamp 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > does not throw when a listener throws 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value 20ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow 4ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling 4ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:149:13
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly 3ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] [messaging] Handler error for FAIL: Error: something went wrong
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes 3ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > tracks active state 2ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setWordIds > stores and replaces word IDs 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight with empty word list 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside style tags 2ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside script tags 2ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > defaults to inactive before first set 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple matches of the same word 2ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks 37ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight when active is false 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight hidden elements 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles text with no matching words gracefully 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights matching text in body 35ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores word data in dataset 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles root with no text nodes 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores full word data including example and note 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes highlight spans and restores text 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root has no highlights 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root is not an Element 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside already highlighted elements 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple different words 2ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes multiple highlight spans and restores text order 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op on empty body 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is empty string 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is invalid JSON 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles null/undefined message 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > is a no-op when no highlights exist 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns the word from element data 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > registers and invokes a handler 4ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > removes all highlights from document 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler returning data 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element has no data 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] [messaging] Sync handler error for FAIL: Error: sync error
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that resolves 53ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles non-object message 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:167:13
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 53ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 1ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 52ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 51ms
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] 
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 0ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 0ms
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 51ms
+[2026-07-04T05:56:21.845Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 50ms
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-04T05:56:21.845Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]  FAIL  src/background/__tests__/settingsStorage.test.ts > saveSettings > saves backup to local storage
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]  ❯ src/background/__tests__/settingsStorage.test.ts:175:28
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] 
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]     174| 
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]     173|     await saveSettings(DEFAULT_SETTINGS)
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] AssertionError: expected "spy" to be called with arguments: [ ObjectContaining{…}, Any<Function> ][90m
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]  FAIL  src/background/__tests__/settingsStorage.test.ts > clearAllSettings > removes settings from sync and local storage
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] --
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] AssertionError: expected "spy" to be called with arguments: [ 'extensionSettings', Any<Function> ][90m
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]     270|     await clearAllSettings()
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]  ❯ src/background/__tests__/settingsStorage.test.ts:272:30
+[2026-07-04T05:56:21.846Z] [INFO] [stderr]     271|
+[2026-07-04T05:56:21.846Z] [INFO] [stderr] 
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] @@ -171,12 +171,12 @@
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:33.633Z] [INFO] [stderr]    await saveSettings(DEFAULT_SETTINGS)
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:33.633Z] [INFO] [stderr]  it('saves backup to local storage', async () => {
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] -  expect(localStore.set).toHaveBeenCalledWith(
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] -    expect.any(Function),
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] +  const backupCall = (localStore.set as ReturnType<typeof vi.fn>).mock.calls.find(
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] +    (c: unknown[]) => c[0] && typeof c[0] === 'object' && 'ielts-settings-backup' in c[0],
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:56:33.633Z] [INFO] [stderr]  
+[2026-07-04T05:56:33.633Z] [INFO] [stderr]    )
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] +  expect(backupCall).toBeDefined()
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] -      expect.objectContaining({ 'ielts-settings-backup': expect.any(Object) }),
+[2026-07-04T05:56:33.633Z] [INFO] [stderr]  it('notifies listeners after saving', async () => {
+[2026-07-04T05:56:33.633Z] [INFO] [stderr]  })
+[2026-07-04T05:56:33.633Z] [INFO] [stderr]  
+[2026-07-04T05:56:33.633Z] [INFO] [stderr]  
+[2026-07-04T05:56:33.633Z] [INFO] [stderr]    const listener = vi.fn()
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] 
+[2026-07-04T05:56:33.633Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] @@ -268,9 +268,9 @@
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] ===================================================================
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:34.203Z] [INFO] [stderr]  
+[2026-07-04T05:56:34.203Z] [INFO] [stderr]  await clearAllSettings()
+[2026-07-04T05:56:34.203Z] [INFO] [stderr]  )
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] -expect(syncStore.remove).toHaveBeenCalledWith('extensionSettings', expect.any(Function))
+[2026-07-04T05:56:34.203Z] [INFO] [stderr]  localStore.set({ aiApiKey: 'sk-key', 'ielts-settings-backup': DEFAULT_SETTINGS })
+[2026-07-04T05:56:34.203Z] [INFO] [stderr]    expect.any(Function),
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] +expect(syncStore.remove).toHaveBeenCalledWith(['extensionSettings'], expect.any(Function))
+[2026-07-04T05:56:34.203Z] [INFO] [stderr]  
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:34.203Z] [INFO] [stderr]    ['aiApiKey', 'ielts-settings-backup'],
+[2026-07-04T05:56:34.203Z] [INFO] [stderr]  expect(localStore.remove).toHaveBeenCalledWith(
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:34.203Z] [INFO] [stderr] 
+[2026-07-04T05:56:34.208Z] [INFO] Task waiting for input: ApiKey:
+[2026-07-04T05:56:34.290Z] [INFO] [stdout] Two issues: `sync.remove` is called with an array `['extensionSettings']` not a string, and `local.set` for backup is called without a callback. Fixing both.
+[2026-07-04T05:56:37.331Z] [INFO] User input provided via TTY prompt
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > getApiKey returns empty string when no key stored 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] [0m$ [0mpnpm test -- --reporter verbose 2>&1 | grep -E '(settingsStorage|FAIL|Test Files)' -A 3
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey stores and getApiKey retrieves the key 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey with empty string clears the key 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns defaults when no settings stored 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > SAVE_CATEGORIES has expected values 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > falls back to defaults when stored sync data is invalid 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > AI_PROVIDERS has expected values 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] ✓ src/background/__tests__/settingsStorage.test.ts > constants > DEFAULT_SETTINGS matches schema defaults 2ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > THEME_MODES has expected values 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > loads current settings, merges patch, and saves 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns stored sync settings merged with defaults 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves backup to local storage 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > preserves existing field values not in the patch 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > loads apiKey from local storage 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > notifies listeners after saving 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > applies overlapping settings from website 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves settings to sync storage without apiKey 1ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > extracts only overlapping fields 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > saves apiKey from website to local storage 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves apiKey separately to local storage 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > ignores undefined website settings 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > clearAllSettings > removes settings from sync and local storage 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > addSettingsChangeListener registers a listener 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > exportSettingsData returns settings and timestamp 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > importSettingsData saves the provided settings 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > supports multiple listeners 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > clearAllSettings > clears stored values 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > removeSettingsChangeListener unregisters a listener 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > does not include aiApiKey or extension-only fields 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] [messaging] Handler error for FAIL: Error: something went wrong
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > does not throw when a listener throws 0ms
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:149:13
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] [messaging] Sync handler error for FAIL: Error: sync error
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] --
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:153:20
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] --
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:167:13
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:171:20
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]    Start at  12:56:37
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]  Test Files  8 passed (8)
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:38.337Z] [INFO] [stderr] --
+[2026-07-04T05:56:38.337Z] [INFO] [stderr]    Duration  993ms (transform 228ms, setup 0ms, collect 464ms, tests 489ms, environment 3.47s, prepare 486ms)
+[2026-07-04T05:56:38.338Z] [INFO] [stderr]       Tests  116 passed (116)
+[2026-07-04T05:56:41.395Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:56:41.395Z] [INFO] [stderr] [✓] Run tests to verify they pass
+[2026-07-04T05:56:41.395Z] [INFO] [stderr] [✓] Read the full settingsStorage.ts implementation
+[2026-07-04T05:56:41.395Z] [INFO] [stderr] [0m
+[2026-07-04T05:56:41.395Z] [INFO] [stderr] [✓] Create test file at apps/extension/src/background/__tests__/settingsStorage.test.ts
+[2026-07-04T05:56:41.395Z] [INFO] [stderr] [✓] Study existing test patterns (backgroundMessaging.test.ts)
+[2026-07-04T05:56:41.480Z] [INFO] [stdout] All 116 tests pass (30 new + 86 existing).
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] 
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] Created `apps/extension/src/background/__tests__/settingsStorage.test.ts` with 30 tests covering all exported functions:
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] - **getApiKey / setApiKey** — empty default, store/retrieve, clear
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] - **loadSettings** — defaults, stored sync merge, API key from local, invalid data fallback
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] - **saveSettings** — sync save (excludes apiKey), local apiKey save, backup save, listener notification
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] - **patchSettings** — merge patch, preserve existing fields
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] - **syncFromWebsite** — applies overlapping settings, saves apiKey, ignores undefined
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] - **getOverlappingForWebsite** — extracts correct fields, excludes apiKey/extension-only
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] - **clearAllSettings** — removes from sync + local, verifies actual clearing
+[2026-07-04T05:56:44.983Z] [INFO] [stdout] - **Settings change listeners** — register, unregister, multiple, error resilience
+[2026-07-04T05:56:44.984Z] [INFO] [stdout] - **exportSettingsData / importSettingsData** — export format, import roundtrip
+[2026-07-04T05:56:44.984Z] [INFO] [stdout] - **Constants** — `DEFAULT_SETTINGS`, `SAVE_CATEGORIES`, `THEME_MODES`, `AI_PROVIDERS`
+[2026-07-04T05:56:45.212Z] [INFO] Interactive session completed with exit code 0
+[2026-07-04T05:56:45.213Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-04T05:56:45.213Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-04T05:56:45.215Z] [INFO] Task completed successfully

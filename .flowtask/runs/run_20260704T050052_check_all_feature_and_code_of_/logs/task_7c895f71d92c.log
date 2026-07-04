@@ -1,0 +1,615 @@
+[2026-07-04T05:15:11.487Z] [INFO] Task started: Fix and Enhance Options Page Components and AI Settings Form
+[2026-07-04T05:15:11.489Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/extension/src/options/components/AiSettingsForm.tsx","description":"Fixed AI settings form validation and persistence","validationMethod":"file_diff"},{"action":"modify","target":"apps/extension/src/options/components/GeneralSettings.tsx","description":"Improved general settings component","validationMethod":"file_diff"}]
+[2026-07-04T05:15:12.030Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-04T05:15:12.030Z] [INFO] [stderr] [0m
+[2026-07-04T05:15:12.030Z] [INFO] [stderr] [0m
+[2026-07-04T05:15:16.549Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"AiSettingsForm GeneralSettings options components apps/extension/src/options/components/","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-04T05:15:16.695Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/options/components/*.tsx"[90m 0 matches[0m
+[2026-07-04T05:15:19.107Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/options/**/*.tsx"[90m 3 matches[0m
+[2026-07-04T05:15:19.277Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/options/**/*.ts"[90m 0 matches[0m
+[2026-07-04T05:15:21.969Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/options
+[2026-07-04T05:15:25.206Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/options/SettingsPage.tsx
+[2026-07-04T05:15:25.521Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/options/App.tsx
+[2026-07-04T05:15:38.361Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/options/main.tsx
+[2026-07-04T05:15:38.618Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/options/index.css
+[2026-07-04T05:15:38.992Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"useToast","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-04T05:15:41.588Z] [INFO] [stderr] [0m→ [0mRead packages/ui/src/components/Toast.tsx
+[2026-07-04T05:15:56.499Z] [INFO] [stderr] [ ] Create AiSettingsForm.tsx with validation, debounced saving, and error handling
+[2026-07-04T05:15:56.499Z] [INFO] [stderr] [ ] Run lint and typecheck to verify changes
+[2026-07-04T05:15:56.499Z] [INFO] [stderr] [ ] Refactor SettingsPage.tsx to use extracted components
+[2026-07-04T05:15:56.499Z] [INFO] [stderr] [0m
+[2026-07-04T05:15:56.499Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:15:56.499Z] [INFO] [stderr] [ ] Create reusable UI components (Field, ToggleField, Section) extracted from SettingsPage
+[2026-07-04T05:15:56.499Z] [INFO] [stderr] [0m
+[2026-07-04T05:15:56.499Z] [INFO] [stderr] [ ] Create GeneralSettings.tsx with improved state management
+[2026-07-04T05:15:56.737Z] [INFO] [stderr] [0m$ [0mls apps/extension/src/options/
+[2026-07-04T05:15:56.737Z] [INFO] [stderr] SettingsPage.tsx
+[2026-07-04T05:15:56.737Z] [INFO] [stderr] App.tsx
+[2026-07-04T05:15:56.737Z] [INFO] [stderr] [0m
+[2026-07-04T05:15:56.737Z] [INFO] [stderr] main.tsx
+[2026-07-04T05:15:56.737Z] [INFO] [stderr] index.css
+[2026-07-04T05:15:56.997Z] [INFO] [stderr] [0m→ [0mRead apps/extension/package.json
+[2026-07-04T05:16:00.808Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/tsconfig*.json"[90m 1 match[0m
+[2026-07-04T05:16:01.256Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"SettingsPage","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-04T05:16:03.569Z] [INFO] [stderr] [0m→ [0mRead apps/extension/tsconfig.json
+[2026-07-04T05:16:25.411Z] [INFO] [stderr] [0m
+[2026-07-04T05:16:25.411Z] [INFO] [stderr] (no output)
+[2026-07-04T05:16:25.411Z] [INFO] [stderr] [0m$ [0mmkdir -p apps/extension/src/options/components
+[2026-07-04T05:16:25.411Z] [INFO] [stderr] [0m
+[2026-07-04T05:16:25.500Z] [INFO] [stdout] Now I have a full picture. Let me extract the monolithic `SettingsPage.tsx` into focused, validated components. I'll start by creating the component directory and writing the extracted components.
+[2026-07-04T05:16:28.558Z] [INFO] [stderr] [ ] Refactor SettingsPage.tsx to use extracted components
+[2026-07-04T05:16:28.558Z] [INFO] [stderr] [ ] Run lint and typecheck to verify changes
+[2026-07-04T05:16:28.558Z] [INFO] [stderr] [•] Create reusable UI components (Field, ToggleField, Section) extracted from SettingsPage
+[2026-07-04T05:16:28.558Z] [INFO] [stderr] [ ] Create GeneralSettings.tsx with improved state management
+[2026-07-04T05:16:28.557Z] [INFO] [stderr] [ ] Create AiSettingsForm.tsx with validation, debounced saving, and error handling
+[2026-07-04T05:16:28.558Z] [INFO] [stderr] [0m
+[2026-07-04T05:16:28.558Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:16:36.716Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/options/components/ui.tsx
+[2026-07-04T05:16:36.716Z] [INFO] [stderr] [0m
+[2026-07-04T05:16:36.716Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T05:16:39.824Z] [INFO] [stderr] [✓] Create reusable UI components (Field, ToggleField, Section) extracted from SettingsPage
+[2026-07-04T05:16:39.824Z] [INFO] [stderr] [•] Create AiSettingsForm.tsx with validation, debounced saving, and error handling
+[2026-07-04T05:16:39.824Z] [INFO] [stderr] [ ] Refactor SettingsPage.tsx to use extracted components
+[2026-07-04T05:16:39.825Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:16:39.824Z] [INFO] [stderr] [ ] Run lint and typecheck to verify changes
+[2026-07-04T05:16:39.824Z] [INFO] [stderr] [ ] Create GeneralSettings.tsx with improved state management
+[2026-07-04T05:16:39.825Z] [INFO] [stderr] [0m
+[2026-07-04T05:17:36.342Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/options/components/AiSettingsForm.tsx
+[2026-07-04T05:17:36.342Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T05:17:36.342Z] [INFO] [stderr] [0m
+[2026-07-04T05:17:41.889Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/options/components/GeneralSettings.tsx
+[2026-07-04T05:17:41.889Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T05:17:41.889Z] [INFO] [stderr] [0m
+[2026-07-04T05:17:44.863Z] [INFO] [stderr] [0m
+[2026-07-04T05:17:44.863Z] [INFO] [stderr] [•] Refactor SettingsPage.tsx to use extracted components
+[2026-07-04T05:17:44.863Z] [INFO] [stderr] [✓] Create reusable UI components (Field, ToggleField, Section) extracted from SettingsPage
+[2026-07-04T05:17:44.863Z] [INFO] [stderr] [✓] Create GeneralSettings.tsx with improved state management
+[2026-07-04T05:17:44.863Z] [INFO] [stderr] [ ] Run lint and typecheck to verify changes
+[2026-07-04T05:17:44.863Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:17:44.863Z] [INFO] [stderr] [✓] Create AiSettingsForm.tsx with validation, debounced saving, and error handling
+[2026-07-04T05:18:00.454Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/options/SettingsPage.tsx
+[2026-07-04T05:18:00.454Z] [INFO] [stderr] [0m
+[2026-07-04T05:18:00.454Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-04T05:18:04.414Z] [INFO] [stderr] [✓] Create reusable UI components (Field, ToggleField, Section) extracted from SettingsPage
+[2026-07-04T05:18:04.414Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:18:04.414Z] [INFO] [stderr] [✓] Create AiSettingsForm.tsx with validation, debounced saving, and error handling
+[2026-07-04T05:18:04.414Z] [INFO] [stderr] [✓] Create GeneralSettings.tsx with improved state management
+[2026-07-04T05:18:04.414Z] [INFO] [stderr] [✓] Refactor SettingsPage.tsx to use extracted components
+[2026-07-04T05:18:04.414Z] [INFO] [stderr] [•] Run lint and typecheck to verify changes
+[2026-07-04T05:18:04.414Z] [INFO] [stderr] [0m
+[2026-07-04T05:18:07.683Z] [INFO] [stderr] [0m$ [0mpnpm lint
+[2026-07-04T05:18:07.683Z] [INFO] [stderr] $ echo 'no linter configured'
+[2026-07-04T05:18:07.683Z] [INFO] [stderr] no linter configured
+[2026-07-04T05:18:07.683Z] [INFO] [stderr] [0m
+[2026-07-04T05:18:09.319Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-04T05:18:09.319Z] [INFO] [stderr] [0m
+[2026-07-04T05:18:09.319Z] [INFO] [stderr] [0m$ [0mpnpm typecheck
+[2026-07-04T05:18:12.289Z] [INFO] [stderr] .flowtask/events.jsonl                             |   3 +
+[2026-07-04T05:18:12.289Z] [INFO] [stderr] [0m$ [0mgit diff --stat
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  .flowtask/run-index.json                           |   2 +-
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  .../content-script/highlighter/highlightStyles.ts  |   2 +-
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  .../content-script/highlighter/highlightEngine.ts  | 160 ++++-----
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  .flowtask/task-index.json                          |   2 +-
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  .../content-script/highlighter/highlightMatcher.ts |   8 +
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  apps/web/src/features/roadmap/roadmapService.ts    |  12 +
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  .../src/popup/components/PopupDashboard.tsx        | 368 +++++++++------------
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  .flowtask/state.json                               |   2 +-
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  .../content-script/highlighter/highlightTooltip.ts | 155 ++++-----
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  packages/storage/src/db.ts                         |  12 +
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  packages/storage/src/__tests__/migrations.test.ts  |  23 +-
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  packages/storage/src/migrations.ts                 |  39 ++-
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  packages/storage/src/repositories/index.ts         |   5 +
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  apps/extension/src/options/SettingsPage.tsx        | 356 +++++---------------
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  apps/web/src/services/storage/Database.ts          |  12 +
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  packages/storage/src/index.ts                      |   5 +
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  .../storage/src/repositories/ContentRepository.ts  |  48 ++-
+[2026-07-04T05:18:12.289Z] [INFO] [stderr] [0m
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  20 files changed, 574 insertions(+), 745 deletions(-)
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  packages/storage/src/schema.ts                     |  30 ++
+[2026-07-04T05:18:12.289Z] [INFO] [stderr]  apps/extension/src/background/index.ts             |  75 +----
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] [0m$ [0mgit diff -- apps/extension/src/options/
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] diff --git a/apps/extension/src/options/SettingsPage.tsx b/apps/extension/src/options/SettingsPage.tsx
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] -import { useState, useEffect, useCallback } from 'react'
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] --- a/apps/extension/src/options/SettingsPage.tsx
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] +++ b/apps/extension/src/options/SettingsPage.tsx
+[2026-07-04T05:18:15.653Z] [INFO] [stderr]    loadSettings,
+[2026-07-04T05:18:15.653Z] [INFO] [stderr]  import {
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] +import { useState, useEffect, useCallback, useRef } from 'react'
+[2026-07-04T05:18:15.653Z] [INFO] [stderr]  import { useToast } from '../../../../packages/ui/src/components/Toast'
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] @@ -8,46 +8,33 @@ import {
+[2026-07-04T05:18:15.653Z] [INFO] [stderr]    type ExtensionSettings,
+[2026-07-04T05:18:15.653Z] [INFO] [stderr]  } from '../background/settingsStorage'
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] @@ -1,4 +1,4 @@
+[2026-07-04T05:18:15.653Z] [INFO] [stderr]    importSettingsData,
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] -const CATEGORY_LABELS: Record<string, string> = {
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] -  vocabulary: 'Vocabulary',
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] -  THEME_MODES,
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] -  sentence: 'Example Sentence',
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] -  phrase: 'Useful Phrase',
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] -  SAVE_CATEGORIES,
+[2026-07-04T05:18:15.653Z] [INFO] [stderr] index 27e252e..d82fe12 100644
+[2026-07-04T05:18:15.653Z] [INFO] [stderr]    DEFAULT_SETTINGS,
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  speaking: 'Speaking Idea',
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  writing: 'Writing Idea',
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  grammar: 'Grammar Note',
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  mistake: 'Mistake Note',
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  reading: 'Reading Material',
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  dark: 'Dark',
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -}
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  light: 'Light',
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -}
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  system: 'System (follow device)',
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -const THEME_LABELS: Record<string, string> = {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +import AiSettingsForm from './components/AiSettingsForm'
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    const [loading, setLoading] = useState(true)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +import GeneralSettings from './components/GeneralSettings'
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  const [showApiKey, setShowApiKey] = useState(false)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +import { Section, buttonStyle } from './components/ui'
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]  
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +  const settingsRef = useRef(settings)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    const [confirmClear, setConfirmClear] = useState(false)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    const { showToast } = useToast()
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    useEffect(() => {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]  
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]      loadSettings().then((s) => {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +      settingsRef.current = s
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +  settingsRef.current = settings
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]        setLoading(false)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]  
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    }, [])
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    const [settings, setSettings] = useState<ExtensionSettings>(DEFAULT_SETTINGS)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]      })
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +  const handleSave = useCallback(async (patch: Partial<ExtensionSettings>) => {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -    const next = { ...settings, ...patch }
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]        setSettings(s)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  const update = async (patch: Partial<ExtensionSettings>) => {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +    settingsRef.current = next
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]      setSettings(next)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]      await saveSettings(next)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]  export default function SettingsPage() {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +    const next = { ...settingsRef.current, ...patch }
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] -  }
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]  
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +  }, [])
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]          await importSettingsData(data)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]      try {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] @@ -82,6 +69,7 @@ export default function SettingsPage() {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    const handleExport = useCallback(async () => {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]          setSettings(reloaded)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]          const reloaded = await loadSettings()
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +        settingsRef.current = reloaded
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]          showToast('error', `Import failed: ${e instanceof Error ? e.message : 'Invalid file'}`)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] @@ -93,12 +81,17 @@ export default function SettingsPage() {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]          showToast('success', 'Settings imported successfully')
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]        } catch (e) {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]      setSettings(DEFAULT_SETTINGS)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]      showToast('info', 'All settings cleared')
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    }, [showToast])
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]  
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +    settingsRef.current = DEFAULT_SETTINGS
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    const handleClear = useCallback(async () => {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]      await clearAllSettings()
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]      setConfirmClear(false)
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +    return (
+[2026-07-04T05:18:15.654Z] [INFO] [stderr]    if (loading) {
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +        Loading settings...
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +      </div>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr]    }
+[2026-07-04T05:18:15.654Z] [INFO] [stderr] +    )
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] +      <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-muted)' }}>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr]  
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -    return <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-muted)' }}>Loading settings...</div>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] @@ -110,133 +103,18 @@ export default function SettingsPage() {
+[2026-07-04T05:18:15.655Z] [INFO] [stderr]    return (
+[2026-07-04T05:18:15.655Z] [INFO] [stderr]        </header>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr]          </p>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -      {/* AI Provider */}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -        <Field label="Provider">
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -      <Section title="AI Provider">
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -          <select
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            value={settings.aiProvider}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            <option value="openai">OpenAI</option>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr]  
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            style={selectStyle}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            onChange={(e) => update({ aiProvider: e.target.value as 'openai' | 'custom' })}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -          >
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -        <Field label="Base URL">
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -        </Field>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            <option value="custom">Custom (OpenAI-compatible)</option>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            type="url"
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -          <input
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -          </select>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            value={settings.aiBaseUrl}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            onChange={(e) => update({ aiBaseUrl: e.target.value })}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            placeholder="https://api.openai.com/v1"
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -          />
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -        </Field>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -        <Field label="API Key">
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -          <div style={{ display: 'flex', gap: '8px' }}>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            <input
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              type={showApiKey ? 'text' : 'password'}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            style={inputStyle}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              value={settings.aiApiKey}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              placeholder="sk-..."
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              onChange={(e) => update({ aiApiKey: e.target.value })}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            />
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              style={{ ...inputStyle, flex: 1 }}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              onClick={() => setShowApiKey((v) => !v)}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              style={{
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -                padding: '8px 12px',
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -                borderRadius: 'var(--radius-md)',
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            <button
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -                border: '1px solid var(--color-border)',
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -                cursor: 'pointer',
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -                color: 'var(--color-text-secondary)',
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -                fontSize: '13px',
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -                whiteSpace: 'nowrap',
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              }}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              aria-label={showApiKey ? 'Hide API key' : 'Show API key'}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            >
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            </button>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -          </div>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -        </Field>
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -                background: 'var(--color-surface)',
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -        <Field label="Model">
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            value={settings.aiModel}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            type="text"
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -              {showApiKey ? 'Hide' : 'Show'}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            placeholder="gpt-4o-mini"
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            onChange={(e) => update({ aiModel: e.target.value })}
+[2026-07-04T05:18:15.655Z] [INFO] [stderr] -            style={inputStyle}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          />
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] +      <AiSettingsForm settings={settings} onSave={handleSave} />
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          <input
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        </Field>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr]  
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] +      <GeneralSettings settings={settings} onSave={handleSave} />
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -      {/* Appearance */}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        <Field label="Theme Mode">
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -      <Section title="Appearance">
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            style={selectStyle}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            onChange={(e) => update({ themeMode: e.target.value as 'light' | 'dark' | 'system' })}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          >
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          <select
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -      </Section>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            {THEME_MODES.map((mode) => (
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            value={settings.themeMode}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -              </option>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -                {THEME_LABELS[mode] || mode}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            ))}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -              <option key={mode} value={mode}>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        </Field>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        <ToggleField
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -      {/* Behavior */}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          label="Floating Toolbar"
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          onChange={(v) => update({ floatingToolbar: v })}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        />
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        <ToggleField
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -      <Section title="Behavior">
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          label="Auto-save Selected Text"
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          </select>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          checked={settings.autoSaveSelected}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          description="Show a floating toolbar when selecting text on webpages"
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          description="Automatically save selected text without showing the save dialog"
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -      </Section>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          checked={settings.floatingToolbar}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          label="Auto-highlight Saved Vocabulary"
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        />
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          checked={settings.autoHighlightSavedVocabulary}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          onChange={(v) => update({ autoHighlightSavedVocabulary: v })}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          onChange={(v) => update({ autoSaveSelected: v })}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        <ToggleField
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          description="Automatically highlight your saved vocabulary words and phrases on every webpage you visit"
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        />
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -      {/* Defaults */}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -      </Section>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          <select
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -      <Section title="Defaults">
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            value={settings.defaultCategory}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        <Field label="Default Save Category">
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            {SAVE_CATEGORIES.map((cat) => (
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -                {CATEGORY_LABELS[cat] || cat}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -              </option>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          </select>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -              <option key={cat} value={cat}>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            style={selectStyle}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          >
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        </Field>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            ))}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            onChange={(e) => update({ defaultCategory: e.target.value as typeof SAVE_CATEGORIES[number] })}
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -        <Field label="Default IELTS Topic">
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            type="text"
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            placeholder="general"
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          <input
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -        </Field>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -            style={inputStyle}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -      </Section>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]        <Section title="Data Management">
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -            value={settings.defaultTopic}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -      {/* Data Management */}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +        <p
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +            fontSize: '13px',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -            onChange={(e) => update({ defaultTopic: e.target.value })}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -        <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', margin: '0 0 12px', lineHeight: '1.5' }}>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +            margin: '0 0 12px',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +            color: 'var(--color-text-secondary)',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +            lineHeight: '1.5',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +        >
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]            Export your settings as a JSON file to back them up or transfer to another device.
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]          </p>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]            Import a previously exported settings file to restore your configuration.
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +          style={{
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] @@ -248,14 +126,35 @@ export default function SettingsPage() {
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]              Import Settings
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +          }}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]            </button>
+[2026-07-04T05:18:15.656Z] [INFO] [stderr] -          />
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]          </div>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -        <div style={{ marginTop: '16px', borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +          style={{
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +        <div
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +          }}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +            borderTop: '1px solid var(--color-border)',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +        >
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +            paddingTop: '16px',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]            {confirmClear ? (
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -              <p style={{ fontSize: '13px', color: 'var(--color-danger)', margin: 0, fontWeight: 500 }}>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                  fontSize: '13px',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                  color: 'var(--color-danger)',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +            marginTop: '16px',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                  fontWeight: 500,
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                style={{
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                  margin: 0,
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +              <p
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +              >
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]                </p>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]                  Are you sure? This will reset all settings to defaults and remove your API key.
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                }}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                  onClick={handleClear}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                <button
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                    ...buttonStyle,
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -                <button onClick={handleClear} style={{ ...buttonStyle, background: 'var(--color-danger)', color: '#fff', border: 'none' }}>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]                <div style={{ display: 'flex', gap: '8px' }}>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                    border: 'none',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                    background: 'var(--color-danger)',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                  style={{
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                    color: '#fff',
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]                    Yes, Clear All
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] @@ -266,7 +165,11 @@ export default function SettingsPage() {
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]                  <button onClick={() => setConfirmClear(false)} style={buttonStyle}>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                >
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]            ) : (
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]                  </button>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                  }}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +              style={{
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]                onClick={() => setConfirmClear(true)}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]              >
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                ...buttonStyle,
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]              <button
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -              style={{ ...buttonStyle, color: 'var(--color-danger)', borderColor: 'var(--color-danger)' }}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]          </div>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] @@ -274,7 +177,6 @@ export default function SettingsPage() {
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]        </Section>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +              }}
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]  
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]                Clear All Settings
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] @@ -288,136 +190,26 @@ export default function SettingsPage() {
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]              </button>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                color: 'var(--color-danger)',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]          >
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]          <div
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]            style={{
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]            <p style={{ margin: '0 0 8px', fontWeight: 600 }}>Your Data Stays Local</p>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] +                borderColor: 'var(--color-danger)',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -            <li>All data is stored locally in your browser. There is no backend server.</li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -            <li>Your API key is stored in your browser's local storage, not in cloud sync. It is used only for AI requests you initiate.</li>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr] -      {/* Privacy */}
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -            <li>Webpage content is never sent anywhere unless you explicitly use an AI feature.</li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +              All data is stored locally in your browser. There is no backend server.
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            </li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            <li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -            <li>We do not collect browsing history, personal information, or usage analytics.</li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            <li>
+[2026-07-04T05:18:15.657Z] [INFO] [stderr]        <Section title="Privacy">
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +              Webpage content is never sent anywhere unless you explicitly use an AI feature.
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            </li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +              Your API key is stored in your browser's local storage, not in cloud sync. It is
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]            <ul style={{ margin: 0, paddingLeft: '16px' }}>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            <li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            </li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            </li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            <li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +              We do not collect browsing history, personal information, or usage analytics.
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +              used only for AI requests you initiate.
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +              You can export or delete all your data at any time from the Data Management
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]            </ul>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            </li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]        </Section>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +            <li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]          </div>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]      </div>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -    <section
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -  return (
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]  }
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] +              section.
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -function Section({ title, children }: { title: string; children: React.ReactNode }) {
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -        background: 'var(--color-surface)',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -        border: '1px solid var(--color-border)',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      <h2
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      }}
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -        padding: '20px',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -    >
+[2026-07-04T05:18:15.658Z] [INFO] [stderr]    )
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -          fontSize: '13px',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -        style={{
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -        borderRadius: 'var(--radius-lg)',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -          fontWeight: 600,
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -        }}
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      >
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -          margin: '0 0 16px',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -          textTransform: 'uppercase',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      </h2>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -            <li>You can export or delete all your data at any time from the Data Management section.</li>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -        {children}
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -          color: 'var(--color-muted)',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -          letterSpacing: '0.05em',
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -    </section>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -}
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -  )
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      </div>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -        {title}
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -        {label}
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -  return (
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      </label>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -function Field({ label, children }: { label: string; children: React.ReactNode }) {
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -}
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      {children}
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -    </div>
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -function ToggleField({
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -  label,
+[2026-07-04T05:18:15.658Z] [INFO] [stderr] -      style={{
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  description,
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  checked,
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  )
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  label: string
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -}: {
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  description?: string
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  onChange: (v: boolean) => void
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  checked: boolean
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -      <div style={{ flex: 1 }}>
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -}) {
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  onChange,
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text)' }}>{label}</span>
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        )}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: '1.4' }}>
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          </p>
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        {description && (
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        onClick={() => onChange(!checked)}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -      </div>
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -      <button
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          width: '44px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          height: '24px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -            {description}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        style={{
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          border: 'none',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          borderRadius: '12px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          position: 'relative',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          background: checked ? 'var(--color-primary)' : 'var(--color-border)',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          flexShrink: 0,
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          cursor: 'pointer',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          marginTop: '2px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        role="switch"
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  return (
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -      >
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          transition: 'background 0.2s',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        aria-checked={checked}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -            position: 'absolute',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        }}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -            left: checked ? '22px' : '2px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        <span
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -            borderRadius: '50%',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -            width: '20px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -            height: '20px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -        />
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -            transition: 'left 0.2s',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -    </div>
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  )
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -      </button>
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -            top: '2px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -            background: '#ffffff',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -          style={{
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  padding: '8px 12px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  borderRadius: 'var(--radius-md)',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  background: 'var(--color-background)',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -const inputStyle: React.CSSProperties = {
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  border: '1px solid var(--color-border)',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  color: 'var(--color-text)',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  fontSize: '14px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  outline: 'none',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  appearance: 'auto',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -const selectStyle: React.CSSProperties = {
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  ...inputStyle,
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  borderRadius: 'var(--radius-md)',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  padding: '8px 16px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -const buttonStyle: React.CSSProperties = {
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  width: '100%',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  border: '1px solid var(--color-border)',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  fontSize: '13px',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  fontWeight: 500,
+[2026-07-04T05:18:15.660Z] [INFO] [stderr] [0m
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  color: 'var(--color-text)',
+[2026-07-04T05:18:15.660Z] [INFO] [stderr] -          }}
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  cursor: 'pointer',
+[2026-07-04T05:18:15.659Z] [INFO] [stderr] -  background: 'var(--color-background)',
+[2026-07-04T05:18:15.682Z] [INFO] Task waiting for input: ApiKey:
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] Changes not staged for commit:
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] 
+[2026-07-04T05:18:25.573Z] [INFO] [stderr]   (use "git restore <file>..." to discard changes in working directory)
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] Your branch is up to date with 'origin/main'.
+[2026-07-04T05:18:25.573Z] [INFO] [stderr]   (use "git add <file>..." to include in what will be committed)
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] 	apps/extension/src/options/components/
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] 
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] 	modified:   apps/extension/src/options/SettingsPage.tsx
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] Untracked files:
+[2026-07-04T05:18:25.573Z] [INFO] [stderr]   (use "git add <file>..." to update what will be committed)
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] no changes added to commit (use "git add" and/or "git commit -a")
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] 
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] [0m$ [0mgit status -- apps/extension/src/options/
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] On branch main
+[2026-07-04T05:18:25.573Z] [INFO] [stderr] [0m
+[2026-07-04T05:18:33.574Z] [INFO] [stderr] [✓] Create reusable UI components (Field, ToggleField, Section) extracted from SettingsPage
+[2026-07-04T05:18:33.574Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-04T05:18:33.574Z] [INFO] [stderr] [✓] Create AiSettingsForm.tsx with validation, debounced saving, and error handling
+[2026-07-04T05:18:33.574Z] [INFO] [stderr] [✓] Refactor SettingsPage.tsx to use extracted components
+[2026-07-04T05:18:33.574Z] [INFO] [stderr] [✓] Create GeneralSettings.tsx with improved state management
+[2026-07-04T05:18:33.574Z] [INFO] [stderr] [0m
+[2026-07-04T05:18:33.574Z] [INFO] [stderr] [✓] Run lint and typecheck to verify changes
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] 
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] **Created** `apps/extension/src/options/components/ui.tsx` — Extracted reusable `Section`, `Field` (with `error` and `required` props), and `ToggleField` components plus shared style objects.
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] **Created** `apps/extension/src/options/components/AiSettingsForm.tsx`:
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Local form state decoupled from parent for smooth typing, synced from props via `useEffect`
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Errors displayed inline via `Field`'s new `error` prop
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] 
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Debounced save (500ms) for text inputs using ref-based latest values to avoid stale closures
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Immediate save on provider select change
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Cleanup of debounce timer on unmount
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] Typecheck passes clean. Here's a summary of the changes:
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Validation: API key required, model required, base URL required when provider is `custom`
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - `autoComplete="off"` on API key field
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] 
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] **Created** `apps/extension/src/options/components/GeneralSettings.tsx`:
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Try/catch wrapping all `onSave` calls with toast error feedback
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Immediate save for selects/ toggles (theme, category, toggles)
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Debounced save (400ms) for the `defaultTopic` text input
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] 
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] **Modified** `apps/extension/src/options/SettingsPage.tsx`:
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Replaced inline AI settings, appearance, behavior, and defaults sections with `<AiSettingsForm>` and `<GeneralSettings>`
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Synced `localTopic` state from props
+[2026-07-04T05:18:39.674Z] [INFO] [stdout] - Fixed stale closure bug in `handleSave` using `useRef` to track latest settings
+[2026-07-04T05:18:39.674Z] [INFO] [stdout] - Updated `settingsRef.current` on import and clear operations
+[2026-07-04T05:18:39.673Z] [INFO] [stdout] - Error handling with toast notifications
+[2026-07-04T05:20:29.838Z] [INFO] User input provided via TTY prompt
+[2026-07-04T05:20:29.839Z] [INFO] Interactive session completed with exit code null
+[2026-07-04T05:20:29.839Z] [INFO] Executor finished with status: failed, exit code: undefined
+[2026-07-04T05:20:29.840Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-04T05:20:29.847Z] [INFO] Task completed successfully

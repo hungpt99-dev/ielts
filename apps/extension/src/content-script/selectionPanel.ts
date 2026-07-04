@@ -500,6 +500,8 @@ export function destroySelectionPanel(): void {
   if (styleEl) styleEl.remove()
 }
 
-init()
+init().catch((err) => {
+  console.error('[IELTS] Selection panel init failed:', err)
+})
 
 export {}

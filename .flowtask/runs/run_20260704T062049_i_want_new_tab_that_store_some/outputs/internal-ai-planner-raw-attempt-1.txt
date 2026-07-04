@@ -1,0 +1,356 @@
+{
+  "title": "Add Study Links Tab for User Saved Items",
+  "summary": "Research and plan implementation of a new tab to store user-saved study links and related items",
+  "tasks": [
+    {
+      "title": "Analyze existing saved items storage and retrieval in extension",
+      "description": "Investigate how saved items such as vocabulary and phrases are stored and retrieved in the extension, focusing on apps/extension/src/content-script/saveSelectedText.ts and related storage keys like 'savedItems'. Document data structure, storage mechanism, and APIs used.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear understanding of savedItems data structure and storage method",
+        "Documented APIs and storage keys used for saved items"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A document or notes describing how saved items are stored and accessed in the extension codebase",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-saved-items-storage.md",
+          "description": "Documentation of saved items storage and retrieval in extension",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "analyze",
+      "inputContext": "Project source code of extension content scripts and storage usage",
+      "targetFiles": [
+        "apps/extension/src/content-script/saveSelectedText.ts"
+      ],
+      "targetArtifacts": [
+        "docs/extension-saved-items-storage.md"
+      ],
+      "evidence": [
+        "docs/extension-saved-items-storage.md file exists"
+      ],
+      "verificationCommand": "ls docs/extension-saved-items-storage.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundational knowledge of saved items storage for new tab implementation"
+    },
+    {
+      "title": "Research UI patterns for adding a new tab in the extension popup",
+      "description": "Investigate the current extension popup UI code to understand how tabs are implemented and navigated. Identify the files and components responsible for tab rendering and navigation. Document the approach to add a new tab for storing user saved study links.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze existing saved items storage and retrieval in extension"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Identified popup UI components managing tabs",
+        "Documented method to add a new tab in the popup UI"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A document describing the popup tab UI structure and how to add a new tab",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-popup-tab-ui.md",
+          "description": "Documentation of popup UI tab structure and extension points",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "analyze",
+      "inputContext": "Extension popup source code and UI components",
+      "targetFiles": [
+        "apps/extension/src/popup/components"
+      ],
+      "targetArtifacts": [
+        "docs/extension-popup-tab-ui.md"
+      ],
+      "evidence": [
+        "docs/extension-popup-tab-ui.md file exists"
+      ],
+      "verificationCommand": "ls docs/extension-popup-tab-ui.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides UI integration plan for new tab in extension popup"
+    },
+    {
+      "title": "Investigate existing user data models and storage for user-generated content",
+      "description": "Examine packages/content/src/userContent.ts and related storage modules to understand how user-generated content is modeled, stored, and accessed. Focus on data structures, APIs, and editing mechanisms relevant to storing user saved links or notes.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze existing saved items storage and retrieval in extension"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Documented user content data models and storage APIs",
+        "Identified reusable components or patterns for new user saved items"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A document describing user content data models and storage mechanisms",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/user-content-storage.md",
+          "description": "Documentation of user content data models and storage APIs",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "analyze",
+      "inputContext": "User content source code and storage modules",
+      "targetFiles": [
+        "packages/content/src/userContent.ts"
+      ],
+      "targetArtifacts": [
+        "docs/user-content-storage.md"
+      ],
+      "evidence": [
+        "docs/user-content-storage.md file exists"
+      ],
+      "verificationCommand": "ls docs/user-content-storage.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides data model foundation for new saved links tab"
+    },
+    {
+      "title": "Define data model and storage schema for study links tab",
+      "description": "Based on research of existing saved items and user content storage, define a precise data model and storage schema for the new study links tab. Specify fields such as id, url, title, notes, tags, createdAt, updatedAt. Decide storage location (e.g., extension local storage, IndexedDB, or user content DB).",
+      "executor": "opencode",
+      "dependsOn": [
+        "Investigate existing user data models and storage for user-generated content"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Data model JSON schema or TypeScript interface defined",
+        "Storage mechanism and schema documented"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A formal data model and storage schema document for study links tab",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/study-links-data-model.md",
+          "description": "Data model and storage schema for study links tab",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "User content storage documentation and saved items storage analysis",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/study-links-data-model.md"
+      ],
+      "evidence": [
+        "docs/study-links-data-model.md file exists"
+      ],
+      "verificationCommand": "ls docs/study-links-data-model.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Defines the data foundation for implementing the new tab"
+    },
+    {
+      "title": "Design UI component for Study Links tab in extension popup",
+      "description": "Design the React component for the new Study Links tab in the extension popup. Include UI elements for listing saved links with title, URL, notes, tags, and timestamps. Include controls for adding, editing, deleting entries. Document component structure, props, and state management approach.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Research UI patterns for adding a new tab in the extension popup",
+        "Define data model and storage schema for study links tab"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Component design document with UI mockup or wireframe",
+        "Defined props and state management plan"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A detailed UI component design document for the Study Links tab",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/study-links-tab-ui-design.md",
+          "description": "UI component design for Study Links tab",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Popup UI tab structure and data model for study links",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/study-links-tab-ui-design.md"
+      ],
+      "evidence": [
+        "docs/study-links-tab-ui-design.md file exists"
+      ],
+      "verificationCommand": "ls docs/study-links-tab-ui-design.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides UI blueprint for coding the new tab"
+    },
+    {
+      "title": "Plan integration of Study Links tab with existing saved items and storage APIs",
+      "description": "Plan how the new Study Links tab will integrate with existing saved items storage and user content APIs. Define methods for loading, saving, updating, and deleting study links. Specify any new APIs or storage handlers needed.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze existing saved items storage and retrieval in extension",
+        "Investigate existing user data models and storage for user-generated content",
+        "Define data model and storage schema for study links tab"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Integration plan document with API usage and extension points",
+        "Defined new API signatures if needed"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A documented integration plan for Study Links tab storage and APIs",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/study-links-integration-plan.md",
+          "description": "Integration plan for Study Links tab with storage and APIs",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Saved items storage and user content storage documentation",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/study-links-integration-plan.md"
+      ],
+      "evidence": [
+        "docs/study-links-integration-plan.md file exists"
+      ],
+      "verificationCommand": "ls docs/study-links-integration-plan.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures smooth integration of new tab with existing storage"
+    },
+    {
+      "title": "Document user interaction flows for Study Links tab",
+      "description": "Define detailed user interaction flows for the Study Links tab including adding a new link, editing notes, tagging, deleting entries, and viewing details. Include error handling and edge cases. Produce flow diagrams or step-by-step descriptions.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design UI component for Study Links tab in extension popup"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Complete user interaction flow documentation",
+        "Clear handling of edge cases and errors"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "User interaction flow document for Study Links tab",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/study-links-user-flows.md",
+          "description": "User interaction flows for Study Links tab",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "UI component design for Study Links tab",
+      "targetFiles": [],
+      "targetArtifacts": [
+        "docs/study-links-user-flows.md"
+      ],
+      "evidence": [
+        "docs/study-links-user-flows.md file exists"
+      ],
+      "verificationCommand": "ls docs/study-links-user-flows.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "fixed"
+      },
+      "timeout": {
+        "durationMs": 30000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Prepares detailed interaction blueprint for implementation"
+    }
+  ]
+}

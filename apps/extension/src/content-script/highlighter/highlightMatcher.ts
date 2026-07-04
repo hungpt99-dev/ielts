@@ -80,3 +80,11 @@ export function normalizeWords(words: string[]): string[] {
 
   return result
 }
+
+export function hasAnyWord(text: string, words: HighlightWord[]): boolean {
+  const lower = text.toLowerCase()
+  for (const w of words) {
+    if (lower.includes(w.text.toLowerCase())) return true
+  }
+  return false
+}

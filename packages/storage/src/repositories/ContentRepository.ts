@@ -138,7 +138,11 @@ export class PassageEntryRepository extends BaseRepository<PassageEntry> {
   }
 }
 
-import { contentMetaSchema, userContentEditSchema } from '../schema'
+import {
+  contentMetaSchema,
+  userContentEditSchema,
+  exerciseEntrySchema,
+} from '../schema'
 
 export type ContentMeta = z.infer<typeof contentMetaSchema>
 export type UserContentEdit = z.infer<typeof userContentEditSchema>
@@ -183,6 +187,48 @@ export class ContentMetaRepository extends BaseRepository<ContentMeta> {
       seededAt: now,
       updatedAt: now,
     })
+  }
+}
+
+export type ExerciseEntry = z.infer<typeof exerciseEntrySchema>
+
+export class SpeakingExerciseRepository extends BaseRepository<ExerciseEntry> {
+  constructor() {
+    super('speakingExercises', exerciseEntrySchema)
+  }
+
+  async findByTopic(topic: string): Promise<ExerciseEntry[]> {
+    return this.queryByIndex('topic', topic)
+  }
+}
+
+export class WritingExerciseRepository extends BaseRepository<ExerciseEntry> {
+  constructor() {
+    super('writingExercises', exerciseEntrySchema)
+  }
+
+  async findByTopic(topic: string): Promise<ExerciseEntry[]> {
+    return this.queryByIndex('topic', topic)
+  }
+}
+
+export class ReadingExerciseRepository extends BaseRepository<ExerciseEntry> {
+  constructor() {
+    super('readingExercises', exerciseEntrySchema)
+  }
+
+  async findByTopic(topic: string): Promise<ExerciseEntry[]> {
+    return this.queryByIndex('topic', topic)
+  }
+}
+
+export class ListeningExerciseRepository extends BaseRepository<ExerciseEntry> {
+  constructor() {
+    super('listeningExercises', exerciseEntrySchema)
+  }
+
+  async findByTopic(topic: string): Promise<ExerciseEntry[]> {
+    return this.queryByIndex('topic', topic)
   }
 }
 
