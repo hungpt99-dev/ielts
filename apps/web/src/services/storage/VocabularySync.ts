@@ -114,6 +114,16 @@ export function initVocabSync(): void {
   if (initialized) return
   initialized = true
   window.addEventListener('message', handleVocabMessage)
+
+  // Request vocabulary saved in the extension's chrome.storage.local
+  // while the web app was not open (bootstrap sync).
+  // The extension's bridge-client will reply with VOCAB_SAVED messages.
+  try {
+    window.postMessage(
+      { source: 'ielts-page', action: 'REQUEST_EXTENSION_VOCAB' },
+      window.location.origin,
+    )
+  } catch { /* ignore */ }
 }
 
 export function destroyVocabSync(): void {

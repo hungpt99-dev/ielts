@@ -1,4 +1,4 @@
-import { safeSendMessage } from '../utils/safe-chrome'
+import { safeSendMessage, safeStorageGet } from '../utils/safe-chrome'
 
 interface BridgeMessage {
   source: 'ielts-extension' | 'ielts-page'
@@ -39,6 +39,37 @@ function forwardToPage(data: unknown): void {
   } catch { /* ignore */ }
 }
 
+async function forwardVocabToPage(): Promise<void> {
+  const [savedResult, vocabResult] = await Promise.all([
+    safeStorageGet<any[]>('savedItems'),
+    safeStorageGet<any[]>('vocabulary'),
+  ])
+
+  const savedItems = savedResult.savedItems || []
+  const vocabItems = vocabResult.vocabulary || []
+
+  const vocabFromSaved = savedItems
+    .filter((item: Record<string, unknown>) => item.category === 'vocabulary')
+    .map((item: Record<string, unknown>) => ({
+      source: 'ielts-extension' as const,
+      action: 'VOCAB_SAVED' as const,
+      data: item,
+    }))
+
+  const vocabFromDict = vocabItems.map((item: Record<string, unknown>) => ({
+    source: 'ielts-extension' as const,
+    action: 'VOCAB_SAVED' as const,
+    data: item,
+  }))
+
+  const allMessages = [...vocabFromDict, ...vocabFromSaved]
+  for (const msg of allMessages) {
+    try {
+      window.postMessage(msg, window.location.origin)
+    } catch { /* ignore */ }
+  }
+}
+
 function handlePageMessage(event: MessageEvent): void {
   if (event.origin !== window.location.origin) return
   if (!isValidBridgeMessage(event.data)) return
@@ -46,6 +77,10 @@ function handlePageMessage(event: MessageEvent): void {
 
   if (event.data.action === 'SETTINGS_CHANGED' && event.data.data) {
     forwardToBackground(event.data.data as Record<string, unknown>)
+  }
+
+  if (event.data.action === 'REQUEST_EXTENSION_VOCAB') {
+    forwardVocabToPage()
   }
 }
 
