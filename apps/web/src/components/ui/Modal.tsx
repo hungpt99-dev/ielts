@@ -18,12 +18,14 @@ const sizeClasses = {
 export default function Modal({ open, onClose, title, children, size = 'md' }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
+  const onCloseRef = useRef(onClose)
+  onCloseRef.current = onClose
 
   useEffect(() => {
     if (!open) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') onCloseRef.current()
     }
 
     document.addEventListener('keydown', handleKeyDown)
@@ -40,7 +42,7 @@ export default function Modal({ open, onClose, title, children, size = 'md' }: M
       document.body.style.overflow = ''
       document.body.style.paddingRight = ''
     }
-  }, [open, onClose])
+  }, [open])
 
   if (!open) return null
 
