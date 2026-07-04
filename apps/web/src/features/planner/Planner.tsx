@@ -9,7 +9,7 @@ import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import CalendarView from './components/CalendarView'
 import { taskFormSchema, type TaskFormData } from './validation'
-import { generateAISchedule } from './aiPlannerService'
+import { generateAISchedule, type AiPhase } from './aiPlannerService'
 
 const CATEGORIES: TaskCategory[] = [
   'Vocabulary', 'Reading', 'Listening',
@@ -31,111 +31,10 @@ const CATEGORY_COLORS: Record<TaskCategory, string> = {
   'Mock Test': 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
 }
 
-const SCHEDULE_TEMPLATES: Array<{
-  category: TaskCategory
-  title: string
-  description: string
-  minutesDaily: number
-  minutesWeekly: number
-}> = [
-  { category: 'Vocabulary', title: 'Learn new vocabulary words', description: 'Study new words using the Vocabulary Notebook', minutesDaily: 15, minutesWeekly: 105 },
-  { category: 'Vocabulary', title: 'Review vocabulary due today', description: 'Use spaced repetition to review due words', minutesDaily: 10, minutesWeekly: 70 },
-  { category: 'Reading', title: 'Read IELTS passage', description: 'Read and answer questions for one IELTS Reading passage', minutesDaily: 0, minutesWeekly: 60 },
-  { category: 'Listening', title: 'Listening practice', description: 'Complete one Listening section exercise', minutesDaily: 0, minutesWeekly: 50 },
-  { category: 'Writing Task 2', title: 'Write a Task 2 essay', description: 'Practice writing a 250-word essay', minutesDaily: 0, minutesWeekly: 40 },
-  { category: 'Writing Task 1', title: 'Writing Task 1 practice', description: 'Describe a chart or graph', minutesDaily: 0, minutesWeekly: 30 },
-  { category: 'Speaking Part 2', title: 'Speaking Part 2 practice', description: 'Practice a cue card topic for 2 minutes', minutesDaily: 0, minutesWeekly: 30 },
-  { category: 'Speaking Part 3', title: 'Speaking Part 3 discussion', description: 'Practice answering abstract questions', minutesDaily: 0, minutesWeekly: 20 },
-  { category: 'Grammar', title: 'Review grammar topic', description: 'Study grammar rules and practice exercises', minutesDaily: 0, minutesWeekly: 40 },
-  { category: 'Mock Test', title: 'Full Mock Test', description: 'Complete one full IELTS mock test', minutesDaily: 0, minutesWeekly: 0 },
-]
-
 interface ScheduleConfig {
   targetBand: number
   dailyMinutes: number
   examDate: string
-}
-
-function generateSchedule(config: ScheduleConfig): Array<{
-  date: string
-  items: Array<{ category: TaskCategory; title: string; description: string; minutes: number }>
-}> {
-  const { targetBand, dailyMinutes, examDate } = config
-  const start = new Date()
-  start.setHours(0, 0, 0, 0)
-  const end = examDate ? new Date(examDate + 'T00:00:00') : new Date(start)
-  if (!examDate) end.setMonth(end.getMonth() + 3)
-  if (end <= start) end.setMonth(end.getMonth() + 3)
-
-  const intensityMultiplier = Math.min(targetBand / 5, 2)
-  const dailyTarget = Math.round(dailyMinutes * intensityMultiplier)
-
-  const weeklyTasks = SCHEDULE_TEMPLATES.filter(t => t.minutesWeekly > 0 || t.minutesDaily > 0)
-  const dailyTasks = weeklyTasks.filter(t => t.minutesDaily > 0)
-
-  const days: Array<{
-    date: string
-    items: Array<{ category: TaskCategory; title: string; description: string; minutes: number }>
-  }> = []
-
-  const current = new Date(start)
-  while (current <= end) {
-    const dateStr = current.toISOString().slice(0, 10)
-    const dayOfWeek = current.getDay()
-    const adjustedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1
-
-    const items: Array<{ category: TaskCategory; title: string; description: string; minutes: number }> = []
-
-    let totalMin = 0
-
-    for (const t of dailyTasks) {
-      items.push({
-        category: t.category,
-        title: t.title,
-        description: t.description,
-        minutes: t.minutesDaily,
-      })
-      totalMin += t.minutesDaily
-    }
-
-    if (adjustedDay < 5) {
-      const weeklyOnWeekdays = weeklyTasks.filter(
-        t => t.minutesWeekly > 0 && t.minutesDaily === 0
-      )
-      const perDay = Math.ceil(weeklyOnWeekdays.length / 5)
-      const startIdx = adjustedDay * perDay % weeklyOnWeekdays.length
-      for (let i = 0; i < perDay && startIdx + i < weeklyOnWeekdays.length; i++) {
-        const t = weeklyOnWeekdays[startIdx + i]
-        const allocMinutes = Math.min(
-          t.minutesWeekly > 50 ? 40 : t.minutesWeekly,
-          Math.max(15, Math.round(t.minutesWeekly / 5))
-        )
-        items.push({ category: t.category, title: t.title, description: t.description, minutes: allocMinutes })
-        totalMin += allocMinutes
-      }
-    } else {
-      const weekendTasks = weeklyTasks.filter(
-        t => t.minutesWeekly > 0 && !dailyTasks.includes(t)
-      )
-      const remaining = Math.max(dailyTarget - totalMin, 30)
-      let allocated = 0
-      for (const t of weekendTasks) {
-        if (allocated >= remaining) break
-        const m = Math.min(t.minutesWeekly > 50 ? 40 : t.minutesWeekly, remaining - allocated)
-        items.push({ category: t.category, title: t.title, description: t.description, minutes: m })
-        allocated += m
-        totalMin += m
-      }
-    }
-
-    if (totalMin > 0) {
-      days.push({ date: dateStr, items })
-    }
-
-    current.setDate(current.getDate() + 1)
-  }
-
-  return days
 }
 
 export default function Planner() {
@@ -173,6 +72,8 @@ export default function Planner() {
 
   const [generating, setGenerating] = useState(false)
   const [generatedCount, setGeneratedCount] = useState(0)
+  const [generatedPhases, setGeneratedPhases] = useState<AiPhase[]>([])
+  const [replaceExisting, setReplaceExisting] = useState(false)
 
   const [saving, setSaving] = useState(false)
 
@@ -315,40 +216,33 @@ export default function Planner() {
   async function confirmGenerateSchedule() {
     setGenerating(true)
     setGeneratedCount(0)
+    setGeneratedPhases([])
     setError(null)
     try {
-      let schedule: Array<{
-        date: string
-        items: Array<{ category: TaskCategory; title: string; minutes: number; description?: string }>
-      }>
-
-      const aiResult = await generateAISchedule()
-      if (aiResult.usedAi && !aiResult.error) {
-        schedule = aiResult.days
-      } else {
-        const template = generateSchedule(scheduleConfig)
-        schedule = template.map(d => ({
-          date: d.date,
-          items: d.items.map(i => ({
-            category: i.category,
-            title: i.title,
-            minutes: i.minutes,
-            description: i.description,
-          })),
-        }))
-      }
+      const aiResult = await generateAISchedule({ replaceExisting })
+      const schedule = aiResult.days
+      setGeneratedPhases(aiResult.phases)
 
       const existingTasks = await DatabaseService.getAll<TaskEntry>('tasks')
+      const scheduleDates = new Set(schedule.map(d => d.date))
+
+      if (replaceExisting) {
+        const toDelete = existingTasks.filter(t => scheduleDates.has(t.date.slice(0, 10)))
+        await Promise.all(toDelete.map(t => DatabaseService.remove('tasks', t.id)))
+      }
+
       const now = new Date().toISOString()
       let count = 0
       for (const day of schedule) {
-        const dateHasTasks = existingTasks.some(t => t.date.slice(0, 10) === day.date)
-        if (dateHasTasks) continue
+        if (!replaceExisting) {
+          const dateHasTasks = existingTasks.some(t => t.date.slice(0, 10) === day.date)
+          if (dateHasTasks) continue
+        }
         for (const item of day.items) {
           const task: TaskEntry = {
             id: generateId(),
             title: item.title,
-            description: item.description ?? '',
+            description: '',
             category: item.category,
             date: day.date + 'T00:00:00.000Z',
             isDone: false,
@@ -909,7 +803,7 @@ export default function Planner() {
       <Modal open={showGenerateModal} onClose={() => setShowGenerateModal(false)} title="Generate Study Schedule" size="md">
         <div className="space-y-4">
           <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            AI will generate a personalised daily study schedule based on your target band, current level, weak areas, and available study time. Falls back to template-based scheduling if AI is not configured.
+            AI generates a structured schedule organised into learning phases with weekly focuses and daily tasks tailored to your level, weak areas, and available study time.
           </p>
           <div className="space-y-2 rounded-lg border p-3" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-alt)' }}>
             <div className="flex justify-between text-sm">
@@ -927,9 +821,22 @@ export default function Planner() {
               </span>
             </div>
           </div>
-          <p className="text-xs" style={{ color: 'var(--color-warning)' }}>
-            Only days without existing tasks will receive new tasks. Existing tasks will not be modified.
-          </p>
+
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={replaceExisting}
+              onChange={(e) => setReplaceExisting(e.target.checked)}
+              className="mt-0.5 h-4 w-4 rounded border-[var(--color-border)] text-[var(--color-primary)] focus:ring-[var(--color-primary)]"
+            />
+            <div>
+              <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>Replace existing tasks</span>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--color-muted)' }}>
+                Deletes tasks on the scheduled dates before adding new ones. Leave unchecked to only fill empty days.
+              </p>
+            </div>
+          </label>
+
           <div className="flex justify-end gap-3">
             <Button variant="secondary" onClick={() => setShowGenerateModal(false)}>Cancel</Button>
             <Button onClick={confirmGenerateSchedule} loading={generating}>
@@ -1025,15 +932,20 @@ export default function Planner() {
 
       {generatedCount > 0 && (
         <div
-          className="fixed bottom-6 right-6 rounded-lg px-4 py-3 shadow-lg"
+          className="fixed bottom-6 right-6 rounded-lg px-4 py-3 shadow-lg space-y-1"
           style={{
             backgroundColor: 'var(--color-success)',
             color: 'white',
           }}
         >
           <p className="text-sm font-medium">
-            Generated {generatedCount} tasks!
+            Generated {generatedCount} tasks
           </p>
+          {generatedPhases.length > 0 && (
+            <p className="text-xs opacity-90">
+              Phases: {generatedPhases.map(p => p.name).join(' → ')}
+            </p>
+          )}
         </div>
       )}
     </div>
