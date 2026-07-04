@@ -7,8 +7,9 @@ import ArticleCollector from './components/ArticleCollector'
 import VideoHelper from './components/VideoHelper'
 import BackupRestore from './components/BackupRestore'
 import MiniTutor from './components/MiniTutor'
+import SavedWordsView from './components/SavedWordsView'
 
-type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor'
+type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords'
 
 function App() {
   const [view, setView] = useState<ViewState>('dashboard')
@@ -73,6 +74,14 @@ function App() {
     return (
       <ToastProvider>
         <MiniTutor onBack={() => setView('dashboard')} />
+      </ToastProvider>
+    )
+  }
+
+  if (view === 'savedWords') {
+    return (
+      <ToastProvider>
+        <SavedWordsView onBack={() => setView('dashboard')} />
       </ToastProvider>
     )
   }

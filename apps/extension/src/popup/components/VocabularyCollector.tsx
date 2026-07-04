@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { extensionVocabSchema } from '../../storage/vocabularyStore'
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveVocabularyEntry } from '../../storage/vocabularyStore'
+import { findWord } from '../services/popupDataService'
 
 interface VocabularyCollectorProps {
   onSaved: () => void
@@ -146,6 +147,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
   const [aiDetails, setAiDetails] = useState<AIDetails | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
+  const [existingWord, setExistingWord] = useState<{ word: string; meaning: string } | null>(null)
 
   const [addToReview, setAddToReview] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -175,6 +177,25 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
       })
     })
   }, [])
+
+  useEffect(() => {
+    const w = word.trim().toLowerCase()
+    if (!w || w.length < 2) {
+      setExistingWord(null)
+      return
+    }
+    let cancelled = false
+    const timer = setTimeout(async () => {
+      const found = await findWord(word.trim())
+      if (!cancelled) {
+        setExistingWord(found ? { word: found.word, meaning: found.meaning } : null)
+      }
+    }, 400)
+    return () => {
+      cancelled = true
+      clearTimeout(timer)
+    }
+  }, [word])
 
   const handleEnrich = useCallback(async () => {
     const wordToEnrich = word.trim()
@@ -375,6 +396,21 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
         </div>
         {errors.word && (
           <span id="vocab-word-error" role="alert" style={{ fontSize: '12px', color: 'var(--color-danger)' }}>{errors.word}</span>
+        )}
+        {existingWord && (
+          <div style={{
+            marginTop: '6px',
+            padding: '8px 10px',
+            background: 'var(--color-surface-alt)',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--color-border)',
+            fontSize: '12px',
+            color: 'var(--color-text-secondary)',
+            lineHeight: 1.4,
+          }}>
+            <span style={{ fontWeight: 600 }}>Already saved:</span>{' '}
+            {existingWord.word} — {existingWord.meaning}
+          </div>
         )}
       </Field>
 

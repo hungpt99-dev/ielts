@@ -1,11 +1,12 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useState, useEffect } from 'react'
 import { useToast } from '../../../../../packages/ui/src/components/Toast'
 import { usePopupData } from '../hooks/usePopupData'
 import DashboardCard from './DashboardCard'
 import type { LearningEntry } from '../../types'
+import { loadVocabulary } from '../services/popupDataService'
 
 interface PopupDashboardProps {
-  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor') => void
+  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords') => void
 }
 
 interface ActionItem {
@@ -210,6 +211,13 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
     refreshProgress,
     refreshRecent,
   } = usePopupData()
+  const [vocabCount, setVocabCount] = useState(0)
+
+  useEffect(() => {
+    loadVocabulary().then((result) => {
+      setVocabCount(result.stats.total)
+    }).catch(() => {})
+  }, [])
 
   const handleQuickSavePage = useCallback(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -308,6 +316,13 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         description: 'Save YouTube & video content',
         onClick: () => onNavigate('videoHelper'),
         color: '#ec4899',
+      },
+      {
+        icon: '📚',
+        label: 'Saved Words',
+        description: `${vocabCount} word${vocabCount !== 1 ? 's' : ''}`,
+        onClick: () => onNavigate('savedWords'),
+        color: '#8b5cf6',
       },
       {
         icon: '🔄',
