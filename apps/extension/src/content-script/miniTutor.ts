@@ -93,22 +93,22 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     const aiType = ACTION_TO_AI_TYPE[action]
     if (aiType) {
       showExplainPanel(text, aiType)
-      sendResponse({ success: true, panelOpened: true })
+      try { sendResponse({ success: true, panelOpened: true }) } catch { /* ignore */ }
     } else {
-      sendResponse({ success: true, panelOpened: false })
+      try { sendResponse({ success: true, panelOpened: false }) } catch { /* ignore */ }
     }
     return false
   }
 
   if (message.type === 'MINI_TUTOR_GET_SELECTION') {
     const selection = getActiveSelection()
-    sendResponse(selection)
+    try { sendResponse(selection) } catch { /* ignore */ }
     return false
   }
 
   if (message.type === 'MINI_TUTOR_GET_SELECTION_FULL') {
     const context = getSelectionContext()
-    sendResponse(context)
+    try { sendResponse(context) } catch { /* ignore */ }
     return false
   }
 
@@ -117,20 +117,18 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     const selection = getActiveSelection()
 
     if (!selection.text) {
-      sendResponse({ success: false, error: 'No text selected' })
+      try { sendResponse({ success: false, error: 'No text selected' }) } catch { /* ignore */ }
       return false
     }
 
     const aiType = ACTION_TO_AI_TYPE[action]
     if (aiType) {
       showExplainPanel(selection.text, aiType)
-      sendResponse({ success: true, panelOpened: true })
+      try { sendResponse({ success: true, panelOpened: true }) } catch { /* ignore */ }
     } else {
       showExplainPanel(selection.text, 'simple')
-      sendResponse({ success: true, panelOpened: true })
+      try { sendResponse({ success: true, panelOpened: true }) } catch { /* ignore */ }
     }
     return false
   }
 })
-
-export {}

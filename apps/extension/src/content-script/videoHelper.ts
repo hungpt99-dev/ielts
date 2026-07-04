@@ -226,7 +226,7 @@ observer.observe(document, { subtree: true, childList: true })
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === 'GET_VIDEO_PAGE_INFO') {
     const info = detectVideoPage()
-    sendResponse(info)
+    try { sendResponse(info) } catch { /* ignore */ }
     return true
   }
 })

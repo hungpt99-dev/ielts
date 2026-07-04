@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useToast } from '../../../../../packages/ui/src/components/Toast'
+import { safeStorageGet, safeStorageSet, safeSendMessage, safeFetchProviderConfig } from '../../utils/safe-chrome'
 import {
   explain,
   type AiExplainType,
@@ -22,12 +23,6 @@ interface ActionConfig {
 
 interface MiniTutorProps {
   onBack: () => void
-}
-
-interface ProviderConfig {
-  apiKey: string
-  baseUrl: string
-  model: string
 }
 
 const ACTIONS: ActionConfig[] = [
@@ -67,18 +62,7 @@ const CUSTOM_PROMPTS: Record<string, { system: string; user: string }> = {
   },
 }
 
-async function getProviderConfig(): Promise<ProviderConfig> {
-  const [syncResult, localResult] = await Promise.all([
-    new Promise<any>(r => chrome.storage.sync.get(['extensionSettings'], r)),
-    new Promise<any>(r => chrome.storage.local.get(['aiApiKey'], r)),
-  ])
-  const settings = syncResult.extensionSettings || {}
-  return {
-    apiKey: localResult.aiApiKey || '',
-    baseUrl: settings.aiBaseUrl || 'https://api.openai.com/v1',
-    model: settings.aiModel || 'gpt-4o-mini',
-  }
-}
+const getProviderConfig = safeFetchProviderConfig
 
 async function customAICall(systemPrompt: string, userMessage: string): Promise<string> {
   const config = await getProviderConfig()
@@ -241,17 +225,7 @@ export default function MiniTutor({ onBack }: MiniTutorProps) {
       updatedAt: new Date().toISOString(),
     }
 
-    chrome.storage.local.get(['savedItems'], (res) => {
-      const items = res.savedItems || []
-      items.unshift(entry)
-      chrome.storage.local.set({ savedItems: items })
-    })
-
-    chrome.runtime.sendMessage({
-      type: 'UPDATE_PROGRESS',
-      payload: { notesAdded: 1 },
-    })
-
+    saveItem(entry, 'notesAdded')
     setSaved(true)
     showToast('success', 'Saved as note')
   }
@@ -275,18 +249,19 @@ export default function MiniTutor({ onBack }: MiniTutorProps) {
       updatedAt: new Date().toISOString(),
     }
 
-    chrome.storage.local.get(['savedItems'], (res) => {
-      const items = res.savedItems || []
-      items.unshift(entry)
-      chrome.storage.local.set({ savedItems: items })
-    })
-
-    chrome.runtime.sendMessage({
-      type: 'UPDATE_PROGRESS',
-      payload: { wordsAdded: 1 },
-    })
-
+    saveItem(entry, 'wordsAdded')
     showToast('success', 'Saved as vocabulary')
+  }
+
+  async function saveItem(entry: Record<string, unknown>, progressField: 'wordsAdded' | 'notesAdded') {
+    const result = await safeStorageGet<any[]>('savedItems')
+    const items = result.savedItems || []
+    items.unshift(entry)
+    await safeStorageSet({ savedItems: items })
+    safeSendMessage({
+      type: 'UPDATE_PROGRESS',
+      payload: { [progressField]: 1 },
+    })
   }
 
   const personalityTips = [
@@ -455,7 +430,7 @@ export default function MiniTutor({ onBack }: MiniTutorProps) {
               </div>
               {error.includes('API key') && (
                 <button
-                  onClick={() => chrome.runtime.sendMessage({ type: 'OPEN_OPTIONS' })}
+                  onClick={() => safeSendMessage({ type: 'OPEN_OPTIONS' })}
                   style={{
                     marginTop: '10px',
                     padding: '7px 14px',

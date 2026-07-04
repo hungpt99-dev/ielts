@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getTodayEntries } from '../../storage/indexedDB'
 import type { LearningEntry } from '../../types'
+import { safeStorageGet } from '../../utils/safe-chrome'
 
 export interface DailyProgress {
   wordsAdded: number
@@ -33,12 +34,9 @@ const DEFAULT_PROGRESS: DailyProgress = {
   streak: 0,
 }
 
-function loadProgress(): Promise<DailyProgress> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get(['dailyProgress'], (result) => {
-      resolve(result.dailyProgress || DEFAULT_PROGRESS)
-    })
-  })
+async function loadProgress(): Promise<DailyProgress> {
+  const result = await safeStorageGet<any>('dailyProgress')
+  return result.dailyProgress || DEFAULT_PROGRESS
 }
 
 async function loadRecentEntries(): Promise<LearningEntry[]> {
@@ -90,13 +88,19 @@ export function usePopupData(): PopupDataResult {
     init()
 
     const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      if (changes.dailyProgress?.newValue) {
-        setProgress(changes.dailyProgress.newValue as DailyProgress)
-      }
+      try {
+        if (changes.dailyProgress?.newValue) {
+          setProgress(changes.dailyProgress.newValue as DailyProgress)
+        }
+      } catch { /* ignore */ }
     }
 
-    chrome.storage.onChanged.addListener(listener)
-    return () => chrome.storage.onChanged.removeListener(listener)
+    try {
+      chrome.storage.onChanged.addListener(listener)
+    } catch { /* ignore */ }
+    return () => {
+      try { chrome.storage.onChanged.removeListener(listener) } catch { /* ignore */ }
+    }
   }, [refreshProgress, refreshRecent])
 
   const toggleDarkMode = useCallback(() => {

@@ -519,7 +519,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (text) {
       showExplainPanel(text, action)
     }
-    sendResponse({ success: true })
+    try { sendResponse({ success: true }) } catch { /* ignore */ }
     return false
   }
 })
