@@ -1,6 +1,6 @@
 import { callAI } from '@ielts/ai'
 import type { ProviderConfig, AICallResult } from '@ielts/ai'
-import type { AppSettings, TaskEntry, TaskCategory } from '../../models'
+import type { AppSettings, TaskEntry, TaskCategory, VocabularyEntry, VocabReviewEntry } from '../../models'
 import { loadAppSettings } from '../../services/storage/SettingsStorage'
 import { DatabaseService } from '../../services/storage/Database'
 import {
@@ -70,7 +70,44 @@ function getAiConfig(settings: AppSettings): ProviderConfig | null {
   }
 }
 
-function buildInput(settings: AppSettings): StudyPlanInput {
+function getToday(): string {
+  return new Date().toISOString().slice(0, 10)
+}
+
+function calculateStreak(tasks: TaskEntry[]): number {
+  const doneDates = tasks
+    .filter(t => t.isDone && t.completedAt)
+    .map(t => t.completedAt!.slice(0, 10))
+    .sort()
+  if (doneDates.length === 0) return 0
+
+  const uniqueDates = [...new Set(doneDates)].sort().reverse()
+  let streak = 0
+  const today = getToday()
+  let check = today
+
+  for (const date of uniqueDates) {
+    if (date === check) {
+      streak++
+      const d = new Date(check)
+      d.setDate(d.getDate() - 1)
+      check = d.toISOString().slice(0, 10)
+    } else if (date < check) {
+      break
+    }
+  }
+  return streak
+}
+
+function calculateCompletionRate(tasks: TaskEntry[]): number {
+  const now = getToday()
+  const missed = tasks.filter(t => !t.isDone && t.date.slice(0, 10) < now).length
+  const done = tasks.filter(t => t.isDone).length
+  const total = done + missed
+  return total > 0 ? Math.round((done / total) * 100) : 100
+}
+
+async function loadEnrichedInput(settings: AppSettings): Promise<StudyPlanInput> {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const startDate = today.toISOString().slice(0, 10)
@@ -82,6 +119,26 @@ function buildInput(settings: AppSettings): StudyPlanInput {
       )
     : maxDays
   const daysToGenerate = Math.max(7, Math.min(examDays, maxDays))
+
+  const [vocabulary, reviews, tasks] = await Promise.all([
+    DatabaseService.getAll<VocabularyEntry>('vocabulary'),
+    DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews'),
+    DatabaseService.getAll<TaskEntry>('tasks'),
+  ])
+
+  const now = getToday()
+  const dueReviews = reviews.filter(r => r.nextReviewDate.slice(0, 10) <= now)
+  const masteredVocab = vocabulary.filter(v => v.status === 'mastered')
+  const streak = calculateStreak(tasks)
+  const completionRate = calculateCompletionRate(tasks)
+
+  const sessionAccuracies: number[] = []
+  for (const task of tasks) {
+    if (task.isDone) sessionAccuracies.push(100)
+  }
+  const recentAccuracy = sessionAccuracies.length > 0
+    ? Math.round(sessionAccuracies.reduce((s, v) => s + v, 0) / sessionAccuracies.length)
+    : 100
 
   return {
     targetBand: settings.targetBand,
@@ -101,6 +158,12 @@ function buildInput(settings: AppSettings): StudyPlanInput {
         ? settings.preferredSchedule
         : ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
     startDate,
+    vocabularyCount: vocabulary.length,
+    masteredCount: masteredVocab.length,
+    dueReviewCount: dueReviews.length,
+    taskCompletionRate: completionRate,
+    studyStreak: streak,
+    recentAccuracy,
   }
 }
 
@@ -134,27 +197,17 @@ function parsePlanResponse(content: string): StudyPlanData | null {
   }
 }
 
-function fallbackSchedule(settings: AppSettings): StudyPlanData {
+function fallbackSchedule(input: StudyPlanInput): StudyPlanData {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  const maxDays = 90
-  const endDate = settings.examDate
-    ? new Date(settings.examDate.slice(0, 10) + 'T00:00:00')
-    : new Date(today.getTime() + maxDays * 24 * 60 * 60 * 1000)
-  if (endDate <= today) endDate.setMonth(endDate.getMonth() + 3)
+  const endDate = new Date(today.getTime() + input.daysToGenerate * 24 * 60 * 60 * 1000)
 
   const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-  const availableSet = new Set(
-    settings.preferredSchedule.length > 0
-      ? settings.preferredSchedule
-      : ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
-  )
-  const weakSet = new Set(
-    settings.weakSkills.length > 0
-      ? settings.weakSkills.map(s => s.toLowerCase())
-      : [],
-  )
-  const topic = settings.preferredTopics[0] || 'IELTS'
+  const availableSet = new Set(input.preferredSchedule)
+  const topic = input.preferredTopics[0] || 'IELTS'
+
+  const focusVocab = input.vocabularyCount < 50
+  const reduceTasks = input.taskCompletionRate < 50
 
   const days: StudyPlanDay[] = []
   const current = new Date(today)
@@ -163,20 +216,30 @@ function fallbackSchedule(settings: AppSettings): StudyPlanData {
     const dayName = dayNames[current.getDay()]
 
     if (availableSet.has(dayName)) {
-      const items: StudyPlanTask[] = [
-        { category: 'Vocabulary', title: `Learn new vocabulary on ${topic}`, minutes: 15 },
-        { category: 'Vocabulary', title: 'Review due vocabulary', minutes: 10 },
-      ]
-      if (weakSet.has('reading')) items.push({ category: 'Reading', title: `Read IELTS passage on ${topic}`, minutes: 30 })
-      if (weakSet.has('listening')) items.push({ category: 'Listening', title: 'Complete a listening exercise', minutes: 25 })
-      if (weakSet.has('writing')) items.push({ category: 'Writing Task 2', title: `Write Task 2 essay on ${topic}`, minutes: 30 })
-      if (weakSet.has('speaking')) items.push({ category: 'Speaking Part 2', title: 'Practice cue card topic', minutes: 15 })
+      const items: StudyPlanTask[] = []
+
+      if (focusVocab) {
+        items.push({ category: 'Vocabulary', title: `Learn new vocabulary on ${topic}`, minutes: 15 })
+      }
+      items.push({ category: 'Vocabulary', title: 'Review due vocabulary', minutes: 10 })
+
+      if (input.weakSkills.includes('reading') || !reduceTasks) {
+        items.push({ category: 'Reading', title: `Read IELTS passage on ${topic}`, minutes: 30 })
+      }
+      if (input.weakSkills.includes('listening') && !reduceTasks) {
+        items.push({ category: 'Listening', title: 'Complete a listening exercise', minutes: 25 })
+      }
+      if (input.weakSkills.includes('writing') || items.length < 3) {
+        items.push({ category: 'Writing Task 2', title: `Write Task 2 essay on ${topic}`, minutes: 30 })
+      }
+      if (input.weakSkills.includes('speaking') && !reduceTasks) {
+        items.push({ category: 'Speaking Part 2', title: 'Practice cue card topic', minutes: 15 })
+      }
       items.push({ category: 'Grammar', title: 'Review grammar rules', minutes: 15 })
 
       const totalMin = items.reduce((s, i) => s + i.minutes, 0)
-      const maxMin = settings.dailyStudyMinutes || 60
-      if (totalMin > maxMin) {
-        while (items.reduce((s, i) => s + i.minutes, 0) > maxMin && items.length > 3) {
+      if (totalMin > input.dailyMinutes) {
+        while (items.reduce((s, i) => s + i.minutes, 0) > input.dailyMinutes && items.length > 2) {
           items.pop()
         }
       }
@@ -196,7 +259,7 @@ function fallbackSchedule(settings: AppSettings): StudyPlanData {
   const phase: StudyPlanPhase = {
     name: 'Study Plan',
     description: 'Personalised IELTS study schedule',
-    targetBandRange: `${settings.currentBand}-${settings.targetBand}`,
+    targetBandRange: `${input.currentBand}-${input.targetBand}`,
     weeks: [],
   }
 
@@ -217,11 +280,11 @@ export async function generateStudyPlan(): Promise<StudyPlannerState> {
   try {
     const settings = loadAppSettings()
     const config = getAiConfig(settings)
+    const input = await loadEnrichedInput(settings)
 
     let planData: StudyPlanData
 
     if (config) {
-      const input = buildInput(settings)
       const systemPrompt = buildStudyPlanSystemPrompt()
       const userPrompt = buildStudyPlanUserPrompt(input)
 
@@ -233,13 +296,13 @@ export async function generateStudyPlan(): Promise<StudyPlannerState> {
       )
 
       if (result.error || !result.content) {
-        planData = fallbackSchedule(settings)
+        planData = fallbackSchedule(input)
       } else {
         const parsed = parsePlanResponse(result.content)
-        planData = parsed ?? fallbackSchedule(settings)
+        planData = parsed ?? fallbackSchedule(input)
       }
     } else {
-      planData = fallbackSchedule(settings)
+      planData = fallbackSchedule(input)
     }
 
     savePlan(planData)
@@ -254,7 +317,8 @@ export async function generateStudyPlan(): Promise<StudyPlannerState> {
     }
   } catch (err) {
     const settings = loadAppSettings()
-    const planData = fallbackSchedule(settings)
+    const input = await loadEnrichedInput(settings)
+    const planData = fallbackSchedule(input)
     savePlan(planData)
     const tasks = await createTasksFromPlan(planData)
     return {
