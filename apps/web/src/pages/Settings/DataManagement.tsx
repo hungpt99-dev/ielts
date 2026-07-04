@@ -181,7 +181,7 @@ export default function DataManagement() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+        <h1 className="text-2xl font-bold" style={{ color: 'var(--color-danger)' }}>
           Data Management
         </h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
@@ -282,7 +282,7 @@ export default function DataManagement() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Reset Data</CardTitle>
+          <CardTitle style={{ color: 'var(--color-danger)' }}>Reset Data</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-slate-600 dark:text-slate-400">
