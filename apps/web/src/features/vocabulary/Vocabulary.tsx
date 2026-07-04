@@ -483,9 +483,7 @@ export default function Vocabulary() {
             />
           ) : (
             <div className="space-y-2">
-              {filteredEntries.map(entry => {
-                const isExpanded = expandedWordId === entry.id
-                return (
+              {filteredEntries.map(entry => (
                 <div
                   key={entry.id}
                   className="rounded-lg border p-4 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
@@ -507,23 +505,23 @@ export default function Vocabulary() {
                           </h3>
                         </button>
                         <button
-                          onClick={() => setExpandedWordId(isExpanded ? null : entry.id)}
+                          onClick={() => setExpandedWordId(expandedWordId === entry.id ? null : entry.id)}
                           className="flex items-center justify-center rounded-lg transition-colors"
                           style={{
                             width: '28px',
                             height: '28px',
                             border: '1px solid var(--color-border)',
-                            background: isExpanded ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
-                            color: isExpanded ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                            background: expandedWordId === entry.id ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
+                            color: expandedWordId === entry.id ? 'var(--color-primary)' : 'var(--color-text-secondary)',
                             cursor: 'pointer',
                             flexShrink: 0,
                             fontSize: '13px',
                             lineHeight: 1,
                           }}
-                          title={isExpanded ? 'Hide word forms' : 'Show word forms'}
-                          aria-label={isExpanded ? 'Hide word forms' : 'Show word forms'}
+                          title={expandedWordId === entry.id ? 'Hide word forms' : 'Show word forms'}
+                          aria-label={expandedWordId === entry.id ? 'Hide word forms' : 'Show word forms'}
                         >
-                          <span className={`inline-block transition-transform duration-200 ${isExpanded ? 'rotate-90' : ''}`}>
+                          <span className={`inline-block transition-transform duration-200 ${expandedWordId === entry.id ? 'rotate-90' : ''}`}>
                             ▶
                           </span>
                         </button>
@@ -632,7 +630,7 @@ export default function Vocabulary() {
                     </div>
                   </div>
 
-                  {isExpanded && (
+                  {expandedWordId === entry.id && (
                     <div className="mt-4 border-t pt-4" style={{ borderColor: 'var(--color-border)' }}>
                       <InlineWordFamily entry={entry} onGenerate={handleGenerateFamilyFor} />
                     </div>
