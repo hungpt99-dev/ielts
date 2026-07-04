@@ -1,5 +1,15 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { loadVocabulary, findWord, type PopupVocabEntry, type PopupVocabStats } from '../services/popupDataService'
+
+function speakWord(word: string) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(word)
+    utterance.lang = 'en-US'
+    utterance.rate = 0.85
+    window.speechSynthesis.speak(utterance)
+  }
+}
 
 interface SavedWordsViewProps {
   onBack: () => void
@@ -175,8 +185,36 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
                   <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>
                     {entry.word}
                   </span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); speakWord(entry.word) }}
+                    title={`Pronounce "${entry.word}"`}
+                    aria-label={`Listen to pronunciation of ${entry.word}`}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '24px',
+                      height: '24px',
+                      border: 'none',
+                      borderRadius: '4px',
+                      background: 'transparent',
+                      color: 'var(--color-muted)',
+                      cursor: 'pointer',
+                      padding: 0,
+                      lineHeight: 1,
+                      flexShrink: 0,
+                      verticalAlign: 'middle',
+                    }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-text-secondary)' }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-muted)' }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                      <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" />
+                    </svg>
+                  </button>
                   {entry.pronunciation && (
-                    <span style={{ marginLeft: '6px', fontSize: '11px', color: 'var(--color-muted)' }}>
+                    <span style={{ marginLeft: '2px', fontSize: '11px', color: 'var(--color-muted)' }}>
                       /{entry.pronunciation}/
                     </span>
                   )}

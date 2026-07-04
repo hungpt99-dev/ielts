@@ -19,12 +19,18 @@ export function safeStorageGet<T>(
     try {
       chrome.storage.local.get(keys, (result) => {
         if (chrome.runtime.lastError) {
+          if (!isContextError(chrome.runtime.lastError)) {
+            console.warn('[IELTS] storage.local.get error:', chrome.runtime.lastError)
+          }
           resolve({})
           return
         }
         resolve(result as Record<string, T | undefined>)
       })
-    } catch {
+    } catch (err) {
+      if (!isContextError(err)) {
+        console.warn('[IELTS] storage.local.get threw:', err)
+      }
       resolve({})
     }
   })
@@ -117,8 +123,17 @@ export function safeFetchProviderConfig(): Promise<{
         safeStorageGet<any>(['aiApiKey']),
       ])
       const settings = syncResult.extensionSettings || {}
+
+      // Primary: read from chrome.storage.local (where the options page saves it)
+      let apiKey = localResult.aiApiKey || ''
+
+      // Fallback: check if the key is in sync storage (legacy migration path)
+      if (!apiKey) {
+        apiKey = settings.aiApiKey || ''
+      }
+
       return {
-        apiKey: localResult.aiApiKey || '',
+        apiKey,
         baseUrl: settings.aiBaseUrl || OPENAI_BASE_URL,
         model: settings.aiModel || DEFAULT_MODEL,
       }

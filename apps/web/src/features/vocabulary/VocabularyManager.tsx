@@ -8,6 +8,7 @@ import EmptyState from '../../components/ui/EmptyState'
 import LoadingSpinner from '../../components/ui/LoadingSpinner'
 import WordForm from './components/WordForm'
 import ReviewMode from './components/ReviewMode'
+import PronounceButton from '../../components/ui/PronounceButton'
 import {
   computeStats,
   filterVocabulary,
@@ -450,6 +451,7 @@ export default function VocabularyManager({
                         {entry.word}
                       </h3>
                     </button>
+                    <PronounceButton word={entry.word} />
                     {entry.pronunciation && (
                       <span className="text-sm text-slate-400 dark:text-slate-500">
                         /{entry.pronunciation}/

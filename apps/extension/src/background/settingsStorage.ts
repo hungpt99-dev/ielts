@@ -113,17 +113,17 @@ export async function loadSettings(): Promise<ExtensionSettings> {
   return { ...settings, aiApiKey: apiKey }
 }
 
-export function saveSettings(settings: ExtensionSettings): Promise<void> {
-  return new Promise<void>((resolve) => {
-    const syncData = toSyncSettings(settings)
-    chrome.storage.sync.set({ [SYNC_KEY]: syncData }, () => {
-      chrome.storage.local.set({ [LOCAL_SETTINGS_BACKUP]: syncData })
-      resolve()
-    })
-    setApiKey(settings.aiApiKey || '')
-  }).then(() => {
-    notifyListeners(settings)
-  })
+export async function saveSettings(settings: ExtensionSettings): Promise<void> {
+  const syncData = toSyncSettings(settings)
+  await Promise.all([
+    new Promise<void>((resolve) => {
+      chrome.storage.sync.set({ [SYNC_KEY]: syncData }, () => {
+        chrome.storage.local.set({ [LOCAL_SETTINGS_BACKUP]: syncData }, resolve)
+      })
+    }),
+    setApiKey(settings.aiApiKey || ''),
+  ])
+  notifyListeners(settings)
 }
 
 export async function patchSettings(patch: Partial<ExtensionSettings>): Promise<ExtensionSettings> {

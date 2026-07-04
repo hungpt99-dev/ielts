@@ -4,6 +4,16 @@ import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { findWord } from '../services/popupDataService'
 
+function speakWord(word: string) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(word)
+    utterance.lang = 'en-US'
+    utterance.rate = 0.85
+    window.speechSynthesis.speak(utterance)
+  }
+}
+
 interface VocabularyCollectorProps {
   onSaved: () => void
   onCancel: () => void
@@ -618,6 +628,34 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
               <span style={{ fontSize: '12px', color: 'var(--color-muted)', fontFamily: 'monospace' }}>
                 {aiDetails.pronunciation}
               </span>
+            )}
+            {word.trim() && (
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); speakWord(word.trim()) }}
+                title={`Pronounce "${word.trim()}"`}
+                aria-label="Listen to pronunciation"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '24px',
+                  height: '24px',
+                  border: 'none',
+                  borderRadius: '4px',
+                  background: 'transparent',
+                  color: 'var(--color-muted)',
+                  cursor: 'pointer',
+                  padding: 0,
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-text-secondary)' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-muted)' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                  <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" />
+                </svg>
+              </button>
             )}
           </div>
 

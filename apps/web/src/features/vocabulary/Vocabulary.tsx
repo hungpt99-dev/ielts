@@ -10,6 +10,7 @@ import ReviewMode from './components/ReviewMode'
 import VocabularyImport from './VocabularyImport'
 import { onVocabularyChanged } from './vocabularyEvents'
 import { onVocabSavedFromExtension, notifyExtensionVocabSaved } from '../../services/storage/VocabularySync'
+import PronounceButton from '../../components/ui/PronounceButton'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -468,6 +469,7 @@ export default function Vocabulary() {
                             {entry.word}
                           </h3>
                         </button>
+                        <PronounceButton word={entry.word} />
                         {entry.pronunciation && (
                           <span className="text-sm" style={{ color: 'var(--color-muted)' }}>
                             /{entry.pronunciation}/
@@ -624,9 +626,12 @@ export default function Vocabulary() {
                 Pronunciation: /{detailEntry.pronunciation}/
               </p>
             )}
-            <p className="text-xs italic" style={{ color: 'var(--color-muted)' }}>
-              {detailEntry.partOfSpeech}
-            </p>
+            <div className="flex items-center gap-2">
+              <PronounceButton word={detailEntry.word} />
+              <p className="text-xs italic" style={{ color: 'var(--color-muted)' }}>
+                {detailEntry.partOfSpeech}
+              </p>
+            </div>
 
             <div>
               <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>Meaning</p>
