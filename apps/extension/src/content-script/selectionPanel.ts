@@ -374,6 +374,7 @@ function renderDictionaryData(data: DictionaryEntry): void {
     if (data.pronunciation) {
       html += `<span style="font-size:11px;color:var(--ielts-muted);font-style:italic;">${escapeHtml(data.pronunciation)}</span>`
     }
+    html += `<button id="${PANEL_ID}-speak" title="Listen to pronunciation" aria-label="Listen to pronunciation" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:none;border-radius:4px;background:transparent;color:var(--ielts-muted);cursor:pointer;padding:0;line-height:1;flex-shrink:0;font-size:14px;">🔊</button>`
     html += `</div>`
   }
 
@@ -396,6 +397,19 @@ function renderDictionaryData(data: DictionaryEntry): void {
   }
 
   bodyEl.innerHTML = html
+
+  const speakBtn = document.getElementById(`${PANEL_ID}-speak`)
+  if (speakBtn) {
+    speakBtn.addEventListener('click', () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel()
+        const utterance = new SpeechSynthesisUtterance(normalizeWord(selectedText) || data.word)
+        utterance.lang = 'en-US'
+        utterance.rate = 0.85
+        window.speechSynthesis.speak(utterance)
+      }
+    })
+  }
 }
 
 function showToast(message: string): void {

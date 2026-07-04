@@ -56,6 +56,7 @@ export default function Vocabulary() {
   const [detailEntry, setDetailEntry] = useState<VocabularyEntry | null>(null)
   const [detailOpen, setDetailOpen] = useState(false)
   const [generatingFamily, setGeneratingFamily] = useState(false)
+  const [expandedWordId, setExpandedWordId] = useState<string | null>(null)
 
   const [tab, setTab] = useState<'browse' | 'review'>('browse')
 
@@ -235,6 +236,20 @@ export default function Vocabulary() {
     }
     setGeneratingFamily(false)
   }, [detailEntry])
+
+  const handleGenerateFamilyFor = useCallback(async (entry: VocabularyEntry) => {
+    const result = await generateWordFamily(entry.word, entry.meaning)
+    if (result.wordFamily.length > 0) {
+      const updated: VocabularyEntry = {
+        ...entry,
+        wordFamily: [...new Set([...entry.wordFamily, ...result.wordFamily])],
+        updatedAt: new Date().toISOString(),
+      }
+      await DatabaseService.put('vocabulary', updated)
+      setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
+    }
+    return result
+  }, [])
 
   if (loading) {
     return (
@@ -468,7 +483,9 @@ export default function Vocabulary() {
             />
           ) : (
             <div className="space-y-2">
-              {filteredEntries.map(entry => (
+              {filteredEntries.map(entry => {
+                const isExpanded = expandedWordId === entry.id
+                return (
                 <div
                   key={entry.id}
                   className="rounded-lg border p-4 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
@@ -508,6 +525,25 @@ export default function Vocabulary() {
                         </p>
                       )}
                       <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <button
+                          onClick={() => setExpandedWordId(isExpanded ? null : entry.id)}
+                          className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors"
+                          style={{
+                            backgroundColor: isExpanded ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
+                            color: isExpanded ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                            border: 'none',
+                            cursor: 'pointer',
+                          }}
+                          title={isExpanded ? 'Hide word forms' : 'Show word forms'}
+                        >
+                          <svg className={`h-3 w-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
+                          Forms
+                          {(entry.wordFamily.length > 0) && (
+                            <span className="ml-0.5">({entry.wordFamily.length})</span>
+                          )}
+                        </button>
                         <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_COLORS[entry.status]}`}>
                           {entry.status}
                         </span>
@@ -593,6 +629,12 @@ export default function Vocabulary() {
                       </Button>
                     </div>
                   </div>
+
+                  {isExpanded && (
+                    <div className="mt-4 border-t pt-4" style={{ borderColor: 'var(--color-border)' }}>
+                      <InlineWordFamily entry={entry} onGenerate={handleGenerateFamilyFor} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -769,5 +811,26 @@ export default function Vocabulary() {
         )}
       </Modal>
     </div>
+  )
+}
+
+function InlineWordFamily({ entry, onGenerate }: {
+  entry: VocabularyEntry
+  onGenerate: (entry: VocabularyEntry) => Promise<{ wordFamily: string[]; error: string | null }>
+}) {
+  const [generating, setGenerating] = useState(false)
+
+  const handleGenerate = useCallback(async () => {
+    setGenerating(true)
+    await onGenerate(entry)
+    setGenerating(false)
+  }, [entry, onGenerate])
+
+  return (
+    <WordFamilyDisplay
+      wordFamily={entry.wordFamily}
+      onGenerate={handleGenerate}
+      generating={generating}
+    />
   )
 }
