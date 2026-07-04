@@ -1,4 +1,9 @@
 import type { SaveCategory } from '../types'
+import {
+  safeStorageGet,
+  safeStorageSet,
+  safeSendMessage,
+} from '../utils/safe-chrome'
 
 interface SaveSelectionPayload {
   text: string
@@ -50,22 +55,24 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === 'SAVE_SELECTION') {
     const payload = message.payload as SaveSelectionPayload
     showToast(`Saved as ${payload.category}`)
-    sendResponse({ success: true })
+    try { sendResponse({ success: true }) } catch { /* ignore */ }
     return false
   }
 
   if (message.type === 'GET_PAGE_INFO') {
-    sendResponse({
-      title: document.title,
-      url: window.location.href,
-      selectedText: getSelectedText(),
-    })
+    try {
+      sendResponse({
+        title: document.title,
+        url: window.location.href,
+        selectedText: getSelectedText(),
+      })
+    } catch { /* ignore */ }
     return false
   }
 
   if (message.type === 'SAVE_ARTIFACT') {
     const payload = message.payload as Record<string, unknown>
-    chrome.storage.local.get(['artifacts'], (result) => {
+    safeStorageGet<any[]>('artifacts').then((result) => {
       const items = result.artifacts || []
       items.unshift({
         id: crypto.randomUUID(),
@@ -80,16 +87,16 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       })
-      chrome.storage.local.set({ artifacts: items })
+      safeStorageSet({ artifacts: items })
     })
     showToast('Page saved as Artifact')
-    sendResponse({ success: true })
+    try { sendResponse({ success: true }) } catch { /* ignore */ }
     return false
   }
 
   if (message.type === 'SAVE_SELECTION_FULL') {
     const payload = message.payload as SaveSelectionPayload
-    chrome.storage.local.get(['savedItems'], (result) => {
+    safeStorageGet<any[]>('savedItems').then((result) => {
       const items = result.savedItems || []
       items.unshift({
         id: crypto.randomUUID(),
@@ -103,9 +110,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         difficulty: payload.difficulty || '',
         tags: payload.tags || [],
       })
-      chrome.storage.local.set({ savedItems: items })
+      safeStorageSet({ savedItems: items })
 
-      chrome.runtime.sendMessage({
+      safeSendMessage({
         type: 'UPDATE_PROGRESS',
         payload: {
           wordsAdded: payload.category === 'vocabulary' ? 1 : 0,
@@ -114,7 +121,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       })
     })
     showToast(`Saved as ${payload.category}`)
-    sendResponse({ success: true })
+    try { sendResponse({ success: true }) } catch { /* ignore */ }
     return false
   }
 })

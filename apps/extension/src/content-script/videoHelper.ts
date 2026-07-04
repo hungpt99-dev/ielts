@@ -1,6 +1,8 @@
 const PANEL_ID = 'ielts-video-helper'
 const TOAST_ID = 'ielts-vh-toast'
 
+import { safeSendMessage } from '../utils/safe-chrome'
+
 interface VideoPageInfo {
   isVideoPage: boolean
   platform: string
@@ -137,7 +139,7 @@ class VideoHelperUI {
     injectStyles()
     this.createBadge(info)
 
-    chrome.runtime.sendMessage({
+    safeSendMessage({
       type: 'VIDEO_PAGE_DETECTED',
       payload: {
         isVideoPage: true,
@@ -168,7 +170,7 @@ class VideoHelperUI {
 
     this.badge.addEventListener('click', () => {
       this.badge?.classList.remove('show')
-      chrome.runtime.sendMessage({
+      safeSendMessage({
         type: 'VIDEO_HELPER_OPEN',
         payload: {
           videoTitle: info.videoTitle,

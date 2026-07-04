@@ -13,6 +13,7 @@ import {
   AI_EXPLAIN_ICONS,
 } from '@ielts/ai'
 import { injectContentStyles } from './sharedStyles'
+import { safeSendMessage, safeFetchProviderConfig } from '../utils/safe-chrome'
 
 const PANEL_ID = 'ielts-ai-explain-panel'
 const OVERLAY_ID = 'ielts-ai-explain-overlay'
@@ -25,18 +26,7 @@ interface AiExplainEntry {
   loading: boolean
 }
 
-async function getProviderConfig(): Promise<{ apiKey: string; baseUrl: string; model: string }> {
-  const [syncResult, localResult] = await Promise.all([
-    new Promise<any>(r => chrome.storage.sync.get(['extensionSettings'], r)),
-    new Promise<any>(r => chrome.storage.local.get(['aiApiKey'], r)),
-  ])
-  const settings = syncResult.extensionSettings || {}
-  return {
-    apiKey: localResult.aiApiKey || '',
-    baseUrl: settings.aiBaseUrl || 'https://api.openai.com/v1',
-    model: settings.aiModel || 'gpt-4o-mini',
-  }
-}
+const getProviderConfig = safeFetchProviderConfig
 
 let currentText = ''
 let entries: Record<AiExplainType, AiExplainEntry> = {} as Record<AiExplainType, AiExplainEntry>
@@ -288,7 +278,7 @@ function renderMissingKey(bodyEl: HTMLDivElement): void {
   if (settingsBtn) {
     settingsBtn.addEventListener('click', () => {
       closePanel()
-      chrome.runtime.sendMessage({ type: 'OPEN_OPTIONS' })
+      safeSendMessage({ type: 'OPEN_OPTIONS' })
     })
   }
 

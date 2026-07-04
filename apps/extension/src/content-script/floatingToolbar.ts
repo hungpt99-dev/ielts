@@ -2,6 +2,12 @@ import type { SaveCategory } from '../types'
 import type { AiExplainType } from '@ielts/ai'
 import { showExplainPanel } from './aiExplain'
 import { injectContentStyles } from './sharedStyles'
+import {
+  safeStorageGet,
+  safeStorageSet,
+  safeSyncGet,
+  safeSendMessage,
+} from '../utils/safe-chrome'
 
 const FLOATING_TOOLBAR_ID = 'ielts-ft-bar'
 const FLOATING_STYLES_ID = 'ielts-ft-styles'
@@ -42,13 +48,9 @@ class FloatingToolbar {
   }
 
   private async loadSettings(): Promise<void> {
-    try {
-      const result = await chrome.storage.sync.get(['extensionSettings'])
-      const settings = result.extensionSettings || {}
-      this.isEnabled = settings.floatingToolbar !== false
-    } catch {
-      this.isEnabled = true
-    }
+    const result = await safeSyncGet<any>(['extensionSettings'])
+    const settings = result.extensionSettings || {}
+    this.isEnabled = settings.floatingToolbar !== false
   }
 
   private addListeners(): void {
@@ -298,7 +300,7 @@ class FloatingToolbar {
     }
   }
 
-  private saveText(text: string, category: SaveCategory): void {
+  private async saveText(text: string, category: SaveCategory): Promise<void> {
     const entry = {
       id: crypto.randomUUID(),
       text,
@@ -312,13 +314,12 @@ class FloatingToolbar {
       tags: [] as string[],
     }
 
-    chrome.storage.local.get(['savedItems'], (result) => {
-      const items = result.savedItems || []
-      items.unshift(entry)
-      chrome.storage.local.set({ savedItems: items })
-    })
+    const result = await safeStorageGet<any[]>('savedItems')
+    const items = result.savedItems || []
+    items.unshift(entry)
+    await safeStorageSet({ savedItems: items })
 
-    chrome.runtime.sendMessage({
+    safeSendMessage({
       type: 'UPDATE_PROGRESS',
       payload: {
         wordsAdded: category === 'vocabulary' ? 1 : 0,

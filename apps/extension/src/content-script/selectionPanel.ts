@@ -7,6 +7,13 @@ import {
 } from '@ielts/ai'
 import { showExplainPanel } from './aiExplain'
 import { injectContentStyles } from './sharedStyles'
+import {
+  safeStorageGet,
+  safeStorageSet,
+  safeSyncGet,
+  safeSendMessage,
+  safeFetchProviderConfig,
+} from '../utils/safe-chrome'
 
 const PANEL_ID = 'ielts-sp-panel'
 const STYLES_ID = 'ielts-sp-styles'
@@ -65,13 +72,9 @@ async function init(): Promise<void> {
 }
 
 async function loadSettings(): Promise<void> {
-  try {
-    const result = await chrome.storage.sync.get(['extensionSettings'])
-    const settings = result.extensionSettings || {}
-    isEnabled = settings.floatingToolbar !== false
-  } catch {
-    isEnabled = true
-  }
+  const result = await safeSyncGet<any>(['extensionSettings'])
+  const settings = result.extensionSettings || {}
+  isEnabled = settings.floatingToolbar !== false
 }
 
 function onMouseUp(e: MouseEvent): void {
@@ -265,7 +268,7 @@ function execute(action: ToolbarAction): void {
   }
 }
 
-function saveText(text: string, category: SaveCategory): void {
+async function saveText(text: string, category: SaveCategory): Promise<void> {
   const entry = {
     id: crypto.randomUUID(),
     text,
@@ -279,13 +282,12 @@ function saveText(text: string, category: SaveCategory): void {
     tags: [] as string[],
   }
 
-  chrome.storage.local.get(['savedItems'], (result) => {
-    const items = result.savedItems || []
-    items.unshift(entry)
-    chrome.storage.local.set({ savedItems: items })
-  })
+  const result = await safeStorageGet<any[]>('savedItems')
+  const items = result.savedItems || []
+  items.unshift(entry)
+  await safeStorageSet({ savedItems: items })
 
-  chrome.runtime.sendMessage({
+  safeSendMessage({
     type: 'UPDATE_PROGRESS',
     payload: {
       wordsAdded: category === 'vocabulary' ? 1 : 0,
@@ -431,18 +433,7 @@ function showToast(message: string): void {
   }, 2800)
 }
 
-async function getProviderConfig(): Promise<{ apiKey: string; baseUrl: string; model: string }> {
-  const [syncResult, localResult] = await Promise.all([
-    new Promise<any>(r => chrome.storage.sync.get(['extensionSettings'], r)),
-    new Promise<any>(r => chrome.storage.local.get(['aiApiKey'], r)),
-  ])
-  const settings = syncResult.extensionSettings || {}
-  return {
-    apiKey: localResult.aiApiKey || '',
-    baseUrl: settings.aiBaseUrl || 'https://api.openai.com/v1',
-    model: settings.aiModel || 'gpt-4o-mini',
-  }
-}
+const getProviderConfig = safeFetchProviderConfig
 
 function removePanel(): void {
   const existing = document.getElementById(PANEL_ID)

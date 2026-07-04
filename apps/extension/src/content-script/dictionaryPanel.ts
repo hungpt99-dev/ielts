@@ -2,26 +2,20 @@ import {
   generateDictionaryEntry,
   dictionaryCache,
   type DictionaryEntry,
-  type ProviderConfig,
 } from '@ielts/ai'
 import { injectContentStyles } from './sharedStyles'
+import {
+  safeStorageGet,
+  safeStorageSet,
+  safeSendMessage,
+  safeFetchProviderConfig,
+} from '../utils/safe-chrome'
 
 const PANEL_ID = 'ielts-dict-panel'
 const TOAST_ID = 'ielts-dict-toast'
 const STYLES_ID = 'ielts-dict-styles'
 
-async function getProviderConfig(): Promise<ProviderConfig> {
-  const [syncResult, localResult] = await Promise.all([
-    new Promise<any>(r => chrome.storage.sync.get(['extensionSettings'], r)),
-    new Promise<any>(r => chrome.storage.local.get(['aiApiKey'], r)),
-  ])
-  const settings = syncResult.extensionSettings || {}
-  return {
-    apiKey: localResult.aiApiKey || '',
-    baseUrl: settings.aiBaseUrl || 'https://api.openai.com/v1',
-    model: settings.aiModel || 'gpt-4o-mini',
-  }
-}
+const getProviderConfig = safeFetchProviderConfig
 
 let panelEl: HTMLDivElement | null = null
 let currentWord = ''
@@ -343,13 +337,12 @@ async function saveWord(): Promise<void> {
     entry.collocations = cached.collocations
   }
 
-  await chrome.storage.local.get(['vocabulary'], (result) => {
-    const items = result.vocabulary || []
-    items.unshift(entry)
-    chrome.storage.local.set({ vocabulary: items })
-  })
+  const vocabResult = await safeStorageGet<any[]>('vocabulary')
+  const vocabItems = vocabResult.vocabulary || []
+  vocabItems.unshift(entry)
+  await safeStorageSet({ vocabulary: vocabItems })
 
-  chrome.runtime.sendMessage({
+  safeSendMessage({
     type: 'UPDATE_PROGRESS',
     payload: { wordsAdded: 1 },
   })
