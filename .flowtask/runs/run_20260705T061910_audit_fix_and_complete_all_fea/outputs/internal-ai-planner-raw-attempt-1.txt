@@ -1,0 +1,986 @@
+{
+  "title": "Audit and Fix IELTS Journey Chrome Extension Features",
+  "summary": "Inspect, audit, and fix all features of the IELTS Journey Chrome Extension to ensure full functionality and production readiness.",
+  "tasks": [
+    {
+      "title": "Inspect and Document Current Extension Architecture",
+      "description": "Perform a thorough inspection of the existing IELTS Journey Chrome Extension codebase, including popup UI, content scripts, background/service worker, storage, API sync, and AI features. Document the architecture, component interactions, data flow, and communication mechanisms between extension parts in a structured report.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Architecture report covers all extension parts: popup, content scripts, background/service worker, storage, API sync, AI features",
+        "Data flow and communication between components are clearly described",
+        "Existing services and utilities are identified"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "ls apps/extension/src"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A comprehensive architecture document describing the extension's structure and component interactions is produced.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-architecture-audit.md",
+          "description": "Architecture audit report for IELTS Journey Chrome Extension",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "analyze",
+      "inputContext": "Access to full extension source code under apps/extension/src",
+      "targetFiles": [
+        "docs/extension-architecture-audit.md"
+      ],
+      "targetArtifacts": [
+        "extension-architecture-audit.md"
+      ],
+      "evidence": [
+        "docs/extension-architecture-audit.md file exists"
+      ],
+      "verificationCommand": "ls docs/extension-architecture-audit.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundational understanding of extension architecture for targeted fixes."
+    },
+    {
+      "title": "List and Assess All Existing Extension Features and Their Status",
+      "description": "Create a detailed list of all existing features implemented in the extension, referencing documentation and source code. For each feature, assess its current implementation status: working, broken, incomplete, duplicated, or risky. Include features from popup UI, content scripts, background/service worker, storage, API sync, and AI integration.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Inspect and Document Current Extension Architecture"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Complete feature list covering all extension functionalities",
+        "Status assessment for each feature with clear notes on issues or risks",
+        "Reference to source files or modules implementing each feature"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "cat docs/extension-architecture-audit.md"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A feature status report listing all extension features with their current implementation health and issues.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-feature-status.md",
+          "description": "Feature list and status assessment for IELTS Journey Chrome Extension",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "research",
+      "actionType": "analyze",
+      "inputContext": "Extension architecture audit report",
+      "targetFiles": [
+        "docs/extension-feature-status.md"
+      ],
+      "targetArtifacts": [
+        "extension-feature-status.md"
+      ],
+      "evidence": [
+        "docs/extension-feature-status.md file exists"
+      ],
+      "verificationCommand": "ls docs/extension-feature-status.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Identifies feature gaps and issues to prioritize fixes."
+    },
+    {
+      "title": "Identify Broken, Incomplete, Duplicated, or Risky Extension Parts",
+      "description": "Analyze the feature status report and source code to identify specific broken, incomplete, duplicated, or risky parts of the extension. Highlight critical user-facing issues and architectural risks such as duplicated event listeners, memory leaks, or unsafe DOM manipulations. Document these findings with references to code locations.",
+      "executor": "opencode",
+      "dependsOn": [
+        "List and Assess All Existing Extension Features and Their Status"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Clear list of broken or incomplete features with code references",
+        "Identification of duplicated or risky code patterns",
+        "Prioritized list of issues based on user impact and technical risk"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "cat docs/extension-feature-status.md"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A detailed issues report listing all problematic extension parts with prioritization for fixes.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-issues-report.md",
+          "description": "Issues and risks report for IELTS Journey Chrome Extension",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "investigate",
+      "inputContext": "Extension feature status report and source code",
+      "targetFiles": [
+        "docs/extension-issues-report.md"
+      ],
+      "targetArtifacts": [
+        "extension-issues-report.md"
+      ],
+      "evidence": [
+        "docs/extension-issues-report.md file exists"
+      ],
+      "verificationCommand": "ls docs/extension-issues-report.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a prioritized list of extension problems to address."
+    },
+    {
+      "title": "Fix Extension Popup Opening and User Data Display Issues",
+      "description": "Fix issues preventing the extension popup from opening correctly. Ensure the popup UI loads reliably and can read and display user data from storage. Modify popup components and hooks as needed to fix data fetching, state management, and rendering bugs. Add error handling and loading states for user data display.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Identify Broken, Incomplete, Duplicated, or Risky Extension Parts"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Extension popup opens reliably on icon click",
+        "User data is fetched from storage and displayed correctly in popup",
+        "Loading, error, and empty states are handled gracefully in popup UI"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter popup"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Extension popup UI opens and displays user data correctly with proper state handling.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/App.tsx",
+          "description": "Fix popup root component to handle opening and data display",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/hooks/usePopupData.ts",
+          "description": "Fix data fetching hook to read user data correctly",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/PopupDashboard.tsx",
+          "description": "Fix dashboard component to display user data and handle states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Extension issues report, popup UI source code",
+      "targetFiles": [
+        "apps/extension/src/popup/App.tsx",
+        "apps/extension/src/popup/hooks/usePopupData.ts",
+        "apps/extension/src/popup/components/PopupDashboard.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "popup opens without errors",
+        "user data visible in popup UI",
+        "tests for popup pass"
+      ],
+      "verificationCommand": "pnpm test --filter popup",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Restores core popup functionality for user interaction."
+    },
+    {
+      "title": "Fix Vocabulary Notebook and Word Details Display in Popup",
+      "description": "Fix the vocabulary notebook feature in the popup to correctly load and display saved vocabulary items. Implement click handlers on vocabulary items to show detailed word information including meaning, pronunciation, part of speech, forms, synonyms, examples, and IELTS usage. Ensure the read/pronunciation button works with text-to-speech integration.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Fix Extension Popup Opening and User Data Display Issues"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Vocabulary notebook loads saved vocabulary correctly",
+        "Clicking a vocabulary item opens a detailed view with all required word information",
+        "Read/pronunciation button triggers correct text-to-speech playback"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter vocabulary"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Vocabulary notebook and word details feature fully functional with TTS support.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/VocabularyNotebook.tsx",
+          "description": "Fix vocabulary list loading and display",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/WordDetails.tsx",
+          "description": "Implement detailed word information view with TTS button",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/services/textToSpeech.ts",
+          "description": "Fix or implement text-to-speech service for pronunciation",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Popup vocabulary components and TTS service source code",
+      "targetFiles": [
+        "apps/extension/src/popup/components/VocabularyNotebook.tsx",
+        "apps/extension/src/popup/components/WordDetails.tsx",
+        "apps/extension/src/popup/services/textToSpeech.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "vocabulary notebook displays saved words",
+        "word details show all required info",
+        "pronunciation button plays audio",
+        "vocabulary tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter vocabulary",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Restores full vocabulary management and learning support in popup."
+    },
+    {
+      "title": "Fix Text Selection Handling and AI Explanation/Simplification Features in Content Script",
+      "description": "Fix content script logic to detect user text selection on any webpage reliably. Ensure the floating toolbar appears on selection with options to explain or simplify the selected text using AI. Fix communication between content script and background/service worker for AI API calls. Add error handling and loading states for AI responses.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Identify Broken, Incomplete, Duplicated, or Risky Extension Parts"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Text selection detection works on various webpages",
+        "Floating toolbar appears correctly without breaking page layout",
+        "Explain and simplify AI features return valid responses",
+        "Errors and loading states handled gracefully"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter content"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Content script text selection and AI features work reliably with proper UI and error handling.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/content/selection-handler.ts",
+          "description": "Fix text selection detection and event handling",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/content/floating-toolbar.ts",
+          "description": "Fix floating toolbar UI injection and positioning",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/ai-service.ts",
+          "description": "Fix AI API call handling and messaging",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Content script and background AI service source code",
+      "targetFiles": [
+        "apps/extension/src/content/selection-handler.ts",
+        "apps/extension/src/content/floating-toolbar.ts",
+        "apps/extension/src/background/ai-service.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "floating toolbar appears on text selection",
+        "AI explain and simplify features return results",
+        "content script tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter content",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Restores core AI-powered text assistance features in content scripts."
+    },
+    {
+      "title": "Fix Saving Selected Text, Vocabulary, and Article/Page Content Features",
+      "description": "Fix logic to save selected text, new vocabulary entries, and article/page content as reading material. Ensure data is stored correctly in IndexedDB or chrome.storage with proper sync to web app. Fix UI feedback for save actions and error handling. Verify data consistency and no duplication.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Fix Text Selection Handling and AI Explanation/Simplification Features in Content Script"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Selected text can be saved successfully",
+        "New vocabulary entries save correctly without duplicates",
+        "Article/page content saves as reading material",
+        "Data sync with web app works correctly",
+        "UI shows success, error, and loading states properly"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter storage"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Saving features for text, vocabulary, and articles work reliably with sync and UI feedback.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/services/storage.ts",
+          "description": "Fix storage wrapper for saving and syncing data",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/SaveForm.tsx",
+          "description": "Fix UI components for saving vocabulary and articles",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Storage service and popup save UI source code",
+      "targetFiles": [
+        "apps/extension/src/services/storage.ts",
+        "apps/extension/src/popup/components/SaveForm.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "data saved and synced without duplication",
+        "UI feedback visible on save actions",
+        "storage tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter storage",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures reliable data saving and syncing features."
+    },
+    {
+      "title": "Fix YouTube/Video Page Support and Video Metadata Saving",
+      "description": "Fix extension support for YouTube and other video pages. Detect video title, URL, and transcript/notes if available. Implement saving of video metadata and transcript as study material. Ensure UI integration in popup and content scripts for video-related features.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Fix Saving Selected Text, Vocabulary, and Article/Page Content Features"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Video pages are detected correctly",
+        "Video title, URL, and transcript can be saved",
+        "Popup UI shows video-related features and saved data",
+        "No errors or layout breakage on video pages"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter video"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Video page support and metadata saving features work correctly and integrate with extension UI.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/content/youtube-helper.ts",
+          "description": "Fix YouTube page detection and transcript extraction",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/VideoHelper.tsx",
+          "description": "Fix popup UI for video metadata display and saving",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "YouTube helper and popup video UI source code",
+      "targetFiles": [
+        "apps/extension/src/content/youtube-helper.ts",
+        "apps/extension/src/popup/components/VideoHelper.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "video metadata saved correctly",
+        "popup shows video info",
+        "video tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter video",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Adds robust video page support and metadata saving."
+    },
+    {
+      "title": "Fix Auto-Highlighting of Saved Words on Webpages",
+      "description": "Fix the auto-highlight feature to highlight saved vocabulary words on webpages without breaking layout or causing duplicate highlights. Ensure safe DOM manipulation and event listener management. Make auto-highlight work reliably on dynamic pages and avoid performance issues.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Identify Broken, Incomplete, Duplicated, or Risky Extension Parts"
+      ],
+      "riskLevel": "high",
+      "acceptanceCriteria": [
+        "Saved words are highlighted correctly on various websites",
+        "No duplicate highlights occur",
+        "Page layout and styles remain intact",
+        "Auto-highlight works on dynamic content pages",
+        "No memory leaks or duplicated event listeners"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter content"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Auto-highlight feature works safely and reliably without breaking host pages.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/content/auto-highlight.ts",
+          "description": "Fix auto-highlight logic for safe DOM manipulation and duplicate avoidance",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Content script auto-highlight source code",
+      "targetFiles": [
+        "apps/extension/src/content/auto-highlight.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "words highlighted without duplicates",
+        "no layout breakage on tested sites",
+        "content script tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter content",
+      "approvalRequired": true,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures safe and performant auto-highlight feature."
+    },
+    {
+      "title": "Fix Vocabulary Review Flow and Pending Review Count Display",
+      "description": "Fix the vocabulary review flow accessible from the extension popup. Ensure the user can start a review session, and the pending review count displays correctly in the popup dashboard. Fix review session state management and UI updates.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Fix Vocabulary Notebook and Word Details Display in Popup"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "User can start vocabulary review from popup",
+        "Pending review count is accurate and updates correctly",
+        "Review session UI works without errors"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter review"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Vocabulary review flow and pending review count feature fully functional in popup.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/PendingReviews.tsx",
+          "description": "Fix pending review count display and update logic",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/ReviewSession.tsx",
+          "description": "Fix review session UI and state management",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Popup review components source code",
+      "targetFiles": [
+        "apps/extension/src/popup/components/PendingReviews.tsx",
+        "apps/extension/src/popup/components/ReviewSession.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "review session starts correctly",
+        "pending review count updates accurately",
+        "review tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter review",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Restores core vocabulary review functionality."
+    },
+    {
+      "title": "Fix AI Tutor Entry Point and Context Usage in Extension",
+      "description": "Fix the AI Tutor entry point accessible from the extension popup. Ensure it can use selected text or page context when available for AI interactions. Fix communication between popup, background, and AI services. Add proper error handling and loading states.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Fix Text Selection Handling and AI Explanation/Simplification Features in Content Script"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "AI Tutor entry point opens correctly from popup",
+        "Selected text or page context is passed to AI Tutor",
+        "AI Tutor UI handles loading, error, and success states properly"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter ai-tutor"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "AI Tutor feature works correctly with context-aware AI interactions.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/AITutorEntry.tsx",
+          "description": "Fix AI Tutor entry point UI and context passing",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/background/ai-service.ts",
+          "description": "Fix AI service to handle context-aware requests",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "AI Tutor popup and background AI service source code",
+      "targetFiles": [
+        "apps/extension/src/popup/components/AITutorEntry.tsx",
+        "apps/extension/src/background/ai-service.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "AI Tutor opens with context",
+        "AI responses received and displayed",
+        "AI Tutor tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter ai-tutor",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Restores AI Tutor functionality with context awareness."
+    },
+    {
+      "title": "Fix Public API/Search/Import Export Features in Extension",
+      "description": "Fix existing public API, search, and import/export open content features in the extension if implemented. Ensure these features work correctly with storage and UI. Fix any broken UI components, API calls, or data handling logic.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Identify Broken, Incomplete, Duplicated, or Risky Extension Parts"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Public API and search features work correctly",
+        "Import and export features function without errors",
+        "UI components for these features display proper states"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter import-export"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Public API, search, and import/export features fully functional in extension.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/ImportExportSection.tsx",
+          "description": "Fix import/export UI and logic",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/services/api-client.ts",
+          "description": "Fix public API and search client logic",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Import/export and API client source code",
+      "targetFiles": [
+        "apps/extension/src/popup/components/ImportExportSection.tsx",
+        "apps/extension/src/services/api-client.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "import/export works without errors",
+        "API search returns results",
+        "import-export tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter import-export",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Restores data import/export and public API features."
+    },
+    {
+      "title": "Fix Settings and Configuration Sync Between Web App and Extension",
+      "description": "Fix settings and configuration management to ensure consistency between the web app and extension. Fix storage sync logic, UI settings forms, and state management. Handle authentication state correctly and display logged-out state clearly. Add error handling and loading states.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Fix Public API/Search/Import Export Features in Extension"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Settings changes in extension reflect in web app and vice versa",
+        "Authentication state is handled correctly",
+        "Logged-out state is clearly indicated in UI",
+        "Settings UI shows loading, error, and success states"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter settings"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Settings and authentication state sync correctly between extension and web app.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/options/components/AiSettingsForm.tsx",
+          "description": "Fix AI settings form UI and sync logic",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/services/storage-bridge.ts",
+          "description": "Fix storage sync bridge between extension and web app",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Settings UI and storage sync source code",
+      "targetFiles": [
+        "apps/extension/src/options/components/AiSettingsForm.tsx",
+        "apps/extension/src/services/storage-bridge.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "settings sync works bidirectionally",
+        "authentication state handled correctly",
+        "settings tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter settings",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures consistent user settings and auth state across platforms."
+    },
+    {
+      "title": "Add Missing Loading, Empty, Error, and Success States Across Extension UI",
+      "description": "Audit all extension UI components and add missing loading, empty, error, and success states. Ensure consistent user feedback during async operations such as data fetching, saving, AI calls, and sync. Use existing reusable components and styles. Add proper error boundaries where needed.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Fix Settings and Configuration Sync Between Web App and Extension"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "All async UI operations show appropriate loading indicators",
+        "Empty states are shown when no data is available",
+        "Errors are displayed clearly with retry options",
+        "Success states confirm user actions"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter ui"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Extension UI provides clear and consistent feedback states for all user interactions.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/EmptyState.tsx",
+          "description": "Improve empty state component usage",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/ErrorBoundary.tsx",
+          "description": "Add or fix error boundary components",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/LoadingSpinner.tsx",
+          "description": "Add or fix loading spinner component",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Extension UI components source code",
+      "targetFiles": [
+        "apps/extension/src/popup/components/EmptyState.tsx",
+        "apps/extension/src/popup/components/ErrorBoundary.tsx",
+        "apps/extension/src/popup/components/LoadingSpinner.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "loading, empty, error, success states visible in UI",
+        "UI tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter ui",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Improves user experience with clear UI feedback."
+    },
+    {
+      "title": "Test Core Extension Flows Manually and Add Automated Tests",
+      "description": "Perform manual testing of core extension flows including popup opening, vocabulary management, AI features, saving content, auto-highlight, and review. Add or improve automated tests for critical flows using existing test frameworks. Fix any issues found during testing.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Add Missing Loading, Empty, Error, and Success States Across Extension UI"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Manual tests cover all core user flows without errors",
+        "Automated tests added or improved for critical features",
+        "Test coverage increased or maintained",
+        "No regressions introduced"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Core extension features verified manually and covered by automated tests.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "tests/extension/*.test.tsx",
+          "description": "Add or improve automated tests for extension features",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "validate",
+      "inputContext": "Extension source code and existing tests",
+      "targetFiles": [
+        "tests/extension/*.test.tsx"
+      ],
+      "targetArtifacts": [
+        "test coverage report"
+      ],
+      "evidence": [
+        "manual test notes",
+        "automated tests pass",
+        "coverage report"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures extension stability and quality through testing."
+    },
+    {
+      "title": "Final Validation of Extension Stability and Production Readiness",
+      "description": "Perform final validation of the IELTS Journey Chrome Extension in a real Chrome environment. Verify all features work correctly after browser refresh, popup reopen, across different websites, and on restricted pages. Confirm no crashes, no duplicate data, no spam API calls, and proper offline handling. Prepare a final report summarizing fixes, improvements, and remaining issues.",
+      "executor": "shell",
+      "dependsOn": [
+        "Test Core Extension Flows Manually and Add Automated Tests"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Extension loads and functions correctly after browser refresh and popup reopen",
+        "Features work across multiple websites including restricted pages",
+        "No crashes or errors in console",
+        "No duplicate saved data or spam API calls",
+        "Offline usage handled gracefully",
+        "Final report created summarizing work done"
+      ],
+      "commands": [
+        "pnpm build --filter extension",
+        "chrome --load-extension=apps/extension/dist",
+        "pnpm test"
+      ],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Extension is stable, production-ready, and all critical features verified in real environment.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/extension-final-report.md",
+          "description": "Final report summarizing fixes, improvements, and future work",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "validation",
+      "actionType": "validate",
+      "inputContext": "Built extension and test results",
+      "targetFiles": [
+        "docs/extension-final-report.md"
+      ],
+      "targetArtifacts": [
+        "extension-final-report.md"
+      ],
+      "evidence": [
+        "extension-final-report.md file exists",
+        "tests pass",
+        "manual validation notes"
+      ],
+      "verificationCommand": "ls docs/extension-final-report.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Confirms extension readiness for production release."
+    }
+  ]
+}

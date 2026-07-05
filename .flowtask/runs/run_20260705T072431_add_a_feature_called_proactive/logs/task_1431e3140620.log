@@ -1,0 +1,903 @@
+[2026-07-05T08:14:25.729Z] [INFO] Task started: Implement Proactive AI Tutor Message Frequency and Quiet Hours Enforcement
+[2026-07-05T08:14:25.730Z] [INFO] [info] [output-plan] [{"action":"modify","target":"packages/ai-tutor/src/services/proactiveMessageEngine.ts","description":"Add frequency and quiet hours enforcement logic","validationMethod":"file_diff"},{"action":"modify","target":"packages/ai-tutor/src/tests/proactiveMessageFrequency.test.ts","description":"Unit tests for message frequency and quiet hours","validationMethod":"file_exists"}]
+[2026-07-05T08:14:26.325Z] [INFO] [stderr] [0m
+[2026-07-05T08:14:26.325Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-05T08:14:26.325Z] [INFO] [stderr] [0m
+[2026-07-05T08:14:31.577Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"proactiveMessageEngine proactiveMessageFrequency quiet hours message frequency","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-05T08:14:31.896Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/services/proactiveMessageEngine.ts","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-05T08:14:32.335Z] [INFO] [stderr] [0m✱ [0mGlob "packages/ai-tutor/src/tests/proactiveMessage*.test.ts"[90m in . · 4 matches[0m
+[2026-07-05T08:14:35.268Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/tests/proactiveMessageEngine.test.ts
+[2026-07-05T08:14:35.517Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/package.json
+[2026-07-05T08:14:54.499Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T08:14:54.499Z] [INFO] [stderr] [0m
+[2026-07-05T08:14:54.499Z] [INFO] [stderr] [•] Add getQuietHoursRemainingMs(), canSendProactiveMessage() to proactiveMessageEngine.ts
+[2026-07-05T08:14:54.499Z] [INFO] [stderr] [0m
+[2026-07-05T08:14:54.499Z] [INFO] [stderr] [ ] Run tests to verify
+[2026-07-05T08:14:54.499Z] [INFO] [stderr] [ ] Create proactiveMessageFrequency.test.ts with unit tests
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] [0m← [0mEdit packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:15:05.904Z] [INFO] [stderr]  ): boolean {
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] @@ -148,8 +148,140 @@
+[2026-07-05T08:15:05.904Z] [INFO] [stderr]    return settings.categories[category] !== false
+[2026-07-05T08:15:05.904Z] [INFO] [stderr]  }
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +export interface QuietHoursDelayResult {
+[2026-07-05T08:15:05.904Z] [INFO] [stderr]  
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +// ─── Frequency and quiet hours enforcement types ─────────────────────────────
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] ===================================================================
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +export interface CanSendResult {
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  reason?: string
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  canSend: boolean
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  maxPerDay: number
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +}
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  delayUntil?: string
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  endsAt: string
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  isInQuietHours: boolean
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  messagesToday: number
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +}
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] + * Returns the number of milliseconds until quiet hours end.
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] + * Returns 0 if not currently in quiet hours.
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] + */
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const now = new Date()
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const startMinutes = startParts[0] * 60 + startParts[1]
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +/**
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const endParts = settings.quietHoursEnd.split(':').map(Number)
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const currentMinutes = now.getHours() * 60 + now.getMinutes()
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const endMinutes = endParts[0] * 60 + endParts[1]
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +// ─── Frequency and quiet hours enforcement ─────────────────────────────────
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const startParts = settings.quietHoursStart.split(':').map(Number)
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  remainingMs: number
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +export function getQuietHoursRemainingMs(settings: ProactiveMessageSettings): number {
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const inQuietHours =
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +      : currentMinutes >= startMinutes || currentMinutes <= endMinutes
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +    startMinutes <= endMinutes
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const nowDate = new Date()
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  if (!inQuietHours) return 0
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  if (startMinutes <= endMinutes) {
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const nowMs = nowDate.getTime()
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +    return Math.max(0, endDate.getTime() - nowMs)
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +      ? currentMinutes >= startMinutes && currentMinutes <= endMinutes
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  const endDate = new Date(nowDate)
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  }
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  endDate.setHours(endParts[0], endParts[1], 0, 0)
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  endDate.setDate(endDate.getDate() + 1)
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + * Checks if the current time is in quiet hours and returns delay information.
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +}
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +    endDate.setHours(endParts[0], endParts[1], 0, 0)
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +/**
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +  return Math.max(0, endDate.getTime() - nowMs)
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +export function shouldDelayToQuietHours(settings: ProactiveMessageSettings): QuietHoursDelayResult | null {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + */
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  if (remainingMs === 0) return null
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  return {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  const remainingMs = getQuietHoursRemainingMs(settings)
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  const endsAt = new Date(Date.now() + remainingMs).toISOString()
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    remainingMs,
+[2026-07-05T08:15:05.904Z] [INFO] [stderr] +    const endDate = new Date(nowDate)
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +/**
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + * Returns whether a message can be sent, and if not, why.
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  }
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + * Comprehensive pre-send check that enforces all frequency and quiet hours limits.
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    isInQuietHours: true,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +}
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + */
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + * If suppressed, the caller should not send. If delayed, the caller can schedule for later.
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +): CanSendResult {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +export function canSendProactiveMessage(
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  if (!settings.enabled) {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    endsAt,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  existingMessages: ProactiveMessage[] = [],
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    return { canSend: false, reason: 'Proactive tutor is disabled', messagesToday: 0, maxPerDay: settings.maxMessagesPerDay }
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  settings: ProactiveMessageSettings,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  if (quietHoursDelay) {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +      reason: 'Quiet hours are active',
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  const quietHoursDelay = shouldDelayToQuietHours(settings)
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +      messagesToday: getMessagesTodayCount(existingMessages),
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  }
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +      delayUntil: quietHoursDelay.endsAt,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +      canSend: false,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +      maxPerDay: settings.maxMessagesPerDay,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  }
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    return {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +      canSend: false,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  if (todayCount >= settings.maxMessagesPerDay) {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +      reason: 'Max messages per day reached',
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    }
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +      messagesToday: todayCount,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  }
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    return {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    }
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    messagesToday: todayCount,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  return {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    canSend: true,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +      maxPerDay: settings.maxMessagesPerDay,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +    maxPerDay: settings.maxMessagesPerDay,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + * Returns the ISO string of the earliest time a message can be sent,
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + * Computes the next allowed time for sending a proactive message.
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  const todayCount = getMessagesTodayCount(existingMessages)
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + */
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +}
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +/**
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +  if (quietHoursDelay) {
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  existingMessages: ProactiveMessage[] = [],
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +export function getNextAllowedTime(
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] + * considering quiet hours and daily limit reset.
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +  }
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +  settings: ProactiveMessageSettings,
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +  }
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +  const quietHoursDelay = shouldDelayToQuietHours(settings)
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +): string | undefined {
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +  const todayCount = getMessagesTodayCount(existingMessages)
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +    tomorrow.setDate(tomorrow.getDate() + 1)
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +    return quietHoursDelay.endsAt
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +    tomorrow.setHours(0, 0, 0, 0)
+[2026-07-05T08:15:05.905Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +    return tomorrow.toISOString()
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +  return undefined
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +  }
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +    const tomorrow = new Date()
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +}
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.906Z] [INFO] [stderr]  // ─── Generator type ──────────────────────────────────────────────────────────
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +  if (todayCount >= settings.maxMessagesPerDay) {
+[2026-07-05T08:15:05.906Z] [INFO] [stderr]  type MessageGenerator = (input: ProactiveEngineInput) => ProactiveMessage | null
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] 
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] [0m
+[2026-07-05T08:15:05.906Z] [INFO] [stderr]  
+[2026-07-05T08:15:05.906Z] [INFO] [stderr]  
+[2026-07-05T08:15:05.906Z] [INFO] [stderr] +
+[2026-07-05T08:15:05.979Z] [INFO] [stdout] 
+[2026-07-05T08:15:05.979Z] [INFO] [stdout] Now I have a clear picture. The existing code has basic quiet hours and frequency checks in `generateProactiveMessagesWithSettings`, but I need to add dedicated functions for pre-send frequency enforcement, quiet hours remaining time (for delay), and a comprehensive `canSendProactiveMessage` checker. I also need to create the test file.
+[2026-07-05T08:15:05.979Z] [INFO] [stdout] Let me add the enforcement functions:
+[2026-07-05T08:15:08.997Z] [INFO] [stdout] Now update `generateProactiveMessagesWithSettings` to use the new `canSendProactiveMessage`:
+[2026-07-05T08:15:09.007Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/services/proactiveMessageEngine.ts[90m [offset=680, limit=80][0m
+[2026-07-05T08:15:11.955Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/services/proactiveMessageEngine.ts[90m [offset=760, limit=140][0m
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] ===================================================================
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] [0m← [0mEdit packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] [0m
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]    input: ProactiveEngineInput,
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]  export function generateProactiveMessagesWithSettings(
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]    existingMessages: ProactiveMessage[] = [],
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +  const sendCheck = canSendProactiveMessage(settings, existingMessages)
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +): { messages: ProactiveMessage[]; throttled: number; reason?: string; delayUntil?: string; nextAllowedTime?: string } {
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -    return { messages: [], throttled: 0, reason: 'Proactive tutor is disabled' }
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -  if (!settings.enabled) {
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +  if (!sendCheck.canSend) {
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -): { messages: ProactiveMessage[]; throttled: number; reason?: string } {
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]    settings: ProactiveMessageSettings,
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +      throttled: 0,
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +      messages: [],
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +      nextAllowedTime: getNextAllowedTime(settings, existingMessages),
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +      delayUntil: sendCheck.delayUntil,
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +      reason: sendCheck.reason,
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +    return {
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]    }
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] @@ -772,22 +772,21 @@
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -  const todayCount = getMessagesTodayCount(existingMessages)
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +    }
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -    return { messages: [], throttled: 0, reason: 'Quiet hours are active' }
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -  if (isInQuietHours(settings)) {
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]  
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -    return { messages: [], throttled: todayCount, reason: 'Max messages per day reached' }
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -  }
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -  if (todayCount >= settings.maxMessagesPerDay) {
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -  const capacity = settings.maxMessagesPerDay - todayCount
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]      .map(fn => fn(input))
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] -  }
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]    const generated = generators
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]      .filter((msg): msg is ProactiveMessage => msg !== null)
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] [0m
+[2026-07-05T08:15:17.560Z] [INFO] [stderr]      .filter(msg => isCategoryEnabled(settings, msg.category))
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] +  const capacity = settings.maxMessagesPerDay - sendCheck.messagesToday
+[2026-07-05T08:15:17.560Z] [INFO] [stderr] 
+[2026-07-05T08:15:17.625Z] [INFO] [stdout] Now update `generateProactiveMessagesWithSettings` to use `canSendProactiveMessage` and add `getNextAllowedTime` to return value:
+[2026-07-05T08:15:20.701Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T08:15:20.701Z] [INFO] [stderr] [✓] Add getQuietHoursRemainingMs(), canSendProactiveMessage() to proactiveMessageEngine.ts
+[2026-07-05T08:15:20.701Z] [INFO] [stderr] [•] Create proactiveMessageFrequency.test.ts with unit tests
+[2026-07-05T08:15:20.701Z] [INFO] [stderr] [0m
+[2026-07-05T08:15:20.701Z] [INFO] [stderr] [ ] Run tests to verify
+[2026-07-05T08:15:20.768Z] [INFO] [stdout] Now create the test file:
+[2026-07-05T08:15:23.229Z] [INFO] [stderr] [0m→ [0mRead packages/ai-tutor/src/tests
+[2026-07-05T08:15:54.573Z] [INFO] [stderr] [0m
+[2026-07-05T08:15:54.573Z] [INFO] [stderr] [0m← [0mWrite packages/ai-tutor/src/tests/proactiveMessageFrequency.test.ts
+[2026-07-05T08:15:54.573Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T08:15:54.573Z] [INFO] [stderr] [0m
+[2026-07-05T08:15:57.280Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T08:15:57.280Z] [INFO] [stderr] [✓] Add getQuietHoursRemainingMs(), canSendProactiveMessage() to proactiveMessageEngine.ts
+[2026-07-05T08:15:57.280Z] [INFO] [stderr] [✓] Create proactiveMessageFrequency.test.ts with unit tests
+[2026-07-05T08:15:57.280Z] [INFO] [stderr] [•] Run tests to verify
+[2026-07-05T08:15:57.280Z] [INFO] [stderr] [0m
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] $ pnpm -r test --filter=proactiveMessageFrequency
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] [0m$ [0mpnpm test --filter=proactiveMessageFrequency 2>&1
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] Scope: 12 of 13 workspace projects
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test: CACError: Unknown option `--filter`
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/exercises test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/settings test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test:                 ^
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor:
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] Exit status 1
+[2026-07-05T08:16:00.611Z] [INFO] [stderr] packages/ai-tutor test: Failed
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/ai-tutor@0.1.0 test: `vitest run --passWithNoTests --filter=proactiveMessageFrequency`
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai-tutor test: Node.js v24.13.0
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/storage test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test:                 ^
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test:                 ^
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test: Node.js v24.13.0
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test: CACError: Unknown option `--filter`
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test: Node.js v24.13.0
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test: CACError: Unknown option `--filter`
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test:                 ^
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test: Failed
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test: CACError: Unknown option `--filter`
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/theme test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/utils test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/settings test: Failed
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ui test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] [0m
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/ai test: Node.js v24.13.0
+[2026-07-05T08:16:00.612Z] [INFO] [stderr] packages/exercises test: Failed
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]  ❯ src/tests/proactiveMessageFrequency.test.ts (34 tests | 1 failed) 8ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    × getQuietHoursRemainingMs > returns remaining ms during overnight quiet hours 3ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/ai-tutor exec vitest run --passWithNoTests proactiveMessageFrequency.test.ts 2>&1
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]      → expected 111600000 to be 25200000 // Object.is equality
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ getQuietHoursRemainingMs > returns remaining ms during same-day quiet hours 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ getQuietHoursRemainingMs > handles quiet hours that span midnight at the boundary 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ shouldDelayToQuietHours > returns null when not in quiet hours 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ getQuietHoursRemainingMs > returns 0 when quiet hours are disabled (0-0 range) 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr] 
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ canSendProactiveMessage > returns can send when under daily limit and not in quiet hours 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ canSendProactiveMessage > returns cannot send during quiet hours with delay info 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ canSendProactiveMessage > returns can send when some messages already sent but under limit 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ getQuietHoursRemainingMs > returns 0 when not in quiet hours 1ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ canSendProactiveMessage > returns cannot send when max messages per day reached 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ canSendProactiveMessage > returns cannot send when tutor is disabled 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ canSendProactiveMessage > daily limit of 0 means no messages can be sent 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ isCurrentlyQuietHours > returns true for overnight quiet hours at 3 AM 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ canSendProactiveMessage > does not count yesterday messages toward today limit 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ getNextAllowedTime > returns tomorrow midnight when daily limit reached 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ getNextAllowedTime > returns undefined when can send now 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ generateProactiveMessagesWithSettings frequency enforcement > returns delayUntil and nextAllowedTime during quiet hours 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ isCurrentlyQuietHours > returns true at exact quiet hours start boundary 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ isCurrentlyQuietHours > returns false just outside quiet hours at 8:01 AM 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ generateProactiveMessagesWithSettings frequency enforcement > sends messages when all checks pass and returns no nextAllowedTime 1ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ isCurrentlyQuietHours > returns false for same-day quiet hours when outside 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ generateProactiveMessagesWithSettings frequency enforcement > returns nextAllowedTime when daily limit reached 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ canSendProactiveMessage edge cases > quiet hours end boundary at midnight works correctly 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ getNextAllowedTime > returns quiet hours end time when in quiet hours 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ canSendProactiveMessage edge cases > quiet hours covering the entire day blocks all messages 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ isCurrentlyQuietHours > returns true for same-day quiet hours when inside 0ms
+[2026-07-05T08:16:06.755Z] [INFO] [stderr]    ✓ shouldDelayToQuietHours > returns delay info when in quiet hours 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ canSendProactiveMessage edge cases > quiet hours start equals end means no quiet hours 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ canSendProactiveMessage edge cases > handles empty settings defaults correctly 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ getQuietHoursRemainingMs edge cases > returns correct remaining for quiet hours ending at midnight 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ canSendProactiveMessage edge cases > quiet hours start at midnight end at 6 AM works at 7 AM 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] 
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] AssertionError: expected 111600000 to be 25200000 // Object.is equality
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ getQuietHoursRemainingMs edge cases > returns correct remaining for quiet hours starting at midnight 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ getQuietHoursRemainingMs edge cases > returns correct remaining at the very start of quiet hours 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] 
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    ✓ canSendProactiveMessage edge cases > quiet hours start at midnight end at 6 AM works at 3 AM 0ms
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] 
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]  FAIL  src/tests/proactiveMessageFrequency.test.ts > getQuietHoursRemainingMs > returns remaining ms during overnight quiet hours
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] [32m- 25200000[39m
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]  ❯ src/tests/proactiveMessageFrequency.test.ts:69:23
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] [31m+ 111600000[39m
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]      68|     const remaining = getQuietHoursRemainingMs(settings)
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] [31m+ Received[39m
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] 
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]        |                       ^
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]      69|     expect(remaining).toBe(7 * 60 * 60 * 1000)
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] 
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]      71| 
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] 
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]      70|   })
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] 
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]      67|     }
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]  Test Files  1 failed (1)
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    Duration  379ms (transform 33ms, setup 40ms, collect 45ms, tests 8ms, environment 136ms, prepare 34ms)
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]       Tests  1 failed | 33 passed (34)
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] 
+[2026-07-05T08:16:06.756Z] [INFO] [stderr]    Start at  15:16:06
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor:
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] undefined
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run --passWithNoTests proactiveMessageFrequency.test.ts
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] [0m
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] [32m- Expected[39m
+[2026-07-05T08:16:06.756Z] [INFO] [stderr] 
+[2026-07-05T08:16:18.362Z] [INFO] [stderr] [0m← [0mEdit packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:16:18.362Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:16:18.362Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] @@ -178,26 +178,30 @@
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] -    startMinutes <= endMinutes
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]  
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] -      ? currentMinutes >= startMinutes && currentMinutes <= endMinutes
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] -      : currentMinutes >= startMinutes || currentMinutes <= endMinutes
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    const endParts = settings.quietHoursEnd.split(':').map(Number)
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] -  const inQuietHours =
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    const endMinutes = endParts[0] * 60 + endParts[1]
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +  const inQuietHours = crossedMidnight
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] ===================================================================
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]  
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +  const crossedMidnight = startMinutes > endMinutes
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]  
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +    ? currentMinutes >= startMinutes || currentMinutes <= endMinutes
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +    : currentMinutes >= startMinutes && currentMinutes <= endMinutes
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    const nowMs = nowDate.getTime()
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    const startMinutes = startParts[0] * 60 + startParts[1]
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] -  if (startMinutes <= endMinutes) {
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    if (!inQuietHours) return 0
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]      const endDate = new Date(nowDate)
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]  
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    const nowDate = new Date()
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +  if (!crossedMidnight) {
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]      return Math.max(0, endDate.getTime() - nowMs)
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]  
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]      endDate.setHours(endParts[0], endParts[1], 0, 0)
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] -  endDate.setDate(endDate.getDate() + 1)
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +  if (!isAfterMidnight) {
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +  const isAfterMidnight = currentMinutes <= endMinutes
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    const endDate = new Date(nowDate)
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    }
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +    endDate.setDate(endDate.getDate() + 1)
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +  }
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    endDate.setHours(endParts[0], endParts[1], 0, 0)
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]    return Math.max(0, endDate.getTime() - nowMs)
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]  }
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] 
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] [0m
+[2026-07-05T08:16:18.363Z] [INFO] [stderr]  
+[2026-07-05T08:16:18.363Z] [INFO] [stderr] +
+[2026-07-05T08:16:18.433Z] [INFO] [stdout] The overnight calculation is off — when past midnight, the end date should be today, not tomorrow. Let me fix the function:
+[2026-07-05T08:16:22.490Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/ai-tutor exec vitest run --passWithNoTests proactiveMessageFrequency.test.ts 2>&1
+[2026-07-05T08:16:22.490Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+[2026-07-05T08:16:22.490Z] [INFO] [stderr]  ✓ src/tests/proactiveMessageFrequency.test.ts (34 tests) 6ms
+[2026-07-05T08:16:22.490Z] [INFO] [stderr]    Start at  15:16:22
+[2026-07-05T08:16:22.490Z] [INFO] [stderr] 
+[2026-07-05T08:16:22.490Z] [INFO] [stderr] [0m
+[2026-07-05T08:16:22.490Z] [INFO] [stderr]  Test Files  1 passed (1)
+[2026-07-05T08:16:22.490Z] [INFO] [stderr]       Tests  34 passed (34)
+[2026-07-05T08:16:22.490Z] [INFO] [stderr] 
+[2026-07-05T08:16:22.490Z] [INFO] [stderr]    Duration  366ms (transform 33ms, setup 24ms, collect 47ms, tests 6ms, environment 137ms, prepare 32ms)
+[2026-07-05T08:16:25.640Z] [INFO] [stdout] All 34 tests pass. Let me verify the existing engine tests still pass too:
+[2026-07-05T08:16:26.314Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/ai-tutor exec vitest run --passWithNoTests proactiveMessageEngine.test.ts 2>&1
+[2026-07-05T08:16:26.314Z] [INFO] [stderr] 
+[2026-07-05T08:16:26.314Z] [INFO] [stderr]       Tests  59 passed (59)
+[2026-07-05T08:16:26.314Z] [INFO] [stderr]  Test Files  1 passed (1)
+[2026-07-05T08:16:26.314Z] [INFO] [stderr]  ✓ src/tests/proactiveMessageEngine.test.ts (59 tests) 6ms
+[2026-07-05T08:16:26.314Z] [INFO] [stderr]    Duration  380ms (transform 34ms, setup 23ms, collect 48ms, tests 6ms, environment 136ms, prepare 29ms)
+[2026-07-05T08:16:26.314Z] [INFO] [stderr] [0m
+[2026-07-05T08:16:26.314Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+[2026-07-05T08:16:26.314Z] [INFO] [stderr] 
+[2026-07-05T08:16:26.314Z] [INFO] [stderr]    Start at  15:16:25
+[2026-07-05T08:16:29.340Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T08:16:29.340Z] [INFO] [stderr] [✓] Add getQuietHoursRemainingMs(), canSendProactiveMessage() to proactiveMessageEngine.ts
+[2026-07-05T08:16:29.340Z] [INFO] [stderr] [✓] Create proactiveMessageFrequency.test.ts with unit tests
+[2026-07-05T08:16:29.340Z] [INFO] [stderr] [0m
+[2026-07-05T08:16:29.340Z] [INFO] [stderr] [✓] Run tests to verify
+[2026-07-05T08:16:34.711Z] [INFO] [stdout] - `getQuietHoursRemainingMs(settings)` — returns ms until quiet hours end (0 if not in quiet hours); handles same-day and overnight ranges correctly
+[2026-07-05T08:16:34.711Z] [INFO] [stdout] **Summary:** Implemented Proactive AI Tutor Message Frequency and Quiet Hours Enforcement.
+[2026-07-05T08:16:34.711Z] [INFO] [stdout] 
+[2026-07-05T08:16:34.711Z] [INFO] [stdout] **Modified** `packages/ai-tutor/src/services/proactiveMessageEngine.ts` — Added:
+[2026-07-05T08:16:34.712Z] [INFO] [stdout] - `getNextAllowedTime(settings, existingMessages)` — returns ISO string of earliest send time (quiet hours end or tomorrow midnight)
+[2026-07-05T08:16:34.712Z] [INFO] [stdout] - `canSendProactiveMessage(settings, existingMessages)` — pre-send gate combining all limit checks (disabled, quiet hours with delay info, max messages per day)
+[2026-07-05T08:16:34.712Z] [INFO] [stdout] 
+[2026-07-05T08:16:34.712Z] [INFO] [stdout] - `shouldDelayToQuietHours(settings)` — returns `{ isInQuietHours, remainingMs, endsAt }` or null
+[2026-07-05T08:16:34.712Z] [INFO] [stdout] **Created** `packages/ai-tutor/src/tests/proactiveMessageFrequency.test.ts` — 34 tests across all new functions, covering: quiet hours remaining ms (overnight, same-day, boundaries, midnight), canSendProactiveMessage (disabled, quiet hours with delay, max per day, under limit, edge cases like 0 limit, yesterday messages), getNextAllowedTime, isCurrentlyQuietHours boundaries, and generateProactiveMessagesWithSettings frequency enforcement extensions. All 34 pass.
+[2026-07-05T08:16:34.712Z] [INFO] [stdout] 
+[2026-07-05T08:16:34.712Z] [INFO] [stdout] - Updated `generateProactiveMessagesWithSettings` to delegate to `canSendProactiveMessage` and return `delayUntil`/`nextAllowedTime`
+[2026-07-05T08:16:34.946Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-05T08:16:34.946Z] [INFO] Output:
+Now I have a clear picture. The existing code has basic quiet hours and frequency checks in `generateProactiveMessagesWithSettings`, but I need to add dedicated functions for pre-send frequency enforcement, quiet hours remaining time (for delay), and a comprehensive `canSendProactiveMessage` checker. I also need to create the test file.
+
+Let me add the enforcement functions:
+Now update `generateProactiveMessagesWithSettings` to use the new `canSendProactiveMessage`:
+Now update `generateProactiveMessagesWithSettings` to use `canSendProactiveMessage` and add `getNextAllowedTime` to return value:
+Now create the test file:
+The overnight calculation is off — when past midnight, the end date should be today, not tomorrow. Let me fix the function:
+All 34 tests pass. Let me verify the existing engine tests still pass too:
+**Summary:** Implemented Proactive AI Tutor Message Frequency and Quiet Hours Enforcement.
+
+**Modified** `packages/ai-tutor/src/services/proactiveMessageEngine.ts` — Added:
+
+- `getQuietHoursRemainingMs(settings)` — returns ms until quiet hours end (0 if not in quiet hours); handles same-day and overnight ranges correctly
+- `shouldDelayToQuietHours(settings)` — returns `{ isInQuietHours, remainingMs, endsAt }` or null
+- `canSendProactiveMessage(settings, existingMessages)` — pre-send gate combining all limit checks (disabled, quiet hours with delay info, max messages per day)
+- `getNextAllowedTime(settings, existingMessages)` — returns ISO string of earliest send time (quiet hours end or tomorrow midnight)
+- Updated `generateProactiveMessagesWithSettings` to delegate to `canSendProactiveMessage` and return `delayUntil`/`nextAllowedTime`
+
+**Created** `packages/ai-tutor/src/tests/proactiveMessageFrequency.test.ts` — 34 tests across all new functions, covering: quiet hours remaining ms (overnight, same-day, boundaries, midnight), canSendProactiveMessage (disabled, quiet hours with delay, max per day, under limit, edge cases like 0 limit, yesterday messages), g
+[2026-07-05T08:16:34.946Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"proactiveMessageEngine proactiveMessageFrequency quiet hours message frequency","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"packages/ai-tutor/src/services/proactiveMessageEngine.ts","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[0m✱ [0mGlob "packages/ai-tutor/src/tests/proactiveMessage*.test.ts"[90m in . · 4 matches[0m
+[0m→ [0mRead packages/ai-tutor/src/tests/proactiveMessageEngine.test.ts
+[0m→ [0mRead packages/ai-tutor/package.json
+[0m
+[0m# [0mTodos
+[•] Add getQuietHoursRemainingMs(), canSendProactiveMessage() to proactiveMessageEngine.ts
+[ ] Create proactiveMessageFrequency.test.ts with unit tests
+[ ] Run tests to verify
+[0m
+[0m← [0mEdit packages/ai-tutor/src/services/proactiveMessageEngine.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+@@ -148,8 +148,140 @@
+ ): boolean {
+   return settings.categories[category] !== false
+ }
+ 
++// ─── Frequency and quiet hours enforcement types ─────────────────────────────
++
++export interface QuietHoursDelayResult {
++  isInQuietHours: boolean
++  remainingMs: number
++  endsAt: string
++}
++
++export interface CanSendResult {
++  canSend: boolean
++  reason?: string
++  delayUntil?: string
++  messagesToday: number
++  maxPerDay: number
++}
++
++// ─── Frequency and quiet hours enforcement ─────────────────────────────────
++
++/**
++ * Returns the number of milliseconds until quiet hours end.
++ * Returns 0 if not currently in quiet hours.
++ */
++export function getQuietHoursRemainingMs(settings: ProactiveMessageSettings): number {
++  const now = new Date()
++  const currentMinutes = now.getHours() * 60 + now.getMinutes()
++  const startParts = settings.quietHoursStart.split(':').map(Number)
++  const endParts = settings.quietHoursEnd.split(':').map(Number)
++  const startMinutes = startParts[0] * 60 + startParts[1]
++  const endMinutes = endParts[0] * 60 + endParts[1]
++
++  const inQuietHours =
++    startMinutes <= endMinutes
++      ? currentMinutes >= startMinutes && currentMinutes <= endMinutes
++      : currentMinutes >= startMinutes || currentMinutes <= endMinutes
++
++  if (!inQuietHours) return 0
++
++  const nowDate = new Date()
++  const nowMs = nowDate.getTime()
++
++  if (startMinutes <= endMinutes) {
++    const endDate = new Date(nowDate)
++    endDate.setHours(endParts[0], endParts[1], 0, 0)
++    return Math.max(0, endDate.getTime() - nowMs)
++  }
++
++  const endDate = new Date(nowDate)
++  endDate.setDate(endDate.getDate() + 1)
++  endDate.setHours(endParts[0], endParts[1], 0, 0)
++  return Math.max(0, endDate.getTime() - nowMs)
++}
++
++/**
++ * Checks if the current time is in quiet hours and returns delay information.
++ */
++export function shouldDelayToQuietHours(settings: ProactiveMessageSettings): QuietHoursDelayResult | null {
++  const remainingMs = getQuietHoursRemainingMs(settings)
++  if (remainingMs === 0) return null
++  const endsAt = new Date(Date.now() + remainingMs).toISOString()
++  return {
++    isInQuietHours: true,
++    remainingMs,
++    endsAt,
++  }
++}
++
++/**
++ * Comprehensive pre-send check that enforces all frequency and quiet hours limits.
++ * Returns whether a message can be sent, and if not, why.
++ * If suppressed, the caller should not send. If delayed, the caller can schedule for later.
++ */
++export function canSendProactiveMessage(
++  settings: ProactiveMessageSettings,
++  existingMessages: ProactiveMessage[] = [],
++): CanSendResult {
++  if (!settings.enabled) {
++    return { canSend: false, reason: 'Proactive tutor is disabled', messagesToday: 0, maxPerDay: settings.maxMessagesPerDay }
++  }
++
++  const quietHoursDelay = shouldDelayToQuietHours(settings)
++  if (quietHoursDelay) {
++    return {
++      canSend: false,
++      reason: 'Quiet hours are active',
++      delayUntil: quietHoursDelay.endsAt,
++      messagesToday: getMessagesTodayCount(existingMessages),
++      maxPerDay: settings.maxMessagesPerDay,
++    }
++  }
++
++  const todayCount = getMessagesTodayCount(existingMessages)
++  if (todayCount >= settings.maxMessagesPerDay) {
++    return {
++      canSend: false,
++      reason: 'Max messages per day reached',
++      messagesToday: todayCount,
++      maxPerDay: settings.maxMessagesPerDay,
++    }
++  }
++
++  return {
++    canSend: true,
++    messagesToday: todayCount,
++    maxPerDay: settings.maxMessagesPerDay,
++  }
++}
++
++/**
++ * Computes the next allowed time for sending a proactive message.
++ * Returns the ISO string of the earliest time a message can be sent,
++ * considering quiet hours and daily limit reset.
++ */
++export function getNextAllowedTime(
++  settings: ProactiveMessageSettings,
++  existingMessages: ProactiveMessage[] = [],
++): string | undefined {
++  const quietHoursDelay = shouldDelayToQuietHours(settings)
++  if (quietHoursDelay) {
++    return quietHoursDelay.endsAt
++  }
++
++  const todayCount = getMessagesTodayCount(existingMessages)
++  if (todayCount >= settings.maxMessagesPerDay) {
++    const tomorrow = new Date()
++    tomorrow.setDate(tomorrow.getDate() + 1)
++    tomorrow.setHours(0, 0, 0, 0)
++    return tomorrow.toISOString()
++  }
++
++  return undefined
++}
++
+ // ─── Generator type ──────────────────────────────────────────────────────────
+ 
+ type MessageGenerator = (input: ProactiveEngineInput) => ProactiveMessage | null
+ 
+
+[0m
+[0m→ [0mRead packages/ai-tutor/src/services/proactiveMessageEngine.ts[90m [offset=680, limit=80][0m
+[0m→ [0mRead packages/ai-tutor/src/services/proactiveMessageEngine.ts[90m [offset=760, limit=140][0m
+[0m
+[0m← [0mEdit packages/ai-tutor/src/services/proactiveMessageEngine.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+@@ -772,22 +772,21 @@
+ export function generateProactiveMessagesWithSettings(
+   input: ProactiveEngineInput,
+   settings: ProactiveMessageSettings,
+   existingMessages: ProactiveMessage[] = [],
+-): { messages: ProactiveMessage[]; throttled: number; reason?: string } {
+-  if (!settings.enabled) {
+-    return { messages: [], throttled: 0, reason: 'Proactive tutor is disabled' }
++): { messages: ProactiveMessage[]; throttled: number; reason?: string; delayUntil?: string; nextAllowedTime?: string } {
++  const sendCheck = canSendProactiveMessage(settings, existingMessages)
++  if (!sendCheck.canSend) {
++    return {
++      messages: [],
++      throttled: 0,
++      reason: sendCheck.reason,
++      delayUntil: sendCheck.delayUntil,
++      nextAllowedTime: getNextAllowedTime(settings, existingMessages),
++    }
+   }
+-  if (isInQuietHours(settings)) {
+-    return { messages: [], throttled: 0, reason: 'Quiet hours are active' }
+-  }
+ 
+-  const todayCount = getMessagesTodayCount(existingMessages)
+-  if (todayCount >= settings.maxMessagesPerDay) {
+-    return { messages: [], throttled: todayCount, reason: 'Max messages per day reached' }
+-  }
+-
+-  const capacity = settings.maxMessagesPerDay - todayCount
++  const capacity = settings.maxMessagesPerDay - sendCheck.messagesToday
+   const generated = generators
+     .map(fn => fn(input))
+     .filter((msg): msg is ProactiveMessage => msg !== null)
+     .filter(msg => isCategoryEnabled(settings, msg.category))
+
+[0m
+[0m# [0mTodos
+[✓] Add getQuietHoursRemainingMs(), canSendProactiveMessage() to proactiveMessageEngine.ts
+[•] Create proactiveMessageFrequency.test.ts with unit tests
+[ ] Run tests to verify
+[0m
+[0m→ [0mRead packages/ai-tutor/src/tests
+[0m
+[0m← [0mWrite packages/ai-tutor/src/tests/proactiveMessageFrequency.test.ts
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Add getQuietHoursRemainingMs(), canSendProactiveMessage() to proactiveMessageEngine.ts
+[✓] Create proactiveMessageFrequency.test.ts with unit tests
+[•] Run tests to verify
+[0m
+[0m$ [0mpnpm test --filter=proactiveMessageFrequency 2>&1
+$ pnpm -r test --filter=proactiveMessageFrequency
+Scope: 12 of 13 workspace projects
+packages/ai-tutor test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+packages/settings test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+packages/ai test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+packages/exercises test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+packages/ai-tutor test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/ai-tutor test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/ai-tutor test:                 ^
+packages/ai-tutor test: CACError: Unknown option `--filter`
+packages/ai-tutor test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/ai-tutor test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/ai-tutor test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/ai-tutor test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/ai-tutor test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/ai-tutor test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/ai-tutor test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/ai-tutor test: Node.js v24.13.0
+packages/ai-tutor test: Failed
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/ai-tutor@0.1.0 test: `vitest run --passWithNoTests --filter=proactiveMessageFrequency`
+Exit status 1
+packages/storage test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+packages/settings test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/settings test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/settings test:                 ^
+packages/settings test: CACError: Unknown option `--filter`
+packages/settings test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/settings test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/settings test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/settings test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/settings test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/settings test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/settings test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/settings test: Node.js v24.13.0
+packages/exercises test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/exercises test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/exercises test:                 ^
+packages/exercises test: CACError: Unknown option `--filter`
+packages/exercises test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/exercises test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/exercises test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/exercises test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/exercises test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/exercises test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/exercises test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/exercises test: Node.js v24.13.0
+packages/ai test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/ai test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/ai test:                 ^
+packages/ai test: CACError: Unknown option `--filter`
+packages/ai test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/ai test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/ai test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/ai test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/ai test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/ai test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/ai test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/ai test: Node.js v24.13.0
+packages/ai test: Failed
+packages/exercises test: Failed
+packages/settings test: Failed
+packages/theme test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+packages/ui test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+packages/utils test$ vitest run --passWithNoTests --filter=proactiveMessageFrequency
+[ELIFECYCLE] Test failed. See above for more details.
+[0m
+[0m$ [0mpnpm --filter @ielts/ai-tutor exec vitest run --passWithNoTests proactiveMessageFrequency.test.ts 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+
+ ❯ src/tests/proactiveMessageFrequency.test.ts (34 tests | 1 failed) 8ms
+   ✓ getQuietHoursRemainingMs > returns 0 when not in quiet hours 1ms
+   × getQuietHoursRemainingMs > returns remaining ms during overnight quiet hours 3ms
+     → expected 111600000 to be 25200000 // Object.is equality
+   ✓ getQuietHoursRemainingMs > returns remaining ms during same-day quiet hours 0ms
+   ✓ getQuietHoursRemainingMs > returns 0 when quiet hours are disabled (0-0 range) 0ms
+   ✓ getQuietHoursRemainingMs > handles quiet hours that span midnight at the boundary 0ms
+   ✓ shouldDelayToQuietHours > returns null when not in quiet hours 0ms
+   ✓ shouldDelayToQuietHours > returns delay info when in quiet hours 0ms
+   ✓ canSendProactiveMessage > returns cannot send when tutor is disabled 0ms
+   ✓ canSendProactiveMessage > returns cannot send during quiet hours with delay info 0ms
+   ✓ canSendProactiveMessage > returns cannot send when max messages per day reached 0ms
+   ✓ canSendProactiveMessage > returns can send when under daily limit and not in quiet hours 0ms
+   ✓ canSendProactiveMessage > returns can send when some messages already sent but under limit 0ms
+   ✓ canSendProactiveMessage > daily limit of 0 means no messages can be sent 0ms
+   ✓ canSendProactiveMessage > does not count yesterday messages toward today limit 0ms
+   ✓ getNextAllowedTime > returns quiet hours end time when in quiet hours 0ms
+   ✓ getNextAllowedTime > returns tomorrow midnight when daily limit reached 0ms
+   ✓ getNextAllowedTime > returns undefined when can send now 0ms
+   ✓ isCurrentlyQuietHours > returns true for overnight quiet hours at 3 AM 0ms
+   ✓ isCurrentlyQuietHours > returns false just outside quiet hours at 8:01 AM 0ms
+   ✓ isCurrentlyQuietHours > returns true at exact quiet hours start boundary 0ms
+   ✓ isCurrentlyQuietHours > returns false for same-day quiet hours when outside 0ms
+   ✓ isCurrentlyQuietHours > returns true for same-day quiet hours when inside 0ms
+   ✓ generateProactiveMessagesWithSettings frequency enforcement > returns delayUntil and nextAllowedTime during quiet hours 0ms
+   ✓ generateProactiveMessagesWithSettings frequency enforcement > returns nextAllowedTime when daily limit reached 0ms
+   ✓ generateProactiveMessagesWithSettings frequency enforcement > sends messages when all checks pass and returns no nextAllowedTime 1ms
+   ✓ canSendProactiveMessage edge cases > handles empty settings defaults correctly 0ms
+   ✓ canSendProactiveMessage edge cases > quiet hours start equals end means no quiet hours 0ms
+   ✓ canSendProactiveMessage edge cases > quiet hours covering the entire day blocks all messages 0ms
+   ✓ canSendProactiveMessage edge cases > quiet hours end boundary at midnight works correctly 0ms
+   ✓ canSendProactiveMessage edge cases > quiet hours start at midnight end at 6 AM works at 3 AM 0ms
+   ✓ canSendProactiveMessage edge cases > quiet hours start at midnight end at 6 AM works at 7 AM 0ms
+   ✓ getQuietHoursRemainingMs edge cases > returns correct remaining for quiet hours ending at midnight 0ms
+   ✓ getQuietHoursRemainingMs edge cases > returns correct remaining for quiet hours starting at midnight 0ms
+   ✓ getQuietHoursRemainingMs edge cases > returns correct remaining at the very start of quiet hours 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/tests/proactiveMessageFrequency.test.ts > getQuietHoursRemainingMs > returns remaining ms during overnight quiet hours
+AssertionError: expected 111600000 to be 25200000 // Object.is equality
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 25200000[39m
+[31m+ 111600000[39m
+
+ ❯ src/tests/proactiveMessageFrequency.test.ts:69:23
+     67|     }
+     68|     const remaining = getQuietHoursRemainingMs(settings)
+     69|     expect(remaining).toBe(7 * 60 * 60 * 1000)
+       |                       ^
+     70|   })
+     71| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 33 passed (34)
+   Start at  15:16:06
+   Duration  379ms (transform 33ms, setup 40ms, collect 45ms, tests 8ms, environment 136ms, prepare 34ms)
+
+undefined
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor:
+[ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL] Command failed with exit code 1: vitest run --passWithNoTests proactiveMessageFrequency.test.ts
+[0m
+[0m← [0mEdit packages/ai-tutor/src/services/proactiveMessageEngine.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageEngine.ts
+@@ -178,26 +178,30 @@
+   const endParts = settings.quietHoursEnd.split(':').map(Number)
+   const startMinutes = startParts[0] * 60 + startParts[1]
+   const endMinutes = endParts[0] * 60 + endParts[1]
+ 
+-  const inQuietHours =
+-    startMinutes <= endMinutes
+-      ? currentMinutes >= startMinutes && currentMinutes <= endMinutes
+-      : currentMinutes >= startMinutes || currentMinutes <= endMinutes
++  const crossedMidnight = startMinutes > endMinutes
+ 
++  const inQuietHours = crossedMidnight
++    ? currentMinutes >= startMinutes || currentMinutes <= endMinutes
++    : currentMinutes >= startMinutes && currentMinutes <= endMinutes
++
+   if (!inQuietHours) return 0
+ 
+   const nowDate = new Date()
+   const nowMs = nowDate.getTime()
+ 
+-  if (startMinutes <= endMinutes) {
++  if (!crossedMidnight) {
+     const endDate = new Date(nowDate)
+     endDate.setHours(endParts[0], endParts[1], 0, 0)
+     return Math.max(0, endDate.getTime() - nowMs)
+   }
+ 
++  const isAfterMidnight = currentMinutes <= endMinutes
+   const endDate = new Date(nowDate)
+-  endDate.setDate(endDate.getDate() + 1)
++  if (!isAfterMidnight) {
++    endDate.setDate(endDate.getDate() + 1)
++  }
+   endDate.setHours(endParts[0], endParts[1], 0, 0)
+   return Math.max(0, endDate.getTime() - nowMs)
+ }
+ 
+
+[0m
+[0m$ [0mpnpm --filter @ielts/ai-tutor exec vitest run --passWithNoTests proactiveMessageFrequency.test.ts 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+
+ ✓ src/tests/proactiveMessageFrequency.test.ts (34 tests) 6ms
+
+ Test Files  1 passed (1)
+      Tests  34 passed (34)
+   Start at  15:16:22
+   Duration  366ms (transform 33ms, setup 24ms, collect 47ms, tests 6ms, environment 137ms, prepare 32ms)
+[0m
+[0m$ [0mpnpm --filter @ielts/ai-tutor exec vitest run --passWithNoTests proactiveMessageEngine.test.ts 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor
+
+ ✓ src/tests/proactiveMessageEngine.test.ts (59 tests) 6ms
+
+ Test Files  1 passed (1)
+      Tests  59 passed (59)
+   Start at  15:16:25
+   Duration  380ms (transform 34ms, setup 23ms, collect 48ms, tests 6ms, environment 136ms, prepare 29ms)
+[0m
+[0m# [0mTodos
+[✓] Add getQuietHoursRemainingMs(), canSendProactiveMessage() to proactiveMessageEngine.ts
+[✓] Create proactiveMessageFrequency.test.ts with unit tests
+[✓] Run tests to verify
+[0m
+[2026-07-05T08:16:34.947Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-05T08:16:34.951Z] [INFO] Task completed successfully

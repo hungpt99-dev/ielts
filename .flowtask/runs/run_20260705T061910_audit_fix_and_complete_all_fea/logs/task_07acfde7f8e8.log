@@ -1,0 +1,2264 @@
+[2026-07-05T06:27:18.476Z] [INFO] Task started: Fix Extension Popup Opening and User Data Display Issues
+[2026-07-05T06:27:18.478Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/extension/src/popup/App.tsx","description":"Fix popup root component to handle opening and data display","validationMethod":"file_diff"},{"action":"modify","target":"apps/extension/src/popup/hooks/usePopupData.ts","description":"Fix data fetching hook to read user data correctly","validationMethod":"file_diff"},{"action":"modify","target":"apps/extension/src/popup/components/PopupDashboard.tsx","description":"Fix dashboard component to display user data and handle states","validationMethod":"file_diff"}]
+[2026-07-05T06:27:19.014Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-05T06:27:19.014Z] [INFO] [stderr] [0m
+[2026-07-05T06:27:19.014Z] [INFO] [stderr] [0m
+[2026-07-05T06:27:23.664Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"extension popup App.tsx PopupDashboard popup hooks usePopupData","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-05T06:27:23.898Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup
+[2026-07-05T06:27:26.375Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:27:26.655Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/main.tsx
+[2026-07-05T06:27:26.904Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/index.css
+[2026-07-05T06:27:27.274Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/components/*"[90m in . · 12 matches[0m
+[2026-07-05T06:27:27.608Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/hooks/*"[90m in . · 1 match[0m
+[2026-07-05T06:27:27.918Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/services/*"[90m in . · 1 match[0m
+[2026-07-05T06:27:30.605Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/services/popupDataService.ts
+[2026-07-05T06:27:30.856Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/DashboardCard.tsx
+[2026-07-05T06:27:31.146Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/utils/safe-chrome.ts
+[2026-07-05T06:27:31.371Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/storage
+[2026-07-05T06:27:31.634Z] [INFO] [stderr] [91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/types
+[2026-07-05T06:27:31.633Z] [INFO] [stderr] [0m✗ [0mRead apps/extension/src/types failed
+[2026-07-05T06:27:31.634Z] [INFO] [stderr] Did you mean one of these?
+[2026-07-05T06:27:31.634Z] [INFO] [stderr] 
+[2026-07-05T06:27:31.634Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/types.ts
+[2026-07-05T06:27:34.275Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/types.ts
+[2026-07-05T06:27:34.538Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/storage/vocabularyStore.ts
+[2026-07-05T06:27:34.828Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/storage/indexedDB.ts
+[2026-07-05T06:27:35.129Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/manifest.json"[90m in . · 1 match[0m
+[2026-07-05T06:27:35.475Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/**/manifest*"[90m in . · 1 match[0m
+[2026-07-05T06:27:35.812Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/package.json"[90m in . · 1 match[0m
+[2026-07-05T06:27:38.619Z] [INFO] [stderr] [0m→ [0mRead apps/extension/manifest.json
+[2026-07-05T06:27:38.836Z] [INFO] [stderr] [0m→ [0mRead apps/extension/package.json
+[2026-07-05T06:27:39.260Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/**/*.html"[90m in . · 2 matches[0m
+[2026-07-05T06:27:39.601Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/**/*.test.*"[90m in . · 8 matches[0m
+[2026-07-05T06:27:39.906Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/**/*.spec.*"[90m in . · 0 matches[0m
+[2026-07-05T06:27:42.526Z] [INFO] [stderr] [0m→ [0mRead apps/extension/popup.html
+[2026-07-05T06:27:42.882Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/vite.config.*"[90m in . · 1 match[0m
+[2026-07-05T06:27:43.200Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/vitest.config.*"[90m in . · 1 match[0m
+[2026-07-05T06:27:43.490Z] [INFO] [stderr] [0m→ [0mRead apps/extension/tsconfig.json
+[2026-07-05T06:27:43.802Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/__tests__/DashboardCard.test.tsx
+[2026-07-05T06:27:46.392Z] [INFO] [stderr] [0m→ [0mRead apps/extension/vitest.config.ts
+[2026-07-05T06:27:46.652Z] [INFO] [stderr] [0m→ [0mRead apps/extension/vite.config.ts
+[2026-07-05T06:27:47.001Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/**/__tests__/**"[90m in . · 2 matches[0m
+[2026-07-05T06:27:47.459Z] [INFO] [stderr] [0m✱ [0mGrep "from.*popup"[90m in apps/extension · 0 matches[0m
+[2026-07-05T06:27:53.635Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"background service worker popup messaging dailyProgress authentication user data saveVocabulary handleSaveVocabulary","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-05T06:27:53.801Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background
+[2026-07-05T06:27:53.897Z] [INFO] [stdout] Let me explore the background service worker and understand how data flows work.
+[2026-07-05T06:27:56.487Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/index.ts
+[2026-07-05T06:27:56.794Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/services/storage.ts
+[2026-07-05T06:28:08.704Z] [INFO] [stderr] [0m
+[2026-07-05T06:28:08.704Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:28:08.704Z] [INFO] [stderr] [ ] Run tests to verify changes
+[2026-07-05T06:28:08.704Z] [INFO] [stderr] [ ] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[2026-07-05T06:28:08.705Z] [INFO] [stderr] [ ] Fix App.tsx: add error boundary, robust popup mounting
+[2026-07-05T06:28:08.705Z] [INFO] [stderr] [ ] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[2026-07-05T06:28:08.704Z] [INFO] [stderr] [0m
+[2026-07-05T06:28:08.731Z] [INFO] [stdout] Now I have a thorough understanding of the codebase. Let me set up the plan and fix the issues.
+[2026-07-05T06:28:12.684Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"APP_URL DASHBOARD_URL WEBSITE_URL ielts","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[2026-07-05T06:28:13.200Z] [INFO] [stderr] [0m✱ [0mGrep "APP_URL|DASHBOARD_URL|BASE_URL|localhost.*5173"[90m in packages · 2 matches[0m
+[2026-07-05T06:28:15.896Z] [INFO] [stderr] [0m→ [0mRead packages/settings/src/index.ts
+[2026-07-05T06:28:16.182Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/landing/config.ts
+[2026-07-05T06:28:16.633Z] [INFO] [stderr] [0m✱ [0mGrep "EXTENSION_URL|WEB_APP_URL|DASHBOARD_URL"[90m in . · 1 match[0m
+[2026-07-05T06:28:21.789Z] [INFO] [stderr] [ ] Fix App.tsx: add error boundary, robust popup mounting
+[2026-07-05T06:28:21.789Z] [INFO] [stderr] [ ] Run tests to verify changes
+[2026-07-05T06:28:21.789Z] [INFO] [stderr] [0m
+[2026-07-05T06:28:21.789Z] [INFO] [stderr] [•] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[2026-07-05T06:28:21.789Z] [INFO] [stderr] [ ] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[2026-07-05T06:28:21.789Z] [INFO] [stderr] [0m
+[2026-07-05T06:28:21.789Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:28:35.665Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:28:35.665Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:28:35.665Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] @@ -10,13 +10,22 @@
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    streak: number
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    reviewDue: number
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +export interface UserData {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  name: string
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  email: string
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  isLoggedIn: boolean
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  avatar: string
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  user: UserData | null
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +}
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    darkMode: boolean
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    progress: DailyProgress
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    loading: boolean
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    recentEntries: LearningEntry[]
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  error: string | null
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  export interface PopupDataActions {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] @@ -33,8 +42,15 @@
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  export interface PopupDataState {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    reviewDue: 0,
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    toggleDarkMode: () => void
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +const DEFAULT_USER: UserData = {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  email: '',
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  isLoggedIn: false,
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  avatar: '',
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    return result.dailyProgress || DEFAULT_PROGRESS
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +}
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    const result = await safeStorageGet<any>('dailyProgress')
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  name: '',
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] @@ -51,73 +67,142 @@
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]      return []
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    streak: 0,
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  try {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +async function loadUserData(): Promise<UserData | null> {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  } catch {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  async function loadProgress(): Promise<DailyProgress> {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    // Storage not available
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    if (result.ieltsUser?.isLoggedIn) {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    const result = await safeStorageGet<any>('ieltsUser')
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +      return result.ieltsUser as UserData
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  return null
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +}
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] -  const saved = localStorage.getItem('popup-dark-mode')
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] -  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    const saved = localStorage.getItem('popup-dark-mode')
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] -  return saved !== null ? saved === 'true' : prefersDark
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    return saved !== null ? saved === 'true' : prefersDark
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    return false
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  function getInitialDarkMode(): boolean {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  try {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  function applyDarkMode(isDark: boolean) {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    document.documentElement.classList.toggle('dark', isDark)
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  try {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] -  document.documentElement.classList.toggle('dark', isDark)
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  }
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +    // DOM not available
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    const [progress, setProgress] = useState<DailyProgress>(DEFAULT_PROGRESS)
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  } catch {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]  export function usePopupData(): PopupDataResult {
+[2026-07-05T06:28:35.666Z] [INFO] [stderr]    const [recentEntries, setRecentEntries] = useState<LearningEntry[]>([])
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +  const [user, setUser] = useState<UserData | null>(null)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]    const [darkMode, setDarkMode] = useState(false)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]    const [loading, setLoading] = useState(true)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +  const [error, setError] = useState<string | null>(null)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]    const refreshProgress = useCallback(() => {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +    loadProgress()
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] -    loadProgress().then(setProgress)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +      .then(setProgress)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +      .catch(() => setProgress(DEFAULT_PROGRESS))
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]    }, [])
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]    const refreshRecent = useCallback(() => {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +      .then(setRecentEntries)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] -    loadRecentEntries().then(setRecentEntries)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +    loadRecentEntries()
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +      .catch(() => setRecentEntries([]))
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]    }, [])
+[2026-07-05T06:28:35.666Z] [INFO] [stderr] +  } catch {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +    let unregister: (() => void) | undefined
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] -      await Promise.all([refreshProgress(), refreshRecent()])
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] -      const isDark = getInitialDarkMode()
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +    let cancelled = false
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] -      setDarkMode(isDark)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]      const init = async () => {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] -      applyDarkMode(isDark)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] -      setLoading(false)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr]    useEffect(() => {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        ])
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        const [progressResult, recentResult, userResult] = await Promise.allSettled([
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +      try {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        if (cancelled) return
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +          loadProgress(),
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        if (progressResult.status === 'fulfilled') {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +          setProgress(progressResult.value)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +          loadRecentEntries(),
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        if (recentResult.status === 'fulfilled') {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +          setRecentEntries(recentResult.value)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +          loadUserData(),
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        }
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        }
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +          setUser(userResult.value)
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        const failures = [progressResult, recentResult, userResult]
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        if (failures.length > 0) {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +          setError('Failed to load some data')
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        if (userResult.status === 'fulfilled') {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        }
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +      } catch {
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        }
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +          .filter(r => r.status === 'rejected')
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +      } finally {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +          const isDark = getInitialDarkMode()
+[2026-07-05T06:28:35.667Z] [INFO] [stderr] +        if (!cancelled) setError('Failed to initialize popup data')
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +          setDarkMode(isDark)
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +          applyDarkMode(isDark)
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +          setLoading(false)
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +        if (!cancelled) {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      init()
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] -      try {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] -    const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +        }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]          if (changes.dailyProgress?.newValue) {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +    try {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]          }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +        }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] -      } catch { /* ignore */ }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +        if (changes.ieltsUser?.newValue) {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +          setUser(changes.ieltsUser.newValue as UserData)
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      chrome.storage.onChanged.addListener(listener)
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]            setProgress(changes.dailyProgress.newValue as DailyProgress)
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      unregister = () => {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +        try { chrome.storage.onChanged.removeListener(listener) } catch { /* ignore */ }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] -    try {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +    } catch {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] -      chrome.storage.onChanged.addListener(listener)
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      // chrome.storage not available
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      return () => {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] -      try { chrome.storage.onChanged.removeListener(listener) } catch { /* ignore */ }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] -    } catch { /* ignore */ }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      unregister?.()
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      cancelled = true
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] -  }, [refreshProgress, refreshRecent])
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]        const next = !prev
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]    const toggleDarkMode = useCallback(() => {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] -      localStorage.setItem('popup-dark-mode', String(next))
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +  }, [])
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      try {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +        localStorage.setItem('popup-dark-mode', String(next))
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      setDarkMode((prev) => {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]        applyDarkMode(next)
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      })
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]        return next
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +      } catch { /* localStorage not available */ }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]    }, [])
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]  
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      recentEntries,
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +    user,
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      darkMode,
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]    return {
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      progress,
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      loading,
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      refreshProgress,
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      toggleDarkMode,
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] +    error,
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]      refreshRecent,
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] 
+[2026-07-05T06:28:35.668Z] [INFO] [stderr]    }
+[2026-07-05T06:28:35.668Z] [INFO] [stderr] [0m
+[2026-07-05T06:28:40.826Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:28:44.379Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:28:44.379Z] [INFO] [stderr] [0m
+[2026-07-05T06:28:44.379Z] [INFO] [stderr] [ ] Run tests to verify changes
+[2026-07-05T06:28:44.379Z] [INFO] [stderr] [0m
+[2026-07-05T06:28:44.379Z] [INFO] [stderr] [•] Fix App.tsx: add error boundary, robust popup mounting
+[2026-07-05T06:28:44.379Z] [INFO] [stderr] [ ] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[2026-07-05T06:28:44.379Z] [INFO] [stderr] [✓] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[2026-07-05T06:28:56.409Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T06:28:56.409Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/App.tsx
+[2026-07-05T06:28:56.409Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T06:28:56.409Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:28:56.409Z] [INFO] [stderr] @@ -1,5 +1,6 @@
+[2026-07-05T06:28:56.409Z] [INFO] [stderr] +import type { ReactNode } from 'react'
+[2026-07-05T06:28:56.409Z] [INFO] [stderr]  import PopupDashboard from './components/PopupDashboard'
+[2026-07-05T06:28:56.409Z] [INFO] [stderr] +import { Component, useState } from 'react'
+[2026-07-05T06:28:56.409Z] [INFO] [stderr]  import SaveTextForm from './components/SaveTextForm'
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] @@ -10,87 +11,128 @@
+[2026-07-05T06:28:56.409Z] [INFO] [stderr] -import { useState } from 'react'
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  import VocabularyCollector from './components/VocabularyCollector'
+[2026-07-05T06:28:56.409Z] [INFO] [stderr]  import { ToastProvider } from '../../../../packages/ui/src/components/Toast'
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  import SavedWordsView from './components/SavedWordsView'
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -function App() {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -  const [view, setView] = useState<ViewState>('dashboard')
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords'
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +  children: ReactNode
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +interface ErrorBoundaryProps {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +}
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -  const [key, setKey] = useState(0)
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -  const handleSaved = () => {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -  }
+[2026-07-05T06:28:56.409Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +  hasError: boolean
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +interface ErrorBoundaryState {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -    setKey((k) => k + 1)
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +  error: Error | null
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -    return (
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -      <ToastProvider>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -          <SaveTextForm onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +}
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -  if (view === 'saveForm') {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -        <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -      </ToastProvider>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +  constructor(props: ErrorBoundaryProps) {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +    this.state = { hasError: false, error: null }
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +    super(props)
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -    )
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -  if (view === 'vocabularyCollector') {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]    }
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -      <ToastProvider>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -        <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -          <VocabularyCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -    setView('dashboard')
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -      </ToastProvider>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -    )
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]    }
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +    return { hasError: true, error }
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -    return (
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -    return (
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -        </div>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -  if (view === 'articleCollector') {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -      <ToastProvider>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -        </div>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -      </ToastProvider>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -          <ArticleCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -    )
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -        <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +  static getDerivedStateFromError(error: Error) {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +  handleRetry = () => {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]    }
+[2026-07-05T06:28:56.410Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +    this.setState({ hasError: false, error: null })
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -  if (view === 'videoHelper') {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -    return (
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -          <VideoHelper onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +  render() {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +      return (
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -        <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -        </div>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          flexDirection: 'column',
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          display: 'flex',
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +        <div style={{
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          minHeight: '500px',
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +    if (this.state.hasError) {
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          justifyContent: 'center',
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] -      <ToastProvider>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          alignItems: 'center',
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          gap: '12px',
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          textAlign: 'center',
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +            Something went wrong
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +        }}>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +            {this.state.error?.message || 'An unexpected error occurred'}
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          padding: '16px',
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          </p>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          </h2>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +            onClick={this.handleRetry}
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +          <p style={{ fontSize: '13px', color: 'var(--color-muted)', maxWidth: '300px' }}>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +            style={{
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +          <button
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +              background: 'var(--color-surface)',
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +              padding: '8px 16px',
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +              borderRadius: 'var(--radius-md)',
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +              cursor: 'pointer',
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +              border: '1px solid var(--color-border)',
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +              color: 'var(--color-text)',
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +          >
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +              fontSize: '13px',
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +            }}
+[2026-07-05T06:28:56.411Z] [INFO] [stderr]          </div>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -      </ToastProvider>
+[2026-07-05T06:28:56.410Z] [INFO] [stderr] +          <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +            Retry
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +          </button>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -    )
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +      )
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +    }
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -    return (
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +    return this.props.children
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -  if (view === 'backupRestore') {
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +}
+[2026-07-05T06:28:56.411Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -        <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -      <ToastProvider>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr]    }
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -          <BackupRestore onBack={() => setView('dashboard')} />
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -        </div>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -      </ToastProvider>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +function App() {
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +  const [view, setView] = useState<ViewState>('dashboard')
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -  }
+[2026-07-05T06:28:56.411Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -    )
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -      </ToastProvider>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -    )
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +  const [key, setKey] = useState(0)
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -    return (
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -  if (view === 'miniTutor') {
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +    setView('dashboard')
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +  const handleSaved = () => {
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -        <MiniTutor onBack={() => setView('dashboard')} />
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -      <ToastProvider>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +    setKey((k) => k + 1)
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -  if (view === 'savedWords') {
+[2026-07-05T06:28:56.411Z] [INFO] [stderr]    }
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -    return (
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -        <SavedWordsView onBack={() => setView('dashboard')} />
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +  const renderView = () => {
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -    )
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +    switch (view) {
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +      case 'saveForm':
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -      <ToastProvider>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +        return (
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +        )
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +          </div>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +      case 'vocabularyCollector':
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] -      </ToastProvider>
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +        return (
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +            <SaveTextForm onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +          <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +          </div>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +      case 'articleCollector':
+[2026-07-05T06:28:56.411Z] [INFO] [stderr] +          <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        )
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +          <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +            <ArticleCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +      case 'videoHelper':
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +          </div>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +          <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +            <VocabularyCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        )
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        )
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +      case 'backupRestore':
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +            <VideoHelper onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        return (
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        return (
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +          </div>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +          <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +            <BackupRestore onBack={() => setView('dashboard')} />
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        return (
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +      case 'miniTutor':
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        return <MiniTutor onBack={() => setView('dashboard')} />
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +          </div>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +      case 'savedWords':
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +      default:
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        return <SavedWordsView onBack={() => setView('dashboard')} />
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        return <PopupDashboard key={key} onNavigate={setView} />
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        )
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] -    <ToastProvider>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] -    </ToastProvider>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr]    }
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +    }
+[2026-07-05T06:28:56.412Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] -      <PopupDashboard key={key} onNavigate={setView} />
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +    <ErrorBoundary>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr]    return (
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +        {renderView()}
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +      </ToastProvider>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +    </ErrorBoundary>
+[2026-07-05T06:28:56.412Z] [INFO] [stderr]  }
+[2026-07-05T06:28:56.412Z] [INFO] [stderr]  
+[2026-07-05T06:28:56.412Z] [INFO] [stderr]  export default App
+[2026-07-05T06:28:56.412Z] [INFO] [stderr]    )
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] [0m
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] 
+[2026-07-05T06:28:56.412Z] [INFO] [stderr] +      <ToastProvider>
+[2026-07-05T06:29:00.153Z] [INFO] [stderr] [✓] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[2026-07-05T06:29:00.154Z] [INFO] [stderr] [0m
+[2026-07-05T06:29:00.154Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:29:00.154Z] [INFO] [stderr] [•] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[2026-07-05T06:29:00.154Z] [INFO] [stderr] [ ] Run tests to verify changes
+[2026-07-05T06:29:00.154Z] [INFO] [stderr] [✓] Fix App.tsx: add error boundary, robust popup mounting
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] @@ -204,25 +204,33 @@
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]  const {
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +  user,
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]    recentEntries,
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]    progress,
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]    toggleDarkMode,
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]    refreshProgress,
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +  error,
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]  const { showToast } = useToast()
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]  } = usePopupData()
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +const [vocabCountLoading, setVocabCountLoading] = useState(true)
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]  const [vocabCount, setVocabCount] = useState(0)
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]    darkMode,
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]    loading,
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]  
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]    refreshRecent,
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]    loadVocabulary().then((result) => {
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]      setVocabCount(result.stats.total)
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] -  }).catch(() => {})
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]  useEffect(() => {
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +  }).finally(() => {
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +  }).catch(() => {
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +    setVocabCountLoading(false)
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]  
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +    setVocabCount(0)
+[2026-07-05T06:29:34.912Z] [INFO] [stderr]  }, [])
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] -  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +const handleQuickSavePage = useCallback(async () => {
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] -const handleQuickSavePage = useCallback(() => {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        return
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +  setVocabCountLoading(true)
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      if (!tab?.url || !tab?.title) {
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      }
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        showToast('warning', 'No active page to save')
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] +  try {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        status: 'new' as const,
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] @@ -240,33 +248,41 @@
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        createdAt: new Date().toISOString(),
+[2026-07-05T06:29:34.912Z] [INFO] [stderr] -    const tab = tabs[0]
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -        wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0,
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -    chrome.storage.local.get(['dailyProgress'], (result) => {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      const current = result.dailyProgress || {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +      chrome.storage.local.get(['dailyProgress']),
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    const [progressResult, savedItemsResult] = await Promise.all([
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +      chrome.storage.local.get(['savedItems']),
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      }
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      }
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    const current = (progressResult.dailyProgress as DailyProgress) || {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    ])
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +      wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0,
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    }
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        updatedAt: new Date().toISOString(),
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]          dailyProgress: { ...current, articlesSaved: current.articlesSaved + 1 },
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        chrome.storage.local.set({
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    await Promise.all([
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -    chrome.storage.local.get(['savedItems'], (result) => {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    const items = (savedItemsResult.savedItems as unknown[]) || []
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    items.unshift(entry)
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      const items = result.savedItems || []
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -    })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +  })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      items.unshift(entry)
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      chrome.storage.local.set({ savedItems: items })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    ])
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +      }),
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +      chrome.storage.local.set({ savedItems: items }),
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      showToast('success', 'Page saved to reading list')
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -    })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      refreshProgress()
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +  }
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -  })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    showToast('error', 'Failed to save page')
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  }, [showToast, refreshProgress, refreshRecent])
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -  showToast('info', 'Opening vocabulary review…')
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +}, [])
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -}, [showToast])
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  const handleStartReview = useCallback(() => {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +  } catch {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -  chrome.tabs.create({ url: 'http://localhost:5173' })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +  chrome.tabs.create({ url: chrome.runtime.getURL('options.html') + '#review' })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  const handleOpenDashboard = useCallback(() => {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  }, [])
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  const handleQuickAddNote = useCallback(() => {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +  chrome.tabs.create({ url: 'https://ielts-journey.app/dashboard' })
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      },
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      refreshRecent()
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        icon: '📚',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        label: 'Saved Words',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]    onNavigate('saveForm')
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      description: `${vocabCount} word${vocabCount !== 1 ? 's' : ''}`,
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        onClick: () => onNavigate('savedWords'),
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] @@ -319,9 +335,9 @@
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +      description: vocabCountLoading ? 'Loading...' : `${vocabCount} word${vocabCount !== 1 ? 's' : ''}`,
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      },
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        icon: '🌐',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        color: '#8b5cf6',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        description: 'Search and import open content',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        color: '#06b6d4',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]        label: 'Public API',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      onClick: () => chrome.tabs.create({ url: 'http://localhost:5173/public-api' }),
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]    ],
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]      },
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -  [onNavigate, progress.reviewDue, handleStartReview],
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  )
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +  [onNavigate, progress.reviewDue, vocabCount, vocabCountLoading, handleStartReview],
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      display: 'flex',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +      onClick: () => chrome.tabs.create({ url: 'https://ielts-journey.app/public-api' }),
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -    <div style={{
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      alignItems: 'center',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]  if (loading) {
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      fontSize: '14px',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      minHeight: '500px',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr]    return (
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -    }}>
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      justifyContent: 'center',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      Loading...
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +      role="status"
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +    <div
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +      style={{
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +        display: 'flex',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] -      color: 'var(--color-muted)',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +        alignItems: 'center',
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +        flexDirection: 'column',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        minHeight: '500px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        gap: '12px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      aria-label="Loading"
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      }}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +    >
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      <div
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        style={{
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          width: '24px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          height: '24px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          borderRadius: '50%',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          animation: 'spin 0.8s linear infinite',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        }}
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] @@ -334,30 +350,86 @@
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      <span style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          borderTopColor: 'var(--color-primary)',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      />
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        Loading your learning data…
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]  }
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]  
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]      </div>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          border: '3px solid var(--color-border)',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]    )
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +if (error) {
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      </span>
+[2026-07-05T06:29:34.913Z] [INFO] [stderr] +        justifyContent: 'center',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +    <div
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      role="alert"
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      style={{
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        display: 'flex',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        flexDirection: 'column',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        justifyContent: 'center',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        minHeight: '500px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        padding: '16px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        gap: '12px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        textAlign: 'center',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +    >
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      <span style={{ fontSize: '14px', color: 'var(--color-danger)', fontWeight: 500 }}>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        alignItems: 'center',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      }}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      </span>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        {error}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      </span>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      <button
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        Some data may not be available.
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        style={{
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          borderRadius: 'var(--radius-md)',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          border: '1px solid var(--color-border)',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        onClick={() => { refreshProgress(); refreshRecent() }}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          background: 'var(--color-surface)',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          padding: '8px 16px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        }}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          fontSize: '13px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          color: 'var(--color-text)',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      >
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +  )
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        Retry
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +  return (
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +    </div>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          cursor: 'pointer',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]      style={{
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +      </button>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]    <div
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] @@ -391,21 +463,53 @@
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]  return (
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]          </div>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]        display: 'flex',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]          >
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]            }}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -          style={{
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -        <h1
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -            color: 'var(--color-text)',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -            fontSize: '16px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -            letterSpacing: '-0.01em',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -          }}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -            margin: 0,
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        <div>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -        >
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -          IELTS Journey
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]            I
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -            fontWeight: 700,
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +              fontSize: '16px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +              fontWeight: 700,
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +            style={{
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          <h1
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] -        </h1>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          >
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +            }}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +              color: 'var(--color-text)',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +            IELTS Journey
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          </h1>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          {user?.isLoggedIn && user.name && (
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +              style={{
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +            <span
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +                color: 'var(--color-primary)',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +              margin: 0,
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +                display: 'block',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +                fontWeight: 500,
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +              }}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +                fontSize: '11px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +              {user.name}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +                marginTop: '1px',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +            >
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +          )}
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +              letterSpacing: '-0.01em',
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +            </span>
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]        </div>
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +        {!user?.isLoggedIn ? (
+[2026-07-05T06:29:34.914Z] [INFO] [stderr] +        </div>
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +            style={{
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +          <button
+[2026-07-05T06:29:34.914Z] [INFO] [stderr]        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +            onClick={() => chrome.tabs.create({ url: 'https://ielts-journey.app/login' })}
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +              fontSize: '11px',
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +              border: '1px solid var(--color-primary)',
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +              borderRadius: 'var(--radius-sm)',
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +              fontWeight: 500,
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +              cursor: 'pointer',
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +              background: 'transparent',
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +          >
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +            }}
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +              padding: '4px 8px',
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +            Log In
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +              color: 'var(--color-primary)',
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +        ) : null}
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] +          </button>
+[2026-07-05T06:29:34.915Z] [INFO] [stderr]          <button
+[2026-07-05T06:29:34.915Z] [INFO] [stderr]          <StreakBadge streak={progress.streak} />
+[2026-07-05T06:29:34.915Z] [INFO] [stderr]            onClick={toggleDarkMode}
+[2026-07-05T06:29:34.915Z] [INFO] [stderr]            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] [0m
+[2026-07-05T06:29:34.915Z] [INFO] [stderr] 
+[2026-07-05T06:29:34.967Z] [INFO] [stdout] Let me fix the PopupDashboard.tsx. I'll make targeted edits.
+[2026-07-05T06:29:38.979Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/index.css
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/index.css
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:29:38.980Z] [INFO] [stderr]    display: flex;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr]    flex-direction: column;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr]    min-height: 500px;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr]  }
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/index.css
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/index.css
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  from { transform: rotate(0deg); }
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +@keyframes spin {
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +.sr-only {
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  to { transform: rotate(360deg); }
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  margin: -1px;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  position: absolute;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +}
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  height: 1px;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  padding: 0;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  width: 1px;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] @@ -102,4 +102,21 @@
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  clip: rect(0, 0, 0, 0);
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  white-space: nowrap;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +}
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] [0m
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  border-width: 0;
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] 
+[2026-07-05T06:29:38.980Z] [INFO] [stderr] +  overflow: hidden;
+[2026-07-05T06:29:39.096Z] [INFO] [stdout] Now I need to add the spinner animation CSS to `index.css` since the loading state references it.
+[2026-07-05T06:29:42.441Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [limit=10][0m
+[2026-07-05T06:29:42.546Z] [INFO] [stdout] Let me check the PopupDashboard.tsx imports - the `DailyProgress` type used in `handleQuickSavePage` needs to be imported.
+[2026-07-05T06:29:46.310Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:29:46.310Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:29:46.311Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:29:46.311Z] [INFO] [stderr] @@ -1,7 +1,8 @@
+[2026-07-05T06:29:46.311Z] [INFO] [stderr]  import { useToast } from '../../../../../packages/ui/src/components/Toast'
+[2026-07-05T06:29:46.311Z] [INFO] [stderr]  import { usePopupData } from '../hooks/usePopupData'
+[2026-07-05T06:29:46.311Z] [INFO] [stderr] +import type { DailyProgress } from '../hooks/usePopupData'
+[2026-07-05T06:29:46.311Z] [INFO] [stderr]  import { memo, useCallback, useMemo, useState, useEffect } from 'react'
+[2026-07-05T06:29:46.311Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:29:46.311Z] [INFO] [stderr]  import type { LearningEntry } from '../../types'
+[2026-07-05T06:29:46.311Z] [INFO] [stderr]  import { loadVocabulary } from '../services/popupDataService'
+[2026-07-05T06:29:46.311Z] [INFO] [stderr]  
+[2026-07-05T06:29:46.311Z] [INFO] [stderr] 
+[2026-07-05T06:29:46.311Z] [INFO] [stderr] [0m
+[2026-07-05T06:29:46.311Z] [INFO] [stderr]  import DashboardCard from './DashboardCard'
+[2026-07-05T06:29:46.311Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:29:46.310Z] [INFO] [stderr] [0m
+[2026-07-05T06:29:49.157Z] [INFO] [stderr] [✓] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[2026-07-05T06:29:49.157Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:29:49.157Z] [INFO] [stderr] [✓] Fix App.tsx: add error boundary, robust popup mounting
+[2026-07-05T06:29:49.157Z] [INFO] [stderr] [✓] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[2026-07-05T06:29:49.157Z] [INFO] [stderr] [•] Run tests to verify changes
+[2026-07-05T06:29:49.158Z] [INFO] [stderr] [0m
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > shows toast notification when SAVE_SELECTION message is received 2ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] $ vitest run --reporter verbose -- --reporter verbose
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns default progress when nothing stored 1ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > handles SAVE_SELECTION_FULL message with chrome.storage.local 2ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] [0m$ [0mpnpm test -- --reporter verbose 2>&1
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by default amount 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by custom amount 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > starts from zero when no stored progress 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > adds and retrieves saved items 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > returns empty array when nothing stored 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns stored progress 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > responds to GET_PAGE_INFO with page title, url, and selected text 2ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > merges patch with existing progress 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > getVideoPageInfo returns null when not set 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setVideoPageInfo stores and getVideoPageInfo retrieves 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > sets progress and install timestamp 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > creates from defaults when nothing stored 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setPendingVideoInfo stores and getPendingVideoInfo retrieves 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > deduplicates case-insensitive duplicates 1ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > returns null before install 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > is a no-op when no sync status exists 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > removes empty strings 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > removes pending items and updates sync status 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > prefers longer phrases over shorter words 1ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > returns null when no status stored 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches single word case-insensitively 2ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches phrases exactly 1ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches with surrounding punctuation 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles regex special characters in words 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > clearAllExtensionData > clears all stored data 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > highlights both when they do not overlap 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches whole words only 1ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles Unicode characters 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] [messaging] Unknown message type: TEST_ACTION
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > sorts by length descending 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > does not highlight inside other words 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches multiple occurrences of the same word 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] [messaging] Unknown message type: UNKNOWN
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty text 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > returns empty array for empty input 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty word list 0ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly 1ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value 11ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling 5ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] [messaging] Handler error for FAIL: Error: something went wrong
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow 1ms
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:149:13
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:153:20
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]     at new Promise (<anonymous>)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]     at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]     at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+[2026-07-05T06:29:53.918Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.918Z] [INFO] [stderr]     at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside script tags 3ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > tracks active state 3ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights matching text in body 34ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setWordIds > stores and replaces word IDs 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes 5ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > defaults to inactive before first set 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside style tags 5ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple matches of the same word 2ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks 24ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores full word data including example and note 1ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles text with no matching words gracefully 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside already highlighted elements 1ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight when active is false 1ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple different words 3ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles root with no text nodes 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight hidden elements 9ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes highlight spans and restores text 1ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root is not an Element 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > is a no-op when no highlights exist 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root has no highlights 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > removes all highlights from document 1ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes multiple highlight spans and restores text order 1ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight with empty word list 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op on empty body 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns the word from element data 2ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler 2ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is invalid JSON 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is empty string 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores word data in dataset 3ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler returning data 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles non-object message 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types 1ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element has no data 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > registers and invokes a handler 4ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that resolves 51ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > DEFAULT_SETTINGS matches schema defaults 4ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > THEME_MODES has expected values 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > getApiKey returns empty string when no key stored 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > AI_PROVIDERS has expected values 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns defaults when no settings stored 1ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey with empty string clears the key 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > SAVE_CATEGORIES has expected values 1ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves apiKey separately to local storage 1ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey stores and getApiKey retrieves the key 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns stored sync settings merged with defaults 1ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves settings to sync storage without apiKey 5ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > loads apiKey from local storage 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > falls back to defaults when stored sync data is invalid 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > applies overlapping settings from website 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves backup to local storage 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > saves apiKey from website to local storage 0ms
+[2026-07-05T06:29:53.919Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles null/undefined message 1ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > extracts only overlapping fields 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > notifies listeners after saving 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > preserves existing field values not in the patch 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > loads current settings, merges patch, and saves 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > does not include aiApiKey or extension-only fields 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > importSettingsData saves the provided settings 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > clearAllSettings > clears stored values 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > exportSettingsData returns settings and timestamp 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > addSettingsChangeListener registers a listener 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > ignores undefined website settings 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:167:13
+[2026-07-05T06:29:53.920Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > clearAllSettings > removes settings from sync and local storage 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > removeSettingsChangeListener unregisters a listener 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr] [messaging] Sync handler error for FAIL: Error: sync error
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:171:20
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > does not throw when a listener throws 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > supports multiple listeners 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at new Promise (<anonymous>)
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 55ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+[2026-07-05T06:29:53.920Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 50ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 51ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 2ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 0ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  Test Files  8 passed (8)
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 50ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]       Tests  116 passed (116)
+[2026-07-05T06:29:53.920Z] [INFO] [stderr] 
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 51ms
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]    Duration  1.04s (transform 266ms, setup 0ms, collect 538ms, tests 483ms, environment 3.62s, prepare 590ms)
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]    Start at  13:29:52
+[2026-07-05T06:29:53.920Z] [INFO] [stderr] [0m
+[2026-07-05T06:29:53.920Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+[2026-07-05T06:29:56.847Z] [INFO] [stdout] All 116 tests pass. Let me also check TypeScript compiles properly.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] [0m$ [0mpnpm typecheck 2>&1
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] [0m
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] src/popup/components/SavedWordsView.tsx(1,40): error TS6133: 'useCallback' is declared but its value is never read.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] src/popup/hooks/usePopupData.ts(46,7): error TS6133: 'DEFAULT_USER' is declared but its value is never read.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] src/popup/components/SavedWordsView.tsx(2,26): error TS6133: 'findWord' is declared but its value is never read.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+[2026-07-05T06:29:58.447Z] [INFO] [stderr] [ELIFECYCLE] Command failed with exit code 2.
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] @@ -42,15 +42,8 @@
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:30:02.963Z] [INFO] [stderr]  }
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] -  name: '',
+[2026-07-05T06:30:02.963Z] [INFO] [stderr]  
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] -const DEFAULT_USER: UserData = {
+[2026-07-05T06:30:02.963Z] [INFO] [stderr]    streak: 0,
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] -  avatar: '',
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] -  email: '',
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] -
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] -  isLoggedIn: false,
+[2026-07-05T06:30:02.963Z] [INFO] [stderr]    const result = await safeStorageGet<any>('dailyProgress')
+[2026-07-05T06:30:02.963Z] [INFO] [stderr]  async function loadProgress(): Promise<DailyProgress> {
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] -}
+[2026-07-05T06:30:02.963Z] [INFO] [stderr]    reviewDue: 0,
+[2026-07-05T06:30:02.963Z] [INFO] [stderr]  }
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] 
+[2026-07-05T06:30:02.963Z] [INFO] [stderr]    return result.dailyProgress || DEFAULT_PROGRESS
+[2026-07-05T06:30:02.963Z] [INFO] [stderr] [0m
+[2026-07-05T06:30:03.015Z] [INFO] [stdout] Let me fix the TypeScript errors in the production code.
+[2026-07-05T06:30:05.773Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/SavedWordsView.tsx[90m [limit=10][0m
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/SavedWordsView.tsx
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] [0m
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SavedWordsView.tsx
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SavedWordsView.tsx
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] @@ -1,6 +1,6 @@
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SavedWordsView.tsx
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] +import { useState, useEffect, useMemo } from 'react'
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] -import { loadVocabulary, findWord, type PopupVocabEntry, type PopupVocabStats } from '../services/popupDataService'
+[2026-07-05T06:30:09.394Z] [INFO] [stderr]      window.speechSynthesis.cancel()
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] +import { loadVocabulary, type PopupVocabEntry, type PopupVocabStats } from '../services/popupDataService'
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] -import { useState, useEffect, useMemo, useCallback } from 'react'
+[2026-07-05T06:30:09.394Z] [INFO] [stderr]  
+[2026-07-05T06:30:09.394Z] [INFO] [stderr]  function speakWord(word: string) {
+[2026-07-05T06:30:09.394Z] [INFO] [stderr]    if ('speechSynthesis' in window) {
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] 
+[2026-07-05T06:30:09.394Z] [INFO] [stderr] [0m
+[2026-07-05T06:30:14.296Z] [INFO] [stderr] [0m$ [0mpnpm typecheck 2>&1 | grep -E "error TS" | grep -v "__tests__"
+[2026-07-05T06:30:14.296Z] [INFO] [stderr] [0m
+[2026-07-05T06:30:14.297Z] [INFO] [stderr] (no output)
+[2026-07-05T06:30:17.679Z] [INFO] [stdout] All production TypeScript errors are clean. Let me run the tests one final time to confirm.
+[2026-07-05T06:30:18.989Z] [INFO] [stderr] [0m$ [0mpnpm test -- --reporter verbose 2>&1 | tail -20
+[2026-07-05T06:30:18.989Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 52ms
+[2026-07-05T06:30:18.989Z] [INFO] [stderr]     at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+[2026-07-05T06:30:18.989Z] [INFO] [stderr] 
+[2026-07-05T06:30:18.989Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 1ms
+[2026-07-05T06:30:18.989Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 51ms
+[2026-07-05T06:30:18.989Z] [INFO] [stderr] at new Promise (<anonymous>)
+[2026-07-05T06:30:18.989Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 0ms
+[2026-07-05T06:30:18.990Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 50ms
+[2026-07-05T06:30:18.989Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 0ms
+[2026-07-05T06:30:18.989Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 0ms
+[2026-07-05T06:30:18.990Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 52ms
+[2026-07-05T06:30:18.990Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 51ms
+[2026-07-05T06:30:18.990Z] [INFO] [stderr]    Duration  956ms (transform 224ms, setup 0ms, collect 483ms, tests 472ms, environment 3.18s, prepare 448ms)
+[2026-07-05T06:30:18.989Z] [INFO] [stderr]     at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+[2026-07-05T06:30:18.990Z] [INFO] [stderr]  Test Files  8 passed (8)
+[2026-07-05T06:30:18.990Z] [INFO] [stderr] 
+[2026-07-05T06:30:18.990Z] [INFO] [stderr]       Tests  116 passed (116)
+[2026-07-05T06:30:18.990Z] [INFO] [stderr]    Start at  13:30:17
+[2026-07-05T06:30:18.990Z] [INFO] [stderr] [0m
+[2026-07-05T06:30:18.990Z] [INFO] [stderr]     at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+[2026-07-05T06:30:22.252Z] [INFO] [stderr] [✓] Fix App.tsx: add error boundary, robust popup mounting
+[2026-07-05T06:30:22.252Z] [INFO] [stderr] [✓] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[2026-07-05T06:30:22.252Z] [INFO] [stderr] [0m
+[2026-07-05T06:30:22.252Z] [INFO] [stderr] [✓] Run tests to verify changes
+[2026-07-05T06:30:22.252Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:30:22.252Z] [INFO] [stderr] [✓] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[2026-07-05T06:30:29.284Z] [INFO] [stdout] All 116 tests pass, production TypeScript is clean. Here's the summary:
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] 
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Used `Promise.allSettled` so one failing data source doesn't block others
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] ### `apps/extension/src/popup/hooks/usePopupData.ts`
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Added `error` state to surface loading failures gracefully
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Added cleanup via `cancelled` flag to prevent state updates after unmount
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Wrapped dark mode DOM/storage access with try/catch for non-popup contexts
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] 
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Added real-time storage listener for `ieltsUser` changes too
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Added `refreshProgress` and `refreshRecent` with error catch handlers
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] ## Changes Made
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Added `UserData` interface and `user` state to track auth status
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] 
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] ### `apps/extension/src/popup/App.tsx`
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Added `ErrorBoundary` React class component wrapping the entire popup
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - **Fixed bug**: `actions` useMemo was missing `vocabCount` in dependency array — now recalculates when vocab count loads
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] 
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] ### `apps/extension/src/popup/components/PopupDashboard.tsx`
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Shows fallback UI with error message and retry button on crash
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - **Added loading state** for vocab count in the "Saved Words" action description
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - **Fixed bug**: `handleQuickSavePage` used two sequential `chrome.storage.local.get` calls — now parallel with `Promise.all`
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] ### `apps/extension/src/popup/index.css`
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - **Fixed bug**: `handleStartReview` only showed a toast — now opens options page review tab
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - **Added states**: loading spinner with animation, error state with retry button, user auth display (name + login button)
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Refactored view switching to a `switch` statement for clarity
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] 
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Added `.sr-only` utility class
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - **Fixed hardcoded URLs**: `http://localhost:5173` and `/public-api` replaced with proper production URLs
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - **Fixed bug**: `handleQuickSavePage` used callback-style `chrome.tabs.query` — now async/await with proper error handling
+[2026-07-05T06:30:29.285Z] [INFO] [stdout] - Added `@keyframes spin` animation for the loading spinner
+[2026-07-05T06:30:29.497Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-05T06:30:29.497Z] [INFO] Output:
+Let me explore the background service worker and understand how data flows work.
+Now I have a thorough understanding of the codebase. Let me set up the plan and fix the issues.
+Let me fix the PopupDashboard.tsx. I'll make targeted edits.
+Now I need to add the spinner animation CSS to `index.css` since the loading state references it.
+Let me check the PopupDashboard.tsx imports - the `DailyProgress` type used in `handleQuickSavePage` needs to be imported.
+All 116 tests pass. Let me also check TypeScript compiles properly.
+Let me fix the TypeScript errors in the production code.
+All production TypeScript errors are clean. Let me run the tests one final time to confirm.
+All 116 tests pass, production TypeScript is clean. Here's the summary:
+
+## Changes Made
+
+### `apps/extension/src/popup/hooks/usePopupData.ts`
+- Added `UserData` interface and `user` state to track auth status
+- Added `error` state to surface loading failures gracefully
+- Used `Promise.allSettled` so one failing data source doesn't block others
+- Added real-time storage listener for `ieltsUser` changes too
+- Added cleanup via `cancelled` flag to prevent state updates after unmount
+- Wrapped dark mode DOM/storage access with try/catch for non-popup contexts
+- Added `refreshProgress` and `refreshRecent` with error catch handlers
+
+### `apps/extension/src/popup/App.tsx`
+- Added `ErrorBoundary` React class component wrapping the entire popup
+- Shows fallback UI with error message and retry button on crash
+- Refactored view switching to a `switch` statement for clarity
+
+### `apps/extension/src/popup/components/PopupDashboard.tsx`
+- **Fixed bug**: `actions` useMemo was missing `vocabCount` in dependency array — now recalculates when vocab count loads
+- **Fixed bug**: `handleQuickSavePage` used two sequential `chrome.storage.local.get` calls — now parallel with `Promise.all`
+- **Fixed bug**: `handleQuickSavePage` used callback-style `chrome.tabs.query` — now async/await with proper error handling
+- **Fixed bug*
+[2026-07-05T06:30:29.497Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"extension popup App.tsx PopupDashboard popup hooks usePopupData","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[0m→ [0mRead apps/extension/src/popup
+[0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx
+[0m→ [0mRead apps/extension/src/popup/main.tsx
+[0m→ [0mRead apps/extension/src/popup/index.css
+[0m✱ [0mGlob "apps/extension/src/popup/components/*"[90m in . · 12 matches[0m
+[0m✱ [0mGlob "apps/extension/src/popup/hooks/*"[90m in . · 1 match[0m
+[0m✱ [0mGlob "apps/extension/src/popup/services/*"[90m in . · 1 match[0m
+[0m→ [0mRead apps/extension/src/popup/services/popupDataService.ts
+[0m→ [0mRead apps/extension/src/popup/components/DashboardCard.tsx
+[0m→ [0mRead apps/extension/src/utils/safe-chrome.ts
+[0m→ [0mRead apps/extension/src/storage
+[0m✗ [0mRead apps/extension/src/types failed
+[91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/types
+
+Did you mean one of these?
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/types.ts
+[0m→ [0mRead apps/extension/src/types.ts
+[0m→ [0mRead apps/extension/src/storage/vocabularyStore.ts
+[0m→ [0mRead apps/extension/src/storage/indexedDB.ts
+[0m✱ [0mGlob "apps/extension/manifest.json"[90m in . · 1 match[0m
+[0m✱ [0mGlob "apps/extension/**/manifest*"[90m in . · 1 match[0m
+[0m✱ [0mGlob "apps/extension/package.json"[90m in . · 1 match[0m
+[0m→ [0mRead apps/extension/manifest.json
+[0m→ [0mRead apps/extension/package.json
+[0m✱ [0mGlob "apps/extension/**/*.html"[90m in . · 2 matches[0m
+[0m✱ [0mGlob "apps/extension/**/*.test.*"[90m in . · 8 matches[0m
+[0m✱ [0mGlob "apps/extension/**/*.spec.*"[90m in . · 0 matches[0m
+[0m→ [0mRead apps/extension/popup.html
+[0m✱ [0mGlob "apps/extension/vite.config.*"[90m in . · 1 match[0m
+[0m✱ [0mGlob "apps/extension/vitest.config.*"[90m in . · 1 match[0m
+[0m→ [0mRead apps/extension/tsconfig.json
+[0m→ [0mRead apps/extension/src/popup/components/__tests__/DashboardCard.test.tsx
+[0m→ [0mRead apps/extension/vitest.config.ts
+[0m→ [0mRead apps/extension/vite.config.ts
+[0m✱ [0mGlob "apps/extension/src/popup/**/__tests__/**"[90m in . · 2 matches[0m
+[0m✱ [0mGrep "from.*popup"[90m in apps/extension · 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"background service worker popup messaging dailyProgress authentication user data saveVocabulary handleSaveVocabulary","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[0m→ [0mRead apps/extension/src/background
+[0m→ [0mRead apps/extension/src/background/index.ts
+[0m→ [0mRead apps/extension/src/services/storage.ts
+[0m
+[0m# [0mTodos
+[ ] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[ ] Fix App.tsx: add error boundary, robust popup mounting
+[ ] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[ ] Run tests to verify changes
+[0m
+[0m⚙ [0mcodegraph_codegraph_search {"query":"APP_URL DASHBOARD_URL WEBSITE_URL ielts","projectPath":"/Users/phamthanhhung/Desktop/MyProject/IELTS"}
+[0m✱ [0mGrep "APP_URL|DASHBOARD_URL|BASE_URL|localhost.*5173"[90m in packages · 2 matches[0m
+[0m→ [0mRead packages/settings/src/index.ts
+[0m→ [0mRead apps/web/src/pages/landing/config.ts
+[0m✱ [0mGrep "EXTENSION_URL|WEB_APP_URL|DASHBOARD_URL"[90m in . · 1 match[0m
+[0m
+[0m# [0mTodos
+[•] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[ ] Fix App.tsx: add error boundary, robust popup mounting
+[ ] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[ ] Run tests to verify changes
+[0m
+[0m← [0mEdit apps/extension/src/popup/hooks/usePopupData.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+@@ -10,13 +10,22 @@
+   reviewDue: number
+   streak: number
+ }
+ 
++export interface UserData {
++  name: string
++  email: string
++  avatar: string
++  isLoggedIn: boolean
++}
++
+ export interface PopupDataState {
+   progress: DailyProgress
+   recentEntries: LearningEntry[]
++  user: UserData | null
+   darkMode: boolean
+   loading: boolean
++  error: string | null
+ }
+ 
+ export interface PopupDataActions {
+   toggleDarkMode: () => void
+@@ -33,8 +42,15 @@
+   reviewDue: 0,
+   streak: 0,
+ }
+ 
++const DEFAULT_USER: UserData = {
++  name: '',
++  email: '',
++  avatar: '',
++  isLoggedIn: false,
++}
++
+ async function loadProgress(): Promise<DailyProgress> {
+   const result = await safeStorageGet<any>('dailyProgress')
+   return result.dailyProgress || DEFAULT_PROGRESS
+ }
+@@ -51,73 +67,142 @@
+     return []
+   }
+ }
+ 
++async function loadUserData(): Promise<UserData | null> {
++  try {
++    const result = await safeStorageGet<any>('ieltsUser')
++    if (result.ieltsUser?.isLoggedIn) {
++      return result.ieltsUser as UserData
++    }
++  } catch {
++    // Storage not available
++  }
++  return null
++}
++
+ function getInitialDarkMode(): boolean {
+-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+-  const saved = localStorage.getItem('popup-dark-mode')
+-  return saved !== null ? saved === 'true' : prefersDark
++  try {
++    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
++    const saved = localStorage.getItem('popup-dark-mode')
++    return saved !== null ? saved === 'true' : prefersDark
++  } catch {
++    return false
++  }
+ }
+ 
+ function applyDarkMode(isDark: boolean) {
+-  document.documentElement.classList.toggle('dark', isDark)
++  try {
++    document.documentElement.classList.toggle('dark', isDark)
++  } catch {
++    // DOM not available
++  }
+ }
+ 
+ export function usePopupData(): PopupDataResult {
+   const [progress, setProgress] = useState<DailyProgress>(DEFAULT_PROGRESS)
+   const [recentEntries, setRecentEntries] = useState<LearningEntry[]>([])
++  const [user, setUser] = useState<UserData | null>(null)
+   const [darkMode, setDarkMode] = useState(false)
+   const [loading, setLoading] = useState(true)
++  const [error, setError] = useState<string | null>(null)
+ 
+   const refreshProgress = useCallback(() => {
+-    loadProgress().then(setProgress)
++    loadProgress()
++      .then(setProgress)
++      .catch(() => setProgress(DEFAULT_PROGRESS))
+   }, [])
+ 
+   const refreshRecent = useCallback(() => {
+-    loadRecentEntries().then(setRecentEntries)
++    loadRecentEntries()
++      .then(setRecentEntries)
++      .catch(() => setRecentEntries([]))
+   }, [])
+ 
+   useEffect(() => {
++    let cancelled = false
++    let unregister: (() => void) | undefined
++
+     const init = async () => {
+-      await Promise.all([refreshProgress(), refreshRecent()])
+-      const isDark = getInitialDarkMode()
+-      setDarkMode(isDark)
+-      applyDarkMode(isDark)
+-      setLoading(false)
++      try {
++        const [progressResult, recentResult, userResult] = await Promise.allSettled([
++          loadProgress(),
++          loadRecentEntries(),
++          loadUserData(),
++        ])
++
++        if (cancelled) return
++
++        if (progressResult.status === 'fulfilled') {
++          setProgress(progressResult.value)
++        }
++        if (recentResult.status === 'fulfilled') {
++          setRecentEntries(recentResult.value)
++        }
++        if (userResult.status === 'fulfilled') {
++          setUser(userResult.value)
++        }
++
++        const failures = [progressResult, recentResult, userResult]
++          .filter(r => r.status === 'rejected')
++        if (failures.length > 0) {
++          setError('Failed to load some data')
++        }
++      } catch {
++        if (!cancelled) setError('Failed to initialize popup data')
++      } finally {
++        if (!cancelled) {
++          const isDark = getInitialDarkMode()
++          setDarkMode(isDark)
++          applyDarkMode(isDark)
++          setLoading(false)
++        }
++      }
+     }
+ 
+     init()
+ 
+-    const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
+-      try {
++    try {
++      const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
+         if (changes.dailyProgress?.newValue) {
+           setProgress(changes.dailyProgress.newValue as DailyProgress)
+         }
+-      } catch { /* ignore */ }
++        if (changes.ieltsUser?.newValue) {
++          setUser(changes.ieltsUser.newValue as UserData)
++        }
++      }
++      chrome.storage.onChanged.addListener(listener)
++      unregister = () => {
++        try { chrome.storage.onChanged.removeListener(listener) } catch { /* ignore */ }
++      }
++    } catch {
++      // chrome.storage not available
+     }
+ 
+-    try {
+-      chrome.storage.onChanged.addListener(listener)
+-    } catch { /* ignore */ }
+     return () => {
+-      try { chrome.storage.onChanged.removeListener(listener) } catch { /* ignore */ }
++      cancelled = true
++      unregister?.()
+     }
+-  }, [refreshProgress, refreshRecent])
++  }, [])
+ 
+   const toggleDarkMode = useCallback(() => {
+     setDarkMode((prev) => {
+       const next = !prev
+-      localStorage.setItem('popup-dark-mode', String(next))
++      try {
++        localStorage.setItem('popup-dark-mode', String(next))
++      } catch { /* localStorage not available */ }
+       applyDarkMode(next)
+       return next
+     })
+   }, [])
+ 
+   return {
+     progress,
+     recentEntries,
++    user,
+     darkMode,
+     loading,
++    error,
+     toggleDarkMode,
+     refreshProgress,
+     refreshRecent,
+   }
+
+[0m
+[0m→ [0mRead apps/extension/src/popup/hooks/usePopupData.ts
+[0m
+[0m# [0mTodos
+[✓] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[•] Fix App.tsx: add error boundary, robust popup mounting
+[ ] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[ ] Run tests to verify changes
+[0m
+[0m← [0mEdit apps/extension/src/popup/App.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+@@ -1,5 +1,6 @@
+-import { useState } from 'react'
++import { Component, useState } from 'react'
++import type { ReactNode } from 'react'
+ import { ToastProvider } from '../../../../packages/ui/src/components/Toast'
+ import PopupDashboard from './components/PopupDashboard'
+ import SaveTextForm from './components/SaveTextForm'
+ import VocabularyCollector from './components/VocabularyCollector'
+@@ -10,87 +11,128 @@
+ import SavedWordsView from './components/SavedWordsView'
+ 
+ type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords'
+ 
+-function App() {
+-  const [view, setView] = useState<ViewState>('dashboard')
+-  const [key, setKey] = useState(0)
++interface ErrorBoundaryProps {
++  children: ReactNode
++}
+ 
+-  const handleSaved = () => {
+-    setView('dashboard')
+-    setKey((k) => k + 1)
+-  }
++interface ErrorBoundaryState {
++  hasError: boolean
++  error: Error | null
++}
+ 
+-  if (view === 'saveForm') {
+-    return (
+-      <ToastProvider>
+-        <div style={{ padding: '16px', minHeight: '500px' }}>
+-          <SaveTextForm onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+-        </div>
+-      </ToastProvider>
+-    )
++class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
++  constructor(props: ErrorBoundaryProps) {
++    super(props)
++    this.state = { hasError: false, error: null }
+   }
+ 
+-  if (view === 'vocabularyCollector') {
+-    return (
+-      <ToastProvider>
+-        <div style={{ padding: '16px', minHeight: '500px' }}>
+-          <VocabularyCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+-        </div>
+-      </ToastProvider>
+-    )
++  static getDerivedStateFromError(error: Error) {
++    return { hasError: true, error }
+   }
+ 
+-  if (view === 'articleCollector') {
+-    return (
+-      <ToastProvider>
+-        <div style={{ padding: '16px', minHeight: '500px' }}>
+-          <ArticleCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+-        </div>
+-      </ToastProvider>
+-    )
++  handleRetry = () => {
++    this.setState({ hasError: false, error: null })
+   }
+ 
+-  if (view === 'videoHelper') {
+-    return (
+-      <ToastProvider>
+-        <div style={{ padding: '16px', minHeight: '500px' }}>
+-          <VideoHelper onSaved={handleSaved} onCancel={() => setView('dashboard')} />
++  render() {
++    if (this.state.hasError) {
++      return (
++        <div style={{
++          display: 'flex',
++          flexDirection: 'column',
++          alignItems: 'center',
++          justifyContent: 'center',
++          minHeight: '500px',
++          padding: '16px',
++          gap: '12px',
++          textAlign: 'center',
++        }}>
++          <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
++          <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>
++            Something went wrong
++          </h2>
++          <p style={{ fontSize: '13px', color: 'var(--color-muted)', maxWidth: '300px' }}>
++            {this.state.error?.message || 'An unexpected error occurred'}
++          </p>
++          <button
++            onClick={this.handleRetry}
++            style={{
++              padding: '8px 16px',
++              borderRadius: 'var(--radius-md)',
++              border: '1px solid var(--color-border)',
++              background: 'var(--color-surface)',
++              color: 'var(--color-text)',
++              cursor: 'pointer',
++              fontSize: '13px',
++            }}
++          >
++            Retry
++          </button>
+         </div>
+-      </ToastProvider>
+-    )
++      )
++    }
++    return this.props.children
+   }
++}
+ 
+-  if (view === 'backupRestore') {
+-    return (
+-      <ToastProvider>
+-        <div style={{ padding: '16px', minHeight: '500px' }}>
+-          <BackupRestore onBack={() => setView('dashboard')} />
+-        </div>
+-      </ToastProvider>
+-    )
+-  }
++function App() {
++  const [view, setView] = useState<ViewState>('dashboard')
++  const [key, setKey] = useState(0)
+ 
+-  if (view === 'miniTutor') {
+-    return (
+-      <ToastProvider>
+-        <MiniTutor onBack={() => setView('dashboard')} />
+-      </ToastProvider>
+-    )
++  const handleSaved = () => {
++    setView('dashboard')
++    setKey((k) => k + 1)
+   }
+ 
+-  if (view === 'savedWords') {
+-    return (
+-      <ToastProvider>
+-        <SavedWordsView onBack={() => setView('dashboard')} />
+-      </ToastProvider>
+-    )
++  const renderView = () => {
++    switch (view) {
++      case 'saveForm':
++        return (
++          <div style={{ padding: '16px', minHeight: '500px' }}>
++            <SaveTextForm onSaved={handleSaved} onCancel={() => setView('dashboard')} />
++          </div>
++        )
++      case 'vocabularyCollector':
++        return (
++          <div style={{ padding: '16px', minHeight: '500px' }}>
++            <VocabularyCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
++          </div>
++        )
++      case 'articleCollector':
++        return (
++          <div style={{ padding: '16px', minHeight: '500px' }}>
++            <ArticleCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
++          </div>
++        )
++      case 'videoHelper':
++        return (
++          <div style={{ padding: '16px', minHeight: '500px' }}>
++            <VideoHelper onSaved={handleSaved} onCancel={() => setView('dashboard')} />
++          </div>
++        )
++      case 'backupRestore':
++        return (
++          <div style={{ padding: '16px', minHeight: '500px' }}>
++            <BackupRestore onBack={() => setView('dashboard')} />
++          </div>
++        )
++      case 'miniTutor':
++        return <MiniTutor onBack={() => setView('dashboard')} />
++      case 'savedWords':
++        return <SavedWordsView onBack={() => setView('dashboard')} />
++      default:
++        return <PopupDashboard key={key} onNavigate={setView} />
++    }
+   }
+ 
+   return (
+-    <ToastProvider>
+-      <PopupDashboard key={key} onNavigate={setView} />
+-    </ToastProvider>
++    <ErrorBoundary>
++      <ToastProvider>
++        {renderView()}
++      </ToastProvider>
++    </ErrorBoundary>
+   )
+ }
+ 
+ export default App
+
+[0m
+[0m# [0mTodos
+[✓] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[✓] Fix App.tsx: add error boundary, robust popup mounting
+[•] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[ ] Run tests to verify changes
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+@@ -204,25 +204,33 @@
+ const { showToast } = useToast()
+ const {
+   progress,
+   recentEntries,
++  user,
+   darkMode,
+   loading,
++  error,
+   toggleDarkMode,
+   refreshProgress,
+   refreshRecent,
+ } = usePopupData()
+ const [vocabCount, setVocabCount] = useState(0)
++const [vocabCountLoading, setVocabCountLoading] = useState(true)
+ 
+ useEffect(() => {
++  setVocabCountLoading(true)
+   loadVocabulary().then((result) => {
+     setVocabCount(result.stats.total)
+-  }).catch(() => {})
++  }).catch(() => {
++    setVocabCount(0)
++  }).finally(() => {
++    setVocabCountLoading(false)
++  })
+ }, [])
+ 
+-const handleQuickSavePage = useCallback(() => {
+-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+-    const tab = tabs[0]
++const handleQuickSavePage = useCallback(async () => {
++  try {
++    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+     if (!tab?.url || !tab?.title) {
+       showToast('warning', 'No active page to save')
+       return
+     }
+@@ -240,33 +248,41 @@
+       status: 'new' as const,
+       createdAt: new Date().toISOString(),
+       updatedAt: new Date().toISOString(),
+     }
+-    chrome.storage.local.get(['dailyProgress'], (result) => {
+-      const current = result.dailyProgress || {
+-        wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0,
+-      }
++
++    const [progressResult, savedItemsResult] = await Promise.all([
++      chrome.storage.local.get(['dailyProgress']),
++      chrome.storage.local.get(['savedItems']),
++    ])
++
++    const current = (progressResult.dailyProgress as DailyProgress) || {
++      wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0,
++    }
++    const items = (savedItemsResult.savedItems as unknown[]) || []
++    items.unshift(entry)
++
++    await Promise.all([
+       chrome.storage.local.set({
+         dailyProgress: { ...current, articlesSaved: current.articlesSaved + 1 },
+-      })
+-    })
+-    chrome.storage.local.get(['savedItems'], (result) => {
+-      const items = result.savedItems || []
+-      items.unshift(entry)
+-      chrome.storage.local.set({ savedItems: items })
+-    })
++      }),
++      chrome.storage.local.set({ savedItems: items }),
++    ])
++
+     showToast('success', 'Page saved to reading list')
+     refreshProgress()
+     refreshRecent()
+-  })
++  } catch {
++    showToast('error', 'Failed to save page')
++  }
+ }, [showToast, refreshProgress, refreshRecent])
+ 
+ const handleStartReview = useCallback(() => {
+-  showToast('info', 'Opening vocabulary review…')
+-}, [showToast])
++  chrome.tabs.create({ url: chrome.runtime.getURL('options.html') + '#review' })
++}, [])
+ 
+ const handleOpenDashboard = useCallback(() => {
+-  chrome.tabs.create({ url: 'http://localhost:5173' })
++  chrome.tabs.create({ url: 'https://ielts-journey.app/dashboard' })
+ }, [])
+ 
+ const handleQuickAddNote = useCallback(() => {
+   onNavigate('saveForm')
+@@ -319,9 +335,9 @@
+     },
+     {
+       icon: '📚',
+       label: 'Saved Words',
+-      description: `${vocabCount} word${vocabCount !== 1 ? 's' : ''}`,
++      description: vocabCountLoading ? 'Loading...' : `${vocabCount} word${vocabCount !== 1 ? 's' : ''}`,
+       onClick: () => onNavigate('savedWords'),
+       color: '#8b5cf6',
+     },
+     {
+@@ -334,30 +350,86 @@
+     {
+       icon: '🌐',
+       label: 'Public API',
+       description: 'Search and import open content',
+-      onClick: () => chrome.tabs.create({ url: 'http://localhost:5173/public-api' }),
++      onClick: () => chrome.tabs.create({ url: 'https://ielts-journey.app/public-api' }),
+       color: '#06b6d4',
+     },
+   ],
+-  [onNavigate, progress.reviewDue, handleStartReview],
++  [onNavigate, progress.reviewDue, vocabCount, vocabCountLoading, handleStartReview],
+ )
+ 
+ if (loading) {
+   return (
+-    <div style={{
+-      display: 'flex',
+-      alignItems: 'center',
+-      justifyContent: 'center',
+-      minHeight: '500px',
+-      fontSize: '14px',
+-      color: 'var(--color-muted)',
+-    }}>
+-      Loading...
++    <div
++      role="status"
++      aria-label="Loading"
++      style={{
++        display: 'flex',
++        flexDirection: 'column',
++        alignItems: 'center',
++        justifyContent: 'center',
++        minHeight: '500px',
++        gap: '12px',
++      }}
++    >
++      <div
++        style={{
++          width: '24px',
++          height: '24px',
++          border: '3px solid var(--color-border)',
++          borderTopColor: 'var(--color-primary)',
++          borderRadius: '50%',
++          animation: 'spin 0.8s linear infinite',
++        }}
++      />
++      <span style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
++        Loading your learning data…
++      </span>
+     </div>
+   )
+ }
+ 
++if (error) {
++  return (
++    <div
++      role="alert"
++      style={{
++        display: 'flex',
++        flexDirection: 'column',
++        alignItems: 'center',
++        justifyContent: 'center',
++        minHeight: '500px',
++        padding: '16px',
++        gap: '12px',
++        textAlign: 'center',
++      }}
++    >
++      <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
++      <span style={{ fontSize: '14px', color: 'var(--color-danger)', fontWeight: 500 }}>
++        {error}
++      </span>
++      <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
++        Some data may not be available.
++      </span>
++      <button
++        onClick={() => { refreshProgress(); refreshRecent() }}
++        style={{
++          padding: '8px 16px',
++          borderRadius: 'var(--radius-md)',
++          border: '1px solid var(--color-border)',
++          background: 'var(--color-surface)',
++          color: 'var(--color-text)',
++          cursor: 'pointer',
++          fontSize: '13px',
++        }}
++      >
++        Retry
++      </button>
++    </div>
++  )
++}
++
+ return (
+   <div
+     style={{
+       display: 'flex',
+@@ -391,21 +463,53 @@
+           }}
+         >
+           I
+         </div>
+-        <h1
+-          style={{
+-            fontSize: '16px',
+-            fontWeight: 700,
+-            color: 'var(--color-text)',
+-            margin: 0,
+-            letterSpacing: '-0.01em',
+-          }}
+-        >
+-          IELTS Journey
+-        </h1>
++        <div>
++          <h1
++            style={{
++              fontSize: '16px',
++              fontWeight: 700,
++              color: 'var(--color-text)',
++              margin: 0,
++              letterSpacing: '-0.01em',
++            }}
++          >
++            IELTS Journey
++          </h1>
++          {user?.isLoggedIn && user.name && (
++            <span
++              style={{
++                fontSize: '11px',
++                color: 'var(--color-primary)',
++                fontWeight: 500,
++                display: 'block',
++                marginTop: '1px',
++              }}
++            >
++              {user.name}
++            </span>
++          )}
++        </div>
+       </div>
+       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
++        {!user?.isLoggedIn ? (
++          <button
++            onClick={() => chrome.tabs.create({ url: 'https://ielts-journey.app/login' })}
++            style={{
++              fontSize: '11px',
++              padding: '4px 8px',
++              borderRadius: 'var(--radius-sm)',
++              border: '1px solid var(--color-primary)',
++              background: 'transparent',
++              color: 'var(--color-primary)',
++              cursor: 'pointer',
++              fontWeight: 500,
++            }}
++          >
++            Log In
++          </button>
++        ) : null}
+         <StreakBadge streak={progress.streak} />
+         <button
+           onClick={toggleDarkMode}
+           aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/index.css
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/index.css
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/index.css
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/index.css
+@@ -102,4 +102,21 @@
+   display: flex;
+   flex-direction: column;
+   min-height: 500px;
+ }
++
++@keyframes spin {
++  from { transform: rotate(0deg); }
++  to { transform: rotate(360deg); }
++}
++
++.sr-only {
++  position: absolute;
++  width: 1px;
++  height: 1px;
++  padding: 0;
++  margin: -1px;
++  overflow: hidden;
++  clip: rect(0, 0, 0, 0);
++  white-space: nowrap;
++  border-width: 0;
++}
+
+[0m
+[0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [limit=10][0m
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+@@ -1,7 +1,8 @@
+ import { memo, useCallback, useMemo, useState, useEffect } from 'react'
+ import { useToast } from '../../../../../packages/ui/src/components/Toast'
+ import { usePopupData } from '../hooks/usePopupData'
++import type { DailyProgress } from '../hooks/usePopupData'
+ import DashboardCard from './DashboardCard'
+ import type { LearningEntry } from '../../types'
+ import { loadVocabulary } from '../services/popupDataService'
+ 
+
+[0m
+[0m# [0mTodos
+[✓] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[✓] Fix App.tsx: add error boundary, robust popup mounting
+[✓] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[•] Run tests to verify changes
+[0m
+[0m$ [0mpnpm test -- --reporter verbose 2>&1
+$ vitest run --reporter verbose -- --reporter verbose
+
+ RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension
+
+ ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > shows toast notification when SAVE_SELECTION message is received 2ms
+ ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > handles SAVE_SELECTION_FULL message with chrome.storage.local 2ms
+ ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > responds to GET_PAGE_INFO with page title, url, and selected text 2ms
+ ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns default progress when nothing stored 1ms
+ ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns stored progress 0ms
+ ✓ src/__tests__/storageService.test.ts > updateDailyProgress > merges patch with existing progress 0ms
+ ✓ src/__tests__/storageService.test.ts > updateDailyProgress > creates from defaults when nothing stored 0ms
+ ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by default amount 0ms
+ ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by custom amount 0ms
+ ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > starts from zero when no stored progress 0ms
+ ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > returns empty array when nothing stored 0ms
+ ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > adds and retrieves saved items 0ms
+ ✓ src/__tests__/storageService.test.ts > video page info > setVideoPageInfo stores and getVideoPageInfo retrieves 0ms
+ ✓ src/__tests__/storageService.test.ts > video page info > getVideoPageInfo returns null when not set 0ms
+ ✓ src/__tests__/storageService.test.ts > video page info > setPendingVideoInfo stores and getPendingVideoInfo retrieves 0ms
+ ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > returns null before install 0ms
+ ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > sets progress and install timestamp 0ms
+ ✓ src/__tests__/storageService.test.ts > clearAllExtensionData > clears all stored data 0ms
+ ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > returns null when no status stored 0ms
+ ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > removes pending items and updates sync status 0ms
+ ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > is a no-op when no sync status exists 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > deduplicates case-insensitive duplicates 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > removes empty strings 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > sorts by length descending 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > returns empty array for empty input 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches single word case-insensitively 2ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches whole words only 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches phrases exactly 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches with surrounding punctuation 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > prefers longer phrases over shorter words 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > highlights both when they do not overlap 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles regex special characters in words 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > does not highlight inside other words 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches multiple occurrences of the same word 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty text 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty word list 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles Unicode characters 0ms
+stderr | src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler
+[messaging] Unknown message type: TEST_ACTION
+
+stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types
+[messaging] Unknown message type: UNKNOWN
+
+stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value 11ms
+ ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling 5ms
+ ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly 1ms
+ ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow 1ms
+stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects
+[messaging] Handler error for FAIL: Error: something went wrong
+    at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:149:13
+    at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+    at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:153:20
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+    at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+    at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+
+stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks 24ms
+ ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes 5ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > tracks active state 3ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > defaults to inactive before first set 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setWordIds > stores and replaces word IDs 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights matching text in body 34ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside script tags 3ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside style tags 5ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight hidden elements 9ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight when active is false 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight with empty word list 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple matches of the same word 2ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple different words 3ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores word data in dataset 3ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores full word data including example and note 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside already highlighted elements 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles text with no matching words gracefully 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles root with no text nodes 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes highlight spans and restores text 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes multiple highlight spans and restores text order 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root is not an Element 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root has no highlights 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op on empty body 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > removes all highlights from document 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > is a no-op when no highlights exist 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns the word from element data 2ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element has no data 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is invalid JSON 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is empty string 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > registers and invokes a handler 4ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler 2ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types 1ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles null/undefined message 1ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles non-object message 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler returning data 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that resolves 51ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > constants > DEFAULT_SETTINGS matches schema defaults 4ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > constants > SAVE_CATEGORIES has expected values 1ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > constants > THEME_MODES has expected values 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > constants > AI_PROVIDERS has expected values 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > getApiKey returns empty string when no key stored 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey stores and getApiKey retrieves the key 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey with empty string clears the key 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns defaults when no settings stored 1ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns stored sync settings merged with defaults 1ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > loads apiKey from local storage 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > falls back to defaults when stored sync data is invalid 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves settings to sync storage without apiKey 5ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves apiKey separately to local storage 1ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves backup to local storage 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > notifies listeners after saving 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > loads current settings, merges patch, and saves 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > preserves existing field values not in the patch 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > applies overlapping settings from website 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > saves apiKey from website to local storage 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > ignores undefined website settings 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > extracts only overlapping fields 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > does not include aiApiKey or extension-only fields 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > clearAllSettings > removes settings from sync and local storage 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > clearAllSettings > clears stored values 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > exportSettingsData returns settings and timestamp 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > importSettingsData saves the provided settings 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > addSettingsChangeListener registers a listener 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > removeSettingsChangeListener unregisters a listener 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > supports multiple listeners 0ms
+ ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > does not throw when a listener throws 0ms
+stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws
+[messaging] Sync handler error for FAIL: Error: sync error
+    at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:167:13
+    at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:113:20[90m)[39m
+    at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:171:20
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+    at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+    at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 55ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 2ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 51ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 50ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 51ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 50ms
+
+ Test Files  8 passed (8)
+      Tests  116 passed (116)
+   Start at  13:29:52
+   Duration  1.04s (transform 266ms, setup 0ms, collect 538ms, tests 483ms, environment 3.62s, prepare 590ms)
+[0m
+[0m$ [0mpnpm typecheck 2>&1
+$ tsc --noEmit
+src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+  Type 'unknown' is not assignable to type 'SyncStatus'.
+src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+src/popup/components/SavedWordsView.tsx(1,40): error TS6133: 'useCallback' is declared but its value is never read.
+src/popup/components/SavedWordsView.tsx(2,26): error TS6133: 'findWord' is declared but its value is never read.
+src/popup/hooks/usePopupData.ts(46,7): error TS6133: 'DEFAULT_USER' is declared but its value is never read.
+[ELIFECYCLE] Command failed with exit code 2.
+[0m
+[0m← [0mEdit apps/extension/src/popup/hooks/usePopupData.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/hooks/usePopupData.ts
+@@ -42,15 +42,8 @@
+   reviewDue: 0,
+   streak: 0,
+ }
+ 
+-const DEFAULT_USER: UserData = {
+-  name: '',
+-  email: '',
+-  avatar: '',
+-  isLoggedIn: false,
+-}
+-
+ async function loadProgress(): Promise<DailyProgress> {
+   const result = await safeStorageGet<any>('dailyProgress')
+   return result.dailyProgress || DEFAULT_PROGRESS
+ }
+
+[0m
+[0m→ [0mRead apps/extension/src/popup/components/SavedWordsView.tsx[90m [limit=10][0m
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/SavedWordsView.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SavedWordsView.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SavedWordsView.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SavedWordsView.tsx
+@@ -1,6 +1,6 @@
+-import { useState, useEffect, useMemo, useCallback } from 'react'
+-import { loadVocabulary, findWord, type PopupVocabEntry, type PopupVocabStats } from '../services/popupDataService'
++import { useState, useEffect, useMemo } from 'react'
++import { loadVocabulary, type PopupVocabEntry, type PopupVocabStats } from '../services/popupDataService'
+ 
+ function speakWord(word: string) {
+   if ('speechSynthesis' in window) {
+     window.speechSynthesis.cancel()
+
+[0m
+[0m$ [0mpnpm typecheck 2>&1 | grep -E "error TS" | grep -v "__tests__"
+(no output)
+[0m
+[0m$ [0mpnpm test -- --reporter verbose 2>&1 | tail -20
+at new Promise (<anonymous>)
+    at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+    at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+    at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 52ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 1ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 52ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 51ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 50ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 51ms
+
+ Test Files  8 passed (8)
+      Tests  116 passed (116)
+   Start at  13:30:17
+   Duration  956ms (transform 224ms, setup 0ms, collect 483ms, tests 472ms, environment 3.18s, prepare 448ms)
+[0m
+[0m# [0mTodos
+[✓] Fix usePopupData.ts: add error state, user auth state, handle edge cases
+[✓] Fix App.tsx: add error boundary, robust popup mounting
+[✓] Fix PopupDashboard.tsx: error/loading/empty states, data display, deps, hardcoded URLs
+[✓] Run tests to verify changes
+[0m
+[2026-07-05T06:30:29.498Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-05T06:30:29.501Z] [INFO] Task completed successfully

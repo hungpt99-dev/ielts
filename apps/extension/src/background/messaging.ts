@@ -1,11 +1,13 @@
-import type { SaveCategory } from '../types'
+import type { SaveCategory, LearningEntry } from '../types'
 import type { SharedSettingsPatch } from '@ielts/settings'
 import {
   updateDailyProgress,
   setVideoPageInfo,
   setPendingVideoInfo,
-  addSavedItem,
+  incrementDailyProgress,
 } from '../services/storage'
+import { saveEntry } from '../storage/indexedDB'
+import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
 
 export interface SaveItemPayload {
   category: SaveCategory
@@ -49,6 +51,8 @@ export interface MiniTutorOpenPayload {
 export interface AiExplainPayload {
   text: string
   action: string
+  systemPrompt?: string
+  userPrompt?: string
 }
 
 interface MessageMap {
@@ -178,7 +182,82 @@ export function initMessaging(): void {
 
   registerHandler('MINI_TUTOR_SAVE_RESULT', async (_msg) => {
     const msg = _msg as ExtensionMessage<'MINI_TUTOR_SAVE_RESULT'>
-    await addSavedItem(msg.payload as unknown as Record<string, unknown>)
+    const now = new Date().toISOString()
+    try {
+      const learningEntry: LearningEntry = {
+        id: msg.payload.id,
+        text: msg.payload.text,
+        category: msg.payload.category,
+        topic: 'general',
+        skill: 'vocabulary',
+        difficulty: '',
+        tags: [],
+        personalNote: '',
+        pageTitle: msg.payload.pageTitle || '',
+        pageUrl: msg.payload.pageUrl || '',
+        status: 'new',
+        createdAt: now,
+        updatedAt: now,
+      }
+      await saveEntry(learningEntry)
+      await incrementDailyProgress('wordsAdded', 1)
+    } catch {
+      /* non-critical */
+    }
+  })
+
+  registerHandler('SAVE_SELECTION_FULL', async (_msg) => {
+    const msg = _msg as ExtensionMessage<'SAVE_SELECTION_FULL'>
+    const now = new Date().toISOString()
+    try {
+      const entry: LearningEntry = {
+        id: crypto.randomUUID(),
+        text: msg.payload.text,
+        category: msg.payload.category,
+        topic: msg.payload.topic || 'general',
+        skill: (msg.payload.skill || 'general') as LearningEntry['skill'],
+        difficulty: (msg.payload.difficulty || '') as LearningEntry['difficulty'],
+        tags: msg.payload.tags || [],
+        personalNote: msg.payload.note || '',
+        pageTitle: msg.payload.pageTitle,
+        pageUrl: msg.payload.pageUrl,
+        status: 'new',
+        createdAt: now,
+        updatedAt: now,
+      }
+      await saveEntry(entry)
+
+      if (msg.payload.category === 'vocabulary') {
+        try {
+          const vocabEntry = extensionVocabSchema.parse({
+            id: crypto.randomUUID(),
+            word: msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+            sourceSentence: msg.payload.text,
+            pageTitle: msg.payload.pageTitle,
+            pageUrl: msg.payload.pageUrl,
+            topic: msg.payload.topic || 'general',
+            personalNote: msg.payload.note || '',
+            tags: msg.payload.tags || [],
+            meaning: '',
+            partOfSpeech: '',
+            pronunciation: '',
+            difficulty: msg.payload.difficulty || '',
+            status: 'new',
+            addedToReview: true,
+            reviewId: '',
+            createdAt: now,
+            updatedAt: now,
+          })
+          await saveVocabularyEntry(vocabEntry)
+        } catch {
+          /* non-critical */
+        }
+      }
+
+      await incrementDailyProgress('wordsAdded', msg.payload.category === 'vocabulary' ? 1 : 0)
+    } catch (err) {
+      console.error('[messaging] SAVE_SELECTION_FULL handler error:', err)
+    }
   })
 
   registerHandler('MINI_TUTOR_OPEN_PAGE', async (_msg, _sender) => {

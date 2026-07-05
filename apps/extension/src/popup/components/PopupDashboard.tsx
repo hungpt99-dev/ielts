@@ -1,12 +1,16 @@
 import { memo, useCallback, useMemo, useState, useEffect } from 'react'
 import { useToast } from '../../../../../packages/ui/src/components/Toast'
 import { usePopupData } from '../hooks/usePopupData'
+import type { DailyProgress } from '../hooks/usePopupData'
 import DashboardCard from './DashboardCard'
+import ExtensionProactiveMessages from './ExtensionProactiveMessages'
 import type { LearningEntry } from '../../types'
 import { loadVocabulary } from '../services/popupDataService'
+import { getDueCount } from '../services/reviewService'
+import { safeStorageGet, safeStorageSet } from '../../utils/safe-chrome'
 
 interface PopupDashboardProps {
-  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords') => void
+  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews') => void
 }
 
 interface ActionItem {
@@ -205,23 +209,43 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
   const {
     progress,
     recentEntries,
+    user,
     darkMode,
     loading,
+    error,
     toggleDarkMode,
     refreshProgress,
     refreshRecent,
   } = usePopupData()
   const [vocabCount, setVocabCount] = useState(0)
+  const [vocabCountLoading, setVocabCountLoading] = useState(true)
+  const [dueCount, setDueCount] = useState(0)
 
   useEffect(() => {
-    loadVocabulary().then((result) => {
-      setVocabCount(result.stats.total)
-    }).catch(() => {})
-  }, [])
+    setVocabCountLoading(true)
+    Promise.all([
+      loadVocabulary(),
+      getDueCount(),
+    ]).then(([vocabResult, dueResult]) => {
+      setVocabCount(vocabResult.stats.total)
+      setDueCount(dueResult)
+      if (dueResult !== progress.reviewDue) {
+        safeStorageGet<any>('dailyProgress').then((result) => {
+          const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+          safeStorageSet({ dailyProgress: { ...current, reviewDue: dueResult } })
+        }).catch(() => {})
+      }
+    }).catch(() => {
+      setVocabCount(0)
+      setDueCount(0)
+    }).finally(() => {
+      setVocabCountLoading(false)
+    })
+  }, [progress.reviewDue])
 
-  const handleQuickSavePage = useCallback(() => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const tab = tabs[0]
+  const handleQuickSavePage = useCallback(async () => {
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
       if (!tab?.url || !tab?.title) {
         showToast('warning', 'No active page to save')
         return
@@ -241,31 +265,39 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }
-      chrome.storage.local.get(['dailyProgress'], (result) => {
-        const current = result.dailyProgress || {
-          wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0,
-        }
+
+      const [progressResult, savedItemsResult] = await Promise.all([
+        chrome.storage.local.get(['dailyProgress']),
+        chrome.storage.local.get(['savedItems']),
+      ])
+
+      const current = (progressResult.dailyProgress as DailyProgress) || {
+        wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0,
+      }
+      const items = (savedItemsResult.savedItems as unknown[]) || []
+      items.unshift(entry)
+
+      await Promise.all([
         chrome.storage.local.set({
           dailyProgress: { ...current, articlesSaved: current.articlesSaved + 1 },
-        })
-      })
-      chrome.storage.local.get(['savedItems'], (result) => {
-        const items = result.savedItems || []
-        items.unshift(entry)
-        chrome.storage.local.set({ savedItems: items })
-      })
+        }),
+        chrome.storage.local.set({ savedItems: items }),
+      ])
+
       showToast('success', 'Page saved to reading list')
       refreshProgress()
       refreshRecent()
-    })
+    } catch {
+      showToast('error', 'Failed to save page')
+    }
   }, [showToast, refreshProgress, refreshRecent])
 
   const handleStartReview = useCallback(() => {
-    showToast('info', 'Opening vocabulary review…')
-  }, [showToast])
+    onNavigate('pendingReviews')
+  }, [onNavigate])
 
   const handleOpenDashboard = useCallback(() => {
-    chrome.tabs.create({ url: 'http://localhost:5173' })
+    chrome.tabs.create({ url: 'https://ielts-journey.app/dashboard' })
   }, [])
 
   const handleQuickAddNote = useCallback(() => {
@@ -320,39 +352,95 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
       {
         icon: '📚',
         label: 'Saved Words',
-        description: `${vocabCount} word${vocabCount !== 1 ? 's' : ''}`,
+        description: vocabCountLoading ? 'Loading...' : `${vocabCount} word${vocabCount !== 1 ? 's' : ''}`,
         onClick: () => onNavigate('savedWords'),
         color: '#8b5cf6',
       },
       {
         icon: '🔄',
         label: 'Start Review',
-        description: `${progress.reviewDue} pending review${progress.reviewDue !== 1 ? 's' : ''}`,
+        description: `${dueCount} pending review${dueCount !== 1 ? 's' : ''}`,
         onClick: handleStartReview,
         color: '#f59e0b',
       },
       {
         icon: '🌐',
-        label: 'Public API',
-        description: 'Search and import open content',
-        onClick: () => chrome.tabs.create({ url: 'http://localhost:5173/public-api' }),
+        label: 'Public Content',
+        description: 'Search, import, and export open content',
+        onClick: () => onNavigate('importExport'),
         color: '#06b6d4',
       },
     ],
-    [onNavigate, progress.reviewDue, handleStartReview],
+    [onNavigate, dueCount, vocabCount, vocabCountLoading, handleStartReview],
   )
 
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '500px',
-        fontSize: '14px',
-        color: 'var(--color-muted)',
-      }}>
-        Loading...
+      <div
+        role="status"
+        aria-label="Loading"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '500px',
+          gap: '12px',
+        }}
+      >
+        <div
+          style={{
+            width: '24px',
+            height: '24px',
+            border: '3px solid var(--color-border)',
+            borderTopColor: 'var(--color-primary)',
+            borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite',
+          }}
+        />
+        <span style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
+          Loading your learning data…
+        </span>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div
+        role="alert"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '500px',
+          padding: '16px',
+          gap: '12px',
+          textAlign: 'center',
+        }}
+      >
+        <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
+        <span style={{ fontSize: '14px', color: 'var(--color-danger)', fontWeight: 500 }}>
+          {error}
+        </span>
+        <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+          Some data may not be available.
+        </span>
+        <button
+          onClick={() => { refreshProgress(); refreshRecent() }}
+          style={{
+            padding: '8px 16px',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--color-border)',
+            background: 'var(--color-surface)',
+            color: 'var(--color-text)',
+            cursor: 'pointer',
+            fontSize: '13px',
+          }}
+        >
+          Retry
+        </button>
       </div>
     )
   }
@@ -392,19 +480,51 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
           >
             I
           </div>
-          <h1
-            style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              color: 'var(--color-text)',
-              margin: 0,
-              letterSpacing: '-0.01em',
-            }}
-          >
-            IELTS Journey
-          </h1>
+          <div>
+            <h1
+              style={{
+                fontSize: '16px',
+                fontWeight: 700,
+                color: 'var(--color-text)',
+                margin: 0,
+                letterSpacing: '-0.01em',
+              }}
+            >
+              IELTS Journey
+            </h1>
+            {user?.isLoggedIn && user.name && (
+              <span
+                style={{
+                  fontSize: '11px',
+                  color: 'var(--color-primary)',
+                  fontWeight: 500,
+                  display: 'block',
+                  marginTop: '1px',
+                }}
+              >
+                {user.name}
+              </span>
+            )}
+          </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {!user?.isLoggedIn ? (
+            <button
+              onClick={() => chrome.tabs.create({ url: 'https://ielts-journey.app/login' })}
+              style={{
+                fontSize: '11px',
+                padding: '4px 8px',
+                borderRadius: 'var(--radius-sm)',
+                border: '1px solid var(--color-primary)',
+                background: 'transparent',
+                color: 'var(--color-primary)',
+                cursor: 'pointer',
+                fontWeight: 500,
+              }}
+            >
+              Log In
+            </button>
+          ) : null}
           <StreakBadge streak={progress.streak} />
           <button
             onClick={toggleDarkMode}
@@ -430,6 +550,8 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         </div>
       </header>
 
+      <ExtensionProactiveMessages />
+
       <section
         style={{
           display: 'grid',
@@ -442,9 +564,9 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         <DashboardCard label="Articles" value={progress.articlesSaved} icon="📰" />
         <DashboardCard
           label="Review Due"
-          value={progress.reviewDue}
+          value={dueCount}
           icon="🔄"
-          accent={progress.reviewDue > 0}
+          accent={dueCount > 0}
         />
       </section>
 

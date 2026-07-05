@@ -1,7 +1,7 @@
 # Refactor Analysis Report
 
 > Comprehensive codebase analysis for the IELTS Learning Journey project.
-> Date: 2026-07-01
+> Date: 2026-07-05 (updated with Vietnamese assumptions, stale features, and product direction analysis)
 > Analyzed by: OpenCode
 
 ---
@@ -694,3 +694,351 @@ apps/extension/
 | Test coverage | ~5% | >60% |
 | Documentation coverage | ~25% | 100% |
 | Hardcoded colors | Many | Zero |
+
+---
+
+## 14. Vietnamese-Specific Assumptions & Hard-Coded Content
+
+### 14.1 Data Model Level
+
+| Location | Issue | Impact |
+|----------|-------|--------|
+| `apps/web/src/models/index.ts:103` | `VocabularyEntry.meaningVi: string` — Dedicated Vietnamese meaning field | All vocabulary entries carry Vietnamese baggage; the model assumes bi-lingual (EN-VI) storage |
+| `apps/web/src/models/aiTutorModels.ts:144` | `UserTutorPreferences.language: 'english' \| 'vietnamese' \| 'both'` | Language system is hardcoded to just English/Vietnamese; no extensibility for other languages |
+| `apps/web/src/models/aiTutorModels.ts:147` | `UserTutorPreferences.useVietnamese: boolean` | Overlapping boolean flag that duplicates `language` field |
+| `apps/web/src/features/configuration/models.ts:15` | `AiTutorMode: 'vietnamese-explanation-tutor'` | Specific tutor mode for Vietnamese explanations |
+| `apps/web/src/features/configuration/models.ts:31` | `AiResponseLanguage: 'english' \| 'vietnamese' \| 'both'` | Only 3 options; not extensible |
+| `packages/ai/src/prompts/explain.ts:5` | `AiExplainType: 'vietnamese'` | Vietnamese explain is a first-class type, not a plugin |
+| `packages/ai/src/schemas/vocabulary.ts:5` | `meaningVi` field in vocabulary Zod schema | AI output schema requires Vietnamese |
+| `packages/ai/src/schemas/dictionary.ts:6` | `meaningVi` field in dictionary Zod schema | AI output schema requires Vietnamese |
+| `packages/storage/src/schema.ts:55` | `meaningVi` field in storage schema | DB schema stores Vietnamese field for every vocabulary entry |
+| `packages/ai-tutor/src/types/proactiveMessage.ts:126` | `TutorTone: 'vietnamese'` | Vietnamese is a built-in tone, not one of many possible languages |
+
+### 14.2 AI Prompt Level — `vietnamese` as a Built-in Feature
+
+| Location | Issue |
+|----------|-------|
+| `packages/ai/src/prompts/explain.ts:36` | System prompt: _"Translate this text to Vietnamese and explain any difficult English words"_ |
+| `packages/ai/src/prompts/explain.ts:46` | System prompt: _"You are an IELTS tutor. Translate to Vietnamese and add vocabulary notes."_ |
+| `packages/ai/src/prompts/vocabulary.ts:21` | Prompt asks for `meaningVi` — Vietnamese translation |
+| `packages/ai/src/prompts/dictionary.ts:19` | Prompt asks for `meaningVi` — Vietnamese translation |
+| `packages/ai/src/prompts/video.ts:120` | Prompt asks for Vietnamese `translation` in shadowing scripts |
+| `apps/web/src/components/aiTutor/aiTutorHelper.ts:5` | `LANGUAGE_INSTRUCTION.vietnamese = 'Respond in Vietnamese only.'` |
+| `apps/web/src/components/aiTutor/aiTutorHelper.ts:6` | `LANGUAGE_INSTRUCTION.both = 'Respond in both English and Vietnamese, separated by "---".'` |
+
+### 14.3 AI Tutor Level — Hard-coded Vietnamese Fallback Responses
+
+| File | Function | Lines | Description |
+|------|----------|-------|-------------|
+| `apps/web/src/pages/AITutorChat.tsx` | `generateFriendModeVietnamese()` | 186-202 | 4 Vietnamese chat responses for friendly mode (e.g. "Chào bạn! 😊 Rất vui được trò chuyện!") |
+| `apps/web/src/pages/AITutorChat.tsx` | `generateVietnameseExplanation()` | 639-666 | 7 Vietnamese grammar/vocabulary explanations (e.g. "Mạo từ (a/an/the) có thể khó!") |
+| `apps/web/src/components/aiTutor/SpeakingPartner.tsx` | `generateFeedbackVietnamese()` | 670-703 | Full Vietnamese speaking feedback with band estimates ("Ước tính Band Nói") |
+| `apps/web/src/components/aiTutor/WritingTutor.tsx` | `generateFeedbackVietnamese()` | 927-946 | Full Vietnamese writing feedback with categories ("Điểm mạnh", "Cần cải thiện") |
+| `apps/web/src/components/aiTutor/TeachingMode.tsx` | `generateLessonText()` | 640 | Vietnamese lesson text ("Giải thích", "Quy tắc chính") |
+| `apps/web/src/components/aiTutor/TeachingMode.tsx` | `generateFeedbackMessage()` | 666-672 | Vietnamese lesson completion ("Hoàn thành bài học", "Điểm của bạn") |
+| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | `getSummaryVietnamese()` | 269-276 | Vietnamese topic summaries ("Tóm tắt") |
+| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | `generateVocabVietnamese()` | 325-344 | Vietnamese vocabulary headers ("Từ vựng IELTS quan trọng") |
+| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | `generateComprehensionQuestions()` | 355 | Vietnamese question header ("Câu hỏi đọc hiểu") |
+| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | Various | 417,473,626-661 | Vietnamese labels for opinion questions, exercises, IELTS connections |
+
+### 14.4 Proactive Message Level
+
+| Location | Issue |
+|----------|-------|
+| `packages/ai-tutor/src/services/proactiveMessageEngine.ts:87` | `TONE_PREFIXES.vietnamese = ['Chào bạn! ', 'Xin chào! ', 'Bạn ơi! ']` — Vietnamese greeting prefixes for proactive messages |
+
+### 14.5 Extension Level — Vietnamese UI Labels
+
+| Location | Issue |
+|----------|-------|
+| `apps/extension/src/popup/components/VocabularyCollector.tsx:684` | `<strong>Nghĩa:</strong>` — Vietnamese label for "Meaning" |
+| `apps/extension/src/popup/components/WordDetails.tsx:171` | `title="Nghĩa (Vietnamese)"` — Vietnamese sub-header in word details |
+| `apps/extension/src/popup/components/MiniTutor.tsx:32` | `description: 'Translate to Vietnamese'` — Action description hardcodes Vietnamese |
+| `apps/extension/src/content-script/aiExplain.ts:368` | `renderSection('Vietnamese Translation', ...)` — Tab label hardcodes Vietnamese |
+
+### 14.6 User-Facing Creator Info
+
+| Location | Issue |
+|----------|-------|
+| `apps/web/src/pages/landing/config.ts:2` | `name: 'Phạm Thanh Hưng'` — Creator's Vietnamese name (appropriate for About page but not landing) |
+| `apps/web/src/pages/LandingPage.tsx:63` | `"Built by Phạm Thanh Hưng · Free for all IELTS learners"` — Vietnamese name in main hero |
+
+### 14.7 Default Language Settings
+
+| Location | Issue |
+|----------|-------|
+| `apps/web/src/models/aiTutorModels.ts:156-168` | `DEFAULT_TUTOR_PREFERENCES` default `language: 'english'` is correct, but `useVietnamese: false` is redundant |
+| `apps/web/src/features/configuration/storage.ts` | Configuration storage — no `nativeLanguage` or `explanationLanguage` fields are separated |
+| `apps/web/src/features/configuration/models.ts:61` | `responseLanguage` is single field — doesn't separate app language from AI explanation language |
+| `packages/ai-tutor/src/types/proactiveMessage.ts` | No language-agnostic message generation — all proactive messages are English-first with Vietnamese special case |
+
+### 14.8 Missing Globalization Infrastructure
+
+The app has **no**:
+- i18n / l10n library (react-i18next, react-intl, etc.)
+- Locale files (.json, .po, .yaml)
+- Language detection (browser navigator.language)
+- Right-to-left (RTL) support
+- Country/region selection
+- Locale-aware date/number formatting (uses `toLocaleDateString('en-US')` hardcoded)
+- Language preference in localStorage keys (all hardcoded English)
+
+Vietnamese support is implemented as **code-level branching** (`if (language === 'vietnamese')`) rather than through a proper translation system.
+
+---
+
+## 15. Inappropriate / Stale / Unused Features
+
+### 15.1 Features to Remove (Not IELTS-Related)
+
+| Feature | File | Reason |
+|---------|------|--------|
+| **Public API Importer** | `apps/web/src/features/publicApiIntegration/` (~2,000+ lines) | Searches Wiktionary, Datamuse, Tatoeba, Wikipedia, Project Gutenberg — not IELTS-specific; complex, unused dependency; duplicates existing content |
+| **Artifacts (Saved URLs)** | `apps/web/src/features/artifacts/ArtifactsPage.tsx` (466 lines) | Generic bookmarking feature; not IELTS-specific; extension already saves articles |
+| **Import/Export** | `apps/web/src/pages/ImportExport.tsx` (306 lines) | Duplicated by `packages/storage/backup/` export/import; extension has its own BackupRestore; two competing implementations |
+| **Website Info Pages** | `apps/web/src/components/PublicTabPage.tsx` | About/Recruit/Donate/Feedback tabs — not learning features; personal website content mixed into product |
+| **About Me Page** | `apps/web/src/features/info/AboutMe.tsx` | Personal portfolio content, not IELTS learning |
+| **Recruit Page** | `apps/web/src/features/info/Recruit.tsx` | Recruitment info, not IELTS learning |
+| **Donate Page** | `apps/web/src/features/info/Donate.tsx` | Donation page, not IELTS learning |
+| **Send Feedback** | `apps/web/src/features/info/SendFeedback.tsx` | Could be useful but currently just a form with no backend |
+| **WebsiteInfo** | `apps/web/src/features/info/WebsiteInfo.tsx` | Meta info page about the website itself |
+
+### 15.2 Features to Review (Potentially Remove or Refactor)
+
+| Feature | File | Reason |
+|---------|------|--------|
+| **Grammar Learning** | `apps/web/src/features/grammar/GrammarLearning.tsx` (1407 lines) | Duplicated by `GrammarNotes` page; two separate grammar features with overlapping functionality |
+| **Grammar Notes** | `apps/web/src/pages/GrammarNotes.tsx` (728 lines) | Duplicates GrammarLearning; both are CRUD for grammar topics |
+| **Mock Tests Tracker** | `apps/web/src/pages/MockTests.tsx` (749 lines) | Manual mock test entry tracker — no actual mock tests; just stores scores the user inputs manually |
+| **Topics Progress** | `apps/web/src/pages/TopicsProgress.tsx` | Tracks progress by IELTS topic — useful but overlaps with dashboard and progress pages |
+| **Progress Review (AI)** | `apps/web/src/features/progressReview/ProgressReviewPage.tsx` | AI-generated progress report — useful but duplicates `Progress.tsx` charts |
+| **Analytics** | `apps/web/src/features/analytics/Analytics.tsx` (805 lines) | Recharts-based analytics page — duplicates `Progress.tsx` which already shows charts |
+| **Search** | `apps/web/src/pages/Search.tsx` (675 lines) | Full-text search across all entities — useful but complex; edge-case feature |
+| **Planner** | `apps/web/src/features/planner/Planner.tsx` | AI-generated schedule — duplicated by `StudyPlan` feature |
+| **DailyPlan** | `apps/web/src/pages/DailyPlan.tsx` | Daily view of study tasks — overlaps with Dashboard and StudyPlan |
+| **Review Center** | `apps/web/src/pages/ReviewCenter.tsx` | Centralized review hub — useful but duplicates vocabulary review flow |
+| **Study Notes** | `apps/web/src/features/notes/StudyNotesPage.tsx` | Free-form notes feature — not IELTS-specific; generic note-taking |
+
+### 15.3 Duplicate Page/Feature Implementations
+
+These are the most critical duplicates that need consolidation:
+
+| Feature | `pages/` file | `features/` file | Status |
+|---------|--------------|------------------|--------|
+| Dashboard | `src/pages/Dashboard.tsx` (446 lines) | `src/features/dashboard/Dashboard.tsx` (492 lines) | Different implementations |
+| Vocabulary | `src/pages/Vocabulary.tsx` (1036 lines) | `src/features/vocabulary/Vocabulary.tsx` (772 lines) | Different implementations |
+| Reading | `src/pages/ReadingJournal.tsx` (865 lines) | `src/features/reading/ReadingPractice.tsx` | Different approaches |
+| Listening | `src/pages/ListeningJournal.tsx` (895 lines) | `src/features/listening/ListeningPractice.tsx` | Different approaches |
+| Writing | `src/pages/WritingPractice.tsx` (1055 lines) | `src/features/writing/WritingPractice.tsx` | Different approaches |
+| Speaking | `src/pages/SpeakingPractice.tsx` (1081 lines) | `src/features/speaking/SpeakingPractice.tsx` | Different approaches |
+| Settings | `src/pages/Settings.tsx` + `DataManagement.tsx` (755 lines) | `src/features/settings/Settings.tsx` (591 lines) | Different implementations |
+| Mistakes | `src/pages/Mistakes.tsx` (750 lines) | `src/features/mistakes/MistakeNotebook.tsx` (1068 lines) | Different implementations |
+| Grammar | `src/pages/GrammarNotes.tsx` (728 lines) | `src/features/grammar/GrammarLearning.tsx` (1407 lines) | Different implementations |
+
+### 15.4 Stale/Dead Code
+
+| Item | Location | Evidence |
+|------|----------|----------|
+| `App.tsx` (root) | `src/App.tsx` | Not imported by `main.tsx` which imports from `src/app/App.tsx` instead |
+| `pwa-config.ts` | `src/pwa-config.ts` | Contains only comments — JS file that never executes |
+| `src/extension/` | `src/extension/ProactiveAssistant.ts` (445 lines) | Extension-specific code in web app's src/ — not imported by any web app component |
+| Old landing components | `src/components/LandingPage.tsx`, `HeroSection.tsx`, etc. | `src/pages/landing/` has a separate, newer landing page implementation |
+| `useDashboard` hook | `src/hooks/useDashboard.ts` | Only used by the OLD `src/pages/Dashboard.tsx`, not the `features/dashboard/` version |
+| `useAutosave` hook | `src/hooks/useAutosave.ts` | Not imported anywhere in the current codebase |
+| `data/ieltsContent.ts` | `src/features/tasks/ieltsContent.ts` | Static IELTS content — not imported by any component |
+| `Phrases` data | `src/features/speaking/data/phrases.ts` | Speaking phrases — not imported by any speaking component |
+| `DashboardPreviewSection` | `src/components/DashboardPreviewSection.tsx` | Old landing component — not used by new landing |
+| `FeatureSection` | `src/components/FeatureSection.tsx` | Old landing component — not used by new landing |
+| `DonationSection` | `src/components/DonationSection.tsx` | Old landing component — not used by new landing |
+| `RecruitmentSection` | `src/components/RecruitmentSection.tsx` | Old landing component — not used by new landing |
+| Duplicate UI component | `packages/ui/src/components/Toast.tsx` vs `src/components/ui/Toast.tsx` | Two Toast implementations |
+| `AITutorSection` | `src/components/AITutorSection.tsx` | Maybe unused on landing |
+| `FinalCTASection` | `src/components/FinalCTASection.tsx` | Maybe unused on landing |
+| `Footer` | `src/components/Footer.tsx` | Has both old and new implementations |
+| `SEOHead` | `src/components/SEOHead.tsx` | Not using react-helmet anywhere else |
+
+### 15.5 Duplicate Services / Logic
+
+| Area | Files | Problem |
+|------|-------|---------|
+| AI Service | `src/services/ai/AIService.ts` vs `packages/ai/` | Two separate AI call implementations |
+| Storage | `src/services/storage/Database.ts` vs `packages/storage/` vs `apps/extension/src/storage/` | Three IndexedDB implementations |
+| SM-2 Algorithm | `src/utils/spaced-repetition.ts` vs `packages/storage/reviewService.ts` vs `packages/exercises/reviewScheduler.ts` vs `packages/learning-engine/review-scheduler/` | Four implementations of the same algorithm |
+| Settings Context | `src/context/SettingsContext.tsx` vs `src/features/configuration/configSlice.tsx` | Two settings management systems |
+| Error Classes | `packages/utils/src/errors.ts` (22 classes) vs `packages/ai/src/errors/types.ts` (6) vs `packages/storage/src/errors.ts` (6) | Error classes duplicated with different messages |
+| `generateId()` | `packages/exercises/utils/id.ts` vs `packages/ai-tutor/utils/id.ts` | Same function in 2 packages |
+| `isInQuietHours()` | 3 files in `packages/ai-tutor/` | Same logic in 3 files |
+| Writing Prompts | `src/features/writing/data/prompts.ts` vs extension's own data | Writing prompt data in both apps |
+| Speaking Questions | `src/features/speaking/data/questions.ts` vs extension's own data | Speaking questions in both apps |
+
+### 15.6 Dead Navigation Routes (from Layout.tsx)
+
+These routes in the sidebar should be reviewed:
+
+- `/artifacts` — Generic bookmarking feature
+- `/search` — Full-text search (edge case)
+- `/public-api` — Not IELTS-specific
+- `/mock-tests` — Manual score tracker only
+- `/grammar` — Duplicated by GrammarLearning
+- `/topics` — Overlaps with dashboard/progress
+- `/import-export` — Duplicated by backup system
+- `/info` — Personal website content
+
+---
+
+## 16. Extension-Specific Issues
+
+### 16.1 Vietnamese in Extension
+
+| File | Line | Issue |
+|------|------|-------|
+| `VocabularyCollector.tsx` | 684 | `<strong>Nghĩa:</strong>` — Vietnamese UI label |
+| `WordDetails.tsx` | 171 | `title="Nghĩa (Vietnamese)"` — Vietnamese header |
+| `MiniTutor.tsx` | 32 | `'Translate to Vietnamese'` — action description |
+| `aiExplain.ts` | 368 | `'Vietnamese Translation'` — tab label |
+
+### 16.2 Stale/Half-Finished Extension Features
+
+| Feature | Issue |
+|---------|-------|
+| **Video Helper** (`VideoHelper.tsx`) | Only works with YouTube; Vimeo detection is present but non-functional; no transcript for Vimeo |
+| **Website Bridge** (`bridge-client.ts`) | Bridge to web app is defined but web app has no matching bridge server; sync is incomplete |
+| **Proactive Message Panel** (`proactiveMessagePanel.tsx`) | In-page toast messages — intrusive UX; disabled by default |
+| **Dictionary Panel** (`dictionaryPanel.ts`) | Quick word lookup on double-click — may conflict with page functionality |
+| **Public Content Search** (`ImportExportSection.tsx`) | Searches 5 external APIs; complex feature with licensing/attribution requirements; not IELTS-specific |
+
+### 16.3 Extension Duplicates Web App Data
+
+The extension stores its own data in a **separate IndexedDB database** that is not accessible from the web app:
+- `vocabularyStore.ts` — separate vocabulary data
+- `articleStore.ts` — separate articles
+- `mistakeStore.ts` — separate mistakes
+- `videoStore.ts` — separate video data
+
+This means users who use both the extension and the web app have **completely separate data silos**.
+
+---
+
+## 17. Localization System Requirements
+
+### 17.1 Current State
+
+The app uses a **custom ad-hoc language system** with these characteristics:
+- `type Language = 'english' | 'vietnamese' | 'both'` in multiple files
+- Language is propagated as a parameter to every AI generation function
+- Vietnamese responses are generated via `if (language === 'vietnamese')` branching
+- No locale files, no translation dictionaries, no i18n library
+- `meaningVi` fields assume Vietnamese is the only second language worth storing
+
+### 17.2 Required Changes for Globalization
+
+1. **Separate language settings:**
+   - `appDisplayLanguage` — language for UI chrome/menus/buttons
+   - `aiExplanationLanguage` — language for AI tutor explanations
+   - `contentLanguage` — language for exercise content/instructions
+   - `nativeLanguage` — user's native language (for translation features)
+
+2. **Remove hard-coded Vietnamese branching:**
+   - Replace `if (language === 'vietnamese')` with `if (language === userSettings.aiExplanationLanguage)`
+   - Replace hardcoded Vietnamese strings with AI-generated translations or locale files
+
+3. **Data model changes:**
+   - Remove `meaningVi` from core vocabulary schema; replace with language-agnostic `translations: Record<string, string>`
+   - Remove `'vietnamese'` from `AiTutorMode`, `TutorTone`, `AiExplainType`; make language a separate dimension
+   - Remove `useVietnamese` boolean (duplicates `language` field)
+
+4. **AI prompt changes:**
+   - Remove hardcoded Vietnamese-specific prompts
+   - Make language instruction dynamic: `Respond in {language} only.`
+   - Remove Vietnamese-specific schema fields from AI responses
+
+5. **Default settings:**
+   - Default app language: `'en'` (English)
+   - Default AI explanation language: `'en'` (English)
+   - Vietnamese available as an option, not the default
+
+---
+
+## 18. Product Direction Alignment
+
+### 18.1 Features Aligned with Product Direction
+
+| Feature | Alignment | Keep/Refactor |
+|---------|-----------|---------------|
+| Vocabulary Notebook | Core | **Keep** |
+| Vocabulary Review (SM-2) | Core | **Keep** |
+| AI Tutor | Core | **Refactor** |
+| Study Plan | Core | **Refactor** |
+| Dashboard | Core | **Refactor** |
+| Reading Practice | Core | **Refactor** |
+| Listening Practice | Core | **Refactor** |
+| Writing Practice | Core | **Refactor** |
+| Speaking Practice | Core | **Refactor** |
+| Mistake Tracking | Core | **Keep** |
+| Progress Review | Core | **Refactor** |
+| Chrome Extension | Core | **Refactor** |
+| PWA Support | Core | **Keep** |
+| Local-first Storage | Core | **Keep** |
+| AI Provider Config | Core | **Refactor** |
+
+### 18.2 Features NOT Aligned with Product Direction
+
+| Feature | Reason | Action |
+|---------|--------|--------|
+| Public API Import | Not IELTS-specific; complex dependencies | **Remove** |
+| Artifacts (Bookmarks) | Generic bookmarking; not learning | **Remove** |
+| Import/Export (page) | Duplicated by proper backup system | **Remove** |
+| Website Info / About / Recruit / Donate | Personal website content; not IELTS | **Remove** |
+| Grammar Learning (Gamified) | Duplicates Grammar Notes; half-finished | **Remove or Merge** |
+| Grammar Notes (CRUD) | Basic CRUD; no actual grammar engine | **Merge into core** |
+| Mock Tests Tracker | Manual entry only; no actual tests | **Remove or Refactor** |
+| Topics Progress | Overlaps with Dashboard/Progress | **Merge** |
+| Search | Edge-case feature; complex | **Consider removing** |
+| Study Notes | Generic notes; not IELTS-specific | **Consider removing** |
+| Review Center | Duplicates vocabulary review | **Merge** |
+
+---
+
+## 19. Cleanup Priority Matrix
+
+| Priority | Item | Effort | Impact | Type |
+|----------|------|--------|--------|------|
+| P0 | Remove hardcoded Vietnamese fallback strings from AI Tutor components | Medium | High | Globalization |
+| P0 | Remove `meaningVi` from core schemas; use flexible translations | Medium | High | Globalization |
+| P0 | Separate language settings (app language vs AI language) | Medium | High | Globalization |
+| P1 | Remove Public API Import feature | Low | High | Cleanup |
+| P1 | Remove Artifacts feature | Low | High | Cleanup |
+| P1 | Remove Info/About/Donate/Recruit pages | Low | Medium | Cleanup |
+| P1 | Consolidate duplicate page/feature implementations | High | High | Architecture |
+| P1 | Remove `'vietnamese'` from tutor modes, tones, and explain types | Medium | High | Globalization |
+| P2 | Remove Mock Tests page | Low | Medium | Cleanup |
+| P2 | Remove or consolidate duplicate Grammar features | Medium | Medium | Cleanup |
+| P2 | Remove duplicate Import/Export page | Low | Medium | Cleanup |
+| P2 | Remove old landing page components | Low | Low | Cleanup |
+| P2 | Remove unused hooks (`useAutosave`) | Low | Low | Cleanup |
+| P2 | Remove dead `src/App.tsx` (unused entry) | Low | Low | Cleanup |
+| P2 | Remove `src/pwa-config.ts` (comment-only file) | Low | Low | Cleanup |
+| P2 | Remove `src/extension/ProactiveAssistant.ts` from web app | Low | Medium | Cleanup |
+| P3 | Consolidate 4 SM-2 algorithm implementations | High | Medium | Architecture |
+| P3 | Consolidate 3 IndexedDB implementations | High | Medium | Architecture |
+| P3 | Consolidate duplicate AI services | Medium | Medium | Architecture |
+| P3 | Consolidate duplicate error classes | Medium | Low | Architecture |
+| P3 | Add i18n library and locale files | High | High | Globalization |
+| P3 | Update extension to use shared `@ielts/storage` package | High | Medium | Architecture |
+
+---
+
+## 20. Code Quality Metrics Summary
+
+| Metric | Current | Target |
+|--------|---------|--------|
+| Vietnamese hardcoded strings | ~80 lines across 10 files | 0 |
+| Vietnamese-specific data model fields | 6 locations (`meaningVi` × 4, `AiResponseLanguage`, `TutorTone`) | 0 (replaced by flexible system) |
+| Duplicate features (`pages/` vs `features/`) | 9 pairs | 0 (consolidated) |
+| Separate IndexedDB implementations | 3 | 1 |
+| SM-2 implementations | 4 | 1 |
+| Unused components | ~10 | 0 |
+| Non-IELTS feature modules | 6-8 | 0 |
+| `any`/`unknown` escape hatches | ~30 | 0 |
+| Files >700 lines | 12 | 0 |
+| Comment-only files | 2 | 0 |

@@ -1,5 +1,4 @@
 const PANEL_ID = 'ielts-video-helper'
-const TOAST_ID = 'ielts-vh-toast'
 
 import { safeSendMessage } from '../utils/safe-chrome'
 
@@ -11,21 +10,62 @@ interface VideoPageInfo {
   videoId: string
 }
 
+function extractYoutubeVideoId(url: string): string {
+  const urlObj = new URL(url)
+  if (urlObj.hostname.includes('youtu.be')) {
+    return urlObj.pathname.slice(1).split('/')[0].split('?')[0]
+  }
+  if (urlObj.pathname.startsWith('/shorts/')) {
+    return urlObj.pathname.split('/shorts/')[1]?.split('?')[0] || ''
+  }
+  const id = urlObj.searchParams.get('v') || ''
+  if (id) return id
+  const match = urlObj.pathname.match(/^\/embed\/([^/?]+)/)
+  return match?.[1] || ''
+}
+
+function extractYoutubeTitle(): string {
+  const selectors = [
+    'h1.ytd-watch-metadata yt-formatted-string',
+    'h1.ytd-video-primary-info-renderer',
+    '#title h1 yt-formatted-string',
+    '.video-title',
+    '#container h1 yt-formatted-string',
+  ]
+  for (const sel of selectors) {
+    const el = document.querySelector(sel)
+    const text = el?.textContent?.trim()
+    if (text) return text
+  }
+  return document.title.replace(' - YouTube', '').replace(' - YouTube Shorts', '').trim()
+}
+
 function detectVideoPage(): VideoPageInfo {
   const url = window.location.href
   const hostname = window.location.hostname
 
   if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) {
-    const urlObj = new URL(url)
-    const videoId = urlObj.searchParams.get('v') || ''
-    const titleEl = document.querySelector('h1.ytd-watch-metadata, h1 yt-formatted-string.ytd-video-primary-info-renderer')
-    const title = titleEl?.textContent?.trim() || document.title.replace(' - YouTube', '').trim()
+    const videoId = extractYoutubeVideoId(url)
+    const isVideoPage = !!videoId
     return {
-      isVideoPage: !!videoId || hostname.includes('youtu.be'),
+      isVideoPage,
       platform: 'youtube',
-      videoTitle: title,
+      videoTitle: isVideoPage ? extractYoutubeTitle() : '',
       videoUrl: url,
-      videoId: videoId || urlObj.pathname.slice(1),
+      videoId,
+    }
+  }
+
+  if (hostname.includes('vimeo.com')) {
+    const urlObj = new URL(url)
+    const videoId = urlObj.pathname.split('/')[1] || ''
+    const titleEl = document.querySelector('[data-title], .clip_header-title, h1')
+    return {
+      isVideoPage: !!videoId && /^\d+$/.test(videoId),
+      platform: 'vimeo',
+      videoTitle: titleEl?.textContent?.trim() || document.title.replace(' | Vimeo', '').trim(),
+      videoUrl: url,
+      videoId,
     }
   }
 
@@ -36,40 +76,6 @@ function detectVideoPage(): VideoPageInfo {
     videoUrl: '',
     videoId: '',
   }
-}
-
-function showToast(message: string) {
-  const existing = document.getElementById(TOAST_ID)
-  if (existing) existing.remove()
-
-  const el = document.createElement('div')
-  el.id = TOAST_ID
-  el.textContent = message
-  Object.assign(el.style, {
-    position: 'fixed',
-    bottom: '24px',
-    right: '24px',
-    background: '#0f172a',
-    color: '#f1f5f9',
-    padding: '10px 18px',
-    borderRadius: '8px',
-    fontSize: '13px',
-    zIndex: '2147483647',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
-    fontFamily: 'system-ui, -apple-system, sans-serif',
-    opacity: '1',
-    transform: 'translateY(0)',
-    transition: 'opacity 0.2s, transform 0.2s',
-    pointerEvents: 'none',
-    maxWidth: '380px',
-    lineHeight: '1.4',
-  })
-  document.body.appendChild(el)
-  setTimeout(() => {
-    el.style.opacity = '0'
-    el.style.transform = 'translateY(8px)'
-    setTimeout(() => el.remove(), 250)
-  }, 2800)
 }
 
 function injectStyles() {
@@ -129,12 +135,89 @@ function injectStyles() {
   document.head.appendChild(style)
 }
 
+async function extractYoutubeTranscriptFromPage(): Promise<string> {
+  try {
+    const scripts = document.querySelectorAll('script')
+    let playerResponse: Record<string, unknown> | null = null
+
+    for (const s of scripts) {
+      const text = s.textContent || ''
+      if (text.includes('ytInitialPlayerResponse') || text.includes('playerCaptionsTracklistRenderer')) {
+        const match = text.match(/ytInitialPlayerResponse\s*=\s*({.+?});/)
+        if (match) {
+          try {
+            playerResponse = JSON.parse(match[1])
+            break
+          } catch {
+            /* try next script */
+          }
+        }
+      }
+    }
+
+    if (!playerResponse) {
+      const dataEl = document.getElementById('player-container')
+      if (dataEl) {
+        const dataScript = dataEl.querySelector('script')
+        if (dataScript?.textContent) {
+          const match = dataScript.textContent.match(/window\.__INITIAL_STATE__\s*=\s*({.+?});/)
+          if (match) {
+            try {
+              const state = JSON.parse(match[1])
+              const tracks = state?.playerOverlays?.playerOverlayRenderer?.captionsTracklist ??
+                             state?.captions?.playerCaptionsTracklistRenderer?.captionTracks
+              if (tracks?.length) {
+                playerResponse = {
+                  captions: {
+                    playerCaptionsTracklistRenderer: { captionTracks: tracks },
+                  },
+                }
+              }
+            } catch {
+              /* continue */
+            }
+          }
+        }
+      }
+    }
+
+    const captionTracks = (playerResponse as any)?.captions?.playerCaptionsTracklistRenderer?.captionTracks
+    if (!captionTracks?.length) return ''
+
+    const track = captionTracks.find((t: { languageCode: string }) => t.languageCode === 'en')
+      || captionTracks.find((t: { languageCode: string }) => t.languageCode?.startsWith('en'))
+      || captionTracks[0]
+    if (!track?.baseUrl) return ''
+
+    const response = await fetch(track.baseUrl)
+    const xml = await response.text()
+    const parser = new DOMParser()
+    const xmlDoc = parser.parseFromString(xml, 'text/xml')
+    const texts = xmlDoc.querySelectorAll('text')
+    const segments = Array.from(texts)
+      .map(t => t.textContent?.trim())
+      .filter((t): t is string => !!t)
+
+    return segments.join(' ')
+  } catch {
+    return ''
+  }
+}
+
 class VideoHelperUI {
   private badge: HTMLDivElement | null = null
+  private lastVideoId = ''
 
   init(): void {
     const info = detectVideoPage()
-    if (!info.isVideoPage) return
+    if (!info.isVideoPage) {
+      this.removeBadge()
+      this.lastVideoId = ''
+      return
+    }
+
+    if (info.videoId === this.lastVideoId) return
+    this.lastVideoId = info.videoId
 
     injectStyles()
     this.createBadge(info)
@@ -179,7 +262,6 @@ class VideoHelperUI {
           platform: info.platform,
         },
       })
-      showToast('Opening Video Helper in popup...')
     })
 
     document.body.appendChild(this.badge)
@@ -201,6 +283,14 @@ class VideoHelperUI {
     if (existing) existing.remove()
   }
 
+  async getTranscript(): Promise<string> {
+    const info = detectVideoPage()
+    if (info.platform === 'youtube' && info.videoId) {
+      return extractYoutubeTranscriptFromPage()
+    }
+    return ''
+  }
+
   destroy(): void {
     this.removeBadge()
   }
@@ -208,20 +298,31 @@ class VideoHelperUI {
 
 const instance = new VideoHelperUI()
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => instance.init())
-} else {
+function initVideoHelper() {
   instance.init()
 }
 
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initVideoHelper)
+} else {
+  initVideoHelper()
+}
+
 let lastUrl = location.href
-const observer = new MutationObserver(() => {
+
+function onUrlChange() {
   if (location.href !== lastUrl) {
     lastUrl = location.href
-    setTimeout(() => instance.init(), 1000)
+    setTimeout(() => instance.init(), 800)
   }
-})
+}
+
+const observer = new MutationObserver(() => onUrlChange())
 observer.observe(document, { subtree: true, childList: true })
+
+document.addEventListener('yt-navigate-finish', () => {
+  setTimeout(() => instance.init(), 500)
+})
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === 'GET_VIDEO_PAGE_INFO') {
@@ -229,6 +330,13 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     try { sendResponse(info) } catch { /* ignore */ }
     return true
   }
+
+  if (message.type === 'FETCH_YOUTUBE_TRANSCRIPT') {
+    instance.getTranscript().then((transcript) => {
+      try { sendResponse({ transcript }) } catch { /* ignore */ }
+    })
+    return true
+  }
 })
 
-export {}
+export { detectVideoPage }

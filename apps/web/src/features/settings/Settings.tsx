@@ -16,6 +16,9 @@ import ToggleSwitch from '../../components/ui/ToggleSwitch'
 import Input from '../../components/ui/Input'
 import Select from '../../components/ui/Select'
 import AISettings from './AISettings'
+import { ConfigProvider } from '../configuration/configSlice'
+import BasicSettingsForm from '../configuration/components/BasicSettingsForm'
+import AdvancedSettingsForm from '../configuration/components/AdvancedSettingsForm'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health',
@@ -45,6 +48,41 @@ interface FormErrors {
   currentBand?: string
   dailyStudyMinutes?: string
   studyReminder?: string
+}
+
+function DeepConfigPanel() {
+  const [view, setView] = useState<'basic' | 'advanced'>('basic')
+
+  return (
+    <div>
+      <div className="mb-6 flex gap-1 rounded-lg border p-1" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface-alt)' }}>
+        <button
+          type="button"
+          onClick={() => setView('basic')}
+          className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all ${
+            view === 'basic'
+              ? 'bg-[var(--color-surface)] text-[var(--color-text)] shadow-sm'
+              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text)]'
+          }`}
+        >
+          Basic Settings
+        </button>
+        <button
+          type="button"
+          onClick={() => setView('advanced')}
+          className={`flex-1 rounded-md px-4 py-2 text-sm font-medium transition-all ${
+            view === 'advanced'
+              ? 'bg-[var(--color-surface)] text-[var(--color-text)] shadow-sm'
+              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text)]'
+          }`}
+        >
+          Advanced Settings
+        </button>
+      </div>
+
+      {view === 'basic' ? <BasicSettingsForm /> : <AdvancedSettingsForm />}
+    </div>
+  )
 }
 
 export default function Settings() {
@@ -131,6 +169,7 @@ export default function Settings() {
           preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const,
           aiApiKey: '',
           aiProvider: 'openai' as const,
+          aiBaseUrl: '',
           aiEndpoint: '',
           aiModel: 'gpt-4o-mini',
           aiEnabled: false,
@@ -518,6 +557,21 @@ export default function Settings() {
               </p>
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Deep Configuration</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-4 text-sm text-[var(--color-text-secondary)]">
+            Customize AI tutor behavior, provider settings, feedback preferences, and more.
+            Basic settings cover common preferences; advanced settings give you full control.
+          </p>
+          <ConfigProvider>
+            <DeepConfigPanel />
+          </ConfigProvider>
         </CardContent>
       </Card>
 

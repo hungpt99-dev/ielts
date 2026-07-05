@@ -16,7 +16,7 @@ interface ContentTemplate {
 const VOCABULARY_CONTENT: ContentTemplate[] = [
   {
     skill: 'Vocabulary',
-    title: 'Learn 10 Useful Environment Vocabulary Words',
+    title: 'Learn 10 Environment Vocabulary Words',
     objective: 'Learn and practice key environment-related vocabulary for IELTS',
     difficulty: 'medium',
     estimatedMinutes: 20,
@@ -436,7 +436,36 @@ export function getRandomContentForSkill(skill: StudySkill, excludeTitles?: stri
 }
 
 export function getContentByTitle(title: string): ContentTemplate | null {
-  return ALL_CONTENT.find(c => c.title === title) ?? null
+  const exact = ALL_CONTENT.find(c => c.title === title)
+  if (exact) return exact
+
+  const lower = title.toLowerCase()
+
+  const caseInsensitive = ALL_CONTENT.find(c => c.title.toLowerCase() === lower)
+  if (caseInsensitive) return caseInsensitive
+
+  const keywordSkillMap: Array<{ keywords: string[]; skill: StudySkill }> = [
+    { keywords: ['vocabulary', 'vocab', 'word'], skill: 'Vocabulary' },
+    { keywords: ['reading', 'read', 'passage', 'skim', 'scan'], skill: 'Reading' },
+    { keywords: ['listening', 'listen', 'audio', 'lecture'], skill: 'Listening' },
+    { keywords: ['writing', 'write', 'essay', 'chart', 'task 1', 'task1', 'task 2', 'task2', 'paragraph'], skill: 'Writing' },
+    { keywords: ['speaking', 'speak', 'speech', 'cue card', 'cue-card'], skill: 'Speaking' },
+    { keywords: ['grammar', 'tense', 'conditional', 'sentence structure'], skill: 'Grammar' },
+  ]
+
+  for (const { keywords, skill } of keywordSkillMap) {
+    if (keywords.some(k => lower.includes(k))) {
+      const skillContent = ALL_CONTENT.filter(c => c.skill === skill)
+      if (skillContent.length > 0) {
+        return skillContent[0]
+      }
+    }
+  }
+
+  const partial = ALL_CONTENT.find(c => lower.includes(c.title.toLowerCase()) || c.title.toLowerCase().includes(lower))
+  if (partial) return partial
+
+  return null
 }
 
 export function getAllContentTemplates(): ContentTemplate[] {

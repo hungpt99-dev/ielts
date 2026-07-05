@@ -3,6 +3,9 @@ import { extensionVocabSchema } from '../../storage/vocabularyStore'
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { findWord } from '../services/popupDataService'
+import { saveEntry } from '../../storage/indexedDB'
+import { incrementDailyProgress } from '../../services/storage'
+import type { LearningEntry } from '../../types'
 
 function speakWord(word: string) {
   if ('speechSynthesis' in window) {
@@ -275,15 +278,28 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
 
       await saveVocabularyEntry(entry)
 
-      chrome.storage.local.get(['dailyProgress'], (result) => {
-        const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
-        chrome.storage.local.set({
-          dailyProgress: {
-            ...current,
-            wordsAdded: current.wordsAdded + 1,
-          },
-        })
-      })
+      try {
+        const learningEntry: LearningEntry = {
+          id: crypto.randomUUID(),
+          text: wordTrimmed,
+          category: 'vocabulary',
+          topic: topic.trim() || 'general',
+          skill: 'vocabulary',
+          difficulty,
+          tags,
+          personalNote: personalNote.trim(),
+          pageTitle: pageInfo.title,
+          pageUrl: pageInfo.url,
+          status: 'new',
+          createdAt: now,
+          updatedAt: now,
+        }
+        await saveEntry(learningEntry)
+      } catch {
+        /* non-critical */
+      }
+
+      await incrementDailyProgress('wordsAdded', 1)
 
       setSaved(true)
       setTimeout(() => onSaved(), 1200)
@@ -665,7 +681,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
 
           {aiDetails.meaningVi && (
             <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
-              <strong>Nghĩa:</strong> {aiDetails.meaningVi}
+              <strong>Vietnamese:</strong> {aiDetails.meaningVi}
             </div>
           )}
 

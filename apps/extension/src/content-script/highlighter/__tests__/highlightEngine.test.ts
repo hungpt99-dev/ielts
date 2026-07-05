@@ -5,7 +5,6 @@ import {
   removeAllHighlights,
   setActive,
   isActive,
-  setWordIds,
   getHighlightWordFromElement,
 } from '../highlightEngine'
 import type { HighlightWord } from '../highlightMatcher'
@@ -34,14 +33,6 @@ describe('highlightEngine', () => {
       setActive(true)
       setActive(false)
       expect(isActive()).toBe(false)
-    })
-  })
-
-  describe('setWordIds', () => {
-    it('stores and replaces word IDs', () => {
-      const ids = new Set(['a', 'b', 'c'])
-      setWordIds(ids)
-      setWordIds(new Set(['x']))
     })
   })
 

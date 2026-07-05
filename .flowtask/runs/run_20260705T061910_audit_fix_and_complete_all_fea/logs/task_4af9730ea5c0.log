@@ -1,0 +1,2160 @@
+[2026-07-05T06:39:58.043Z] [INFO] Task started: Fix Saving Selected Text, Vocabulary, and Article/Page Content Features
+[2026-07-05T06:39:58.052Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/extension/src/services/storage.ts","description":"Fix storage wrapper for saving and syncing data","validationMethod":"file_diff"},{"action":"modify","target":"apps/extension/src/popup/components/SaveForm.tsx","description":"Fix UI components for saving vocabulary and articles","validationMethod":"file_diff"}]
+[2026-07-05T06:39:58.852Z] [INFO] [stderr] [0m
+[2026-07-05T06:39:58.852Z] [INFO] [stderr] [0m
+[2026-07-05T06:39:58.852Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-05T06:40:05.034Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"storage service extension apps/extension/src/services/storage.ts","maxFiles":15}
+[2026-07-05T06:40:05.105Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"SaveForm popup components apps/extension/src/popup/components","maxFiles":15}
+[2026-07-05T06:40:08.852Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/storage/indexedDB.ts"}
+[2026-07-05T06:40:09.024Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/types.ts"}
+[2026-07-05T06:40:09.227Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/utils/safe-chrome.ts"}
+[2026-07-05T06:40:09.487Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/storage/vocabularyStore.ts"}
+[2026-07-05T06:40:13.962Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"popup App.tsx index.tsx apps/extension/src/popup","maxFiles":8}
+[2026-07-05T06:40:14.320Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"background messaging service worker apps/extension/src/background","maxFiles":10}
+[2026-07-05T06:40:14.475Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script"}
+[2026-07-05T06:40:20.537Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/ArticleCollector.tsx"}
+[2026-07-05T06:40:20.781Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/VocabularyCollector.tsx"}
+[2026-07-05T06:40:21.021Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/VideoHelper.tsx"}
+[2026-07-05T06:40:21.201Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script/saveSelectedText.ts"}
+[2026-07-05T06:40:21.431Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script/index.ts"}
+[2026-07-05T06:41:15.086Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script/selectionPanel.ts"}
+[2026-07-05T06:41:15.315Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script/floatingToolbar.ts"}
+[2026-07-05T06:41:15.705Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/QuickAddVocab.tsx","includeCode":true}
+[2026-07-05T06:41:35.416Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/background/index.ts"}
+[2026-07-05T06:41:35.687Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/background","symbolsOnly":true}
+[2026-07-05T06:41:35.912Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/SavedWordsView.tsx"}
+[2026-07-05T06:42:11.415Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:11.415Z] [INFO] [stderr] [ ] Fix content script save paths to persist data properly instead of lost savedItems
+[2026-07-05T06:42:11.415Z] [INFO] [stderr] [ ] Fix ArticleCollector to also save LearningEntry for recent entries
+[2026-07-05T06:42:11.415Z] [INFO] [stderr] [ ] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[2026-07-05T06:42:11.415Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:42:11.415Z] [INFO] [stderr] [ ] Verify all changes build correctly
+[2026-07-05T06:42:11.416Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:11.415Z] [INFO] [stderr] [ ] Add helper functions to storage service for cross-context saving
+[2026-07-05T06:42:11.415Z] [INFO] [stderr] [ ] Fix background messaging SAVE_SELECTION_FULL handler
+[2026-07-05T06:42:11.416Z] [INFO] [stderr] [ ] Fix VocabularyCollector to also save LearningEntry for recent entries
+[2026-07-05T06:42:11.517Z] [INFO] [stdout] Now I have a comprehensive understanding of all saving flows and data paths. Let me set up my task tracking and implement the fixes.
+[2026-07-05T06:42:16.786Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:42:16.786Z] [INFO] [stderr] [•] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[2026-07-05T06:42:16.786Z] [INFO] [stderr] [ ] Fix ArticleCollector to also save LearningEntry for recent entries
+[2026-07-05T06:42:16.786Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:16.786Z] [INFO] [stderr] [ ] Fix background messaging SAVE_SELECTION_FULL handler
+[2026-07-05T06:42:16.786Z] [INFO] [stderr] [ ] Add helper functions to storage service for cross-context saving
+[2026-07-05T06:42:16.786Z] [INFO] [stderr] [ ] Fix content script save paths to persist data properly instead of lost savedItems
+[2026-07-05T06:42:16.786Z] [INFO] [stderr] [ ] Verify all changes build correctly
+[2026-07-05T06:42:16.786Z] [INFO] [stderr] [ ] Fix VocabularyCollector to also save LearningEntry for recent entries
+[2026-07-05T06:42:20.675Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] @@ -1,9 +1,12 @@
+[2026-07-05T06:42:25.998Z] [INFO] [stderr]  import { entryFormSchema, entrySchema } from '../../types'
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] +import type { EntryFormData, LearningEntry } from '../../types'
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:42:25.998Z] [INFO] [stderr]  import { saveEntry } from '../../storage/indexedDB'
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] -import type { EntryFormData } from '../../types'
+[2026-07-05T06:42:25.998Z] [INFO] [stderr]  import { SAVE_CATEGORIES, CATEGORY_LABELS, CATEGORY_COLORS, CATEGORY_ICONS, SKILL_OPTIONS, SKILL_LABELS } from '../../types'
+[2026-07-05T06:42:25.998Z] [INFO] [stderr]    onSaved: () => void
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] +import { incrementDailyProgress } from '../../services/storage'
+[2026-07-05T06:42:25.998Z] [INFO] [stderr]  
+[2026-07-05T06:42:25.998Z] [INFO] [stderr]    onCancel: () => void
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] +import { saveVocabularyEntry, extensionVocabSchema } from '../../storage/vocabularyStore'
+[2026-07-05T06:42:25.998Z] [INFO] [stderr]  import { useState, useEffect } from 'react'
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] 
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] +import { saveArticleEntry, extensionArticleSchema } from '../../storage/articleStore'
+[2026-07-05T06:42:25.998Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:25.998Z] [INFO] [stderr]  interface SaveTextFormProps {
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:42:33.074Z] [INFO] [stderr]    })
+[2026-07-05T06:42:33.074Z] [INFO] [stderr]    await saveEntry(entry)
+[2026-07-05T06:42:33.074Z] [INFO] [stderr]  
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] @@ -120,17 +120,63 @@
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:42:33.074Z] [INFO] [stderr]  
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] -  chrome.storage.local.get(['dailyProgress'], (result) => {
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] -    const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] -      ...current,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] -    const updated = {
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        word: form.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        id: crypto.randomUUID(),
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +    try {
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +      const vocabEntry = extensionVocabSchema.parse({
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        sourceSentence: form.text,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] -      wordsAdded: current.wordsAdded + (form.category === 'vocabulary' ? 1 : 0),
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +  if (form.category === 'vocabulary') {
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        personalNote: form.personalNote,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        meaning: '',
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        pageUrl: pageInfo.url,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        pageTitle: pageInfo.title,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        partOfSpeech: '',
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        tags,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        topic: form.topic,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        pronunciation: '',
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        status: 'new',
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        difficulty: form.difficulty,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        addedToReview: true,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        createdAt: now,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        updatedAt: now,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +      })
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        reviewId: '',
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +      /* non-critical: vocabulary entry saved as learning entry already */
+[2026-07-05T06:42:33.074Z] [INFO] [stderr]      }
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] -  })
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +      await saveVocabularyEntry(vocabEntry)
+[2026-07-05T06:42:33.074Z] [INFO] [stderr]  
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +  if (form.category === 'reading' && form.text.trim().length > 50) {
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +    try {
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +    } catch {
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +  }
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        url: pageInfo.url,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +      const articleEntry = extensionArticleSchema.parse({
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        content: form.text,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        title: pageInfo.title || form.text.slice(0, 80),
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +        topic: form.topic,
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +        tags,
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +        personalNote: form.personalNote,
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +        isReadingPractice: true,
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        id: crypto.randomUUID(),
+[2026-07-05T06:42:33.074Z] [INFO] [stderr] +        selectedParagraph: form.text,
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +        status: 'new',
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +        updatedAt: now,
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +      /* non-critical: article entry saved as learning entry already */
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +      })
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +        difficulty: form.difficulty,
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +    } catch {
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +        createdAt: now,
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] +  }
+[2026-07-05T06:42:33.075Z] [INFO] [stderr] +      await saveArticleEntry(articleEntry)
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] +    1,
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] +    form.category === 'vocabulary' ? 'wordsAdded' : 'notesAdded',
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] +
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] +    }
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] +
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] +  await incrementDailyProgress(
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] 
+[2026-07-05T06:42:33.078Z] [INFO] [stderr]    setErrors({ submit: 'Failed to save. Please try again.' })
+[2026-07-05T06:42:33.078Z] [INFO] [stderr]  } catch (err) {
+[2026-07-05T06:42:33.078Z] [INFO] [stderr]    setTimeout(() => onSaved(), 1200)
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:33.078Z] [INFO] [stderr] +  )
+[2026-07-05T06:42:33.078Z] [INFO] [stderr]    setSaved(true)
+[2026-07-05T06:42:33.079Z] [INFO] [stderr] -    chrome.storage.local.set({ dailyProgress: updated })
+[2026-07-05T06:42:36.865Z] [INFO] [stderr] [✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[2026-07-05T06:42:36.865Z] [INFO] [stderr] [ ] Fix ArticleCollector to also save LearningEntry for recent entries
+[2026-07-05T06:42:36.865Z] [INFO] [stderr] [•] Fix VocabularyCollector to also save LearningEntry for recent entries
+[2026-07-05T06:42:36.865Z] [INFO] [stderr] [ ] Verify all changes build correctly
+[2026-07-05T06:42:36.865Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:42:36.865Z] [INFO] [stderr] [ ] Fix content script save paths to persist data properly instead of lost savedItems
+[2026-07-05T06:42:36.865Z] [INFO] [stderr] [ ] Fix background messaging SAVE_SELECTION_FULL handler
+[2026-07-05T06:42:36.865Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:36.865Z] [INFO] [stderr] [ ] Add helper functions to storage service for cross-context saving
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-05T06:42:41.764Z] [INFO] [stderr]  import { extensionVocabSchema } from '../../storage/vocabularyStore'
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-05T06:42:41.764Z] [INFO] [stderr]  import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
+[2026-07-05T06:42:41.764Z] [INFO] [stderr]  import { findWord } from '../services/popupDataService'
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] @@ -2,8 +2,11 @@
+[2026-07-05T06:42:41.764Z] [INFO] [stderr]  import { saveVocabularyEntry } from '../../storage/vocabularyStore'
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] +import type { LearningEntry } from '../../types'
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] +import { saveEntry } from '../../storage/indexedDB'
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] 
+[2026-07-05T06:42:41.764Z] [INFO] [stderr]  function speakWord(word: string) {
+[2026-07-05T06:42:41.764Z] [INFO] [stderr]      window.speechSynthesis.cancel()
+[2026-07-05T06:42:41.764Z] [INFO] [stderr]    if ('speechSynthesis' in window) {
+[2026-07-05T06:42:41.765Z] [INFO] [stderr]  
+[2026-07-05T06:42:41.764Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:41.765Z] [INFO] [stderr] +import { incrementDailyProgress } from '../../services/storage'
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] @@ -277,18 +277,31 @@
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:42:46.692Z] [INFO] [stderr]    })
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-05T06:42:46.692Z] [INFO] [stderr]  
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] -  chrome.storage.local.get(['dailyProgress'], (result) => {
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] -    const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+[2026-07-05T06:42:46.692Z] [INFO] [stderr]  
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] -      dailyProgress: {
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] -    chrome.storage.local.set({
+[2026-07-05T06:42:46.692Z] [INFO] [stderr]    await saveVocabularyEntry(entry)
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] -        ...current,
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] -  })
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] -      },
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +    const learningEntry: LearningEntry = {
+[2026-07-05T06:42:46.692Z] [INFO] [stderr] -        wordsAdded: current.wordsAdded + 1,
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] -    })
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      id: crypto.randomUUID(),
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      topic: topic.trim() || 'general',
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      difficulty,
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      skill: 'vocabulary',
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      pageTitle: pageInfo.title,
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +  try {
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      personalNote: personalNote.trim(),
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      status: 'new',
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      updatedAt: now,
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      tags,
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      createdAt: now,
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      text: wordTrimmed,
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      category: 'vocabulary',
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +      pageUrl: pageInfo.url,
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +    }
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +    await saveEntry(learningEntry)
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +  await incrementDailyProgress('wordsAdded', 1)
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +  } catch {
+[2026-07-05T06:42:46.693Z] [INFO] [stderr]  
+[2026-07-05T06:42:46.693Z] [INFO] [stderr]    setSaved(true)
+[2026-07-05T06:42:46.693Z] [INFO] [stderr]    setTimeout(() => onSaved(), 1200)
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +
+[2026-07-05T06:42:46.693Z] [INFO] [stderr]  } catch {
+[2026-07-05T06:42:46.693Z] [INFO] [stderr]    setErrors({ submit: 'Failed to save. Please try again.' })
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] 
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +    /* non-critical */
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:46.693Z] [INFO] [stderr] +  }
+[2026-07-05T06:42:50.381Z] [INFO] [stderr] [✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[2026-07-05T06:42:50.381Z] [INFO] [stderr] [ ] Fix background messaging SAVE_SELECTION_FULL handler
+[2026-07-05T06:42:50.381Z] [INFO] [stderr] [ ] Fix content script save paths to persist data properly instead of lost savedItems
+[2026-07-05T06:42:50.381Z] [INFO] [stderr] [ ] Add helper functions to storage service for cross-context saving
+[2026-07-05T06:42:50.381Z] [INFO] [stderr] [ ] Verify all changes build correctly
+[2026-07-05T06:42:50.381Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:42:50.382Z] [INFO] [stderr] [✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[2026-07-05T06:42:50.381Z] [INFO] [stderr] [•] Fix ArticleCollector to also save LearningEntry for recent entries
+[2026-07-05T06:42:50.382Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] @@ -1,7 +1,10 @@
+[2026-07-05T06:42:54.613Z] [INFO] [stderr]  import { useState, useEffect, useCallback } from 'react'
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-05T06:42:54.613Z] [INFO] [stderr]  import { extensionArticleSchema, saveArticleEntry, IELTS_TOPICS } from '../../storage/articleStore'
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] +import { saveEntry } from '../../storage/indexedDB'
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] +import { incrementDailyProgress } from '../../services/storage'
+[2026-07-05T06:42:54.613Z] [INFO] [stderr]  import type { ExtensionArticleEntry, ArticleQuestion } from '../../storage/articleStore'
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] +import type { LearningEntry } from '../../types'
+[2026-07-05T06:42:54.613Z] [INFO] [stderr]    onSaved: () => void
+[2026-07-05T06:42:54.613Z] [INFO] [stderr]    onCancel: () => void
+[2026-07-05T06:42:54.613Z] [INFO] [stderr]  
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] 
+[2026-07-05T06:42:54.613Z] [INFO] [stderr]  interface ArticleCollectorProps {
+[2026-07-05T06:42:54.613Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] @@ -228,18 +228,31 @@
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-05T06:42:59.190Z] [INFO] [stderr]    })
+[2026-07-05T06:42:59.190Z] [INFO] [stderr]  
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] -  chrome.storage.local.get(['dailyProgress'], (result) => {
+[2026-07-05T06:42:59.190Z] [INFO] [stderr]  
+[2026-07-05T06:42:59.190Z] [INFO] [stderr]    await saveArticleEntry(entry)
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] -    chrome.storage.local.set({
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] -    const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] -      dailyProgress: {
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] -  })
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] -        ...current,
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] -    })
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +  try {
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] -      },
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] -        articlesSaved: current.articlesSaved + 1,
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      text: titleTrimmed,
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      skill: 'reading',
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      category: 'reading',
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      topic: topic.trim() || 'general',
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      id: crypto.randomUUID(),
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      tags,
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      personalNote: personalNote.trim(),
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      pageUrl: pageInfo.url,
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      pageTitle: pageInfo.title,
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +    }
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +    const learningEntry: LearningEntry = {
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      updatedAt: now,
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      status: 'new',
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      difficulty,
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +  } catch {
+[2026-07-05T06:42:59.190Z] [INFO] [stderr]  
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +  await incrementDailyProgress('articlesSaved', 1)
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +    /* non-critical */
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +  }
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +
+[2026-07-05T06:42:59.190Z] [INFO] [stderr]    setSaved(true)
+[2026-07-05T06:42:59.190Z] [INFO] [stderr]    setTimeout(() => onSaved(), 1200)
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +      createdAt: now,
+[2026-07-05T06:42:59.190Z] [INFO] [stderr]  } catch {
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] [0m
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] 
+[2026-07-05T06:42:59.190Z] [INFO] [stderr]    setErrors({ submit: 'Failed to save. Please try again.' })
+[2026-07-05T06:42:59.190Z] [INFO] [stderr] +    await saveEntry(learningEntry)
+[2026-07-05T06:43:08.916Z] [INFO] [stderr] [✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[2026-07-05T06:43:08.916Z] [INFO] [stderr] [✓] Fix ArticleCollector to also save LearningEntry for recent entries
+[2026-07-05T06:43:08.916Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:43:08.916Z] [INFO] [stderr] [•] Fix content script save paths to persist data properly instead of lost savedItems
+[2026-07-05T06:43:08.916Z] [INFO] [stderr] [ ] Add helper functions to storage service for cross-context saving
+[2026-07-05T06:43:08.916Z] [INFO] [stderr] [ ] Verify all changes build correctly
+[2026-07-05T06:43:08.916Z] [INFO] [stderr] [0m
+[2026-07-05T06:43:08.916Z] [INFO] [stderr] [✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[2026-07-05T06:43:08.916Z] [INFO] [stderr] [ ] Fix background messaging SAVE_SELECTION_FULL handler
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] dist
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] node_modules
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] options.html
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] [0m$ [0mls apps/extension/
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] popup.html
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] manifest.json
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] package.json
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] src
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] tsconfig.json
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] vite.config.ts
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] vitest.config.ts
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] [0m
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] public
+[2026-07-05T06:43:12.219Z] [INFO] [stderr] scripts
+[2026-07-05T06:43:12.394Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/vite.config.*"[90m 1 match[0m
+[2026-07-05T06:43:12.643Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/tsconfig*.json"[90m 1 match[0m
+[2026-07-05T06:43:12.810Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/webpack.config.*"[90m 0 matches[0m
+[2026-07-05T06:43:15.957Z] [INFO] [stderr] [0m→ [0mRead apps/extension/vite.config.ts
+[2026-07-05T06:43:16.300Z] [INFO] [stderr] [0m→ [0mRead apps/extension/tsconfig.json
+[2026-07-05T06:43:20.446Z] [INFO] [stderr] [0m→ [0mRead apps/extension/package.json
+[2026-07-05T06:43:20.847Z] [INFO] [stderr] [0m$ [0mls apps/extension/scripts/
+[2026-07-05T06:43:20.847Z] [INFO] [stderr] build.mjs
+[2026-07-05T06:43:20.847Z] [INFO] [stderr] package.mjs
+[2026-07-05T06:43:20.847Z] [INFO] [stderr] [0m
+[2026-07-05T06:43:20.847Z] [INFO] [stderr] [0m
+[2026-07-05T06:43:23.903Z] [INFO] [stderr] [0m→ [0mRead apps/extension/scripts/build.mjs
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/messaging.ts
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] [0m
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] @@ -1,12 +1,14 @@
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] -import type { SaveCategory } from '../types'
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:43:41.293Z] [INFO] [stderr]    updateDailyProgress,
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] -  addSavedItem,
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] +import type { SaveCategory, LearningEntry } from '../types'
+[2026-07-05T06:43:41.293Z] [INFO] [stderr]    setVideoPageInfo,
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] +  incrementDailyProgress,
+[2026-07-05T06:43:41.293Z] [INFO] [stderr]  import type { SharedSettingsPatch } from '@ielts/settings'
+[2026-07-05T06:43:41.293Z] [INFO] [stderr]  } from '../services/storage'
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] +import { saveEntry } from '../storage/indexedDB'
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] +import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
+[2026-07-05T06:43:41.293Z] [INFO] [stderr]  export interface SaveItemPayload {
+[2026-07-05T06:43:41.293Z] [INFO] [stderr]    text: string
+[2026-07-05T06:43:41.293Z] [INFO] [stderr] 
+[2026-07-05T06:43:41.293Z] [INFO] [stderr]  
+[2026-07-05T06:43:41.293Z] [INFO] [stderr]    setPendingVideoInfo,
+[2026-07-05T06:43:41.293Z] [INFO] [stderr]    category: SaveCategory
+[2026-07-05T06:43:41.294Z] [INFO] [stderr] [0m
+[2026-07-05T06:43:41.294Z] [INFO] [stderr]  import {
+[2026-07-05T06:43:41.399Z] [INFO] [stdout] Now I understand the build process. The background script is bundled by esbuild and CAN import from indexedDB modules. But the content script's indexedDB points to the PAGE's origin, so it must communicate via messaging. Let me implement the fixes.
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/messaging.ts
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] @@ -179,9 +179,30 @@
+[2026-07-05T06:43:46.240Z] [INFO] [stderr]  registerHandler('MINI_TUTOR_SAVE_RESULT', async (_msg) => {
+[2026-07-05T06:43:46.240Z] [INFO] [stderr]    const msg = _msg as ExtensionMessage<'MINI_TUTOR_SAVE_RESULT'>
+[2026-07-05T06:43:46.240Z] [INFO] [stderr]  
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +  try {
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +  const now = new Date().toISOString()
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] -  await addSavedItem(msg.payload as unknown as Record<string, unknown>)
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      id: msg.payload.id,
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      category: msg.payload.category,
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +    const learningEntry: LearningEntry = {
+[2026-07-05T06:43:46.240Z] [INFO] [stderr]  })
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      skill: 'vocabulary',
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      text: msg.payload.text,
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      topic: 'general',
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      pageTitle: msg.payload.pageTitle || '',
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      personalNote: '',
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      tags: [],
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      status: 'new',
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      pageUrl: msg.payload.pageUrl || '',
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      difficulty: '',
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      updatedAt: now,
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +    await incrementDailyProgress('wordsAdded', 1)
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +    /* non-critical */
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +    await saveEntry(learningEntry)
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +  } catch {
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +    }
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +      createdAt: now,
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] +  }
+[2026-07-05T06:43:46.240Z] [INFO] [stderr]  registerHandler('MINI_TUTOR_OPEN_PAGE', async (_msg, _sender) => {
+[2026-07-05T06:43:46.240Z] [INFO] [stderr]    const msg = _msg as ExtensionMessage<'MINI_TUTOR_OPEN_PAGE'>
+[2026-07-05T06:43:46.240Z] [INFO] [stderr]  })
+[2026-07-05T06:43:46.240Z] [INFO] [stderr]  
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] [0m
+[2026-07-05T06:43:46.240Z] [INFO] [stderr] 
+[2026-07-05T06:43:53.412Z] [INFO] [stderr] [0m✗ [0mEdit apps/extension/src/background/messaging.ts failed
+[2026-07-05T06:43:53.412Z] [INFO] [stderr] [91m[1mError: [0mCould not find oldString in the file. It must match exactly, including whitespace, indentation, and line endings.
+[2026-07-05T06:43:56.719Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/messaging.ts[90m [offset=175, limit=30][0m
+[2026-07-05T06:44:00.453Z] [INFO] [stderr] [0m✱ [0mGrep "SAVE_SELECTION_FULL"[90m in apps/extension/src/background/messaging.ts · 2 matches[0m
+[2026-07-05T06:44:04.423Z] [INFO] [stderr] [0m✱ [0mGrep "registerHandler.*SAVE_SELECTION_FULL|addSavedItem"[90m in apps/extension/src · 5 matches[0m
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/messaging.ts
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] [0m
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:44:18.334Z] [INFO] [stderr]      /* non-critical */
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +registerHandler('SAVE_SELECTION_FULL', async (_msg) => {
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] @@ -203,8 +203,62 @@
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      id: crypto.randomUUID(),
+[2026-07-05T06:44:18.334Z] [INFO] [stderr]    }
+[2026-07-05T06:44:18.334Z] [INFO] [stderr]  
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +  const msg = _msg as ExtensionMessage<'SAVE_SELECTION_FULL'>
+[2026-07-05T06:44:18.334Z] [INFO] [stderr]  })
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      text: msg.payload.text,
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +  const now = new Date().toISOString()
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +    const entry: LearningEntry = {
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      topic: msg.payload.topic || 'general',
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +  try {
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      tags: msg.payload.tags || [],
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      difficulty: msg.payload.difficulty || '',
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      personalNote: msg.payload.note || '',
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      pageTitle: msg.payload.pageTitle,
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      skill: msg.payload.skill || 'vocabulary',
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      pageUrl: msg.payload.pageUrl,
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +    await saveEntry(entry)
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      createdAt: now,
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      updatedAt: now,
+[2026-07-05T06:44:18.334Z] [INFO] [stderr] +      category: msg.payload.category,
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +      status: 'new',
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +      try {
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +    if (msg.payload.category === 'vocabulary') {
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +        const vocabEntry = extensionVocabSchema.parse({
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          id: crypto.randomUUID(),
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +    }
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          pageTitle: msg.payload.pageTitle,
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          personalNote: msg.payload.note || '',
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          word: msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          meaning: '',
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          pageUrl: msg.payload.pageUrl,
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          tags: msg.payload.tags || [],
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          partOfSpeech: '',
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          sourceSentence: msg.payload.text,
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          topic: msg.payload.topic || 'general',
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          pronunciation: '',
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          difficulty: msg.payload.difficulty || '',
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          createdAt: now,
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          addedToReview: true,
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          updatedAt: now,
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +        })
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +        await saveVocabularyEntry(vocabEntry)
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          status: 'new',
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +      } catch {
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +          reviewId: '',
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +    }
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +        /* non-critical */
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +      }
+[2026-07-05T06:44:18.336Z] [INFO] [stderr] +    console.error('[messaging] SAVE_SELECTION_FULL handler error:', err)
+[2026-07-05T06:44:18.335Z] [INFO] [stderr] +
+[2026-07-05T06:44:18.336Z] [INFO] [stderr] +})
+[2026-07-05T06:44:18.336Z] [INFO] [stderr] +    await incrementDailyProgress('wordsAdded', msg.payload.category === 'vocabulary' ? 1 : 0)
+[2026-07-05T06:44:18.336Z] [INFO] [stderr] +  }
+[2026-07-05T06:44:18.336Z] [INFO] [stderr] +
+[2026-07-05T06:44:18.336Z] [INFO] [stderr]    const msg = _msg as ExtensionMessage<'MINI_TUTOR_OPEN_PAGE'>
+[2026-07-05T06:44:18.336Z] [INFO] [stderr]    const { action, text } = msg.payload
+[2026-07-05T06:44:18.336Z] [INFO] [stderr]  registerHandler('MINI_TUTOR_OPEN_PAGE', async (_msg, _sender) => {
+[2026-07-05T06:44:18.336Z] [INFO] [stderr] +  } catch (err) {
+[2026-07-05T06:44:18.336Z] [INFO] [stderr]    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+[2026-07-05T06:44:18.336Z] [INFO] [stderr] 
+[2026-07-05T06:44:18.336Z] [INFO] [stderr] [0m
+[2026-07-05T06:44:18.414Z] [INFO] [stdout] Now I see — there's no `SAVE_SELECTION_FULL` handler registered in the background yet. Let me add it, and also update the content script paths.
+[2026-07-05T06:44:22.109Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/messaging.ts[90m [offset=175][0m
+[2026-07-05T06:44:32.575Z] [INFO] [stderr] [0m
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]    }
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] @@ -300,35 +300,19 @@
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]  
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    id: crypto.randomUUID(),
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -  const entry = {
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    text,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]  }
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    pageUrl: window.location.href,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    topic: '',
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    pageTitle: document.title,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    savedAt: new Date().toISOString(),
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    tags: [] as string[],
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    note: '',
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -  }
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    difficulty: '',
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    category,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] +  this.toast(`Saved as ${category}`)
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -  const items = result.savedItems || []
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]  private async saveText(text: string, category: SaveCategory): Promise<void> {
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -  items.unshift(entry)
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -  await safeStorageSet({ savedItems: items })
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -  const result = await safeStorageGet<any[]>('savedItems')
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -    type: 'UPDATE_PROGRESS',
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -      notesAdded: category === 'mistake' ? 1 : 0,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] +    type: 'SAVE_SELECTION_FULL',
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]    safeSendMessage({
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]  
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]      payload: {
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] +      text,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] +      pageUrl: window.location.href,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -      wordsAdded: category === 'vocabulary' ? 1 : 0,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] +      pageTitle: document.title,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -  this.toast(`Saved as ${category}`)
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]    })
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] +      category,
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]  
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]    explain: 'simple',
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] 
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] -
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]  }
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]  private actionToAiType: Record<string, AiExplainType> = {
+[2026-07-05T06:44:32.576Z] [INFO] [stderr] [0m
+[2026-07-05T06:44:32.576Z] [INFO] [stderr]      },
+[2026-07-05T06:44:32.618Z] [INFO] [stdout] Now let me update the floating toolbar's `saveText` method to properly persist data:
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] @@ -305,45 +305,19 @@
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/content-script/selectionPanel.ts
+[2026-07-05T06:44:37.656Z] [INFO] [stderr]  
+[2026-07-05T06:44:37.656Z] [INFO] [stderr]  }
+[2026-07-05T06:44:37.656Z] [INFO] [stderr]    }
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    id: crypto.randomUUID(),
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    text,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    category,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    pageTitle: document.title,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    pageUrl: window.location.href,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    savedAt: new Date().toISOString(),
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    note: '',
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    topic: '',
+[2026-07-05T06:44:37.656Z] [INFO] [stderr]  async function saveText(text: string, category: SaveCategory): Promise<void> {
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    difficulty: '',
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -  const entry = {
+[2026-07-05T06:44:37.656Z] [INFO] [stderr]  
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] +  showToast(`Saved as ${category}`)
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    tags: [] as string[],
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -  }
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -  const result = await safeStorageGet<any[]>('savedItems')
+[2026-07-05T06:44:37.656Z] [INFO] [stderr]    safeSendMessage({
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -  const items = result.savedItems || []
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    type: 'UPDATE_PROGRESS',
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -      notesAdded: category === 'mistake' ? 1 : 0,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr]      payload: {
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -      wordsAdded: category === 'vocabulary' ? 1 : 0,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] +    type: 'SAVE_SELECTION_FULL',
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] +      category,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -  items.unshift(entry)
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] +      pageUrl: window.location.href,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] +      pageTitle: document.title,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -  await safeStorageSet({ savedItems: items })
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] +      text,
+[2026-07-05T06:44:37.656Z] [INFO] [stderr]    })
+[2026-07-05T06:44:37.656Z] [INFO] [stderr]      },
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -  if (category === 'vocabulary') {
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -        source: 'ielts-extension',
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    try {
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -      window.postMessage({
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -    } catch { /* ignore */ }
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -        action: 'VOCAB_SAVED',
+[2026-07-05T06:44:37.657Z] [INFO] [stderr] -  showToast(`Saved as ${category}`)
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -      }, window.location.origin)
+[2026-07-05T06:44:37.656Z] [INFO] [stderr] -        data: entry,
+[2026-07-05T06:44:37.657Z] [INFO] [stderr] -
+[2026-07-05T06:44:37.657Z] [INFO] [stderr] -  }
+[2026-07-05T06:44:37.657Z] [INFO] [stderr]    const aiType = ACTION_TO_AI_TYPE[action.id]
+[2026-07-05T06:44:37.657Z] [INFO] [stderr]  
+[2026-07-05T06:44:37.657Z] [INFO] [stderr] [0m
+[2026-07-05T06:44:37.657Z] [INFO] [stderr] 
+[2026-07-05T06:44:37.657Z] [INFO] [stderr]  }
+[2026-07-05T06:44:37.657Z] [INFO] [stderr]  function triggerAI(action: ToolbarAction, text: string): void {
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:44:50.177Z] [INFO] [stderr]  import type { SaveCategory } from '../types'
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] @@ -1,10 +1,6 @@
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] -  safeStorageSet,
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] -import {
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] +import { safeSendMessage } from '../utils/safe-chrome'
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] -} from '../utils/safe-chrome'
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] -  safeStorageGet,
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] -  safeSendMessage,
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] 
+[2026-07-05T06:44:50.177Z] [INFO] [stderr]    text: string
+[2026-07-05T06:44:50.177Z] [INFO] [stderr]    category: SaveCategory
+[2026-07-05T06:44:50.177Z] [INFO] [stderr]  interface SaveSelectionPayload {
+[2026-07-05T06:44:50.177Z] [INFO] [stderr] [0m
+[2026-07-05T06:44:50.177Z] [INFO] [stderr]  
+[2026-07-05T06:44:50.276Z] [INFO] [stdout] Now update the `saveSelectedText.ts` handler for `SAVE_SELECTION_FULL` to forward to background instead of saving to dead `savedItems`:
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:44:56.190Z] [INFO] [stderr]  
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:44:56.190Z] [INFO] [stderr]      const payload = message.payload as SaveSelectionPayload
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] @@ -91,45 +91,25 @@
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      category: payload.category,
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      text: payload.text,
+[2026-07-05T06:44:56.190Z] [INFO] [stderr]    }
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      savedAt: new Date().toISOString(),
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      pageTitle: payload.pageTitle,
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      id: crypto.randomUUID(),
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      pageUrl: payload.pageUrl,
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      topic: payload.topic || '',
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      note: payload.note || '',
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -    const entry = {
+[2026-07-05T06:44:56.190Z] [INFO] [stderr]    if (message.type === 'SAVE_SELECTION_FULL') {
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      difficulty: payload.difficulty || '',
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -    safeStorageGet<any[]>('savedItems').then((result) => {
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      safeStorageSet({ savedItems: items })
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -      const items = result.savedItems || []
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -      tags: payload.tags || [],
+[2026-07-05T06:44:56.190Z] [INFO] [stderr]  
+[2026-07-05T06:44:56.190Z] [INFO] [stderr] -    }
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -      safeSendMessage({
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -      items.unshift(entry)
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -          notesAdded: payload.category === 'mistake' ? 1 : 0,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -          wordsAdded: payload.category === 'vocabulary' ? 1 : 0,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -        type: 'UPDATE_PROGRESS',
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -        payload: {
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +    showToast(`Saved as ${payload.category}`)
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +    safeSendMessage({
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -        },
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -      })
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +        category: payload.category,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +        pageTitle: payload.pageTitle,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +      payload: {
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +        difficulty: payload.difficulty,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +      },
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +        pageUrl: payload.pageUrl,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +        text: payload.text,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +      type: 'SAVE_SELECTION_FULL',
+[2026-07-05T06:44:56.191Z] [INFO] [stderr]      })
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +        topic: payload.topic,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -    if (payload.category === 'vocabulary') {
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +        tags: payload.tags,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -        window.postMessage({
+[2026-07-05T06:44:56.191Z] [INFO] [stderr]  
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -      try {
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -          action: 'VOCAB_SAVED',
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] +        note: payload.note,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -          data: entry,
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -          source: 'ielts-extension',
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -        }, window.location.origin)
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -    }
+[2026-07-05T06:44:56.191Z] [INFO] [stderr]    }
+[2026-07-05T06:44:56.191Z] [INFO] [stderr]      try { sendResponse({ success: true }) } catch { /* ignore */ }
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -    showToast(`Saved as ${payload.category}`)
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] -      } catch { /* ignore */ }
+[2026-07-05T06:44:56.191Z] [INFO] [stderr]      return false
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] [0m
+[2026-07-05T06:44:56.191Z] [INFO] [stderr] 
+[2026-07-05T06:44:56.191Z] [INFO] [stderr]  })
+[2026-07-05T06:45:01.634Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:45:05.995Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:05.996Z] [INFO] [stderr]  import type { SaveCategory } from '../types'
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] @@ -1,6 +1,10 @@
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] -import { safeSendMessage } from '../utils/safe-chrome'
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] +  safeStorageSet,
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] +  safeStorageGet,
+[2026-07-05T06:45:05.996Z] [INFO] [stderr]  interface SaveSelectionPayload {
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] +  safeSendMessage,
+[2026-07-05T06:45:05.996Z] [INFO] [stderr]  
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] +import {
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] +} from '../utils/safe-chrome'
+[2026-07-05T06:45:05.996Z] [INFO] [stderr]    text: string
+[2026-07-05T06:45:05.996Z] [INFO] [stderr]    category: SaveCategory
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:05.996Z] [INFO] [stderr] 
+[2026-07-05T06:45:13.145Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:45:13.145Z] [INFO] [stderr] [✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[2026-07-05T06:45:13.145Z] [INFO] [stderr] [✓] Fix background messaging SAVE_SELECTION_FULL handler
+[2026-07-05T06:45:13.145Z] [INFO] [stderr] [✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[2026-07-05T06:45:13.145Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:13.145Z] [INFO] [stderr] [ ] Verify all changes build correctly
+[2026-07-05T06:45:13.145Z] [INFO] [stderr] [•] Fix QuickAddVocab to use incrementDailyProgress for consistency
+[2026-07-05T06:45:13.145Z] [INFO] [stderr] [✓] Fix ArticleCollector to also save LearningEntry for recent entries
+[2026-07-05T06:45:13.145Z] [INFO] [stderr] [✓] Fix content script save paths to persist data properly instead of lost savedItems
+[2026-07-05T06:45:17.438Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/QuickAddVocab.tsx
+[2026-07-05T06:45:17.438Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+[2026-07-05T06:45:17.438Z] [INFO] [stderr]  import { useState, useEffect, useCallback } from 'react'
+[2026-07-05T06:45:17.438Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:45:17.438Z] [INFO] [stderr] @@ -1,8 +1,9 @@
+[2026-07-05T06:45:17.438Z] [INFO] [stderr]  import { saveVocabularyEntry } from '../../storage/vocabularyStore'
+[2026-07-05T06:45:17.438Z] [INFO] [stderr]  interface QuickAddVocabProps {
+[2026-07-05T06:45:17.438Z] [INFO] [stderr]  import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
+[2026-07-05T06:45:17.438Z] [INFO] [stderr]    onSaved: () => void
+[2026-07-05T06:45:17.438Z] [INFO] [stderr]  import { extensionVocabSchema } from '../../storage/vocabularyStore'
+[2026-07-05T06:45:17.438Z] [INFO] [stderr] +import { incrementDailyProgress } from '../../services/storage'
+[2026-07-05T06:45:17.438Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+[2026-07-05T06:45:17.438Z] [INFO] [stderr] 
+[2026-07-05T06:45:17.438Z] [INFO] [stderr]  
+[2026-07-05T06:45:17.438Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+[2026-07-05T06:45:17.438Z] [INFO] [stderr]    onCancel: () => void
+[2026-07-05T06:45:17.438Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:21.773Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/QuickAddVocab.tsx
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+[2026-07-05T06:45:21.774Z] [INFO] [stderr]    })
+[2026-07-05T06:45:21.774Z] [INFO] [stderr]    await saveVocabularyEntry(entry)
+[2026-07-05T06:45:21.774Z] [INFO] [stderr]      updatedAt: now,
+[2026-07-05T06:45:21.773Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+[2026-07-05T06:45:21.774Z] [INFO] [stderr]  
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] +  await incrementDailyProgress('wordsAdded', 1)
+[2026-07-05T06:45:21.774Z] [INFO] [stderr]  
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] @@ -103,22 +103,10 @@
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -      articlesSaved: 0,
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -      wordsAdded: 0,
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -      notesAdded: 0,
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -      reviewDue: 0,
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -    }
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -    chrome.storage.local.set({
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -  chrome.storage.local.get(['dailyProgress'], (result) => {
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -      streak: 0,
+[2026-07-05T06:45:21.774Z] [INFO] [stderr]    setTimeout(() => onSaved(), 1200)
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -    const current = result.dailyProgress || {
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -    })
+[2026-07-05T06:45:21.774Z] [INFO] [stderr]    setSaved(true)
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -  })
+[2026-07-05T06:45:21.774Z] [INFO] [stderr]  } catch {
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:21.774Z] [INFO] [stderr]    setErrors({ submit: 'Failed to save. Please try again.' })
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] 
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+[2026-07-05T06:45:21.774Z] [INFO] [stderr] -      dailyProgress: { ...current, wordsAdded: current.wordsAdded + 1 },
+[2026-07-05T06:45:27.852Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:45:27.852Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:45:27.852Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:45:27.852Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:45:27.852Z] [INFO] [stderr]    videoEntrySchema,
+[2026-07-05T06:45:27.852Z] [INFO] [stderr] +import { incrementDailyProgress } from '../../services/storage'
+[2026-07-05T06:45:27.852Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:45:27.852Z] [INFO] [stderr] @@ -11,8 +11,9 @@
+[2026-07-05T06:45:27.852Z] [INFO] [stderr]  import { saveEntry as saveLearningEntry } from '../../storage/indexedDB'
+[2026-07-05T06:45:27.852Z] [INFO] [stderr]  
+[2026-07-05T06:45:27.852Z] [INFO] [stderr]  import type { VideoQuestion, VideoVocabItem, ShadowingItem } from '../../storage/videoStore'
+[2026-07-05T06:45:27.852Z] [INFO] [stderr]  interface VideoHelperProps {
+[2026-07-05T06:45:27.852Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:27.852Z] [INFO] [stderr]    type VideoEntry,
+[2026-07-05T06:45:27.852Z] [INFO] [stderr]  import type { LearningEntry } from '../../types'
+[2026-07-05T06:45:27.852Z] [INFO] [stderr]  } from '../../storage/videoStore'
+[2026-07-05T06:45:27.852Z] [INFO] [stderr] 
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:45:32.160Z] [INFO] [stderr]      }
+[2026-07-05T06:45:32.160Z] [INFO] [stderr]    }
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] @@ -281,18 +281,10 @@
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] -  chrome.storage.local.get(['dailyProgress'], (result) => {
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] -    const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+[2026-07-05T06:45:32.160Z] [INFO] [stderr]        await saveVocabularyEntry(vocabEntry)
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] -    chrome.storage.local.set({
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] -      dailyProgress: {
+[2026-07-05T06:45:32.160Z] [INFO] [stderr]  
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] -        wordsAdded: current.wordsAdded + (vocabData?.length || 0),
+[2026-07-05T06:45:32.161Z] [INFO] [stderr] -  })
+[2026-07-05T06:45:32.161Z] [INFO] [stderr] +  await incrementDailyProgress('wordsAdded', vocabData?.length || 0)
+[2026-07-05T06:45:32.161Z] [INFO] [stderr] -      },
+[2026-07-05T06:45:32.161Z] [INFO] [stderr] +  await incrementDailyProgress('articlesSaved', 1)
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] -        ...current,
+[2026-07-05T06:45:32.161Z] [INFO] [stderr]  
+[2026-07-05T06:45:32.160Z] [INFO] [stderr] -        articlesSaved: current.articlesSaved + 1,
+[2026-07-05T06:45:32.161Z] [INFO] [stderr]  } catch {
+[2026-07-05T06:45:32.161Z] [INFO] [stderr]    setSaved(true)
+[2026-07-05T06:45:32.161Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:32.161Z] [INFO] [stderr] 
+[2026-07-05T06:45:32.161Z] [INFO] [stderr]    setTimeout(() => onSaved(), 1200)
+[2026-07-05T06:45:32.161Z] [INFO] [stderr] -    })
+[2026-07-05T06:45:36.250Z] [INFO] [stderr] [✓] Fix content script save paths to persist data properly instead of lost savedItems
+[2026-07-05T06:45:36.250Z] [INFO] [stderr] [✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[2026-07-05T06:45:36.250Z] [INFO] [stderr] [✓] Fix QuickAddVocab and VideoHelper to use incrementDailyProgress
+[2026-07-05T06:45:36.250Z] [INFO] [stderr] [✓] Fix background messaging SAVE_SELECTION_FULL handler
+[2026-07-05T06:45:36.250Z] [INFO] [stderr] [✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[2026-07-05T06:45:36.250Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:45:36.250Z] [INFO] [stderr] [✓] Fix ArticleCollector to also save LearningEntry for recent entries
+[2026-07-05T06:45:36.250Z] [INFO] [stderr] [•] Verify all changes build and typecheck correctly
+[2026-07-05T06:45:36.251Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] [0m$ [0mnpx tsc --noEmit 2>&1
+[2026-07-05T06:45:42.315Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/content-script/floatingToolbar.ts(6,3): error TS6133: 'safeStorageGet' is declared but its value is never read.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/background/messaging.ts(216,9): error TS2322: Type 'string' is not assignable to type '"vocabulary" | "grammar" | "reading" | "writing" | "speaking" | "listening" | "general"'.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/content-script/selectionPanel.ts(11,3): error TS6133: 'safeStorageGet' is declared but its value is never read.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/background/messaging.ts(217,9): error TS2322: Type 'string' is not assignable to type '"" | "easy" | "medium" | "hard"'.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/content-script/selectionPanel.ts(12,3): error TS6133: 'safeStorageSet' is declared but its value is never read.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/content-script/floatingToolbar.ts(7,3): error TS6133: 'safeStorageSet' is declared but its value is never read.
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:42.315Z] [INFO] [stderr] src/popup/components/SaveTextForm.tsx(3,30): error TS6196: 'LearningEntry' is declared but never used.
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] @@ -212,10 +212,10 @@
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/messaging.ts
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T06:45:49.206Z] [INFO] [stderr]  topic: msg.payload.topic || 'general',
+[2026-07-05T06:45:49.206Z] [INFO] [stderr]  category: msg.payload.category,
+[2026-07-05T06:45:49.206Z] [INFO] [stderr]  text: msg.payload.text,
+[2026-07-05T06:45:49.206Z] [INFO] [stderr]  id: crypto.randomUUID(),
+[2026-07-05T06:45:49.206Z] [INFO] [stderr]  tags: msg.payload.tags || [],
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] +skill: (msg.payload.skill || 'general') as LearningEntry['skill'],
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] -difficulty: msg.payload.difficulty || '',
+[2026-07-05T06:45:49.206Z] [INFO] [stderr]  personalNote: msg.payload.note || '',
+[2026-07-05T06:45:49.206Z] [INFO] [stderr]  pageTitle: msg.payload.pageTitle,
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] +difficulty: (msg.payload.difficulty || '') as LearningEntry['difficulty'],
+[2026-07-05T06:45:49.206Z] [INFO] [stderr]  pageUrl: msg.payload.pageUrl,
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] 
+[2026-07-05T06:45:49.206Z] [INFO] [stderr] -skill: msg.payload.skill || 'vocabulary',
+[2026-07-05T06:45:52.867Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-05T06:45:52.866Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-05T06:45:52.867Z] [INFO] [stderr] @@ -2,10 +2,8 @@
+[2026-07-05T06:45:52.866Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:45:52.867Z] [INFO] [stderr]  import { showExplainPanel } from './aiExplain'
+[2026-07-05T06:45:52.867Z] [INFO] [stderr]  import {
+[2026-07-05T06:45:52.867Z] [INFO] [stderr]  import { injectContentStyles } from './sharedStyles'
+[2026-07-05T06:45:52.867Z] [INFO] [stderr]  import type { AiExplainType } from '@ielts/ai'
+[2026-07-05T06:45:52.867Z] [INFO] [stderr] -  safeStorageGet,
+[2026-07-05T06:45:52.867Z] [INFO] [stderr]    safeSyncGet,
+[2026-07-05T06:45:52.866Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-05T06:45:52.867Z] [INFO] [stderr]  } from '../utils/safe-chrome'
+[2026-07-05T06:45:52.867Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:52.867Z] [INFO] [stderr]    safeSendMessage,
+[2026-07-05T06:45:52.867Z] [INFO] [stderr] -  safeStorageSet,
+[2026-07-05T06:45:52.867Z] [INFO] [stderr] 
+[2026-07-05T06:45:52.867Z] [INFO] [stderr]  
+[2026-07-05T06:45:52.867Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/content-script/selectionPanel.ts
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+[2026-07-05T06:45:57.147Z] [INFO] [stderr]  import { injectContentStyles } from './sharedStyles'
+[2026-07-05T06:45:57.147Z] [INFO] [stderr]  import { showExplainPanel } from './aiExplain'
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] @@ -7,10 +7,8 @@
+[2026-07-05T06:45:57.147Z] [INFO] [stderr]  import {
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] -  safeStorageSet,
+[2026-07-05T06:45:57.147Z] [INFO] [stderr]    safeSendMessage,
+[2026-07-05T06:45:57.147Z] [INFO] [stderr]  } from '../utils/safe-chrome'
+[2026-07-05T06:45:57.147Z] [INFO] [stderr]    safeFetchProviderConfig,
+[2026-07-05T06:45:57.147Z] [INFO] [stderr]  } from '@ielts/ai'
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] 
+[2026-07-05T06:45:57.147Z] [INFO] [stderr]    safeSyncGet,
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] [0m
+[2026-07-05T06:45:57.147Z] [INFO] [stderr] -  safeStorageGet,
+[2026-07-05T06:46:01.189Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:46:01.189Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:46:01.189Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:46:01.189Z] [INFO] [stderr] @@ -1,7 +1,7 @@
+[2026-07-05T06:46:01.189Z] [INFO] [stderr]  import { SAVE_CATEGORIES, CATEGORY_LABELS, CATEGORY_COLORS, CATEGORY_ICONS, SKILL_OPTIONS, SKILL_LABELS } from '../../types'
+[2026-07-05T06:46:01.189Z] [INFO] [stderr]  import { entryFormSchema, entrySchema } from '../../types'
+[2026-07-05T06:46:01.190Z] [INFO] [stderr] +import type { EntryFormData } from '../../types'
+[2026-07-05T06:46:01.190Z] [INFO] [stderr]  import { useState, useEffect } from 'react'
+[2026-07-05T06:46:01.190Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:46:01.190Z] [INFO] [stderr]  import { saveVocabularyEntry, extensionVocabSchema } from '../../storage/vocabularyStore'
+[2026-07-05T06:46:01.189Z] [INFO] [stderr] -import type { EntryFormData, LearningEntry } from '../../types'
+[2026-07-05T06:46:01.190Z] [INFO] [stderr]  import { incrementDailyProgress } from '../../services/storage'
+[2026-07-05T06:46:01.190Z] [INFO] [stderr] [0m
+[2026-07-05T06:46:01.190Z] [INFO] [stderr]  import { saveEntry } from '../../storage/indexedDB'
+[2026-07-05T06:46:01.190Z] [INFO] [stderr] 
+[2026-07-05T06:46:01.189Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:46:06.184Z] [INFO] [stderr] src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+[2026-07-05T06:46:06.184Z] [INFO] [stderr] [0m$ [0mnpx tsc --noEmit 2>&1
+[2026-07-05T06:46:06.184Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+[2026-07-05T06:46:06.184Z] [INFO] [stderr] src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+[2026-07-05T06:46:06.184Z] [INFO] [stderr] src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+[2026-07-05T06:46:06.184Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T06:46:06.184Z] [INFO] [stderr] [0m
+[2026-07-05T06:46:06.184Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+[2026-07-05T06:46:06.184Z] [INFO] [stderr] src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+[2026-07-05T06:46:10.476Z] [INFO] [stdout] All remaining TypeScript errors are in pre-existing test files, not in the changes I made. Let me run the build:
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] [0m$ [0mnode scripts/build.mjs 2>&1
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] ✓ 183 modules transformed.
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] computing gzip size...
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] dist/assets/options.css         2.00 kB │ gzip:  0.78 kB
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] vite v6.4.3 building for production...
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] transforming...
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] rendering chunks...
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] dist/assets/options.js         13.11 kB │ gzip:  4.27 kB
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] dist/popup.html                 0.61 kB │ gzip:  0.35 kB
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] [0m
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] ✓ built in 563ms
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] ✓ Extension built successfully
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] dist/assets/chunk-schemas.js  265.13 kB │ gzip: 80.03 kB
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] dist/assets/popup.js          175.67 kB │ gzip: 42.47 kB
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] dist/options.html               0.63 kB │ gzip:  0.36 kB
+[2026-07-05T06:46:11.181Z] [INFO] [stderr] dist/assets/popup.css           2.40 kB │ gzip:  0.93 kB
+[2026-07-05T06:46:15.082Z] [INFO] [stderr] -rw-r--r--@ 1 phamthanhhung  staff  629211 Jul  5 13:46 dist/background.js
+[2026-07-05T06:46:15.082Z] [INFO] [stderr] -rw-r--r--@ 1 phamthanhhung  staff     630 Jul  5 13:46 dist/options.html
+[2026-07-05T06:46:15.082Z] [INFO] [stderr] [0m
+[2026-07-05T06:46:15.082Z] [INFO] [stderr] -rw-r--r--@ 1 phamthanhhung  staff     613 Jul  5 13:46 dist/popup.html
+[2026-07-05T06:46:15.082Z] [INFO] [stderr] -rw-r--r--@ 1 phamthanhhung  staff  637427 Jul  5 13:46 dist/content.js
+[2026-07-05T06:46:15.082Z] [INFO] [stderr] [0m$ [0mls -la dist/*.js dist/*.html 2>&1
+[2026-07-05T06:46:19.643Z] [INFO] [stderr] [0m$ [0mnpx vitest run --reporter verbose 2>&1 | head -80
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns default progress when nothing stored 3ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > shows toast notification when SAVE_SELECTION message is received 2ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns stored progress 0ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr] 
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > merges patch with existing progress 0ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > responds to GET_PAGE_INFO with page title, url, and selected text 1ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by default amount 0ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by custom amount 0ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > creates from defaults when nothing stored 0ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > handles SAVE_SELECTION_FULL message with chrome.storage.local 3ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > starts from zero when no stored progress 0ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setVideoPageInfo stores and getVideoPageInfo retrieves 0ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > returns empty array when nothing stored 0ms
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > returns null before install 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setPendingVideoInfo stores and getPendingVideoInfo retrieves 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > getVideoPageInfo returns null when not set 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > sets progress and install timestamp 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > returns null when no status stored 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > removes pending items and updates sync status 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > clearAllExtensionData > clears all stored data 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > deduplicates case-insensitive duplicates 1ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > sorts by length descending 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > returns empty array for empty input 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > removes empty strings 0ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches single word case-insensitively 3ms
+[2026-07-05T06:46:19.644Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > is a no-op when no sync status exists 0ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches with surrounding punctuation 0ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > highlights both when they do not overlap 1ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > prefers longer phrases over shorter words 2ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles regex special characters in words 0ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > does not highlight inside other words 0ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches whole words only 1ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty text 0ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty word list 0ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles Unicode characters 0ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches multiple occurrences of the same word 0ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] 
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] 
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] 
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] 
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches phrases exactly 1ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value 18ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling 7ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly 2ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow 3ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] 
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.643Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > adds and retrieves saved items 0ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] 
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] 
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes 3ms
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] [0m
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] [messaging] Unknown message type: TEST_ACTION
+[2026-07-05T06:46:19.645Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks 24ms
+[2026-07-05T06:46:19.646Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T06:46:19.645Z] [INFO] [stderr] [messaging] Unknown message type: UNKNOWN
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that resolves 52ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr] [0m$ [0mnpx vitest run --reporter verbose 2>&1 | tail -30
+[2026-07-05T06:46:24.648Z] [INFO] [stderr] ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler returning data 0ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws
+[2026-07-05T06:46:24.648Z] [INFO] [stderr] [messaging] Sync handler error for FAIL: Error: sync error
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:115:20[90m)[39m
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:171:20
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:167:13
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at new Promise (<anonymous>)
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]     at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+[2026-07-05T06:46:24.648Z] [INFO] [stderr] 
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 53ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 2ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 1ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 52ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 51ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 1ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 1ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 52ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr] 
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  Test Files  8 passed (8)
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 50ms
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]       Tests  116 passed (116)
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]    Start at  13:46:23
+[2026-07-05T06:46:24.648Z] [INFO] [stderr] [0m
+[2026-07-05T06:46:24.648Z] [INFO] [stderr]    Duration  1.14s (transform 202ms, setup 0ms, collect 580ms, tests 561ms, environment 3.72s, prepare 579ms)
+[2026-07-05T06:46:29.512Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:46:29.512Z] [INFO] [stderr] [✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[2026-07-05T06:46:29.512Z] [INFO] [stderr] [✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[2026-07-05T06:46:29.512Z] [INFO] [stderr] [✓] Fix ArticleCollector to also save LearningEntry for recent entries
+[2026-07-05T06:46:29.512Z] [INFO] [stderr] [✓] Fix background messaging SAVE_SELECTION_FULL handler
+[2026-07-05T06:46:29.512Z] [INFO] [stderr] [✓] Fix QuickAddVocab and VideoHelper to use incrementDailyProgress
+[2026-07-05T06:46:29.512Z] [INFO] [stderr] [✓] Fix content script save paths to persist data properly instead of lost savedItems
+[2026-07-05T06:46:29.512Z] [INFO] [stderr] [✓] Verify all changes build and typecheck correctly
+[2026-07-05T06:46:29.512Z] [INFO] [stderr] [0m
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] ### Changes Made
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] ## Summary
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] - When category is `reading` and text > 50 chars: also saves as `articleEntry` 
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] - Replaced direct `chrome.storage.local.get/set` with `incrementDailyProgress()`
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] **1. `apps/extension/src/popup/components/SaveTextForm.tsx`**
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] Fixed all saving features — build passes (no errors), all 116 tests pass.
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] **2. `apps/extension/src/popup/components/VocabularyCollector.tsx`**
+[2026-07-05T06:46:37.590Z] [INFO] [stdout] - When category is `vocabulary`: also saves to `vocabularyStore` (IndexedDB) so entries appear in Vocabulary Notebook
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - After saving vocabulary, also saves a `LearningEntry` to indexedDB so it shows in "recent entries" on dashboard
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] **3. `apps/extension/src/popup/components/ArticleCollector.tsx`**
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - Replaced direct chrome.storage with `incrementDailyProgress()`
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - Replaced direct chrome.storage with `incrementDailyProgress()`
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] **4. `apps/extension/src/background/messaging.ts`**
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - After saving article, also saves a `LearningEntry` to indexedDB for recent entries
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - Rewrote `MINI_TUTOR_SAVE_RESULT` handler to save to indexedDB instead of `savedItems`
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] **5. `apps/extension/src/content-script/floatingToolbar.ts`**
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - Changed `saveText()` to send `SAVE_SELECTION_FULL` message to background (which saves to indexedDB) instead of saving to invisible `savedItems`
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - Added `SAVE_SELECTION_FULL` handler that saves to indexedDB (`saveEntry` + `saveVocabularyEntry` for vocab) instead of dead `savedItems` key
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - Same fix as floating toolbar
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - Changed `SAVE_SELECTION_FULL` handler to forward to background via messaging (proper indexedDB storage) instead of storing in dead `savedItems`
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] **7. `apps/extension/src/content-script/saveSelectedText.ts`**
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] **8. `apps/extension/src/popup/components/QuickAddVocab.tsx`** and **`VideoHelper.tsx`**
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] **6. `apps/extension/src/content-script/selectionPanel.ts`**
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] ### What was fixed
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] 
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] | Vocab saved via VocabularyCollector not showing in recent entries | Fixed — saves LearningEntry to indexedDB |
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] | Issue | Status |
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] | Articles saved via ArticleCollector not showing in recent entries | Fixed — saves LearningEntry to indexedDB |
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] - Replaced direct `chrome.storage.local.get/set` with `incrementDailyProgress()` for consistency
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] | TypeScript errors in modified source files | Fixed — all clean |
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] | Inconsistent dailyProgress updates (mixed patterns) | Fixed — all components use `incrementDailyProgress()` |
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] | Vocab saved via SaveTextForm not showing in Vocabulary Notebook | Fixed — cross-saves to vocabularyStore |
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] |-------|--------|
+[2026-07-05T06:46:37.591Z] [INFO] [stdout] | Content script saves going to dead `savedItems` key (invisible to popup) | Fixed — all paths now route to indexedDB |
+[2026-07-05T06:46:37.954Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-05T06:46:37.954Z] [INFO] Output:
+Now I have a comprehensive understanding of all saving flows and data paths. Let me set up my task tracking and implement the fixes.
+Now I understand the build process. The background script is bundled by esbuild and CAN import from indexedDB modules. But the content script's indexedDB points to the PAGE's origin, so it must communicate via messaging. Let me implement the fixes.
+Now I see — there's no `SAVE_SELECTION_FULL` handler registered in the background yet. Let me add it, and also update the content script paths.
+Now let me update the floating toolbar's `saveText` method to properly persist data:
+Now update the `saveSelectedText.ts` handler for `SAVE_SELECTION_FULL` to forward to background instead of saving to dead `savedItems`:
+All remaining TypeScript errors are in pre-existing test files, not in the changes I made. Let me run the build:
+## Summary
+
+Fixed all saving features — build passes (no errors), all 116 tests pass.
+
+### Changes Made
+
+**1. `apps/extension/src/popup/components/SaveTextForm.tsx`**
+- When category is `vocabulary`: also saves to `vocabularyStore` (IndexedDB) so entries appear in Vocabulary Notebook
+- When category is `reading` and text > 50 chars: also saves as `articleEntry` 
+- Replaced direct `chrome.storage.local.get/set` with `incrementDailyProgress()`
+
+**2. `apps/extension/src/popup/components/VocabularyCollector.tsx`**
+- After saving vocabulary, also saves a `LearningEntry` to indexedDB so it shows in "recent entries" on dashboard
+- Replaced direct chrome.storage with `incrementDailyProgress()`
+
+**3. `apps/extension/src/popup/components/ArticleCollector.tsx`**
+- After saving article, also saves a `LearningEntry` to indexedDB for recent entries
+- Replaced direct chrome.storage with `incrementDailyProgress()`
+
+**4. `apps/extension/src/background/messaging.ts`**
+- Added `SAVE_SELECTION_FULL` handler that saves to indexedDB (`saveEntry` + `saveVocabularyEntry` for vocab) instead of dead `savedItems` key
+- Rewrote `MINI_TUTOR_SAVE_RESUL
+[2026-07-05T06:46:37.955Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"storage service extension apps/extension/src/services/storage.ts","maxFiles":15}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"SaveForm popup components apps/extension/src/popup/components","maxFiles":15}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/storage/indexedDB.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/types.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/utils/safe-chrome.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/storage/vocabularyStore.ts"}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"popup App.tsx index.tsx apps/extension/src/popup","maxFiles":8}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"background messaging service worker apps/extension/src/background","maxFiles":10}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/ArticleCollector.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/VocabularyCollector.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/VideoHelper.tsx"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script/saveSelectedText.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script/index.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script/selectionPanel.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/content-script/floatingToolbar.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/QuickAddVocab.tsx","includeCode":true}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/background/index.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/background","symbolsOnly":true}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/SavedWordsView.tsx"}
+[0m
+[0m# [0mTodos
+[ ] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[ ] Fix VocabularyCollector to also save LearningEntry for recent entries
+[ ] Fix ArticleCollector to also save LearningEntry for recent entries
+[ ] Fix content script save paths to persist data properly instead of lost savedItems
+[ ] Fix background messaging SAVE_SELECTION_FULL handler
+[ ] Add helper functions to storage service for cross-context saving
+[ ] Verify all changes build correctly
+[0m
+[0m# [0mTodos
+[•] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[ ] Fix VocabularyCollector to also save LearningEntry for recent entries
+[ ] Fix ArticleCollector to also save LearningEntry for recent entries
+[ ] Fix content script save paths to persist data properly instead of lost savedItems
+[ ] Fix background messaging SAVE_SELECTION_FULL handler
+[ ] Add helper functions to storage service for cross-context saving
+[ ] Verify all changes build correctly
+[0m
+[0m→ [0mRead apps/extension/src/popup/components/SaveTextForm.tsx
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/SaveTextForm.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+@@ -1,9 +1,12 @@
+ import { useState, useEffect } from 'react'
+ import { entryFormSchema, entrySchema } from '../../types'
+-import type { EntryFormData } from '../../types'
++import type { EntryFormData, LearningEntry } from '../../types'
+ import { SAVE_CATEGORIES, CATEGORY_LABELS, CATEGORY_COLORS, CATEGORY_ICONS, SKILL_OPTIONS, SKILL_LABELS } from '../../types'
+ import { saveEntry } from '../../storage/indexedDB'
++import { incrementDailyProgress } from '../../services/storage'
++import { saveVocabularyEntry, extensionVocabSchema } from '../../storage/vocabularyStore'
++import { saveArticleEntry, extensionArticleSchema } from '../../storage/articleStore'
+ 
+ interface SaveTextFormProps {
+   onSaved: () => void
+   onCancel: () => void
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/SaveTextForm.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+@@ -120,17 +120,63 @@
+   })
+ 
+   await saveEntry(entry)
+ 
+-  chrome.storage.local.get(['dailyProgress'], (result) => {
+-    const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+-    const updated = {
+-      ...current,
+-      wordsAdded: current.wordsAdded + (form.category === 'vocabulary' ? 1 : 0),
++  if (form.category === 'vocabulary') {
++    try {
++      const vocabEntry = extensionVocabSchema.parse({
++        id: crypto.randomUUID(),
++        word: form.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
++        sourceSentence: form.text,
++        pageTitle: pageInfo.title,
++        pageUrl: pageInfo.url,
++        topic: form.topic,
++        personalNote: form.personalNote,
++        tags,
++        meaning: '',
++        partOfSpeech: '',
++        pronunciation: '',
++        difficulty: form.difficulty,
++        status: 'new',
++        addedToReview: true,
++        reviewId: '',
++        createdAt: now,
++        updatedAt: now,
++      })
++      await saveVocabularyEntry(vocabEntry)
++    } catch {
++      /* non-critical: vocabulary entry saved as learning entry already */
+     }
+-    chrome.storage.local.set({ dailyProgress: updated })
+-  })
++  }
+ 
++  if (form.category === 'reading' && form.text.trim().length > 50) {
++    try {
++      const articleEntry = extensionArticleSchema.parse({
++        id: crypto.randomUUID(),
++        title: pageInfo.title || form.text.slice(0, 80),
++        url: pageInfo.url,
++        content: form.text,
++        selectedParagraph: form.text,
++        topic: form.topic,
++        tags,
++        personalNote: form.personalNote,
++        isReadingPractice: true,
++        difficulty: form.difficulty,
++        status: 'new',
++        createdAt: now,
++        updatedAt: now,
++      })
++      await saveArticleEntry(articleEntry)
++    } catch {
++      /* non-critical: article entry saved as learning entry already */
++    }
++  }
++
++  await incrementDailyProgress(
++    form.category === 'vocabulary' ? 'wordsAdded' : 'notesAdded',
++    1,
++  )
++
+   setSaved(true)
+   setTimeout(() => onSaved(), 1200)
+ } catch (err) {
+   setErrors({ submit: 'Failed to save. Please try again.' })
+
+[0m
+[0m# [0mTodos
+[✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[•] Fix VocabularyCollector to also save LearningEntry for recent entries
+[ ] Fix ArticleCollector to also save LearningEntry for recent entries
+[ ] Fix content script save paths to persist data properly instead of lost savedItems
+[ ] Fix background messaging SAVE_SELECTION_FULL handler
+[ ] Add helper functions to storage service for cross-context saving
+[ ] Verify all changes build correctly
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/VocabularyCollector.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+@@ -2,8 +2,11 @@
+ import { extensionVocabSchema } from '../../storage/vocabularyStore'
+ import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
+ import { saveVocabularyEntry } from '../../storage/vocabularyStore'
+ import { findWord } from '../services/popupDataService'
++import { saveEntry } from '../../storage/indexedDB'
++import { incrementDailyProgress } from '../../services/storage'
++import type { LearningEntry } from '../../types'
+ 
+ function speakWord(word: string) {
+   if ('speechSynthesis' in window) {
+     window.speechSynthesis.cancel()
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/VocabularyCollector.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VocabularyCollector.tsx
+@@ -277,18 +277,31 @@
+   })
+ 
+   await saveVocabularyEntry(entry)
+ 
+-  chrome.storage.local.get(['dailyProgress'], (result) => {
+-    const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+-    chrome.storage.local.set({
+-      dailyProgress: {
+-        ...current,
+-        wordsAdded: current.wordsAdded + 1,
+-      },
+-    })
+-  })
++  try {
++    const learningEntry: LearningEntry = {
++      id: crypto.randomUUID(),
++      text: wordTrimmed,
++      category: 'vocabulary',
++      topic: topic.trim() || 'general',
++      skill: 'vocabulary',
++      difficulty,
++      tags,
++      personalNote: personalNote.trim(),
++      pageTitle: pageInfo.title,
++      pageUrl: pageInfo.url,
++      status: 'new',
++      createdAt: now,
++      updatedAt: now,
++    }
++    await saveEntry(learningEntry)
++  } catch {
++    /* non-critical */
++  }
+ 
++  await incrementDailyProgress('wordsAdded', 1)
++
+   setSaved(true)
+   setTimeout(() => onSaved(), 1200)
+ } catch {
+   setErrors({ submit: 'Failed to save. Please try again.' })
+
+[0m
+[0m# [0mTodos
+[✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[•] Fix ArticleCollector to also save LearningEntry for recent entries
+[ ] Fix content script save paths to persist data properly instead of lost savedItems
+[ ] Fix background messaging SAVE_SELECTION_FULL handler
+[ ] Add helper functions to storage service for cross-context saving
+[ ] Verify all changes build correctly
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/ArticleCollector.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+@@ -1,7 +1,10 @@
+ import { useState, useEffect, useCallback } from 'react'
+ import { extensionArticleSchema, saveArticleEntry, IELTS_TOPICS } from '../../storage/articleStore'
+ import type { ExtensionArticleEntry, ArticleQuestion } from '../../storage/articleStore'
++import { saveEntry } from '../../storage/indexedDB'
++import { incrementDailyProgress } from '../../services/storage'
++import type { LearningEntry } from '../../types'
+ 
+ interface ArticleCollectorProps {
+   onSaved: () => void
+   onCancel: () => void
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/ArticleCollector.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ArticleCollector.tsx
+@@ -228,18 +228,31 @@
+   })
+ 
+   await saveArticleEntry(entry)
+ 
+-  chrome.storage.local.get(['dailyProgress'], (result) => {
+-    const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+-    chrome.storage.local.set({
+-      dailyProgress: {
+-        ...current,
+-        articlesSaved: current.articlesSaved + 1,
+-      },
+-    })
+-  })
++  try {
++    const learningEntry: LearningEntry = {
++      id: crypto.randomUUID(),
++      text: titleTrimmed,
++      category: 'reading',
++      topic: topic.trim() || 'general',
++      skill: 'reading',
++      difficulty,
++      tags,
++      personalNote: personalNote.trim(),
++      pageTitle: pageInfo.title,
++      pageUrl: pageInfo.url,
++      status: 'new',
++      createdAt: now,
++      updatedAt: now,
++    }
++    await saveEntry(learningEntry)
++  } catch {
++    /* non-critical */
++  }
+ 
++  await incrementDailyProgress('articlesSaved', 1)
++
+   setSaved(true)
+   setTimeout(() => onSaved(), 1200)
+ } catch {
+   setErrors({ submit: 'Failed to save. Please try again.' })
+
+[0m
+[0m# [0mTodos
+[✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[✓] Fix ArticleCollector to also save LearningEntry for recent entries
+[•] Fix content script save paths to persist data properly instead of lost savedItems
+[ ] Fix background messaging SAVE_SELECTION_FULL handler
+[ ] Add helper functions to storage service for cross-context saving
+[ ] Verify all changes build correctly
+[0m
+[0m$ [0mls apps/extension/
+dist
+manifest.json
+node_modules
+options.html
+package.json
+popup.html
+public
+scripts
+src
+tsconfig.json
+vite.config.ts
+vitest.config.ts
+[0m
+[0m✱ [0mGlob "apps/extension/vite.config.*"[90m 1 match[0m
+[0m✱ [0mGlob "apps/extension/tsconfig*.json"[90m 1 match[0m
+[0m✱ [0mGlob "apps/extension/webpack.config.*"[90m 0 matches[0m
+[0m→ [0mRead apps/extension/vite.config.ts
+[0m→ [0mRead apps/extension/tsconfig.json
+[0m→ [0mRead apps/extension/package.json
+[0m
+[0m$ [0mls apps/extension/scripts/
+build.mjs
+package.mjs
+[0m
+[0m→ [0mRead apps/extension/scripts/build.mjs
+[0m
+[0m← [0mEdit apps/extension/src/background/messaging.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+@@ -1,12 +1,14 @@
+-import type { SaveCategory } from '../types'
++import type { SaveCategory, LearningEntry } from '../types'
+ import type { SharedSettingsPatch } from '@ielts/settings'
+ import {
+   updateDailyProgress,
+   setVideoPageInfo,
+   setPendingVideoInfo,
+-  addSavedItem,
++  incrementDailyProgress,
+ } from '../services/storage'
++import { saveEntry } from '../storage/indexedDB'
++import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
+ 
+ export interface SaveItemPayload {
+   category: SaveCategory
+   text: string
+
+[0m
+[0m← [0mEdit apps/extension/src/background/messaging.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+@@ -179,9 +179,30 @@
+ })
+ 
+ registerHandler('MINI_TUTOR_SAVE_RESULT', async (_msg) => {
+   const msg = _msg as ExtensionMessage<'MINI_TUTOR_SAVE_RESULT'>
+-  await addSavedItem(msg.payload as unknown as Record<string, unknown>)
++  const now = new Date().toISOString()
++  try {
++    const learningEntry: LearningEntry = {
++      id: msg.payload.id,
++      text: msg.payload.text,
++      category: msg.payload.category,
++      topic: 'general',
++      skill: 'vocabulary',
++      difficulty: '',
++      tags: [],
++      personalNote: '',
++      pageTitle: msg.payload.pageTitle || '',
++      pageUrl: msg.payload.pageUrl || '',
++      status: 'new',
++      createdAt: now,
++      updatedAt: now,
++    }
++    await saveEntry(learningEntry)
++    await incrementDailyProgress('wordsAdded', 1)
++  } catch {
++    /* non-critical */
++  }
+ })
+ 
+ registerHandler('MINI_TUTOR_OPEN_PAGE', async (_msg, _sender) => {
+   const msg = _msg as ExtensionMessage<'MINI_TUTOR_OPEN_PAGE'>
+
+[0m
+[0m✗ [0mEdit apps/extension/src/background/messaging.ts failed
+[91m[1mError: [0mCould not find oldString in the file. It must match exactly, including whitespace, indentation, and line endings.
+[0m→ [0mRead apps/extension/src/background/messaging.ts[90m [offset=175, limit=30][0m
+[0m✱ [0mGrep "SAVE_SELECTION_FULL"[90m in apps/extension/src/background/messaging.ts · 2 matches[0m
+[0m✱ [0mGrep "registerHandler.*SAVE_SELECTION_FULL|addSavedItem"[90m in apps/extension/src · 5 matches[0m
+[0m
+[0m← [0mEdit apps/extension/src/background/messaging.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+@@ -203,8 +203,62 @@
+     /* non-critical */
+   }
+ })
+ 
++registerHandler('SAVE_SELECTION_FULL', async (_msg) => {
++  const msg = _msg as ExtensionMessage<'SAVE_SELECTION_FULL'>
++  const now = new Date().toISOString()
++  try {
++    const entry: LearningEntry = {
++      id: crypto.randomUUID(),
++      text: msg.payload.text,
++      category: msg.payload.category,
++      topic: msg.payload.topic || 'general',
++      skill: msg.payload.skill || 'vocabulary',
++      difficulty: msg.payload.difficulty || '',
++      tags: msg.payload.tags || [],
++      personalNote: msg.payload.note || '',
++      pageTitle: msg.payload.pageTitle,
++      pageUrl: msg.payload.pageUrl,
++      status: 'new',
++      createdAt: now,
++      updatedAt: now,
++    }
++    await saveEntry(entry)
++
++    if (msg.payload.category === 'vocabulary') {
++      try {
++        const vocabEntry = extensionVocabSchema.parse({
++          id: crypto.randomUUID(),
++          word: msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
++          sourceSentence: msg.payload.text,
++          pageTitle: msg.payload.pageTitle,
++          pageUrl: msg.payload.pageUrl,
++          topic: msg.payload.topic || 'general',
++          personalNote: msg.payload.note || '',
++          tags: msg.payload.tags || [],
++          meaning: '',
++          partOfSpeech: '',
++          pronunciation: '',
++          difficulty: msg.payload.difficulty || '',
++          status: 'new',
++          addedToReview: true,
++          reviewId: '',
++          createdAt: now,
++          updatedAt: now,
++        })
++        await saveVocabularyEntry(vocabEntry)
++      } catch {
++        /* non-critical */
++      }
++    }
++
++    await incrementDailyProgress('wordsAdded', msg.payload.category === 'vocabulary' ? 1 : 0)
++  } catch (err) {
++    console.error('[messaging] SAVE_SELECTION_FULL handler error:', err)
++  }
++})
++
+ registerHandler('MINI_TUTOR_OPEN_PAGE', async (_msg, _sender) => {
+   const msg = _msg as ExtensionMessage<'MINI_TUTOR_OPEN_PAGE'>
+   const { action, text } = msg.payload
+   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+
+[0m
+[0m→ [0mRead apps/extension/src/background/messaging.ts[90m [offset=175][0m
+[0m
+[0m← [0mEdit apps/extension/src/content-script/floatingToolbar.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+@@ -300,35 +300,19 @@
+   }
+ }
+ 
+ private async saveText(text: string, category: SaveCategory): Promise<void> {
+-  const entry = {
+-    id: crypto.randomUUID(),
+-    text,
+-    category,
+-    pageTitle: document.title,
+-    pageUrl: window.location.href,
+-    savedAt: new Date().toISOString(),
+-    note: '',
+-    topic: '',
+-    difficulty: '',
+-    tags: [] as string[],
+-  }
++  this.toast(`Saved as ${category}`)
+ 
+-  const result = await safeStorageGet<any[]>('savedItems')
+-  const items = result.savedItems || []
+-  items.unshift(entry)
+-  await safeStorageSet({ savedItems: items })
+-
+   safeSendMessage({
+-    type: 'UPDATE_PROGRESS',
++    type: 'SAVE_SELECTION_FULL',
+     payload: {
+-      wordsAdded: category === 'vocabulary' ? 1 : 0,
+-      notesAdded: category === 'mistake' ? 1 : 0,
++      text,
++      category,
++      pageTitle: document.title,
++      pageUrl: window.location.href,
+     },
+   })
+-
+-  this.toast(`Saved as ${category}`)
+ }
+ 
+ private actionToAiType: Record<string, AiExplainType> = {
+   explain: 'simple',
+
+[0m
+[0m← [0mEdit apps/extension/src/content-script/selectionPanel.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+@@ -305,45 +305,19 @@
+   }
+ }
+ 
+ async function saveText(text: string, category: SaveCategory): Promise<void> {
+-  const entry = {
+-    id: crypto.randomUUID(),
+-    text,
+-    category,
+-    pageTitle: document.title,
+-    pageUrl: window.location.href,
+-    savedAt: new Date().toISOString(),
+-    note: '',
+-    topic: '',
+-    difficulty: '',
+-    tags: [] as string[],
+-  }
++  showToast(`Saved as ${category}`)
+ 
+-  const result = await safeStorageGet<any[]>('savedItems')
+-  const items = result.savedItems || []
+-  items.unshift(entry)
+-  await safeStorageSet({ savedItems: items })
+-
+   safeSendMessage({
+-    type: 'UPDATE_PROGRESS',
++    type: 'SAVE_SELECTION_FULL',
+     payload: {
+-      wordsAdded: category === 'vocabulary' ? 1 : 0,
+-      notesAdded: category === 'mistake' ? 1 : 0,
++      text,
++      category,
++      pageTitle: document.title,
++      pageUrl: window.location.href,
+     },
+   })
+-
+-  if (category === 'vocabulary') {
+-    try {
+-      window.postMessage({
+-        source: 'ielts-extension',
+-        action: 'VOCAB_SAVED',
+-        data: entry,
+-      }, window.location.origin)
+-    } catch { /* ignore */ }
+-  }
+-
+-  showToast(`Saved as ${category}`)
+ }
+ 
+ function triggerAI(action: ToolbarAction, text: string): void {
+   const aiType = ACTION_TO_AI_TYPE[action.id]
+
+[0m
+[0m← [0mEdit apps/extension/src/content-script/saveSelectedText.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+@@ -1,10 +1,6 @@
+ import type { SaveCategory } from '../types'
+-import {
+-  safeStorageGet,
+-  safeStorageSet,
+-  safeSendMessage,
+-} from '../utils/safe-chrome'
++import { safeSendMessage } from '../utils/safe-chrome'
+ 
+ interface SaveSelectionPayload {
+   text: string
+   category: SaveCategory
+
+[0m
+[0m← [0mEdit apps/extension/src/content-script/saveSelectedText.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+@@ -91,45 +91,25 @@
+   }
+ 
+   if (message.type === 'SAVE_SELECTION_FULL') {
+     const payload = message.payload as SaveSelectionPayload
+-    const entry = {
+-      id: crypto.randomUUID(),
+-      text: payload.text,
+-      category: payload.category,
+-      pageTitle: payload.pageTitle,
+-      pageUrl: payload.pageUrl,
+-      savedAt: new Date().toISOString(),
+-      note: payload.note || '',
+-      topic: payload.topic || '',
+-      difficulty: payload.difficulty || '',
+-      tags: payload.tags || [],
+-    }
+-    safeStorageGet<any[]>('savedItems').then((result) => {
+-      const items = result.savedItems || []
+-      items.unshift(entry)
+-      safeStorageSet({ savedItems: items })
+ 
+-      safeSendMessage({
+-        type: 'UPDATE_PROGRESS',
+-        payload: {
+-          wordsAdded: payload.category === 'vocabulary' ? 1 : 0,
+-          notesAdded: payload.category === 'mistake' ? 1 : 0,
+-        },
+-      })
++    showToast(`Saved as ${payload.category}`)
++
++    safeSendMessage({
++      type: 'SAVE_SELECTION_FULL',
++      payload: {
++        text: payload.text,
++        category: payload.category,
++        pageTitle: payload.pageTitle,
++        pageUrl: payload.pageUrl,
++        topic: payload.topic,
++        difficulty: payload.difficulty,
++        note: payload.note,
++        tags: payload.tags,
++      },
+     })
+ 
+-    if (payload.category === 'vocabulary') {
+-      try {
+-        window.postMessage({
+-          source: 'ielts-extension',
+-          action: 'VOCAB_SAVED',
+-          data: entry,
+-        }, window.location.origin)
+-      } catch { /* ignore */ }
+-    }
+-
+-    showToast(`Saved as ${payload.category}`)
+     try { sendResponse({ success: true }) } catch { /* ignore */ }
+     return false
+   }
+ })
+
+[0m
+[0m→ [0mRead apps/extension/src/content-script/saveSelectedText.ts
+[0m
+[0m← [0mEdit apps/extension/src/content-script/saveSelectedText.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/saveSelectedText.ts
+@@ -1,6 +1,10 @@
+ import type { SaveCategory } from '../types'
+-import { safeSendMessage } from '../utils/safe-chrome'
++import {
++  safeStorageGet,
++  safeStorageSet,
++  safeSendMessage,
++} from '../utils/safe-chrome'
+ 
+ interface SaveSelectionPayload {
+   text: string
+   category: SaveCategory
+
+[0m
+[0m# [0mTodos
+[✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[✓] Fix ArticleCollector to also save LearningEntry for recent entries
+[✓] Fix content script save paths to persist data properly instead of lost savedItems
+[✓] Fix background messaging SAVE_SELECTION_FULL handler
+[•] Fix QuickAddVocab to use incrementDailyProgress for consistency
+[ ] Verify all changes build correctly
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/QuickAddVocab.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+@@ -1,8 +1,9 @@
+ import { useState, useEffect, useCallback } from 'react'
+ import { extensionVocabSchema } from '../../storage/vocabularyStore'
+ import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
+ import { saveVocabularyEntry } from '../../storage/vocabularyStore'
++import { incrementDailyProgress } from '../../services/storage'
+ 
+ interface QuickAddVocabProps {
+   onSaved: () => void
+   onCancel: () => void
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/QuickAddVocab.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/QuickAddVocab.tsx
+@@ -103,22 +103,10 @@
+     updatedAt: now,
+   })
+ 
+   await saveVocabularyEntry(entry)
++  await incrementDailyProgress('wordsAdded', 1)
+ 
+-  chrome.storage.local.get(['dailyProgress'], (result) => {
+-    const current = result.dailyProgress || {
+-      wordsAdded: 0,
+-      notesAdded: 0,
+-      articlesSaved: 0,
+-      reviewDue: 0,
+-      streak: 0,
+-    }
+-    chrome.storage.local.set({
+-      dailyProgress: { ...current, wordsAdded: current.wordsAdded + 1 },
+-    })
+-  })
+-
+   setSaved(true)
+   setTimeout(() => onSaved(), 1200)
+ } catch {
+   setErrors({ submit: 'Failed to save. Please try again.' })
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/VideoHelper.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+@@ -11,8 +11,9 @@
+   videoEntrySchema,
+   type VideoEntry,
+ } from '../../storage/videoStore'
+ import { saveEntry as saveLearningEntry } from '../../storage/indexedDB'
++import { incrementDailyProgress } from '../../services/storage'
+ import type { VideoQuestion, VideoVocabItem, ShadowingItem } from '../../storage/videoStore'
+ import type { LearningEntry } from '../../types'
+ 
+ interface VideoHelperProps {
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/VideoHelper.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/VideoHelper.tsx
+@@ -281,18 +281,10 @@
+       await saveVocabularyEntry(vocabEntry)
+     }
+   }
+ 
+-  chrome.storage.local.get(['dailyProgress'], (result) => {
+-    const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+-    chrome.storage.local.set({
+-      dailyProgress: {
+-        ...current,
+-        wordsAdded: current.wordsAdded + (vocabData?.length || 0),
+-        articlesSaved: current.articlesSaved + 1,
+-      },
+-    })
+-  })
++  await incrementDailyProgress('wordsAdded', vocabData?.length || 0)
++  await incrementDailyProgress('articlesSaved', 1)
+ 
+   setSaved(true)
+   setTimeout(() => onSaved(), 1200)
+ } catch {
+
+[0m
+[0m# [0mTodos
+[✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[✓] Fix ArticleCollector to also save LearningEntry for recent entries
+[✓] Fix content script save paths to persist data properly instead of lost savedItems
+[✓] Fix background messaging SAVE_SELECTION_FULL handler
+[✓] Fix QuickAddVocab and VideoHelper to use incrementDailyProgress
+[•] Verify all changes build and typecheck correctly
+[0m
+[0m$ [0mnpx tsc --noEmit 2>&1
+src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+  Type 'unknown' is not assignable to type 'SyncStatus'.
+src/background/messaging.ts(216,9): error TS2322: Type 'string' is not assignable to type '"vocabulary" | "grammar" | "reading" | "writing" | "speaking" | "listening" | "general"'.
+src/background/messaging.ts(217,9): error TS2322: Type 'string' is not assignable to type '"" | "easy" | "medium" | "hard"'.
+src/content-script/floatingToolbar.ts(6,3): error TS6133: 'safeStorageGet' is declared but its value is never read.
+src/content-script/floatingToolbar.ts(7,3): error TS6133: 'safeStorageSet' is declared but its value is never read.
+src/content-script/selectionPanel.ts(11,3): error TS6133: 'safeStorageGet' is declared but its value is never read.
+src/content-script/selectionPanel.ts(12,3): error TS6133: 'safeStorageSet' is declared but its value is never read.
+src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+src/popup/components/SaveTextForm.tsx(3,30): error TS6196: 'LearningEntry' is declared but never used.
+[0m
+[0m← [0mEdit apps/extension/src/background/messaging.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+@@ -212,10 +212,10 @@
+ id: crypto.randomUUID(),
+ text: msg.payload.text,
+ category: msg.payload.category,
+ topic: msg.payload.topic || 'general',
+-skill: msg.payload.skill || 'vocabulary',
+-difficulty: msg.payload.difficulty || '',
++skill: (msg.payload.skill || 'general') as LearningEntry['skill'],
++difficulty: (msg.payload.difficulty || '') as LearningEntry['difficulty'],
+ tags: msg.payload.tags || [],
+ personalNote: msg.payload.note || '',
+ pageTitle: msg.payload.pageTitle,
+ pageUrl: msg.payload.pageUrl,
+
+[0m
+[0m← [0mEdit apps/extension/src/content-script/floatingToolbar.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/floatingToolbar.ts
+@@ -2,10 +2,8 @@
+ import type { AiExplainType } from '@ielts/ai'
+ import { showExplainPanel } from './aiExplain'
+ import { injectContentStyles } from './sharedStyles'
+ import {
+-  safeStorageGet,
+-  safeStorageSet,
+   safeSyncGet,
+   safeSendMessage,
+ } from '../utils/safe-chrome'
+ 
+
+[0m
+[0m← [0mEdit apps/extension/src/content-script/selectionPanel.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/selectionPanel.ts
+@@ -7,10 +7,8 @@
+ } from '@ielts/ai'
+ import { showExplainPanel } from './aiExplain'
+ import { injectContentStyles } from './sharedStyles'
+ import {
+-  safeStorageGet,
+-  safeStorageSet,
+   safeSyncGet,
+   safeSendMessage,
+   safeFetchProviderConfig,
+ } from '../utils/safe-chrome'
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/SaveTextForm.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/SaveTextForm.tsx
+@@ -1,7 +1,7 @@
+ import { useState, useEffect } from 'react'
+ import { entryFormSchema, entrySchema } from '../../types'
+-import type { EntryFormData, LearningEntry } from '../../types'
++import type { EntryFormData } from '../../types'
+ import { SAVE_CATEGORIES, CATEGORY_LABELS, CATEGORY_COLORS, CATEGORY_ICONS, SKILL_OPTIONS, SKILL_LABELS } from '../../types'
+ import { saveEntry } from '../../storage/indexedDB'
+ import { incrementDailyProgress } from '../../services/storage'
+ import { saveVocabularyEntry, extensionVocabSchema } from '../../storage/vocabularyStore'
+
+[0m
+[0m$ [0mnpx tsc --noEmit 2>&1
+src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+  Type 'unknown' is not assignable to type 'SyncStatus'.
+src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+[0m
+[0m$ [0mnode scripts/build.mjs 2>&1
+vite v6.4.3 building for production...
+transforming...
+✓ 183 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/popup.html                 0.61 kB │ gzip:  0.35 kB
+dist/options.html               0.63 kB │ gzip:  0.36 kB
+dist/assets/options.css         2.00 kB │ gzip:  0.78 kB
+dist/assets/popup.css           2.40 kB │ gzip:  0.93 kB
+dist/assets/options.js         13.11 kB │ gzip:  4.27 kB
+dist/assets/popup.js          175.67 kB │ gzip: 42.47 kB
+dist/assets/chunk-schemas.js  265.13 kB │ gzip: 80.03 kB
+✓ built in 563ms
+✓ Extension built successfully
+[0m
+[0m$ [0mls -la dist/*.js dist/*.html 2>&1
+-rw-r--r--@ 1 phamthanhhung  staff  629211 Jul  5 13:46 dist/background.js
+-rw-r--r--@ 1 phamthanhhung  staff  637427 Jul  5 13:46 dist/content.js
+-rw-r--r--@ 1 phamthanhhung  staff     630 Jul  5 13:46 dist/options.html
+-rw-r--r--@ 1 phamthanhhung  staff     613 Jul  5 13:46 dist/popup.html
+[0m
+[0m$ [0mnpx vitest run --reporter verbose 2>&1 | head -80
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension
+
+ ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > shows toast notification when SAVE_SELECTION message is received 2ms
+ ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > handles SAVE_SELECTION_FULL message with chrome.storage.local 3ms
+ ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > responds to GET_PAGE_INFO with page title, url, and selected text 1ms
+ ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns default progress when nothing stored 3ms
+ ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns stored progress 0ms
+ ✓ src/__tests__/storageService.test.ts > updateDailyProgress > merges patch with existing progress 0ms
+ ✓ src/__tests__/storageService.test.ts > updateDailyProgress > creates from defaults when nothing stored 0ms
+ ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by default amount 0ms
+ ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by custom amount 0ms
+ ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > starts from zero when no stored progress 0ms
+ ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > returns empty array when nothing stored 0ms
+ ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > adds and retrieves saved items 0ms
+ ✓ src/__tests__/storageService.test.ts > video page info > setVideoPageInfo stores and getVideoPageInfo retrieves 0ms
+ ✓ src/__tests__/storageService.test.ts > video page info > getVideoPageInfo returns null when not set 0ms
+ ✓ src/__tests__/storageService.test.ts > video page info > setPendingVideoInfo stores and getPendingVideoInfo retrieves 0ms
+ ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > returns null before install 0ms
+ ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > sets progress and install timestamp 0ms
+ ✓ src/__tests__/storageService.test.ts > clearAllExtensionData > clears all stored data 0ms
+ ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > returns null when no status stored 0ms
+ ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > removes pending items and updates sync status 0ms
+ ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > is a no-op when no sync status exists 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > deduplicates case-insensitive duplicates 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > removes empty strings 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > sorts by length descending 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > returns empty array for empty input 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches single word case-insensitively 3ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches whole words only 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches phrases exactly 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches with surrounding punctuation 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > prefers longer phrases over shorter words 2ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > highlights both when they do not overlap 1ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles regex special characters in words 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > does not highlight inside other words 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches multiple occurrences of the same word 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty text 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty word list 0ms
+ ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles Unicode characters 0ms
+stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+ ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value 18ms
+ ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling 7ms
+ ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly 2ms
+ ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow 3ms
+stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+The current testing environment is not configured to support act(...)
+
+stderr | src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler
+[messaging] Unknown message type: TEST_ACTION
+
+ ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks 24ms
+ ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes 3ms
+stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types
+[messaging] Unknown message type: UNKNOWN
+[0m
+[0m$ [0mnpx vitest run --reporter verbose 2>&1 | tail -30
+✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler returning data 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that resolves 52ms
+stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws
+[messaging] Sync handler error for FAIL: Error: sync error
+    at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:167:13
+    at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:115:20[90m)[39m
+    at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:171:20
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+    at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+    at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+    at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 53ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 2ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 1ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 52ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 51ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 1ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 1ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 52ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 50ms
+
+ Test Files  8 passed (8)
+      Tests  116 passed (116)
+   Start at  13:46:23
+   Duration  1.14s (transform 202ms, setup 0ms, collect 580ms, tests 561ms, environment 3.72s, prepare 579ms)
+[0m
+[0m# [0mTodos
+[✓] Fix SaveTextForm to cross-save vocabulary/reading to respective IndexedDB stores and use incrementDailyProgress
+[✓] Fix VocabularyCollector to also save LearningEntry for recent entries
+[✓] Fix ArticleCollector to also save LearningEntry for recent entries
+[✓] Fix content script save paths to persist data properly instead of lost savedItems
+[✓] Fix background messaging SAVE_SELECTION_FULL handler
+[✓] Fix QuickAddVocab and VideoHelper to use incrementDailyProgress
+[✓] Verify all changes build and typecheck correctly
+[0m
+[2026-07-05T06:46:37.955Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-05T06:46:37.961Z] [INFO] Task completed successfully

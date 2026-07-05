@@ -1,0 +1,959 @@
+{
+  "title": "Plan Proactive AI Tutor Feature for IELTS Journey",
+  "summary": "Create a detailed implementation plan for the Proactive AI Tutor feature including data integration, message generation, UI integration, and user settings.",
+  "tasks": [
+    {
+      "title": "Analyze existing AI Tutor and learning data modules",
+      "description": "Review current AI Tutor implementation in packages/ai-tutor and learning data sources in packages/learning-engine and packages/storage. Document data models for user profile, study plan, vocabulary, mistakes, progress, and activity logs. Identify APIs and data stores to be used for proactive message triggers.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Documented data models and APIs for user profile, study plan, vocabulary, mistakes, progress, and activity",
+        "List of data sources and their access methods for proactive message generation"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A comprehensive analysis document describing all relevant data sources and APIs for the proactive AI Tutor feature.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/feature-analysis/proactive-ai-tutor-data-sources.md",
+          "description": "Analysis document of data sources and APIs for proactive AI Tutor",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "Project source code and existing AI Tutor and learning data modules",
+      "targetFiles": [
+        "docs/feature-analysis/proactive-ai-tutor-data-sources.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "docs/feature-analysis/proactive-ai-tutor-data-sources.md file exists"
+      ],
+      "verificationCommand": "ls docs/feature-analysis/proactive-ai-tutor-data-sources.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundational understanding of data needed for proactive message generation"
+    },
+    {
+      "title": "Design Proactive Message Generation Engine",
+      "description": "Design the logic and rules for generating proactive messages based on user data such as study plan, progress, mistakes, vocabulary, streaks, and inactivity. Define message categories, triggers, priorities, and example message templates. Specify how to avoid message spamming and ensure contextual relevance.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Analyze existing AI Tutor and learning data modules"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Detailed design document with message categories, triggers, and templates",
+        "Rules for message frequency and user annoyance prevention",
+        "Mapping of user data inputs to message triggers"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A design specification document for the proactive message generation engine with clear rules and examples.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/proactive-message-engine.md",
+          "description": "Design document for proactive message generation engine",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Data analysis document from previous task",
+      "targetFiles": [
+        "docs/design/proactive-message-engine.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "docs/design/proactive-message-engine.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/proactive-message-engine.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Defines the core logic for proactive AI Tutor messaging"
+    },
+    {
+      "title": "Design User Settings and Configuration UI for Proactive AI Tutor",
+      "description": "Design the user interface and data model for configuring proactive AI Tutor settings including enabling/disabling, reminder frequency, tutor tone, preferred study time, notification channels, weak skill priority, automation level, and exercise suggestion preferences. Specify UI components and integration points in settings pages.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design Proactive Message Generation Engine"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "UI mockups or wireframes for settings page additions",
+        "Data model schema for storing user settings",
+        "Integration plan for settings persistence and retrieval"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A design document and UI mockups for proactive AI Tutor user settings and configuration.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/proactive-ai-tutor-settings.md",
+          "description": "Design document and UI mockups for proactive AI Tutor settings",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Proactive message engine design document",
+      "targetFiles": [
+        "docs/design/proactive-ai-tutor-settings.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "docs/design/proactive-ai-tutor-settings.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/proactive-ai-tutor-settings.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables user customization of proactive AI Tutor behavior"
+    },
+    {
+      "title": "Design UI Integration Points for Proactive AI Tutor Messages",
+      "description": "Design how and where proactive AI Tutor messages will be displayed in the app: dashboard, header chat icon, messenger popup, extension popup, text selection popup, after lesson completion, after mistakes, inactivity alerts, and weekly progress reviews. Specify UI components, message display logic, and user interaction patterns.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design Proactive Message Generation Engine"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "UI design document detailing all integration points",
+        "Component hierarchy and interaction flow diagrams",
+        "Accessibility and user experience considerations"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A comprehensive UI integration design document for proactive AI Tutor messages.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/design/proactive-ai-tutor-ui-integration.md",
+          "description": "UI integration design for proactive AI Tutor messages",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "design",
+      "actionType": "generate",
+      "inputContext": "Proactive message engine design document",
+      "targetFiles": [
+        "docs/design/proactive-ai-tutor-ui-integration.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "docs/design/proactive-ai-tutor-ui-integration.md file exists"
+      ],
+      "verificationCommand": "ls docs/design/proactive-ai-tutor-ui-integration.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Defines how proactive messages appear and interact with users"
+    },
+    {
+      "title": "Create Proactive Message Data Model and Storage Schema",
+      "description": "Define TypeScript types and IndexedDB/localStorage schemas for storing proactive messages, message states (read, dismissed, snoozed), and user settings. Implement data access services for CRUD operations on proactive messages and settings.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design User Settings and Configuration UI for Proactive AI Tutor"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "TypeScript interfaces for messages and settings",
+        "Storage schema definitions for IndexedDB and localStorage",
+        "Data service modules with unit tests for message and settings CRUD"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Robust data model and storage layer for proactive AI Tutor messages and settings with passing tests.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "packages/ai-tutor/src/types/proactiveMessage.ts",
+          "description": "TypeScript types for proactive messages and settings",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ai-tutor/src/services/proactiveMessageStorage.ts",
+          "description": "Data access service for proactive messages and settings",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/tests/proactiveMessageStorage.test.ts",
+          "description": "Unit tests for proactive message storage service",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "User settings design document",
+      "targetFiles": [
+        "packages/ai-tutor/src/types/proactiveMessage.ts",
+        "packages/ai-tutor/src/services/proactiveMessageStorage.ts",
+        "packages/ai-tutor/src/tests/proactiveMessageStorage.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "unit tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=proactiveMessageStorage",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides persistent storage for proactive messages and user preferences"
+    },
+    {
+      "title": "Implement Proactive Message Generation Engine Module",
+      "description": "Implement the proactive message generation engine as a service module in packages/ai-tutor. Use user data inputs to generate contextual messages with categories, priorities, and actions. Include logic to prevent message spamming and respect user settings like quiet hours and max messages per day.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Proactive Message Data Model and Storage Schema",
+        "Design Proactive Message Generation Engine"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Service module generates messages based on input data",
+        "Respects user settings for frequency and quiet hours",
+        "Includes unit tests covering message generation scenarios"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=proactiveMessageEngine"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "A fully functional proactive message generation engine with tests and integration points.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "packages/ai-tutor/src/services/proactiveMessageEngine.ts",
+          "description": "Proactive message generation engine implementation",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/tests/proactiveMessageEngine.test.ts",
+          "description": "Unit tests for proactive message engine",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Data model and design documents",
+      "targetFiles": [
+        "packages/ai-tutor/src/services/proactiveMessageEngine.ts",
+        "packages/ai-tutor/src/tests/proactiveMessageEngine.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "unit tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=proactiveMessageEngine",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Core logic for generating proactive AI Tutor messages"
+    },
+    {
+      "title": "Implement Proactive Message Event Bus and Notification System",
+      "description": "Implement an event bus service to broadcast new proactive messages and message state changes across the app. Integrate with browser notifications respecting user settings. Ensure messages can be subscribed to and cleared by UI components.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Proactive Message Generation Engine Module"
+      ],
+      "riskLevel": "low",
+      "acceptanceCriteria": [
+        "Event bus service implemented with subscribe/unsubscribe methods",
+        "Browser notifications sent when enabled in settings",
+        "Unit tests verify event emission and notification behavior"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=proactiveEventBus"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Event bus and notification system for proactive messages with tests.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/services/proactiveEventBus.ts",
+          "description": "Event bus for proactive message events",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/services/proactiveNotificationService.ts",
+          "description": "Notification service for proactive messages",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/tests/proactiveEventBus.test.ts",
+          "description": "Unit tests for event bus",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Proactive message engine module",
+      "targetFiles": [
+        "packages/ai-tutor/src/services/proactiveEventBus.ts",
+        "packages/ai-tutor/src/services/proactiveNotificationService.ts",
+        "packages/ai-tutor/src/tests/proactiveEventBus.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "unit tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=proactiveEventBus",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables reactive UI updates and notifications for proactive messages"
+    },
+    {
+      "title": "Implement Proactive AI Tutor Settings UI Components",
+      "description": "Develop React components for the proactive AI Tutor settings page based on the design. Include toggles, dropdowns, time pickers, and multi-selects for all configurable options. Integrate with settings storage service to load and save user preferences.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design User Settings and Configuration UI for Proactive AI Tutor",
+        "Create Proactive Message Data Model and Storage Schema"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Settings UI components implemented and styled per design",
+        "Settings persist and load correctly from storage",
+        "UI validation and error handling implemented"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=proactiveSettings"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Fully functional proactive AI Tutor settings UI integrated with storage and validation.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "apps/web/src/features/aiTutor/components/ProactiveSettings.tsx",
+          "description": "React components for proactive AI Tutor settings UI",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/aiTutor/hooks/useProactiveSettings.ts",
+          "description": "Hook for loading and saving proactive AI Tutor settings",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/aiTutor/tests/ProactiveSettings.test.tsx",
+          "description": "UI tests for proactive settings components",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Settings design document and data model",
+      "targetFiles": [
+        "apps/web/src/features/aiTutor/components/ProactiveSettings.tsx",
+        "apps/web/src/features/aiTutor/hooks/useProactiveSettings.ts",
+        "apps/web/src/features/aiTutor/tests/ProactiveSettings.test.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "UI tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=ProactiveSettings",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Allows users to customize proactive AI Tutor behavior"
+    },
+    {
+      "title": "Implement Proactive Message Display Components in Dashboard and Chat UI",
+      "description": "Develop React components to display proactive AI Tutor messages in the dashboard view, header chat icon, and messenger-style popup. Include message list, message cards with action buttons, dismiss and snooze controls, and message state handling. Integrate with the event bus to receive new messages.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Design UI Integration Points for Proactive AI Tutor Messages",
+        "Implement Proactive Message Event Bus and Notification System"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Message display components implemented and styled",
+        "Messages update reactively on new events",
+        "User interactions (dismiss, snooze, action) work correctly"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=ProactiveMessageDisplay"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Interactive UI components showing proactive messages in dashboard and chat with full user controls.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "apps/web/src/features/aiTutor/components/ProactiveMessageList.tsx",
+          "description": "Message list component for proactive AI Tutor messages",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "create",
+          "target": "apps/web/src/features/aiTutor/components/ProactiveMessageCard.tsx",
+          "description": "Individual message card component with actions",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/dashboard/components/DashboardProactiveMessages.tsx",
+          "description": "Dashboard integration for proactive messages",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/chat/components/HeaderChatIcon.tsx",
+          "description": "Header chat icon integration for message notifications",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "UI integration design and event bus implementation",
+      "targetFiles": [
+        "apps/web/src/features/aiTutor/components/ProactiveMessageList.tsx",
+        "apps/web/src/features/aiTutor/components/ProactiveMessageCard.tsx",
+        "apps/web/src/features/dashboard/components/DashboardProactiveMessages.tsx",
+        "apps/web/src/features/chat/components/HeaderChatIcon.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "UI tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=ProactiveMessageDisplay",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides user-facing UI for proactive AI Tutor messages"
+    },
+    {
+      "title": "Implement Proactive Message Triggers on User Actions and Events",
+      "description": "Implement logic to trigger proactive message generation after key user events: lesson completion, repeated mistakes, inactivity detection, vocabulary saving, text selection, and weekly progress review. Integrate with proactive message engine and event bus to generate and broadcast messages.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Proactive Message Generation Engine Module",
+        "Implement Proactive Message Event Bus and Notification System"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Triggers implemented for all specified user events",
+        "Messages generated and emitted correctly on triggers",
+        "No excessive or duplicate messages generated"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=proactiveMessageTriggers"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Proactive messages are generated and emitted appropriately on user events with tests verifying behavior.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "packages/ai-tutor/src/services/proactiveMessageTriggers.ts",
+          "description": "Service module implementing proactive message triggers on user events",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/tests/proactiveMessageTriggers.test.ts",
+          "description": "Unit tests for proactive message triggers",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Proactive message engine and event bus modules",
+      "targetFiles": [
+        "packages/ai-tutor/src/services/proactiveMessageTriggers.ts",
+        "packages/ai-tutor/src/tests/proactiveMessageTriggers.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "unit tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=proactiveMessageTriggers",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enables proactive AI Tutor to respond to user behavior with timely messages"
+    },
+    {
+      "title": "Integrate Proactive AI Tutor in Browser Extension UI",
+      "description": "Extend the browser extension popup and content script UI to display proactive AI Tutor messages. Implement message display on extension popup open, text selection popup, and vocabulary save events. Ensure messages are consistent with main app and respect user settings.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Proactive Message Display Components in Dashboard and Chat UI",
+        "Implement Proactive Message Event Bus and Notification System"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Proactive messages appear in extension popup and content script UI",
+        "Messages update reactively and user interactions work",
+        "User settings are respected in extension context"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=extensionProactiveMessages"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Proactive AI Tutor messages integrated and functional in browser extension UI with tests.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/extension/src/popup/components/ExtensionProactiveMessages.tsx",
+          "description": "Extension popup component for proactive messages",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/content-script/proactiveMessagePanel.tsx",
+          "description": "Content script popup panel for proactive messages on text selection",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/extension/src/content-script/vocabularySaveHandler.ts",
+          "description": "Hook to trigger proactive messages after vocabulary save",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Proactive message UI components and event bus",
+      "targetFiles": [
+        "apps/extension/src/popup/components/ExtensionProactiveMessages.tsx",
+        "apps/extension/src/content-script/proactiveMessagePanel.tsx",
+        "apps/extension/src/content-script/vocabularySaveHandler.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "UI tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=extensionProactiveMessages",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Extends proactive AI Tutor presence to browser extension interfaces"
+    },
+    {
+      "title": "Implement Proactive AI Tutor Message Frequency and Quiet Hours Enforcement",
+      "description": "Implement logic in the proactive message engine or event bus to enforce user-configured limits on message frequency, maximum messages per day, and quiet hours during which messages are suppressed or delayed. Include unit tests for these behaviors.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Proactive Message Generation Engine Module",
+        "Implement Proactive Message Event Bus and Notification System"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Message frequency limits and quiet hours enforced correctly",
+        "Messages are suppressed or delayed as per settings",
+        "Unit tests cover edge cases and normal scenarios"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=proactiveMessageFrequency"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Robust enforcement of message frequency and quiet hours with passing tests.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/services/proactiveMessageEngine.ts",
+          "description": "Add frequency and quiet hours enforcement logic",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/tests/proactiveMessageFrequency.test.ts",
+          "description": "Unit tests for message frequency and quiet hours",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Proactive message engine and user settings",
+      "targetFiles": [
+        "packages/ai-tutor/src/services/proactiveMessageEngine.ts",
+        "packages/ai-tutor/src/tests/proactiveMessageFrequency.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "unit tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=proactiveMessageFrequency",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Prevents user annoyance by controlling message frequency and timing"
+    },
+    {
+      "title": "Implement Automated Weekly and Monthly Progress Review Messages",
+      "description": "Implement scheduled tasks or background jobs that generate and send proactive messages reviewing user progress after 7 days and 30 days. Use user data to summarize achievements, weaknesses, and recommendations. Integrate with proactive message engine and event bus.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Proactive Message Generation Engine Module",
+        "Implement Proactive Message Event Bus and Notification System"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Scheduled progress review messages generated at correct intervals",
+        "Messages include relevant progress summaries and recommendations",
+        "Unit tests verify scheduling and message content"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=progressReviewMessages"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Automated progress review messages implemented and tested.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "packages/ai-tutor/src/services/proactiveProgressReview.ts",
+          "description": "Service for scheduled weekly and monthly progress review messages",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/tests/proactiveProgressReview.test.ts",
+          "description": "Unit tests for progress review message service",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Proactive message engine and user data",
+      "targetFiles": [
+        "packages/ai-tutor/src/services/proactiveProgressReview.ts",
+        "packages/ai-tutor/src/tests/proactiveProgressReview.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "unit tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=proactiveProgressReview",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides timely progress summaries to motivate and guide users"
+    },
+    {
+      "title": "Implement User Feedback and Interaction Handling for Proactive Messages",
+      "description": "Implement handling of user interactions with proactive messages including dismiss, snooze, action button clicks, and feedback on message usefulness. Update message states in storage and adjust future message generation accordingly.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Proactive Message Display Components in Dashboard and Chat UI",
+        "Implement Proactive Message Event Bus and Notification System"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "User interactions update message states correctly",
+        "Feedback influences future message generation",
+        "Unit and integration tests cover interaction flows"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=proactiveMessageInteractions"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Robust handling of user interactions with proactive messages with tests.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/services/proactiveMessageInteraction.ts",
+          "description": "Service handling user interactions with proactive messages",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ai-tutor/src/tests/proactiveMessageInteractions.test.ts",
+          "description": "Tests for message interaction handling",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Proactive message UI components and storage",
+      "targetFiles": [
+        "packages/ai-tutor/src/services/proactiveMessageInteraction.ts",
+        "packages/ai-tutor/src/tests/proactiveMessageInteractions.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "files exist",
+        "unit tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=proactiveMessageInteractions",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 120000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Improves message relevance and user experience through feedback"
+    },
+    {
+      "title": "Create Comprehensive Integration Tests for Proactive AI Tutor Feature",
+      "description": "Develop end-to-end integration tests covering the full proactive AI Tutor workflow: data input, message generation, event bus notification, UI display, user interaction, and settings persistence. Use test user profiles with varied data to simulate realistic scenarios.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement Proactive Message Generation Engine Module",
+        "Implement Proactive Message Display Components in Dashboard and Chat UI",
+        "Implement Proactive Message Event Bus and Notification System",
+        "Implement Proactive AI Tutor Settings UI Components"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Integration tests cover all major feature flows",
+        "Tests simulate user data and interactions realistically",
+        "Tests pass reliably in CI environment"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test --filter=proactiveAITutorIntegration"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Robust integration test suite validating proactive AI Tutor feature end-to-end.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts",
+          "description": "Integration tests for proactive AI Tutor feature",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "create",
+      "inputContext": "All implemented proactive AI Tutor modules",
+      "targetFiles": [
+        "packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "file exists",
+        "integration tests pass"
+      ],
+      "verificationCommand": "pnpm test --filter=proactiveAITutorIntegration",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures feature quality and reliability before release"
+    },
+    {
+      "title": "Document Proactive AI Tutor Feature Architecture and Usage",
+      "description": "Write comprehensive documentation covering the architecture, data flow, message generation logic, UI integration, user settings, and developer guidelines for the proactive AI Tutor feature. Include examples of proactive messages and configuration options.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create Comprehensive Integration Tests for Proactive AI Tutor Feature"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Documentation covers all major aspects of the feature",
+        "Includes diagrams and example messages",
+        "Clear instructions for developers and users"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "Complete and clear documentation for the proactive AI Tutor feature.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/features/proactive-ai-tutor.md",
+          "description": "Feature documentation for proactive AI Tutor",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "documentation",
+      "actionType": "create",
+      "inputContext": "All design and implementation artifacts",
+      "targetFiles": [
+        "docs/features/proactive-ai-tutor.md"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "docs/features/proactive-ai-tutor.md file exists"
+      ],
+      "verificationCommand": "ls docs/features/proactive-ai-tutor.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 180000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides knowledge base for users and developers"
+    }
+  ]
+}

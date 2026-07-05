@@ -1,15 +1,9 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
-import { loadVocabulary, findWord, type PopupVocabEntry, type PopupVocabStats } from '../services/popupDataService'
-
-function speakWord(word: string) {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel()
-    const utterance = new SpeechSynthesisUtterance(word)
-    utterance.lang = 'en-US'
-    utterance.rate = 0.85
-    window.speechSynthesis.speak(utterance)
-  }
-}
+import { loadVocabulary, type PopupVocabEntry, type PopupVocabStats } from '../services/popupDataService'
+import { getAllVocabulary } from '../../storage/vocabularyStore'
+import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
+import { speakText } from '../services/textToSpeech'
+import WordDetails from './WordDetails'
 
 interface SavedWordsViewProps {
   onBack: () => void
@@ -32,17 +26,67 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
   const [entries, setEntries] = useState<PopupVocabEntry[]>([])
   const [stats, setStats] = useState<PopupVocabStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState<'all' | 'new' | 'learning' | 'mastered'>('all')
   const [sortBy, setSortBy] = useState<'newest' | 'alpha'>('newest')
+  const [selectedEntry, setSelectedEntry] = useState<ExtensionVocabEntry | null>(null)
 
   useEffect(() => {
     loadVocabulary().then((result) => {
       setEntries(result.entries)
       setStats(result.stats)
       setLoading(false)
-    }).catch(() => setLoading(false))
+    }).catch((err) => {
+      setError(err instanceof Error ? err.message : 'Failed to load vocabulary')
+      setLoading(false)
+    })
   }, [])
+
+  const handleWordClick = useCallback(async (popupEntry: PopupVocabEntry) => {
+    try {
+      const all = await getAllVocabulary()
+      const full = all.find(e => e.id === popupEntry.id || e.word.toLowerCase() === popupEntry.word.toLowerCase())
+      if (full) {
+        setSelectedEntry(full)
+      } else {
+        const partial: ExtensionVocabEntry = {
+          id: popupEntry.id,
+          word: popupEntry.word,
+          meaning: popupEntry.meaning,
+          meaningVi: '',
+          pronunciation: popupEntry.pronunciation,
+          partOfSpeech: popupEntry.partOfSpeech,
+          topic: popupEntry.topic,
+          difficulty: (popupEntry.difficulty || '') as '' | 'easy' | 'medium' | 'hard',
+          status: popupEntry.status as ExtensionVocabEntry['status'],
+          exampleSentence: '',
+          synonyms: [],
+          antonyms: [],
+          collocations: [],
+          wordFamily: [],
+          sourceSentence: '',
+          pageTitle: '',
+          pageUrl: '',
+          personalNote: '',
+          tags: [],
+          addedToReview: false,
+          reviewId: '',
+          createdAt: popupEntry.createdAt,
+          updatedAt: popupEntry.createdAt,
+        }
+        setSelectedEntry(partial)
+      }
+    } catch {
+      setError('Could not load full word details')
+    }
+  }, [])
+
+  if (selectedEntry) {
+    return (
+      <WordDetails entry={selectedEntry} onBack={() => setSelectedEntry(null)} />
+    )
+  }
 
   const filtered = useMemo(() => {
     let result = entries
@@ -71,6 +115,37 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
     return (
       <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-muted)', fontSize: '13px' }}>
         Loading vocabulary...
+      </div>
+    )
+  }
+
+  if (error && entries.length === 0) {
+    return (
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 16px', borderBottom: '1px solid var(--color-border)' }}>
+          <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', padding: '4px', color: 'var(--color-text-secondary)' }} aria-label="Back">
+            ←
+          </button>
+          <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>Vocabulary</span>
+        </div>
+        <div role="alert" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 16px', gap: '12px', textAlign: 'center' }}>
+          <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
+          <span style={{ fontSize: '13px', color: 'var(--color-danger)' }}>{error}</span>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              padding: '8px 16px',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--color-border)',
+              background: 'var(--color-surface)',
+              color: 'var(--color-text)',
+              cursor: 'pointer',
+              fontSize: '13px',
+            }}
+          >
+            Retry
+          </button>
+        </div>
       </div>
     )
   }
@@ -174,19 +249,27 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
           filtered.map(entry => (
             <div
               key={entry.id}
+              onClick={() => handleWordClick(entry)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleWordClick(entry) } }}
+              role="button"
+              tabIndex={0}
+              aria-label={`View details for ${entry.word}`}
               style={{
                 padding: '10px 16px',
                 borderBottom: '1px solid var(--color-border)',
                 cursor: 'pointer',
+                transition: 'background 0.15s ease',
               }}
+              onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'var(--color-surface-alt)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent' }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>
                     {entry.word}
                   </span>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); speakWord(entry.word) }}
+                    <button
+                    onClick={(e) => { e.stopPropagation(); speakText(entry.word) }}
                     title={`Pronounce "${entry.word}"`}
                     aria-label={`Listen to pronunciation of ${entry.word}`}
                     style={{

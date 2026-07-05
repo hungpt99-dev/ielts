@@ -27,7 +27,6 @@ describe('DashboardCard', () => {
 
   it('renders with accent styling', () => {
     const { root, container } = setup('Streak', 7, '🔥', true)
-    const card = container.querySelector('div')
     expect(container.textContent).toContain('Streak')
     expect(container.textContent).toContain('7')
     cleanup(root, container)
@@ -42,6 +41,26 @@ describe('DashboardCard', () => {
   it('renders large values without overflow', () => {
     const { root, container } = setup('Count', 99999, '📊')
     expect(container.textContent).toContain('99999')
+    cleanup(root, container)
+  })
+
+  it('renders negative values', () => {
+    const { root, container } = setup('Balance', -5, '💳')
+    expect(container.textContent).toContain('-5')
+    cleanup(root, container)
+  })
+
+  it('renders with empty icon', () => {
+    const { root, container } = setup('Empty', 0, '')
+    expect(container.textContent).toContain('Empty')
+    expect(container.textContent).toContain('0')
+    cleanup(root, container)
+  })
+
+  it('renders with very long label', () => {
+    const longLabel = 'A'.repeat(100)
+    const { root, container } = setup(longLabel, 1, '📌')
+    expect(container.textContent).toContain(longLabel)
     cleanup(root, container)
   })
 })

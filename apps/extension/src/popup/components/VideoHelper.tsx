@@ -12,6 +12,8 @@ import {
   type VideoEntry,
 } from '../../storage/videoStore'
 import { saveEntry as saveLearningEntry } from '../../storage/indexedDB'
+import { incrementDailyProgress } from '../../services/storage'
+import { safeStorageGet } from '../../utils/safe-chrome'
 import type { VideoQuestion, VideoVocabItem, ShadowingItem } from '../../storage/videoStore'
 import type { LearningEntry } from '../../types'
 
@@ -65,10 +67,12 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
     videoUrl: '',
     videoId: '',
   })
+  const [videoInfoLoading, setVideoInfoLoading] = useState(true)
   const [notes, setNotes] = useState('')
   const [transcript, setTranscript] = useState('')
   const [topic, setTopic] = useState('')
   const [showTranscriptInput, setShowTranscriptInput] = useState(false)
+  const [fetchingTranscript, setFetchingTranscript] = useState(false)
 
   const [activeTab, setActiveTab] = useState<AiTab>('vocabulary')
 
@@ -89,14 +93,36 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const tab = tabs[0]
-      if (!tab.id) return
+    let cancelled = false
 
-      chrome.tabs.sendMessage(tab.id, { type: 'GET_VIDEO_PAGE_INFO' }, (response) => {
+    async function loadVideoInfo() {
+      setVideoInfoLoading(true)
+      try {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+        if (!tab.id) {
+          setVideoInfoLoading(false)
+          return
+        }
+
+        const response = await chrome.tabs.sendMessage(tab.id, { type: 'GET_VIDEO_PAGE_INFO' }).catch(() => null)
+        if (cancelled) return
+
         if (response?.isVideoPage) {
           setVideoInfo(response)
-        } else {
+          setVideoInfoLoading(false)
+          return
+        }
+
+        const pending = await safeStorageGet<any>('pendingVideoInfo')
+        if (cancelled) return
+
+        if (pending?.pendingVideoInfo?.isVideoPage) {
+          setVideoInfo(pending.pendingVideoInfo)
+          setVideoInfoLoading(false)
+          return
+        }
+
+        if (tab.url) {
           setVideoInfo({
             isVideoPage: false,
             platform: '',
@@ -105,8 +131,37 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
             videoId: '',
           })
         }
-      })
-    })
+      } catch {
+        /* fallback to default */
+      } finally {
+        if (!cancelled) setVideoInfoLoading(false)
+      }
+    }
+
+    loadVideoInfo()
+    return () => { cancelled = true }
+  }, [])
+
+  const handleFetchTranscript = useCallback(async () => {
+    try {
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      if (!tab.id) return
+
+      setFetchingTranscript(true)
+      setError(null)
+
+      const response = await chrome.tabs.sendMessage(tab.id, { type: 'FETCH_YOUTUBE_TRANSCRIPT' }).catch(() => null)
+      if (response?.transcript) {
+        setTranscript(response.transcript)
+        setShowTranscriptInput(false)
+      } else {
+        setError('No captions found for this video. Paste the transcript manually.')
+      }
+    } catch {
+      setError('Could not fetch transcript. Try pasting it manually.')
+    } finally {
+      setFetchingTranscript(false)
+    }
   }, [])
 
   const handleGenerateVocabulary = useCallback(async () => {
@@ -281,16 +336,8 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
         }
       }
 
-      chrome.storage.local.get(['dailyProgress'], (result) => {
-        const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
-        chrome.storage.local.set({
-          dailyProgress: {
-            ...current,
-            wordsAdded: current.wordsAdded + (vocabData?.length || 0),
-            articlesSaved: current.articlesSaved + 1,
-          },
-        })
-      })
+      await incrementDailyProgress('wordsAdded', vocabData?.length || 0)
+      await incrementDailyProgress('articlesSaved', 1)
 
       setSaved(true)
       setTimeout(() => onSaved(), 1200)
@@ -326,237 +373,266 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
         </div>
       )}
 
-      {/* Video Info */}
-      <div style={{ padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)' }}>
-        <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text)', marginBottom: '2px', wordBreak: 'break-word' }}>
-          {videoInfo.videoTitle || 'Unknown Video'}
+      {videoInfoLoading ? (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px', justifyContent: 'center' }}>
+          <div style={{ width: '16px', height: '16px', border: '2px solid var(--color-border)', borderTopColor: 'var(--color-primary)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+          <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>Detecting video page...</span>
         </div>
-        {videoInfo.videoUrl && (
-          <div style={{ fontSize: '11px', color: 'var(--color-muted)', wordBreak: 'break-all' }}>
-            {videoInfo.videoUrl}
-          </div>
-        )}
-        {videoInfo.platform && (
-          <span style={{ display: 'inline-block', marginTop: '4px', padding: '1px 6px', borderRadius: '4px', background: '#fef3c7', color: '#d97706', fontSize: '10px', fontWeight: 600, textTransform: 'uppercase' }}>
-            {videoInfo.platform}
-          </span>
-        )}
-      </div>
-
-      {/* Notes */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Notes</label>
-        <textarea
-          value={notes}
-          onChange={e => setNotes(e.target.value)}
-          rows={2}
-          placeholder="Add your notes about this video..."
-          style={{ width: '100%', padding: '8px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', fontSize: '13px', lineHeight: 1.5, resize: 'vertical', fontFamily: 'var(--font-sans)' }}
-        />
-      </div>
-
-      {/* Topic + Transcript toggle */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>IELTS Topic</label>
-        <input
-          type="text"
-          value={topic}
-          onChange={e => setTopic(e.target.value)}
-          placeholder="e.g. education, environment, technology"
-          style={{ width: '100%', padding: '8px 10px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', fontSize: '13px' }}
-        />
-      </div>
-
-      {/* Transcript */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Transcript</label>
-          <button
-            type="button"
-            onClick={() => setShowTranscriptInput(!showTranscriptInput)}
-            style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontSize: '12px', cursor: 'pointer', fontWeight: 500 }}
-          >
-            {showTranscriptInput ? 'Hide' : transcript ? 'Edit' : 'Paste Transcript'}
-          </button>
-        </div>
-        {showTranscriptInput && (
-          <textarea
-            value={transcript}
-            onChange={e => setTranscript(e.target.value)}
-            rows={4}
-            placeholder="Paste video transcript here for AI analysis..."
-            style={{ width: '100%', padding: '8px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', fontSize: '13px', lineHeight: 1.5, resize: 'vertical', fontFamily: 'var(--font-sans)' }}
-          />
-        )}
-        {transcript && !showTranscriptInput && (
-          <div style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
-            ✓ {transcript.length} characters pasted
-          </div>
-        )}
-      </div>
-
-      {/* AI Actions */}
-      {transcript.trim() && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)' }}>
-          <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Analysis</div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
-            <AiActionButton label="📖 Vocabulary" onClick={handleGenerateVocabulary} state={vocabState} />
-            <AiActionButton label="📝 Summary" onClick={handleGenerateSummary} state={summaryState} />
-            <AiActionButton label="❓ Questions" onClick={handleGenerateQuestions} state={questionsState} />
-            <AiActionButton label="🎤 Shadowing" onClick={handleGenerateShadowing} state={shadowingState} />
+      ) : (
+        <>
+          {/* Video Info */}
+          <div style={{ padding: '10px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)' }}>
+            {videoInfo.isVideoPage ? (
+              <>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text)', marginBottom: '2px', wordBreak: 'break-word' }}>
+                  {videoInfo.videoTitle || 'Unknown Video'}
+                </div>
+                {videoInfo.videoUrl && (
+                  <div style={{ fontSize: '11px', color: 'var(--color-muted)', wordBreak: 'break-all' }}>
+                    {videoInfo.videoUrl}
+                  </div>
+                )}
+                {videoInfo.platform && (
+                  <span style={{ display: 'inline-block', marginTop: '4px', padding: '1px 6px', borderRadius: '4px', background: '#fef3c7', color: '#d97706', fontSize: '10px', fontWeight: 600, textTransform: 'uppercase' }}>
+                    {videoInfo.platform}
+                  </span>
+                )}
+              </>
+            ) : (
+              <div style={{ fontSize: '13px', color: 'var(--color-muted)', textAlign: 'center', padding: '8px' }}>
+                No video detected on this page. Navigate to a YouTube video and try again.
+              </div>
+            )}
           </div>
 
-          {/* Results tabs */}
-          {[vocabData, summaryData, questionsData, shadowingData].some(Boolean) && (
-            <div style={{ marginTop: '4px' }}>
-              <div style={{ display: 'flex', gap: '4px', marginBottom: '8px', overflowX: 'auto', scrollbarWidth: 'thin' }}>
-                {(Object.entries(TAB_LABELS) as [AiTab, string][]).map(([key, label]) => {
-                  const hasData = (key === 'vocabulary' && vocabData) ||
-                    (key === 'summary' && summaryData) ||
-                    (key === 'questions' && questionsData) ||
-                    (key === 'shadowing' && shadowingData)
-                  if (!hasData) return null
-                  return (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() => setActiveTab(key)}
-                      style={{
-                        padding: '4px 10px',
-                        borderRadius: '6px',
-                        border: 'none',
-                        fontSize: '11px',
-                        cursor: 'pointer',
-                        whiteSpace: 'nowrap',
-                        fontWeight: 500,
-                        background: activeTab === key ? 'rgba(59,130,246,0.15)' : 'transparent',
-                        color: activeTab === key ? 'var(--color-primary)' : 'var(--color-muted)',
-                      }}
-                    >
-                      {label}
-                    </button>
-                  )
-                })}
+          {/* Notes */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Notes</label>
+            <textarea
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              rows={2}
+              placeholder="Add your notes about this video..."
+              style={{ width: '100%', padding: '8px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', fontSize: '13px', lineHeight: 1.5, resize: 'vertical', fontFamily: 'var(--font-sans)' }}
+            />
+          </div>
+
+          {/* Topic */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>IELTS Topic</label>
+            <input
+              type="text"
+              value={topic}
+              onChange={e => setTopic(e.target.value)}
+              placeholder="e.g. education, environment, technology"
+              style={{ width: '100%', padding: '8px 10px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', fontSize: '13px' }}
+            />
+          </div>
+
+          {/* Transcript */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Transcript</label>
+              <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                {videoInfo.platform === 'youtube' && videoInfo.isVideoPage && (
+                  <button
+                    type="button"
+                    onClick={handleFetchTranscript}
+                    disabled={fetchingTranscript}
+                    style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontSize: '12px', cursor: fetchingTranscript ? 'default' : 'pointer', fontWeight: 500, opacity: fetchingTranscript ? 0.7 : 1 }}
+                  >
+                    {fetchingTranscript ? '⏳ Fetching...' : '🎬 Fetch Transcript'}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setShowTranscriptInput(!showTranscriptInput)}
+                  style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontSize: '12px', cursor: 'pointer', fontWeight: 500 }}
+                >
+                  {showTranscriptInput ? 'Hide' : transcript ? 'Edit' : 'Paste Transcript'}
+                </button>
+              </div>
+            </div>
+            {showTranscriptInput && (
+              <textarea
+                value={transcript}
+                onChange={e => setTranscript(e.target.value)}
+                rows={4}
+                placeholder="Paste video transcript here for AI analysis..."
+                style={{ width: '100%', padding: '8px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', fontSize: '13px', lineHeight: 1.5, resize: 'vertical', fontFamily: 'var(--font-sans)' }}
+              />
+            )}
+            {transcript && !showTranscriptInput && (
+              <div style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
+                ✓ {transcript.length.toLocaleString()} characters
+              </div>
+            )}
+          </div>
+
+          {/* AI Actions */}
+          {transcript.trim() && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', padding: '12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)' }}>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>AI Analysis</div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                <AiActionButton label="📖 Vocabulary" onClick={handleGenerateVocabulary} state={vocabState} />
+                <AiActionButton label="📝 Summary" onClick={handleGenerateSummary} state={summaryState} />
+                <AiActionButton label="❓ Questions" onClick={handleGenerateQuestions} state={questionsState} />
+                <AiActionButton label="🎤 Shadowing" onClick={handleGenerateShadowing} state={shadowingState} />
               </div>
 
-              {activeTab === 'vocabulary' && vocabData && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '140px', overflowY: 'auto' }}>
-                  {vocabData.map((item, i) => (
-                    <div key={i} style={{ padding: '6px 8px', borderRadius: '6px', background: 'var(--color-surface-alt)', fontSize: '12px' }}>
-                      <strong style={{ color: 'var(--color-primary)' }}>{item.word}</strong>
-                      {item.partOfSpeech && <span style={{ color: 'var(--color-muted)', marginLeft: '4px', fontSize: '10px' }}>{item.partOfSpeech}</span>}
-                      <div style={{ color: 'var(--color-text)', marginTop: '2px' }}>{item.meaning}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Results tabs */}
+              {[vocabData, summaryData, questionsData, shadowingData].some(Boolean) && (
+                <div style={{ marginTop: '4px' }}>
+                  <div style={{ display: 'flex', gap: '4px', marginBottom: '8px', overflowX: 'auto', scrollbarWidth: 'thin' }}>
+                    {(Object.entries(TAB_LABELS) as [AiTab, string][]).map(([key, label]) => {
+                      const hasData = (key === 'vocabulary' && vocabData) ||
+                        (key === 'summary' && summaryData) ||
+                        (key === 'questions' && questionsData) ||
+                        (key === 'shadowing' && shadowingData)
+                      if (!hasData) return null
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() => setActiveTab(key)}
+                          style={{
+                            padding: '4px 10px',
+                            borderRadius: '6px',
+                            border: 'none',
+                            fontSize: '11px',
+                            cursor: 'pointer',
+                            whiteSpace: 'nowrap',
+                            fontWeight: 500,
+                            background: activeTab === key ? 'rgba(59,130,246,0.15)' : 'transparent',
+                            color: activeTab === key ? 'var(--color-primary)' : 'var(--color-muted)',
+                          }}
+                        >
+                          {label}
+                        </button>
+                      )
+                    })}
+                  </div>
 
-              {activeTab === 'summary' && summaryData && (
-                <div style={{ maxHeight: '140px', overflowY: 'auto', fontSize: '12px' }}>
-                  <div style={{ color: 'var(--color-text)', lineHeight: 1.5, marginBottom: '8px' }}>{summaryData.summary}</div>
-                  {summaryData.keyPoints.length > 0 && (
-                    <div>
-                      <div style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>Key Points</div>
-                      <ul style={{ margin: 0, paddingLeft: '16px' }}>
-                        {summaryData.keyPoints.map((p, i) => (
-                          <li key={i} style={{ color: 'var(--color-text)', marginBottom: '2px' }}>{p}</li>
-                        ))}
-                      </ul>
+                  {activeTab === 'vocabulary' && vocabData && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '140px', overflowY: 'auto' }}>
+                      {vocabData.map((item, i) => (
+                        <div key={i} style={{ padding: '6px 8px', borderRadius: '6px', background: 'var(--color-surface-alt)', fontSize: '12px' }}>
+                          <strong style={{ color: 'var(--color-primary)' }}>{item.word}</strong>
+                          {item.partOfSpeech && <span style={{ color: 'var(--color-muted)', marginLeft: '4px', fontSize: '10px' }}>{item.partOfSpeech}</span>}
+                          <div style={{ color: 'var(--color-text)', marginTop: '2px' }}>{item.meaning}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {activeTab === 'summary' && summaryData && (
+                    <div style={{ maxHeight: '140px', overflowY: 'auto', fontSize: '12px' }}>
+                      <div style={{ color: 'var(--color-text)', lineHeight: 1.5, marginBottom: '8px' }}>{summaryData.summary}</div>
+                      {summaryData.keyPoints.length > 0 && (
+                        <div>
+                          <div style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>Key Points</div>
+                          <ul style={{ margin: 0, paddingLeft: '16px' }}>
+                            {summaryData.keyPoints.map((p, i) => (
+                              <li key={i} style={{ color: 'var(--color-text)', marginBottom: '2px' }}>{p}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {activeTab === 'questions' && questionsData && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '140px', overflowY: 'auto' }}>
+                      {questionsData.map((q, i) => (
+                        <div key={i} style={{ padding: '8px', borderRadius: '6px', background: 'var(--color-surface-alt)' }}>
+                          <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text)', marginBottom: '4px' }}>
+                            {i + 1}. {q.question}
+                          </div>
+                          {q.options && (
+                            <div style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
+                              {q.options.map((opt, oi) => (
+                                <div key={oi} style={{ padding: '2px 0' }}>{String.fromCharCode(65 + oi)}. {opt}</div>
+                              ))}
+                            </div>
+                          )}
+                          <div style={{ fontSize: '11px', color: 'var(--color-success)', marginTop: '4px' }}>
+                            ✓ {q.correctAnswer}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {activeTab === 'shadowing' && shadowingData && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '140px', overflowY: 'auto' }}>
+                      {shadowingData.map((item, i) => (
+                        <div key={i} style={{ padding: '8px', borderRadius: '6px', background: 'var(--color-surface-alt)' }}>
+                          <div style={{ fontSize: '12px', color: 'var(--color-text)', lineHeight: 1.5 }}>🎤 {item.sentence}</div>
+                          {item.translation && <div style={{ fontSize: '11px', color: 'var(--color-muted)', marginTop: '2px' }}>{item.translation}</div>}
+                          {item.focusWords.length > 0 && (
+                            <div style={{ display: 'flex', gap: '4px', marginTop: '4px' }}>
+                              {item.focusWords.map((fw, fi) => (
+                                <span key={fi} style={{ padding: '1px 6px', borderRadius: '3px', background: '#dbeafe', color: '#1d4ed8', fontSize: '10px' }}>{fw}</span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
               )}
 
-              {activeTab === 'questions' && questionsData && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '140px', overflowY: 'auto' }}>
-                  {questionsData.map((q, i) => (
-                    <div key={i} style={{ padding: '8px', borderRadius: '6px', background: 'var(--color-surface-alt)' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--color-text)', marginBottom: '4px' }}>
-                        {i + 1}. {q.question}
-                      </div>
-                      {q.options && (
-                        <div style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
-                          {q.options.map((opt, oi) => (
-                            <div key={oi} style={{ padding: '2px 0' }}>{String.fromCharCode(65 + oi)}. {opt}</div>
-                          ))}
-                        </div>
-                      )}
-                      <div style={{ fontSize: '11px', color: 'var(--color-success)', marginTop: '4px' }}>
-                        ✓ {q.correctAnswer}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {activeTab === 'shadowing' && shadowingData && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', maxHeight: '140px', overflowY: 'auto' }}>
-                  {shadowingData.map((item, i) => (
-                    <div key={i} style={{ padding: '8px', borderRadius: '6px', background: 'var(--color-surface-alt)' }}>
-                      <div style={{ fontSize: '12px', color: 'var(--color-text)', lineHeight: 1.5 }}>🎤 {item.sentence}</div>
-                      {item.translation && <div style={{ fontSize: '11px', color: 'var(--color-muted)', marginTop: '2px' }}>{item.translation}</div>}
-                      {item.focusWords.length > 0 && (
-                        <div style={{ display: 'flex', gap: '4px', marginTop: '4px' }}>
-                          {item.focusWords.map((fw, fi) => (
-                            <span key={fi} style={{ padding: '1px 6px', borderRadius: '3px', background: '#dbeafe', color: '#1d4ed8', fontSize: '10px' }}>{fw}</span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+              {/* Error / No key states */}
+              {[vocabState, summaryState, questionsState, shadowingState].some(s => s.status === 'error' || s.status === 'no-key') && (
+                <div style={{ padding: '8px 10px', borderRadius: '6px', fontSize: '11px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
+                  {vocabState.status === 'no-key' || summaryState.status === 'no-key' || questionsState.status === 'no-key' || shadowingState.status === 'no-key' ? (
+                    <span>
+                      API key not configured.{' '}
+                      <button type="button" onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('options.html') })} style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontSize: '11px', textDecoration: 'underline' }}>Open Settings</button>
+                    </span>
+                  ) : (
+                    (vocabState.status === 'error' ? vocabState.message :
+                      summaryState.status === 'error' ? summaryState.message :
+                        questionsState.status === 'error' ? questionsState.message :
+                          shadowingState.status === 'error' ? shadowingState.message : '')
+                  )}
                 </div>
               )}
             </div>
           )}
 
-          {/* Error / No key states */}
-          {[vocabState, summaryState, questionsState, shadowingState].some(s => s.status === 'error' || s.status === 'no-key') && (
-            <div style={{ padding: '8px 10px', borderRadius: '6px', fontSize: '11px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca' }}>
-              {vocabState.status === 'no-key' || summaryState.status === 'no-key' || questionsState.status === 'no-key' || shadowingState.status === 'no-key' ? (
-                <span>
-                  API key not configured.{' '}
-                  <button type="button" onClick={() => chrome.tabs.create({ url: chrome.runtime.getURL('options.html') })} style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', fontSize: '11px', textDecoration: 'underline' }}>Open Settings</button>
-                </span>
-              ) : (
-                (vocabState.status === 'error' ? vocabState.message :
-                  summaryState.status === 'error' ? summaryState.message :
-                    questionsState.status === 'error' ? questionsState.message :
-                      shadowingState.status === 'error' ? shadowingState.message : '')
-              )}
-            </div>
-          )}
-        </div>
+          <label style={{ display: 'flex', gap: '4px', fontSize: '11px', color: 'var(--color-muted)', lineHeight: 1.4, padding: '6px 8px', borderRadius: 'var(--radius-md)', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+            <span>ℹ️</span>
+            <span>For YouTube videos, click "Fetch Transcript" to auto-detect captions, or paste the transcript manually for AI analysis.</span>
+          </label>
+
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', paddingTop: '8px', borderTop: '1px solid var(--color-border)' }}>
+            <button type="button" onClick={onCancel} style={{ padding: '8px 16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', fontSize: '13px', cursor: 'pointer' }}>
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={saving || !videoInfo.videoTitle.trim()}
+              style={{
+                padding: '8px 20px',
+                borderRadius: 'var(--radius-md)',
+                border: 'none',
+                background: saving || !videoInfo.videoTitle.trim() ? 'var(--color-primary-hover)' : 'var(--color-primary)',
+                color: '#ffffff',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: saving || !videoInfo.videoTitle.trim() ? 'not-allowed' : 'pointer',
+                opacity: saving || !videoInfo.videoTitle.trim() ? 0.7 : 1,
+              }}
+            >
+              {saving ? 'Saving...' : 'Save Video & Vocabulary'}
+            </button>
+          </div>
+        </>
       )}
-
-      <label style={{ display: 'flex', gap: '4px', fontSize: '11px', color: 'var(--color-muted)', lineHeight: 1.4, padding: '6px 8px', borderRadius: 'var(--radius-md)', background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-        <span>ℹ️</span>
-        <span>For YouTube videos, the Video Helper badge appears on the video page. Paste the transcript manually for AI analysis.</span>
-      </label>
-
-      <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', paddingTop: '8px', borderTop: '1px solid var(--color-border)' }}>
-        <button type="button" onClick={onCancel} style={{ padding: '8px 16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', fontSize: '13px', cursor: 'pointer' }}>
-          Cancel
-        </button>
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={saving || !videoInfo.videoTitle.trim()}
-          style={{
-            padding: '8px 20px',
-            borderRadius: 'var(--radius-md)',
-            border: 'none',
-            background: saving || !videoInfo.videoTitle.trim() ? 'var(--color-primary-hover)' : 'var(--color-primary)',
-            color: '#ffffff',
-            fontSize: '13px',
-            fontWeight: 600,
-            cursor: saving || !videoInfo.videoTitle.trim() ? 'not-allowed' : 'pointer',
-            opacity: saving || !videoInfo.videoTitle.trim() ? 0.7 : 1,
-          }}
-        >
-          {saving ? 'Saving...' : 'Save Video & Vocabulary'}
-        </button>
-      </div>
     </div>
   )
 }

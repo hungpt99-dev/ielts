@@ -11,11 +11,20 @@ export interface DailyProgress {
   streak: number
 }
 
+export interface UserData {
+  name: string
+  email: string
+  avatar: string
+  isLoggedIn: boolean
+}
+
 export interface PopupDataState {
   progress: DailyProgress
   recentEntries: LearningEntry[]
+  user: UserData | null
   darkMode: boolean
   loading: boolean
+  error: string | null
 }
 
 export interface PopupDataActions {
@@ -52,61 +61,128 @@ async function loadRecentEntries(): Promise<LearningEntry[]> {
   }
 }
 
+async function loadUserData(): Promise<UserData | null> {
+  try {
+    const result = await safeStorageGet<any>('ieltsUser')
+    if (result.ieltsUser?.isLoggedIn) {
+      return result.ieltsUser as UserData
+    }
+  } catch {
+    // Storage not available
+  }
+  return null
+}
+
 function getInitialDarkMode(): boolean {
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  const saved = localStorage.getItem('popup-dark-mode')
-  return saved !== null ? saved === 'true' : prefersDark
+  try {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const saved = localStorage.getItem('popup-dark-mode')
+    return saved !== null ? saved === 'true' : prefersDark
+  } catch {
+    return false
+  }
 }
 
 function applyDarkMode(isDark: boolean) {
-  document.documentElement.classList.toggle('dark', isDark)
+  try {
+    document.documentElement.classList.toggle('dark', isDark)
+  } catch {
+    // DOM not available
+  }
 }
 
 export function usePopupData(): PopupDataResult {
   const [progress, setProgress] = useState<DailyProgress>(DEFAULT_PROGRESS)
   const [recentEntries, setRecentEntries] = useState<LearningEntry[]>([])
+  const [user, setUser] = useState<UserData | null>(null)
   const [darkMode, setDarkMode] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const refreshProgress = useCallback(() => {
-    loadProgress().then(setProgress)
+    loadProgress()
+      .then(setProgress)
+      .catch(() => setProgress(DEFAULT_PROGRESS))
   }, [])
 
   const refreshRecent = useCallback(() => {
-    loadRecentEntries().then(setRecentEntries)
+    loadRecentEntries()
+      .then(setRecentEntries)
+      .catch(() => setRecentEntries([]))
   }, [])
 
   useEffect(() => {
+    let cancelled = false
+    let unregister: (() => void) | undefined
+
     const init = async () => {
-      await Promise.all([refreshProgress(), refreshRecent()])
-      const isDark = getInitialDarkMode()
-      setDarkMode(isDark)
-      applyDarkMode(isDark)
-      setLoading(false)
+      try {
+        const [progressResult, recentResult, userResult] = await Promise.allSettled([
+          loadProgress(),
+          loadRecentEntries(),
+          loadUserData(),
+        ])
+
+        if (cancelled) return
+
+        if (progressResult.status === 'fulfilled') {
+          setProgress(progressResult.value)
+        }
+        if (recentResult.status === 'fulfilled') {
+          setRecentEntries(recentResult.value)
+        }
+        if (userResult.status === 'fulfilled') {
+          setUser(userResult.value)
+        }
+
+        const failures = [progressResult, recentResult, userResult]
+          .filter(r => r.status === 'rejected')
+        if (failures.length > 0) {
+          setError('Failed to load some data')
+        }
+      } catch {
+        if (!cancelled) setError('Failed to initialize popup data')
+      } finally {
+        if (!cancelled) {
+          const isDark = getInitialDarkMode()
+          setDarkMode(isDark)
+          applyDarkMode(isDark)
+          setLoading(false)
+        }
+      }
     }
 
     init()
 
-    const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
-      try {
+    try {
+      const listener = (changes: { [key: string]: chrome.storage.StorageChange }) => {
         if (changes.dailyProgress?.newValue) {
           setProgress(changes.dailyProgress.newValue as DailyProgress)
         }
-      } catch { /* ignore */ }
+        if (changes.ieltsUser?.newValue) {
+          setUser(changes.ieltsUser.newValue as UserData)
+        }
+      }
+      chrome.storage.onChanged.addListener(listener)
+      unregister = () => {
+        try { chrome.storage.onChanged.removeListener(listener) } catch { /* ignore */ }
+      }
+    } catch {
+      // chrome.storage not available
     }
 
-    try {
-      chrome.storage.onChanged.addListener(listener)
-    } catch { /* ignore */ }
     return () => {
-      try { chrome.storage.onChanged.removeListener(listener) } catch { /* ignore */ }
+      cancelled = true
+      unregister?.()
     }
-  }, [refreshProgress, refreshRecent])
+  }, [])
 
   const toggleDarkMode = useCallback(() => {
     setDarkMode((prev) => {
       const next = !prev
-      localStorage.setItem('popup-dark-mode', String(next))
+      try {
+        localStorage.setItem('popup-dark-mode', String(next))
+      } catch { /* localStorage not available */ }
       applyDarkMode(next)
       return next
     })
@@ -115,8 +191,10 @@ export function usePopupData(): PopupDataResult {
   return {
     progress,
     recentEntries,
+    user,
     darkMode,
     loading,
+    error,
     toggleDarkMode,
     refreshProgress,
     refreshRecent,

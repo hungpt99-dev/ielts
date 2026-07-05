@@ -34,6 +34,7 @@ let activeTab: AiExplainType = 'simple'
 let onClose: (() => void) | null = null
 let panelEl: HTMLDivElement | null = null
 let overlayEl: HTMLDivElement | null = null
+let keyHandler: ((e: KeyboardEvent) => void) | null = null
 
 const ALL_TYPES: AiExplainType[] = ['simple', 'vietnamese', 'ielts-vocab', 'grammar', 'rewrite', 'example-sentences', 'quiz']
 
@@ -66,6 +67,14 @@ export function showExplainPanel(text: string, initialAction?: AiExplainType): v
     if (panelEl) panelEl.style.opacity = '1'
     if (overlayEl) overlayEl.style.opacity = '1'
   })
+
+  keyHandler = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.preventDefault()
+      closePanel()
+    }
+  }
+  document.addEventListener('keydown', keyHandler)
 
   loadTab(activeTab)
 }
@@ -171,6 +180,10 @@ function createPanel(): HTMLDivElement {
 }
 
 function closePanel(): void {
+  if (keyHandler) {
+    document.removeEventListener('keydown', keyHandler)
+    keyHandler = null
+  }
   if (panelEl) {
     panelEl.style.opacity = '0'
     setTimeout(() => panelEl?.remove(), 200)

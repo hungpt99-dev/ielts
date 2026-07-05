@@ -1,0 +1,1173 @@
+[2026-07-05T08:53:12.007Z] [INFO] Task started: Inspect Project Structure and User-Facing Features
+[2026-07-05T08:53:12.012Z] [INFO] [info] [output-plan] [{"action":"create","target":"docs/refactor-analysis-report.md","description":"Comprehensive codebase analysis report including project structure and Vietnamese-specific assumptions","validationMethod":"file_exists"}]
+[2026-07-05T08:53:12.603Z] [INFO] [stderr] [0m
+[2026-07-05T08:53:12.603Z] [INFO] [stderr] [0m
+[2026-07-05T08:53:12.603Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-05T08:53:17.538Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T08:53:17.538Z] [INFO] [stderr] [ ] Identify Vietnamese-specific assumptions and hard-coded content
+[2026-07-05T08:53:17.538Z] [INFO] [stderr] [ ] Create comprehensive refactor analysis report
+[2026-07-05T08:53:17.538Z] [INFO] [stderr] [0m
+[2026-07-05T08:53:17.538Z] [INFO] [stderr] [ ] Identify all user-facing features
+[2026-07-05T08:53:17.538Z] [INFO] [stderr] [•] Inspect top-level project structure
+[2026-07-05T08:53:20.065Z] [INFO] [stderr] [0m→ [0mRead .
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] [0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS -maxdepth 3 -type f -name "*.json" -o -name "*.ts" -o -name "*.tsx" -o -name "*.js" | head -100
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] [0m
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/dist/workbox-9c191d2f.js
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/dist/assets/index-D_1h3sRq.js
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/dist/sw.js
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.mf/cf.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/codegraph.config.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm-workspace-state-v1.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.node.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/settings/tsconfig.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/dist/registerSW.js
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/settings/package.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ui/tsconfig.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/package.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/vitest.config.ts
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/tsconfig.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.app.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/content/package.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/package.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/content/tsconfig.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/tsconfig.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/package.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/content/vitest.config.ts
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/tsconfig.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/theme/tsconfig.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises/package.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/utils/tsconfig.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/vitest.config.ts
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/theme/package.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/vitest.config.ts
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai/tsconfig.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai/package.json
+[2026-07-05T08:53:20.568Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ui/package.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/package.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises/vitest.config.ts
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/utils/package.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/project.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/config.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises/tsconfig.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/tsconfig.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/run-index.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/task-index.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/manifest.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/tsconfig.app.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/vite.config.ts
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/vitest.config.ts
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] [0m
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/eslint.config.js
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/state.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/tsconfig.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/package.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/tsconfig.node.json
+[2026-07-05T08:53:20.569Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vitest.config.ts
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] [0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS -maxdepth 1 -type f -o -type d | sort
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.gitignore
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.DS_Store
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.vite-dev.pid
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/dist
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.codegraph
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/codegraph.config.json
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/docs
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-lock.yaml
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/scripts
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/package.json
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/public
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-workspace.yaml
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.json
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.app.json
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/wrangler.toml
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.node.json
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.git
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/.wrangler
+[2026-07-05T08:53:20.814Z] [INFO] [stderr] [0m
+[2026-07-05T08:53:23.604Z] [INFO] [stderr] [0m→ [0mRead apps
+[2026-07-05T08:53:23.814Z] [INFO] [stderr] [0m→ [0mRead packages
+[2026-07-05T08:53:24.031Z] [INFO] [stderr] [0m→ [0mRead docs
+[2026-07-05T08:53:24.264Z] [INFO] [stderr] [0m→ [0mRead package.json
+[2026-07-05T08:53:24.493Z] [INFO] [stderr] [0m→ [0mRead pnpm-workspace.yaml
+[2026-07-05T08:53:29.661Z] [INFO] [stderr] [0m• [0mInspect web app structure[90m Explore Agent[0m
+[2026-07-05T08:53:31.320Z] [INFO] [stderr] [0m• [0mInspect extension app structure[90m Explore Agent[0m
+[2026-07-05T08:53:33.413Z] [INFO] [stderr] [0m• [0mInspect all packages structure[90m Explore Agent[0m
+[2026-07-05T08:54:59.948Z] [INFO] [stderr] [0m✓ [0mInspect web app structure[90m Explore Agent[0m
+[2026-07-05T08:55:19.641Z] [INFO] [stderr] [0m✓ [0mInspect extension app structure[90m Explore Agent[0m
+[2026-07-05T08:55:52.044Z] [INFO] [stderr] [0m✓ [0mInspect all packages structure[90m Explore Agent[0m
+[2026-07-05T08:55:57.530Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T08:55:57.530Z] [INFO] [stderr] [✓] Identify all user-facing features
+[2026-07-05T08:55:57.530Z] [INFO] [stderr] [•] Deep-dive into Vietnamese-specific content and stale features
+[2026-07-05T08:55:57.530Z] [INFO] [stderr] [0m
+[2026-07-05T08:55:57.530Z] [INFO] [stderr] [ ] Create comprehensive refactor analysis report
+[2026-07-05T08:55:57.530Z] [INFO] [stderr] [0m
+[2026-07-05T08:55:57.530Z] [INFO] [stderr] [✓] Inspect top-level project structure
+[2026-07-05T08:56:00.476Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/models/index.ts
+[2026-07-05T08:56:00.829Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/models/aiTutorModels.ts
+[2026-07-05T08:56:01.062Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/configuration/models.ts
+[2026-07-05T08:56:01.363Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/configuration/configSlice.tsx
+[2026-07-05T08:56:05.232Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/aiTutorHelper.ts[90m [limit=100][0m
+[2026-07-05T08:56:05.673Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/ai/AIService.ts
+[2026-07-05T08:56:05.857Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/onboarding/onboardingService.ts
+[2026-07-05T08:56:10.391Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/MockTests.tsx[90m [limit=30][0m
+[2026-07-05T08:56:10.626Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/GrammarNotes.tsx[90m [limit=30][0m
+[2026-07-05T08:56:10.988Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/ImportExport.tsx[90m [limit=30][0m
+[2026-07-05T08:56:11.339Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/PublicApiImportPage.tsx[90m [limit=30][0m
+[2026-07-05T08:56:11.682Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/Search.tsx[90m [limit=30][0m
+[2026-07-05T08:56:12.069Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [limit=50][0m
+[2026-07-05T08:56:12.122Z] [INFO] [stdout] Let me now check some of the stale/inappropriate features and the remaining Vietnamese hardcoded content.
+[2026-07-05T08:56:15.857Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=180, limit=50][0m
+[2026-07-05T08:56:16.269Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=630, limit=50][0m
+[2026-07-05T08:56:16.832Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/SpeakingPartner.tsx[90m [offset=670, limit=40][0m
+[2026-07-05T08:56:17.222Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/WritingTutor.tsx[90m [offset=920, limit=40][0m
+[2026-07-05T08:56:17.756Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/TeachingMode.tsx[90m [offset=635, limit=50][0m
+[2026-07-05T08:56:18.272Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/ReadingListeningTutor.tsx[90m [offset=265, limit=50][0m
+[2026-07-05T08:56:21.984Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/grammar/GrammarLearning.tsx[90m [limit=30][0m
+[2026-07-05T08:56:22.359Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/artifacts/ArtifactsPage.tsx[90m [limit=30][0m
+[2026-07-05T08:56:22.741Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/speaking/data/questions.ts[90m [limit=40][0m
+[2026-07-05T08:56:23.110Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/speaking/data/phrases.ts[90m [limit=40][0m
+[2026-07-05T08:56:23.487Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/writing/data/prompts.ts[90m [limit=30][0m
+[2026-07-05T08:56:23.851Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/reading/data/passages.ts[90m [limit=30][0m
+[2026-07-05T08:56:27.025Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/listening/data/exercises.ts[90m [limit=40][0m
+[2026-07-05T08:56:27.274Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/landing/config.ts
+[2026-07-05T08:56:27.657Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/landing/HeroSection.tsx[90m [limit=50][0m
+[2026-07-05T08:56:28.081Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/landing/FeatureGrid.tsx[90m [limit=30][0m
+[2026-07-05T08:56:28.451Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/Layout.tsx[90m [limit=100][0m
+[2026-07-05T08:56:32.276Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/ReadingListeningTutor.tsx[90m [offset=315, limit=50][0m
+[2026-07-05T08:56:32.684Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/planner/aiPlannerPrompts.ts[90m [limit=50][0m
+[2026-07-05T08:56:33.047Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/roadmap/aiPlanPrompts.ts[90m [limit=50][0m
+[2026-07-05T08:56:33.735Z] [INFO] [stderr] [0m→ [0mRead packages/ai/src/prompts/explain.ts[90m [offset=1, limit=70][0m
+[2026-07-05T08:56:37.926Z] [INFO] [stderr] [0m→ [0mRead docs/features.md[90m [limit=100][0m
+[2026-07-05T08:56:39.002Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/extension/ProactiveAssistant.ts[90m [limit=30][0m
+[2026-07-05T08:56:39.004Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/analytics/Analytics.tsx[90m [limit=30][0m
+[2026-07-05T08:56:45.154Z] [INFO] [stderr] [0m
+[2026-07-05T08:56:45.154Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T08:56:45.154Z] [INFO] [stderr] [✓] Inspect top-level project structure
+[2026-07-05T08:56:45.154Z] [INFO] [stderr] [✓] Identify all user-facing features
+[2026-07-05T08:56:45.154Z] [INFO] [stderr] [✓] Deep-dive into Vietnamese-specific content and stale features
+[2026-07-05T08:56:45.154Z] [INFO] [stderr] [•] Create comprehensive refactor analysis report
+[2026-07-05T08:56:45.154Z] [INFO] [stderr] [0m
+[2026-07-05T08:56:48.420Z] [INFO] [stderr] [0m→ [0mRead docs/refactor-analysis-report.md[90m [limit=50][0m
+[2026-07-05T08:56:51.552Z] [INFO] [stderr] [0m→ [0mRead docs/refactor-analysis-report.md[90m [offset=51, limit=650][0m
+[2026-07-05T08:56:57.660Z] [INFO] [stderr] [0m→ [0mRead docs/refactor-analysis-report.md[90m [offset=690, limit=10][0m
+[2026-07-05T08:56:57.755Z] [INFO] [stdout] Now I have a thorough understanding of the entire codebase. Let me create the comprehensive refactor analysis report.
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] [0m
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] [0m← [0mEdit docs/refactor-analysis-report.md
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] @@ -693,4 +693,352 @@
+[2026-07-05T08:57:50.689Z] [INFO] [stderr]  | Feature completeness (structure) | ~30% | 100% |
+[2026-07-05T08:57:50.689Z] [INFO] [stderr]  | Documentation coverage | ~25% | 100% |
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] ===================================================================
+[2026-07-05T08:57:50.689Z] [INFO] [stderr]  | Hardcoded colors | Many | Zero |
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.689Z] [INFO] [stderr]  | Test coverage | ~5% | >60% |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +|----------|-------|--------|
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/models/index.ts:103` | `VocabularyEntry.meaningVi: string` — Dedicated Vietnamese meaning field | All vocabulary entries carry Vietnamese baggage; the model assumes bi-lingual (EN-VI) storage |
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +---
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +### 14.1 Data Model Level
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/models/aiTutorModels.ts:144` | `UserTutorPreferences.language: 'english' \| 'vietnamese' \| 'both'` | Language system is hardcoded to just English/Vietnamese; no extensibility for other languages |
+[2026-07-05T08:57:50.689Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai/src/schemas/vocabulary.ts:5` | `meaningVi` field in vocabulary Zod schema | AI output schema requires Vietnamese |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai/src/schemas/dictionary.ts:6` | `meaningVi` field in dictionary Zod schema | AI output schema requires Vietnamese |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/features/configuration/models.ts:31` | `AiResponseLanguage: 'english' \| 'vietnamese' \| 'both'` | Only 3 options; not extensible |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/models/aiTutorModels.ts:147` | `UserTutorPreferences.useVietnamese: boolean` | Overlapping boolean flag that duplicates `language` field |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| Location | Issue | Impact |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai/src/prompts/explain.ts:5` | `AiExplainType: 'vietnamese'` | Vietnamese explain is a first-class type, not a plugin |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai-tutor/src/types/proactiveMessage.ts:126` | `TutorTone: 'vietnamese'` | Vietnamese is a built-in tone, not one of many possible languages |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/features/configuration/models.ts:15` | `AiTutorMode: 'vietnamese-explanation-tutor'` | Specific tutor mode for Vietnamese explanations |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/storage/src/schema.ts:55` | `meaningVi` field in storage schema | DB schema stores Vietnamese field for every vocabulary entry |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +## 14. Vietnamese-Specific Assumptions & Hard-Coded Content
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +|----------|-------|
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| Location | Issue |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +### 14.2 AI Prompt Level — `vietnamese` as a Built-in Feature
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai/src/prompts/explain.ts:46` | System prompt: _"You are an IELTS tutor. Translate to Vietnamese and add vocabulary notes."_ |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai/src/prompts/vocabulary.ts:21` | Prompt asks for `meaningVi` — Vietnamese translation |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai/src/prompts/dictionary.ts:19` | Prompt asks for `meaningVi` — Vietnamese translation |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| File | Function | Lines | Description |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/aiTutorHelper.ts:6` | `LANGUAGE_INSTRUCTION.both = 'Respond in both English and Vietnamese, separated by "---".'` |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +|------|----------|-------|-------------|
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai/src/prompts/video.ts:120` | Prompt asks for Vietnamese `translation` in shadowing scripts |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/pages/AITutorChat.tsx` | `generateFriendModeVietnamese()` | 186-202 | 4 Vietnamese chat responses for friendly mode (e.g. "Chào bạn! 😊 Rất vui được trò chuyện!") |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/aiTutorHelper.ts:5` | `LANGUAGE_INSTRUCTION.vietnamese = 'Respond in Vietnamese only.'` |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai/src/prompts/explain.ts:36` | System prompt: _"Translate this text to Vietnamese and explain any difficult English words"_ |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/SpeakingPartner.tsx` | `generateFeedbackVietnamese()` | 670-703 | Full Vietnamese speaking feedback with band estimates ("Ước tính Band Nói") |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +### 14.3 AI Tutor Level — Hard-coded Vietnamese Fallback Responses
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/WritingTutor.tsx` | `generateFeedbackVietnamese()` | 927-946 | Full Vietnamese writing feedback with categories ("Điểm mạnh", "Cần cải thiện") |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/TeachingMode.tsx` | `generateFeedbackMessage()` | 666-672 | Vietnamese lesson completion ("Hoàn thành bài học", "Điểm của bạn") |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | `generateVocabVietnamese()` | 325-344 | Vietnamese vocabulary headers ("Từ vựng IELTS quan trọng") |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | `getSummaryVietnamese()` | 269-276 | Vietnamese topic summaries ("Tóm tắt") |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | `generateComprehensionQuestions()` | 355 | Vietnamese question header ("Câu hỏi đọc hiểu") |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +### 14.4 Proactive Message Level
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/TeachingMode.tsx` | `generateLessonText()` | 640 | Vietnamese lesson text ("Giải thích", "Quy tắc chính") |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| Location | Issue |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | Various | 417,473,626-661 | Vietnamese labels for opinion questions, exercises, IELTS connections |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai-tutor/src/services/proactiveMessageEngine.ts:87` | `TONE_PREFIXES.vietnamese = ['Chào bạn! ', 'Xin chào! ', 'Bạn ơi! ']` — Vietnamese greeting prefixes for proactive messages |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +|----------|-------|
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/pages/AITutorChat.tsx` | `generateVietnameseExplanation()` | 639-666 | 7 Vietnamese grammar/vocabulary explanations (e.g. "Mạo từ (a/an/the) có thể khó!") |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| Location | Issue |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/extension/src/popup/components/VocabularyCollector.tsx:684` | `<strong>Nghĩa:</strong>` — Vietnamese label for "Meaning" |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/extension/src/content-script/aiExplain.ts:368` | `renderSection('Vietnamese Translation', ...)` — Tab label hardcodes Vietnamese |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/extension/src/popup/components/WordDetails.tsx:171` | `title="Nghĩa (Vietnamese)"` — Vietnamese sub-header in word details |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +|----------|-------|
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +### 14.6 User-Facing Creator Info
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/extension/src/popup/components/MiniTutor.tsx:32` | `description: 'Translate to Vietnamese'` — Action description hardcodes Vietnamese |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| Location | Issue |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +### 14.5 Extension Level — Vietnamese UI Labels
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/pages/LandingPage.tsx:63` | `"Built by Phạm Thanh Hưng · Free for all IELTS learners"` — Vietnamese name in main hero |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +|----------|-------|
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/pages/landing/config.ts:2` | `name: 'Phạm Thanh Hưng'` — Creator's Vietnamese name (appropriate for About page but not landing) |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +### 14.7 Default Language Settings
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/models/aiTutorModels.ts:156-168` | `DEFAULT_TUTOR_PREFERENCES` default `language: 'english'` is correct, but `useVietnamese: false` is redundant |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| Location | Issue |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/features/configuration/models.ts:61` | `responseLanguage` is single field — doesn't separate app language from AI explanation language |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `apps/web/src/features/configuration/storage.ts` | Configuration storage — no `nativeLanguage` or `explanationLanguage` fields are separated |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +|----------|-------|
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +| `packages/ai-tutor/src/types/proactiveMessage.ts` | No language-agnostic message generation — all proactive messages are English-first with Vietnamese special case |
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +### 14.8 Missing Globalization Infrastructure
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +- Locale files (.json, .po, .yaml)
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +The app has **no**:
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +- Language detection (browser navigator.language)
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +- Country/region selection
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +- Locale-aware date/number formatting (uses `toLocaleDateString('en-US')` hardcoded)
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +Vietnamese support is implemented as **code-level branching** (`if (language === 'vietnamese')`) rather than through a proper translation system.
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +---
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.690Z] [INFO] [stderr] +- Language preference in localStorage keys (all hardcoded English)
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +- i18n / l10n library (react-i18next, react-intl, etc.)
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +### 15.1 Features to Remove (Not IELTS-Related)
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +## 15. Inappropriate / Stale / Unused Features
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Feature | File | Reason |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +- Right-to-left (RTL) support
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Public API Importer** | `apps/web/src/features/publicApiIntegration/` (~2,000+ lines) | Searches Wiktionary, Datamuse, Tatoeba, Wikipedia, Project Gutenberg — not IELTS-specific; complex, unused dependency; duplicates existing content |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Artifacts (Saved URLs)** | `apps/web/src/features/artifacts/ArtifactsPage.tsx` (466 lines) | Generic bookmarking feature; not IELTS-specific; extension already saves articles |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Import/Export** | `apps/web/src/pages/ImportExport.tsx` (306 lines) | Duplicated by `packages/storage/backup/` export/import; extension has its own BackupRestore; two competing implementations |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Recruit Page** | `apps/web/src/features/info/Recruit.tsx` | Recruitment info, not IELTS learning |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Send Feedback** | `apps/web/src/features/info/SendFeedback.tsx` | Could be useful but currently just a form with no backend |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **About Me Page** | `apps/web/src/features/info/AboutMe.tsx` | Personal portfolio content, not IELTS learning |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +### 15.2 Features to Review (Potentially Remove or Refactor)
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Feature | File | Reason |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Website Info Pages** | `apps/web/src/components/PublicTabPage.tsx` | About/Recruit/Donate/Feedback tabs — not learning features; personal website content mixed into product |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +|---------|------|--------|
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Grammar Learning** | `apps/web/src/features/grammar/GrammarLearning.tsx` (1407 lines) | Duplicated by `GrammarNotes` page; two separate grammar features with overlapping functionality |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **WebsiteInfo** | `apps/web/src/features/info/WebsiteInfo.tsx` | Meta info page about the website itself |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Mock Tests Tracker** | `apps/web/src/pages/MockTests.tsx` (749 lines) | Manual mock test entry tracker — no actual mock tests; just stores scores the user inputs manually |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Progress Review (AI)** | `apps/web/src/features/progressReview/ProgressReviewPage.tsx` | AI-generated progress report — useful but duplicates `Progress.tsx` charts |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +|---------|------|--------|
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Planner** | `apps/web/src/features/planner/Planner.tsx` | AI-generated schedule — duplicated by `StudyPlan` feature |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Review Center** | `apps/web/src/pages/ReviewCenter.tsx` | Centralized review hub — useful but duplicates vocabulary review flow |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **DailyPlan** | `apps/web/src/pages/DailyPlan.tsx` | Daily view of study tasks — overlaps with Dashboard and StudyPlan |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Topics Progress** | `apps/web/src/pages/TopicsProgress.tsx` | Tracks progress by IELTS topic — useful but overlaps with dashboard and progress pages |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Grammar Notes** | `apps/web/src/pages/GrammarNotes.tsx` (728 lines) | Duplicates GrammarLearning; both are CRUD for grammar topics |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Search** | `apps/web/src/pages/Search.tsx` (675 lines) | Full-text search across all entities — useful but complex; edge-case feature |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Donate Page** | `apps/web/src/features/info/Donate.tsx` | Donation page, not IELTS learning |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +These are the most critical duplicates that need consolidation:
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Study Notes** | `apps/web/src/features/notes/StudyNotesPage.tsx` | Free-form notes feature — not IELTS-specific; generic note-taking |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| **Analytics** | `apps/web/src/features/analytics/Analytics.tsx` (805 lines) | Recharts-based analytics page — duplicates `Progress.tsx` which already shows charts |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +### 15.3 Duplicate Page/Feature Implementations
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +|---------|--------------|------------------|--------|
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Listening | `src/pages/ListeningJournal.tsx` (895 lines) | `src/features/listening/ListeningPractice.tsx` | Different approaches |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Vocabulary | `src/pages/Vocabulary.tsx` (1036 lines) | `src/features/vocabulary/Vocabulary.tsx` (772 lines) | Different implementations |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Reading | `src/pages/ReadingJournal.tsx` (865 lines) | `src/features/reading/ReadingPractice.tsx` | Different approaches |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Feature | `pages/` file | `features/` file | Status |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Dashboard | `src/pages/Dashboard.tsx` (446 lines) | `src/features/dashboard/Dashboard.tsx` (492 lines) | Different implementations |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Writing | `src/pages/WritingPractice.tsx` (1055 lines) | `src/features/writing/WritingPractice.tsx` | Different approaches |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Grammar | `src/pages/GrammarNotes.tsx` (728 lines) | `src/features/grammar/GrammarLearning.tsx` (1407 lines) | Different implementations |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Settings | `src/pages/Settings.tsx` + `DataManagement.tsx` (755 lines) | `src/features/settings/Settings.tsx` (591 lines) | Different implementations |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Speaking | `src/pages/SpeakingPractice.tsx` (1081 lines) | `src/features/speaking/SpeakingPractice.tsx` | Different approaches |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Item | Location | Evidence |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| Mistakes | `src/pages/Mistakes.tsx` (750 lines) | `src/features/mistakes/MistakeNotebook.tsx` (1068 lines) | Different implementations |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +### 15.4 Stale/Dead Code
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| `App.tsx` (root) | `src/App.tsx` | Not imported by `main.tsx` which imports from `src/app/App.tsx` instead |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +|------|----------|----------|
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +| `src/extension/` | `src/extension/ProactiveAssistant.ts` (445 lines) | Extension-specific code in web app's src/ — not imported by any web app component |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `pwa-config.ts` | `src/pwa-config.ts` | Contains only comments — JS file that never executes |
+[2026-07-05T08:57:50.691Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `useDashboard` hook | `src/hooks/useDashboard.ts` | Only used by the OLD `src/pages/Dashboard.tsx`, not the `features/dashboard/` version |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `data/ieltsContent.ts` | `src/features/tasks/ieltsContent.ts` | Static IELTS content — not imported by any component |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `Phrases` data | `src/features/speaking/data/phrases.ts` | Speaking phrases — not imported by any speaking component |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `DashboardPreviewSection` | `src/components/DashboardPreviewSection.tsx` | Old landing component — not used by new landing |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `useAutosave` hook | `src/hooks/useAutosave.ts` | Not imported anywhere in the current codebase |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `DonationSection` | `src/components/DonationSection.tsx` | Old landing component — not used by new landing |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| Old landing components | `src/components/LandingPage.tsx`, `HeroSection.tsx`, etc. | `src/pages/landing/` has a separate, newer landing page implementation |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `AITutorSection` | `src/components/AITutorSection.tsx` | Maybe unused on landing |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `FeatureSection` | `src/components/FeatureSection.tsx` | Old landing component — not used by new landing |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `Footer` | `src/components/Footer.tsx` | Has both old and new implementations |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `FinalCTASection` | `src/components/FinalCTASection.tsx` | Maybe unused on landing |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `RecruitmentSection` | `src/components/RecruitmentSection.tsx` | Old landing component — not used by new landing |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `SEOHead` | `src/components/SEOHead.tsx` | Not using react-helmet anywhere else |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| Duplicate UI component | `packages/ui/src/components/Toast.tsx` vs `src/components/ui/Toast.tsx` | Two Toast implementations |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| AI Service | `src/services/ai/AIService.ts` vs `packages/ai/` | Two separate AI call implementations |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| Area | Files | Problem |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +### 15.5 Duplicate Services / Logic
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +|------|-------|---------|
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| Storage | `src/services/storage/Database.ts` vs `packages/storage/` vs `apps/extension/src/storage/` | Three IndexedDB implementations |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `generateId()` | `packages/exercises/utils/id.ts` vs `packages/ai-tutor/utils/id.ts` | Same function in 2 packages |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| Error Classes | `packages/utils/src/errors.ts` (22 classes) vs `packages/ai/src/errors/types.ts` (6) vs `packages/storage/src/errors.ts` (6) | Error classes duplicated with different messages |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| Speaking Questions | `src/features/speaking/data/questions.ts` vs extension's own data | Speaking questions in both apps |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| Writing Prompts | `src/features/writing/data/prompts.ts` vs extension's own data | Writing prompt data in both apps |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| SM-2 Algorithm | `src/utils/spaced-repetition.ts` vs `packages/storage/reviewService.ts` vs `packages/exercises/reviewScheduler.ts` vs `packages/learning-engine/review-scheduler/` | Four implementations of the same algorithm |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `isInQuietHours()` | 3 files in `packages/ai-tutor/` | Same logic in 3 files |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `/artifacts` — Generic bookmarking feature
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| Settings Context | `src/context/SettingsContext.tsx` vs `src/features/configuration/configSlice.tsx` | Two settings management systems |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +These routes in the sidebar should be reviewed:
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `/grammar` — Duplicated by GrammarLearning
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `/public-api` — Not IELTS-specific
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `/search` — Full-text search (edge case)
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +### 15.6 Dead Navigation Routes (from Layout.tsx)
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `/topics` — Overlaps with dashboard/progress
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `/import-export` — Duplicated by backup system
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +---
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +### 16.1 Vietnamese in Extension
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +|------|------|-------|
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `VocabularyCollector.tsx` | 684 | `<strong>Nghĩa:</strong>` — Vietnamese UI label |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `WordDetails.tsx` | 171 | `title="Nghĩa (Vietnamese)"` — Vietnamese header |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| File | Line | Issue |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `aiExplain.ts` | 368 | `'Vietnamese Translation'` — tab label |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| `MiniTutor.tsx` | 32 | `'Translate to Vietnamese'` — action description |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `/info` — Personal website content
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `/mock-tests` — Manual score tracker only
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +### 16.2 Stale/Half-Finished Extension Features
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| Feature | Issue |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +## 16. Extension-Specific Issues
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| **Video Helper** (`VideoHelper.tsx`) | Only works with YouTube; Vimeo detection is present but non-functional; no transcript for Vimeo |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| **Website Bridge** (`bridge-client.ts`) | Bridge to web app is defined but web app has no matching bridge server; sync is incomplete |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| **Proactive Message Panel** (`proactiveMessagePanel.tsx`) | In-page toast messages — intrusive UX; disabled by default |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| **Public Content Search** (`ImportExportSection.tsx`) | Searches 5 external APIs; complex feature with licensing/attribution requirements; not IELTS-specific |
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +|---------|-------|
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +### 16.3 Extension Duplicates Web App Data
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +The extension stores its own data in a **separate IndexedDB database** that is not accessible from the web app:
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `vocabularyStore.ts` — separate vocabulary data
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +This means users who use both the extension and the web app have **completely separate data silos**.
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `articleStore.ts` — separate articles
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +- `videoStore.ts` — separate video data
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +---
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +- `mistakeStore.ts` — separate mistakes
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +## 17. Localization System Requirements
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +### 17.1 Current State
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +The app uses a **custom ad-hoc language system** with these characteristics:
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +- No locale files, no translation dictionaries, no i18n library
+[2026-07-05T08:57:50.692Z] [INFO] [stderr] +| **Dictionary Panel** (`dictionaryPanel.ts`) | Quick word lookup on double-click — may conflict with page functionality |
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +- Language is propagated as a parameter to every AI generation function
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +- Vietnamese responses are generated via `if (language === 'vietnamese')` branching
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +- `meaningVi` fields assume Vietnamese is the only second language worth storing
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +### 17.2 Required Changes for Globalization
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +- `type Language = 'english' | 'vietnamese' | 'both'` in multiple files
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - `aiExplanationLanguage` — language for AI tutor explanations
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - `nativeLanguage` — user's native language (for translation features)
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - `contentLanguage` — language for exercise content/instructions
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +2. **Remove hard-coded Vietnamese branching:**
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Replace `if (language === 'vietnamese')` with `if (language === userSettings.aiExplanationLanguage)`
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - `appDisplayLanguage` — language for UI chrome/menus/buttons
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Replace hardcoded Vietnamese strings with AI-generated translations or locale files
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +3. **Data model changes:**
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Remove `'vietnamese'` from `AiTutorMode`, `TutorTone`, `AiExplainType`; make language a separate dimension
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Remove `useVietnamese` boolean (duplicates `language` field)
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +4. **AI prompt changes:**
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Make language instruction dynamic: `Respond in {language} only.`
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Remove `meaningVi` from core vocabulary schema; replace with language-agnostic `translations: Record<string, string>`
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Remove hardcoded Vietnamese-specific prompts
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Remove Vietnamese-specific schema fields from AI responses
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +5. **Default settings:**
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Vietnamese available as an option, not the default
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +---
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +### 18.1 Features Aligned with Product Direction
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +## 18. Product Direction Alignment
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +1. **Separate language settings:**
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +   - Default AI explanation language: `'en'` (English)
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Vocabulary Notebook | Core | **Keep** |
+[2026-07-05T08:57:50.693Z] [INFO] [stderr] +   - Default app language: `'en'` (English)
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +|---------|-----------|---------------|
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| AI Tutor | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Study Plan | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Feature | Alignment | Keep/Refactor |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Listening Practice | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Dashboard | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Reading Practice | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Vocabulary Review (SM-2) | Core | **Keep** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Speaking Practice | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Mistake Tracking | Core | **Keep** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Chrome Extension | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Writing Practice | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| AI Provider Config | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Local-first Storage | Core | **Keep** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +### 18.2 Features NOT Aligned with Product Direction
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Feature | Reason | Action |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +|---------|--------|--------|
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Progress Review | Core | **Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Public API Import | Not IELTS-specific; complex dependencies | **Remove** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| PWA Support | Core | **Keep** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Import/Export (page) | Duplicated by proper backup system | **Remove** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Artifacts (Bookmarks) | Generic bookmarking; not learning | **Remove** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Website Info / About / Recruit / Donate | Personal website content; not IELTS | **Remove** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Topics Progress | Overlaps with Dashboard/Progress | **Merge** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Grammar Learning (Gamified) | Duplicates Grammar Notes; half-finished | **Remove or Merge** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Grammar Notes (CRUD) | Basic CRUD; no actual grammar engine | **Merge into core** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Review Center | Duplicates vocabulary review | **Merge** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Search | Edge-case feature; complex | **Consider removing** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Study Notes | Generic notes; not IELTS-specific | **Consider removing** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +## 19. Cleanup Priority Matrix
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +---
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +|----------|------|--------|--------|------|
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P0 | Remove `meaningVi` from core schemas; use flexible translations | Medium | High | Globalization |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P0 | Separate language settings (app language vs AI language) | Medium | High | Globalization |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Mock Tests Tracker | Manual entry only; no actual tests | **Remove or Refactor** |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P1 | Consolidate duplicate page/feature implementations | High | High | Architecture |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P0 | Remove hardcoded Vietnamese fallback strings from AI Tutor components | Medium | High | Globalization |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P1 | Remove Info/About/Donate/Recruit pages | Low | Medium | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Priority | Item | Effort | Impact | Type |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P1 | Remove `'vietnamese'` from tutor modes, tones, and explain types | Medium | High | Globalization |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P1 | Remove Artifacts feature | Low | High | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P2 | Remove Mock Tests page | Low | Medium | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P1 | Remove Public API Import feature | Low | High | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P2 | Remove old landing page components | Low | Low | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P2 | Remove or consolidate duplicate Grammar features | Medium | Medium | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P2 | Remove duplicate Import/Export page | Low | Medium | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P2 | Remove `src/pwa-config.ts` (comment-only file) | Low | Low | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P2 | Remove `src/extension/ProactiveAssistant.ts` from web app | Low | Medium | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P2 | Remove unused hooks (`useAutosave`) | Low | Low | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P3 | Consolidate 4 SM-2 algorithm implementations | High | Medium | Architecture |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P3 | Consolidate 3 IndexedDB implementations | High | Medium | Architecture |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P3 | Consolidate duplicate error classes | Medium | Low | Architecture |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P3 | Update extension to use shared `@ielts/storage` package | High | Medium | Architecture |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P3 | Consolidate duplicate AI services | Medium | Medium | Architecture |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P3 | Add i18n library and locale files | High | High | Globalization |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +---
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +## 20. Code Quality Metrics Summary
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| P2 | Remove dead `src/App.tsx` (unused entry) | Low | Low | Cleanup |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Metric | Current | Target |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Duplicate features (`pages/` vs `features/`) | 9 pairs | 0 (consolidated) |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +|--------|---------|--------|
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Vietnamese-specific data model fields | 6 locations (`meaningVi` × 4, `AiResponseLanguage`, `TutorTone`) | 0 (replaced by flexible system) |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Separate IndexedDB implementations | 3 | 1 |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| Vietnamese hardcoded strings | ~80 lines across 10 files | 0 |
+[2026-07-05T08:57:50.695Z] [INFO] [stderr] +| Unused components | ~10 | 0 |
+[2026-07-05T08:57:50.695Z] [INFO] [stderr] +| `any`/`unknown` escape hatches | ~30 | 0 |
+[2026-07-05T08:57:50.695Z] [INFO] [stderr] +| Files >700 lines | 12 | 0 |
+[2026-07-05T08:57:50.694Z] [INFO] [stderr] +| SM-2 implementations | 4 | 1 |
+[2026-07-05T08:57:50.695Z] [INFO] [stderr] +| Comment-only files | 2 | 0 |
+[2026-07-05T08:57:50.695Z] [INFO] [stderr] [0m
+[2026-07-05T08:57:50.695Z] [INFO] [stderr] +| Non-IELTS feature modules | 6-8 | 0 |
+[2026-07-05T08:57:50.695Z] [INFO] [stderr] 
+[2026-07-05T08:57:54.007Z] [INFO] [stderr] [0m
+[2026-07-05T08:57:54.007Z] [INFO] [stderr] 1044 /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[2026-07-05T08:57:54.007Z] [INFO] [stderr] [0m$ [0mwc -l /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] > Comprehensive codebase analysis for the IELTS Learning Journey project.
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] > Analyzed by: OpenCode
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] [0m$ [0mhead -5 /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md && echo "---" && tail -5 /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] ---
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] # Refactor Analysis Report
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] > Date: 2026-07-01
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] | Non-IELTS feature modules | 6-8 | 0 |
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] | `any`/`unknown` escape hatches | ~30 | 0 |
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] | Files >700 lines | 12 | 0 |
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] 
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] [0m
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] | Unused components | ~10 | 0 |
+[2026-07-05T08:57:57.017Z] [INFO] [stderr] | Comment-only files | 2 | 0 |
+[2026-07-05T08:58:00.439Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[2026-07-05T08:58:00.439Z] [INFO] [stderr] [0m← [0mEdit docs/refactor-analysis-report.md
+[2026-07-05T08:58:00.439Z] [INFO] [stderr]  # Refactor Analysis Report
+[2026-07-05T08:58:00.439Z] [INFO] [stderr]  
+[2026-07-05T08:58:00.439Z] [INFO] [stderr]  > Comprehensive codebase analysis for the IELTS Learning Journey project.
+[2026-07-05T08:58:00.439Z] [INFO] [stderr] @@ -1,8 +1,8 @@
+[2026-07-05T08:58:00.439Z] [INFO] [stderr] +> Date: 2026-07-05 (updated with Vietnamese assumptions, stale features, and product direction analysis)
+[2026-07-05T08:58:00.439Z] [INFO] [stderr] 
+[2026-07-05T08:58:00.439Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[2026-07-05T08:58:00.439Z] [INFO] [stderr] ===================================================================
+[2026-07-05T08:58:00.439Z] [INFO] [stderr]  
+[2026-07-05T08:58:00.439Z] [INFO] [stderr] -> Date: 2026-07-01
+[2026-07-05T08:58:00.439Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[2026-07-05T08:58:00.439Z] [INFO] [stderr]  ---
+[2026-07-05T08:58:00.439Z] [INFO] [stderr]  
+[2026-07-05T08:58:00.440Z] [INFO] [stderr] [0m
+[2026-07-05T08:58:00.439Z] [INFO] [stderr]  > Analyzed by: OpenCode
+[2026-07-05T08:58:03.869Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T08:58:03.869Z] [INFO] [stderr] [✓] Identify all user-facing features
+[2026-07-05T08:58:03.869Z] [INFO] [stderr] [0m
+[2026-07-05T08:58:03.869Z] [INFO] [stderr] [✓] Create comprehensive refactor analysis report
+[2026-07-05T08:58:03.869Z] [INFO] [stderr] [✓] Inspect top-level project structure
+[2026-07-05T08:58:03.869Z] [INFO] [stderr] [✓] Deep-dive into Vietnamese-specific content and stale features
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] **Key findings documented:**
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] 
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] ## Completion Summary
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] ### Vietnamese-specific assumptions (80+ hardcoded strings, 10+ files)
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] - `meaningVi` field in 4 data models (core vocabulary schema, AI schemas, storage schema)
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] - `'vietnamese'` as a first-class value in `AiTutorMode`, `TutorTone`, `AiExplainType`, `AiResponseLanguage`, `UserTutorPreferences.language`
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] - `TONE_PREFIXES.vietnamese` in proactive message engine
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] - Hard-coded Vietnamese fallback responses in 5 AI Tutor components (AITutorChat, SpeakingPartner, WritingTutor, TeachingMode, ReadingListeningTutor)
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] - Vietnamese UI labels in extension (WordDetails, VocabularyCollector, MiniTutor, aiExplain)
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] 
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] - **Consolidate:** 9 duplicate `pages/` vs `features/` implementations, 4 SM-2 algorithms, 3 IndexedDB layers, 2 Toast components
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] - AI prompts that hardcode Vietnamese-specific instructions
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] **Report created at** `docs/refactor-analysis-report.md` (1044 lines, up from 696).
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] - **Dead code:** `src/App.tsx` (unused), `pwa-config.ts` (comment-only), `useAutosave` (unused), `src/extension/ProactiveAssistant.ts` (extension code in web app), speaking `phrases.ts` (unused)
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] 
+[2026-07-05T08:58:10.355Z] [INFO] [stdout] ### Key architecture issues to address
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] 
+[2026-07-05T08:58:10.355Z] [INFO] [stdout] - No separation between app language and AI explanation language
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] 
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] ### Features identified as inappropriate/stale (15+)
+[2026-07-05T08:58:10.354Z] [INFO] [stdout] - **Remove:** Public API Import (~2000 lines), Artifacts, Mock Tests, Info/About/Donate/Recruit, old landing components, Import/Export page (duplicated)
+[2026-07-05T08:58:10.355Z] [INFO] [stdout] - No i18n framework — Vietnamese support is code-level branching only
+[2026-07-05T08:58:10.355Z] [INFO] [stdout] - No locale files or translation dictionaries
+[2026-07-05T08:58:10.355Z] [INFO] [stdout] - Major business logic mixed into UI components (AITutorChat at 2833 lines)
+[2026-07-05T08:58:10.559Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-05T08:58:10.560Z] [INFO] Output:
+Let me now check some of the stale/inappropriate features and the remaining Vietnamese hardcoded content.
+Now I have a thorough understanding of the entire codebase. Let me create the comprehensive refactor analysis report.
+## Completion Summary
+
+**Report created at** `docs/refactor-analysis-report.md` (1044 lines, up from 696).
+
+**Key findings documented:**
+
+### Vietnamese-specific assumptions (80+ hardcoded strings, 10+ files)
+- `meaningVi` field in 4 data models (core vocabulary schema, AI schemas, storage schema)
+- `'vietnamese'` as a first-class value in `AiTutorMode`, `TutorTone`, `AiExplainType`, `AiResponseLanguage`, `UserTutorPreferences.language`
+- Hard-coded Vietnamese fallback responses in 5 AI Tutor components (AITutorChat, SpeakingPartner, WritingTutor, TeachingMode, ReadingListeningTutor)
+- Vietnamese UI labels in extension (WordDetails, VocabularyCollector, MiniTutor, aiExplain)
+- `TONE_PREFIXES.vietnamese` in proactive message engine
+- AI prompts that hardcode Vietnamese-specific instructions
+
+### Features identified as inappropriate/stale (15+)
+- **Remove:** Public API Import (~2000 lines), Artifacts, Mock Tests, Info/About/Donate/Recruit, old landing components, Import/Export page (duplicated)
+- **Consolidate:** 9 duplicate `pages/` vs `features/` implementations, 4 SM-2 algorithms, 3 IndexedDB layers, 2 Toast components
+- **Dead code:** `src/App.tsx` (unused), `pwa-config.ts` (comment-only), `useAutosave` (unused), `src/extension/ProactiveAssistant.ts` (extension code in web app), speaking `phrases.ts` (unused)
+
+### Key architecture issues to address
+- No i18n framework — Vietnamese support is code-level branching only
+- No separation between app language and AI explanation language
+- No locale files or translation dictionaries
+- Major business logic mixed into UI components (AITutorChat at 2833 lines)
+[2026-07-05T08:58:10.560Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m# [0mTodos
+[•] Inspect top-level project structure
+[ ] Identify all user-facing features
+[ ] Identify Vietnamese-specific assumptions and hard-coded content
+[ ] Create comprehensive refactor analysis report
+[0m
+[0m→ [0mRead .
+[0m
+[0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS -maxdepth 3 -type f -name "*.json" -o -name "*.ts" -o -name "*.tsx" -o -name "*.js" | head -100
+/Users/phamthanhhung/Desktop/MyProject/IELTS/codegraph.config.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.node.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.app.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/dist/workbox-9c191d2f.js
+/Users/phamthanhhung/Desktop/MyProject/IELTS/dist/registerSW.js
+/Users/phamthanhhung/Desktop/MyProject/IELTS/dist/assets/index-D_1h3sRq.js
+/Users/phamthanhhung/Desktop/MyProject/IELTS/dist/sw.js
+/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.mf/cf.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm-workspace-state-v1.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ui/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ui/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/settings/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/settings/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/vitest.config.ts
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/learning-engine/vitest.config.ts
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/content/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/content/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/content/vitest.config.ts
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/utils/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/utils/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/storage/vitest.config.ts
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/theme/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/theme/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises/vitest.config.ts
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/state.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/project.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/config.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/task-index.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask/run-index.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/manifest.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vite.config.ts
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/vitest.config.ts
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/tsconfig.node.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/tsconfig.app.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/eslint.config.js
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/vite.config.ts
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/vitest.config.ts
+[0m
+[0m$ [0mfind /Users/phamthanhhung/Desktop/MyProject/IELTS -maxdepth 1 -type f -o -type d | sort
+/Users/phamthanhhung/Desktop/MyProject/IELTS
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.DS_Store
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.codegraph
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.flowtask
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.git
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.gitignore
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.vite-dev.pid
+/Users/phamthanhhung/Desktop/MyProject/IELTS/.wrangler
+/Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps
+/Users/phamthanhhung/Desktop/MyProject/IELTS/codegraph.config.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/dist
+/Users/phamthanhhung/Desktop/MyProject/IELTS/docs
+/Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules
+/Users/phamthanhhung/Desktop/MyProject/IELTS/package.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages
+/Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-lock.yaml
+/Users/phamthanhhung/Desktop/MyProject/IELTS/pnpm-workspace.yaml
+/Users/phamthanhhung/Desktop/MyProject/IELTS/public
+/Users/phamthanhhung/Desktop/MyProject/IELTS/scripts
+/Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.app.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/tsconfig.node.json
+/Users/phamthanhhung/Desktop/MyProject/IELTS/wrangler.toml
+[0m
+[0m→ [0mRead apps
+[0m→ [0mRead packages
+[0m→ [0mRead docs
+[0m→ [0mRead package.json
+[0m→ [0mRead pnpm-workspace.yaml
+[0m• [0mInspect web app structure[90m Explore Agent[0m
+[0m• [0mInspect extension app structure[90m Explore Agent[0m
+[0m• [0mInspect all packages structure[90m Explore Agent[0m
+[0m✓ [0mInspect web app structure[90m Explore Agent[0m
+[0m✓ [0mInspect extension app structure[90m Explore Agent[0m
+[0m✓ [0mInspect all packages structure[90m Explore Agent[0m
+[0m
+[0m# [0mTodos
+[✓] Inspect top-level project structure
+[✓] Identify all user-facing features
+[•] Deep-dive into Vietnamese-specific content and stale features
+[ ] Create comprehensive refactor analysis report
+[0m
+[0m→ [0mRead apps/web/src/models/index.ts
+[0m→ [0mRead apps/web/src/models/aiTutorModels.ts
+[0m→ [0mRead apps/web/src/features/configuration/models.ts
+[0m→ [0mRead apps/web/src/features/configuration/configSlice.tsx
+[0m→ [0mRead apps/web/src/components/aiTutor/aiTutorHelper.ts[90m [limit=100][0m
+[0m→ [0mRead apps/web/src/services/ai/AIService.ts
+[0m→ [0mRead apps/web/src/features/onboarding/onboardingService.ts
+[0m→ [0mRead apps/web/src/pages/MockTests.tsx[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/pages/GrammarNotes.tsx[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/pages/ImportExport.tsx[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/pages/PublicApiImportPage.tsx[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/pages/Search.tsx[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [limit=50][0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=180, limit=50][0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=630, limit=50][0m
+[0m→ [0mRead apps/web/src/components/aiTutor/SpeakingPartner.tsx[90m [offset=670, limit=40][0m
+[0m→ [0mRead apps/web/src/components/aiTutor/WritingTutor.tsx[90m [offset=920, limit=40][0m
+[0m→ [0mRead apps/web/src/components/aiTutor/TeachingMode.tsx[90m [offset=635, limit=50][0m
+[0m→ [0mRead apps/web/src/components/aiTutor/ReadingListeningTutor.tsx[90m [offset=265, limit=50][0m
+[0m→ [0mRead apps/web/src/features/grammar/GrammarLearning.tsx[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/features/artifacts/ArtifactsPage.tsx[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/features/speaking/data/questions.ts[90m [limit=40][0m
+[0m→ [0mRead apps/web/src/features/speaking/data/phrases.ts[90m [limit=40][0m
+[0m→ [0mRead apps/web/src/features/writing/data/prompts.ts[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/features/reading/data/passages.ts[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/features/listening/data/exercises.ts[90m [limit=40][0m
+[0m→ [0mRead apps/web/src/pages/landing/config.ts
+[0m→ [0mRead apps/web/src/pages/landing/HeroSection.tsx[90m [limit=50][0m
+[0m→ [0mRead apps/web/src/pages/landing/FeatureGrid.tsx[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/components/Layout.tsx[90m [limit=100][0m
+[0m→ [0mRead apps/web/src/components/aiTutor/ReadingListeningTutor.tsx[90m [offset=315, limit=50][0m
+[0m→ [0mRead apps/web/src/features/planner/aiPlannerPrompts.ts[90m [limit=50][0m
+[0m→ [0mRead apps/web/src/features/roadmap/aiPlanPrompts.ts[90m [limit=50][0m
+[0m→ [0mRead packages/ai/src/prompts/explain.ts[90m [offset=1, limit=70][0m
+[0m→ [0mRead docs/features.md[90m [limit=100][0m
+[0m→ [0mRead apps/web/src/extension/ProactiveAssistant.ts[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/features/analytics/Analytics.tsx[90m [limit=30][0m
+[0m
+[0m# [0mTodos
+[✓] Inspect top-level project structure
+[✓] Identify all user-facing features
+[✓] Deep-dive into Vietnamese-specific content and stale features
+[•] Create comprehensive refactor analysis report
+[0m
+[0m→ [0mRead docs/refactor-analysis-report.md[90m [limit=50][0m
+[0m→ [0mRead docs/refactor-analysis-report.md[90m [offset=51, limit=650][0m
+[0m→ [0mRead docs/refactor-analysis-report.md[90m [offset=690, limit=10][0m
+[0m
+[0m← [0mEdit docs/refactor-analysis-report.md
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+@@ -693,4 +693,352 @@
+ | Feature completeness (structure) | ~30% | 100% |
+ | Test coverage | ~5% | >60% |
+ | Documentation coverage | ~25% | 100% |
+ | Hardcoded colors | Many | Zero |
++
++---
++
++## 14. Vietnamese-Specific Assumptions & Hard-Coded Content
++
++### 14.1 Data Model Level
++
++| Location | Issue | Impact |
++|----------|-------|--------|
++| `apps/web/src/models/index.ts:103` | `VocabularyEntry.meaningVi: string` — Dedicated Vietnamese meaning field | All vocabulary entries carry Vietnamese baggage; the model assumes bi-lingual (EN-VI) storage |
++| `apps/web/src/models/aiTutorModels.ts:144` | `UserTutorPreferences.language: 'english' \| 'vietnamese' \| 'both'` | Language system is hardcoded to just English/Vietnamese; no extensibility for other languages |
++| `apps/web/src/models/aiTutorModels.ts:147` | `UserTutorPreferences.useVietnamese: boolean` | Overlapping boolean flag that duplicates `language` field |
++| `apps/web/src/features/configuration/models.ts:15` | `AiTutorMode: 'vietnamese-explanation-tutor'` | Specific tutor mode for Vietnamese explanations |
++| `apps/web/src/features/configuration/models.ts:31` | `AiResponseLanguage: 'english' \| 'vietnamese' \| 'both'` | Only 3 options; not extensible |
++| `packages/ai/src/prompts/explain.ts:5` | `AiExplainType: 'vietnamese'` | Vietnamese explain is a first-class type, not a plugin |
++| `packages/ai/src/schemas/vocabulary.ts:5` | `meaningVi` field in vocabulary Zod schema | AI output schema requires Vietnamese |
++| `packages/ai/src/schemas/dictionary.ts:6` | `meaningVi` field in dictionary Zod schema | AI output schema requires Vietnamese |
++| `packages/storage/src/schema.ts:55` | `meaningVi` field in storage schema | DB schema stores Vietnamese field for every vocabulary entry |
++| `packages/ai-tutor/src/types/proactiveMessage.ts:126` | `TutorTone: 'vietnamese'` | Vietnamese is a built-in tone, not one of many possible languages |
++
++### 14.2 AI Prompt Level — `vietnamese` as a Built-in Feature
++
++| Location | Issue |
++|----------|-------|
++| `packages/ai/src/prompts/explain.ts:36` | System prompt: _"Translate this text to Vietnamese and explain any difficult English words"_ |
++| `packages/ai/src/prompts/explain.ts:46` | System prompt: _"You are an IELTS tutor. Translate to Vietnamese and add vocabulary notes."_ |
++| `packages/ai/src/prompts/vocabulary.ts:21` | Prompt asks for `meaningVi` — Vietnamese translation |
++| `packages/ai/src/prompts/dictionary.ts:19` | Prompt asks for `meaningVi` — Vietnamese translation |
++| `packages/ai/src/prompts/video.ts:120` | Prompt asks for Vietnamese `translation` in shadowing scripts |
++| `apps/web/src/components/aiTutor/aiTutorHelper.ts:5` | `LANGUAGE_INSTRUCTION.vietnamese = 'Respond in Vietnamese only.'` |
++| `apps/web/src/components/aiTutor/aiTutorHelper.ts:6` | `LANGUAGE_INSTRUCTION.both = 'Respond in both English and Vietnamese, separated by "---".'` |
++
++### 14.3 AI Tutor Level — Hard-coded Vietnamese Fallback Responses
++
++| File | Function | Lines | Description |
++|------|----------|-------|-------------|
++| `apps/web/src/pages/AITutorChat.tsx` | `generateFriendModeVietnamese()` | 186-202 | 4 Vietnamese chat responses for friendly mode (e.g. "Chào bạn! 😊 Rất vui được trò chuyện!") |
++| `apps/web/src/pages/AITutorChat.tsx` | `generateVietnameseExplanation()` | 639-666 | 7 Vietnamese grammar/vocabulary explanations (e.g. "Mạo từ (a/an/the) có thể khó!") |
++| `apps/web/src/components/aiTutor/SpeakingPartner.tsx` | `generateFeedbackVietnamese()` | 670-703 | Full Vietnamese speaking feedback with band estimates ("Ước tính Band Nói") |
++| `apps/web/src/components/aiTutor/WritingTutor.tsx` | `generateFeedbackVietnamese()` | 927-946 | Full Vietnamese writing feedback with categories ("Điểm mạnh", "Cần cải thiện") |
++| `apps/web/src/components/aiTutor/TeachingMode.tsx` | `generateLessonText()` | 640 | Vietnamese lesson text ("Giải thích", "Quy tắc chính") |
++| `apps/web/src/components/aiTutor/TeachingMode.tsx` | `generateFeedbackMessage()` | 666-672 | Vietnamese lesson completion ("Hoàn thành bài học", "Điểm của bạn") |
++| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | `getSummaryVietnamese()` | 269-276 | Vietnamese topic summaries ("Tóm tắt") |
++| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | `generateVocabVietnamese()` | 325-344 | Vietnamese vocabulary headers ("Từ vựng IELTS quan trọng") |
++| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | `generateComprehensionQuestions()` | 355 | Vietnamese question header ("Câu hỏi đọc hiểu") |
++| `apps/web/src/components/aiTutor/ReadingListeningTutor.tsx` | Various | 417,473,626-661 | Vietnamese labels for opinion questions, exercises, IELTS connections |
++
++### 14.4 Proactive Message Level
++
++| Location | Issue |
++|----------|-------|
++| `packages/ai-tutor/src/services/proactiveMessageEngine.ts:87` | `TONE_PREFIXES.vietnamese = ['Chào bạn! ', 'Xin chào! ', 'Bạn ơi! ']` — Vietnamese greeting prefixes for proactive messages |
++
++### 14.5 Extension Level — Vietnamese UI Labels
++
++| Location | Issue |
++|----------|-------|
++| `apps/extension/src/popup/components/VocabularyCollector.tsx:684` | `<strong>Nghĩa:</strong>` — Vietnamese label for "Meaning" |
++| `apps/extension/src/popup/components/WordDetails.tsx:171` | `title="Nghĩa (Vietnamese)"` — Vietnamese sub-header in word details |
++| `apps/extension/src/popup/components/MiniTutor.tsx:32` | `description: 'Translate to Vietnamese'` — Action description hardcodes Vietnamese |
++| `apps/extension/src/content-script/aiExplain.ts:368` | `renderSection('Vietnamese Translation', ...)` — Tab label hardcodes Vietnamese |
++
++### 14.6 User-Facing Creator Info
++
++| Location | Issue |
++|----------|-------|
++| `apps/web/src/pages/landing/config.ts:2` | `name: 'Phạm Thanh Hưng'` — Creator's Vietnamese name (appropriate for About page but not landing) |
++| `apps/web/src/pages/LandingPage.tsx:63` | `"Built by Phạm Thanh Hưng · Free for all IELTS learners"` — Vietnamese name in main hero |
++
++### 14.7 Default Language Settings
++
++| Location | Issue |
++|----------|-------|
++| `apps/web/src/models/aiTutorModels.ts:156-168` | `DEFAULT_TUTOR_PREFERENCES` default `language: 'english'` is correct, but `useVietnamese: false` is redundant |
++| `apps/web/src/features/configuration/storage.ts` | Configuration storage — no `nativeLanguage` or `explanationLanguage` fields are separated |
++| `apps/web/src/features/configuration/models.ts:61` | `responseLanguage` is single field — doesn't separate app language from AI explanation language |
++| `packages/ai-tutor/src/types/proactiveMessage.ts` | No language-agnostic message generation — all proactive messages are English-first with Vietnamese special case |
++
++### 14.8 Missing Globalization Infrastructure
++
++The app has **no**:
++- i18n / l10n library (react-i18next, react-intl, etc.)
++- Locale files (.json, .po, .yaml)
++- Language detection (browser navigator.language)
++- Right-to-left (RTL) support
++- Country/region selection
++- Locale-aware date/number formatting (uses `toLocaleDateString('en-US')` hardcoded)
++- Language preference in localStorage keys (all hardcoded English)
++
++Vietnamese support is implemented as **code-level branching** (`if (language === 'vietnamese')`) rather than through a proper translation system.
++
++---
++
++## 15. Inappropriate / Stale / Unused Features
++
++### 15.1 Features to Remove (Not IELTS-Related)
++
++| Feature | File | Reason |
++|---------|------|--------|
++| **Public API Importer** | `apps/web/src/features/publicApiIntegration/` (~2,000+ lines) | Searches Wiktionary, Datamuse, Tatoeba, Wikipedia, Project Gutenberg — not IELTS-specific; complex, unused dependency; duplicates existing content |
++| **Artifacts (Saved URLs)** | `apps/web/src/features/artifacts/ArtifactsPage.tsx` (466 lines) | Generic bookmarking feature; not IELTS-specific; extension already saves articles |
++| **Import/Export** | `apps/web/src/pages/ImportExport.tsx` (306 lines) | Duplicated by `packages/storage/backup/` export/import; extension has its own BackupRestore; two competing implementations |
++| **Website Info Pages** | `apps/web/src/components/PublicTabPage.tsx` | About/Recruit/Donate/Feedback tabs — not learning features; personal website content mixed into product |
++| **About Me Page** | `apps/web/src/features/info/AboutMe.tsx` | Personal portfolio content, not IELTS learning |
++| **Recruit Page** | `apps/web/src/features/info/Recruit.tsx` | Recruitment info, not IELTS learning |
++| **Donate Page** | `apps/web/src/features/info/Donate.tsx` | Donation page, not IELTS learning |
++| **Send Feedback** | `apps/web/src/features/info/SendFeedback.tsx` | Could be useful but currently just a form with no backend |
++| **WebsiteInfo** | `apps/web/src/features/info/WebsiteInfo.tsx` | Meta info page about the website itself |
++
++### 15.2 Features to Review (Potentially Remove or Refactor)
++
++| Feature | File | Reason |
++|---------|------|--------|
++| **Grammar Learning** | `apps/web/src/features/grammar/GrammarLearning.tsx` (1407 lines) | Duplicated by `GrammarNotes` page; two separate grammar features with overlapping functionality |
++| **Grammar Notes** | `apps/web/src/pages/GrammarNotes.tsx` (728 lines) | Duplicates GrammarLearning; both are CRUD for grammar topics |
++| **Mock Tests Tracker** | `apps/web/src/pages/MockTests.tsx` (749 lines) | Manual mock test entry tracker — no actual mock tests; just stores scores the user inputs manually |
++| **Topics Progress** | `apps/web/src/pages/TopicsProgress.tsx` | Tracks progress by IELTS topic — useful but overlaps with dashboard and progress pages |
++| **Progress Review (AI)** | `apps/web/src/features/progressReview/ProgressReviewPage.tsx` | AI-generated progress report — useful but duplicates `Progress.tsx` charts |
++| **Analytics** | `apps/web/src/features/analytics/Analytics.tsx` (805 lines) | Recharts-based analytics page — duplicates `Progress.tsx` which already shows charts |
++| **Search** | `apps/web/src/pages/Search.tsx` (675 lines) | Full-text search across all entities — useful but complex; edge-case feature |
++| **Planner** | `apps/web/src/features/planner/Planner.tsx` | AI-generated schedule — duplicated by `StudyPlan` feature |
++| **DailyPlan** | `apps/web/src/pages/DailyPlan.tsx` | Daily view of study tasks — overlaps with Dashboard and StudyPlan |
++| **Review Center** | `apps/web/src/pages/ReviewCenter.tsx` | Centralized review hub — useful but duplicates vocabulary review flow |
++| **Study Notes** | `apps/web/src/features/notes/StudyNotesPage.tsx` | Free-form notes feature — not IELTS-specific; generic note-taking |
++
++### 15.3 Duplicate Page/Feature Implementations
++
++These are the most critical duplicates that need consolidation:
++
++| Feature | `pages/` file | `features/` file | Status |
++|---------|--------------|------------------|--------|
++| Dashboard | `src/pages/Dashboard.tsx` (446 lines) | `src/features/dashboard/Dashboard.tsx` (492 lines) | Different implementations |
++| Vocabulary | `src/pages/Vocabulary.tsx` (1036 lines) | `src/features/vocabulary/Vocabulary.tsx` (772 lines) | Different implementations |
++| Reading | `src/pages/ReadingJournal.tsx` (865 lines) | `src/features/reading/ReadingPractice.tsx` | Different approaches |
++| Listening | `src/pages/ListeningJournal.tsx` (895 lines) | `src/features/listening/ListeningPractice.tsx` | Different approaches |
++| Writing | `src/pages/WritingPractice.tsx` (1055 lines) | `src/features/writing/WritingPractice.tsx` | Different approaches |
++| Speaking | `src/pages/SpeakingPractice.tsx` (1081 lines) | `src/features/speaking/SpeakingPractice.tsx` | Different approaches |
++| Settings | `src/pages/Settings.tsx` + `DataManagement.tsx` (755 lines) | `src/features/settings/Settings.tsx` (591 lines) | Different implementations |
++| Mistakes | `src/pages/Mistakes.tsx` (750 lines) | `src/features/mistakes/MistakeNotebook.tsx` (1068 lines) | Different implementations |
++| Grammar | `src/pages/GrammarNotes.tsx` (728 lines) | `src/features/grammar/GrammarLearning.tsx` (1407 lines) | Different implementations |
++
++### 15.4 Stale/Dead Code
++
++| Item | Location | Evidence |
++|------|----------|----------|
++| `App.tsx` (root) | `src/App.tsx` | Not imported by `main.tsx` which imports from `src/app/App.tsx` instead |
++| `pwa-config.ts` | `src/pwa-config.ts` | Contains only comments — JS file that never executes |
++| `src/extension/` | `src/extension/ProactiveAssistant.ts` (445 lines) | Extension-specific code in web app's src/ — not imported by any web app component |
++| Old landing components | `src/components/LandingPage.tsx`, `HeroSection.tsx`, etc. | `src/pages/landing/` has a separate, newer landing page implementation |
++| `useDashboard` hook | `src/hooks/useDashboard.ts` | Only used by the OLD `src/pages/Dashboard.tsx`, not the `features/dashboard/` version |
++| `useAutosave` hook | `src/hooks/useAutosave.ts` | Not imported anywhere in the current codebase |
++| `data/ieltsContent.ts` | `src/features/tasks/ieltsContent.ts` | Static IELTS content — not imported by any component |
++| `Phrases` data | `src/features/speaking/data/phrases.ts` | Speaking phrases — not imported by any speaking component |
++| `DashboardPreviewSection` | `src/components/DashboardPreviewSection.tsx` | Old landing component — not used by new landing |
++| `FeatureSection` | `src/components/FeatureSection.tsx` | Old landing component — not used by new landing |
++| `DonationSection` | `src/components/DonationSection.tsx` | Old landing component — not used by new landing |
++| `RecruitmentSection` | `src/components/RecruitmentSection.tsx` | Old landing component — not used by new landing |
++| Duplicate UI component | `packages/ui/src/components/Toast.tsx` vs `src/components/ui/Toast.tsx` | Two Toast implementations |
++| `AITutorSection` | `src/components/AITutorSection.tsx` | Maybe unused on landing |
++| `FinalCTASection` | `src/components/FinalCTASection.tsx` | Maybe unused on landing |
++| `Footer` | `src/components/Footer.tsx` | Has both old and new implementations |
++| `SEOHead` | `src/components/SEOHead.tsx` | Not using react-helmet anywhere else |
++
++### 15.5 Duplicate Services / Logic
++
++| Area | Files | Problem |
++|------|-------|---------|
++| AI Service | `src/services/ai/AIService.ts` vs `packages/ai/` | Two separate AI call implementations |
++| Storage | `src/services/storage/Database.ts` vs `packages/storage/` vs `apps/extension/src/storage/` | Three IndexedDB implementations |
++| SM-2 Algorithm | `src/utils/spaced-repetition.ts` vs `packages/storage/reviewService.ts` vs `packages/exercises/reviewScheduler.ts` vs `packages/learning-engine/review-scheduler/` | Four implementations of the same algorithm |
++| Settings Context | `src/context/SettingsContext.tsx` vs `src/features/configuration/configSlice.tsx` | Two settings management systems |
++| Error Classes | `packages/utils/src/errors.ts` (22 classes) vs `packages/ai/src/errors/types.ts` (6) vs `packages/storage/src/errors.ts` (6) | Error classes duplicated with different messages |
++| `generateId()` | `packages/exercises/utils/id.ts` vs `packages/ai-tutor/utils/id.ts` | Same function in 2 packages |
++| `isInQuietHours()` | 3 files in `packages/ai-tutor/` | Same logic in 3 files |
++| Writing Prompts | `src/features/writing/data/prompts.ts` vs extension's own data | Writing prompt data in both apps |
++| Speaking Questions | `src/features/speaking/data/questions.ts` vs extension's own data | Speaking questions in both apps |
++
++### 15.6 Dead Navigation Routes (from Layout.tsx)
++
++These routes in the sidebar should be reviewed:
++
++- `/artifacts` — Generic bookmarking feature
++- `/search` — Full-text search (edge case)
++- `/public-api` — Not IELTS-specific
++- `/mock-tests` — Manual score tracker only
++- `/grammar` — Duplicated by GrammarLearning
++- `/topics` — Overlaps with dashboard/progress
++- `/import-export` — Duplicated by backup system
++- `/info` — Personal website content
++
++---
++
++## 16. Extension-Specific Issues
++
++### 16.1 Vietnamese in Extension
++
++| File | Line | Issue |
++|------|------|-------|
++| `VocabularyCollector.tsx` | 684 | `<strong>Nghĩa:</strong>` — Vietnamese UI label |
++| `WordDetails.tsx` | 171 | `title="Nghĩa (Vietnamese)"` — Vietnamese header |
++| `MiniTutor.tsx` | 32 | `'Translate to Vietnamese'` — action description |
++| `aiExplain.ts` | 368 | `'Vietnamese Translation'` — tab label |
++
++### 16.2 Stale/Half-Finished Extension Features
++
++| Feature | Issue |
++|---------|-------|
++| **Video Helper** (`VideoHelper.tsx`) | Only works with YouTube; Vimeo detection is present but non-functional; no transcript for Vimeo |
++| **Website Bridge** (`bridge-client.ts`) | Bridge to web app is defined but web app has no matching bridge server; sync is incomplete |
++| **Proactive Message Panel** (`proactiveMessagePanel.tsx`) | In-page toast messages — intrusive UX; disabled by default |
++| **Dictionary Panel** (`dictionaryPanel.ts`) | Quick word lookup on double-click — may conflict with page functionality |
++| **Public Content Search** (`ImportExportSection.tsx`) | Searches 5 external APIs; complex feature with licensing/attribution requirements; not IELTS-specific |
++
++### 16.3 Extension Duplicates Web App Data
++
++The extension stores its own data in a **separate IndexedDB database** that is not accessible from the web app:
++- `vocabularyStore.ts` — separate vocabulary data
++- `articleStore.ts` — separate articles
++- `mistakeStore.ts` — separate mistakes
++- `videoStore.ts` — separate video data
++
++This means users who use both the extension and the web app have **completely separate data silos**.
++
++---
++
++## 17. Localization System Requirements
++
++### 17.1 Current State
++
++The app uses a **custom ad-hoc language system** with these characteristics:
++- `type Language = 'english' | 'vietnamese' | 'both'` in multiple files
++- Language is propagated as a parameter to every AI generation function
++- Vietnamese responses are generated via `if (language === 'vietnamese')` branching
++- No locale files, no translation dictionaries, no i18n library
++- `meaningVi` fields assume Vietnamese is the only second language worth storing
++
++### 17.2 Required Changes for Globalization
++
++1. **Separate language settings:**
++   - `appDisplayLanguage` — language for UI chrome/menus/buttons
++   - `aiExplanationLanguage` — language for AI tutor explanations
++   - `contentLanguage` — language for exercise content/instructions
++   - `nativeLanguage` — user's native language (for translation features)
++
++2. **Remove hard-coded Vietnamese branching:**
++   - Replace `if (language === 'vietnamese')` with `if (language === userSettings.aiExplanationLanguage)`
++   - Replace hardcoded Vietnamese strings with AI-generated translations or locale files
++
++3. **Data model changes:**
++   - Remove `meaningVi` from core vocabulary schema; replace with language-agnostic `translations: Record<string, string>`
++   - Remove `'vietnamese'` from `AiTutorMode`, `TutorTone`, `AiExplainType`; make language a separate dimension
++   - Remove `useVietnamese` boolean (duplicates `language` field)
++
++4. **AI prompt changes:**
++   - Remove hardcoded Vietnamese-specific prompts
++   - Make language instruction dynamic: `Respond in {language} only.`
++   - Remove Vietnamese-specific schema fields from AI responses
++
++5. **Default settings:**
++   - Default app language: `'en'` (English)
++   - Default AI explanation language: `'en'` (English)
++   - Vietnamese available as an option, not the default
++
++---
++
++## 18. Product Direction Alignment
++
++### 18.1 Features Aligned with Product Direction
++
++| Feature | Alignment | Keep/Refactor |
++|---------|-----------|---------------|
++| Vocabulary Notebook | Core | **Keep** |
++| Vocabulary Review (SM-2) | Core | **Keep** |
++| AI Tutor | Core | **Refactor** |
++| Study Plan | Core | **Refactor** |
++| Dashboard | Core | **Refactor** |
++| Reading Practice | Core | **Refactor** |
++| Listening Practice | Core | **Refactor** |
++| Writing Practice | Core | **Refactor** |
++| Speaking Practice | Core | **Refactor** |
++| Mistake Tracking | Core | **Keep** |
++| Progress Review | Core | **Refactor** |
++| Chrome Extension | Core | **Refactor** |
++| PWA Support | Core | **Keep** |
++| Local-first Storage | Core | **Keep** |
++| AI Provider Config | Core | **Refactor** |
++
++### 18.2 Features NOT Aligned with Product Direction
++
++| Feature | Reason | Action |
++|---------|--------|--------|
++| Public API Import | Not IELTS-specific; complex dependencies | **Remove** |
++| Artifacts (Bookmarks) | Generic bookmarking; not learning | **Remove** |
++| Import/Export (page) | Duplicated by proper backup system | **Remove** |
++| Website Info / About / Recruit / Donate | Personal website content; not IELTS | **Remove** |
++| Grammar Learning (Gamified) | Duplicates Grammar Notes; half-finished | **Remove or Merge** |
++| Grammar Notes (CRUD) | Basic CRUD; no actual grammar engine | **Merge into core** |
++| Mock Tests Tracker | Manual entry only; no actual tests | **Remove or Refactor** |
++| Topics Progress | Overlaps with Dashboard/Progress | **Merge** |
++| Search | Edge-case feature; complex | **Consider removing** |
++| Study Notes | Generic notes; not IELTS-specific | **Consider removing** |
++| Review Center | Duplicates vocabulary review | **Merge** |
++
++---
++
++## 19. Cleanup Priority Matrix
++
++| Priority | Item | Effort | Impact | Type |
++|----------|------|--------|--------|------|
++| P0 | Remove hardcoded Vietnamese fallback strings from AI Tutor components | Medium | High | Globalization |
++| P0 | Remove `meaningVi` from core schemas; use flexible translations | Medium | High | Globalization |
++| P0 | Separate language settings (app language vs AI language) | Medium | High | Globalization |
++| P1 | Remove Public API Import feature | Low | High | Cleanup |
++| P1 | Remove Artifacts feature | Low | High | Cleanup |
++| P1 | Remove Info/About/Donate/Recruit pages | Low | Medium | Cleanup |
++| P1 | Consolidate duplicate page/feature implementations | High | High | Architecture |
++| P1 | Remove `'vietnamese'` from tutor modes, tones, and explain types | Medium | High | Globalization |
++| P2 | Remove Mock Tests page | Low | Medium | Cleanup |
++| P2 | Remove or consolidate duplicate Grammar features | Medium | Medium | Cleanup |
++| P2 | Remove duplicate Import/Export page | Low | Medium | Cleanup |
++| P2 | Remove old landing page components | Low | Low | Cleanup |
++| P2 | Remove unused hooks (`useAutosave`) | Low | Low | Cleanup |
++| P2 | Remove dead `src/App.tsx` (unused entry) | Low | Low | Cleanup |
++| P2 | Remove `src/pwa-config.ts` (comment-only file) | Low | Low | Cleanup |
++| P2 | Remove `src/extension/ProactiveAssistant.ts` from web app | Low | Medium | Cleanup |
++| P3 | Consolidate 4 SM-2 algorithm implementations | High | Medium | Architecture |
++| P3 | Consolidate 3 IndexedDB implementations | High | Medium | Architecture |
++| P3 | Consolidate duplicate AI services | Medium | Medium | Architecture |
++| P3 | Consolidate duplicate error classes | Medium | Low | Architecture |
++| P3 | Add i18n library and locale files | High | High | Globalization |
++| P3 | Update extension to use shared `@ielts/storage` package | High | Medium | Architecture |
++
++---
++
++## 20. Code Quality Metrics Summary
++
++| Metric | Current | Target |
++|--------|---------|--------|
++| Vietnamese hardcoded strings | ~80 lines across 10 files | 0 |
++| Vietnamese-specific data model fields | 6 locations (`meaningVi` × 4, `AiResponseLanguage`, `TutorTone`) | 0 (replaced by flexible system) |
++| Duplicate features (`pages/` vs `features/`) | 9 pairs | 0 (consolidated) |
++| Separate IndexedDB implementations | 3 | 1 |
++| SM-2 implementations | 4 | 1 |
++| Unused components | ~10 | 0 |
++| Non-IELTS feature modules | 6-8 | 0 |
++| `any`/`unknown` escape hatches | ~30 | 0 |
++| Files >700 lines | 12 | 0 |
++| Comment-only files | 2 | 0 |
+
+[0m
+[0m$ [0mwc -l /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+1044 /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+[0m
+[0m$ [0mhead -5 /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md && echo "---" && tail -5 /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+# Refactor Analysis Report
+
+> Comprehensive codebase analysis for the IELTS Learning Journey project.
+> Date: 2026-07-01
+> Analyzed by: OpenCode
+---
+| Unused components | ~10 | 0 |
+| Non-IELTS feature modules | 6-8 | 0 |
+| `any`/`unknown` escape hatches | ~30 | 0 |
+| Files >700 lines | 12 | 0 |
+| Comment-only files | 2 | 0 |
+[0m
+[0m← [0mEdit docs/refactor-analysis-report.md
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/refactor-analysis-report.md
+@@ -1,8 +1,8 @@
+ # Refactor Analysis Report
+ 
+ > Comprehensive codebase analysis for the IELTS Learning Journey project.
+-> Date: 2026-07-01
++> Date: 2026-07-05 (updated with Vietnamese assumptions, stale features, and product direction analysis)
+ > Analyzed by: OpenCode
+ 
+ ---
+ 
+
+[0m
+[0m# [0mTodos
+[✓] Inspect top-level project structure
+[✓] Identify all user-facing features
+[✓] Deep-dive into Vietnamese-specific content and stale features
+[✓] Create comprehensive refactor analysis report
+[0m
+[2026-07-05T08:58:10.560Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-05T08:58:10.563Z] [INFO] Task completed successfully

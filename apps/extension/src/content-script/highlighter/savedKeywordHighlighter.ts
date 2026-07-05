@@ -5,6 +5,7 @@ import {
   removeAllHighlights,
   setActive,
   isActive,
+  isModifyingDOMForHighlight,
 } from './highlightEngine'
 import { destroyTooltip } from './highlightTooltip'
 import { type HighlightWord } from './highlightMatcher'
@@ -12,6 +13,10 @@ import { type HighlightWord } from './highlightMatcher'
 const SETTINGS_KEY = 'extensionSettings'
 const VOCAB_STORAGE_KEY = 'vocabulary'
 const SAVED_ITEMS_KEY = 'savedItems'
+
+const SCAN_DEBOUNCE_MS = 300
+const MAX_RETRIES = 3
+const RETRY_DELAY_MS = 1000
 
 interface SavedVocabEntry {
   id: string
@@ -30,6 +35,7 @@ let isEnabled = true
 let observer: MutationObserver | null = null
 let scanTimer: ReturnType<typeof setTimeout> | null = null
 let isInitialized = false
+let retryCount = 0
 
 async function loadSettings(): Promise<boolean> {
   try {
@@ -39,6 +45,7 @@ async function loadSettings(): Promise<boolean> {
     const settings = result[SETTINGS_KEY] || {}
     return settings.autoHighlightSavedVocabulary !== false
   } catch {
+    console.debug('[IELTS Journey] Could not load settings, defaulting to enabled')
     return true
   }
 }
@@ -85,29 +92,37 @@ async function loadVocabulary(): Promise<HighlightWord[]> {
       }
     }
   } catch {
-    /* ignore storage errors */
+    console.debug('[IELTS Journey] Could not load vocabulary from storage')
   }
 
   return Array.from(wordMap.values())
 }
 
-function scanPage(): void {
+function scanPage(root?: Node): void {
   if (!isActive() || currentWords.length === 0) return
 
-  const count = highlightMatches(document.body, currentWords)
+  const target = root ?? document.body
+  if (!target) return
+
+  const count = highlightMatches(target, currentWords)
   if (count > 0) {
-    // highlighted successfully
+    console.debug(`[IELTS Journey] Auto-highlight: ${count} matches on page`)
   }
 }
 
-function debouncedScan(): void {
+function debouncedScan(root?: Node): void {
   if (scanTimer) {
     clearTimeout(scanTimer)
   }
   scanTimer = setTimeout(() => {
-    scanPage()
+    scanPage(root)
     scanTimer = null
-  }, 300)
+    retryCount = 0
+  }, SCAN_DEBOUNCE_MS)
+}
+
+function isOurHighlightElement(el: Element): boolean {
+  return el.classList?.contains('ielts-journey-saved-keyword-highlight')
 }
 
 function setupMutationObserver(): void {
@@ -115,6 +130,7 @@ function setupMutationObserver(): void {
 
   observer = new MutationObserver((mutations) => {
     if (!isActive() || currentWords.length === 0) return
+    if (isModifyingDOMForHighlight()) return
 
     let hasNewContent = false
     for (const mutation of mutations) {
@@ -122,11 +138,7 @@ function setupMutationObserver(): void {
         for (const node of mutation.addedNodes) {
           if (node.nodeType === Node.ELEMENT_NODE) {
             const el = node as Element
-            if (
-              el.matches?.(
-                `.${'ielts-journey-saved-keyword-highlight'}, .${'ielts-journey-saved-keyword-highlight'} *`,
-              )
-            ) {
+            if (isOurHighlightElement(el) || el.closest?.('.ielts-journey-saved-keyword-highlight')) {
               continue
             }
             if (
@@ -149,6 +161,11 @@ function setupMutationObserver(): void {
     }
   })
 
+  if (!document.body) {
+    console.debug('[IELTS Journey] document.body not ready for observer')
+    return
+  }
+
   observer.observe(document.body, {
     childList: true,
     subtree: true,
@@ -161,6 +178,14 @@ async function refreshHighlights(): Promise<void> {
   removeAllHighlights()
 
   if (!isActive() || currentWords.length === 0) return
+
+  if (!document.body) {
+    if (retryCount < MAX_RETRIES) {
+      retryCount++
+      setTimeout(refreshHighlights, RETRY_DELAY_MS)
+    }
+    return
+  }
 
   scanPage()
   setupMutationObserver()
@@ -186,6 +211,7 @@ function onStorageChanged(
           observer = null
         }
       }
+      console.debug(`[IELTS Journey] Auto-highlight ${enabled ? 'enabled' : 'disabled'}`)
     }
     return
   }
@@ -194,8 +220,13 @@ function onStorageChanged(
     changes[VOCAB_STORAGE_KEY] ||
     changes[SAVED_ITEMS_KEY]
   ) {
+    console.debug('[IELTS Journey] Vocabulary changed, refreshing highlights')
     refreshHighlights()
   }
+}
+
+function onPageUnload(): void {
+  destroySavedKeywordHighlighter()
 }
 
 export async function initSavedKeywordHighlighter(): Promise<void> {
@@ -216,6 +247,9 @@ export async function initSavedKeywordHighlighter(): Promise<void> {
   }
 
   chrome.storage.onChanged.addListener(onStorageChanged)
+  window.addEventListener('beforeunload', onPageUnload)
+
+  console.debug(`[IELTS Journey] Auto-highlight initialized (${currentWords.length} words)`)
 }
 
 export function destroySavedKeywordHighlighter(): void {
@@ -235,6 +269,7 @@ export function destroySavedKeywordHighlighter(): void {
   }
 
   chrome.storage.onChanged.removeListener(onStorageChanged)
+  window.removeEventListener('beforeunload', onPageUnload)
 }
 
 export function getHighlightedWords(): HighlightWord[] {

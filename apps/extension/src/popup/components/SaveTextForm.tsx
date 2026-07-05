@@ -3,6 +3,9 @@ import { entryFormSchema, entrySchema } from '../../types'
 import type { EntryFormData } from '../../types'
 import { SAVE_CATEGORIES, CATEGORY_LABELS, CATEGORY_COLORS, CATEGORY_ICONS, SKILL_OPTIONS, SKILL_LABELS } from '../../types'
 import { saveEntry } from '../../storage/indexedDB'
+import { incrementDailyProgress } from '../../services/storage'
+import { saveVocabularyEntry, extensionVocabSchema } from '../../storage/vocabularyStore'
+import { saveArticleEntry, extensionArticleSchema } from '../../storage/articleStore'
 
 interface SaveTextFormProps {
   onSaved: () => void
@@ -118,14 +121,60 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
 
       await saveEntry(entry)
 
-      chrome.storage.local.get(['dailyProgress'], (result) => {
-        const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
-        const updated = {
-          ...current,
-          wordsAdded: current.wordsAdded + (form.category === 'vocabulary' ? 1 : 0),
+      if (form.category === 'vocabulary') {
+        try {
+          const vocabEntry = extensionVocabSchema.parse({
+            id: crypto.randomUUID(),
+            word: form.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+            sourceSentence: form.text,
+            pageTitle: pageInfo.title,
+            pageUrl: pageInfo.url,
+            topic: form.topic,
+            personalNote: form.personalNote,
+            tags,
+            meaning: '',
+            partOfSpeech: '',
+            pronunciation: '',
+            difficulty: form.difficulty,
+            status: 'new',
+            addedToReview: true,
+            reviewId: '',
+            createdAt: now,
+            updatedAt: now,
+          })
+          await saveVocabularyEntry(vocabEntry)
+        } catch {
+          /* non-critical: vocabulary entry saved as learning entry already */
         }
-        chrome.storage.local.set({ dailyProgress: updated })
-      })
+      }
+
+      if (form.category === 'reading' && form.text.trim().length > 50) {
+        try {
+          const articleEntry = extensionArticleSchema.parse({
+            id: crypto.randomUUID(),
+            title: pageInfo.title || form.text.slice(0, 80),
+            url: pageInfo.url,
+            content: form.text,
+            selectedParagraph: form.text,
+            topic: form.topic,
+            tags,
+            personalNote: form.personalNote,
+            isReadingPractice: true,
+            difficulty: form.difficulty,
+            status: 'new',
+            createdAt: now,
+            updatedAt: now,
+          })
+          await saveArticleEntry(articleEntry)
+        } catch {
+          /* non-critical: article entry saved as learning entry already */
+        }
+      }
+
+      await incrementDailyProgress(
+        form.category === 'vocabulary' ? 'wordsAdded' : 'notesAdded',
+        1,
+      )
 
       setSaved(true)
       setTimeout(() => onSaved(), 1200)

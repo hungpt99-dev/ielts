@@ -96,43 +96,23 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
   if (message.type === 'SAVE_SELECTION_FULL') {
     const payload = message.payload as SaveSelectionPayload
-    const entry = {
-      id: crypto.randomUUID(),
-      text: payload.text,
-      category: payload.category,
-      pageTitle: payload.pageTitle,
-      pageUrl: payload.pageUrl,
-      savedAt: new Date().toISOString(),
-      note: payload.note || '',
-      topic: payload.topic || '',
-      difficulty: payload.difficulty || '',
-      tags: payload.tags || [],
-    }
-    safeStorageGet<any[]>('savedItems').then((result) => {
-      const items = result.savedItems || []
-      items.unshift(entry)
-      safeStorageSet({ savedItems: items })
-
-      safeSendMessage({
-        type: 'UPDATE_PROGRESS',
-        payload: {
-          wordsAdded: payload.category === 'vocabulary' ? 1 : 0,
-          notesAdded: payload.category === 'mistake' ? 1 : 0,
-        },
-      })
-    })
-
-    if (payload.category === 'vocabulary') {
-      try {
-        window.postMessage({
-          source: 'ielts-extension',
-          action: 'VOCAB_SAVED',
-          data: entry,
-        }, window.location.origin)
-      } catch { /* ignore */ }
-    }
 
     showToast(`Saved as ${payload.category}`)
+
+    safeSendMessage({
+      type: 'SAVE_SELECTION_FULL',
+      payload: {
+        text: payload.text,
+        category: payload.category,
+        pageTitle: payload.pageTitle,
+        pageUrl: payload.pageUrl,
+        topic: payload.topic,
+        difficulty: payload.difficulty,
+        note: payload.note,
+        tags: payload.tags,
+      },
+    })
+
     try { sendResponse({ success: true }) } catch { /* ignore */ }
     return false
   }

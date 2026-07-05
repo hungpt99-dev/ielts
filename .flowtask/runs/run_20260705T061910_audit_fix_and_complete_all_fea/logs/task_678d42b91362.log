@@ -1,0 +1,549 @@
+[2026-07-05T06:46:37.966Z] [INFO] Task started: Fix YouTube/Video Page Support and Video Metadata Saving
+[2026-07-05T06:46:37.970Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/extension/src/content/youtube-helper.ts","description":"Fix YouTube page detection and transcript extraction","validationMethod":"file_diff"},{"action":"modify","target":"apps/extension/src/popup/components/VideoHelper.tsx","description":"Fix popup UI for video metadata display and saving","validationMethod":"file_diff"}]
+[2026-07-05T06:46:38.772Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-05T06:46:38.773Z] [INFO] [stderr] [0m
+[2026-07-05T06:46:38.772Z] [INFO] [stderr] [0m
+[2026-07-05T06:46:43.986Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"youtube helper video content script popup video detection transcript extraction","maxFiles":15}
+[2026-07-05T06:46:44.198Z] [INFO] [stderr] [0m✱ [0mGlob "**/extension/**/youtube*"[90m 0 matches[0m
+[2026-07-05T06:46:44.312Z] [INFO] [stderr] [0m✱ [0mGlob "**/extension/**/video*"[90m 2 matches[0m
+[2026-07-05T06:46:47.374Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:46:47.671Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/storage/videoStore.ts
+[2026-07-05T06:46:47.933Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:46:48.035Z] [INFO] [stdout] Let me read the full files to understand the current implementation.
+[2026-07-05T06:46:52.472Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/content-script/*"[90m 10 matches[0m
+[2026-07-05T06:46:52.498Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"content-script index background service worker VIDEO_PAGE_DETECTED VIDEO_HELPER_OPEN GET_VIDEO_PAGE_INFO message handling","maxFiles":15}
+[2026-07-05T06:46:52.657Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/background/*"[90m 5 matches[0m
+[2026-07-05T06:46:56.232Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/index.ts
+[2026-07-05T06:46:56.527Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/index.ts
+[2026-07-05T06:46:56.771Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"setVideoPageInfo setPendingVideoInfo","kind":"function"}
+[2026-07-05T06:47:00.275Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/services/storage.ts[90m [offset=85, limit=60][0m
+[2026-07-05T06:47:00.381Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/components/*"[90m 13 matches[0m
+[2026-07-05T06:47:00.658Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/utils/safe-chrome.ts
+[2026-07-05T06:47:03.565Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup
+[2026-07-05T06:47:03.815Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/*.tsx"[90m 2 matches[0m
+[2026-07-05T06:47:06.514Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/App.tsx
+[2026-07-05T06:47:10.436Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:47:24.481Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/services/storage.ts[90m [limit=50][0m
+[2026-07-05T06:47:46.493Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:47:46.495Z] [INFO] [stderr] [•] Fix YouTube page detection in videoHelper.ts (better selectors, Shorts support, transcript extraction, SPA navigation)
+[2026-07-05T06:47:46.495Z] [INFO] [stderr] [ ] Verify changes compile and validate
+[2026-07-05T06:47:46.495Z] [INFO] [stderr] [ ] Fix VideoHelper.tsx popup (storage fallback, fetch transcript button, better states)
+[2026-07-05T06:47:46.495Z] [INFO] [stderr] [0m
+[2026-07-05T06:47:46.496Z] [INFO] [stderr] [0m
+[2026-07-05T06:48:07.512Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:48:07.512Z] [INFO] [stderr] [0m
+[2026-07-05T06:48:07.513Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T06:48:07.602Z] [INFO] [stdout] Now I'll fix both files. Starting with the content script's YouTube detection and transcript extraction.
+[2026-07-05T06:48:49.122Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:48:49.122Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T06:48:49.122Z] [INFO] [stderr] [0m
+[2026-07-05T06:48:49.218Z] [INFO] [stdout] Now let me fix the popup VideoHelper component.
+[2026-07-05T06:48:52.419Z] [INFO] [stderr] [✓] Fix YouTube page detection in videoHelper.ts (better selectors, Shorts support, transcript extraction, SPA navigation)
+[2026-07-05T06:48:52.419Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:48:52.419Z] [INFO] [stderr] [0m
+[2026-07-05T06:48:52.419Z] [INFO] [stderr] [•] Verify changes compile and validate
+[2026-07-05T06:48:52.419Z] [INFO] [stderr] [✓] Fix VideoHelper.tsx popup (storage fallback, fetch transcript button, better states)
+[2026-07-05T06:48:55.841Z] [INFO] [stderr] [0m$ [0mcat apps/extension/package.json | grep -A5 '"scripts"'
+[2026-07-05T06:48:55.841Z] [INFO] [stderr]     "dev": "vite --port 5174 --strictPort",
+[2026-07-05T06:48:55.841Z] [INFO] [stderr]     "build:production": "node scripts/build.mjs production",
+[2026-07-05T06:48:55.841Z] [INFO] [stderr]     "package": "pnpm build && node scripts/package.mjs",
+[2026-07-05T06:48:55.841Z] [INFO] [stderr]     "build": "node scripts/build.mjs",
+[2026-07-05T06:48:55.841Z] [INFO] [stderr]     "preview": "vite preview",
+[2026-07-05T06:48:55.841Z] [INFO] [stderr] "scripts": {
+[2026-07-05T06:48:55.841Z] [INFO] [stderr] [0m
+[2026-07-05T06:48:59.029Z] [INFO] [stderr] "typecheck": "tsc --noEmit",
+[2026-07-05T06:48:59.029Z] [INFO] [stderr]     "lint": "echo 'no linter configured'",
+[2026-07-05T06:48:59.030Z] [INFO] [stderr] [0m$ [0mcat apps/extension/package.json | grep -E '"typecheck|"lint|"type-check|"check"' 
+[2026-07-05T06:48:59.030Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension typecheck 2>&1 | tail -30
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+[2026-07-05T06:49:03.829Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] Exit status 2
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:03.829Z] [INFO] [stderr] src/content-script/videoHelper.ts(82,10): error TS6133: 'showToast' is declared but its value is never read.
+[2026-07-05T06:49:11.692Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:11.693Z] [INFO] [stderr]    }
+[2026-07-05T06:49:11.693Z] [INFO] [stderr]  }
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] @@ -78,42 +78,8 @@
+[2026-07-05T06:49:11.693Z] [INFO] [stderr]  
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -function showToast(message: string) {
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -
+[2026-07-05T06:49:11.693Z] [INFO] [stderr]      videoId: '',
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -  if (existing) existing.remove()
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -  const existing = document.getElementById(TOAST_ID)
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -  const el = document.createElement('div')
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -  el.textContent = message
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -    bottom: '24px',
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -  el.id = TOAST_ID
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -  Object.assign(el.style, {
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -    right: '24px',
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -    background: '#0f172a',
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -    borderRadius: '8px',
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -    position: 'fixed',
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -    padding: '10px 18px',
+[2026-07-05T06:49:11.693Z] [INFO] [stderr] -    color: '#f1f5f9',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    zIndex: '2147483647',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    fontSize: '13px',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    fontFamily: 'system-ui, -apple-system, sans-serif',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    pointerEvents: 'none',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    transition: 'opacity 0.2s, transform 0.2s',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    transform: 'translateY(0)',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    opacity: '1',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -  document.body.appendChild(el)
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    maxWidth: '380px',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    el.style.opacity = '0'
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -  })
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    setTimeout(() => el.remove(), 250)
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    lineHeight: '1.4',
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -    el.style.transform = 'translateY(8px)'
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -
+[2026-07-05T06:49:11.694Z] [INFO] [stderr] -  setTimeout(() => {
+[2026-07-05T06:49:11.696Z] [INFO] [stderr]    const style = document.createElement('style')
+[2026-07-05T06:49:11.696Z] [INFO] [stderr] 
+[2026-07-05T06:49:11.696Z] [INFO] [stderr]    if (document.getElementById(`${PANEL_ID}-styles`)) return
+[2026-07-05T06:49:11.696Z] [INFO] [stderr]  function injectStyles() {
+[2026-07-05T06:49:11.696Z] [INFO] [stderr]    style.id = `${PANEL_ID}-styles`
+[2026-07-05T06:49:11.696Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:11.696Z] [INFO] [stderr] -  }, 2800)
+[2026-07-05T06:49:11.696Z] [INFO] [stderr] -}
+[2026-07-05T06:49:11.775Z] [INFO] [stdout] The only new error from my changes is the unused `showToast` function. Let me remove it.
+[2026-07-05T06:49:14.881Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:14.881Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:14.881Z] [INFO] [stderr]  const PANEL_ID = 'ielts-video-helper'
+[2026-07-05T06:49:14.881Z] [INFO] [stderr] -const TOAST_ID = 'ielts-vh-toast'
+[2026-07-05T06:49:14.881Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:49:14.881Z] [INFO] [stderr]  
+[2026-07-05T06:49:14.882Z] [INFO] [stderr]  
+[2026-07-05T06:49:14.881Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:14.881Z] [INFO] [stderr]  import { safeSendMessage } from '../utils/safe-chrome'
+[2026-07-05T06:49:14.882Z] [INFO] [stderr] 
+[2026-07-05T06:49:14.882Z] [INFO] [stderr]  interface VideoPageInfo {
+[2026-07-05T06:49:14.881Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:14.882Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:14.882Z] [INFO] [stderr] @@ -1,6 +1,5 @@
+[2026-07-05T06:49:19.925Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[2026-07-05T06:49:19.925Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T06:49:19.925Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension typecheck 2>&1 | grep -v '__tests__' | grep -v 'ERR_PNPM' | grep -v 'Exit status'
+[2026-07-05T06:49:19.925Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:19.925Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T06:49:23.600Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:23.697Z] [INFO] [stdout] Good - no errors from my changes. The only type errors are pre-existing in test files. Let me verify the final state of my edited files.
+[2026-07-05T06:49:29.410Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/VideoHelper.tsx[90m [limit=50][0m
+[2026-07-05T06:49:32.407Z] [INFO] [stderr] [0m✱ [0mGrep "showToast|TOAST_ID"[90m in apps/extension/src/content-script · 18 matches[0m
+[2026-07-05T06:49:36.249Z] [INFO] [stdout] Good - no cross-references to the removed items. Let me do a final verification.
+[2026-07-05T06:49:37.836Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:37.836Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension typecheck 2>&1 | grep -E '(videoHelper|VideoHelper)' | head -20
+[2026-07-05T06:49:37.836Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:37.836Z] [INFO] [stderr] (no output)
+[2026-07-05T06:49:41.582Z] [INFO] [stderr] .flowtask/events.jsonl                             |   6 +
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .flowtask/run-index.json                           |   2 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .flowtask/state.json                               |   2 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/extension/src/background/messaging.ts         |  83 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/extension/src/content-script/aiExplain.ts     |  13 +
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .flowtask/task-index.json                          |   2 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/content-script/floatingToolbar.ts          |  30 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/content-script/saveSelectedText.ts         |  48 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../extension/src/content-script/selectionPanel.ts | 125 +--
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/extension/src/popup/App.tsx                   | 168 ++--
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/popup/components/ArticleCollector.tsx      |  34 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/popup/components/PopupDashboard.tsx        | 189 ++++-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/popup/components/QuickAddVocab.tsx         |  15 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../extension/src/popup/components/VideoHelper.tsx | 518 +++++++-----
+[2026-07-05T06:49:41.582Z] [INFO] [stderr] [0m$ [0mgit diff --stat
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/popup/components/SaveTextForm.tsx          |  63 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/popup/components/VocabularyCollector.tsx   |  34 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/extension/src/popup/index.css                 |  17 +
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/components/Layout.tsx                 |   4 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/popup/components/SavedWordsView.tsx        |  74 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../__tests__/TaskCompletionHandler.test.ts        | 123 ---
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/features/ai-tutor/aiTutorService.ts   | 133 ++-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/components/TaskCompletionHandler.ts   |  40 -
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/features/content/StudyContentPage.tsx | 902 ---------------------
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/extension/src/popup/hooks/usePopupData.ts     | 118 ++-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../web/src/features/dashboard/dashboardService.ts |  37 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/features/dashboard/Dashboard.tsx      |  57 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/features/study-plan/studyPlanService.ts    |  33 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/features/tasks/ieltsContent.ts        |  31 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/extension/src/content-script/videoHelper.ts   | 208 +++--
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/models/index.ts                       |   6 -
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../src/features/study-plan/studyPlanPrompts.ts    |   2 +-
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/services/ExerciseGenerator.ts         | 458 -----------
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/features/settings/Settings.tsx        |  53 ++
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  .../services/__tests__/ExerciseGenerator.test.ts   | 474 -----------
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  packages/learning-engine/src/progress/index.ts     |   1 +
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  docs/features.md                                   | 170 ++++
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  packages/learning-engine/src/types.ts              |  45 +
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  39 files changed, 1649 insertions(+), 3210 deletions(-)
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/src/services/ExerciseGenerator.test.ts    | 248 ------
+[2026-07-05T06:49:41.582Z] [INFO] [stderr]  apps/web/tests/e2e/taskExerciseGeneration.test.ts  | 293 -------
+[2026-07-05T06:49:41.582Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:41.624Z] [INFO] [stdout] No type errors from my changes. Let me check the diff.
+[2026-07-05T06:49:45.396Z] [INFO] [stderr] [0m$ [0mgit diff apps/extension/src/content-script/videoHelper.ts apps/extension/src/popup/components/VideoHelper.tsx --stat
+[2026-07-05T06:49:45.396Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:45.396Z] [INFO] [stderr] fatal: option '--stat' must come before non-option arguments
+[2026-07-05T06:49:48.405Z] [INFO] [stderr] [0m$ [0mgit diff -- apps/extension/src/content-script/videoHelper.ts apps/extension/src/popup/components/VideoHelper.tsx | head -20
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] diff --git a/apps/extension/src/content-script/videoHelper.ts b/apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] index 52e310f..15acd3b 100644
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] +++ b/apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:48.406Z] [INFO] [stderr]  const PANEL_ID = 'ielts-video-helper'
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] -const TOAST_ID = 'ielts-vh-toast'
+[2026-07-05T06:49:48.406Z] [INFO] [stderr]  import { safeSendMessage } from '../utils/safe-chrome'
+[2026-07-05T06:49:48.406Z] [INFO] [stderr]  
+[2026-07-05T06:49:48.406Z] [INFO] [stderr]    videoId: string
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] --- a/apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] +  const urlObj = new URL(url)
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] @@ -1,5 +1,4 @@
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] @@ -11,21 +10,62 @@ interface VideoPageInfo {
+[2026-07-05T06:49:48.406Z] [INFO] [stderr]  
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] +function extractYoutubeVideoId(url: string): string {
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] +  if (urlObj.hostname.includes('youtu.be')) {
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] +    return urlObj.pathname.slice(1).split('/')[0].split('?')[0]
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] +  }
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] +  if (urlObj.pathname.startsWith('/shorts/')) {
+[2026-07-05T06:49:48.406Z] [INFO] [stderr]  }
+[2026-07-05T06:49:48.406Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:48.406Z] [INFO] [stderr]  
+[2026-07-05T06:49:53.866Z] [INFO] [stderr] [0m$ [0mpnpm test --filter video 2>&1 | tail -5
+[2026-07-05T06:49:53.866Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:53.866Z] [INFO] [stderr] packages/ui test$ vitest run --passWithNoTests --filter video
+[2026-07-05T06:49:53.866Z] [INFO] [stderr] packages/utils test$ vitest run --passWithNoTests --filter video
+[2026-07-05T06:49:53.866Z] [INFO] [stderr] packages/theme test$ vitest run --passWithNoTests --filter video
+[2026-07-05T06:49:53.866Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-05T06:49:53.866Z] [INFO] [stderr] packages/ai-tutor test: Failed
+[2026-07-05T06:49:58.868Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension test 2>&1 | tail -20
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]     at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 51ms
+[2026-07-05T06:49:58.868Z] [INFO] [stderr] 
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 0ms
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 1ms
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]     at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+[2026-07-05T06:49:58.868Z] [INFO] [stderr] at new Promise (<anonymous>)
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]     at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 0ms
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 51ms
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 52ms
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 0ms
+[2026-07-05T06:49:58.868Z] [INFO] [stderr] 
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 51ms
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 52ms
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]       Tests  116 passed (116)
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]    Start at  13:49:57
+[2026-07-05T06:49:58.868Z] [INFO] [stderr] [0m
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]  Test Files  8 passed (8)
+[2026-07-05T06:49:58.868Z] [INFO] [stderr]    Duration  1.07s (transform 311ms, setup 0ms, collect 636ms, tests 457ms, environment 3.46s, prepare 490ms)
+[2026-07-05T06:50:02.766Z] [INFO] [stderr] [✓] Verify changes compile and validate
+[2026-07-05T06:50:02.766Z] [INFO] [stderr] [✓] Fix YouTube page detection in videoHelper.ts (better selectors, Shorts support, transcript extraction, SPA navigation)
+[2026-07-05T06:50:02.766Z] [INFO] [stderr] [0m
+[2026-07-05T06:50:02.766Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:50:02.766Z] [INFO] [stderr] [✓] Fix VideoHelper.tsx popup (storage fallback, fetch transcript button, better states)
+[2026-07-05T06:50:02.844Z] [INFO] [stdout] All 116 tests pass, including video-related messaging tests (VIDEO_PAGE_DETECTED, VIDEO_HELPER_OPEN). Let me mark the task complete.
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] - Extracted `extractYoutubeVideoId()` to handle `youtu.be` short URLs, `/shorts/` paths, and `/embed/` URLs alongside standard `?v=` params
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] 
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] **`apps/extension/src/content-script/videoHelper.ts`**
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] - Added Vimeo video page detection
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] Here's a summary of what was fixed:
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] 
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] ### Changes Made
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] - Added `extractYoutubeTranscriptFromPage()` — parses `ytInitialPlayerResponse` from the page's script tags to find caption tracks, fetches the XML transcript, and returns plain text
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] - Added `getTranscript()` method on `VideoHelperUI` for external callers
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] - Registered `FETCH_YOUTUBE_TRANSCRIPT` message handler in content script so the popup can request transcript extraction
+[2026-07-05T06:50:09.598Z] [INFO] [stdout] 
+[2026-07-05T06:50:09.598Z] [INFO] [stdout] - Added fallback: if `GET_VIDEO_PAGE_INFO` fails (content script unavailable), reads `pendingVideoInfo` from `chrome.storage.local`
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] - Replaced fragile single-selector YouTube title extraction with `extractYoutubeTitle()` using 5 fallback selectors matching YouTube's varied DOM layouts
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] - Removed unused `showToast`/`TOAST_ID` (dead code)
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] - Added duplicate badge prevention via `lastVideoId` tracking
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] **`apps/extension/src/popup/components/VideoHelper.tsx`**
+[2026-07-05T06:50:09.598Z] [INFO] [stdout] - Added "Fetch Transcript" button (YouTube only) that sends `FETCH_YOUTUBE_TRANSCRIPT` to the content script
+[2026-07-05T06:50:09.598Z] [INFO] [stdout] - Added `videoInfoLoading` state with a spinner while detecting the video page
+[2026-07-05T06:50:09.598Z] [INFO] [stdout] - Uses `safeStorageGet` from safe-chrome utilities
+[2026-07-05T06:50:09.598Z] [INFO] [stdout] - Shows clear "No video detected" message when not on a video page
+[2026-07-05T06:50:09.596Z] [INFO] [stdout] - Added `yt-navigate-finish` event listener for YouTube SPA navigation
+[2026-07-05T06:50:09.598Z] [INFO] [stdout] - Proper `cancelled` flag in effect cleanup to prevent state updates after unmount
+[2026-07-05T06:50:09.598Z] [INFO] [stdout] - Transcript length now shows formatted count (e.g., "1,234 characters")
+[2026-07-05T06:50:09.848Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-05T06:50:09.848Z] [INFO] Output:
+Let me read the full files to understand the current implementation.
+Now I'll fix both files. Starting with the content script's YouTube detection and transcript extraction.
+Now let me fix the popup VideoHelper component.
+The only new error from my changes is the unused `showToast` function. Let me remove it.
+Good - no errors from my changes. The only type errors are pre-existing in test files. Let me verify the final state of my edited files.
+Good - no cross-references to the removed items. Let me do a final verification.
+No type errors from my changes. Let me check the diff.
+All 116 tests pass, including video-related messaging tests (VIDEO_PAGE_DETECTED, VIDEO_HELPER_OPEN). Let me mark the task complete.
+Here's a summary of what was fixed:
+
+### Changes Made
+
+**`apps/extension/src/content-script/videoHelper.ts`**
+- Replaced fragile single-selector YouTube title extraction with `extractYoutubeTitle()` using 5 fallback selectors matching YouTube's varied DOM layouts
+- Extracted `extractYoutubeVideoId()` to handle `youtu.be` short URLs, `/shorts/` paths, and `/embed/` URLs alongside standard `?v=` params
+- Added Vimeo video page detection
+- Added `extractYoutubeTranscriptFromPage()` — parses `ytInitialPlayerResponse` from the page's script tags to find caption tracks, fetches the XML transcript, and returns plain text
+- Added `getTranscript()` method on `VideoHelperUI` for external callers
+- Added duplicate badge prevention via `lastVideoId` tracking
+- Added `yt-navigate-finish` event listener for YouTube SPA navigation
+- Registered `FETCH_YOUTUBE_TRANSCRIPT` message handler in content script so the popup can request transcript extraction
+- Removed unused `showToast`/`TOAST_ID` (dead code)
+
+**`apps/extension/src/popup/components/VideoHelper.tsx`**
+- Added `videoInfoLoading` state with a spinner while detecting the video page
+- Added fallback: if `GET_VIDEO_PAGE_INFO` fails (content script unavailable), reads `pendingVideoInfo` from `chrome.storage.local`
+- Added "Fet
+[2026-07-05T06:50:09.849Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"youtube helper video content script popup video detection transcript extraction","maxFiles":15}
+[0m✱ [0mGlob "**/extension/**/youtube*"[90m 0 matches[0m
+[0m✱ [0mGlob "**/extension/**/video*"[90m 2 matches[0m
+[0m→ [0mRead apps/extension/src/popup/components/VideoHelper.tsx
+[0m→ [0mRead apps/extension/src/storage/videoStore.ts
+[0m→ [0mRead apps/extension/src/content-script/videoHelper.ts
+[0m✱ [0mGlob "apps/extension/src/content-script/*"[90m 10 matches[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"content-script index background service worker VIDEO_PAGE_DETECTED VIDEO_HELPER_OPEN GET_VIDEO_PAGE_INFO message handling","maxFiles":15}
+[0m✱ [0mGlob "apps/extension/src/background/*"[90m 5 matches[0m
+[0m→ [0mRead apps/extension/src/content-script/index.ts
+[0m→ [0mRead apps/extension/src/background/index.ts
+[0m⚙ [0mcodegraph_codegraph_search {"query":"setVideoPageInfo setPendingVideoInfo","kind":"function"}
+[0m→ [0mRead apps/extension/src/services/storage.ts[90m [offset=85, limit=60][0m
+[0m✱ [0mGlob "apps/extension/src/popup/components/*"[90m 13 matches[0m
+[0m→ [0mRead apps/extension/src/utils/safe-chrome.ts
+[0m→ [0mRead apps/extension/src/popup
+[0m✱ [0mGlob "apps/extension/src/popup/*.tsx"[90m 2 matches[0m
+[0m→ [0mRead apps/extension/src/popup/App.tsx
+[0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx
+[0m→ [0mRead apps/extension/src/services/storage.ts[90m [limit=50][0m
+[0m
+[0m# [0mTodos
+[•] Fix YouTube page detection in videoHelper.ts (better selectors, Shorts support, transcript extraction, SPA navigation)
+[ ] Fix VideoHelper.tsx popup (storage fallback, fetch transcript button, better states)
+[ ] Verify changes compile and validate
+[0m
+[0m← [0mWrite apps/extension/src/content-script/videoHelper.ts
+Wrote file successfully.
+[0m
+[0m← [0mWrite apps/extension/src/popup/components/VideoHelper.tsx
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Fix YouTube page detection in videoHelper.ts (better selectors, Shorts support, transcript extraction, SPA navigation)
+[✓] Fix VideoHelper.tsx popup (storage fallback, fetch transcript button, better states)
+[•] Verify changes compile and validate
+[0m
+[0m$ [0mcat apps/extension/package.json | grep -A5 '"scripts"'
+"scripts": {
+    "dev": "vite --port 5174 --strictPort",
+    "build": "node scripts/build.mjs",
+    "build:production": "node scripts/build.mjs production",
+    "package": "pnpm build && node scripts/package.mjs",
+    "preview": "vite preview",
+[0m
+[0m$ [0mcat apps/extension/package.json | grep -E '"typecheck|"lint|"type-check|"check"' 
+"typecheck": "tsc --noEmit",
+    "lint": "echo 'no linter configured'",
+[0m
+[0m$ [0mpnpm --filter extension typecheck 2>&1 | tail -30
+$ tsc --noEmit
+src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+  Type 'unknown' is not assignable to type 'SyncStatus'.
+src/content-script/videoHelper.ts(82,10): error TS6133: 'showToast' is declared but its value is never read.
+src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+Exit status 2
+[0m
+[0m← [0mEdit apps/extension/src/content-script/videoHelper.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+@@ -78,42 +78,8 @@
+     videoId: '',
+   }
+ }
+ 
+-function showToast(message: string) {
+-  const existing = document.getElementById(TOAST_ID)
+-  if (existing) existing.remove()
+-
+-  const el = document.createElement('div')
+-  el.id = TOAST_ID
+-  el.textContent = message
+-  Object.assign(el.style, {
+-    position: 'fixed',
+-    bottom: '24px',
+-    right: '24px',
+-    background: '#0f172a',
+-    color: '#f1f5f9',
+-    padding: '10px 18px',
+-    borderRadius: '8px',
+-    fontSize: '13px',
+-    zIndex: '2147483647',
+-    boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+-    fontFamily: 'system-ui, -apple-system, sans-serif',
+-    opacity: '1',
+-    transform: 'translateY(0)',
+-    transition: 'opacity 0.2s, transform 0.2s',
+-    pointerEvents: 'none',
+-    maxWidth: '380px',
+-    lineHeight: '1.4',
+-  })
+-  document.body.appendChild(el)
+-  setTimeout(() => {
+-    el.style.opacity = '0'
+-    el.style.transform = 'translateY(8px)'
+-    setTimeout(() => el.remove(), 250)
+-  }, 2800)
+-}
+-
+ function injectStyles() {
+   if (document.getElementById(`${PANEL_ID}-styles`)) return
+   const style = document.createElement('style')
+   style.id = `${PANEL_ID}-styles`
+
+[0m
+[0m← [0mEdit apps/extension/src/content-script/videoHelper.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/content-script/videoHelper.ts
+@@ -1,6 +1,5 @@
+ const PANEL_ID = 'ielts-video-helper'
+-const TOAST_ID = 'ielts-vh-toast'
+ 
+ import { safeSendMessage } from '../utils/safe-chrome'
+ 
+ interface VideoPageInfo {
+
+[0m
+[0m$ [0mpnpm --filter extension typecheck 2>&1 | grep -v '__tests__' | grep -v 'ERR_PNPM' | grep -v 'Exit status'
+$ tsc --noEmit
+  Type 'unknown' is not assignable to type 'SyncStatus'.
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[0m
+[0m→ [0mRead apps/extension/src/content-script/videoHelper.ts
+[0m→ [0mRead apps/extension/src/popup/components/VideoHelper.tsx[90m [limit=50][0m
+[0m✱ [0mGrep "showToast|TOAST_ID"[90m in apps/extension/src/content-script · 18 matches[0m
+[0m
+[0m$ [0mpnpm --filter extension typecheck 2>&1 | grep -E '(videoHelper|VideoHelper)' | head -20
+(no output)
+[0m
+[0m$ [0mgit diff --stat
+.flowtask/events.jsonl                             |   6 +
+ .flowtask/run-index.json                           |   2 +-
+ .flowtask/state.json                               |   2 +-
+ .flowtask/task-index.json                          |   2 +-
+ apps/extension/src/background/messaging.ts         |  83 +-
+ apps/extension/src/content-script/aiExplain.ts     |  13 +
+ .../src/content-script/floatingToolbar.ts          |  30 +-
+ .../src/content-script/saveSelectedText.ts         |  48 +-
+ .../extension/src/content-script/selectionPanel.ts | 125 +--
+ apps/extension/src/content-script/videoHelper.ts   | 208 +++--
+ apps/extension/src/popup/App.tsx                   | 168 ++--
+ .../src/popup/components/ArticleCollector.tsx      |  34 +-
+ .../src/popup/components/PopupDashboard.tsx        | 189 ++++-
+ .../src/popup/components/QuickAddVocab.tsx         |  15 +-
+ .../src/popup/components/SaveTextForm.tsx          |  63 +-
+ .../src/popup/components/SavedWordsView.tsx        |  74 +-
+ .../extension/src/popup/components/VideoHelper.tsx | 518 +++++++-----
+ .../src/popup/components/VocabularyCollector.tsx   |  34 +-
+ apps/extension/src/popup/hooks/usePopupData.ts     | 118 ++-
+ apps/extension/src/popup/index.css                 |  17 +
+ apps/web/src/components/Layout.tsx                 |   4 +-
+ apps/web/src/components/TaskCompletionHandler.ts   |  40 -
+ .../__tests__/TaskCompletionHandler.test.ts        | 123 ---
+ apps/web/src/features/ai-tutor/aiTutorService.ts   | 133 ++-
+ apps/web/src/features/content/StudyContentPage.tsx | 902 ---------------------
+ apps/web/src/features/dashboard/Dashboard.tsx      |  57 +-
+ .../web/src/features/dashboard/dashboardService.ts |  37 +-
+ apps/web/src/features/settings/Settings.tsx        |  53 ++
+ .../src/features/study-plan/studyPlanPrompts.ts    |   2 +-
+ .../src/features/study-plan/studyPlanService.ts    |  33 +-
+ apps/web/src/features/tasks/ieltsContent.ts        |  31 +-
+ apps/web/src/models/index.ts                       |   6 -
+ apps/web/src/services/ExerciseGenerator.test.ts    | 248 ------
+ apps/web/src/services/ExerciseGenerator.ts         | 458 -----------
+ .../services/__tests__/ExerciseGenerator.test.ts   | 474 -----------
+ apps/web/tests/e2e/taskExerciseGeneration.test.ts  | 293 -------
+ docs/features.md                                   | 170 ++++
+ packages/learning-engine/src/progress/index.ts     |   1 +
+ packages/learning-engine/src/types.ts              |  45 +
+ 39 files changed, 1649 insertions(+), 3210 deletions(-)
+[0m
+[0m$ [0mgit diff apps/extension/src/content-script/videoHelper.ts apps/extension/src/popup/components/VideoHelper.tsx --stat
+fatal: option '--stat' must come before non-option arguments
+[0m
+[0m$ [0mgit diff -- apps/extension/src/content-script/videoHelper.ts apps/extension/src/popup/components/VideoHelper.tsx | head -20
+diff --git a/apps/extension/src/content-script/videoHelper.ts b/apps/extension/src/content-script/videoHelper.ts
+index 52e310f..15acd3b 100644
+--- a/apps/extension/src/content-script/videoHelper.ts
++++ b/apps/extension/src/content-script/videoHelper.ts
+@@ -1,5 +1,4 @@
+ const PANEL_ID = 'ielts-video-helper'
+-const TOAST_ID = 'ielts-vh-toast'
+ 
+ import { safeSendMessage } from '../utils/safe-chrome'
+ 
+@@ -11,21 +10,62 @@ interface VideoPageInfo {
+   videoId: string
+ }
+ 
++function extractYoutubeVideoId(url: string): string {
++  const urlObj = new URL(url)
++  if (urlObj.hostname.includes('youtu.be')) {
++    return urlObj.pathname.slice(1).split('/')[0].split('?')[0]
++  }
++  if (urlObj.pathname.startsWith('/shorts/')) {
+[0m
+[0m$ [0mpnpm test --filter video 2>&1 | tail -5
+packages/theme test$ vitest run --passWithNoTests --filter video
+packages/ui test$ vitest run --passWithNoTests --filter video
+packages/ai-tutor test: Failed
+packages/utils test$ vitest run --passWithNoTests --filter video
+[ELIFECYCLE] Test failed. See above for more details.
+[0m
+[0m$ [0mpnpm --filter extension test 2>&1 | tail -20
+at new Promise (<anonymous>)
+    at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+    at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+    at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 51ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 1ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 52ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 51ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 0ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 52ms
+ ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 51ms
+
+ Test Files  8 passed (8)
+      Tests  116 passed (116)
+   Start at  13:49:57
+   Duration  1.07s (transform 311ms, setup 0ms, collect 636ms, tests 457ms, environment 3.46s, prepare 490ms)
+[0m
+[0m# [0mTodos
+[✓] Fix YouTube page detection in videoHelper.ts (better selectors, Shorts support, transcript extraction, SPA navigation)
+[✓] Fix VideoHelper.tsx popup (storage fallback, fetch transcript button, better states)
+[✓] Verify changes compile and validate
+[0m
+[2026-07-05T06:50:09.849Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-05T06:50:09.855Z] [INFO] Task completed successfully

@@ -1,7 +1,9 @@
 import { findMatches, hasAnyWord, type HighlightWord, type TextMatch } from './highlightMatcher'
-import { showTooltip, scheduleHideTooltip, cancelHideTooltip } from './highlightTooltip'
+import { showTooltip, scheduleHideTooltip, cancelHideTooltip, hideTooltip } from './highlightTooltip'
 
 const HIGHLIGHT_CLASS = 'ielts-journey-saved-keyword-highlight'
+
+const MAX_TEXT_NODES = 10000
 
 const SKIP_TAGS = new Set([
   'script', 'style', 'iframe', 'svg', 'noscript',
@@ -9,14 +11,15 @@ const SKIP_TAGS = new Set([
 ])
 
 interface HighlightState {
-  wordIds: Set<string>
   active: boolean
 }
 
-let state: HighlightState = {
-  wordIds: new Set(),
+const state: HighlightState = {
   active: false,
 }
+
+let delegatedListenersAttached = false
+let isModifyingDOM = false
 
 function acceptTextNode(node: Text): number {
   const parent = node.parentElement
@@ -46,16 +49,73 @@ function acceptTextNode(node: Text): number {
   return NodeFilter.FILTER_ACCEPT
 }
 
-function getTextNodes(root: Node): Text[] {
+function getTextNodes(root: Node, limit = MAX_TEXT_NODES): Text[] {
   const nodes: Text[] = []
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: acceptTextNode })
 
   let node: Text | null
   while ((node = walker.nextNode() as Text | null)) {
     nodes.push(node)
+    if (nodes.length >= limit) break
   }
 
   return nodes
+}
+
+function getHighlightWord(el: HTMLElement): HighlightWord | null {
+  const data = el.dataset.highlight
+  if (!data) return null
+  try {
+    return JSON.parse(data) as HighlightWord
+  } catch {
+    return null
+  }
+}
+
+function handleHighlightMouseOver(e: MouseEvent): void {
+  const target = e.target as Node
+  if (!(target instanceof HTMLElement)) return
+  const span = target.closest<HTMLSpanElement>(`.${HIGHLIGHT_CLASS}`)
+  if (!span) return
+  cancelHideTooltip()
+  const word = getHighlightWord(span)
+  if (word) showTooltip(word, e.clientX, e.clientY)
+}
+
+function handleHighlightMouseOut(e: MouseEvent): void {
+  const target = e.target as Node
+  if (!(target instanceof HTMLElement)) return
+  const span = target.closest<HTMLSpanElement>(`.${HIGHLIGHT_CLASS}`)
+  if (!span) return
+  const related = e.relatedTarget as Node | null
+  if (related && span.contains(related)) return
+  scheduleHideTooltip(300)
+}
+
+function handleHighlightClick(e: MouseEvent): void {
+  const target = e.target as Node
+  if (!(target instanceof HTMLElement)) return
+  const span = target.closest<HTMLSpanElement>(`.${HIGHLIGHT_CLASS}`)
+  if (!span) return
+  e.stopPropagation()
+  const word = getHighlightWord(span)
+  if (word) showTooltip(word, e.clientX, e.clientY, true)
+}
+
+function attachDelegatedListeners(): void {
+  if (delegatedListenersAttached) return
+  delegatedListenersAttached = true
+  document.addEventListener('mouseover', handleHighlightMouseOver, { passive: true })
+  document.addEventListener('mouseout', handleHighlightMouseOut, { passive: true })
+  document.addEventListener('click', handleHighlightClick, true)
+}
+
+function detachDelegatedListeners(): void {
+  if (!delegatedListenersAttached) return
+  delegatedListenersAttached = false
+  document.removeEventListener('mouseover', handleHighlightMouseOver)
+  document.removeEventListener('mouseout', handleHighlightMouseOut)
+  document.removeEventListener('click', handleHighlightClick, true)
 }
 
 function createHighlightSpan(match: TextMatch): HTMLSpanElement {
@@ -64,18 +124,6 @@ function createHighlightSpan(match: TextMatch): HTMLSpanElement {
 
   const { id, text, meaning, exampleSentence, personalNote } = match.word
   span.dataset.highlight = JSON.stringify({ id, text, meaning, exampleSentence, personalNote })
-
-  span.addEventListener('mouseenter', (e) => {
-    cancelHideTooltip()
-    showTooltip(match.word, e.clientX, e.clientY)
-  })
-  span.addEventListener('mouseleave', () => {
-    scheduleHideTooltip(300)
-  })
-  span.addEventListener('click', (e) => {
-    e.stopPropagation()
-    showTooltip(match.word, e.clientX, e.clientY, true)
-  })
 
   return span
 }
@@ -86,31 +134,41 @@ function splitAndHighlight(node: Text, matches: TextMatch[]): boolean {
   const parent = node.parentNode
   if (!parent) return false
 
-  const text = node.textContent ?? ''
-  const fragment = document.createDocumentFragment()
-  let lastEnd = 0
+  isModifyingDOM = true
+  try {
+    const text = node.textContent ?? ''
+    const fragment = document.createDocumentFragment()
+    let lastEnd = 0
 
-  for (const m of matches) {
-    if (m.start > lastEnd) {
-      fragment.appendChild(document.createTextNode(text.slice(lastEnd, m.start)))
+    for (const m of matches) {
+      if (m.start < lastEnd) continue
+      if (m.start > text.length || m.end > text.length) continue
+
+      if (m.start > lastEnd) {
+        fragment.appendChild(document.createTextNode(text.slice(lastEnd, m.start)))
+      }
+
+      const span = createHighlightSpan(m)
+      span.textContent = text.slice(m.start, m.end)
+      fragment.appendChild(span)
+      lastEnd = m.end
     }
 
-    const span = createHighlightSpan(m)
-    span.textContent = text.slice(m.start, m.end)
-    fragment.appendChild(span)
-    lastEnd = m.end
-  }
+    if (lastEnd < text.length) {
+      fragment.appendChild(document.createTextNode(text.slice(lastEnd)))
+    }
 
-  if (lastEnd < text.length) {
-    fragment.appendChild(document.createTextNode(text.slice(lastEnd)))
+    parent.replaceChild(fragment, node)
+    return true
+  } finally {
+    isModifyingDOM = false
   }
-
-  parent.replaceChild(fragment, node)
-  return true
 }
 
 export function highlightMatches(root: Node, words: HighlightWord[]): number {
   if (!state.active || words.length === 0) return 0
+
+  attachDelegatedListeners()
 
   const textNodes = getTextNodes(root)
   let highlightCount = 0
@@ -125,7 +183,15 @@ export function highlightMatches(root: Node, words: HighlightWord[]): number {
     }
   }
 
+  if (highlightCount > 0) {
+    console.debug(`[IELTS Journey] Auto-highlight: ${highlightCount} matches highlighted`)
+  }
+
   return highlightCount
+}
+
+export function isModifyingDOMForHighlight(): boolean {
+  return isModifyingDOM
 }
 
 export function removeHighlights(root: Node): void {
@@ -142,26 +208,21 @@ export function removeHighlights(root: Node): void {
 
 export function removeAllHighlights(): void {
   removeHighlights(document.body)
+  detachDelegatedListeners()
+  hideTooltip()
 }
 
 export function setActive(active: boolean): void {
   state.active = active
+  if (!active) {
+    detachDelegatedListeners()
+  }
 }
 
 export function isActive(): boolean {
   return state.active
 }
 
-export function setWordIds(ids: Set<string>): void {
-  state.wordIds = ids
-}
-
 export function getHighlightWordFromElement(el: HTMLElement): HighlightWord | null {
-  const data = el.dataset.highlight
-  if (!data) return null
-  try {
-    return JSON.parse(data) as HighlightWord
-  } catch {
-    return null
-  }
+  return getHighlightWord(el)
 }

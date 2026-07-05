@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { extensionArticleSchema, saveArticleEntry, IELTS_TOPICS } from '../../storage/articleStore'
 import type { ExtensionArticleEntry, ArticleQuestion } from '../../storage/articleStore'
+import { saveEntry } from '../../storage/indexedDB'
+import { incrementDailyProgress } from '../../services/storage'
+import type { LearningEntry } from '../../types'
 
 interface ArticleCollectorProps {
   onSaved: () => void
@@ -226,15 +229,28 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
 
       await saveArticleEntry(entry)
 
-      chrome.storage.local.get(['dailyProgress'], (result) => {
-        const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
-        chrome.storage.local.set({
-          dailyProgress: {
-            ...current,
-            articlesSaved: current.articlesSaved + 1,
-          },
-        })
-      })
+      try {
+        const learningEntry: LearningEntry = {
+          id: crypto.randomUUID(),
+          text: titleTrimmed,
+          category: 'reading',
+          topic: topic.trim() || 'general',
+          skill: 'reading',
+          difficulty,
+          tags,
+          personalNote: personalNote.trim(),
+          pageTitle: pageInfo.title,
+          pageUrl: pageInfo.url,
+          status: 'new',
+          createdAt: now,
+          updatedAt: now,
+        }
+        await saveEntry(learningEntry)
+      } catch {
+        /* non-critical */
+      }
+
+      await incrementDailyProgress('articlesSaved', 1)
 
       setSaved(true)
       setTimeout(() => onSaved(), 1200)

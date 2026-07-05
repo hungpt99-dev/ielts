@@ -7,6 +7,15 @@ import { buildPersonalizationContext } from '../personalization/personalizationS
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { callAI } from '@ielts/ai'
 import type { ProviderConfig } from '@ielts/ai'
+import { loadConfiguration } from '../configuration/storage'
+import type {
+  AiTutorMode,
+  ExplanationStyle,
+  CorrectionStrictness,
+  FeedbackDepth,
+  AiResponseLanguage,
+  AiProviderConfig as ConfigAiProviderConfig,
+} from '../configuration/models'
 
 export interface TutorSuggestion {
   title: string
@@ -392,7 +401,7 @@ Return a JSON object with these fields:
           exercisePrompt,
           'Generate an IELTS writing exercise using the provided vocabulary words. Return valid JSON only.',
           () => config,
-          { temperature: 0.7, maxTokens: 300 },
+          { temperature: config.temperature ?? 0.7, maxTokens: config.maxTokens ?? 300 },
         )
 
         if (!error && content) {
@@ -458,7 +467,7 @@ Skill: ${skill}`
           reviewPrompt,
           'Give me explanation, suggestion, and example for this mistake.',
           () => config,
-          { temperature: 0.7, maxTokens: 200 },
+          { temperature: config.temperature ?? 0.7, maxTokens: config.maxTokens ?? 200 },
         )
         if (!error && content) {
           reviews.push({
@@ -616,17 +625,79 @@ Skill: ${skill}`
   }
 
   private buildProviderConfig(): ProviderConfig | null {
+    try {
+      const config = loadConfiguration()
+      const activeProviderId = config.advanced.activeProviderId
+      const activeProvider = config.advanced.providers[activeProviderId]
+
+      const mapProvider = (p: ConfigAiProviderConfig): ProviderConfig => ({
+        apiKey: p.apiKey,
+        baseUrl: p.baseUrl,
+        model: p.model,
+        temperature: p.temperature,
+        maxTokens: p.maxTokens,
+      })
+
+      if (activeProvider?.apiKey) {
+        return mapProvider(activeProvider)
+      }
+
+      if (activeProvider?.fallbackProvider) {
+        const fallback = config.advanced.providers[activeProvider.fallbackProvider]
+        if (fallback?.apiKey) {
+          return mapProvider(fallback)
+        }
+      }
+
+      for (const provider of Object.values(config.advanced.providers)) {
+        if (provider.apiKey) {
+          return mapProvider(provider)
+        }
+      }
+    } catch {
+      /* new config unavailable — fall through to legacy */
+    }
+
     const settings = loadAppSettings()
     if (!settings.aiApiKey) return null
     return {
       apiKey: settings.aiApiKey,
-      baseUrl: settings.aiEndpoint || OPENAI_BASE_URL,
+      baseUrl: settings.aiBaseUrl || settings.aiEndpoint || OPENAI_BASE_URL,
       model: settings.aiModel || DEFAULT_MODEL,
     }
   }
 
   private buildTutorSystemPrompt(context: PersonalizationContext): string {
+    let config
+    try {
+      config = loadConfiguration()
+    } catch {
+      config = null
+    }
+
+    const tutorConfig = config?.advanced.tutorConfig
+    const basicConfig = config?.basic
+
+    const modePrompt = tutorConfig ? this.buildModePrompt(tutorConfig.mode) : ''
+    const stylePrompt = tutorConfig ? this.buildExplanationStylePrompt(tutorConfig.explanationStyle) : ''
+    const strictnessPrompt = tutorConfig ? this.buildStrictnessPrompt(tutorConfig.correctionStrictness) : ''
+    const feedbackDepthPrompt = tutorConfig ? this.buildFeedbackDepthPrompt(tutorConfig.feedbackDepth) : ''
+    const languagePrompt = basicConfig ? this.buildLanguagePrompt(basicConfig.responseLanguage) : ''
+
+    const customPrompt = tutorConfig?.customSystemPrompt
+      ? `\n\nAdditional instructions from user:\n${tutorConfig.customSystemPrompt}`
+      : ''
+
+    const sections = [
+      modePrompt,
+      stylePrompt,
+      strictnessPrompt,
+      feedbackDepthPrompt,
+      languagePrompt,
+    ].filter(Boolean).join('\n')
+
     return `You are an expert IELTS tutor assistant integrated into a learning app. You help learners prepare for the IELTS exam with personalized advice, explanations, and motivation.
+${sections}
 
 Current user context:
 - Target band: ${context.profile.targetBand}, Current band: ${context.profile.currentBand}
@@ -636,6 +707,7 @@ Current user context:
 - Today's unfinished tasks: ${context.progress.todayUnfinished}
 - Vocabulary saved: ${context.vocabulary.totalWords} (${context.vocabulary.dueForReview} due for review)
 - Total mistakes recorded: ${context.mistakes.total}
+${customPrompt}
 
 Your role:
 1. Answer IELTS-related questions clearly and concisely.
@@ -648,13 +720,66 @@ Your role:
 8. Do NOT make up specific data not provided in the context.`
   }
 
+  private buildModePrompt(mode: AiTutorMode): string {
+    const modePrompts: Record<AiTutorMode, string> = {
+      'friendly-tutor': 'You are a friendly, encouraging IELTS tutor. Be warm and supportive while providing useful feedback.',
+      'strict-examiner': 'You are a strict IELTS examiner. Be precise, formal, and direct. Use IELTS assessment criteria in your feedback.',
+      'simple-english-teacher': 'You are a simple English teacher. Use very clear, easy-to-understand language. Explain concepts as simply as possible.',
+      'vietnamese-explanation-tutor': 'You can explain concepts in Vietnamese when helpful. Use Vietnamese to clarify difficult points, but encourage English practice.',
+      'motivation-coach': 'You are a motivation coach focused on IELTS preparation. Be highly encouraging, inspirational, and focus on building the learner\'s confidence.',
+      'grammar-focused-tutor': 'You are a grammar-focused IELTS tutor. Prioritize grammar explanations and corrections in all responses.',
+      'vocabulary-focused-tutor': 'You are a vocabulary-focused IELTS tutor. Emphasize word choice, collocations, and vocabulary building in all responses.',
+      'writing-correction-tutor': 'You are a writing correction tutor. Focus on analyzing and improving writing structure, coherence, and task achievement.',
+      'speaking-practice-tutor': 'You are a speaking practice tutor. Focus on fluency, pronunciation, and natural expression in responses.',
+    }
+    return modePrompts[mode] || modePrompts['friendly-tutor']
+  }
+
+  private buildExplanationStylePrompt(style: ExplanationStyle): string {
+    const stylePrompts: Record<ExplanationStyle, string> = {
+      'simple': 'Explain concepts simply and briefly. Avoid complex terminology.',
+      'detailed': 'Provide detailed, thorough explanations. Include relevant examples and nuances.',
+      'example-based': 'Use examples extensively to illustrate concepts. Provide multiple sample sentences or scenarios.',
+      'socratic': 'Use guiding questions to help the learner discover answers themselves rather than giving direct explanations.',
+      'step-by-step': 'Break down explanations into clear, sequential steps. Number your points.',
+    }
+    return stylePrompts[style] || stylePrompts['detailed']
+  }
+
+  private buildStrictnessPrompt(strictness: CorrectionStrictness): string {
+    const strictnessPrompts: Record<CorrectionStrictness, string> = {
+      'gentle': 'Be gentle with corrections. Always start with something positive before pointing out errors. Use soft language like "consider trying" instead of "this is wrong."',
+      'balanced': 'Balance positive feedback with corrections. Be honest about mistakes but maintain a supportive tone.',
+      'strict': 'Be direct and precise with corrections. Do not sugar-coat feedback. Use clear, definitive language about what is correct and incorrect.',
+    }
+    return strictnessPrompts[strictness] || strictnessPrompts['balanced']
+  }
+
+  private buildFeedbackDepthPrompt(depth: FeedbackDepth): string {
+    const depthPrompts: Record<FeedbackDepth, string> = {
+      'minimal': 'Keep feedback brief and to the point. Only provide essential corrections and suggestions.',
+      'standard': 'Provide moderate detail in feedback. Include reasoning behind corrections.',
+      'thorough': 'Provide comprehensive, detailed feedback. Include full explanations, examples, and suggestions for improvement.',
+    }
+    return depthPrompts[depth] || depthPrompts['standard']
+  }
+
+  private buildLanguagePrompt(language: AiResponseLanguage): string {
+    const languagePrompts: Record<AiResponseLanguage, string> = {
+      'english': 'Always respond in English.',
+      'vietnamese': 'Always respond in Vietnamese.',
+      'both': 'Respond in both English and Vietnamese. Provide the English version first, then the Vietnamese translation.',
+    }
+    return languagePrompts[language] || languagePrompts['english']
+  }
+
   async answerQuestion(query: string, ctx?: PersonalizationContext): Promise<string | null> {
     const context = ctx ?? await this.buildContext()
 
     const config = this.buildProviderConfig()
     if (config) {
       const systemPrompt = this.buildTutorSystemPrompt(context)
-      const { content, error } = await callAI(systemPrompt, query, () => config, { temperature: 0.7, maxTokens: 300 })
+      const { content, error } = await callAI(systemPrompt, query, () => config, { temperature: config.temperature ?? 0.7, maxTokens: config.maxTokens ?? 300 })
       if (!error && content) return content
     }
 

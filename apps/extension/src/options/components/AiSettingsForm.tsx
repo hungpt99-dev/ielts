@@ -38,6 +38,8 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
   })
   const [showApiKey, setShowApiKey] = useState(false)
   const [errors, setErrors] = useState<Errors>({})
+  const [saving, setSaving] = useState(false)
+  const [saveFeedback, setSaveFeedback] = useState<'success' | 'error' | null>(null)
 
   const latestRef = useRef(local)
   latestRef.current = local
@@ -60,10 +62,17 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
   }, [])
 
   const doSave = useCallback(async (patch: Partial<ExtensionSettings>) => {
+    setSaving(true)
+    setSaveFeedback(null)
     try {
       await onSave(patch)
+      setSaveFeedback('success')
+      setTimeout(() => setSaveFeedback(null), 2000)
     } catch {
+      setSaveFeedback('error')
       showToast('error', 'Failed to save AI settings')
+    } finally {
+      setSaving(false)
     }
   }, [onSave, showToast])
 
@@ -77,6 +86,7 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
     setErrors(e)
     if (Object.keys(e).length === 0) {
       doSave({
+        aiProvider: vals.aiProvider,
         aiBaseUrl: vals.aiBaseUrl,
         aiApiKey: vals.aiApiKey,
         aiModel: vals.aiModel,
@@ -105,6 +115,7 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
         const e = getErrors(vals)
         if (Object.keys(e).length === 0) {
           doSave({
+            aiProvider: vals.aiProvider,
             aiBaseUrl: vals.aiBaseUrl,
             aiApiKey: vals.aiApiKey,
             aiModel: vals.aiModel,
@@ -126,6 +137,7 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
           value={local.aiProvider}
           onChange={(e) => handleProviderChange(e.target.value)}
           style={selectStyle}
+          disabled={saving}
         >
           <option value="openai">OpenAI</option>
           <option value="custom">Custom (OpenAI-compatible)</option>
@@ -139,6 +151,7 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
           onBlur={handleBlur}
           placeholder="https://api.openai.com/v1"
           style={inputStyle}
+          disabled={saving}
         />
       </Field>
       <Field label="API Key" error={errors.aiApiKey} required>
@@ -151,6 +164,7 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
             placeholder="sk-..."
             style={{ ...inputStyle, flex: 1 }}
             autoComplete="off"
+            disabled={saving}
           />
           <button
             onClick={() => setShowApiKey((v) => !v)}
@@ -178,8 +192,24 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
           onBlur={handleBlur}
           placeholder="gpt-4o-mini"
           style={inputStyle}
+          disabled={saving}
         />
       </Field>
+      {saving && (
+        <div style={{ fontSize: '12px', color: 'var(--color-muted)', marginTop: '4px' }}>
+          Saving...
+        </div>
+      )}
+      {saveFeedback === 'success' && !saving && (
+        <div style={{ fontSize: '12px', color: 'var(--color-success, #16a34a)', marginTop: '4px' }}>
+          Settings saved.
+        </div>
+      )}
+      {saveFeedback === 'error' && !saving && (
+        <div style={{ fontSize: '12px', color: 'var(--color-danger, #dc2626)', marginTop: '4px' }}>
+          Failed to save settings.
+        </div>
+      )}
     </Section>
   )
 }

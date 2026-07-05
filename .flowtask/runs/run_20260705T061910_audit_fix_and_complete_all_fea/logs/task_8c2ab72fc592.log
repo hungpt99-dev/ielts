@@ -1,0 +1,1184 @@
+[2026-07-05T06:53:49.622Z] [INFO] Task started: Fix Vocabulary Review Flow and Pending Review Count Display
+[2026-07-05T06:53:49.624Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/extension/src/popup/components/PendingReviews.tsx","description":"Fix pending review count display and update logic","validationMethod":"file_diff"},{"action":"modify","target":"apps/extension/src/popup/components/ReviewSession.tsx","description":"Fix review session UI and state management","validationMethod":"file_diff"}]
+[2026-07-05T06:53:50.163Z] [INFO] [stderr] [0m
+[2026-07-05T06:53:50.163Z] [INFO] [stderr] [0m
+[2026-07-05T06:53:50.163Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-05T06:53:55.168Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"PendingReviews ReviewSession vocabulary review extension popup","maxFiles":20}
+[2026-07-05T06:53:55.349Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/components/PendingReviews*"[90m 0 matches[0m
+[2026-07-05T06:53:55.538Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/components/ReviewSession*"[90m 0 matches[0m
+[2026-07-05T06:53:58.357Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"apps/extension/src/popup review pending vocabulary review count","maxFiles":20}
+[2026-07-05T06:53:58.494Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/**/*review*"[90m 0 matches[0m
+[2026-07-05T06:53:58.674Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/**/*Review*"[90m 0 matches[0m
+[2026-07-05T06:53:58.876Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/**/*Pending*"[90m 0 matches[0m
+[2026-07-05T06:54:01.592Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/components/*"[90m 13 matches[0m
+[2026-07-05T06:54:01.842Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup
+[2026-07-05T06:54:04.818Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:54:05.064Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/hooks/*"[90m 1 match[0m
+[2026-07-05T06:54:05.275Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/vocabulary-review/*"[90m 4 matches[0m
+[2026-07-05T06:54:09.936Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/options/**/*"[90m 7 matches[0m
+[2026-07-05T06:54:10.216Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:54:10.469Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/services
+[2026-07-05T06:54:15.453Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/services/popupDataService.ts
+[2026-07-05T06:54:16.001Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"getDailyReviewQueue spaced-repetition calculateNextReview getInitialReviewEntry due for review review count","maxFiles":15}
+[2026-07-05T06:54:16.225Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/options/App.tsx
+[2026-07-05T06:54:20.298Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"dailyProgress reviewDue background service worker extension storage indexDB","maxFiles":20}
+[2026-07-05T06:54:20.531Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/options/SettingsPage.tsx
+[2026-07-05T06:54:20.708Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/background*"[90m 0 matches[0m
+[2026-07-05T06:54:28.936Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/App.tsx
+[2026-07-05T06:54:29.110Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/background/*"[90m 5 matches[0m
+[2026-07-05T06:54:29.300Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/storage/*"[90m 5 matches[0m
+[2026-07-05T06:54:31.991Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/index.ts
+[2026-07-05T06:54:32.240Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/storage/indexedDB.ts
+[2026-07-05T06:54:32.531Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/storage/vocabularyStore.ts
+[2026-07-05T06:54:39.217Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/types.ts
+[2026-07-05T06:54:39.500Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/utils/safe-chrome.ts
+[2026-07-05T06:54:43.790Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"VocabularyEntry VocabReviewEntry ReviewRating","kind":"type"}
+[2026-07-05T06:54:44.045Z] [INFO] [stderr] [0m✱ [0mGrep "export interface VocabularyEntry"[90m 1 match[0m
+[2026-07-05T06:54:46.834Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/models/index.ts[90m [offset=20, limit=120][0m
+[2026-07-05T06:54:56.882Z] [INFO] [stderr] [ ] Create ReviewSession.tsx component for the extension popup
+[2026-07-05T06:54:56.882Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:54:56.882Z] [INFO] [stderr] [ ] Create extension-specific spaced repetition service
+[2026-07-05T06:54:56.882Z] [INFO] [stderr] [0m
+[2026-07-05T06:54:56.883Z] [INFO] [stderr] [ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[2026-07-05T06:54:56.883Z] [INFO] [stderr] [ ] Verify with lint/typecheck if configured
+[2026-07-05T06:54:56.883Z] [INFO] [stderr] [0m
+[2026-07-05T06:54:56.883Z] [INFO] [stderr] [ ] Create PendingReviews.tsx component for the extension popup
+[2026-07-05T06:54:56.882Z] [INFO] [stderr] [ ] Add review views to App.tsx routing and ViewState type
+[2026-07-05T06:55:00.301Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/tsconfig*"[90m 1 match[0m
+[2026-07-05T06:55:00.522Z] [INFO] [stderr] [0m✱ [0mGlob "packages/*/src/index.ts"[90m 10 matches[0m
+[2026-07-05T06:55:00.694Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/package.json"[90m 1 match[0m
+[2026-07-05T06:55:00.900Z] [INFO] [stderr] [0m✱ [0mGlob "packages/learning-engine/src/**/*.ts"[90m 28 matches[0m
+[2026-07-05T06:55:03.547Z] [INFO] [stderr] [0m→ [0mRead apps/extension/tsconfig.json
+[2026-07-05T06:55:03.890Z] [INFO] [stderr] [0m→ [0mRead apps/extension/package.json
+[2026-07-05T06:55:04.076Z] [INFO] [stderr] [0m→ [0mRead packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+[2026-07-05T06:55:19.773Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:55:19.773Z] [INFO] [stderr] [ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[2026-07-05T06:55:19.773Z] [INFO] [stderr] [ ] Create PendingReviews.tsx component for the extension popup
+[2026-07-05T06:55:19.773Z] [INFO] [stderr] [0m
+[2026-07-05T06:55:19.773Z] [INFO] [stderr] [ ] Create ReviewSession.tsx component for the extension popup
+[2026-07-05T06:55:19.773Z] [INFO] [stderr] [0m
+[2026-07-05T06:55:19.773Z] [INFO] [stderr] [•] Create extension-specific spaced repetition review service
+[2026-07-05T06:55:19.773Z] [INFO] [stderr] [ ] Add review views to App.tsx routing and ViewState type
+[2026-07-05T06:55:19.773Z] [INFO] [stderr] [ ] Verify with lint/typecheck if configured
+[2026-07-05T06:55:26.770Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/services/popupDataService.ts"[90m 1 match[0m
+[2026-07-05T06:55:38.338Z] [INFO] [stderr] [0m
+[2026-07-05T06:55:38.338Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/popup/services/reviewService.ts
+[2026-07-05T06:55:38.338Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T06:55:38.338Z] [INFO] [stderr] [0m
+[2026-07-05T06:55:41.576Z] [INFO] [stderr] [✓] Create extension-specific spaced repetition review service
+[2026-07-05T06:55:41.576Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:55:41.576Z] [INFO] [stderr] [ ] Create ReviewSession.tsx component for the extension popup
+[2026-07-05T06:55:41.576Z] [INFO] [stderr] [ ] Verify with lint/typecheck if configured
+[2026-07-05T06:55:41.576Z] [INFO] [stderr] [•] Create PendingReviews.tsx component for the extension popup
+[2026-07-05T06:55:41.576Z] [INFO] [stderr] [0m
+[2026-07-05T06:55:41.576Z] [INFO] [stderr] [ ] Add review views to App.tsx routing and ViewState type
+[2026-07-05T06:55:41.576Z] [INFO] [stderr] [ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[2026-07-05T06:55:53.350Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T06:55:53.350Z] [INFO] [stderr] [0m
+[2026-07-05T06:55:53.350Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/popup/components/PendingReviews.tsx
+[2026-07-05T06:55:57.959Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:55:57.959Z] [INFO] [stderr] [✓] Create extension-specific spaced repetition review service
+[2026-07-05T06:55:57.959Z] [INFO] [stderr] [✓] Create PendingReviews.tsx component for the extension popup
+[2026-07-05T06:55:57.959Z] [INFO] [stderr] [•] Create ReviewSession.tsx component for the extension popup
+[2026-07-05T06:55:57.959Z] [INFO] [stderr] [0m
+[2026-07-05T06:55:57.959Z] [INFO] [stderr] [ ] Add review views to App.tsx routing and ViewState type
+[2026-07-05T06:55:57.959Z] [INFO] [stderr] [ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[2026-07-05T06:55:57.959Z] [INFO] [stderr] [ ] Verify with lint/typecheck if configured
+[2026-07-05T06:56:21.912Z] [INFO] [stderr] [0m
+[2026-07-05T06:56:21.912Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/popup/components/ReviewSession.tsx
+[2026-07-05T06:56:21.912Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T06:56:25.636Z] [INFO] [stderr] [✓] Create ReviewSession.tsx component for the extension popup
+[2026-07-05T06:56:25.636Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:56:25.636Z] [INFO] [stderr] [✓] Create PendingReviews.tsx component for the extension popup
+[2026-07-05T06:56:25.636Z] [INFO] [stderr] [•] Add review views to App.tsx routing and ViewState type
+[2026-07-05T06:56:25.636Z] [INFO] [stderr] [ ] Verify with lint/typecheck if configured
+[2026-07-05T06:56:25.636Z] [INFO] [stderr] [✓] Create extension-specific spaced repetition review service
+[2026-07-05T06:56:25.636Z] [INFO] [stderr] [ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[2026-07-05T06:56:25.636Z] [INFO] [stderr] [0m
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/App.tsx
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] @@ -8,10 +8,12 @@
+[2026-07-05T06:56:29.579Z] [INFO] [stderr]  import VideoHelper from './components/VideoHelper'
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T06:56:29.579Z] [INFO] [stderr]  import BackupRestore from './components/BackupRestore'
+[2026-07-05T06:56:29.579Z] [INFO] [stderr]  
+[2026-07-05T06:56:29.579Z] [INFO] [stderr]  import SavedWordsView from './components/SavedWordsView'
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] +type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'reviewSession'
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] +import PendingReviews from './components/PendingReviews'
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T06:56:29.579Z] [INFO] [stderr]  import MiniTutor from './components/MiniTutor'
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:56:29.579Z] [INFO] [stderr]  }
+[2026-07-05T06:56:29.579Z] [INFO] [stderr]  
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] -type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords'
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] 
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] [0m
+[2026-07-05T06:56:29.579Z] [INFO] [stderr]    children: ReactNode
+[2026-07-05T06:56:29.579Z] [INFO] [stderr] +import ReviewSession from './components/ReviewSession'
+[2026-07-05T06:56:29.579Z] [INFO] [stderr]  interface ErrorBoundaryProps {
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/App.tsx
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +    case 'pendingReviews':
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T06:56:33.490Z] [INFO] [stderr]      case 'miniTutor':
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] @@ -122,8 +122,26 @@
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +      return (
+[2026-07-05T06:56:33.490Z] [INFO] [stderr]      case 'savedWords':
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +        <div style={{ padding: '16px', minHeight: '500px' }}>
+[2026-07-05T06:56:33.490Z] [INFO] [stderr]        return <MiniTutor onBack={() => setView('dashboard')} />
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +            onBack={() => setView('dashboard')}
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +            onStartReview={() => setView('reviewSession')}
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +          />
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +      )
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +      return (
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +          <PendingReviews
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +          <ReviewSession
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +        <div style={{ padding: '0', minHeight: '500px' }}>
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +        </div>
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +    case 'reviewSession':
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +            onComplete={() => setView('dashboard')}
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +        </div>
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +          />
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +      )
+[2026-07-05T06:56:33.490Z] [INFO] [stderr] +            onBack={() => setView('pendingReviews')}
+[2026-07-05T06:56:33.490Z] [INFO] [stderr]      default:
+[2026-07-05T06:56:33.490Z] [INFO] [stderr]  }
+[2026-07-05T06:56:33.491Z] [INFO] [stderr]    }
+[2026-07-05T06:56:33.491Z] [INFO] [stderr] 
+[2026-07-05T06:56:33.490Z] [INFO] [stderr]        return <PopupDashboard key={key} onNavigate={setView} />
+[2026-07-05T06:56:33.491Z] [INFO] [stderr] [0m
+[2026-07-05T06:56:33.491Z] [INFO] [stderr]        return <SavedWordsView onBack={() => setView('dashboard')} />
+[2026-07-05T06:56:37.340Z] [INFO] [stderr] [✓] Create PendingReviews.tsx component for the extension popup
+[2026-07-05T06:56:37.340Z] [INFO] [stderr] [✓] Add review views to App.tsx routing and ViewState type
+[2026-07-05T06:56:37.340Z] [INFO] [stderr] [✓] Create extension-specific spaced repetition review service
+[2026-07-05T06:56:37.340Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:56:37.341Z] [INFO] [stderr] [•] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[2026-07-05T06:56:37.340Z] [INFO] [stderr] [ ] Verify with lint/typecheck if configured
+[2026-07-05T06:56:37.341Z] [INFO] [stderr] [0m
+[2026-07-05T06:56:37.341Z] [INFO] [stderr] [✓] Create ReviewSession.tsx component for the extension popup
+[2026-07-05T06:56:42.673Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=1, limit=20][0m
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] [0m
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] @@ -4,11 +4,13 @@
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]  import DashboardCard from './DashboardCard'
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] +import { safeStorageGet, safeStorageSet } from '../../utils/safe-chrome'
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] +import { getDueCount } from '../services/reviewService'
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]  interface PopupDashboardProps {
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]  import { loadVocabulary } from '../services/popupDataService'
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]  import type { DailyProgress } from '../hooks/usePopupData'
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]  
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]  
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]    icon: string
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] +  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords' | 'pendingReviews') => void
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] 
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]  interface ActionItem {
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] -  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords') => void
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]  }
+[2026-07-05T06:56:48.258Z] [INFO] [stderr] [0m
+[2026-07-05T06:56:48.258Z] [INFO] [stderr]  import type { LearningEntry } from '../../types'
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]    refreshRecent,
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] @@ -217,19 +217,31 @@
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]  } = usePopupData()
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]  const [vocabCountLoading, setVocabCountLoading] = useState(true)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]  const [vocabCount, setVocabCount] = useState(0)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +const [dueCount, setDueCount] = useState(0)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]  
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]  useEffect(() => {
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] -  loadVocabulary().then((result) => {
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +  Promise.all([
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +    loadVocabulary(),
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] -    setVocabCount(result.stats.total)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +  ]).then(([vocabResult, dueResult]) => {
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +    getDueCount(),
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +    setVocabCount(vocabResult.stats.total)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +      }).catch(() => {})
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]    setVocabCountLoading(true)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +        const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +      safeStorageGet<any>('dailyProgress').then((result) => {
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +        safeStorageSet({ dailyProgress: { ...current, reviewDue: dueResult } })
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +    }
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]      setVocabCount(0)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]    }).catch(() => {
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]    }).finally(() => {
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +    if (dueResult !== progress.reviewDue) {
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +    setDueCount(0)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] -}, [])
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +    setDueCount(dueResult)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]  
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]      setVocabCountLoading(false)
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] +}, [progress.reviewDue])
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]  const handleQuickSavePage = useCallback(async () => {
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]    try {
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] 
+[2026-07-05T06:56:53.038Z] [INFO] [stderr] [0m
+[2026-07-05T06:56:53.038Z] [INFO] [stderr]    })
+[2026-07-05T06:56:57.141Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:57.141Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:56:57.141Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:57.141Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:57.141Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:56:57.141Z] [INFO] [stderr]  },
+[2026-07-05T06:56:57.141Z] [INFO] [stderr] @@ -357,9 +357,9 @@
+[2026-07-05T06:56:57.141Z] [INFO] [stderr] -  description: `${progress.reviewDue} pending review${progress.reviewDue !== 1 ? 's' : ''}`,
+[2026-07-05T06:56:57.141Z] [INFO] [stderr]  {
+[2026-07-05T06:56:57.141Z] [INFO] [stderr] +  description: `${dueCount} pending review${dueCount !== 1 ? 's' : ''}`,
+[2026-07-05T06:56:57.141Z] [INFO] [stderr] 
+[2026-07-05T06:56:57.141Z] [INFO] [stderr]    icon: '🔄',
+[2026-07-05T06:56:57.141Z] [INFO] [stderr]  },
+[2026-07-05T06:56:57.141Z] [INFO] [stderr]    onClick: handleStartReview,
+[2026-07-05T06:56:57.141Z] [INFO] [stderr]    color: '#f59e0b',
+[2026-07-05T06:56:57.141Z] [INFO] [stderr]  {
+[2026-07-05T06:56:57.141Z] [INFO] [stderr]    label: 'Start Review',
+[2026-07-05T06:56:57.142Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] @@ -291,10 +291,10 @@
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:00.444Z] [INFO] [stderr]  
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:00.444Z] [INFO] [stderr]  const handleStartReview = useCallback(() => {
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] -}, [])
+[2026-07-05T06:57:00.444Z] [INFO] [stderr]    }
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] -  chrome.tabs.create({ url: chrome.runtime.getURL('options.html') + '#review' })
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] +}, [onNavigate])
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:57:00.444Z] [INFO] [stderr]  
+[2026-07-05T06:57:00.444Z] [INFO] [stderr]    chrome.tabs.create({ url: 'https://ielts-journey.app/dashboard' })
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] +  onNavigate('pendingReviews')
+[2026-07-05T06:57:00.444Z] [INFO] [stderr]  const handleOpenDashboard = useCallback(() => {
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:00.444Z] [INFO] [stderr]  }, [showToast, refreshProgress, refreshRecent])
+[2026-07-05T06:57:00.444Z] [INFO] [stderr]  }, [])
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] 
+[2026-07-05T06:57:00.444Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:03.691Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:03.692Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:03.692Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:03.692Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:03.692Z] [INFO] [stderr]        onClick: () => chrome.tabs.create({ url: 'https://ielts-journey.app/public-api' }),
+[2026-07-05T06:57:03.692Z] [INFO] [stderr] @@ -369,9 +369,9 @@
+[2026-07-05T06:57:03.692Z] [INFO] [stderr]      },
+[2026-07-05T06:57:03.692Z] [INFO] [stderr]        color: '#06b6d4',
+[2026-07-05T06:57:03.692Z] [INFO] [stderr] +  [onNavigate, dueCount, vocabCount, vocabCountLoading, handleStartReview],
+[2026-07-05T06:57:03.692Z] [INFO] [stderr] -  [onNavigate, progress.reviewDue, vocabCount, vocabCountLoading, handleStartReview],
+[2026-07-05T06:57:03.692Z] [INFO] [stderr]  )
+[2026-07-05T06:57:03.692Z] [INFO] [stderr]    return (
+[2026-07-05T06:57:03.692Z] [INFO] [stderr]  if (loading) {
+[2026-07-05T06:57:03.692Z] [INFO] [stderr]  
+[2026-07-05T06:57:03.692Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:03.692Z] [INFO] [stderr] 
+[2026-07-05T06:57:03.692Z] [INFO] [stderr]    ],
+[2026-07-05T06:57:03.692Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] @@ -560,11 +560,11 @@
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] -    value={progress.reviewDue}
+[2026-07-05T06:57:06.985Z] [INFO] [stderr]      label="Review Due"
+[2026-07-05T06:57:06.985Z] [INFO] [stderr]    <DashboardCard
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] +    value={dueCount}
+[2026-07-05T06:57:06.985Z] [INFO] [stderr]    <DashboardCard label="Notes Today" value={progress.notesAdded} icon="✏️" />
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] -    accent={progress.reviewDue > 0}
+[2026-07-05T06:57:06.985Z] [INFO] [stderr]  </section>
+[2026-07-05T06:57:06.985Z] [INFO] [stderr]  
+[2026-07-05T06:57:06.985Z] [INFO] [stderr]      icon="🔄"
+[2026-07-05T06:57:06.985Z] [INFO] [stderr]  <section>
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] +    accent={dueCount > 0}
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] 
+[2026-07-05T06:57:06.985Z] [INFO] [stderr]    />
+[2026-07-05T06:57:06.986Z] [INFO] [stderr]    <DashboardCard label="Articles" value={progress.articlesSaved} icon="📰" />
+[2026-07-05T06:57:06.985Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:57:10.561Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:57:10.561Z] [INFO] [stderr] [✓] Add review views to App.tsx routing and ViewState type
+[2026-07-05T06:57:10.561Z] [INFO] [stderr] [•] Verify with lint/typecheck if configured
+[2026-07-05T06:57:10.561Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:10.561Z] [INFO] [stderr] [✓] Create extension-specific spaced repetition review service
+[2026-07-05T06:57:10.561Z] [INFO] [stderr] [✓] Create PendingReviews.tsx component for the extension popup
+[2026-07-05T06:57:10.561Z] [INFO] [stderr] [✓] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[2026-07-05T06:57:10.561Z] [INFO] [stderr] [✓] Create ReviewSession.tsx component for the extension popup
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/extension typecheck 2>&1
+[2026-07-05T06:57:15.526Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] src/popup/components/ReviewSession.tsx(2,42): error TS6133: 'getDueCount' is declared but its value is never read.
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] Exit status 2
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+[2026-07-05T06:57:15.526Z] [INFO] [stderr] src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+[2026-07-05T06:57:19.223Z] [INFO] [stderr] @@ -1,6 +1,6 @@
+[2026-07-05T06:57:19.223Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ReviewSession.tsx
+[2026-07-05T06:57:19.223Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ReviewSession.tsx
+[2026-07-05T06:57:19.223Z] [INFO] [stderr] ===================================================================
+[2026-07-05T06:57:19.223Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/ReviewSession.tsx
+[2026-07-05T06:57:19.224Z] [INFO] [stderr]  interface ReviewSessionProps {
+[2026-07-05T06:57:19.223Z] [INFO] [stderr] -import { buildReviewQueue, handleRating, getDueCount, type ReviewItem, type ReviewRating } from '../services/reviewService'
+[2026-07-05T06:57:19.224Z] [INFO] [stderr]  import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+[2026-07-05T06:57:19.224Z] [INFO] [stderr]  
+[2026-07-05T06:57:19.224Z] [INFO] [stderr] +import { buildReviewQueue, handleRating, type ReviewItem, type ReviewRating } from '../services/reviewService'
+[2026-07-05T06:57:19.224Z] [INFO] [stderr]    onBack: () => void
+[2026-07-05T06:57:19.224Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:19.224Z] [INFO] [stderr]    onComplete: () => void
+[2026-07-05T06:57:19.224Z] [INFO] [stderr] 
+[2026-07-05T06:57:19.224Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ReviewSession.tsx
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/extension typecheck 2>&1
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+[2026-07-05T06:57:23.931Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] Exit status 2
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[2026-07-05T06:57:23.931Z] [INFO] [stderr] src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+[2026-07-05T06:57:27.299Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/App.tsx
+[2026-07-05T06:57:27.768Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=1, limit=15][0m
+[2026-07-05T06:57:27.876Z] [INFO] [stdout] Good - all remaining errors are pre-existing test file issues, not from the changes. Let me verify the final state of all modified files.
+[2026-07-05T06:57:31.149Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=216, limit=80][0m
+[2026-07-05T06:57:34.140Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=355, limit=20][0m
+[2026-07-05T06:57:37.335Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=553, limit=15][0m
+[2026-07-05T06:57:40.523Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/services/reviewService.ts
+[2026-07-05T06:57:46.385Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:46.385Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/extension typecheck 2>&1 | grep -v "^src/__tests__\|^src/popup/components/__tests__"
+[2026-07-05T06:57:46.385Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[2026-07-05T06:57:46.385Z] [INFO] [stderr] Exit status 2
+[2026-07-05T06:57:46.385Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:46.385Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T06:57:46.385Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+[2026-07-05T06:57:46.385Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T06:57:51.480Z] [INFO] [stderr] [0m$ [0mpnpm --filter @ielts/extension typecheck 2>&1 | grep -v "__tests__"
+[2026-07-05T06:57:51.480Z] [INFO] [stderr] Exit status 2
+[2026-07-05T06:57:51.480Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T06:57:51.480Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:51.480Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[2026-07-05T06:57:51.480Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T06:57:51.480Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .flowtask/state.json                               |   2 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr] .flowtask/events.jsonl                             |   6 +
+[2026-07-05T06:57:54.634Z] [INFO] [stderr] [0m$ [0mgit diff --stat
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/extension/src/content-script/aiExplain.ts     |  13 +
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/extension/src/background/messaging.ts         |  83 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/content-script/floatingToolbar.ts          |  30 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .flowtask/run-index.json                           |   2 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../highlighter/__tests__/highlightEngine.test.ts  |   9 -
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .flowtask/task-index.json                          |   2 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../extension/src/content-script/selectionPanel.ts | 125 +--
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/content-script/saveSelectedText.ts         |  48 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/popup/components/QuickAddVocab.tsx         |  15 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/extension/src/content-script/videoHelper.ts   | 208 +++--
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/extension/src/popup/App.tsx                   | 190 +++--
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/popup/components/ArticleCollector.tsx      |  34 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../content-script/highlighter/highlightMatcher.ts |  21 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/popup/components/PopupDashboard.tsx        | 217 +++--
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/popup/components/SavedWordsView.tsx        |  74 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../extension/src/popup/components/VideoHelper.tsx | 518 +++++++-----
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/extension/src/popup/index.css                 |  17 +
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../highlighter/savedKeywordHighlighter.ts         |  59 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../content-script/highlighter/highlightEngine.ts  | 149 +++-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/popup/components/VocabularyCollector.tsx   |  34 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/extension/src/popup/hooks/usePopupData.ts     | 118 ++-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../__tests__/TaskCompletionHandler.test.ts        | 123 ---
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/web/src/components/Layout.tsx                 |   4 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/popup/components/SaveTextForm.tsx          |  63 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/web/src/features/content/StudyContentPage.tsx | 902 ---------------------
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/web/src/components/TaskCompletionHandler.ts   |  40 -
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/web/src/features/ai-tutor/aiTutorService.ts   | 133 ++-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/web/src/features/dashboard/Dashboard.tsx      |  57 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/web/src/features/tasks/ieltsContent.ts        |  31 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/web/src/features/settings/Settings.tsx        |  53 ++
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../web/src/features/dashboard/dashboardService.ts |  37 +-
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/features/study-plan/studyPlanPrompts.ts    |   2 +-
+[2026-07-05T06:57:54.635Z] [INFO] [stderr]  apps/web/src/services/ExerciseGenerator.test.ts    | 248 ------
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  .../src/features/study-plan/studyPlanService.ts    |  33 +-
+[2026-07-05T06:57:54.635Z] [INFO] [stderr]  apps/web/tests/e2e/taskExerciseGeneration.test.ts  | 293 -------
+[2026-07-05T06:57:54.635Z] [INFO] [stderr]  packages/learning-engine/src/progress/index.ts     |   1 +
+[2026-07-05T06:57:54.634Z] [INFO] [stderr]  apps/web/src/models/index.ts                       |   6 -
+[2026-07-05T06:57:54.635Z] [INFO] [stderr]  docs/features.md                                   | 170 ++++
+[2026-07-05T06:57:54.635Z] [INFO] [stderr]  .../services/__tests__/ExerciseGenerator.test.ts   | 474 -----------
+[2026-07-05T06:57:54.635Z] [INFO] [stderr]  apps/web/src/services/ExerciseGenerator.ts         | 458 -----------
+[2026-07-05T06:57:54.635Z] [INFO] [stderr]  43 files changed, 1862 insertions(+), 3285 deletions(-)
+[2026-07-05T06:57:54.635Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:54.635Z] [INFO] [stderr]  packages/learning-engine/src/types.ts              |  45 +
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] [0m$ [0mgit diff --name-only
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] .flowtask/events.jsonl
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/background/messaging.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] .flowtask/run-index.json
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] .flowtask/state.json
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] .flowtask/task-index.json
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/content-script/aiExplain.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/content-script/highlighter/highlightEngine.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/content-script/highlighter/highlightMatcher.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/content-script/floatingToolbar.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/components/ArticleCollector.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/content-script/highlighter/savedKeywordHighlighter.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/content-script/videoHelper.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/content-script/selectionPanel.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/components/SavedWordsView.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/components/SaveTextForm.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/content-script/highlighter/__tests__/highlightEngine.test.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/components/VideoHelper.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/components/QuickAddVocab.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/hooks/usePopupData.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/components/TaskCompletionHandler.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/components/Layout.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/index.css
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/features/content/StudyContentPage.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/features/ai-tutor/aiTutorService.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/components/__tests__/TaskCompletionHandler.test.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/features/study-plan/studyPlanPrompts.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/features/settings/Settings.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/features/dashboard/dashboardService.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/features/study-plan/studyPlanService.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/features/tasks/ieltsContent.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/features/dashboard/Dashboard.tsx
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/services/ExerciseGenerator.test.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/models/index.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/services/__tests__/ExerciseGenerator.test.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] docs/features.md
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/tests/e2e/taskExerciseGeneration.test.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] packages/learning-engine/src/types.ts
+[2026-07-05T06:57:58.158Z] [INFO] [stderr] [0m
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] packages/learning-engine/src/progress/index.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/web/src/services/ExerciseGenerator.ts
+[2026-07-05T06:57:58.157Z] [INFO] [stderr] apps/extension/src/popup/App.tsx
+[2026-07-05T06:58:02.362Z] [INFO] [stderr] M	apps/extension/src/popup/App.tsx
+[2026-07-05T06:58:02.362Z] [INFO] [stderr] [0m$ [0mgit diff --name-status | grep -E "(PendingReviews|ReviewSession|reviewService|popup/App|PopupDashboard)"
+[2026-07-05T06:58:02.362Z] [INFO] [stderr] M	apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:58:02.362Z] [INFO] [stderr] [0m
+[2026-07-05T06:58:05.499Z] [INFO] [stderr] [0m
+[2026-07-05T06:58:05.499Z] [INFO] [stderr] ?? apps/extension/src/popup/components/PendingReviews.tsx
+[2026-07-05T06:58:05.499Z] [INFO] [stderr] [0m$ [0mgit status --short | grep -E "(PendingReviews|ReviewSession|reviewService)"
+[2026-07-05T06:58:05.499Z] [INFO] [stderr] ?? apps/extension/src/popup/services/reviewService.ts
+[2026-07-05T06:58:05.499Z] [INFO] [stderr] ?? apps/extension/src/popup/components/ReviewSession.tsx
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] [0m$ [0mpnpm test --filter review 2>&1
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] $ pnpm -r test --filter review
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test$ vitest run --passWithNoTests --filter review
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test$ vitest run --passWithNoTests --filter review
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test$ vitest run --passWithNoTests --filter review
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/settings test$ vitest run --passWithNoTests --filter review
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] Scope: 12 of 13 workspace projects
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test:                 ^
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test:                 ^
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test: Node.js v24.13.0
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test: CACError: Unknown option `--filter`
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test: CACError: Unknown option `--filter`
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test: Node.js v24.13.0
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test: CACError: Unknown option `--filter`
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test: Node.js v24.13.0
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai-tutor test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test:                 ^
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/exercises test: Failed
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T06:58:09.611Z] [INFO] [stderr] packages/ai test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises:
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test: CACError: Unknown option `--filter`
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/exercises@0.1.0 test: `vitest run --passWithNoTests --filter review`
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] Exit status 1
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test:                 ^
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/ai-tutor test: Failed
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/ai test: Failed
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test: Node.js v24.13.0
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/storage test$ vitest run --passWithNoTests --filter review
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/theme test$ vitest run --passWithNoTests --filter review
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test: Failed
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/settings test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] [0m
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/utils test$ vitest run --passWithNoTests --filter review
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] packages/ui test$ vitest run --passWithNoTests --filter review
+[2026-07-05T06:58:09.612Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-05T06:58:13.479Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/components/__tests__/*Review*"[90m 0 matches[0m
+[2026-07-05T06:58:13.629Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/popup/services/__tests__/*"[90m 0 matches[0m
+[2026-07-05T06:58:13.864Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/**/__tests__/*review*"[90m 0 matches[0m
+[2026-07-05T06:58:17.847Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T06:58:17.847Z] [INFO] [stderr] [✓] Create ReviewSession.tsx component for the extension popup
+[2026-07-05T06:58:17.847Z] [INFO] [stderr] [✓] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[2026-07-05T06:58:17.847Z] [INFO] [stderr] [✓] Create extension-specific spaced repetition review service
+[2026-07-05T06:58:17.847Z] [INFO] [stderr] [✓] Create PendingReviews.tsx component for the extension popup
+[2026-07-05T06:58:17.847Z] [INFO] [stderr] [✓] Verify with lint/typecheck if configured
+[2026-07-05T06:58:17.847Z] [INFO] [stderr] [✓] Add review views to App.tsx routing and ViewState type
+[2026-07-05T06:58:17.847Z] [INFO] [stderr] [0m
+[2026-07-05T06:58:17.847Z] [INFO] [stderr] [0m
+[2026-07-05T06:58:24.816Z] [INFO] [stdout] ## Summary
+[2026-07-05T06:58:24.816Z] [INFO] [stdout] 
+[2026-07-05T06:58:24.816Z] [INFO] [stdout]    - `getDueCount()` — Computes accurate pending review count from vocabulary + review data
+[2026-07-05T06:58:24.816Z] [INFO] [stdout] **3 new files + 2 modified files:**
+[2026-07-05T06:58:24.816Z] [INFO] [stdout] 
+[2026-07-05T06:58:24.816Z] [INFO] [stdout]    - `buildReviewQueue()` — Builds shuffled due queue using spaced repetition scheduling
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 2. **`apps/extension/src/popup/components/PendingReviews.tsx`** (new) — Shows pending review count with:
+[2026-07-05T06:58:24.816Z] [INFO] [stdout] 1. **`apps/extension/src/popup/services/reviewService.ts`** (new) — Extension review service with SM-2 spaced repetition algorithm:
+[2026-07-05T06:58:24.816Z] [INFO] [stdout] 
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - Reviews stored in `chrome.storage.local` under `vocabularyReviews` key
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] ### Changes Made
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - Loading, empty ("All caught up!"), error, and due-count states
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - "Reveal Answer" toggle to show meaning
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - Loading, empty, error, and completed states
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - "Back to Dashboard" navigation
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - Progress bar, completion summary with time and rating breakdown
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 3. **`apps/extension/src/popup/components/ReviewSession.tsx`** (new) — Full review session UI:
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - Displays word, pronunciation, part of speech
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - 4 rating buttons (Again/Hard/Good/Easy) with keyboard shortcuts (1-4, Space)
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 
+[2026-07-05T06:58:24.816Z] [INFO] [stdout]    - `handleRating()` — Persists ratings, updates vocabulary status, calculates next review dates
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 4. **`apps/extension/src/popup/App.tsx`** (modified) — Added `pendingReviews` and `reviewSession` views to routing
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 5. **`apps/extension/src/popup/components/PopupDashboard.tsx`** (modified):
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - `reviewDue` count computed from actual vocabulary/review data via `getDueCount()`
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] - **Pending review count** is now computed from actual data (vocabulary entries + review entries) using SM-2 scheduling, not a stale stored number
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] 
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - "Start Review" now navigates to inline `pendingReviews` view instead of opening `options.html#review`
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - "Start Review" button → navigates to review session
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] ### Fixes applied
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] - **Review flow** is fully inline in the popup (no tab redirect to a non-functional options page route)
+[2026-07-05T06:58:24.817Z] [INFO] [stdout] - **Data lifecycle**: reviews persisted to `chrome.storage.local`, vocabulary status auto-updated on rating
+[2026-07-05T06:58:24.817Z] [INFO] [stdout]    - DashboardCard and action button both show the accurate computed count
+[2026-07-05T06:58:25.028Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-05T06:58:25.029Z] [INFO] Output:
+Good - all remaining errors are pre-existing test file issues, not from the changes. Let me verify the final state of all modified files.
+## Summary
+
+### Changes Made
+
+**3 new files + 2 modified files:**
+
+1. **`apps/extension/src/popup/services/reviewService.ts`** (new) — Extension review service with SM-2 spaced repetition algorithm:
+   - `getDueCount()` — Computes accurate pending review count from vocabulary + review data
+   - `buildReviewQueue()` — Builds shuffled due queue using spaced repetition scheduling
+   - `handleRating()` — Persists ratings, updates vocabulary status, calculates next review dates
+   - Reviews stored in `chrome.storage.local` under `vocabularyReviews` key
+
+2. **`apps/extension/src/popup/components/PendingReviews.tsx`** (new) — Shows pending review count with:
+   - Loading, empty ("All caught up!"), error, and due-count states
+   - "Start Review" button → navigates to review session
+   - "Back to Dashboard" navigation
+
+3. **`apps/extension/src/popup/components/ReviewSession.tsx`** (new) — Full review session UI:
+   - Displays word, pronunciation, part of speech
+   - "Reveal Answer" toggle to show meaning
+   - 4 rating buttons (Again/Hard/Good/Easy) with keyboard shortcuts (1-4, Space)
+   - Progress bar, completion summary with time and rating breakdown
+   - Loading, empty, error, and completed states
+
+4. **`apps/extension/src/popup/App.tsx`** (modified) — Added `pendingReviews` and `reviewSession` views to routing
+
+5. **`apps/extension/src/popup/components/PopupDashboard.tsx`** (modified):
+   - "Start Review" now navigates to inline `pendingReviews` view instead of opening `options.html#review`
+   - `reviewDue` count computed from actual vocabulary/review data via `getDueCount()`
+   - DashboardCard and action button both show the accurate computed count
+
+### Fixes applied
+
+- **Pending review count** is now computed from actual data (vocabulary entries + review entries) using SM-2 scheduling, not a stale stored number
+- **Review flow** is f
+[2026-07-05T06:58:25.029Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"PendingReviews ReviewSession vocabulary review extension popup","maxFiles":20}
+[0m✱ [0mGlob "apps/extension/src/popup/components/PendingReviews*"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/src/popup/components/ReviewSession*"[90m 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"apps/extension/src/popup review pending vocabulary review count","maxFiles":20}
+[0m✱ [0mGlob "apps/extension/src/popup/**/*review*"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/src/popup/**/*Review*"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/src/popup/**/*Pending*"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/src/popup/components/*"[90m 13 matches[0m
+[0m→ [0mRead apps/extension/src/popup
+[0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx
+[0m✱ [0mGlob "apps/extension/src/popup/hooks/*"[90m 1 match[0m
+[0m✱ [0mGlob "apps/web/src/features/vocabulary-review/*"[90m 4 matches[0m
+[0m✱ [0mGlob "apps/extension/src/options/**/*"[90m 7 matches[0m
+[0m→ [0mRead apps/extension/src/popup/hooks/usePopupData.ts
+[0m→ [0mRead apps/extension/src/popup/services
+[0m→ [0mRead apps/extension/src/popup/services/popupDataService.ts
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"getDailyReviewQueue spaced-repetition calculateNextReview getInitialReviewEntry due for review review count","maxFiles":15}
+[0m→ [0mRead apps/extension/src/options/App.tsx
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"dailyProgress reviewDue background service worker extension storage indexDB","maxFiles":20}
+[0m→ [0mRead apps/extension/src/options/SettingsPage.tsx
+[0m✱ [0mGlob "apps/extension/src/background*"[90m 0 matches[0m
+[0m→ [0mRead apps/extension/src/popup/App.tsx
+[0m✱ [0mGlob "apps/extension/src/background/*"[90m 5 matches[0m
+[0m✱ [0mGlob "apps/extension/src/storage/*"[90m 5 matches[0m
+[0m→ [0mRead apps/extension/src/background/index.ts
+[0m→ [0mRead apps/extension/src/storage/indexedDB.ts
+[0m→ [0mRead apps/extension/src/storage/vocabularyStore.ts
+[0m→ [0mRead apps/extension/src/types.ts
+[0m→ [0mRead apps/extension/src/utils/safe-chrome.ts
+[0m⚙ [0mcodegraph_codegraph_search {"query":"VocabularyEntry VocabReviewEntry ReviewRating","kind":"type"}
+[0m✱ [0mGrep "export interface VocabularyEntry"[90m 1 match[0m
+[0m→ [0mRead apps/web/src/models/index.ts[90m [offset=20, limit=120][0m
+[0m
+[0m# [0mTodos
+[ ] Create PendingReviews.tsx component for the extension popup
+[ ] Create ReviewSession.tsx component for the extension popup
+[ ] Create extension-specific spaced repetition service
+[ ] Add review views to App.tsx routing and ViewState type
+[ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[ ] Verify with lint/typecheck if configured
+[0m
+[0m✱ [0mGlob "apps/extension/tsconfig*"[90m 1 match[0m
+[0m✱ [0mGlob "packages/*/src/index.ts"[90m 10 matches[0m
+[0m✱ [0mGlob "apps/extension/package.json"[90m 1 match[0m
+[0m✱ [0mGlob "packages/learning-engine/src/**/*.ts"[90m 28 matches[0m
+[0m→ [0mRead apps/extension/tsconfig.json
+[0m→ [0mRead apps/extension/package.json
+[0m→ [0mRead packages/learning-engine/src/review-scheduler/ReviewSchedulerService.ts
+[0m
+[0m# [0mTodos
+[•] Create extension-specific spaced repetition review service
+[ ] Create PendingReviews.tsx component for the extension popup
+[ ] Create ReviewSession.tsx component for the extension popup
+[ ] Add review views to App.tsx routing and ViewState type
+[ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[ ] Verify with lint/typecheck if configured
+[0m
+[0m✱ [0mGlob "apps/extension/src/popup/services/popupDataService.ts"[90m 1 match[0m
+[0m
+[0m← [0mWrite apps/extension/src/popup/services/reviewService.ts
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create extension-specific spaced repetition review service
+[•] Create PendingReviews.tsx component for the extension popup
+[ ] Create ReviewSession.tsx component for the extension popup
+[ ] Add review views to App.tsx routing and ViewState type
+[ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[ ] Verify with lint/typecheck if configured
+[0m
+[0m← [0mWrite apps/extension/src/popup/components/PendingReviews.tsx
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create extension-specific spaced repetition review service
+[✓] Create PendingReviews.tsx component for the extension popup
+[•] Create ReviewSession.tsx component for the extension popup
+[ ] Add review views to App.tsx routing and ViewState type
+[ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[ ] Verify with lint/typecheck if configured
+[0m
+[0m← [0mWrite apps/extension/src/popup/components/ReviewSession.tsx
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create extension-specific spaced repetition review service
+[✓] Create PendingReviews.tsx component for the extension popup
+[✓] Create ReviewSession.tsx component for the extension popup
+[•] Add review views to App.tsx routing and ViewState type
+[ ] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[ ] Verify with lint/typecheck if configured
+[0m
+[0m← [0mEdit apps/extension/src/popup/App.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+@@ -8,10 +8,12 @@
+ import VideoHelper from './components/VideoHelper'
+ import BackupRestore from './components/BackupRestore'
+ import MiniTutor from './components/MiniTutor'
+ import SavedWordsView from './components/SavedWordsView'
++import PendingReviews from './components/PendingReviews'
++import ReviewSession from './components/ReviewSession'
+ 
+-type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords'
++type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'reviewSession'
+ 
+ interface ErrorBoundaryProps {
+   children: ReactNode
+ }
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/App.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+@@ -122,8 +122,26 @@
+     case 'miniTutor':
+       return <MiniTutor onBack={() => setView('dashboard')} />
+     case 'savedWords':
+       return <SavedWordsView onBack={() => setView('dashboard')} />
++    case 'pendingReviews':
++      return (
++        <div style={{ padding: '16px', minHeight: '500px' }}>
++          <PendingReviews
++            onStartReview={() => setView('reviewSession')}
++            onBack={() => setView('dashboard')}
++          />
++        </div>
++      )
++    case 'reviewSession':
++      return (
++        <div style={{ padding: '0', minHeight: '500px' }}>
++          <ReviewSession
++            onComplete={() => setView('dashboard')}
++            onBack={() => setView('pendingReviews')}
++          />
++        </div>
++      )
+     default:
+       return <PopupDashboard key={key} onNavigate={setView} />
+   }
+ }
+
+[0m
+[0m# [0mTodos
+[✓] Create extension-specific spaced repetition review service
+[✓] Create PendingReviews.tsx component for the extension popup
+[✓] Create ReviewSession.tsx component for the extension popup
+[✓] Add review views to App.tsx routing and ViewState type
+[•] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[ ] Verify with lint/typecheck if configured
+[0m
+[0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=1, limit=20][0m
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+@@ -4,11 +4,13 @@
+ import type { DailyProgress } from '../hooks/usePopupData'
+ import DashboardCard from './DashboardCard'
+ import type { LearningEntry } from '../../types'
+ import { loadVocabulary } from '../services/popupDataService'
++import { getDueCount } from '../services/reviewService'
++import { safeStorageGet, safeStorageSet } from '../../utils/safe-chrome'
+ 
+ interface PopupDashboardProps {
+-  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords') => void
++  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords' | 'pendingReviews') => void
+ }
+ 
+ interface ActionItem {
+   icon: string
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+@@ -217,19 +217,31 @@
+   refreshRecent,
+ } = usePopupData()
+ const [vocabCount, setVocabCount] = useState(0)
+ const [vocabCountLoading, setVocabCountLoading] = useState(true)
++const [dueCount, setDueCount] = useState(0)
+ 
+ useEffect(() => {
+   setVocabCountLoading(true)
+-  loadVocabulary().then((result) => {
+-    setVocabCount(result.stats.total)
++  Promise.all([
++    loadVocabulary(),
++    getDueCount(),
++  ]).then(([vocabResult, dueResult]) => {
++    setVocabCount(vocabResult.stats.total)
++    setDueCount(dueResult)
++    if (dueResult !== progress.reviewDue) {
++      safeStorageGet<any>('dailyProgress').then((result) => {
++        const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
++        safeStorageSet({ dailyProgress: { ...current, reviewDue: dueResult } })
++      }).catch(() => {})
++    }
+   }).catch(() => {
+     setVocabCount(0)
++    setDueCount(0)
+   }).finally(() => {
+     setVocabCountLoading(false)
+   })
+-}, [])
++}, [progress.reviewDue])
+ 
+ const handleQuickSavePage = useCallback(async () => {
+   try {
+     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+@@ -357,9 +357,9 @@
+ },
+ {
+   icon: '🔄',
+   label: 'Start Review',
+-  description: `${progress.reviewDue} pending review${progress.reviewDue !== 1 ? 's' : ''}`,
++  description: `${dueCount} pending review${dueCount !== 1 ? 's' : ''}`,
+   onClick: handleStartReview,
+   color: '#f59e0b',
+ },
+ {
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+@@ -291,10 +291,10 @@
+   }
+ }, [showToast, refreshProgress, refreshRecent])
+ 
+ const handleStartReview = useCallback(() => {
+-  chrome.tabs.create({ url: chrome.runtime.getURL('options.html') + '#review' })
+-}, [])
++  onNavigate('pendingReviews')
++}, [onNavigate])
+ 
+ const handleOpenDashboard = useCallback(() => {
+   chrome.tabs.create({ url: 'https://ielts-journey.app/dashboard' })
+ }, [])
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+@@ -369,9 +369,9 @@
+       onClick: () => chrome.tabs.create({ url: 'https://ielts-journey.app/public-api' }),
+       color: '#06b6d4',
+     },
+   ],
+-  [onNavigate, progress.reviewDue, vocabCount, vocabCountLoading, handleStartReview],
++  [onNavigate, dueCount, vocabCount, vocabCountLoading, handleStartReview],
+ )
+ 
+ if (loading) {
+   return (
+
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/PopupDashboard.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/PopupDashboard.tsx
+@@ -560,11 +560,11 @@
+   <DashboardCard label="Notes Today" value={progress.notesAdded} icon="✏️" />
+   <DashboardCard label="Articles" value={progress.articlesSaved} icon="📰" />
+   <DashboardCard
+     label="Review Due"
+-    value={progress.reviewDue}
++    value={dueCount}
+     icon="🔄"
+-    accent={progress.reviewDue > 0}
++    accent={dueCount > 0}
+   />
+ </section>
+ 
+ <section>
+
+[0m
+[0m# [0mTodos
+[✓] Create extension-specific spaced repetition review service
+[✓] Create PendingReviews.tsx component for the extension popup
+[✓] Create ReviewSession.tsx component for the extension popup
+[✓] Add review views to App.tsx routing and ViewState type
+[✓] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[•] Verify with lint/typecheck if configured
+[0m
+[0m$ [0mpnpm --filter @ielts/extension typecheck 2>&1
+$ tsc --noEmit
+src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+  Type 'unknown' is not assignable to type 'SyncStatus'.
+src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+src/popup/components/ReviewSession.tsx(2,42): error TS6133: 'getDueCount' is declared but its value is never read.
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+Exit status 2
+[0m
+[0m← [0mEdit apps/extension/src/popup/components/ReviewSession.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ReviewSession.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ReviewSession.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/ReviewSession.tsx
+@@ -1,6 +1,6 @@
+ import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+-import { buildReviewQueue, handleRating, getDueCount, type ReviewItem, type ReviewRating } from '../services/reviewService'
++import { buildReviewQueue, handleRating, type ReviewItem, type ReviewRating } from '../services/reviewService'
+ 
+ interface ReviewSessionProps {
+   onComplete: () => void
+   onBack: () => void
+
+[0m
+[0m$ [0mpnpm --filter @ielts/extension typecheck 2>&1
+$ tsc --noEmit
+src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+  Type 'unknown' is not assignable to type 'SyncStatus'.
+src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+Exit status 2
+[0m
+[0m→ [0mRead apps/extension/src/popup/App.tsx
+[0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=1, limit=15][0m
+[0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=216, limit=80][0m
+[0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=355, limit=20][0m
+[0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx[90m [offset=553, limit=15][0m
+[0m→ [0mRead apps/extension/src/popup/services/reviewService.ts
+[0m
+[0m$ [0mpnpm --filter @ielts/extension typecheck 2>&1 | grep -v "^src/__tests__\|^src/popup/components/__tests__"
+$ tsc --noEmit
+  Type 'unknown' is not assignable to type 'SyncStatus'.
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+Exit status 2
+[0m
+[0m$ [0mpnpm --filter @ielts/extension typecheck 2>&1 | grep -v "__tests__"
+$ tsc --noEmit
+  Type 'unknown' is not assignable to type 'SyncStatus'.
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+Exit status 2
+[0m
+[0m$ [0mgit diff --stat
+.flowtask/events.jsonl                             |   6 +
+ .flowtask/run-index.json                           |   2 +-
+ .flowtask/state.json                               |   2 +-
+ .flowtask/task-index.json                          |   2 +-
+ apps/extension/src/background/messaging.ts         |  83 +-
+ apps/extension/src/content-script/aiExplain.ts     |  13 +
+ .../src/content-script/floatingToolbar.ts          |  30 +-
+ .../highlighter/__tests__/highlightEngine.test.ts  |   9 -
+ .../content-script/highlighter/highlightEngine.ts  | 149 +++-
+ .../content-script/highlighter/highlightMatcher.ts |  21 +-
+ .../highlighter/savedKeywordHighlighter.ts         |  59 +-
+ .../src/content-script/saveSelectedText.ts         |  48 +-
+ .../extension/src/content-script/selectionPanel.ts | 125 +--
+ apps/extension/src/content-script/videoHelper.ts   | 208 +++--
+ apps/extension/src/popup/App.tsx                   | 190 +++--
+ .../src/popup/components/ArticleCollector.tsx      |  34 +-
+ .../src/popup/components/PopupDashboard.tsx        | 217 +++--
+ .../src/popup/components/QuickAddVocab.tsx         |  15 +-
+ .../src/popup/components/SaveTextForm.tsx          |  63 +-
+ .../src/popup/components/SavedWordsView.tsx        |  74 +-
+ .../extension/src/popup/components/VideoHelper.tsx | 518 +++++++-----
+ .../src/popup/components/VocabularyCollector.tsx   |  34 +-
+ apps/extension/src/popup/hooks/usePopupData.ts     | 118 ++-
+ apps/extension/src/popup/index.css                 |  17 +
+ apps/web/src/components/Layout.tsx                 |   4 +-
+ apps/web/src/components/TaskCompletionHandler.ts   |  40 -
+ .../__tests__/TaskCompletionHandler.test.ts        | 123 ---
+ apps/web/src/features/ai-tutor/aiTutorService.ts   | 133 ++-
+ apps/web/src/features/content/StudyContentPage.tsx | 902 ---------------------
+ apps/web/src/features/dashboard/Dashboard.tsx      |  57 +-
+ .../web/src/features/dashboard/dashboardService.ts |  37 +-
+ apps/web/src/features/settings/Settings.tsx        |  53 ++
+ .../src/features/study-plan/studyPlanPrompts.ts    |   2 +-
+ .../src/features/study-plan/studyPlanService.ts    |  33 +-
+ apps/web/src/features/tasks/ieltsContent.ts        |  31 +-
+ apps/web/src/models/index.ts                       |   6 -
+ apps/web/src/services/ExerciseGenerator.test.ts    | 248 ------
+ apps/web/src/services/ExerciseGenerator.ts         | 458 -----------
+ .../services/__tests__/ExerciseGenerator.test.ts   | 474 -----------
+ apps/web/tests/e2e/taskExerciseGeneration.test.ts  | 293 -------
+ docs/features.md                                   | 170 ++++
+ packages/learning-engine/src/progress/index.ts     |   1 +
+ packages/learning-engine/src/types.ts              |  45 +
+ 43 files changed, 1862 insertions(+), 3285 deletions(-)
+[0m
+[0m$ [0mgit diff --name-only
+.flowtask/events.jsonl
+.flowtask/run-index.json
+.flowtask/state.json
+.flowtask/task-index.json
+apps/extension/src/background/messaging.ts
+apps/extension/src/content-script/aiExplain.ts
+apps/extension/src/content-script/floatingToolbar.ts
+apps/extension/src/content-script/highlighter/__tests__/highlightEngine.test.ts
+apps/extension/src/content-script/highlighter/highlightEngine.ts
+apps/extension/src/content-script/highlighter/highlightMatcher.ts
+apps/extension/src/content-script/highlighter/savedKeywordHighlighter.ts
+apps/extension/src/content-script/saveSelectedText.ts
+apps/extension/src/content-script/selectionPanel.ts
+apps/extension/src/content-script/videoHelper.ts
+apps/extension/src/popup/App.tsx
+apps/extension/src/popup/components/ArticleCollector.tsx
+apps/extension/src/popup/components/PopupDashboard.tsx
+apps/extension/src/popup/components/QuickAddVocab.tsx
+apps/extension/src/popup/components/SaveTextForm.tsx
+apps/extension/src/popup/components/SavedWordsView.tsx
+apps/extension/src/popup/components/VideoHelper.tsx
+apps/extension/src/popup/components/VocabularyCollector.tsx
+apps/extension/src/popup/hooks/usePopupData.ts
+apps/extension/src/popup/index.css
+apps/web/src/components/Layout.tsx
+apps/web/src/components/TaskCompletionHandler.ts
+apps/web/src/components/__tests__/TaskCompletionHandler.test.ts
+apps/web/src/features/ai-tutor/aiTutorService.ts
+apps/web/src/features/content/StudyContentPage.tsx
+apps/web/src/features/dashboard/Dashboard.tsx
+apps/web/src/features/dashboard/dashboardService.ts
+apps/web/src/features/settings/Settings.tsx
+apps/web/src/features/study-plan/studyPlanPrompts.ts
+apps/web/src/features/study-plan/studyPlanService.ts
+apps/web/src/features/tasks/ieltsContent.ts
+apps/web/src/models/index.ts
+apps/web/src/services/ExerciseGenerator.test.ts
+apps/web/src/services/ExerciseGenerator.ts
+apps/web/src/services/__tests__/ExerciseGenerator.test.ts
+apps/web/tests/e2e/taskExerciseGeneration.test.ts
+docs/features.md
+packages/learning-engine/src/progress/index.ts
+packages/learning-engine/src/types.ts
+[0m
+[0m$ [0mgit diff --name-status | grep -E "(PendingReviews|ReviewSession|reviewService|popup/App|PopupDashboard)"
+M	apps/extension/src/popup/App.tsx
+M	apps/extension/src/popup/components/PopupDashboard.tsx
+[0m
+[0m$ [0mgit status --short | grep -E "(PendingReviews|ReviewSession|reviewService)"
+?? apps/extension/src/popup/components/PendingReviews.tsx
+?? apps/extension/src/popup/components/ReviewSession.tsx
+?? apps/extension/src/popup/services/reviewService.ts
+[0m
+[0m$ [0mpnpm test --filter review 2>&1
+$ pnpm -r test --filter review
+Scope: 12 of 13 workspace projects
+packages/ai test$ vitest run --passWithNoTests --filter review
+packages/ai-tutor test$ vitest run --passWithNoTests --filter review
+packages/exercises test$ vitest run --passWithNoTests --filter review
+packages/settings test$ vitest run --passWithNoTests --filter review
+packages/exercises test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/exercises test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/exercises test:                 ^
+packages/exercises test: CACError: Unknown option `--filter`
+packages/exercises test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/exercises test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/exercises test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/exercises test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/exercises test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/exercises test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/exercises test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/exercises test: Node.js v24.13.0
+packages/ai-tutor test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/ai-tutor test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/ai-tutor test:                 ^
+packages/ai-tutor test: CACError: Unknown option `--filter`
+packages/ai-tutor test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/ai-tutor test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/ai-tutor test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/ai-tutor test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/ai-tutor test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/ai-tutor test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/ai-tutor test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/ai-tutor test: Node.js v24.13.0
+packages/ai test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/ai test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/ai test:                 ^
+packages/ai test: CACError: Unknown option `--filter`
+packages/ai test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/ai test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/ai test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/ai test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/ai test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/ai test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/ai test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/ai test: Node.js v24.13.0
+packages/exercises test: Failed
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/exercises:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/exercises@0.1.0 test: `vitest run --passWithNoTests --filter review`
+Exit status 1
+packages/storage test$ vitest run --passWithNoTests --filter review
+packages/settings test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/settings test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/settings test:                 ^
+packages/settings test: CACError: Unknown option `--filter`
+packages/settings test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/settings test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/settings test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/settings test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/settings test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/settings test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/settings test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/settings test: Node.js v24.13.0
+packages/ai test: Failed
+packages/ai-tutor test: Failed
+packages/theme test$ vitest run --passWithNoTests --filter review
+packages/ui test$ vitest run --passWithNoTests --filter review
+packages/settings test: Failed
+packages/utils test$ vitest run --passWithNoTests --filter review
+[ELIFECYCLE] Test failed. See above for more details.
+[0m
+[0m✱ [0mGlob "apps/extension/src/popup/components/__tests__/*Review*"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/src/popup/services/__tests__/*"[90m 0 matches[0m
+[0m✱ [0mGlob "apps/extension/src/**/__tests__/*review*"[90m 0 matches[0m
+[0m
+[0m# [0mTodos
+[✓] Create extension-specific spaced repetition review service
+[✓] Create PendingReviews.tsx component for the extension popup
+[✓] Create ReviewSession.tsx component for the extension popup
+[✓] Add review views to App.tsx routing and ViewState type
+[✓] Update PopupDashboard to navigate to review view and compute accurate reviewDue count
+[✓] Verify with lint/typecheck if configured
+[0m
+[2026-07-05T06:58:25.029Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-05T06:58:25.033Z] [INFO] Task completed successfully

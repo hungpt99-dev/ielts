@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSettings } from '../../context/SettingsContext'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
@@ -13,41 +13,60 @@ export default function AISettings() {
 
   const [apiKey, setApiKey] = useState(settings.aiApiKey)
   const [provider, setProvider] = useState(settings.aiProvider)
-  const [endpoint, setEndpoint] = useState(settings.aiEndpoint)
+  const [baseUrl, setBaseUrl] = useState(settings.aiBaseUrl || settings.aiEndpoint || '')
   const [model, setModel] = useState(settings.aiModel)
   const [enabled, setEnabled] = useState(settings.aiEnabled)
   const [testing, setTesting] = useState(false)
   const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null)
-  const [saved, setSaved] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [saveFeedback, setSaveFeedback] = useState<'success' | 'error' | null>(null)
+
+  useEffect(() => {
+    setApiKey(settings.aiApiKey)
+    setProvider(settings.aiProvider)
+    setBaseUrl(settings.aiBaseUrl || settings.aiEndpoint || '')
+    setModel(settings.aiModel)
+    setEnabled(settings.aiEnabled)
+  }, [settings.aiApiKey, settings.aiProvider, settings.aiBaseUrl, settings.aiEndpoint, settings.aiModel, settings.aiEnabled])
 
   function handleSave() {
-    updateSettings({
-      aiApiKey: apiKey,
-      aiProvider: provider,
-      aiEndpoint: endpoint,
-      aiModel: model,
-      aiEnabled: enabled,
-    })
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    setSaving(true)
+    setSaveFeedback(null)
+    try {
+      updateSettings({
+        aiApiKey: apiKey,
+        aiProvider: provider,
+        aiBaseUrl: baseUrl,
+        aiEndpoint: baseUrl,
+        aiModel: model,
+        aiEnabled: enabled,
+      })
+      setSaveFeedback('success')
+    } catch {
+      setSaveFeedback('error')
+    } finally {
+      setSaving(false)
+      setTimeout(() => setSaveFeedback(null), 2500)
+    }
   }
 
   function handleReset() {
     setApiKey('')
     setProvider('openai')
-    setEndpoint('')
+    setBaseUrl('')
     setModel('gpt-4o-mini')
     setEnabled(false)
     setTestResult(null)
     updateSettings({
       aiApiKey: '',
       aiProvider: 'openai',
+      aiBaseUrl: '',
       aiEndpoint: '',
       aiModel: 'gpt-4o-mini',
       aiEnabled: false,
     })
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    setSaveFeedback('success')
+    setTimeout(() => setSaveFeedback(null), 2500)
   }
 
   async function handleTestConnection() {
@@ -57,13 +76,18 @@ export default function AISettings() {
     }
     setTesting(true)
     setTestResult(null)
-    const result = await testConnection({
-      apiKey,
-      baseUrl: endpoint || OPENAI_BASE_URL,
-      model: model || DEFAULT_MODEL,
-    })
-    setTestResult({ ok: result.ok, message: result.message })
-    setTesting(false)
+    try {
+      const result = await testConnection({
+        apiKey,
+        baseUrl: baseUrl || OPENAI_BASE_URL,
+        model: model || DEFAULT_MODEL,
+      })
+      setTestResult({ ok: result.ok, message: result.message })
+    } catch {
+      setTestResult({ ok: false, message: 'Connection test failed. Check your settings.' })
+    } finally {
+      setTesting(false)
+    }
   }
 
   function handleKeyChange(val: string) {
@@ -101,7 +125,7 @@ export default function AISettings() {
               onChange={(e) => {
                 setProvider((e.target as HTMLSelectElement).value as 'openai' | 'custom')
                 if ((e.target as HTMLSelectElement).value === 'openai') {
-                  setEndpoint('')
+                  setBaseUrl('')
                   setModel('gpt-4o-mini')
                 }
                 setTestResult(null)
@@ -123,26 +147,23 @@ export default function AISettings() {
               helperText={apiKey ? `${apiKey.slice(0, 8)}...${apiKey.slice(-4)}` : 'No API key set'}
             />
 
-            {provider === 'custom' && (
-              <>
-                <Input
-                  id="ai-endpoint"
-                  type="text"
-                  label="Base URL"
-                  value={endpoint}
-                  onChange={(e) => { setEndpoint((e.target as HTMLInputElement).value); setTestResult(null) }}
-                  placeholder="https://api.openai.com/v1"
-                />
-                <Input
-                  id="ai-model"
-                  type="text"
-                  label="Model"
-                  value={model}
-                  onChange={(e) => { setModel((e.target as HTMLInputElement).value); setTestResult(null) }}
-                  placeholder="gpt-4o-mini"
-                />
-              </>
-            )}
+            <Input
+              id="ai-base-url"
+              type="text"
+              label="Base URL"
+              value={baseUrl}
+              onChange={(e) => { setBaseUrl((e.target as HTMLInputElement).value); setTestResult(null) }}
+              placeholder={OPENAI_BASE_URL}
+            />
+
+            <Input
+              id="ai-model"
+              type="text"
+              label="Model"
+              value={model}
+              onChange={(e) => { setModel((e.target as HTMLInputElement).value); setTestResult(null) }}
+              placeholder={DEFAULT_MODEL}
+            />
 
             <div className="flex flex-wrap gap-3">
               <Button variant="outline" size="sm" onClick={handleTestConnection} loading={testing}>
@@ -173,16 +194,19 @@ export default function AISettings() {
         )}
 
         <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-          <Button onClick={handleSave} disabled={!apiKey && enabled}>
-            Save AI Settings
+          <Button onClick={handleSave} disabled={saving || (!apiKey && enabled)}>
+            {saving ? 'Saving...' : 'Save AI Settings'}
           </Button>
           <Button variant="ghost" onClick={handleReset}>
             Reset AI Settings
           </Button>
         </div>
 
-        {saved && (
+        {saveFeedback === 'success' && (
           <p className="text-xs text-green-600 dark:text-green-400">AI settings saved.</p>
+        )}
+        {saveFeedback === 'error' && (
+          <p className="text-xs text-red-600 dark:text-red-400">Failed to save settings.</p>
         )}
       </CardContent>
     </Card>

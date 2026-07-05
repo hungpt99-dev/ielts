@@ -25,6 +25,19 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     saveAppSettings(settings)
   }, [settings])
 
+  useEffect(() => {
+    function handleSettingsUpdate(e: Event) {
+      const detail = (e as CustomEvent).detail as Partial<AppSettings> | undefined
+      if (detail) {
+        setSettings((prev) => ({ ...prev, ...detail }))
+      } else {
+        setSettings(loadAppSettings())
+      }
+    }
+    window.addEventListener('ielts-settings-updated', handleSettingsUpdate)
+    return () => window.removeEventListener('ielts-settings-updated', handleSettingsUpdate)
+  }, [])
+
   const updateSettings = (patch: Partial<AppSettings>) => {
     setSettings(prev => ({ ...prev, ...patch }))
   }

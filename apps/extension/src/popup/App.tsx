@@ -1,15 +1,19 @@
 import { useState } from 'react'
 import { ToastProvider } from '../../../../packages/ui/src/components/Toast'
+import ErrorBoundary from './components/ErrorBoundary'
 import PopupDashboard from './components/PopupDashboard'
 import SaveTextForm from './components/SaveTextForm'
 import VocabularyCollector from './components/VocabularyCollector'
 import ArticleCollector from './components/ArticleCollector'
 import VideoHelper from './components/VideoHelper'
 import BackupRestore from './components/BackupRestore'
-import MiniTutor from './components/MiniTutor'
+import ImportExportSection from './components/ImportExportSection'
+import AITutorEntry from './components/AITutorEntry'
 import SavedWordsView from './components/SavedWordsView'
+import PendingReviews from './components/PendingReviews'
+import ReviewSession from './components/ReviewSession'
 
-type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'miniTutor' | 'savedWords'
+type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'reviewSession'
 
 function App() {
   const [view, setView] = useState<ViewState>('dashboard')
@@ -20,76 +24,77 @@ function App() {
     setKey((k) => k + 1)
   }
 
-  if (view === 'saveForm') {
-    return (
-      <ToastProvider>
-        <div style={{ padding: '16px', minHeight: '500px' }}>
-          <SaveTextForm onSaved={handleSaved} onCancel={() => setView('dashboard')} />
-        </div>
-      </ToastProvider>
-    )
-  }
-
-  if (view === 'vocabularyCollector') {
-    return (
-      <ToastProvider>
-        <div style={{ padding: '16px', minHeight: '500px' }}>
-          <VocabularyCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
-        </div>
-      </ToastProvider>
-    )
-  }
-
-  if (view === 'articleCollector') {
-    return (
-      <ToastProvider>
-        <div style={{ padding: '16px', minHeight: '500px' }}>
-          <ArticleCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
-        </div>
-      </ToastProvider>
-    )
-  }
-
-  if (view === 'videoHelper') {
-    return (
-      <ToastProvider>
-        <div style={{ padding: '16px', minHeight: '500px' }}>
-          <VideoHelper onSaved={handleSaved} onCancel={() => setView('dashboard')} />
-        </div>
-      </ToastProvider>
-    )
-  }
-
-  if (view === 'backupRestore') {
-    return (
-      <ToastProvider>
-        <div style={{ padding: '16px', minHeight: '500px' }}>
-          <BackupRestore onBack={() => setView('dashboard')} />
-        </div>
-      </ToastProvider>
-    )
-  }
-
-  if (view === 'miniTutor') {
-    return (
-      <ToastProvider>
-        <MiniTutor onBack={() => setView('dashboard')} />
-      </ToastProvider>
-    )
-  }
-
-  if (view === 'savedWords') {
-    return (
-      <ToastProvider>
-        <SavedWordsView onBack={() => setView('dashboard')} />
-      </ToastProvider>
-    )
+  const renderView = () => {
+    switch (view) {
+      case 'saveForm':
+        return (
+          <div style={{ padding: '16px', minHeight: '500px' }}>
+            <SaveTextForm onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+          </div>
+        )
+      case 'vocabularyCollector':
+        return (
+          <div style={{ padding: '16px', minHeight: '500px' }}>
+            <VocabularyCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+          </div>
+        )
+      case 'articleCollector':
+        return (
+          <div style={{ padding: '16px', minHeight: '500px' }}>
+            <ArticleCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+          </div>
+        )
+      case 'videoHelper':
+        return (
+          <div style={{ padding: '16px', minHeight: '500px' }}>
+            <VideoHelper onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+          </div>
+        )
+      case 'backupRestore':
+        return (
+          <div style={{ padding: '16px', minHeight: '500px' }}>
+            <BackupRestore onBack={() => setView('dashboard')} />
+          </div>
+        )
+      case 'importExport':
+        return (
+          <div style={{ padding: '16px', minHeight: '500px' }}>
+            <ImportExportSection onBack={() => setView('dashboard')} />
+          </div>
+        )
+      case 'miniTutor':
+        return <AITutorEntry onBack={() => setView('dashboard')} />
+      case 'savedWords':
+        return <SavedWordsView onBack={() => setView('dashboard')} />
+      case 'pendingReviews':
+        return (
+          <div style={{ padding: '16px', minHeight: '500px' }}>
+            <PendingReviews
+              onStartReview={() => setView('reviewSession')}
+              onBack={() => setView('dashboard')}
+            />
+          </div>
+        )
+      case 'reviewSession':
+        return (
+          <div style={{ padding: '0', minHeight: '500px' }}>
+            <ReviewSession
+              onComplete={() => setView('dashboard')}
+              onBack={() => setView('pendingReviews')}
+            />
+          </div>
+        )
+      default:
+        return <PopupDashboard key={key} onNavigate={setView} />
+    }
   }
 
   return (
-    <ToastProvider>
-      <PopupDashboard key={key} onNavigate={setView} />
-    </ToastProvider>
+    <ErrorBoundary>
+      <ToastProvider>
+        {renderView()}
+      </ToastProvider>
+    </ErrorBoundary>
   )
 }
 

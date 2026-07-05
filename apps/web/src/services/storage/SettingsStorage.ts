@@ -148,7 +148,13 @@ function handleBridgeMessage(event: MessageEvent): void {
     }
 
     const merged = { ...current, ...patch }
+    if (!merged.aiEndpoint && merged.aiBaseUrl) {
+      merged.aiEndpoint = merged.aiBaseUrl
+    }
     setSetting(KEYS.APP_SETTINGS, merged)
+    try {
+      window.dispatchEvent(new CustomEvent('ielts-settings-updated', { detail: merged }))
+    } catch { /* ignore */ }
   } finally {
     _applyingRemote = false
   }

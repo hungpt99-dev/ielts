@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useToast } from '../../../../../packages/ui/src/components/Toast'
-import { safeStorageGet, safeStorageSet, safeSendMessage, safeFetchProviderConfig } from '../../utils/safe-chrome'
-import {
-  explain,
-  type AiExplainType,
-  type SimpleExplain,
-  type VietnameseExplain,
-  type IeltsVocabResult,
-  type RewriteResult,
-  type QuizResult,
+import { safeStorageGet, safeStorageSet, safeSendMessage } from '../../utils/safe-chrome'
+import type {
+  AiExplainType,
+  SimpleExplain,
+  VietnameseExplain,
+  IeltsVocabResult,
+  RewriteResult,
+  QuizResult,
 } from '@ielts/ai'
 
 type MiniTutorAction = 'explain' | 'simplify' | 'translate' | 'exercise' | 'vocabulary' | 'questions' | 'discuss' | 'ielts-connect'
@@ -23,6 +22,8 @@ interface ActionConfig {
 
 interface MiniTutorProps {
   onBack: () => void
+  initialText?: string
+  initialPageInfo?: { title: string; url: string }
 }
 
 const ACTIONS: ActionConfig[] = [
@@ -60,38 +61,6 @@ const CUSTOM_PROMPTS: Record<string, { system: string; user: string }> = {
     system: 'You are an IELTS expert. Analyze the text below and explain how it connects to IELTS exam topics. Identify which IELTS topics (Environment, Education, Technology, Health, Crime, Travel, etc.) the text relates to. Give specific examples of how this content could appear in IELTS Speaking, Writing, Reading, or Listening sections. Format clearly.',
     user: 'Connect this text to IELTS learning:',
   },
-}
-
-const getProviderConfig = safeFetchProviderConfig
-
-async function customAICall(systemPrompt: string, userMessage: string): Promise<string> {
-  const config = await getProviderConfig()
-  if (!config.apiKey) throw new Error('API key not configured. Please add your AI API key in Settings.')
-
-  const response = await fetch(`${config.baseUrl}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${config.apiKey}`,
-    },
-    body: JSON.stringify({
-      model: config.model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: userMessage },
-      ],
-      temperature: 0.7,
-      max_tokens: 1024,
-    }),
-  })
-
-  if (!response.ok) {
-    await response.text().catch(() => 'Unknown error')
-    throw new Error(`AI API error (${response.status})`)
-  }
-
-  const data = await response.json()
-  return data.choices?.[0]?.message?.content || 'No response from AI'
 }
 
 function formatExplainResult(type: AiExplainType, data: unknown): string {
@@ -138,7 +107,7 @@ function formatExplainResult(type: AiExplainType, data: unknown): string {
   }
 }
 
-export default function MiniTutor({ onBack }: MiniTutorProps) {
+export default function MiniTutor({ onBack, initialText, initialPageInfo }: MiniTutorProps) {
   const { showToast } = useToast()
   const [selectedText, setSelectedText] = useState('')
   const [pageInfo, setPageInfo] = useState({ title: '', url: '' })
@@ -150,21 +119,42 @@ export default function MiniTutor({ onBack }: MiniTutorProps) {
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
+    if (initialText) {
+      setSelectedText(initialText)
+      if (initialPageInfo) {
+        setPageInfo(initialPageInfo)
+      }
+      setLoading(false)
+      return
+    }
+
+    let cancelled = false
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (cancelled) return
       const tab = tabs[0]
       if (!tab?.id) {
         setLoading(false)
         return
       }
-      chrome.tabs.sendMessage(tab.id, { type: 'GET_PAGE_INFO' }, (response) => {
-        setLoading(false)
-        if (response?.selectedText) {
-          setSelectedText(response.selectedText)
-          setPageInfo({ title: response.title || '', url: response.url || '' })
-        }
-      })
+
+      try {
+        chrome.tabs.sendMessage(tab.id, { type: 'GET_PAGE_INFO' }, (response) => {
+          if (cancelled) return
+          setLoading(false)
+          if (response?.selectedText) {
+            setSelectedText(response.selectedText)
+            setPageInfo({ title: response.title || tab.title || '', url: response.url || tab.url || '' })
+          } else {
+            setPageInfo({ title: tab.title || '', url: tab.url || '' })
+          }
+        })
+      } catch {
+        if (!cancelled) setLoading(false)
+      }
     })
-  }, [])
+
+    return () => { cancelled = true }
+  }, [initialText, initialPageInfo])
 
   const handleAction = async (action: MiniTutorAction) => {
     if (!selectedText) {
@@ -179,25 +169,65 @@ export default function MiniTutor({ onBack }: MiniTutorProps) {
     setSaved(false)
 
     const aiType = ACTION_AI_MAP[action]
+    const customPrompt = CUSTOM_PROMPTS[action]
 
     try {
+      let response: { success: boolean; data?: unknown; message?: string }
+
       if (aiType) {
-        const config = await getProviderConfig()
-        if (!config.apiKey) {
-          setError('API key not configured. Please add your AI API key in Settings.')
-          setActionLoading(false)
-          return
-        }
-        const res = await explain(aiType, selectedText, () => config)
-        if (res.error) {
-          setError(res.error)
-        } else if (res.data) {
-          setResult(formatExplainResult(aiType, res.data))
-        }
+        response = await new Promise<{ success: boolean; data?: unknown; message?: string }>((resolve) => {
+          try {
+            chrome.runtime.sendMessage(
+              { type: 'AI_EXPLAIN', payload: { text: selectedText, action: aiType } },
+              (res) => {
+                if (chrome.runtime.lastError) {
+                  resolve({ success: false, message: chrome.runtime.lastError.message })
+                } else {
+                  resolve(res as { success: boolean; data?: unknown; message?: string })
+                }
+              },
+            )
+          } catch (err: any) {
+            resolve({ success: false, message: err.message })
+          }
+        })
+      } else if (customPrompt) {
+        response = await new Promise<{ success: boolean; data?: unknown; message?: string }>((resolve) => {
+          try {
+            chrome.runtime.sendMessage(
+              {
+                type: 'AI_EXPLAIN',
+                payload: {
+                  text: selectedText,
+                  action: 'custom',
+                  systemPrompt: customPrompt.system,
+                  userPrompt: customPrompt.user,
+                },
+              },
+              (res) => {
+                if (chrome.runtime.lastError) {
+                  resolve({ success: false, message: chrome.runtime.lastError.message })
+                } else {
+                  resolve(res as { success: boolean; data?: unknown; message?: string })
+                }
+              },
+            )
+          } catch (err: any) {
+            resolve({ success: false, message: err.message })
+          }
+        })
       } else {
-        const prompt = CUSTOM_PROMPTS[action]
-        const text = await customAICall(prompt.system, `${prompt.user}\n\n${selectedText}`)
-        setResult(text)
+        throw new Error('Unknown action')
+      }
+
+      if (!response.success) {
+        setError(response.message || 'AI request failed')
+      } else if (response.data) {
+        if (aiType) {
+          setResult(formatExplainResult(aiType, response.data))
+        } else {
+          setResult(response.data as string)
+        }
       }
     } catch (err: any) {
       setError(err.message || 'An error occurred')

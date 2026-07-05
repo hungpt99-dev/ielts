@@ -216,3 +216,48 @@ export interface LearningEngineState {
   bandProgressHistory: BandProgress[]
   skillBalance: SkillBalance[]
 }
+
+export interface AIProgressReviewInput {
+  tasks: TaskEntry[]
+  readingPractices: ReadingPracticeSession[]
+  listeningPractices: ListeningPracticeSession[]
+  writingSessions: WritingSession[]
+  speakingSessions: SpeakingSession[]
+  vocabulary: VocabularyEntry[]
+  vocabReviews: VocabReviewEntry[]
+  mistakes: MistakeEntry[]
+  mockTests: MockTestEntry[]
+  progressRecords: ProgressRecord[]
+}
+
+export interface AIProgressReviewSummary {
+  totalStudyMinutes: number
+  totalTasksCompleted: number
+  totalSessions: number
+  daysActive: number
+  totalVocabularySaved: number
+  totalVocabularyMastered: number
+  totalMistakes: number
+  resolvedMistakes: number
+  studyConsistency: StudyConsistency
+}
+
+export interface AIProgressReviewData {
+  dateRange: {
+    start: ISOString
+    end: ISOString
+  }
+  summary: AIProgressReviewSummary
+  skillProgress: SkillProgress[]
+  weaknessReport: WeaknessReport
+  vocabularyStatus: {
+    total: number
+    new: number
+    learning: number
+    reviewing: number
+    mastered: number
+  }
+  progressTrend: 'improving' | 'declining' | 'stable' | 'insufficient_data'
+  recommendations: string[]
+  tutorFeedback: string
+}

@@ -1,0 +1,810 @@
+[2026-07-05T06:58:25.035Z] [INFO] Task started: Fix AI Tutor Entry Point and Context Usage in Extension
+[2026-07-05T06:58:25.037Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/extension/src/popup/components/AITutorEntry.tsx","description":"Fix AI Tutor entry point UI and context passing","validationMethod":"file_diff"},{"action":"modify","target":"apps/extension/src/background/ai-service.ts","description":"Fix AI service to handle context-aware requests","validationMethod":"file_diff"}]
+[2026-07-05T06:58:25.577Z] [INFO] [stderr] [0m
+[2026-07-05T06:58:25.578Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-05T06:58:25.578Z] [INFO] [stderr] [0m
+[2026-07-05T06:58:29.981Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"AI Tutor entry point popup background ai-service context selected text page context AITutorEntry"}
+[2026-07-05T06:58:32.561Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"AITutorEntry popup extension background ai-service tutor communication"}
+[2026-07-05T06:58:35.701Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/popup/components/AITutorEntry.tsx"}
+[2026-07-05T06:58:35.923Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/extension/src/background/ai-service.ts"}
+[2026-07-05T06:58:38.441Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/**/*AI*"[90m 0 matches[0m
+[2026-07-05T06:58:38.625Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/**/*Tutor*"[90m 2 matches[0m
+[2026-07-05T06:58:38.824Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/**/*tutor*"[90m 0 matches[0m
+[2026-07-05T06:58:39.051Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/background/*ai*"[90m 0 matches[0m
+[2026-07-05T06:58:42.319Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T06:58:42.536Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/miniTutor.ts
+[2026-07-05T06:58:42.820Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components
+[2026-07-05T06:58:47.755Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-05T06:58:48.079Z] [INFO] [stderr] [0m✱ [0mGrep "GET_PAGE_INFO"[90m in apps/extension · 9 matches[0m
+[2026-07-05T06:58:48.363Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/popup/App.tsx
+[2026-07-05T06:58:56.933Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background
+[2026-07-05T06:58:56.937Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/saveSelectedText.ts
+[2026-07-05T06:59:19.696Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/utils/safe-chrome.ts
+[2026-07-05T06:59:19.954Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/index.ts
+[2026-07-05T06:59:27.532Z] [INFO] [stderr] [0m✱ [0mGlob "apps/extension/src/content-script/aiExplain*"[90m 1 match[0m
+[2026-07-05T06:59:30.359Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/content-script/aiExplain.ts
+[2026-07-05T07:00:02.400Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:02.400Z] [INFO] [stderr] [ ] Update App.tsx to route through AITutorEntry
+[2026-07-05T07:00:02.400Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T07:00:02.400Z] [INFO] [stderr] [•] Create background/ai-service.ts with AI request handlers
+[2026-07-05T07:00:02.400Z] [INFO] [stderr] [ ] Update MiniTutor.tsx to accept initial context props and route AI calls through background
+[2026-07-05T07:00:02.400Z] [INFO] [stderr] [ ] Create popup/components/AITutorEntry.tsx entry point component
+[2026-07-05T07:00:02.400Z] [INFO] [stderr] [ ] Update background/messaging.ts to integrate ai-service
+[2026-07-05T07:00:02.400Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:02.400Z] [INFO] [stderr] [ ] Verify with lint/typecheck
+[2026-07-05T07:00:09.455Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/background/ai-service.ts
+[2026-07-05T07:00:09.455Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:09.455Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T07:00:12.676Z] [INFO] [stderr] [0m→ [0mRead apps/extension/src/background/messaging.ts
+[2026-07-05T07:00:12.759Z] [INFO] [stdout] Let me check the messaging types and add the AI_CUSTOM type.
+[2026-07-05T07:00:34.253Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/ai-service.ts
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/ai-service.ts
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/ai-service.ts
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] @@ -4,31 +4,32 @@
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/ai-service.ts
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]    action: string
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +  userPrompt?: string
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  }
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]    text: string
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  interface AiExplainPayload {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +  systemPrompt?: string
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  text: string
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  systemPrompt: string
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  userPrompt: string
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +  return config
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  }
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -async function handleAiExplain(text: string, action: string) {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +  if (!config.apiKey) throw new Error('API key not configured. Add your AI API key in Settings.')
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +async function fetchProviderConfig(): Promise<{ apiKey: string; baseUrl: string; model: string }> {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  const config = await safeFetchProviderConfig()
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +  const config = await safeFetchProviderConfig()
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -interface AiCustomPayload {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  if (!config.apiKey) throw new Error('API key not configured')
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  console.log(`[ai-service] AI_EXPLAIN action=${action} text.length=${text.length}`)
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +}
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +  if (err instanceof Error) return err.message
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +  return 'An unknown error occurred'
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]    const result = await explain(action as AiExplainType, text, () => config)
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]    if (result.error) throw new Error(result.error)
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +function getErrorMessage(err: unknown): string {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]    return result.data
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -async function handleCustomAi(systemPrompt: string, userMessage: string) {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +  const config = await fetchProviderConfig()
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  const config = await safeFetchProviderConfig()
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  }
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  if (!config.apiKey) throw new Error('API key not configured')
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]      method: 'POST',
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +async function handleCustomPrompt(systemPrompt: string, userMessage: string) {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +  const config = await fetchProviderConfig()
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +async function handleStandardExplain(text: string, action: string) {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]      const payload = message.payload as AiExplainPayload
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] @@ -59,14 +60,13 @@
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]    const response = await fetch(`${config.baseUrl}/chat/completions`, {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]      headers: {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]      if (!payload.text) throw new Error('No text provided')
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]    registerHandler('AI_EXPLAIN', async (message) => {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -    const payload = message.payload as AiCustomPayload
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  registerHandler('AI_CUSTOM', async (message) => {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +    if (payload.systemPrompt && payload.userPrompt) {
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -  })
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +    console.log(`[ai-service] AI_EXPLAIN action=${payload.action} text.length=${payload.text.length}`)
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -    if (!payload.text) throw new Error('No text provided')
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +      return await handleCustomPrompt(payload.systemPrompt, `${payload.userPrompt}\n\n${payload.text}`)
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]  }
+[2026-07-05T07:00:34.254Z] [INFO] [stderr]    })
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +    }
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] 
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -    return await handleAiExplain(payload.text, payload.action || 'simple')
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] -    return await handleCustomAi(payload.systemPrompt, `${payload.userPrompt}\n\n${payload.text}`)
+[2026-07-05T07:00:34.254Z] [INFO] [stderr] +    return await handleStandardExplain(payload.text, payload.action)
+[2026-07-05T07:00:34.259Z] [INFO] Task waiting for input: apiKey:
+[2026-07-05T07:00:34.275Z] [INFO] User input provided via TTY prompt
+[2026-07-05T07:00:37.999Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/messaging.ts
+[2026-07-05T07:00:37.999Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:00:38.000Z] [INFO] [stderr]  
+[2026-07-05T07:00:38.000Z] [INFO] [stderr]    action: string
+[2026-07-05T07:00:37.999Z] [INFO] [stderr] @@ -50,8 +50,10 @@
+[2026-07-05T07:00:37.999Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T07:00:38.000Z] [INFO] [stderr]    text: string
+[2026-07-05T07:00:38.000Z] [INFO] [stderr]  export interface AiExplainPayload {
+[2026-07-05T07:00:38.000Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T07:00:38.000Z] [INFO] [stderr] +  systemPrompt?: string
+[2026-07-05T07:00:38.000Z] [INFO] [stderr]  }
+[2026-07-05T07:00:38.000Z] [INFO] [stderr] +  userPrompt?: string
+[2026-07-05T07:00:38.000Z] [INFO] [stderr]  
+[2026-07-05T07:00:38.000Z] [INFO] [stderr] 
+[2026-07-05T07:00:38.000Z] [INFO] [stderr]  interface MessageMap {
+[2026-07-05T07:00:38.000Z] [INFO] [stderr]    GET_DAILY_PROGRESS: undefined
+[2026-07-05T07:00:38.000Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:38.000Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/messaging.ts
+[2026-07-05T07:00:41.056Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:00:41.056Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+[2026-07-05T07:00:41.056Z] [INFO] [stderr] @@ -1,8 +1,9 @@
+[2026-07-05T07:00:41.056Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/index.ts
+[2026-07-05T07:00:41.056Z] [INFO] [stderr]  import type { SaveCategory } from '../types'
+[2026-07-05T07:00:41.056Z] [INFO] [stderr]  import { updateDailyProgress } from '../services/storage'
+[2026-07-05T07:00:41.056Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+[2026-07-05T07:00:41.056Z] [INFO] [stderr]  import { initializeStorageBridge } from './storage-bridge'
+[2026-07-05T07:00:41.056Z] [INFO] [stderr] +import { initAiService } from './ai-service'
+[2026-07-05T07:00:41.056Z] [INFO] [stderr]  
+[2026-07-05T07:00:41.056Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+[2026-07-05T07:00:41.056Z] [INFO] [stderr]  import { initMessaging } from './messaging'
+[2026-07-05T07:00:41.056Z] [INFO] [stderr]    id: string
+[2026-07-05T07:00:41.056Z] [INFO] [stderr]  interface AiExplainItem {
+[2026-07-05T07:00:41.056Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:41.056Z] [INFO] [stderr] 
+[2026-07-05T07:00:41.056Z] [INFO] [stderr]    title: string
+[2026-07-05T07:00:44.319Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/index.ts
+[2026-07-05T07:00:44.319Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+[2026-07-05T07:00:44.319Z] [INFO] [stderr] @@ -145,7 +145,8 @@
+[2026-07-05T07:00:44.319Z] [INFO] [stderr]  initMessaging()
+[2026-07-05T07:00:44.319Z] [INFO] [stderr]  })
+[2026-07-05T07:00:44.319Z] [INFO] [stderr]  
+[2026-07-05T07:00:44.319Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:00:44.319Z] [INFO] [stderr]  initializeStorageBridge()
+[2026-07-05T07:00:44.319Z] [INFO] [stderr]  
+[2026-07-05T07:00:44.319Z] [INFO] [stderr]    }
+[2026-07-05T07:00:44.319Z] [INFO] [stderr] +initAiService()
+[2026-07-05T07:00:44.319Z] [INFO] [stderr] 
+[2026-07-05T07:00:44.319Z] [INFO] [stderr]  export {}
+[2026-07-05T07:00:44.319Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:44.319Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+[2026-07-05T07:00:44.319Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/index.ts
+[2026-07-05T07:00:48.673Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T07:00:48.674Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:48.673Z] [INFO] [stderr] [✓] Create background/ai-service.ts with AI request handlers
+[2026-07-05T07:00:48.674Z] [INFO] [stderr] [ ] Create popup/components/AITutorEntry.tsx entry point component
+[2026-07-05T07:00:48.674Z] [INFO] [stderr] [•] Update MiniTutor.tsx to accept initial context props and route AI calls through background
+[2026-07-05T07:00:48.674Z] [INFO] [stderr] [ ] Verify with lint/typecheck
+[2026-07-05T07:00:48.673Z] [INFO] [stderr] [ ] Update App.tsx to route through AITutorEntry
+[2026-07-05T07:00:48.674Z] [INFO] [stderr] [✓] Update background/messaging.ts to integrate ai-service
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:00:54.129Z] [INFO] [stderr]  }
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] @@ -22,8 +22,10 @@
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:00:54.129Z] [INFO] [stderr]    onBack: () => void
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:00:54.129Z] [INFO] [stderr]  
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] +  initialText?: string
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] +  initialPageInfo?: { title: string; url: string }
+[2026-07-05T07:00:54.129Z] [INFO] [stderr]  }
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:54.129Z] [INFO] [stderr]    { id: 'explain', icon: '💡', label: 'Explain', description: 'Explain in simple English', color: '#3b82f6' },
+[2026-07-05T07:00:54.129Z] [INFO] [stderr]  
+[2026-07-05T07:00:54.129Z] [INFO] [stderr]  const ACTIONS: ActionConfig[] = [
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] 
+[2026-07-05T07:00:54.129Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:00:54.129Z] [INFO] [stderr]  interface MiniTutorProps {
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:00:57.399Z] [INFO] [stderr]  
+[2026-07-05T07:00:57.399Z] [INFO] [stderr]        return JSON.stringify(data, null, 2)
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] -export default function MiniTutor({ onBack }: MiniTutorProps) {
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] @@ -139,9 +139,9 @@
+[2026-07-05T07:00:57.399Z] [INFO] [stderr]    const { showToast } = useToast()
+[2026-07-05T07:00:57.399Z] [INFO] [stderr]    const [selectedText, setSelectedText] = useState('')
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] 
+[2026-07-05T07:00:57.399Z] [INFO] [stderr]    }
+[2026-07-05T07:00:57.399Z] [INFO] [stderr]  }
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] [0m
+[2026-07-05T07:00:57.399Z] [INFO] [stderr]    const [loading, setLoading] = useState(true)
+[2026-07-05T07:00:57.399Z] [INFO] [stderr] +export default function MiniTutor({ onBack, initialText, initialPageInfo }: MiniTutorProps) {
+[2026-07-05T07:00:57.399Z] [INFO] [stderr]    const [pageInfo, setPageInfo] = useState({ title: '', url: '' })
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] @@ -151,24 +151,45 @@
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]  const [saved, setSaved] = useState(false)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]  useEffect(() => {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]  
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]  const [actionLoading, setActionLoading] = useState(false)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +  if (initialText) {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +    return
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +    setLoading(false)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +    if (initialPageInfo) {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +  }
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +      setPageInfo(initialPageInfo)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]      const tab = tabs[0]
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +  let cancelled = false
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]      if (!tab?.id) {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +    if (cancelled) return
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +    }
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] -      setLoading(false)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]        return
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]      }
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]        setLoading(false)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +    setSelectedText(initialText)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] -        setPageInfo({ title: response.title || '', url: response.url || '' })
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] -    })
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] -      }
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] -        setSelectedText(response.selectedText)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +      chrome.tabs.sendMessage(tab.id, { type: 'GET_PAGE_INFO' }, (response) => {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] -    chrome.tabs.sendMessage(tab.id, { type: 'GET_PAGE_INFO' }, (response) => {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] -      if (response?.selectedText) {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +        if (response?.selectedText) {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +        setLoading(false)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +        if (cancelled) return
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +        } else {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +    }
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +        }
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +          setPageInfo({ title: response.title || tab.title || '', url: response.url || tab.url || '' })
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +          setPageInfo({ title: tab.title || '', url: tab.url || '' })
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +    } catch {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +    try {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] -}, [])
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]  
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +          setSelectedText(response.selectedText)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +}, [initialText, initialPageInfo])
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]  const handleAction = async (action: MiniTutorAction) => {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]    if (!selectedText) {
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]      return
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]    })
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +  return () => { cancelled = true }
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +      })
+[2026-07-05T07:01:02.216Z] [INFO] [stderr]      showToast('warning', 'Select text on a webpage first')
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] 
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] +      if (!cancelled) setLoading(false)
+[2026-07-05T07:01:02.216Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] @@ -201,28 +201,68 @@
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:10.165Z] [INFO] [stderr]  setActionLoading(true)
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] +const customPrompt = CUSTOM_PROMPTS[action]
+[2026-07-05T07:01:10.165Z] [INFO] [stderr]  setSaved(false)
+[2026-07-05T07:01:10.165Z] [INFO] [stderr]  
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] +  let response: { success: boolean; data?: unknown; message?: string }
+[2026-07-05T07:01:10.165Z] [INFO] [stderr]  try {
+[2026-07-05T07:01:10.165Z] [INFO] [stderr]  
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] +
+[2026-07-05T07:01:10.165Z] [INFO] [stderr]  const aiType = ACTION_AI_MAP[action]
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:10.165Z] [INFO] [stderr]    if (aiType) {
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -    const config = await getProviderConfig()
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -    if (!config.apiKey) {
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -      setError('API key not configured. Please add your AI API key in Settings.')
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -    }
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -      return
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -    } else if (res.data) {
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -      setResult(formatExplainResult(aiType, res.data))
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -      setActionLoading(false)
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -    if (res.error) {
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -    }
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] -    const res = await explain(aiType, selectedText, () => config)
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +        chrome.runtime.sendMessage(
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +            if (chrome.runtime.lastError) {
+[2026-07-05T07:01:10.165Z] [INFO] [stderr] -      setError(res.error)
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +          { type: 'AI_EXPLAIN', payload: { text: selectedText, action: aiType } },
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +      try {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +    response = await new Promise<{ success: boolean; data?: unknown; message?: string }>((resolve) => {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +            } else {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +              resolve({ success: false, message: chrome.runtime.lastError.message })
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +              resolve(res as { success: boolean; data?: unknown; message?: string })
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +          (res) => {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +        resolve({ success: false, message: err.message })
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +      } catch (err: any) {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +          },
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +            }
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +        )
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +      }
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +    response = await new Promise<{ success: boolean; data?: unknown; message?: string }>((resolve) => {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +        chrome.runtime.sendMessage(
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +            payload: {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +            type: 'AI_EXPLAIN',
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +          {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +    })
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +  } else if (customPrompt) {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +      try {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +              text: selectedText,
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +          },
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +            },
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +              action: 'custom',
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +              systemPrompt: customPrompt.system,
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +          (res) => {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +              resolve(res as { success: boolean; data?: unknown; message?: string })
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +              resolve({ success: false, message: chrome.runtime.lastError.message })
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +        )
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +            if (chrome.runtime.lastError) {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +      } catch (err: any) {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +        resolve({ success: false, message: err.message })
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +            }
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +              userPrompt: customPrompt.user,
+[2026-07-05T07:01:10.166Z] [INFO] [stderr]    } else {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +    })
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +          },
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] -    const prompt = CUSTOM_PROMPTS[action]
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +      }
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] -    const text = await customAICall(prompt.system, `${prompt.user}\n\n${selectedText}`)
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] -    setResult(text)
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +            } else {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +    if (aiType) {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +    throw new Error('Unknown action')
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +  } else if (response.data) {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr]    }
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +  if (!response.success) {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +      setResult(formatExplainResult(aiType, response.data))
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +    setError(response.message || 'AI request failed')
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +      setResult(response.data as string)
+[2026-07-05T07:01:10.166Z] [INFO] [stderr]  } catch (err: any) {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +  }
+[2026-07-05T07:01:10.166Z] [INFO] [stderr]    setError(err.message || 'An error occurred')
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +    }
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] 
+[2026-07-05T07:01:10.166Z] [INFO] [stderr]  
+[2026-07-05T07:01:10.166Z] [INFO] [stderr]  }
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] +    } else {
+[2026-07-05T07:01:10.166Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] @@ -1,15 +1,14 @@
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:01:14.553Z] [INFO] [stderr]  import { useState, useEffect } from 'react'
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] -import { safeStorageGet, safeStorageSet, safeSendMessage, safeFetchProviderConfig } from '../../utils/safe-chrome'
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:14.553Z] [INFO] [stderr]  import { useToast } from '../../../../../packages/ui/src/components/Toast'
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] -  explain,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] -import {
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] -  type VietnameseExplain,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] -  type SimpleExplain,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] -  type IeltsVocabResult,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] -  type AiExplainType,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] -  type RewriteResult,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] -  type QuizResult,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] +import { safeStorageGet, safeStorageSet, safeSendMessage } from '../../utils/safe-chrome'
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] +  SimpleExplain,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] +  VietnameseExplain,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] +  IeltsVocabResult,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] +  RewriteResult,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr]  } from '@ielts/ai'
+[2026-07-05T07:01:14.553Z] [INFO] [stderr]  
+[2026-07-05T07:01:14.553Z] [INFO] [stderr]  type MiniTutorAction = 'explain' | 'simplify' | 'translate' | 'exercise' | 'vocabulary' | 'questions' | 'discuss' | 'ielts-connect'
+[2026-07-05T07:01:14.553Z] [INFO] [stderr]  
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] +  QuizResult,
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] 
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] +import type {
+[2026-07-05T07:01:14.553Z] [INFO] [stderr] +  AiExplainType,
+[2026-07-05T07:01:19.023Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:01:19.023Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:19.023Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:19.023Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:19.023Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-05T07:01:19.023Z] [INFO] [stderr]    },
+[2026-07-05T07:01:19.023Z] [INFO] [stderr]  }
+[2026-07-05T07:01:19.023Z] [INFO] [stderr]      user: 'Connect this text to IELTS learning:',
+[2026-07-05T07:01:19.023Z] [INFO] [stderr]  
+[2026-07-05T07:01:19.023Z] [INFO] [stderr] @@ -62,40 +62,8 @@
+[2026-07-05T07:01:19.023Z] [INFO] [stderr] -const getProviderConfig = safeFetchProviderConfig
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -  if (!config.apiKey) throw new Error('API key not configured. Please add your AI API key in Settings.')
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -async function customAICall(systemPrompt: string, userMessage: string): Promise<string> {
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -  const config = await getProviderConfig()
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -  const response = await fetch(`${config.baseUrl}/chat/completions`, {
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -    headers: {
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -    },
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -    method: 'POST',
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -      'Content-Type': 'application/json',
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -      messages: [
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -      max_tokens: 1024,
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -      model: config.model,
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -        { role: 'user', content: userMessage },
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -    body: JSON.stringify({
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -    }),
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -      ],
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -  })
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -        { role: 'system', content: systemPrompt },
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -      temperature: 0.7,
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -    await response.text().catch(() => 'Unknown error')
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -  if (!response.ok) {
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -    throw new Error(`AI API error (${response.status})`)
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -  return data.choices?.[0]?.message?.content || 'No response from AI'
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -  const data = await response.json()
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -  }
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -
+[2026-07-05T07:01:19.024Z] [INFO] [stderr]    switch (type) {
+[2026-07-05T07:01:19.024Z] [INFO] [stderr]  function formatExplainResult(type: AiExplainType, data: unknown): string {
+[2026-07-05T07:01:19.024Z] [INFO] [stderr]      case 'simple': {
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -      Authorization: `Bearer ${config.apiKey}`,
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] -}
+[2026-07-05T07:01:19.024Z] [INFO] [stderr]        const d = data as SimpleExplain
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] 
+[2026-07-05T07:01:19.024Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:22.837Z] [INFO] [stderr] [✓] Create background/ai-service.ts with AI request handlers
+[2026-07-05T07:01:22.837Z] [INFO] [stderr] [•] Create popup/components/AITutorEntry.tsx entry point component
+[2026-07-05T07:01:22.837Z] [INFO] [stderr] [✓] Update MiniTutor.tsx to accept initial context props and route AI calls through background
+[2026-07-05T07:01:22.837Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:22.837Z] [INFO] [stderr] [✓] Update background/messaging.ts to integrate ai-service
+[2026-07-05T07:01:22.837Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T07:01:22.837Z] [INFO] [stderr] [ ] Verify with lint/typecheck
+[2026-07-05T07:01:22.837Z] [INFO] [stderr] [ ] Update App.tsx to route through AITutorEntry
+[2026-07-05T07:01:34.741Z] [INFO] [stderr] [0m← [0mWrite apps/extension/src/popup/components/AITutorEntry.tsx
+[2026-07-05T07:01:34.741Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T07:01:34.741Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/App.tsx
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] @@ -6,9 +6,9 @@
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:01:37.883Z] [INFO] [stderr]  import VocabularyCollector from './components/VocabularyCollector'
+[2026-07-05T07:01:37.883Z] [INFO] [stderr]  import ArticleCollector from './components/ArticleCollector'
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] -import MiniTutor from './components/MiniTutor'
+[2026-07-05T07:01:37.883Z] [INFO] [stderr]  import VideoHelper from './components/VideoHelper'
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] +import AITutorEntry from './components/AITutorEntry'
+[2026-07-05T07:01:37.883Z] [INFO] [stderr]  import BackupRestore from './components/BackupRestore'
+[2026-07-05T07:01:37.883Z] [INFO] [stderr]  import ReviewSession from './components/ReviewSession'
+[2026-07-05T07:01:37.883Z] [INFO] [stderr]  import SavedWordsView from './components/SavedWordsView'
+[2026-07-05T07:01:37.883Z] [INFO] [stderr]  import PendingReviews from './components/PendingReviews'
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:37.883Z] [INFO] [stderr]  
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T07:01:37.883Z] [INFO] [stderr] 
+[2026-07-05T07:01:41.136Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/popup/App.tsx
+[2026-07-05T07:01:41.136Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T07:01:41.136Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T07:01:41.136Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:01:41.136Z] [INFO] [stderr]        <BackupRestore onBack={() => setView('dashboard')} />
+[2026-07-05T07:01:41.136Z] [INFO] [stderr] @@ -119,9 +119,9 @@
+[2026-07-05T07:01:41.136Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/popup/App.tsx
+[2026-07-05T07:01:41.136Z] [INFO] [stderr]  case 'miniTutor':
+[2026-07-05T07:01:41.136Z] [INFO] [stderr]    )
+[2026-07-05T07:01:41.137Z] [INFO] [stderr]      </div>
+[2026-07-05T07:01:41.137Z] [INFO] [stderr] +  return <AITutorEntry onBack={() => setView('dashboard')} />
+[2026-07-05T07:01:41.137Z] [INFO] [stderr]  case 'pendingReviews':
+[2026-07-05T07:01:41.137Z] [INFO] [stderr]    return <SavedWordsView onBack={() => setView('dashboard')} />
+[2026-07-05T07:01:41.137Z] [INFO] [stderr]  case 'savedWords':
+[2026-07-05T07:01:41.137Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:41.137Z] [INFO] [stderr]    return (
+[2026-07-05T07:01:41.137Z] [INFO] [stderr] 
+[2026-07-05T07:01:41.137Z] [INFO] [stderr] -  return <MiniTutor onBack={() => setView('dashboard')} />
+[2026-07-05T07:01:45.139Z] [INFO] [stderr] [✓] Update background/messaging.ts to integrate ai-service
+[2026-07-05T07:01:45.138Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T07:01:45.138Z] [INFO] [stderr] [✓] Create background/ai-service.ts with AI request handlers
+[2026-07-05T07:01:45.139Z] [INFO] [stderr] [•] Verify with lint/typecheck
+[2026-07-05T07:01:45.138Z] [INFO] [stderr] [✓] Update App.tsx to route through AITutorEntry
+[2026-07-05T07:01:45.138Z] [INFO] [stderr] [✓] Create popup/components/AITutorEntry.tsx entry point component
+[2026-07-05T07:01:45.139Z] [INFO] [stderr] [✓] Update MiniTutor.tsx to accept initial context props and route AI calls through background
+[2026-07-05T07:01:45.139Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:48.291Z] [INFO] [stderr] [0m$ [0mls /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-05T07:01:48.291Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/package.json
+[2026-07-05T07:01:48.291Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:48.788Z] [INFO] [stderr] [0m✱ [0mGrep ""typecheck|"lint|"build|"test"[90m in apps/extension · 5 matches[0m
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:53.933Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] src/background/ai-service.ts(18,10): error TS6133: 'getErrorMessage' is declared but its value is never read.
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] [0m
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] Exit status 2
+[2026-07-05T07:01:53.933Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension run typecheck 2>&1
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/ai-service.ts
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/ai-service.ts
+[2026-07-05T07:01:58.307Z] [INFO] [stderr]    if (!config.apiKey) throw new Error('API key not configured. Add your AI API key in Settings.')
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] ===================================================================
+[2026-07-05T07:01:58.307Z] [INFO] [stderr]  
+[2026-07-05T07:01:58.307Z] [INFO] [stderr]    return config
+[2026-07-05T07:01:58.307Z] [INFO] [stderr]  }
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] -function getErrorMessage(err: unknown): string {
+[2026-07-05T07:01:58.307Z] [INFO] [stderr]  async function handleStandardExplain(text: string, action: string) {
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] -
+[2026-07-05T07:01:58.307Z] [INFO] [stderr]    if (result.error) throw new Error(result.error)
+[2026-07-05T07:01:58.307Z] [INFO] [stderr]    const result = await explain(action as AiExplainType, text, () => config)
+[2026-07-05T07:01:58.307Z] [INFO] [stderr]    const config = await fetchProviderConfig()
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] -  if (err instanceof Error) return err.message
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] -  return 'An unknown error occurred'
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] -}
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] [0m← [0mEdit apps/extension/src/background/ai-service.ts
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] 
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] @@ -14,13 +14,8 @@
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/src/background/ai-service.ts
+[2026-07-05T07:01:58.307Z] [INFO] [stderr] [0m
+[2026-07-05T07:02:03.180Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension run typecheck 2>&1
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(30,11): error TS6133: 'card' is declared but its value is never read.
+[2026-07-05T07:02:03.180Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T07:02:03.181Z] [INFO] [stderr]   Type 'unknown' is not assignable to type 'SyncStatus'.
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] src/__tests__/storageService.test.ts(18,27): error TS6196: 'StorageSet' is declared but never used.
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension:
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] src/__tests__/backgroundMessaging.test.ts(8,1): error TS6133: 'MessageHandler' is declared but its value is never read.
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] src/__tests__/storageService.test.ts(120,12): error TS2571: Object is of type 'unknown'.
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] src/popup/components/__tests__/DashboardCard.test.tsx(1,32): error TS6133: 'vi' is declared but its value is never read.
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/extension@0.1.0 typecheck: `tsc --noEmit`
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] [0m
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] src/__tests__/storageService.test.ts(173,40): error TS2345: Argument of type 'StorageGet<unknown>' is not assignable to parameter of type 'StorageGet<SyncStatus>'.
+[2026-07-05T07:02:03.181Z] [INFO] [stderr] Exit status 2
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] $ vitest run --reporter verbose
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] [0m$ [0mpnpm --filter extension run test 2>&1
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > handles SAVE_SELECTION_FULL message with chrome.storage.local 2ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > shows toast notification when SAVE_SELECTION message is received 3ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/saveSelectedText.test.ts > Extension SaveSelectedText > responds to GET_PAGE_INFO with page title, url, and selected text 1ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > creates from defaults when nothing stored 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns default progress when nothing stored 3ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by default amount 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > updateDailyProgress > merges patch with existing progress 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setPendingVideoInfo stores and getPendingVideoInfo retrieves 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > increments a field by custom amount 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > getVideoPageInfo returns null when not set 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > adds and retrieves saved items 1ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > sets progress and install timestamp 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getDailyProgress > returns stored progress 1ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > incrementDailyProgress > starts from zero when no stored progress 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getInstalledAt / initializeOnInstall > returns null before install 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > is a no-op when no sync status exists 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > video page info > setVideoPageInfo stores and getVideoPageInfo retrieves 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > clearAllExtensionData > clears all stored data 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > deduplicates case-insensitive duplicates 2ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > removes pending items and updates sync status 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > removes empty strings 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > returns empty array for empty input 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches phrases exactly 1ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches single word case-insensitively 4ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSyncStatus / markItemsSynced > returns null when no status stored 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > normalizeWords > sorts by length descending 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > highlights both when they do not overlap 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles regex special characters in words 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches whole words only 1ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches with surrounding punctuation 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > matches multiple occurrences of the same word 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty text 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > prefers longer phrases over shorter words 2ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > does not highlight inside other words 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > returns empty array for empty word list 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/__tests__/storageService.test.ts > getSavedItems / addSavedItem > returns empty array when nothing stored 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightMatcher.test.ts > highlightMatcher > findMatches > handles Unicode characters 0ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow 1ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] stderr | src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders large values without overflow
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders label and value 10ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.979Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders zero value correctly 2ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/DashboardCard.test.tsx > DashboardCard > renders with accent styling 5ms
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stderr | src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [messaging] Unknown message type: TEST_ACTION
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > toggles popup open and closed on button clicks 21ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.979Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [messaging] Unknown message type: UNKNOWN
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights matching text in body
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 1 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] The current testing environment is not configured to support act(...)
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple matches of the same word
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 2 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores word data in dataset
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple different words
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 1 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/popup/components/__tests__/ChatButton.test.tsx > ChatButton > calls onToggle when popup state changes 3ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores full word data including example and note
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 1 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 1 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 2 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 1 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes highlight spans and restores text
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 1 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes multiple highlight spans and restores text order
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > removes all highlights from document
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 2 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 2 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns the word from element data
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] [IELTS Journey] Auto-highlight: 1 matches highlighted
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside style tags 4ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > tracks active state 2ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] stdout | src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside already highlighted elements
+[2026-07-05T07:02:07.980Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight hidden elements 1ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > setActive / isActive > defaults to inactive before first set 0ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside script tags 2ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight with empty word list 0ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores full word data including example and note 1ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple matches of the same word 1ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights multiple different words 2ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight when active is false 0ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > does not highlight inside already highlighted elements 1ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes highlight spans and restores text 1ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > stores word data in dataset 1ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles root with no text nodes 0ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > highlights matching text in body 40ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root has no highlights 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op on empty body 0ms
+[2026-07-05T07:02:07.980Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > highlightMatches > handles text with no matching words gracefully 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > is a no-op when root is not an Element 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element has no data 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeHighlights > removes multiple highlight spans and restores text order 1ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > removes all highlights from document 1ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > DEFAULT_SETTINGS matches schema defaults 3ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > SAVE_CATEGORIES has expected values 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns the word from element data 1ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is empty string 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > getHighlightWordFromElement > returns null when element data is invalid JSON 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey stores and getApiKey retrieves the key 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > THEME_MODES has expected values 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > constants > AI_PROVIDERS has expected values 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns defaults when no settings stored 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/content-script/highlighter/__tests__/highlightEngine.test.ts > highlightEngine > removeAllHighlights > is a no-op when no highlights exist 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > falls back to defaults when stored sync data is invalid 1ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > loads apiKey from local storage 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves backup to local storage 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves apiKey separately to local storage 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > notifies listeners after saving 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > loadSettings > returns stored sync settings merged with defaults 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > preserves existing field values not in the patch 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > getApiKey returns empty string when no key stored 1ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > patchSettings > loads current settings, merges patch, and saves 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > does not include aiApiKey or extension-only fields 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > ignores undefined website settings 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > exportSettingsData returns settings and timestamp 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > applies overlapping settings from website 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > syncFromWebsite > saves apiKey from website to local storage 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > clearAllSettings > clears stored values 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > exportSettingsData / importSettingsData > importSettingsData saves the provided settings 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > supports multiple listeners 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr] [messaging] Handler error for FAIL: Error: something went wrong
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > removeSettingsChangeListener unregisters a listener 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > does not throw when a listener throws 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > saveSettings > saves settings to sync storage without apiKey 1ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:149:13
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getOverlappingForWebsite > extracts only overlapping fields 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at new Promise (<anonymous>)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:153:20
+[2026-07-05T07:02:07.981Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles null/undefined message 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > rejects unknown message types 1ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles non-object message 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that resolves 53ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler returning data 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > unregisters a handler 2ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr] stderr | src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > registerHandler / unregisterHandler > registers and invokes a handler 4ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:167:13
+[2026-07-05T07:02:07.981Z] [INFO] [stderr] [messaging] Sync handler error for FAIL: Error: sync error
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:155:11
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:117:20[90m)[39m
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at [90m/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/__tests__/backgroundMessaging.test.ts:171:20
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at handleMessage [90m(/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/extension/[39msrc/background/messaging.ts:117:20[90m)[39m
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1897:20
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at runWithTimeout (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1863:10)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at new Promise (<anonymous>)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at runTest (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1574:12)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:26
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > registers default handlers and sets up listener 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles sync handler that throws 1ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns progress from storage 52ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > GET_DAILY_PROGRESS returns defaults when nothing stored 51ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > handleMessage > handles async handler that rejects 52ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > OPEN_OPTIONS calls chrome.runtime.openOptionsPage 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > MINI_TUTOR_OPEN_PAGE sends message to active tab 50ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/__tests__/backgroundMessaging.test.ts > initMessaging > VIDEO_HELPER_OPEN stores pending video info 52ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]     at runSuite (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+runner@3.2.6/node_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:1729:8)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  Test Files  8 passed (8)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr] 
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]       Tests  115 passed (115)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]    Start at  14:02:06
+[2026-07-05T07:02:07.981Z] [INFO] [stderr] [0m
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]    Duration  1.07s (transform 265ms, setup 0ms, collect 629ms, tests 465ms, environment 3.60s, prepare 502ms)
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > settings change listeners > addSettingsChangeListener registers a listener 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > clearAllSettings > removes settings from sync and local storage 0ms
+[2026-07-05T07:02:07.981Z] [INFO] [stderr]  ✓ src/background/__tests__/settingsStorage.test.ts > getApiKey / setApiKey > setApiKey with empty string clears the key 0ms
+[2026-07-05T07:02:11.558Z] [INFO] [stderr] [✓] Create popup/components/AITutorEntry.tsx entry point component
+[2026-07-05T07:02:11.558Z] [INFO] [stderr] [✓] Create background/ai-service.ts with AI request handlers
+[2026-07-05T07:02:11.558Z] [INFO] [stderr] [✓] Update background/messaging.ts to integrate ai-service
+[2026-07-05T07:02:11.558Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T07:02:11.558Z] [INFO] [stderr] [✓] Update MiniTutor.tsx to accept initial context props and route AI calls through background
+[2026-07-05T07:02:11.558Z] [INFO] [stderr] [✓] Update App.tsx to route through AITutorEntry
+[2026-07-05T07:02:11.558Z] [INFO] [stderr] [✓] Verify with lint/typecheck
+[2026-07-05T07:02:11.558Z] [INFO] [stderr] [0m
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] All acceptance criteria met. Here's a summary of what was done:
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] ## Changes Made
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] ### New: `apps/extension/src/popup/components/AITutorEntry.tsx`
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Centralized AI request handler registered for `AI_EXPLAIN` messages
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] ### New: `apps/extension/src/background/ai-service.ts`
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Proper error propagation through the existing messaging infrastructure
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] 
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Graceful fallback if content script isn't available (shows MiniTutor without preselected text)
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Proper loading state with spinner, error state with retry/continue-anyway buttons
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Entry point component that fetches page context before showing `MiniTutor`
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Added optional `initialText` and `initialPageInfo` props → skips content script message if pre-filled
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] 
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Handles both standard `explain()` calls and custom prompt calls via background (no CSP restrictions)
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - AI calls now route through background messaging (`chrome.runtime.sendMessage` → `AI_EXPLAIN`) instead of direct `fetch()` from popup
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] ### Modified: `apps/extension/src/popup/components/MiniTutor.tsx`
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] 
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Better error handling with `chrome.runtime.lastError` checks
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] ### Modified: `apps/extension/src/background/index.ts`
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] 
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Tries `MINI_TUTOR_GET_SELECTION_FULL` first (richer context with surrounding text), falls back to `GET_PAGE_INFO`
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Imports and calls `initAiService()` to register AI handlers in background
+[2026-07-05T07:02:18.435Z] [INFO] [stdout] ### Communication Flow (fixed)
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Routes `miniTutor` view through `AITutorEntry` (which wraps `MiniTutor`)
+[2026-07-05T07:02:18.435Z] [INFO] [stdout] Popup → `AITutorEntry` (gets page context) → `MiniTutor` (with context) → sends `AI_EXPLAIN` → Background `ai-service` → calls AI API → returns structured result → `MiniTutor` formats and displays
+[2026-07-05T07:02:18.435Z] [INFO] [stdout] 
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] 
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] 
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] ### Modified: `apps/extension/src/popup/App.tsx`
+[2026-07-05T07:02:18.434Z] [INFO] [stdout] - Removed `safeFetchProviderConfig`/`customAICall`/`explain` imports (all handled by background)
+[2026-07-05T07:02:18.435Z] [INFO] [stdout] All 115 existing tests pass with no regressions.
+[2026-07-05T07:02:18.435Z] [INFO] [stdout] 
+[2026-07-05T07:02:18.697Z] [INFO] Interactive session completed with exit code 0
+[2026-07-05T07:02:18.697Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-05T07:02:18.697Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-05T07:02:18.701Z] [INFO] Task completed successfully

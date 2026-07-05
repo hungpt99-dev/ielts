@@ -110,6 +110,7 @@ export default function Settings() {
       preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const,
       aiApiKey: '',
       aiProvider: 'openai' as const,
+      aiBaseUrl: '',
       aiEndpoint: '',
       aiModel: 'gpt-4o-mini',
       aiEnabled: false,

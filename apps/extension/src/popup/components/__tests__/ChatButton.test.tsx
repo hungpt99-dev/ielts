@@ -66,4 +66,39 @@ describe('ChatButton', () => {
 
     cleanup(root, container)
   })
+
+  it('starts closed by default', () => {
+    const { root, container } = setup()
+    act(() => { root.render(<ChatButton />) })
+    expect(getDialog()).toBeNull()
+    expect(getButton()?.getAttribute('aria-label')).toBe('Open chat')
+    cleanup(root, container)
+  })
+
+  it('can be toggled multiple times', () => {
+    const onToggle = vi.fn()
+    const { root, container } = setup()
+
+    act(() => { root.render(<ChatButton onToggle={onToggle} />) })
+
+    for (let i = 0; i < 5; i++) {
+      act(() => { getButton()?.click() })
+    }
+
+    expect(onToggle).toHaveBeenCalledTimes(6)
+
+    const expectedCalls = [false, true, false, true, false, true]
+    for (let i = 0; i < expectedCalls.length; i++) {
+      expect(onToggle).toHaveBeenNthCalledWith(i + 1, expectedCalls[i])
+    }
+
+    cleanup(root, container)
+  })
+
+  it('renders without onToggle prop', () => {
+    const { root, container } = setup()
+    act(() => { root.render(<ChatButton />) })
+    expect(getButton()).not.toBeNull()
+    cleanup(root, container)
+  })
 })

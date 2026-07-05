@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { extensionVocabSchema } from '../../storage/vocabularyStore'
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveVocabularyEntry } from '../../storage/vocabularyStore'
+import { incrementDailyProgress } from '../../services/storage'
 
 interface QuickAddVocabProps {
   onSaved: () => void
@@ -103,19 +104,7 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
       })
 
       await saveVocabularyEntry(entry)
-
-      chrome.storage.local.get(['dailyProgress'], (result) => {
-        const current = result.dailyProgress || {
-          wordsAdded: 0,
-          notesAdded: 0,
-          articlesSaved: 0,
-          reviewDue: 0,
-          streak: 0,
-        }
-        chrome.storage.local.set({
-          dailyProgress: { ...current, wordsAdded: current.wordsAdded + 1 },
-        })
-      })
+      await incrementDailyProgress('wordsAdded', 1)
 
       setSaved(true)
       setTimeout(() => onSaved(), 1200)

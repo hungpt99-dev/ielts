@@ -77,7 +77,7 @@ export default function ApiKeySettings() {
   const [aiKey, setAiKey] = useState(settings.aiApiKey);
   const [aiEnabled, setAiEnabled] = useState(settings.aiEnabled);
   const [aiProvider, setAiProvider] = useState(settings.aiProvider);
-  const [aiEndpoint, setAiEndpoint] = useState(settings.aiEndpoint);
+  const [aiBaseUrl, setAiBaseUrl] = useState(settings.aiBaseUrl || settings.aiEndpoint || '');
   const [aiModel, setAiModel] = useState(settings.aiModel);
   const [aiTesting, setAiTesting] = useState(false);
   const [aiTestResult, setAiTestResult] = useState<{
@@ -99,6 +99,14 @@ export default function ApiKeySettings() {
     }
     setStates(initial);
   }, []);
+
+  useEffect(() => {
+    setAiKey(settings.aiApiKey)
+    setAiProvider(settings.aiProvider)
+    setAiBaseUrl(settings.aiBaseUrl || settings.aiEndpoint || '')
+    setAiModel(settings.aiModel)
+    setAiEnabled(settings.aiEnabled)
+  }, [settings.aiApiKey, settings.aiProvider, settings.aiBaseUrl, settings.aiEndpoint, settings.aiModel, settings.aiEnabled])
 
   function updateState(
     name: string,
@@ -146,7 +154,8 @@ export default function ApiKeySettings() {
     updateSettings({
       aiApiKey: aiKey,
       aiProvider: aiProvider,
-      aiEndpoint: aiEndpoint,
+      aiBaseUrl: aiBaseUrl,
+      aiEndpoint: aiBaseUrl,
       aiModel: aiModel,
       aiEnabled: aiEnabled,
     });
@@ -157,13 +166,14 @@ export default function ApiKeySettings() {
   function handleAiReset() {
     setAiKey("");
     setAiProvider("openai");
-    setAiEndpoint("");
+    setAiBaseUrl("");
     setAiModel("gpt-4o-mini");
     setAiEnabled(false);
     setAiTestResult(null);
     updateSettings({
       aiApiKey: "",
       aiProvider: "openai",
+      aiBaseUrl: "",
       aiEndpoint: "",
       aiModel: "gpt-4o-mini",
       aiEnabled: false,
@@ -498,34 +508,30 @@ export default function ApiKeySettings() {
                 </select>
               </div>
 
-              {aiProvider === "custom" && (
-                <>
-                  <Input
-                    id="ai-endpoint"
-                    type="text"
-                    label="Base URL"
-                    value={aiEndpoint}
-                    onChange={(e) => {
-                      setAiEndpoint(
-                        (e.target as HTMLInputElement).value
-                      );
-                      setAiTestResult(null);
-                    }}
-                    placeholder="https://api.openai.com/v1"
-                  />
-                  <Input
-                    id="ai-model"
-                    type="text"
-                    label="Model"
-                    value={aiModel}
-                    onChange={(e) => {
-                      setAiModel((e.target as HTMLInputElement).value);
-                      setAiTestResult(null);
-                    }}
-                    placeholder="gpt-4o-mini"
-                  />
-                </>
-              )}
+              <Input
+                id="ai-base-url"
+                type="text"
+                label="Base URL"
+                value={aiBaseUrl}
+                onChange={(e) => {
+                  setAiBaseUrl(
+                    (e.target as HTMLInputElement).value
+                  );
+                  setAiTestResult(null);
+                }}
+                placeholder="https://api.openai.com/v1"
+              />
+              <Input
+                id="ai-model"
+                type="text"
+                label="Model"
+                value={aiModel}
+                onChange={(e) => {
+                  setAiModel((e.target as HTMLInputElement).value);
+                  setAiTestResult(null);
+                }}
+                placeholder="gpt-4o-mini"
+              />
             </>
           )}
 
