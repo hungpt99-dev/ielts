@@ -118,3 +118,34 @@ Format:
   ]
 }`
 }
+
+export function buildStudyPlanChunkPrompt(
+  input: StudyPlanInput,
+  chunkIndex: number,
+  totalChunks: number,
+  previousPhase: { name: string; description: string } | null,
+): string {
+  const basePrompt = buildStudyPlanUserPrompt(input)
+
+  const progressionFocus =
+    chunkIndex === 1
+      ? 'Building foundational skills and establishing study habits'
+      : chunkIndex === totalChunks
+        ? 'Final preparation, mock tests, and targeted weak-skill improvement'
+        : chunkIndex <= totalChunks / 2
+          ? 'Developing core skills and expanding knowledge'
+          : 'Intensive practice and advanced skill refinement'
+
+  const previousPhaseContext = previousPhase
+    ? `\n- Previous phase: "${previousPhase.name}" — ${previousPhase.description}`
+    : ''
+
+  return `${basePrompt}
+
+## Plan Progression
+- This is Phase ${chunkIndex} of ${totalChunks}
+- Phase focus: ${progressionFocus}
+- Total plan duration: ${input.daysToGenerate} days${previousPhaseContext}
+
+Generate ONE learning phase that continues naturally from the previous phase.`
+}

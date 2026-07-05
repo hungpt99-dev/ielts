@@ -7,6 +7,7 @@ import { DatabaseService } from '../../services/storage/Database'
 import {
   buildStudyPlanSystemPrompt,
   buildStudyPlanUserPrompt,
+  buildStudyPlanChunkPrompt,
 } from './studyPlanPrompts'
 import type { StudyPlanInput } from './studyPlanPrompts'
 import { savePlanToIndexedDB, loadPlanFromIndexedDB } from './studyPlanStore'
@@ -48,6 +49,7 @@ export interface StudyPlannerState {
   tasks: TaskEntry[]
   usedAi: boolean
   error: string | null
+  chunkErrors?: number
 }
 
 const VALID_CATEGORIES: Set<string> = new Set<TaskCategory>([
@@ -58,9 +60,38 @@ const VALID_CATEGORIES: Set<string> = new Set<TaskCategory>([
 ])
 
 const PLAN_STORAGE_KEY = 'ielts-study-plan'
+const AI_CHUNK_SIZE = 30
+const DEFAULT_PLAN_DAYS = 90
+const MAX_PLAN_DAYS = 365
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
+}
+
+function addDays(dateStr: string, days: number): string {
+  const date = new Date(dateStr + 'T00:00:00')
+  date.setDate(date.getDate() + days)
+  return date.toISOString().slice(0, 10)
+}
+
+function getLastWeekNumber(phases: StudyPlanPhase[]): number {
+  let maxWeek = 0
+  for (const phase of phases) {
+    for (const week of phase.weeks) {
+      if (week.weekNumber > maxWeek) maxWeek = week.weekNumber
+    }
+  }
+  return maxWeek
+}
+
+function renumberWeeks(phases: StudyPlanPhase[], offset: number): StudyPlanPhase[] {
+  return phases.map(phase => ({
+    ...phase,
+    weeks: phase.weeks.map(week => ({
+      ...week,
+      weekNumber: week.weekNumber + offset,
+    })),
+  }))
 }
 
 function getAiConfig(settings: AppSettings): ProviderConfig | null {
@@ -113,14 +144,13 @@ async function loadEnrichedInput(settings: AppSettings): Promise<StudyPlanInput>
   const today = new Date()
   today.setHours(0, 0, 0, 0)
   const startDate = today.toISOString().slice(0, 10)
-  const maxDays = 90
   const examDays = settings.examDate
     ? Math.floor(
         (new Date(settings.examDate.slice(0, 10) + 'T00:00:00').getTime() - today.getTime()) /
           (1000 * 60 * 60 * 24),
       )
-    : maxDays
-  const daysToGenerate = Math.max(7, Math.min(examDays, maxDays))
+    : DEFAULT_PLAN_DAYS
+  const daysToGenerate = Math.max(7, Math.min(examDays, MAX_PLAN_DAYS))
 
   const [vocabulary, reviews, tasks] = await Promise.all([
     DatabaseService.getAll<VocabularyEntry>('vocabulary'),
@@ -278,7 +308,72 @@ function fallbackSchedule(input: StudyPlanInput): StudyPlanData {
   return { phases: [phase], generatedAt: new Date().toISOString() }
 }
 
-export async function generateStudyPlan(): Promise<StudyPlannerState> {
+async function generateFullPlan(
+  input: StudyPlanInput,
+  config: ProviderConfig,
+  onProgress?: (current: number, total: number) => void,
+): Promise<StudyPlanData> {
+  const totalDays = input.daysToGenerate
+  const chunkCount = Math.ceil(totalDays / AI_CHUNK_SIZE)
+  const allPhases: StudyPlanPhase[] = []
+  let chunkErrors = 0
+
+  for (let i = 0; i < chunkCount; i++) {
+    onProgress?.(i + 1, chunkCount)
+
+    const chunkStart = i * AI_CHUNK_SIZE
+    const chunkDays = Math.min(AI_CHUNK_SIZE, totalDays - chunkStart)
+    const chunkStartDate = addDays(input.startDate, chunkStart)
+
+    const chunkInput: StudyPlanInput = {
+      ...input,
+      daysToGenerate: chunkDays,
+      startDate: chunkStartDate,
+    }
+
+    const systemPrompt = buildStudyPlanSystemPrompt()
+    const userPrompt = buildStudyPlanChunkPrompt(
+      chunkInput,
+      i + 1,
+      chunkCount,
+      allPhases.length > 0
+        ? { name: allPhases[allPhases.length - 1].name, description: allPhases[allPhases.length - 1].description }
+        : null,
+    )
+
+    try {
+      const result: AICallResult = await callAI(
+        systemPrompt,
+        userPrompt,
+        () => config,
+        { temperature: 0.7, maxTokens: 4096 },
+      )
+
+      let chunkPlan: StudyPlanData
+      if (result.error || !result.content) {
+        chunkErrors++
+        chunkPlan = fallbackSchedule(chunkInput)
+      } else {
+        const parsed = parsePlanResponse(result.content)
+        chunkPlan = parsed ? { phases: parsed.phases, generatedAt: parsed.generatedAt } : fallbackSchedule(chunkInput)
+        if (!parsed) chunkErrors++
+      }
+
+      const offset = getLastWeekNumber(allPhases)
+      allPhases.push(...renumberWeeks(chunkPlan.phases, offset))
+    } catch {
+      chunkErrors++
+      const offset = getLastWeekNumber(allPhases)
+      allPhases.push(...renumberWeeks(fallbackSchedule(chunkInput).phases, offset))
+    }
+  }
+
+  return { phases: allPhases, generatedAt: new Date().toISOString() }
+}
+
+export async function generateStudyPlan(
+  onProgress?: (current: number, total: number) => void,
+): Promise<StudyPlannerState> {
   try {
     const settings = loadAppSettings()
     const config = getAiConfig(settings)
@@ -287,21 +382,26 @@ export async function generateStudyPlan(): Promise<StudyPlannerState> {
     let planData: StudyPlanData
 
     if (config) {
-      const systemPrompt = buildStudyPlanSystemPrompt()
-      const userPrompt = buildStudyPlanUserPrompt(input)
-
-      const result: AICallResult = await callAI(
-        systemPrompt,
-        userPrompt,
-        () => config,
-        { temperature: 0.7, maxTokens: 4096 },
-      )
-
-      if (result.error || !result.content) {
-        planData = fallbackSchedule(input)
+      const totalDays = input.daysToGenerate
+      if (totalDays > AI_CHUNK_SIZE) {
+        planData = await generateFullPlan(input, config, onProgress)
       } else {
-        const parsed = parsePlanResponse(result.content)
-        planData = parsed ?? fallbackSchedule(input)
+        const systemPrompt = buildStudyPlanSystemPrompt()
+        const userPrompt = buildStudyPlanUserPrompt(input)
+
+        const result: AICallResult = await callAI(
+          systemPrompt,
+          userPrompt,
+          () => config,
+          { temperature: 0.7, maxTokens: 4096 },
+        )
+
+        if (result.error || !result.content) {
+          planData = fallbackSchedule(input)
+        } else {
+          const parsed = parsePlanResponse(result.content)
+          planData = parsed ?? fallbackSchedule(input)
+        }
       }
     } else {
       planData = fallbackSchedule(input)
@@ -333,6 +433,25 @@ export async function generateStudyPlan(): Promise<StudyPlannerState> {
 }
 
 export async function createTasksFromPlan(plan: StudyPlanData): Promise<TaskEntry[]> {
+  const planDates = new Set<string>()
+  for (const phase of plan.phases) {
+    for (const week of phase.weeks) {
+      for (const day of week.days) {
+        planDates.add(day.date)
+      }
+    }
+  }
+
+  const existingTaskIds: string[] = []
+  if (planDates.size > 0) {
+    const allTasks = await DatabaseService.getAll<TaskEntry>('tasks')
+    for (const task of allTasks) {
+      if (planDates.has(task.date.slice(0, 10))) {
+        existingTaskIds.push(task.id)
+      }
+    }
+  }
+
   const now = new Date().toISOString()
   const newTasks: TaskEntry[] = []
 
@@ -360,6 +479,10 @@ export async function createTasksFromPlan(plan: StudyPlanData): Promise<TaskEntr
         }
       }
     }
+  }
+
+  if (existingTaskIds.length > 0) {
+    await Promise.all(existingTaskIds.map(id => DatabaseService.remove('tasks', id)))
   }
 
   return newTasks

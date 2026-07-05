@@ -38,6 +38,8 @@ export default function StudyPlan() {
   const [error, setError] = useState<string | null>(null)
   const [generating, setGenerating] = useState(false)
   const [generatedCount, setGeneratedCount] = useState(0)
+  const [generatingPhase, setGeneratingPhase] = useState(0)
+  const [totalPhases, setTotalPhases] = useState(0)
 
   const [selectedDate, setSelectedDate] = useState(today())
   const [calendarYear, setCalendarYear] = useState(() => new Date().getFullYear())
@@ -125,8 +127,13 @@ export default function StudyPlan() {
     setGenerating(true)
     setGeneratedCount(0)
     setError(null)
+    setGeneratingPhase(0)
+    setTotalPhases(0)
     try {
-      const result = await generateStudyPlan()
+      const result = await generateStudyPlan((current, total) => {
+        setGeneratingPhase(current)
+        setTotalPhases(total)
+      })
       setPlan({ phases: result.phases, generatedAt: new Date().toISOString() })
       setTasks(result.tasks)
       setGeneratedCount(result.tasks.length)
@@ -136,6 +143,8 @@ export default function StudyPlan() {
       setError(err instanceof Error ? err.message : 'Failed to generate plan')
     } finally {
       setGenerating(false)
+      setGeneratingPhase(0)
+      setTotalPhases(0)
     }
   }
 
@@ -210,6 +219,12 @@ export default function StudyPlan() {
           </Button>
         </div>
       </div>
+
+      {generating && totalPhases > 0 && (
+        <div className="rounded-lg bg-blue-50 px-4 py-3 text-sm text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+          Generating phase {generatingPhase} of {totalPhases}...
+        </div>
+      )}
 
       {generatedCount > 0 && (
         <div className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700 dark:bg-green-900/30 dark:text-green-400">
