@@ -155,10 +155,10 @@ export interface UserTutorPreferences {
 
 export const DEFAULT_TUTOR_PREFERENCES: UserTutorPreferences = {
   preferredMode: 'ielts-tutor',
-  language: 'both',
+  language: 'english',
   explanationLevel: 'simple',
   correctionStyle: 'gentle',
-  useVietnamese: true,
+  useVietnamese: false,
   autoSaveChat: true,
   notificationsEnabled: false,
   reminderTime: '09:00',

@@ -643,12 +643,6 @@ export interface DashboardData {
   savedVocabularyCount: number
   aiSuggestion: string
   roadmapProgress: number
-  nextTask: {
-    title: string
-    skillFocus: string
-    objective: string
-    id: string
-  } | null
   examCountdown: number
 }
 

@@ -73,7 +73,7 @@ Vocabulary, Reading, Listening, Writing Task 1, Writing Task 2, Speaking Part 1,
 ## Requirements
 1. Organise the schedule into logical learning phases based on the band gap and time available
 2. Split the total days into ${weekCount} weeks, grouped into phases
-3. For each day, provide a list of tasks; total minutes must not exceed ${input.dailyMinutes}
+3. For each day, provide tasks whose total minutes fill as close to ${input.dailyMinutes} as possible; do not exceed ${input.dailyMinutes}
 4. Only assign tasks on days matching the learner's available study days; use empty array for off-days
 5. On study days include 2-4 tasks covering different skill areas
 6. Weight weak areas more heavily — weaker skills appear more often across the week

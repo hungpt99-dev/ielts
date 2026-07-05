@@ -24,8 +24,8 @@ import TopicsProgress from '../pages/TopicsProgress'
 import PublicApiImportPage from '../pages/PublicApiImportPage'
 import PublicTabPage from '../components/PublicTabPage'
 import RoadmapPage from '../features/roadmap/RoadmapPage'
-import StudyContentPage from '../features/content/StudyContentPage'
 import ArtifactsPage from '../features/artifacts/ArtifactsPage'
+import ProgressReviewPage from '../features/progressReview/ProgressReviewPage'
 import FloatingTutorButton from './aiTutor/FloatingTutorButton'
 import ChatIcon from './aiTutor/ChatIcon'
 
@@ -145,6 +145,7 @@ export default function AppLayout() {
             <Route path="/mock-tests" element={<MockTests />} />
             <Route path="/topics" element={<TopicsProgress />} />
             <Route path="/progress" element={<Progress />} />
+            <Route path="/progress-review" element={<ProgressReviewPage />} />
             <Route path="/artifacts" element={<ArtifactsPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/public-api" element={<PublicApiImportPage />} />
@@ -152,7 +153,6 @@ export default function AppLayout() {
             <Route path="/settings/data" element={<DataManagement />} />
             <Route path="/import-export" element={<ImportExport />} />
             <Route path="/info" element={<PublicTabPage />} />
-            <Route path="/study/:taskId" element={<StudyContentPage />} />
             <Route path="/website-info" element={<RedirectWithHash to="/info" hash="about-website" />} />
             <Route path="/about-me" element={<RedirectWithHash to="/info" hash="about-me" />} />
             <Route path="/recruit" element={<RedirectWithHash to="/info" hash="recruit" />} />

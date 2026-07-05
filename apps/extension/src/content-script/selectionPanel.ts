@@ -7,9 +7,8 @@ import {
 } from '@ielts/ai'
 import { showExplainPanel } from './aiExplain'
 import { injectContentStyles } from './sharedStyles'
+import { handleVocabSaved } from './vocabularySaveHandler'
 import {
-  safeStorageGet,
-  safeStorageSet,
   safeSyncGet,
   safeSendMessage,
   safeFetchProviderConfig,
@@ -34,7 +33,7 @@ const ACTIONS: ToolbarAction[] = [
   { id: 'divider', icon: '', label: '' },
   { id: 'explain', icon: '💡', label: 'Explain Meaning', isAiAction: true },
   { id: 'simplify', icon: '✂️', label: 'Simplify Text', isAiAction: true },
-  { id: 'translate', icon: '🌐', label: 'Translate to VN', isAiAction: true },
+  { id: 'translate', icon: '🌐', label: 'Translate', isAiAction: true },
   { id: 'ielts-vocab', icon: '🎯', label: 'IELTS Vocab', isAiAction: true },
 ]
 
@@ -49,6 +48,9 @@ let panelEl: HTMLDivElement | null = null
 let styleEl: HTMLStyleElement | null = null
 let selectedText = ''
 let isEnabled = true
+let scrollTimer: ReturnType<typeof setTimeout> | null = null
+let selectionCheckTimer: ReturnType<typeof setTimeout> | null = null
+let mouseDownTarget: EventTarget | null = null
 
 async function init(): Promise<void> {
   await loadSettings()
@@ -58,7 +60,9 @@ async function init(): Promise<void> {
   document.addEventListener('mouseup', onMouseUp)
   document.addEventListener('mousedown', onMouseDown)
   document.addEventListener('keydown', onKeyDown)
-  window.addEventListener('scroll', hide, { passive: true })
+  document.addEventListener('selectionchange', onSelectionChange)
+  document.addEventListener('touchstart', onTouchStart, { passive: true })
+  window.addEventListener('scroll', onScroll, { passive: true })
 
   chrome.storage.onChanged.addListener((changes) => {
     if (!changes.extensionSettings) return
@@ -81,20 +85,41 @@ function onMouseUp(e: MouseEvent): void {
   if (!isEnabled) return
   if (panelEl?.contains(e.target as Node)) return
 
-  setTimeout(() => {
-    const sel = window.getSelection()
-    const text = sel?.toString().trim() || ''
-    if (text.length < 1) {
-      hide()
-      return
-    }
-    selectedText = text
-    const range = sel?.getRangeAt(0)
-    if (range) show(range.getBoundingClientRect())
-  }, 0)
+  mouseDownTarget = null
+
+  scheduleSelectionCheck(0)
+}
+
+function scheduleSelectionCheck(delay: number = 80): void {
+  if (selectionCheckTimer) clearTimeout(selectionCheckTimer)
+  selectionCheckTimer = setTimeout(() => {
+    selectionCheckTimer = null
+    performSelectionCheck()
+  }, delay)
+}
+
+function performSelectionCheck(): void {
+  const sel = window.getSelection()
+  if (!sel || sel.rangeCount === 0) {
+    hide()
+    return
+  }
+  const text = sel.toString().trim()
+  if (text.length < 1) {
+    hide()
+    return
+  }
+  selectedText = text
+  const range = sel.getRangeAt(0)
+  if (range) show(range.getBoundingClientRect())
 }
 
 function onMouseDown(e: MouseEvent): void {
+  mouseDownTarget = e.target
+  if (selectionCheckTimer) {
+    clearTimeout(selectionCheckTimer)
+    selectionCheckTimer = null
+  }
   if (panelEl && !panelEl.contains(e.target as Node)) {
     hide()
   }
@@ -103,16 +128,27 @@ function onMouseDown(e: MouseEvent): void {
 function onKeyDown(e: KeyboardEvent): void {
   if (e.key === 'Escape') hide()
   if (e.key === 'Shift' || e.key.startsWith('Arrow')) {
-    setTimeout(() => {
-      const sel = window.getSelection()
-      const text = sel?.toString().trim() || ''
-      if (text.length >= 1) {
-        selectedText = text
-        const range = sel?.getRangeAt(0)
-        if (range) show(range.getBoundingClientRect())
-      }
-    }, 0)
+    scheduleSelectionCheck(0)
   }
+}
+
+function onSelectionChange(): void {
+  if (!isEnabled) return
+  if (mouseDownTarget) return
+  scheduleSelectionCheck(120)
+}
+
+function onTouchStart(e: TouchEvent): void {
+  if (panelEl && !panelEl.contains(e.target as Node)) {
+    hide()
+  }
+}
+
+function onScroll(): void {
+  if (scrollTimer) clearTimeout(scrollTimer)
+  scrollTimer = setTimeout(() => {
+    hide()
+  }, 80)
 }
 
 function isWordOnly(text: string): boolean {
@@ -269,43 +305,21 @@ function execute(action: ToolbarAction): void {
 }
 
 async function saveText(text: string, category: SaveCategory): Promise<void> {
-  const entry = {
-    id: crypto.randomUUID(),
-    text,
-    category,
-    pageTitle: document.title,
-    pageUrl: window.location.href,
-    savedAt: new Date().toISOString(),
-    note: '',
-    topic: '',
-    difficulty: '',
-    tags: [] as string[],
-  }
-
-  const result = await safeStorageGet<any[]>('savedItems')
-  const items = result.savedItems || []
-  items.unshift(entry)
-  await safeStorageSet({ savedItems: items })
+  showToast(`Saved as ${category}`)
 
   safeSendMessage({
-    type: 'UPDATE_PROGRESS',
+    type: 'SAVE_SELECTION_FULL',
     payload: {
-      wordsAdded: category === 'vocabulary' ? 1 : 0,
-      notesAdded: category === 'mistake' ? 1 : 0,
+      text,
+      category,
+      pageTitle: document.title,
+      pageUrl: window.location.href,
     },
   })
 
   if (category === 'vocabulary') {
-    try {
-      window.postMessage({
-        source: 'ielts-extension',
-        action: 'VOCAB_SAVED',
-        data: entry,
-      }, window.location.origin)
-    } catch { /* ignore */ }
+    handleVocabSaved(text)
   }
-
-  showToast(`Saved as ${category}`)
 }
 
 function triggerAI(action: ToolbarAction, text: string): void {
@@ -510,7 +524,11 @@ export function destroySelectionPanel(): void {
   document.removeEventListener('mouseup', onMouseUp)
   document.removeEventListener('mousedown', onMouseDown)
   document.removeEventListener('keydown', onKeyDown)
-  window.removeEventListener('scroll', hide)
+  document.removeEventListener('selectionchange', onSelectionChange)
+  document.removeEventListener('touchstart', onTouchStart)
+  window.removeEventListener('scroll', onScroll)
+  if (scrollTimer) clearTimeout(scrollTimer)
+  if (selectionCheckTimer) clearTimeout(selectionCheckTimer)
   removePanel()
   if (styleEl) styleEl.remove()
 }

@@ -259,14 +259,13 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
         </div>
         <div>
           <label htmlFor="meaningVi" className={labelClass}>
-            Vietnamese Meaning
+            Translation
           </label>
           <textarea
             id="meaningVi"
             rows={2}
             {...register('meaningVi')}
             className={inputClass('meaningVi')}
-            placeholder="Phổ biến khắp nơi"
           />
         </div>
       </div>

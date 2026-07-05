@@ -230,9 +230,9 @@ function parsePlanResponse(content: string): StudyPlanData | null {
 }
 
 function fallbackSchedule(input: StudyPlanInput): StudyPlanData {
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-  const endDate = new Date(today.getTime() + input.daysToGenerate * 24 * 60 * 60 * 1000)
+  const start = new Date(input.startDate + 'T00:00:00')
+  start.setHours(0, 0, 0, 0)
+  const endDate = new Date(start.getTime() + input.daysToGenerate * 24 * 60 * 60 * 1000)
 
   const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
   const availableSet = new Set(input.preferredSchedule)
@@ -240,9 +240,11 @@ function fallbackSchedule(input: StudyPlanInput): StudyPlanData {
 
   const focusVocab = input.vocabularyCount < 50
   const reduceTasks = input.taskCompletionRate < 50
+  const isGeneral = input.studyGoal === 'general'
+  const writingCategory = isGeneral ? 'Writing Task 1' : 'Writing Task 2'
 
   const days: StudyPlanDay[] = []
-  const current = new Date(today)
+  const current = new Date(start)
   while (current <= endDate) {
     const dateStr = current.toISOString().slice(0, 10)
     const dayName = dayNames[current.getDay()]
@@ -256,23 +258,34 @@ function fallbackSchedule(input: StudyPlanInput): StudyPlanData {
       items.push({ category: 'Vocabulary', title: 'Review due vocabulary', minutes: 10 })
 
       if (input.weakSkills.includes('reading') || !reduceTasks) {
-        items.push({ category: 'Reading', title: `Read IELTS passage on ${topic}`, minutes: 30 })
+        items.push({ category: 'Reading', title: `Read IELTS ${isGeneral ? 'letter/email' : 'passage'} on ${topic}`, minutes: 30 })
       }
       if (input.weakSkills.includes('listening') && !reduceTasks) {
         items.push({ category: 'Listening', title: 'Complete a listening exercise', minutes: 25 })
       }
       if (input.weakSkills.includes('writing') || items.length < 3) {
-        items.push({ category: 'Writing Task 2', title: `Write Task 2 essay on ${topic}`, minutes: 30 })
+        items.push({ category: writingCategory, title: `Write ${isGeneral ? 'Task 1 letter' : 'Task 2 essay'} on ${topic}`, minutes: 30 })
       }
       if (input.weakSkills.includes('speaking') && !reduceTasks) {
         items.push({ category: 'Speaking Part 2', title: 'Practice cue card topic', minutes: 15 })
       }
       items.push({ category: 'Grammar', title: 'Review grammar rules', minutes: 15 })
 
-      const totalMin = items.reduce((s, i) => s + i.minutes, 0)
-      if (totalMin > input.dailyMinutes) {
-        while (items.reduce((s, i) => s + i.minutes, 0) > input.dailyMinutes && items.length > 2) {
-          items.pop()
+      const rawTotal = items.reduce((s, i) => s + i.minutes, 0)
+      if (rawTotal > 0 && rawTotal !== input.dailyMinutes) {
+        if (rawTotal > input.dailyMinutes) {
+          while (items.reduce((s, i) => s + i.minutes, 0) > input.dailyMinutes && items.length > 2) {
+            items.pop()
+          }
+        } else {
+          const scale = input.dailyMinutes / rawTotal
+          for (const item of items) {
+            item.minutes = Math.max(5, Math.round(item.minutes * scale))
+          }
+          const adjustedTotal = items.reduce((s, i) => s + i.minutes, 0)
+          if (adjustedTotal !== input.dailyMinutes && items.length > 0) {
+            items[items.length - 1].minutes += input.dailyMinutes - adjustedTotal
+          }
         }
       }
 

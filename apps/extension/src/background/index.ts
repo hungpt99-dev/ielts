@@ -2,6 +2,7 @@ import type { SaveCategory } from '../types'
 import { updateDailyProgress } from '../services/storage'
 import { initMessaging } from './messaging'
 import { initializeStorageBridge } from './storage-bridge'
+import { initAiService } from './ai-service'
 
 interface AiExplainItem {
   id: string
@@ -11,7 +12,7 @@ interface AiExplainItem {
 
 const AI_EXPLAIN_ITEMS: AiExplainItem[] = [
   { id: 'ai-explain-simple', title: 'Explain in Simple English', action: 'simple' },
-  { id: 'ai-explain-vietnamese', title: 'Explain in Vietnamese', action: 'vietnamese' },
+  { id: 'ai-explain-vietnamese', title: 'Translate', action: 'vietnamese' },
   { id: 'ai-explain-ielts-vocab', title: 'IELTS Vocabulary', action: 'ielts-vocab' },
   { id: 'ai-explain-grammar', title: 'Grammar Explanation', action: 'grammar' },
   { id: 'ai-explain-rewrite', title: 'Rewrite Naturally', action: 'rewrite' },
@@ -145,6 +146,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 })
 
 initMessaging()
+initAiService()
 initializeStorageBridge()
 
 export {}

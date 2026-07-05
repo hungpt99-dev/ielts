@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDashboard } from '../../hooks/useDashboard'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
@@ -6,6 +6,7 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner'
 import EmptyState from '../../components/ui/EmptyState'
 import Button from '../../components/ui/Button'
 import ProgressChart from './components/ProgressChart'
+import { DatabaseService } from '../../services/storage/Database'
 import type { DashboardData, WeeklyStudyDay, TaskEntry } from '../../models'
 
 const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -94,18 +95,24 @@ export default function Dashboard() {
   const { data, weeklyChart, loading, error } = useDashboard()
   const navigate = useNavigate()
   const tasksRef = useRef<HTMLUListElement>(null)
+  const [tasks, setTasks] = useState<TaskEntry[]>([])
 
-  const handleTaskKeyDown = useCallback(
-    (e: React.KeyboardEvent, task: TaskEntry) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        if (!task.isDone) {
-          navigate(`/study/${encodeURIComponent(task.title)}`)
-        }
-      }
-    },
-    [navigate],
-  )
+  useEffect(() => {
+    if (data) {
+      setTasks(data.todayTasks)
+    }
+  }, [data])
+
+  async function handleToggleDone(task: TaskEntry) {
+    const updated: TaskEntry = {
+      ...task,
+      isDone: !task.isDone,
+      completedAt: !task.isDone ? new Date().toISOString() : null,
+      updatedAt: new Date().toISOString(),
+    }
+    await DatabaseService.put('tasks', updated)
+    setTasks(prev => prev.map(t => t.id === updated.id ? updated : t))
+  }
 
   if (loading) {
     return <LoadingSpinner size="lg" fullPage message="Loading your dashboard..." />
@@ -130,11 +137,11 @@ export default function Dashboard() {
     targetBand, currentBand, weakSkills, dueReviews, todayFocus,
     examDate, studyGoal, dailyStudyMinutes,
     recentMistakes, savedVocabularyCount, aiSuggestion,
-    roadmapProgress, nextTask, examCountdown,
+    roadmapProgress, examCountdown,
   } = data
 
-  const todayUnfinished = todayTasks.filter(t => !t.isDone)
-  const todayDone = todayTasks.filter(t => t.isDone)
+  const todayUnfinished = tasks.filter(t => !t.isDone)
+  const todayDone = tasks.filter(t => t.isDone)
   const progressPercent = weeklyProgress.total > 0
     ? Math.round((weeklyProgress.done / weeklyProgress.total) * 100)
     : 0
@@ -196,30 +203,14 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Continue Learning + Action Buttons */}
+      {/* Action Buttons */}
       <div className="flex flex-wrap gap-3">
-        {nextTask ? (
-          <Button
-            size="lg"
-            onClick={() => navigate(`/study/${encodeURIComponent(nextTask.title)}`)}
-          >
-            Continue Learning: {nextTask.title}
-          </Button>
-        ) : todayUnfinished.length > 0 ? (
-          <Button
-            size="lg"
-            onClick={() => navigate(`/study/${encodeURIComponent(todayUnfinished[0].title)}`)}
-          >
-            Continue Learning ({todayUnfinished.length} tasks left)
-          </Button>
-        ) : (
-          <Button
-            size="lg"
-            onClick={() => navigate('/vocabulary')}
-          >
-            Review Vocabulary
-          </Button>
-        )}
+        <Button
+          size="lg"
+          onClick={() => navigate('/vocabulary')}
+        >
+          Review Vocabulary
+        </Button>
         <Button
           variant="outline"
           size="lg"
@@ -310,15 +301,15 @@ export default function Dashboard() {
               <CardTitle>Today's Study Tasks</CardTitle>
               <span
                 className="text-sm font-medium"
-                style={{ color: todayDone.length === todayTasks.length && todayTasks.length > 0 ? 'var(--color-success)' : 'var(--color-muted)' }}
+                style={{ color: todayDone.length === tasks.length && tasks.length > 0 ? 'var(--color-success)' : 'var(--color-muted)' }}
                 aria-live="polite"
               >
-                {todayDone.length}/{todayTasks.length} done
+                {todayDone.length}/{tasks.length} done
               </span>
             </div>
           </CardHeader>
           <CardContent>
-            {todayTasks.length === 0 ? (
+            {tasks.length === 0 ? (
               <EmptyState
                 title="No tasks planned for today"
                 description="Go to the roadmap to plan your study session."
@@ -326,43 +317,35 @@ export default function Dashboard() {
               />
             ) : (
               <ul className="space-y-2" ref={tasksRef} aria-label="Today's tasks list">
-                {todayTasks.map(task => (
+                {tasks.map(task => (
                   <li
                     key={task.id}
-                    role={task.isDone ? 'listitem' : 'button'}
-                    tabIndex={task.isDone ? undefined : 0}
-                    aria-disabled={task.isDone}
-                    aria-label={task.isDone ? `${task.title} — completed` : `Start task: ${task.title}`}
                     className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
                       task.isDone
                         ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
-                        : 'cursor-pointer hover:border-blue-200 dark:hover:border-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-1'
+                        : 'border-[var(--color-border)] bg-[var(--color-surface)]'
                     }`}
-                    style={{
-                      borderColor: task.isDone ? undefined : 'var(--color-border)',
-                      backgroundColor: task.isDone ? undefined : 'var(--color-surface)',
-                    }}
-                    onClick={() => !task.isDone && navigate(`/study/${encodeURIComponent(task.title)}`)}
-                    onKeyDown={(e) => handleTaskKeyDown(e, task)}
                   >
-                    <span
-                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-bold transition-colors ${
+                    <button
+                      onClick={() => handleToggleDone(task)}
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors ${
                         task.isDone
                           ? 'border-green-500 bg-green-500 text-white'
-                          : 'border-[var(--color-border)]'
+                          : 'border-slate-300 hover:border-slate-400 dark:border-slate-600'
                       }`}
-                      style={{ color: task.isDone ? undefined : 'var(--color-muted)' }}
-                      aria-hidden="true"
+                      aria-label={task.isDone ? `Mark "${task.title}" as undone` : `Mark "${task.title}" as done`}
                     >
-                      {task.isDone ? '✓' : ''}
-                    </span>
+                      {task.isDone && (
+                        <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </button>
                     <div className="min-w-0 flex-1">
                       <span
-                        className="block truncate font-medium"
-                        style={{
-                          color: task.isDone ? 'var(--color-muted)' : 'var(--color-text)',
-                          textDecoration: task.isDone ? 'line-through' : 'none',
-                        }}
+                        className={`block truncate font-medium ${
+                          task.isDone ? 'text-slate-400 line-through dark:text-slate-500' : 'text-slate-700 dark:text-slate-300'
+                        }`}
                       >
                         {task.title}
                       </span>
@@ -374,7 +357,7 @@ export default function Dashboard() {
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
                       {task.timeMinutes > 0 && (
-                        <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
+                        <span className="text-xs text-slate-400">
                           {task.timeMinutes}m
                         </span>
                       )}
@@ -384,16 +367,13 @@ export default function Dashboard() {
               </ul>
             )}
             {todayUnfinished.length > 0 && (
-              <div className="mt-4 flex items-center justify-between" role="status" aria-live="polite">
+              <div className="mt-4" role="status" aria-live="polite">
                 <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
                   {todayUnfinished.length} task{todayUnfinished.length > 1 ? 's' : ''} remaining
                 </p>
-                <Button size="sm" onClick={() => navigate(`/study/${encodeURIComponent(todayUnfinished[0].title)}`)}>
-                  Start Next Task
-                </Button>
               </div>
             )}
-            {todayTasks.length > 0 && todayUnfinished.length === 0 && (
+            {tasks.length > 0 && todayUnfinished.length === 0 && (
               <div className="mt-4 rounded-lg bg-green-50 p-3 text-center dark:bg-green-900/20" role="status" aria-live="polite">
                 <p className="text-sm font-medium text-green-700 dark:text-green-300">
                   All tasks complete! Great work today.
@@ -583,7 +563,7 @@ export default function Dashboard() {
             <p className="mt-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
               {todayUnfinished.length > 0
                 ? `${todayUnfinished.length} task${todayUnfinished.length > 1 ? 's' : ''} remaining today. Keep going!`
-                : todayTasks.length > 0
+                : tasks.length > 0
                   ? 'All tasks completed! Great work today.'
                   : 'Plan your study session to get started.'}
             </p>

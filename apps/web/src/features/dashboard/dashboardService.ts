@@ -12,7 +12,7 @@ import type {
 } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import { loadAppSettings } from '../../services/storage/SettingsStorage'
-import { loadRoadmap, getTodayTask } from '../roadmap/roadmapService'
+import { loadRoadmap } from '../roadmap/roadmapService'
 
 function getToday(): string {
   return new Date().toISOString().slice(0, 10)
@@ -158,39 +158,6 @@ function getExamCountdown(examDate: string): number {
   return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)))
 }
 
-function getNextTaskInfo(): { title: string; skillFocus: string; objective: string; id: string } | null {
-  try {
-    const roadmap = loadRoadmap()
-    if (!roadmap) return null
-    const todayTask = getTodayTask(roadmap)
-    if (todayTask && !todayTask.isComplete) {
-      return {
-        title: todayTask.objective,
-        skillFocus: todayTask.skillFocus,
-        objective: todayTask.objective,
-        id: todayTask.id,
-      }
-    }
-    for (const phase of roadmap.phases) {
-      for (const week of phase.weeks) {
-        for (const day of week.days) {
-          if (!day.isComplete) {
-            return {
-              title: day.objective,
-              skillFocus: day.skillFocus,
-              objective: day.objective,
-              id: day.id,
-            }
-          }
-        }
-      }
-    }
-    return null
-  } catch {
-    return null
-  }
-}
-
 function getRoadmapProgress(): number {
   try {
     const roadmap = loadRoadmap()
@@ -236,7 +203,6 @@ export async function loadDashboardData(): Promise<{
   const examCountdown = getExamCountdown(examDate)
 
   const todayUnfinished = todayTasks.filter(t => !t.isDone)
-  const nextTask = getNextTaskInfo()
   const roadmapProgress = getRoadmapProgress()
   const aiSuggestion = getAiSuggestion(
     todayUnfinished.length,
@@ -265,7 +231,6 @@ export async function loadDashboardData(): Promise<{
     savedVocabularyCount,
     aiSuggestion,
     roadmapProgress,
-    nextTask,
     examCountdown,
   }
 
