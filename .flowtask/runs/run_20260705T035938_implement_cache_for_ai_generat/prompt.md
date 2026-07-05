@@ -1,0 +1,1 @@
+implement cache for AI generate result if needed, implement with best practice, highest code quality, production ready, design pattern
