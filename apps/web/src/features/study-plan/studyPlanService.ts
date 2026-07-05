@@ -9,6 +9,7 @@ import {
   buildStudyPlanUserPrompt,
 } from './studyPlanPrompts'
 import type { StudyPlanInput } from './studyPlanPrompts'
+import { savePlanToIndexedDB, loadPlanFromIndexedDB } from './studyPlanStore'
 
 export interface StudyPlanTask {
   category: TaskCategory
@@ -306,7 +307,7 @@ export async function generateStudyPlan(): Promise<StudyPlannerState> {
       planData = fallbackSchedule(input)
     }
 
-    savePlan(planData)
+    await savePlan(planData)
 
     const tasks = await createTasksFromPlan(planData)
 
@@ -320,7 +321,7 @@ export async function generateStudyPlan(): Promise<StudyPlannerState> {
     const settings = loadAppSettings()
     const input = await loadEnrichedInput(settings)
     const planData = fallbackSchedule(input)
-    savePlan(planData)
+    await savePlan(planData)
     const tasks = await createTasksFromPlan(planData)
     return {
       phases: planData.phases,
@@ -364,22 +365,10 @@ export async function createTasksFromPlan(plan: StudyPlanData): Promise<TaskEntr
   return newTasks
 }
 
-export function loadPlan(): StudyPlanData | null {
-  try {
-    const raw = localStorage.getItem(PLAN_STORAGE_KEY)
-    if (raw) return JSON.parse(raw) as StudyPlanData
-  } catch { /* ignore */ }
-  return null
+export async function loadPlan(): Promise<StudyPlanData | null> {
+  return loadPlanFromIndexedDB()
 }
 
-export function savePlan(plan: StudyPlanData): void {
-  try {
-    localStorage.setItem(PLAN_STORAGE_KEY, JSON.stringify(plan))
-  } catch { /* ignore */ }
-}
-
-export function clearPlan(): void {
-  try {
-    localStorage.removeItem(PLAN_STORAGE_KEY)
-  } catch { /* ignore */ }
+export async function savePlan(plan: StudyPlanData): Promise<void> {
+  return savePlanToIndexedDB(plan)
 }
