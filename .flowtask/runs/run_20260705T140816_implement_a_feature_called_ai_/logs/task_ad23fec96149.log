@@ -1,0 +1,1261 @@
+[2026-07-05T14:26:54.654Z] [INFO] Task started: Design and Implement Global Study Strategy Generator Service
+[2026-07-05T14:26:54.659Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/features/studyPlan/services/globalStrategyService.ts","description":"Service to generate and validate global study strategy via AI","validationMethod":"file_exists"}]
+[2026-07-05T14:26:55.245Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-05T14:26:55.245Z] [INFO] [stderr] [0m
+[2026-07-05T14:26:55.244Z] [INFO] [stderr] [0m
+[2026-07-05T14:27:03.871Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"studyPlan types services utilities globalStrategy","maxFiles":20}
+[2026-07-05T14:27:03.925Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/studyPlan/**/*"[90m 0 matches[0m
+[2026-07-05T14:27:06.841Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/studyPlan/**/*"[90m in . · 0 matches[0m
+[2026-07-05T14:27:07.245Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/study-plan/**/*"[90m in . · 0 matches[0m
+[2026-07-05T14:27:07.458Z] [INFO] [stderr] [91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/studyPlan
+[2026-07-05T14:27:07.458Z] [INFO] [stderr] [0m✗ [0mRead src/features/studyPlan failed
+[2026-07-05T14:27:10.178Z] [INFO] [stderr] [0m→ [0mRead .
+[2026-07-05T14:27:12.739Z] [INFO] [stderr] [0m→ [0mRead apps
+[2026-07-05T14:27:12.969Z] [INFO] [stderr] [0m→ [0mRead packages
+[2026-07-05T14:27:15.945Z] [INFO] [stderr] [0m→ [0mRead apps/web/src
+[2026-07-05T14:27:18.457Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features
+[2026-07-05T14:27:18.812Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/studyPlan/**/*"[90m in . · 3 matches[0m
+[2026-07-05T14:27:19.167Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/study-plan/**/*"[90m in . · 4 matches[0m
+[2026-07-05T14:27:23.264Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan
+[2026-07-05T14:27:23.464Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/studyPlan/**/*"[90m 3 matches[0m
+[2026-07-05T14:27:26.502Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/types.ts
+[2026-07-05T14:27:26.777Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/utils/dateUtils.ts
+[2026-07-05T14:27:27.122Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/utils/__tests__/dateUtils.test.ts
+[2026-07-05T14:27:33.056Z] [INFO] [stderr] [0m• [0mExplore AI service patterns[90m Explore Agent[0m
+[2026-07-05T14:28:41.418Z] [INFO] [stderr] [0m✓ [0mExplore AI service patterns[90m Explore Agent[0m
+[2026-07-05T14:28:44.944Z] [INFO] [stderr] [0m→ [0mRead packages/ai/src/services/explain.ts
+[2026-07-05T14:28:45.177Z] [INFO] [stderr] [0m→ [0mRead packages/ai/src/index.ts
+[2026-07-05T14:28:45.476Z] [INFO] [stderr] [0m→ [0mRead packages/ai/src/client/types.ts
+[2026-07-05T14:28:45.546Z] [INFO] [stdout] Now let me examine existing service implementations to match the patterns.
+[2026-07-05T14:28:48.425Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/roadmap/aiRoadmapGenerator.ts
+[2026-07-05T14:28:48.697Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/planner/aiPlannerService.ts
+[2026-07-05T14:28:51.858Z] [INFO] [stderr] [0m→ [0mRead packages/ai/src/utils/response.ts
+[2026-07-05T14:28:52.248Z] [INFO] [stderr] [0m→ [0mRead packages/settings/src/index.ts
+[2026-07-05T14:28:52.483Z] [INFO] [stderr] [0m✱ [0mGrep "export.*OPENAI_BASE_URL|export.*DEFAULT_MODEL"[90m 2 matches[0m
+[2026-07-05T14:29:12.694Z] [INFO] [stderr] [•] Create services directory and globalStrategyService.ts with AI prompt building, AI call, parsing, and validation
+[2026-07-05T14:29:12.694Z] [INFO] [stderr] [0m
+[2026-07-05T14:29:12.694Z] [INFO] [stderr] [ ] Create unit tests for globalStrategyService.ts
+[2026-07-05T14:29:12.694Z] [INFO] [stderr] [0m
+[2026-07-05T14:29:12.694Z] [INFO] [stderr] [ ] Run tests to verify the implementation
+[2026-07-05T14:29:12.695Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T14:29:16.223Z] [INFO] [stderr] [0m✱ [0mGrep "export type ISOString"[90m 3 matches[0m
+[2026-07-05T14:29:16.712Z] [INFO] [stderr] [0m✱ [0mGrep "vitest|test""[90m in apps/web · 4 matches[0m
+[2026-07-05T14:29:16.851Z] [INFO] [stdout] Let me check how ISOString is imported and the test configuration:
+[2026-07-05T14:29:20.525Z] [INFO] [stderr] [0m→ [0mRead apps/web/package.json
+[2026-07-05T14:29:24.730Z] [INFO] [stderr] [0m✱ [0mGrep "from 'zod'"[90m in apps/web/src · 1 match[0m
+[2026-07-05T14:29:27.661Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/planner/validation.ts
+[2026-07-05T14:29:28.076Z] [INFO] [stderr] [0m✱ [0mGrep "from 'zod'"[90m in packages/ai · 8 matches[0m
+[2026-07-05T14:29:30.911Z] [INFO] [stderr] [0m→ [0mRead packages/ai/package.json
+[2026-07-05T14:29:34.580Z] [INFO] [stderr] [0m✱ [0mGrep "extractJSON|parseAndValidate"[90m in packages/ai/src · 34 matches[0m
+[2026-07-05T14:29:38.157Z] [INFO] [stderr] [0m✱ [0mGrep "extractJSON|parseAndValidate"[90m in packages/ai/src · 1 match[0m
+[2026-07-05T14:29:40.979Z] [INFO] [stderr] [0m✱ [0mGrep "extractJSON|parseAndValidate"[90m in packages/ai/src/index.ts · 1 match[0m
+[2026-07-05T14:29:44.119Z] [INFO] [stderr] [0m→ [0mRead packages/ai/src/utils/index.ts
+[2026-07-05T14:29:48.111Z] [INFO] [stderr] [0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services
+[2026-07-05T14:29:48.111Z] [INFO] [stderr] [0m
+[2026-07-05T14:29:48.111Z] [INFO] [stderr] [0m
+[2026-07-05T14:29:48.111Z] [INFO] [stderr] (no output)
+[2026-07-05T14:29:48.177Z] [INFO] [stdout] Now I have all context. Let me create the service:
+[2026-07-05T14:30:04.653Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:04.653Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T14:30:04.654Z] [INFO] [stderr] [0m
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:09.188Z] [INFO] [stderr]    'Mock Test',
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:09.188Z] [INFO] [stderr]  ]
+[2026-07-05T14:30:09.188Z] [INFO] [stderr]    profile: StudyPlanUserProfile,
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] +export function buildGlobalStrategyPrompt(
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] -function buildGlobalStrategyPrompt(
+[2026-07-05T14:30:09.188Z] [INFO] [stderr]    calculatedMeta: StudyPlanCalculatedMeta,
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] 
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] @@ -14,9 +14,9 @@
+[2026-07-05T14:30:09.188Z] [INFO] [stderr]    'Final Review',
+[2026-07-05T14:30:09.188Z] [INFO] [stderr]  ): { systemPrompt: string; userPrompt: string } {
+[2026-07-05T14:30:09.188Z] [INFO] [stderr]    const systemPrompt =
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] [0m
+[2026-07-05T14:30:09.188Z] [INFO] [stderr]  
+[2026-07-05T14:30:09.188Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:09.278Z] [INFO] [stdout] Let me fix the duplicate function issue:
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:12.789Z] [INFO] [stderr]    }
+[2026-07-05T14:30:12.789Z] [INFO] [stderr]      return null
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] -export function buildGlobalStrategyPrompt(
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:12.789Z] [INFO] [stderr]  
+[2026-07-05T14:30:12.789Z] [INFO] [stderr]  }
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] -): { systemPrompt: string; userPrompt: string } {
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] -  return buildGlobalStrategyPrompt(profile, calculatedMeta)
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] -  profile: StudyPlanUserProfile,
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] @@ -179,15 +179,8 @@
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] -  calculatedMeta: StudyPlanCalculatedMeta,
+[2026-07-05T14:30:12.789Z] [INFO] [stderr]    profile: StudyPlanUserProfile,
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] 
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] -}
+[2026-07-05T14:30:12.789Z] [INFO] [stderr]    getConfig: () => ProviderConfig | null,
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] -
+[2026-07-05T14:30:12.789Z] [INFO] [stderr] [0m
+[2026-07-05T14:30:12.789Z] [INFO] [stderr]    calculatedMeta: StudyPlanCalculatedMeta,
+[2026-07-05T14:30:12.789Z] [INFO] [stderr]  export async function generateGlobalStudyStrategy(
+[2026-07-05T14:30:15.801Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[2026-07-05T14:30:19.340Z] [INFO] [stderr] [•] Create unit tests for globalStrategyService.ts
+[2026-07-05T14:30:19.340Z] [INFO] [stderr] [ ] Run tests to verify the implementation
+[2026-07-05T14:30:19.340Z] [INFO] [stderr] [0m
+[2026-07-05T14:30:19.340Z] [INFO] [stderr] [0m
+[2026-07-05T14:30:19.340Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T14:30:19.340Z] [INFO] [stderr] [✓] Create services directory and globalStrategyService.ts with AI prompt building, AI call, parsing, and validation
+[2026-07-05T14:30:19.420Z] [INFO] [stdout] Now let me create the tests:
+[2026-07-05T14:30:22.045Z] [INFO] [stderr] [0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__
+[2026-07-05T14:30:22.046Z] [INFO] [stderr] [0m
+[2026-07-05T14:30:22.046Z] [INFO] [stderr] (no output)
+[2026-07-05T14:30:45.523Z] [INFO] [stderr] [0m
+[2026-07-05T14:30:45.523Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:30:45.523Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T14:30:48.605Z] [INFO] [stderr] [✓] Create services directory and globalStrategyService.ts with AI prompt building, AI call, parsing, and validation
+[2026-07-05T14:30:48.605Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T14:30:48.605Z] [INFO] [stderr] [✓] Create unit tests for globalStrategyService.ts
+[2026-07-05T14:30:48.605Z] [INFO] [stderr] [•] Run tests to verify the implementation
+[2026-07-05T14:30:48.605Z] [INFO] [stderr] [0m
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] $ pnpm -r test --filter @ielts/web
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] Scope: 12 of 13 workspace projects
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test$ vitest run --passWithNoTests --filter @ielts/web
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test$ vitest run --passWithNoTests --filter @ielts/web
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test$ vitest run --passWithNoTests --filter @ielts/web
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test: CACError: Unknown option `--filter`
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test$ vitest run --passWithNoTests --filter @ielts/web
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS && pnpm test --filter @ielts/web 2>&1 | head -100
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test: Node.js v24.13.0
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test: CACError: Unknown option `--filter`
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test:                 ^
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test:                 ^
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test: Node.js v24.13.0
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test:                 ^
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai:
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test: CACError: Unknown option `--filter`
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test: Node.js v24.13.0
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/ai@0.1.0 test: `vitest run --passWithNoTests --filter @ielts/web`
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] Exit status 1
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai test: Failed
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test:                 ^
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/storage test$ vitest run --passWithNoTests --filter @ielts/web
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test: Node.js v24.13.0
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/settings test: Failed
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ui test$ vitest run --passWithNoTests --filter @ielts/web
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test: Failed
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test: CACError: Unknown option `--filter`
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/utils test$ vitest run --passWithNoTests --filter @ielts/web
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/ai-tutor test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/theme test$ vitest run --passWithNoTests --filter @ielts/web
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] [ELIFECYCLE] Test failed. See above for more details.
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] packages/exercises test: Failed
+[2026-07-05T14:30:51.987Z] [INFO] [stderr] [0m
+[2026-07-05T14:31:55.735Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && pnpm test 2>&1 | tail -80
+[2026-07-05T14:31:55.735Z] [INFO] [stderr] <shell_metadata>
+[2026-07-05T14:31:55.735Z] [INFO] [stderr] shell tool terminated command after exceeding timeout 60000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+[2026-07-05T14:31:55.735Z] [INFO] [stderr] (no output)
+[2026-07-05T14:31:55.735Z] [INFO] [stderr] </shell_metadata>
+[2026-07-05T14:31:55.735Z] [INFO] [stderr] 
+[2026-07-05T14:31:55.735Z] [INFO] [stderr] [0m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --config vitest.config.ts --reporter verbose src/features/studyPlan/services/__tests__/globalStrategyService.test.ts 2>&1
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]    → expected 'Create a comprehensive IELTS study st…' to contain 'Target Band: 7.0'
+[2026-07-05T14:32:00.029Z] [INFO] [stderr]  × src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > returns system and user prompts 4ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response is not valid JSON 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI returns empty content 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for long plans 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response has invalid structure 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI call fails 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]    → expected { …(7) } to be null
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for short plans 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when phaseBreakdown has invalid phase name 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates phase weeklyGoals 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  × src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates weeklyGoals fields strictly 1ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI config is null 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > calls AI with correct parameters 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns parsed strategy on successful valid response 1ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [32m- Expected[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] AssertionError: expected 'Create a comprehensive IELTS study st…' to contain 'Target Band: 7.0'
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  FAIL  src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > returns system and user prompts
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [32m- Target Band: 7.0[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ Create a comprehensive IELTS study strategy.[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Current Band: 5.5[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ ## User Profile[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > handles AI response with extra text around JSON 0ms
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ Received[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Exam Date: 2026-02-15[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Rest Days: sat, sun[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Weak Skills: Reading, Writing[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Study Days: mon, tue, wed, thu, fri[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Daily Study Minutes: 60[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Goal: academic[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Language: english[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Main Focus: Listening[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Intensity: moderate[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Weekly Review: true[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Mock Tests: true[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Target Band: 7[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Vocabulary Review: true[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Strong Skills: Speaking[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ ## Plan Metrics[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Grammar Review: true[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Total Days: 46[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Rest Days: 13[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Topics: Education, Technology[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Study Days: 33[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Final Review Days: 7[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Weeks: 7[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Final Week: true[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Start: 2026-01-01[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ {[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ Long plan: all phases with appropriate durations.[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ - Skill Priority: Listening, Reading, Writing, Vocabulary, Grammar, Speaking[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "description": "Phase description",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+     {[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+   "planSummary": "2-3 sentence strategy overview",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "endDate": "YYYY-MM-DD",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "startDate": "2026-01-01",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "mainFocus": "Main focus area",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "weekCount": 2,[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "weeklyGoals": [[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ Respond with JSON only:[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+ ## Phase Distribution[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+           "weekNumber": 1,[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+         {[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+           "startDate": "YYYY-MM-DD",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+           "endDate": "YYYY-MM-DD",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "phaseName": "Foundation",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "targetSkill": "Reading",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+           "keyActivities": ["Activity 1"],[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       ][39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+           "goal": "Specific goal",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+         }[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+   ],[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+   "weeklyGoals": [[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+     {[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+     }[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+           "focusArea": "Focus",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "weekNumber": 1,[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "focusArea": "Focus",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "goal": "Specific goal",[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+   "phaseBreakdown": [[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+       "keyActivities": ["Activity 1"],[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+       "mockTestPlanned": false[39m
+[2026-07-05T14:32:00.030Z] [INFO] [stderr] [31m+           "mockTestPlanned": false[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+       "endDate": "YYYY-MM-DD",[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+       "startDate": "YYYY-MM-DD",[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+     }[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+       "weekNumber": 3,[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+     {[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+   "mockTestSchedule": [[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+       "focus": "Full Mock Test"[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+   ],[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+       "date": "YYYY-MM-DD",[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+   "finalWeekStrategy": "Strategy for the final week",[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+   "adjustmentRules": ["Rule 1", "Rule 2"][39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]  ❯ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts:158:31
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     156|     expect(result.systemPrompt).toContain('IELTS study plan strategist…
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+   ],[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     158|     expect(result.userPrompt).toContain('Target Band: 7.0')
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+ }[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     157|     expect(result.userPrompt).toContain('Current Band: 5.5')
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]        |                               ^
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     160|     expect(result.userPrompt).toContain('Respond with JSON only')
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]  FAIL  src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates weeklyGoals fields strictly
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     159|     expect(result.userPrompt).toContain('Total Days: 46')
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] AssertionError: expected { …(7) } to be null
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [32m- Expected:[39m 
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+     }[39m
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] [31m+ Received:[39m 
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] {
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] null
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]   "adjustmentRules": [
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     "In the final week, reduce new content and focus on review.",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     "If a day is missed, combine lighter tasks into the next study day.",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     "If mock test scores drop below 6.0, spend extra time on weak skills.",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]   "createdAt": "2026-07-05T14:31:59.944Z",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "date": "2026-01-18",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     {
+[2026-07-05T14:32:00.031Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]   ],
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]   "finalWeekStrategy": "Focus on reviewing mistakes from mock tests and reinforcing key strategies for each section. Prioritize rest and confidence building.",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     },
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]   "phaseBreakdown": [
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "weekNumber": 3,
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]   "mockTestSchedule": [
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "description": "Build core skills and assess current level",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]   ],
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "focus": "Full IELTS Mock Test",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "phaseName": "Foundation",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "startDate": "2026-01-01",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     {
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "endDate": "2026-01-07",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "targetSkill": "all",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]         {
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "weeklyGoals": [
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "weekCount": 1,
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "endDate": "2026-01-07",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]             "Take full diagnostic test",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "focusArea": "Diagnostic",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "keyActivities": [
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "goal": "Complete diagnostic tests for all skills",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           ],
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "mockTestPlanned": false,
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]         },
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "weekNumber": 1,
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       ],
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]             "Identify specific weak areas",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "mainFocus": "Diagnostic assessment and skill foundation",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     {
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]     },
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "mainFocus": "Skill development and practice",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "startDate": "2026-01-01",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "description": "Improve all core skills with emphasis on weak areas",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "endDate": "2026-01-28",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "startDate": "2026-01-08",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "targetSkill": "Listening",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "weekCount": 3,
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "weeklyGoals": [
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]       "phaseName": "Skill Improvement",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "endDate": "2026-01-14",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "goal": "Build listening stamina and section familiarity",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "keyActivities": [
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "focusArea": "Listening fundamentals",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]             "Practice listening sections 1-2",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           ],
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]         {
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "startDate": "2026-01-08",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "weekNumber": 2,
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "mockTestPlanned": false,
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]         {
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]             "Review question types",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "endDate": "2026-01-21",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]         },
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "goal": "Improve reading speed and writing structure",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]             "Timed reading practice",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]           "focusArea": "Reading and Writing",
+[2026-07-05T14:32:00.031Z] [INFO] [stderr]             "Essay structure review",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "mockTestPlanned": true,
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "keyActivities": [
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "weekNumber": 3,
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           ],
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]         },
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]         {
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "startDate": "2026-01-15",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "endDate": "2026-01-28",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "keyActivities": [
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "goal": "Combine skills in timed conditions",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "focusArea": "Integrated practice",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]             "Speaking mock",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           ],
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "startDate": "2026-01-22",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "weekNumber": 4,
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]           "mockTestPlanned": false,
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       ],
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     },
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]         },
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]   ],
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]   "weeklyGoals": [
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]             "Full skills practice",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]   "planSummary": "A 6-week IELTS study plan focusing on listening improvement while building reading and writing skills through structured daily practice.",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "focusArea": "Diagnostic",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "endDate": "2026-01-07",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     {
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "goal": "Short",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]         "Identify specific weak areas",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "mockTestPlanned": false,
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "keyActivities": [
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       ],
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]         "Take full diagnostic test",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "startDate": "2026-01-01",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "weekNumber": 1,
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     },
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "focusArea": "Listening fundamentals",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "goal": "Build listening stamina and section familiarity",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     {
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "keyActivities": [
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "endDate": "2026-01-14",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]         "Practice listening sections 1-2",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       ],
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "weekNumber": 2,
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "startDate": "2026-01-08",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       "mockTestPlanned": false,
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]         "Review question types",
+[2026-07-05T14:32:00.032Z] [INFO] [stderr] }
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     },
+[2026-07-05T14:32:00.032Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]  ❯ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts:275:25
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     275|     expect(result.data).toBeNull()
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     273| 
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]   ],
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]        |                         ^
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     276|   })
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     274|     const result = await generateGlobalStudyStrategy(mockProfile, mock…
+[2026-07-05T14:32:00.032Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]     277| 
+[2026-07-05T14:32:00.032Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.032Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.032Z] [INFO] [stderr] 
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]    Start at  21:31:59
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]    Duration  408ms (transform 27ms, setup 40ms, collect 22ms, tests 8ms, environment 227ms, prepare 32ms)
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]       Tests  2 failed | 12 passed (14)
+[2026-07-05T14:32:00.032Z] [INFO] [stderr]  Test Files  1 failed (1)
+[2026-07-05T14:32:00.032Z] [INFO] [stderr] [0m
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:32:05.283Z] [INFO] [stderr]    expect(result.userPrompt).toBeTruthy()
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] +  expect(result.userPrompt).toContain('Target Band: 7')
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] -  expect(result.userPrompt).toContain('Target Band: 7.0')
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:32:05.283Z] [INFO] [stderr]    expect(result.systemPrompt).toContain('IELTS study plan strategist')
+[2026-07-05T14:32:05.283Z] [INFO] [stderr]    expect(result.userPrompt).toContain('Current Band: 5.5')
+[2026-07-05T14:32:05.283Z] [INFO] [stderr]    expect(result.userPrompt).toContain('Respond with JSON only')
+[2026-07-05T14:32:05.283Z] [INFO] [stderr]  })
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] 
+[2026-07-05T14:32:05.283Z] [INFO] [stderr]    expect(result.userPrompt).toContain('Total Days: 46')
+[2026-07-05T14:32:05.283Z] [INFO] [stderr]    expect(result.systemPrompt).toBeTruthy()
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] [0m
+[2026-07-05T14:32:05.283Z] [INFO] [stderr] @@ -154,9 +154,9 @@
+[2026-07-05T14:32:05.283Z] [INFO] [stderr]  
+[2026-07-05T14:32:05.391Z] [INFO] [stdout] Two test failures to fix. The first is a number formatting issue (7.0 becomes 7 in template literals), the second is the validation test using too long a string:
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] @@ -263,9 +263,9 @@
+[2026-07-05T14:32:08.945Z] [INFO] [stderr]  })
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] +  invalid.weeklyGoals[0].goal = 'X'
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:32:08.945Z] [INFO] [stderr]    vi.mocked(callAI).mockResolvedValue({
+[2026-07-05T14:32:08.945Z] [INFO] [stderr]    const invalid = JSON.parse(JSON.stringify(validStrategyJson))
+[2026-07-05T14:32:08.945Z] [INFO] [stderr]  it('validates weeklyGoals fields strictly', async () => {
+[2026-07-05T14:32:08.945Z] [INFO] [stderr]  
+[2026-07-05T14:32:08.945Z] [INFO] [stderr]  
+[2026-07-05T14:32:08.945Z] [INFO] [stderr]      error: null,
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] 
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] [0m
+[2026-07-05T14:32:08.945Z] [INFO] [stderr] -  invalid.weeklyGoals[0].goal = 'Short'
+[2026-07-05T14:32:08.945Z] [INFO] [stderr]      content: JSON.stringify(invalid),
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > returns system and user prompts 1ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for long plans 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --config vitest.config.ts --reporter verbose src/features/studyPlan/services/__tests__/globalStrategyService.test.ts 2>&1
+[2026-07-05T14:32:14.782Z] [INFO] [stderr] 
+[2026-07-05T14:32:14.782Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI config is null 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI returns empty content 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI call fails 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response is not valid JSON 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for short plans 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response has invalid structure 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when phaseBreakdown has invalid phase name 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr] 
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns parsed strategy on successful valid response 1ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]       Tests  14 passed (14)
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > calls AI with correct parameters 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]    Start at  21:32:14
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  Test Files  1 passed (1)
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > handles AI response with extra text around JSON 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]    Duration  325ms (transform 31ms, setup 25ms, collect 22ms, tests 3ms, environment 148ms, prepare 44ms)
+[2026-07-05T14:32:14.782Z] [INFO] [stderr] [0m
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates weeklyGoals fields strictly 0ms
+[2026-07-05T14:32:14.782Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates phase weeklyGoals 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > todayDateString > returns today as YYYY-MM-DD using fake timers 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > subtracts days with negative argument 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr] 
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > parseDate > parses a date string and resets time to midnight 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > adds positive days 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --config vitest.config.ts --reporter verbose src/features/studyPlan/ 2>&1
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > returns same date for zero 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > toDateString > formats a Date to YYYY-MM-DD 1ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > handles month boundary 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > daysBetween > returns 0 for same date 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateDateRange > generates a continuous range of dates 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > daysBetween > handles month and year boundaries 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > daysBetween > returns negative for earlier date 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateDateRange > returns a single date when start equals end 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getDayOfWeek > returns sun for 2026-01-04 (Sunday) 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateDateRange > handles month boundary 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > daysBetween > returns positive for later date 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateDateRange > handles year boundary 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getDayOfWeek > returns sat for 2026-01-10 (Saturday) 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > isStudyDay > returns false when day is not in study days 0ms
+[2026-07-05T14:32:18.798Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > handles year boundary 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > isStudyDay > returns true when day is in study days 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > countRestDays > counts weekend days as rest 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateWeekNumber > returns 1 for the start date 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getDayOfWeek > returns mon for 2026-01-05 (Monday) 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateWeekNumber > returns 2 for day 7 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > countRestDays > returns totalDays when no study days 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateWeekNumbers > maps each date to its week number 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateTotalWeeks > returns 1 for 7 days 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > countStudyDays > counts weekdays correctly 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateWeekNumber > returns 1 for day 6 of the first week 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateTotalWeeks > returns 1 for 1 day 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getFinalReviewStartDate > returns the date 7 days before exam 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateWeekNumber > returns 5 for week 5 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateTotalWeeks > returns 2 for 8 days 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getFinalReviewStartDate > returns null when days is 0 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateFinalReviewPeriodDays > returns 0 when includeFinalExamPreparationWeek is false 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateTotalWeeks > returns 5 for 30 days 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateFinalReviewPeriodDays > returns 7 when includeFinalExamPreparationWeek is true 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateMockTestSchedule > returns empty when dates array is empty 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateMockTestSchedule > returns empty when includeMockTests is false 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateMockTestSchedule > returns sorted unique dates 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateSkillPriority > includes all six skills in the result 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateSkillPriority > puts strong skills last 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateMockTestSchedule > returns mock test dates at intervals across the plan 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > detects duplicates 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateSkillPriority > prioritizes main focus over weak skills 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > returns valid for continuous dates 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > handles empty array 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > detects gaps 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > handles single date 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDayNumbers > returns day numbers 1-3 for first chunk 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculatePlanMeta > computes all meta fields correctly 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculatePlanMeta > calculates studyDays=totalDays when no rest days 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDates > returns second chunk 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDates > returns first chunk 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDayNumbers > returns day number 10 for last chunk 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDates > returns last partial chunk 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for long plans 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDayNumbers > returns day numbers 4-6 for second chunk 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateDefaultChunkSize > returns 7 for medium model 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > returns system and user prompts 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateDefaultChunkSize > returns 14 for large model 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for short plans 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateDefaultChunkSize > returns 3 for small model 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI returns empty content 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when phaseBreakdown has invalid phase name 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates phase weeklyGoals 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response is not valid JSON 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI config is null 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns parsed strategy on successful valid response 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > calls AI with correct parameters 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response has invalid structure 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  Test Files  2 passed (2)
+[2026-07-05T14:32:18.799Z] [INFO] [stderr] 
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates weeklyGoals fields strictly 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI call fails 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]       Tests  74 passed (74)
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > handles AI response with extra text around JSON 0ms
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]    Start at  21:32:18
+[2026-07-05T14:32:18.799Z] [INFO] [stderr]    Duration  345ms (transform 42ms, setup 25ms, collect 34ms, tests 9ms, environment 141ms, prepare 55ms)
+[2026-07-05T14:32:18.800Z] [INFO] [stderr] [0m
+[2026-07-05T14:32:22.165Z] [INFO] [stderr] [0m
+[2026-07-05T14:32:22.165Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T14:32:22.165Z] [INFO] [stderr] [✓] Run tests to verify the implementation
+[2026-07-05T14:32:22.165Z] [INFO] [stderr] [✓] Create services directory and globalStrategyService.ts with AI prompt building, AI call, parsing, and validation
+[2026-07-05T14:32:22.165Z] [INFO] [stderr] [✓] Create unit tests for globalStrategyService.ts
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] ### `src/features/studyPlan/services/globalStrategyService.ts`
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - **`buildGlobalStrategyPrompt(profile, meta)`** — builds system + user prompts for AI, including user profile, plan metrics, and phase distribution guidance. Prompt instructs AI to respond with JSON in the exact `GlobalStudyStrategy` schema format.
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] 
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - **`parseGlobalStrategy(content)`** — extracts JSON from AI response, validates all fields: phase names, date formats, string lengths, array presence, boolean types. Returns `GlobalStudyStrategy | null`.
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] 
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] ### `src/features/studyPlan/services/__tests__/globalStrategyService.test.ts`
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] 
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - **`generateGlobalStudyStrategy(profile, meta, getConfig)`** — main function that calls `callAI` from `@ielts/ai` with temperature 0.7 / maxTokens 2048, parses + validates the response, and returns `{ data, error }`. Handles: missing config, API errors, empty responses, invalid JSON, structural validation failures.
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] 14 tests covering:
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Prompt building output (includes user profile data, phase distribution guidance)
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Empty response → error
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] 
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] All 74 tests pass (14 new + 60 existing). Here's a summary of what was created:
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Invalid structure → error
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Invalid phase name → error
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Config missing → error
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Invalid JSON → error
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - AI call failure → error
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Valid response → parsed strategy with `createdAt`
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Extra text around JSON → still parses
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Empty phase weeklyGoals → rejection
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Field-level validation (short goal) → rejection
+[2026-07-05T14:32:27.770Z] [INFO] [stdout] - Correct `callAI` parameters verification
+[2026-07-05T14:32:27.993Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-05T14:32:27.993Z] [INFO] Output:
+Now let me examine existing service implementations to match the patterns.
+Let me check how ISOString is imported and the test configuration:
+Now I have all context. Let me create the service:
+Let me fix the duplicate function issue:
+Now let me create the tests:
+Two test failures to fix. The first is a number formatting issue (7.0 becomes 7 in template literals), the second is the validation test using too long a string:
+All 74 tests pass (14 new + 60 existing). Here's a summary of what was created:
+
+### `src/features/studyPlan/services/globalStrategyService.ts`
+
+- **`buildGlobalStrategyPrompt(profile, meta)`** — builds system + user prompts for AI, including user profile, plan metrics, and phase distribution guidance. Prompt instructs AI to respond with JSON in the exact `GlobalStudyStrategy` schema format.
+- **`parseGlobalStrategy(content)`** — extracts JSON from AI response, validates all fields: phase names, date formats, string lengths, array presence, boolean types. Returns `GlobalStudyStrategy | null`.
+- **`generateGlobalStudyStrategy(profile, meta, getConfig)`** — main function that calls `callAI` from `@ielts/ai` with temperature 0.7 / maxTokens 2048, parses + validates the response, and returns `{ data, error }`. Handles: missing config, API errors, empty responses, invalid JSON, structural validation failures.
+
+### `src/features/studyPlan/services/__tests__/globalStrategyService.test.ts`
+
+14 tests covering:
+- Prompt building output (includes user profile data, phase distribution guidance)
+- Config missing → error
+- AI call failure → error
+- Empty response → error
+- Invalid JSON → error
+- Invalid structure → error
+- Invalid phase name → error
+- Valid response → parsed strategy with `createdAt`
+- Extra text around JSON → still parses
+- Field-level validation (short goal) → rejection
+- Empty phase weeklyGoals → rejection
+- Correct `callAI` parameters verification
+[2026-07-05T14:32:27.993Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"studyPlan types services utilities globalStrategy","maxFiles":20}
+[0m✱ [0mGlob "src/features/studyPlan/**/*"[90m 0 matches[0m
+[0m✱ [0mGlob "src/features/studyPlan/**/*"[90m in . · 0 matches[0m
+[0m✱ [0mGlob "src/features/study-plan/**/*"[90m in . · 0 matches[0m
+[0m✗ [0mRead src/features/studyPlan failed
+[91m[1mError: [0mFile not found: /Users/phamthanhhung/Desktop/MyProject/IELTS/src/features/studyPlan
+[0m→ [0mRead .
+[0m→ [0mRead apps
+[0m→ [0mRead packages
+[0m→ [0mRead apps/web/src
+[0m→ [0mRead apps/web/src/features
+[0m✱ [0mGlob "apps/web/src/features/studyPlan/**/*"[90m in . · 3 matches[0m
+[0m✱ [0mGlob "apps/web/src/features/study-plan/**/*"[90m in . · 4 matches[0m
+[0m→ [0mRead apps/web/src/features/studyPlan
+[0m✱ [0mGlob "apps/web/src/features/studyPlan/**/*"[90m 3 matches[0m
+[0m→ [0mRead apps/web/src/features/studyPlan/types.ts
+[0m→ [0mRead apps/web/src/features/studyPlan/utils/dateUtils.ts
+[0m→ [0mRead apps/web/src/features/studyPlan/utils/__tests__/dateUtils.test.ts
+[0m• [0mExplore AI service patterns[90m Explore Agent[0m
+[0m✓ [0mExplore AI service patterns[90m Explore Agent[0m
+[0m→ [0mRead packages/ai/src/services/explain.ts
+[0m→ [0mRead packages/ai/src/index.ts
+[0m→ [0mRead packages/ai/src/client/types.ts
+[0m→ [0mRead apps/web/src/features/roadmap/aiRoadmapGenerator.ts
+[0m→ [0mRead apps/web/src/features/planner/aiPlannerService.ts
+[0m→ [0mRead packages/ai/src/utils/response.ts
+[0m→ [0mRead packages/settings/src/index.ts
+[0m✱ [0mGrep "export.*OPENAI_BASE_URL|export.*DEFAULT_MODEL"[90m 2 matches[0m
+[0m
+[0m# [0mTodos
+[•] Create services directory and globalStrategyService.ts with AI prompt building, AI call, parsing, and validation
+[ ] Create unit tests for globalStrategyService.ts
+[ ] Run tests to verify the implementation
+[0m
+[0m✱ [0mGrep "export type ISOString"[90m 3 matches[0m
+[0m✱ [0mGrep "vitest|test""[90m in apps/web · 4 matches[0m
+[0m→ [0mRead apps/web/package.json
+[0m✱ [0mGrep "from 'zod'"[90m in apps/web/src · 1 match[0m
+[0m→ [0mRead apps/web/src/features/planner/validation.ts
+[0m✱ [0mGrep "from 'zod'"[90m in packages/ai · 8 matches[0m
+[0m→ [0mRead packages/ai/package.json
+[0m✱ [0mGrep "extractJSON|parseAndValidate"[90m in packages/ai/src · 34 matches[0m
+[0m✱ [0mGrep "extractJSON|parseAndValidate"[90m in packages/ai/src · 1 match[0m
+[0m✱ [0mGrep "extractJSON|parseAndValidate"[90m in packages/ai/src/index.ts · 1 match[0m
+[0m→ [0mRead packages/ai/src/utils/index.ts
+[0m
+[0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services
+(no output)
+[0m
+[0m← [0mWrite apps/web/src/features/studyPlan/services/globalStrategyService.ts
+Wrote file successfully.
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/services/globalStrategyService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+@@ -14,9 +14,9 @@
+   'Mock Test',
+   'Final Review',
+ ]
+ 
+-function buildGlobalStrategyPrompt(
++export function buildGlobalStrategyPrompt(
+   profile: StudyPlanUserProfile,
+   calculatedMeta: StudyPlanCalculatedMeta,
+ ): { systemPrompt: string; userPrompt: string } {
+   const systemPrompt =
+
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/services/globalStrategyService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/globalStrategyService.ts
+@@ -179,15 +179,8 @@
+     return null
+   }
+ }
+ 
+-export function buildGlobalStrategyPrompt(
+-  profile: StudyPlanUserProfile,
+-  calculatedMeta: StudyPlanCalculatedMeta,
+-): { systemPrompt: string; userPrompt: string } {
+-  return buildGlobalStrategyPrompt(profile, calculatedMeta)
+-}
+-
+ export async function generateGlobalStudyStrategy(
+   profile: StudyPlanUserProfile,
+   calculatedMeta: StudyPlanCalculatedMeta,
+   getConfig: () => ProviderConfig | null,
+
+[0m
+[0m→ [0mRead apps/web/src/features/studyPlan/services/globalStrategyService.ts
+[0m
+[0m# [0mTodos
+[✓] Create services directory and globalStrategyService.ts with AI prompt building, AI call, parsing, and validation
+[•] Create unit tests for globalStrategyService.ts
+[ ] Run tests to verify the implementation
+[0m
+[0m$ [0mmkdir -p /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__
+(no output)
+[0m
+[0m← [0mWrite apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create services directory and globalStrategyService.ts with AI prompt building, AI call, parsing, and validation
+[✓] Create unit tests for globalStrategyService.ts
+[•] Run tests to verify the implementation
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS && pnpm test --filter @ielts/web 2>&1 | head -100
+$ pnpm -r test --filter @ielts/web
+Scope: 12 of 13 workspace projects
+packages/ai test$ vitest run --passWithNoTests --filter @ielts/web
+packages/ai-tutor test$ vitest run --passWithNoTests --filter @ielts/web
+packages/exercises test$ vitest run --passWithNoTests --filter @ielts/web
+packages/settings test$ vitest run --passWithNoTests --filter @ielts/web
+packages/ai test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/ai test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/ai test:                 ^
+packages/ai test: CACError: Unknown option `--filter`
+packages/ai test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/ai test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/ai test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/ai test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/ai test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/ai test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/ai test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/ai test: Node.js v24.13.0
+packages/exercises test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/exercises test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/exercises test:                 ^
+packages/exercises test: CACError: Unknown option `--filter`
+packages/exercises test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/exercises test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/exercises test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/exercises test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/exercises test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/exercises test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/exercises test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/exercises test: Node.js v24.13.0
+packages/settings test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/settings test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/settings test:                 ^
+packages/settings test: CACError: Unknown option `--filter`
+packages/settings test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/settings test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/settings test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/settings test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/settings test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/settings test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/settings test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/settings test: Node.js v24.13.0
+packages/ai test: Failed
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/ai@0.1.0 test: `vitest run --passWithNoTests --filter @ielts/web`
+Exit status 1
+packages/storage test$ vitest run --passWithNoTests --filter @ielts/web
+packages/ai-tutor test: file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404
+packages/ai-tutor test:           throw new CACError(`Unknown option \`${name.length > 1 ? `--${name}` : `-${name}`}\``);
+packages/ai-tutor test:                 ^
+packages/ai-tutor test: CACError: Unknown option `--filter`
+packages/ai-tutor test:     at Command.checkUnknownOptions (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:404:17)
+packages/ai-tutor test:     at CAC.runMatchedCommand (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:604:13)
+packages/ai-tutor test:     at CAC.parse (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/chunks/cac.0BJqEUeA.js:545:12)
+packages/ai-tutor test:     at file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/.pnpm/vitest@3.2.6_@types+node@26.0.1_jiti@2.7.0_jsdom@26.1.0_lightningcss@1.32.0_terser@5.48.0/node_modules/vitest/dist/cli.js:27:13
+packages/ai-tutor test:     at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+packages/ai-tutor test:     at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+packages/ai-tutor test:     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+packages/ai-tutor test: Node.js v24.13.0
+packages/settings test: Failed
+packages/exercises test: Failed
+packages/theme test$ vitest run --passWithNoTests --filter @ielts/web
+packages/ui test$ vitest run --passWithNoTests --filter @ielts/web
+packages/ai-tutor test: Failed
+packages/utils test$ vitest run --passWithNoTests --filter @ielts/web
+[ELIFECYCLE] Test failed. See above for more details.
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && pnpm test 2>&1 | tail -80
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 60000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --config vitest.config.ts --reporter verbose src/features/studyPlan/services/__tests__/globalStrategyService.test.ts 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ × src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > returns system and user prompts 4ms
+   → expected 'Create a comprehensive IELTS study st…' to contain 'Target Band: 7.0'
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for long plans 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for short plans 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI config is null 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI call fails 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI returns empty content 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response is not valid JSON 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response has invalid structure 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when phaseBreakdown has invalid phase name 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns parsed strategy on successful valid response 1ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > handles AI response with extra text around JSON 0ms
+ × src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates weeklyGoals fields strictly 1ms
+   → expected { …(7) } to be null
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates phase weeklyGoals 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > calls AI with correct parameters 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > returns system and user prompts
+AssertionError: expected 'Create a comprehensive IELTS study st…' to contain 'Target Band: 7.0'
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- Target Band: 7.0[39m
+[31m+ Create a comprehensive IELTS study strategy.[39m
+[31m+[39m
+[31m+ ## User Profile[39m
+[31m+ - Current Band: 5.5[39m
+[31m+ - Target Band: 7[39m
+[31m+ - Exam Date: 2026-02-15[39m
+[31m+ - Daily Study Minutes: 60[39m
+[31m+ - Goal: academic[39m
+[31m+ - Study Days: mon, tue, wed, thu, fri[39m
+[31m+ - Rest Days: sat, sun[39m
+[31m+ - Weak Skills: Reading, Writing[39m
+[31m+ - Strong Skills: Speaking[39m
+[31m+ - Main Focus: Listening[39m
+[31m+ - Intensity: moderate[39m
+[31m+ - Language: english[39m
+[31m+ - Mock Tests: true[39m
+[31m+ - Vocabulary Review: true[39m
+[31m+ - Grammar Review: true[39m
+[31m+ - Weekly Review: true[39m
+[31m+ - Final Week: true[39m
+[31m+ - Topics: Education, Technology[39m
+[31m+[39m
+[31m+ ## Plan Metrics[39m
+[31m+ - Start: 2026-01-01[39m
+[31m+ - Total Days: 46[39m
+[31m+ - Study Days: 33[39m
+[31m+ - Rest Days: 13[39m
+[31m+ - Weeks: 7[39m
+[31m+ - Final Review Days: 7[39m
+[31m+ - Skill Priority: Listening, Reading, Writing, Vocabulary, Grammar, Speaking[39m
+[31m+[39m
+[31m+ ## Phase Distribution[39m
+[31m+[39m
+[31m+[39m
+[31m+[39m
+[31m+ Long plan: all phases with appropriate durations.[39m
+[31m+[39m
+[31m+ Respond with JSON only:[39m
+[31m+ {[39m
+[31m+   "planSummary": "2-3 sentence strategy overview",[39m
+[31m+   "phaseBreakdown": [[39m
+[31m+     {[39m
+[31m+       "phaseName": "Foundation",[39m
+[31m+       "description": "Phase description",[39m
+[31m+       "startDate": "2026-01-01",[39m
+[31m+       "endDate": "YYYY-MM-DD",[39m
+[31m+       "weekCount": 2,[39m
+[31m+       "mainFocus": "Main focus area",[39m
+[31m+       "targetSkill": "Reading",[39m
+[31m+       "weeklyGoals": [[39m
+[31m+         {[39m
+[31m+           "weekNumber": 1,[39m
+[31m+           "startDate": "YYYY-MM-DD",[39m
+[31m+           "endDate": "YYYY-MM-DD",[39m
+[31m+           "focusArea": "Focus",[39m
+[31m+           "goal": "Specific goal",[39m
+[31m+           "keyActivities": ["Activity 1"],[39m
+[31m+           "mockTestPlanned": false[39m
+[31m+         }[39m
+[31m+       ][39m
+[31m+     }[39m
+[31m+   ],[39m
+[31m+   "weeklyGoals": [[39m
+[31m+     {[39m
+[31m+       "weekNumber": 1,[39m
+[31m+       "startDate": "YYYY-MM-DD",[39m
+[31m+       "endDate": "YYYY-MM-DD",[39m
+[31m+       "focusArea": "Focus",[39m
+[31m+       "goal": "Specific goal",[39m
+[31m+       "keyActivities": ["Activity 1"],[39m
+[31m+       "mockTestPlanned": false[39m
+[31m+     }[39m
+[31m+   ],[39m
+[31m+   "mockTestSchedule": [[39m
+[31m+     {[39m
+[31m+       "weekNumber": 3,[39m
+[31m+       "date": "YYYY-MM-DD",[39m
+[31m+       "focus": "Full Mock Test"[39m
+[31m+     }[39m
+[31m+   ],[39m
+[31m+   "finalWeekStrategy": "Strategy for the final week",[39m
+[31m+   "adjustmentRules": ["Rule 1", "Rule 2"][39m
+[31m+ }[39m
+
+ ❯ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts:158:31
+    156|     expect(result.systemPrompt).toContain('IELTS study plan strategist…
+    157|     expect(result.userPrompt).toContain('Current Band: 5.5')
+    158|     expect(result.userPrompt).toContain('Target Band: 7.0')
+       |                               ^
+    159|     expect(result.userPrompt).toContain('Total Days: 46')
+    160|     expect(result.userPrompt).toContain('Respond with JSON only')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates weeklyGoals fields strictly
+AssertionError: expected { …(7) } to be null
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+{
+  "adjustmentRules": [
+    "If a day is missed, combine lighter tasks into the next study day.",
+    "If mock test scores drop below 6.0, spend extra time on weak skills.",
+    "In the final week, reduce new content and focus on review.",
+  ],
+  "createdAt": "2026-07-05T14:31:59.944Z",
+  "finalWeekStrategy": "Focus on reviewing mistakes from mock tests and reinforcing key strategies for each section. Prioritize rest and confidence building.",
+  "mockTestSchedule": [
+    {
+      "date": "2026-01-18",
+      "focus": "Full IELTS Mock Test",
+      "weekNumber": 3,
+    },
+  ],
+  "phaseBreakdown": [
+    {
+      "description": "Build core skills and assess current level",
+      "endDate": "2026-01-07",
+      "mainFocus": "Diagnostic assessment and skill foundation",
+      "phaseName": "Foundation",
+      "startDate": "2026-01-01",
+      "targetSkill": "all",
+      "weekCount": 1,
+      "weeklyGoals": [
+        {
+          "endDate": "2026-01-07",
+          "focusArea": "Diagnostic",
+          "goal": "Complete diagnostic tests for all skills",
+          "keyActivities": [
+            "Take full diagnostic test",
+            "Identify specific weak areas",
+          ],
+          "mockTestPlanned": false,
+          "startDate": "2026-01-01",
+          "weekNumber": 1,
+        },
+      ],
+    },
+    {
+      "description": "Improve all core skills with emphasis on weak areas",
+      "endDate": "2026-01-28",
+      "mainFocus": "Skill development and practice",
+      "phaseName": "Skill Improvement",
+      "startDate": "2026-01-08",
+      "targetSkill": "Listening",
+      "weekCount": 3,
+      "weeklyGoals": [
+        {
+          "endDate": "2026-01-14",
+          "focusArea": "Listening fundamentals",
+          "goal": "Build listening stamina and section familiarity",
+          "keyActivities": [
+            "Practice listening sections 1-2",
+            "Review question types",
+          ],
+          "mockTestPlanned": false,
+          "startDate": "2026-01-08",
+          "weekNumber": 2,
+        },
+        {
+          "endDate": "2026-01-21",
+          "focusArea": "Reading and Writing",
+          "goal": "Improve reading speed and writing structure",
+          "keyActivities": [
+            "Timed reading practice",
+            "Essay structure review",
+          ],
+          "mockTestPlanned": true,
+          "startDate": "2026-01-15",
+          "weekNumber": 3,
+        },
+        {
+          "endDate": "2026-01-28",
+          "focusArea": "Integrated practice",
+          "goal": "Combine skills in timed conditions",
+          "keyActivities": [
+            "Full skills practice",
+            "Speaking mock",
+          ],
+          "mockTestPlanned": false,
+          "startDate": "2026-01-22",
+          "weekNumber": 4,
+        },
+      ],
+    },
+  ],
+  "planSummary": "A 6-week IELTS study plan focusing on listening improvement while building reading and writing skills through structured daily practice.",
+  "weeklyGoals": [
+    {
+      "endDate": "2026-01-07",
+      "focusArea": "Diagnostic",
+      "goal": "Short",
+      "keyActivities": [
+        "Take full diagnostic test",
+        "Identify specific weak areas",
+      ],
+      "mockTestPlanned": false,
+      "startDate": "2026-01-01",
+      "weekNumber": 1,
+    },
+    {
+      "endDate": "2026-01-14",
+      "focusArea": "Listening fundamentals",
+      "goal": "Build listening stamina and section familiarity",
+      "keyActivities": [
+        "Practice listening sections 1-2",
+        "Review question types",
+      ],
+      "mockTestPlanned": false,
+      "startDate": "2026-01-08",
+      "weekNumber": 2,
+    },
+  ],
+}
+
+ ❯ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts:275:25
+    273| 
+    274|     const result = await generateGlobalStudyStrategy(mockProfile, mock…
+    275|     expect(result.data).toBeNull()
+       |                         ^
+    276|   })
+    277| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 12 passed (14)
+   Start at  21:31:59
+   Duration  408ms (transform 27ms, setup 40ms, collect 22ms, tests 8ms, environment 227ms, prepare 32ms)
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+@@ -154,9 +154,9 @@
+   expect(result.systemPrompt).toBeTruthy()
+   expect(result.userPrompt).toBeTruthy()
+   expect(result.systemPrompt).toContain('IELTS study plan strategist')
+   expect(result.userPrompt).toContain('Current Band: 5.5')
+-  expect(result.userPrompt).toContain('Target Band: 7.0')
++  expect(result.userPrompt).toContain('Target Band: 7')
+   expect(result.userPrompt).toContain('Total Days: 46')
+   expect(result.userPrompt).toContain('Respond with JSON only')
+ })
+ 
+
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+@@ -263,9 +263,9 @@
+ })
+ 
+ it('validates weeklyGoals fields strictly', async () => {
+   const invalid = JSON.parse(JSON.stringify(validStrategyJson))
+-  invalid.weeklyGoals[0].goal = 'Short'
++  invalid.weeklyGoals[0].goal = 'X'
+ 
+   vi.mocked(callAI).mockResolvedValue({
+     content: JSON.stringify(invalid),
+     error: null,
+
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --config vitest.config.ts --reporter verbose src/features/studyPlan/services/__tests__/globalStrategyService.test.ts 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > returns system and user prompts 1ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for long plans 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for short plans 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI config is null 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI call fails 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI returns empty content 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response is not valid JSON 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response has invalid structure 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when phaseBreakdown has invalid phase name 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns parsed strategy on successful valid response 1ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > handles AI response with extra text around JSON 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates weeklyGoals fields strictly 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates phase weeklyGoals 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > calls AI with correct parameters 0ms
+
+ Test Files  1 passed (1)
+      Tests  14 passed (14)
+   Start at  21:32:14
+   Duration  325ms (transform 31ms, setup 25ms, collect 22ms, tests 3ms, environment 148ms, prepare 44ms)
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --config vitest.config.ts --reporter verbose src/features/studyPlan/ 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > toDateString > formats a Date to YYYY-MM-DD 1ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > todayDateString > returns today as YYYY-MM-DD using fake timers 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > parseDate > parses a date string and resets time to midnight 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > adds positive days 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > subtracts days with negative argument 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > returns same date for zero 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > handles month boundary 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > addDays > handles year boundary 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > daysBetween > returns 0 for same date 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > daysBetween > returns positive for later date 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > daysBetween > returns negative for earlier date 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > daysBetween > handles month and year boundaries 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateDateRange > generates a continuous range of dates 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateDateRange > returns a single date when start equals end 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateDateRange > handles month boundary 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateDateRange > handles year boundary 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getDayOfWeek > returns mon for 2026-01-05 (Monday) 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getDayOfWeek > returns sun for 2026-01-04 (Sunday) 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getDayOfWeek > returns sat for 2026-01-10 (Saturday) 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > isStudyDay > returns true when day is in study days 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > isStudyDay > returns false when day is not in study days 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > countStudyDays > counts weekdays correctly 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > countRestDays > counts weekend days as rest 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > countRestDays > returns totalDays when no study days 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateWeekNumber > returns 1 for the start date 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateWeekNumber > returns 1 for day 6 of the first week 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateWeekNumber > returns 2 for day 7 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateWeekNumber > returns 5 for week 5 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > generateWeekNumbers > maps each date to its week number 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateTotalWeeks > returns 1 for 1 day 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateTotalWeeks > returns 1 for 7 days 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateTotalWeeks > returns 2 for 8 days 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateTotalWeeks > returns 5 for 30 days 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateFinalReviewPeriodDays > returns 7 when includeFinalExamPreparationWeek is true 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateFinalReviewPeriodDays > returns 0 when includeFinalExamPreparationWeek is false 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getFinalReviewStartDate > returns the date 7 days before exam 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getFinalReviewStartDate > returns null when days is 0 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateMockTestSchedule > returns empty when includeMockTests is false 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateMockTestSchedule > returns empty when dates array is empty 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateMockTestSchedule > returns mock test dates at intervals across the plan 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateMockTestSchedule > returns sorted unique dates 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateSkillPriority > prioritizes main focus over weak skills 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateSkillPriority > puts strong skills last 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateSkillPriority > includes all six skills in the result 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > returns valid for continuous dates 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > detects gaps 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > detects duplicates 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > handles empty array 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > validateDateContinuity > handles single date 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculatePlanMeta > computes all meta fields correctly 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculatePlanMeta > calculates studyDays=totalDays when no rest days 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDates > returns first chunk 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDates > returns second chunk 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDates > returns last partial chunk 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDayNumbers > returns day numbers 1-3 for first chunk 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDayNumbers > returns day numbers 4-6 for second chunk 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > getChunkDayNumbers > returns day number 10 for last chunk 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateDefaultChunkSize > returns 3 for small model 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateDefaultChunkSize > returns 7 for medium model 0ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts > calculateDefaultChunkSize > returns 14 for large model 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > returns system and user prompts 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for long plans 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > buildGlobalStrategyPrompt > includes phase distribution guidance for short plans 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI config is null 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI call fails 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI returns empty content 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response is not valid JSON 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when AI response has invalid structure 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns error when phaseBreakdown has invalid phase name 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > returns parsed strategy on successful valid response 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > handles AI response with extra text around JSON 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates weeklyGoals fields strictly 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > validates phase weeklyGoals 0ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts > generateGlobalStudyStrategy > calls AI with correct parameters 0ms
+
+ Test Files  2 passed (2)
+      Tests  74 passed (74)
+   Start at  21:32:18
+   Duration  345ms (transform 42ms, setup 25ms, collect 34ms, tests 9ms, environment 141ms, prepare 55ms)
+[0m
+[0m# [0mTodos
+[✓] Create services directory and globalStrategyService.ts with AI prompt building, AI call, parsing, and validation
+[✓] Create unit tests for globalStrategyService.ts
+[✓] Run tests to verify the implementation
+[0m
+[2026-07-05T14:32:27.994Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-05T14:32:27.998Z] [INFO] Task completed successfully

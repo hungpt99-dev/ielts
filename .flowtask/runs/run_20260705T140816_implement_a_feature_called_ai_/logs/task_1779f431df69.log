@@ -1,0 +1,1728 @@
+[2026-07-05T14:42:00.099Z] [INFO] Task started: Implement Validation Logic for AI Responses and Daily Plan Data
+[2026-07-05T14:42:00.101Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/features/studyPlan/utils/validation.ts","description":"Validation functions for AI responses and daily plan data","validationMethod":"file_exists"}]
+[2026-07-05T14:42:00.656Z] [INFO] [stderr] [0m
+[2026-07-05T14:42:00.656Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-05T14:42:00.656Z] [INFO] [stderr] [0m
+[2026-07-05T14:42:06.878Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"studyPlan feature types utils services","maxFiles":20}
+[2026-07-05T14:42:07.059Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/studyPlan/**/*"[90m 0 matches[0m
+[2026-07-05T14:42:10.272Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"src/features/studyPlan types DailyPlanItem StudyPlanData PlanPhaseName DayPriority DayDifficulty DailyPlanStatus DailyStudyTask GlobalStudyStrategy","maxFiles":15}
+[2026-07-05T14:42:10.300Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/studyPlan/**/*"[90m 0 matches[0m
+[2026-07-05T14:42:10.530Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/studyPlan/**/*.ts"[90m 0 matches[0m
+[2026-07-05T14:42:10.591Z] [INFO] [stdout] Let me explore the types and existing utilities more thoroughly.
+[2026-07-05T14:42:13.467Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan
+[2026-07-05T14:42:13.700Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/studyPlan/utils/dateUtils.ts"}
+[2026-07-05T14:42:16.851Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/studyPlan/services/dailyPlanService.ts"}
+[2026-07-05T14:42:17.045Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/studyPlan/**/*.test.*"[90m 0 matches[0m
+[2026-07-05T14:42:17.311Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/utils
+[2026-07-05T14:42:20.014Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/utils/__tests__
+[2026-07-05T14:42:20.242Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/studyPlan/**/__tests__/**"[90m 2 matches[0m
+[2026-07-05T14:42:20.585Z] [INFO] [stderr] [0m→ [0mRead apps/web/package.json[90m [limit=30][0m
+[2026-07-05T14:42:23.301Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/utils/__tests__/dateUtils.test.ts
+[2026-07-05T14:42:23.571Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-05T14:42:24.010Z] [INFO] [stderr] [0m→ [0mRead apps/web/vitest.config.ts
+[2026-07-05T14:42:33.980Z] [INFO] [stderr] [0m
+[2026-07-05T14:42:33.980Z] [INFO] [stderr] [ ] Create comprehensive test file for validation utils
+[2026-07-05T14:42:33.980Z] [INFO] [stderr] [ ] Run tests to verify
+[2026-07-05T14:42:33.980Z] [INFO] [stderr] [•] Create src/features/studyPlan/utils/validation.ts with all validation functions
+[2026-07-05T14:42:33.980Z] [INFO] [stderr] [0m
+[2026-07-05T14:42:33.980Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T14:42:34.072Z] [INFO] [stdout] Now I have a thorough picture of the codebase. Let me create the validation utility.
+[2026-07-05T14:42:37.545Z] [INFO] [stderr] [0m✱ [0mGrep "validateChunkDays"[90m 5 matches[0m
+[2026-07-05T14:43:11.703Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/studyPlan/utils/validation.ts
+[2026-07-05T14:43:11.703Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T14:43:11.703Z] [INFO] [stderr] [0m
+[2026-07-05T14:43:11.703Z] [INFO] [stderr] [0m
+[2026-07-05T14:43:11.818Z] [INFO] [stdout] Now I'll create the validation utility with all required functions, then update `dailyPlanService.ts` to import from it, and write comprehensive tests.
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:17.918Z] [INFO] [stderr]  import type {
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] @@ -3,53 +3,22 @@
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:17.918Z] [INFO] [stderr]    DailyPlanItem,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:17.918Z] [INFO] [stderr]    DailyStudyTask,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr]    PlanChunkRequest,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr]    PlanPhaseName,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] -  DayPriority,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] -  ChunkValidationResult,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] -  DayDifficulty,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr]  } from '../types'
+[2026-07-05T14:43:17.918Z] [INFO] [stderr]    ValidationError,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] +import {
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] -import { generateDateRange } from '../utils/dateUtils'
+[2026-07-05T14:43:17.918Z] [INFO] [stderr]    StudySkill,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr]  import type { TaskCategory } from '../../../models'
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] +  validateChunkDays,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] +  VALID_PHASE_NAMES,
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] +  VALID_PRIORITIES,
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] +  VALID_DIFFICULTIES,
+[2026-07-05T14:43:17.919Z] [INFO] [stderr]  
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] +} from '../utils/validation'
+[2026-07-05T14:43:17.918Z] [INFO] [stderr] -  DailyPlanStatus,
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -const VALID_PHASE_NAMES: PlanPhaseName[] = [
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Foundation',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] +  ALLOWED_CATEGORIES,
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -]
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Skill Improvement',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Final Review',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] +  VALID_SKILLS,
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -const VALID_SKILLS: StudySkill[] = [
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Weakness Fixing',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -const VALID_PRIORITIES: DayPriority[] = ['low', 'medium', 'high', 'critical']
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Mock Test',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Speaking',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Vocabulary',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -const VALID_DIFFICULTIES: DayDifficulty[] = ['easy', 'medium', 'hard']
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -]
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -const ALLOWED_CATEGORIES: TaskCategory[] = [
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Vocabulary',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Reading',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Listening',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Reading',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Listening',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Writing Task 2',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Speaking Part 2',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Writing',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Grammar',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Speaking Part 1',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Grammar',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Writing Task 1',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -]
+[2026-07-05T14:43:17.919Z] [INFO] [stderr]    skill: string
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Speaking Part 3',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -  'Mock Test',
+[2026-07-05T14:43:17.919Z] [INFO] [stderr]    title: string
+[2026-07-05T14:43:17.919Z] [INFO] [stderr]  interface GeneratedTaskInput {
+[2026-07-05T14:43:17.919Z] [INFO] [stderr]    description: string
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] 
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] -
+[2026-07-05T14:43:17.919Z] [INFO] [stderr] [0m
+[2026-07-05T14:43:17.970Z] [INFO] [stdout] Now let me update `dailyPlanService.ts` to import from the new validation module, removing duplicated code:
+[2026-07-05T14:43:26.320Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:26.320Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:26.320Z] [INFO] [stderr]    return { days, error: null }
+[2026-07-05T14:43:26.320Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:26.320Z] [INFO] [stderr]  
+[2026-07-05T14:43:26.320Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:26.320Z] [INFO] [stderr]  
+[2026-07-05T14:43:26.320Z] [INFO] [stderr] @@ -379,141 +379,8 @@
+[2026-07-05T14:43:26.320Z] [INFO] [stderr] -export function validateChunkDays(
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  const errors: ValidationError[] = []
+[2026-07-05T14:43:26.320Z] [INFO] [stderr] -  days: DailyPlanItem[],
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  const duplicateDates: string[] = []
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -): ChunkValidationResult {
+[2026-07-05T14:43:26.320Z] [INFO] [stderr]  }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  const missingDates: string[] = []
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  const invalidDays: number[] = []
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  request: PlanChunkRequest,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  const receivedDates = days.map(d => d.date)
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  for (const date of receivedDates) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      duplicateDates.push(date)
+[2026-07-05T14:43:26.320Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      dateSet.add(date)
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  const dateSet = new Set<string>()
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    if (dateSet.has(date)) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    } else {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  for (const expectedDate of expectedDates) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    if (!dateSet.has(expectedDate)) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      missingDates.push(expectedDate)
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    if (!expectedDates.includes(date)) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  for (const date of receivedDates) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        message: `Unexpected date outside chunk range: ${date}. Expected range: ${request.chunkStartDate} to ${request.chunkEndDate}.`,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      errors.push({
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        date,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        field: 'date',
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      })
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        field: 'dayNumber',
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      errors.push({
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    if (!request.chunkDayNumbers.includes(day.dayNumber)) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  for (const day of days) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        dayNumber: day.dayNumber,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        message: `Day number ${day.dayNumber} for date ${day.date} is not in the requested chunk day range: ${request.chunkDayNumbers.join(', ')}.`,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  const expectedDates = generateDateRange(request.chunkStartDate, request.chunkEndDate)
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      invalidDays.push(day.dayNumber)
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      })
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        date: day.date,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    if (!VALID_PHASE_NAMES.includes(day.phaseName)) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        field: 'phaseName',
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        date: day.date,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        dayNumber: day.dayNumber,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        message: `Invalid phase name "${day.phaseName}" for Day ${day.dayNumber}.`,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      })
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      errors.push({
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    if (day.estimatedTotalMinutes < 0 || day.estimatedTotalMinutes > 600) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      errors.push({
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      invalidDays.push(day.dayNumber)
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        date: day.date,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        field: 'estimatedTotalMinutes',
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        dayNumber: day.dayNumber,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    }
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    const hasAnyTask =
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      })
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      day.speakingTask !== null ||
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      invalidDays.push(day.dayNumber)
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      day.reviewTask !== null
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      day.grammarTask !== null ||
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      day.writingTask !== null ||
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      day.listeningTask !== null ||
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        message: `Unreasonable estimated total minutes: ${day.estimatedTotalMinutes} for Day ${day.dayNumber}.`,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        field: 'tasks',
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -    if (day.estimatedTotalMinutes > 0 && !hasAnyTask) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      day.readingTask !== null ||
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        dayNumber: day.dayNumber,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        message: `Day ${day.dayNumber} has estimatedTotalMinutes > 0 but no tasks assigned.`,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -        date: day.date,
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      errors.push({
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      })
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      invalidDays.push(day.dayNumber)
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -  }
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    }
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -  for (let i = 1; i < sorted.length; i++) {
+[2026-07-05T14:43:26.321Z] [INFO] [stderr] -      day.vocabularyTask !== null ||
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -  const sorted = [...days].sort((a, b) => a.dayNumber - b.dayNumber)
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    const prevDate = new Date(sorted[i - 1].date + 'T00:00:00')
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -        message: `Date gap between Day ${sorted[i - 1].dayNumber} (${sorted[i - 1].date}) and Day ${sorted[i].dayNumber} (${sorted[i].date}): ${diffDays} day(s) apart, expected 1.`,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    const currDate = new Date(sorted[i].date + 'T00:00:00')
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -        dayNumber: sorted[i].dayNumber,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    const diffMs = currDate.getTime() - prevDate.getTime()
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -        field: 'dateContinuity',
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -      errors.push({
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -        date: sorted[i].date,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -      invalidDays.push(sorted[i].dayNumber)
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -      })
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    if (diffDays !== 1) {
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -  }
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    }
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    for (const d of days) {
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -  if (uniqueDayNumbers.size !== days.length) {
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    const seen = new Set<number>()
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -  const uniqueDayNumbers = new Set(days.map(d => d.dayNumber))
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24))
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -          field: 'duplicateDayNumber',
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -          dayNumber: d.dayNumber,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -      if (seen.has(d.dayNumber)) {
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -          date: d.date,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -        })
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -        invalidDays.push(d.dayNumber)
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -      seen.add(d.dayNumber)
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -      }
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -          message: `Duplicate day number: ${d.dayNumber}.`,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -        errors.push({
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    isValid:
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    invalidDays: [...new Set(invalidDays)],
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -  }
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -  return {
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    errors,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    missingDates,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -  }
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    }
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -    duplicateDates,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -
+[2026-07-05T14:43:26.322Z] [INFO] [stderr]    planId: string,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr]    request: PlanChunkRequest,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr]  export async function generateDailyPlanChunk(
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] [0m
+[2026-07-05T14:43:26.322Z] [INFO] [stderr]    getConfig: () => ProviderConfig | null,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -      errors.length === 0 && missingDates.length === 0 && duplicateDates.length === 0,
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] 
+[2026-07-05T14:43:26.322Z] [INFO] [stderr] -}
+[2026-07-05T14:43:26.404Z] [INFO] [stdout] Now remove the duplicate `validateChunkDays` function from `dailyPlanService.ts`:
+[2026-07-05T14:43:31.451Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/services/dailyPlanService.ts[90m [limit=60][0m
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] [0m
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] @@ -5,9 +5,8 @@
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:34.973Z] [INFO] [stderr]    PlanChunkRequest,
+[2026-07-05T14:43:34.973Z] [INFO] [stderr]    PlanPhaseName,
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:34.973Z] [INFO] [stderr]  import type { TaskCategory } from '../../../models'
+[2026-07-05T14:43:34.973Z] [INFO] [stderr]    DailyStudyTask,
+[2026-07-05T14:43:34.973Z] [INFO] [stderr]  import {
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] -  ValidationError,
+[2026-07-05T14:43:34.973Z] [INFO] [stderr]    validateChunkDays,
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] 
+[2026-07-05T14:43:34.973Z] [INFO] [stderr]  } from '../types'
+[2026-07-05T14:43:34.973Z] [INFO] [stderr] [0m
+[2026-07-05T14:43:34.973Z] [INFO] [stderr]    StudySkill,
+[2026-07-05T14:43:38.156Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/studyPlan/services/dailyPlanService.ts[90m [offset=61][0m
+[2026-07-05T14:43:46.652Z] [INFO] [stdout] I need to add back some type imports that are used in the file:
+[2026-07-05T14:43:46.660Z] [INFO] [stderr] [0m
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/services/dailyPlanService.ts
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:43:46.661Z] [INFO] [stderr]    DailyStudyTask,
+[2026-07-05T14:43:46.661Z] [INFO] [stderr]    PlanPhaseName,
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] @@ -5,8 +5,11 @@
+[2026-07-05T14:43:46.661Z] [INFO] [stderr]    StudySkill,
+[2026-07-05T14:43:46.661Z] [INFO] [stderr]    PlanChunkRequest,
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] +  DayDifficulty,
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] +  DailyPlanStatus,
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] +  DayPriority,
+[2026-07-05T14:43:46.661Z] [INFO] [stderr]  } from '../types'
+[2026-07-05T14:43:46.661Z] [INFO] [stderr]    validateChunkDays,
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] 
+[2026-07-05T14:43:46.661Z] [INFO] [stderr]  import type { TaskCategory } from '../../../models'
+[2026-07-05T14:43:46.661Z] [INFO] [stderr]  import {
+[2026-07-05T14:43:46.661Z] [INFO] [stderr] [0m
+[2026-07-05T14:43:49.801Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T14:43:49.801Z] [INFO] [stderr] [0m
+[2026-07-05T14:43:49.801Z] [INFO] [stderr] [ ] Run tests to verify
+[2026-07-05T14:43:49.802Z] [INFO] [stderr] [•] Create comprehensive test file for validation utils
+[2026-07-05T14:43:49.802Z] [INFO] [stderr] [✓] Create src/features/studyPlan/utils/validation.ts with all validation functions
+[2026-07-05T14:44:38.169Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-05T14:44:38.169Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:44:38.170Z] [INFO] [stderr] [0m
+[2026-07-05T14:44:41.707Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T14:44:41.707Z] [INFO] [stderr] [•] Run tests to verify
+[2026-07-05T14:44:41.707Z] [INFO] [stderr] [0m
+[2026-07-05T14:44:41.707Z] [INFO] [stderr] [✓] Create src/features/studyPlan/utils/validation.ts with all validation functions
+[2026-07-05T14:44:41.707Z] [INFO] [stderr] [✓] Create comprehensive test file for validation utils
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] $ vitest run --config vitest.config.ts -- --reporter verbose
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 9:44:45 PM [vite] (client) warning: Duplicate key "learnerProfile" in object literal
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] [0m$ [0mpnpm test -- --reporter verbose 2>&1 | head -300
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    |      ^
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 80 |      newContentCount: getNum('ielts-new-content-count'),
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 83 |    }
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]  RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]   Plugin: vite:esbuild
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 81 |      ...overrides,
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 105|      newContentCount: getNewContentCount(),
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]   File: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 9:44:45 PM [vite] (client) warning: Duplicate key "learnerProfile" in object literal
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 106|      ...overrides,
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    |      ^
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 82 |      learnerProfile: overrides.learnerProfile ? { ...profile, ...overrides.learnerProfile } : profile,
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 108|    }
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 84 |  }
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 107|      learnerProfile: mergedProfile,
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] stderr | ../../packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts > Settings Persistence and Configuration > validates schema when saving — rejects invalid values
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]   File: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageTriggers.ts
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 109|  }
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] [ProactiveMessageStorage] Invalid settings schema [
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     origin: [32m'number'[39m,
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]   }
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]   Plugin: vite:esbuild
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     path: [ [32m'maxMessagesPerDay'[39m ],
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]   {
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     code: [32m'too_small'[39m,
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     inclusive: [33mfalse[39m,
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     message: [32m'Too small: expected number to be >0'[39m
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     minimum: [33m0[39m,
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] ]
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] ProactiveEventBus handler error: Error: Handler error
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at safeInvoke (/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveEventBus.ts:29:5)
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveEventBus.ts:42:39
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at Object.emitNewMessage (/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveEventBus.ts:42:25)
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at mockCall (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+spy@3.2.6/node_modules/[4m@vitest/spy[24m/dist/index.js:96:15)
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts:564:42
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts:574:36
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at Set.forEach (<anonymous>)
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]  ❯ src/features/studyPlan/utils/__tests__/validation.test.ts (84 tests | 6 failed) 12ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at Proxy.assertThrows (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/chai@5.3.3/node_modules/[4mchai[24m/index.js:2767:5)
+[2026-07-05T14:45:01.711Z] [INFO] [stderr] stderr | ../../packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts > Event Bus Integration > error in one handler does not affect others
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ constants > VALID_PHASE_NAMES has correct values 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ constants > VALID_PRIORITIES has correct values 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ constants > ALLOWED_CATEGORIES includes mock test 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts (85 tests) 35ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDateString > accepts valid YYYY-MM-DD 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ constants > VALID_DIFFICULTIES has correct values 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at Proxy.methodWrapper (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/chai@5.3.3/node_modules/[4mchai[24m/index.js:1686:25)
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidPhaseName > rejects invalid phase names 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ constants > VALID_SKILLS has correct values 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidPhaseName > accepts valid phase names 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDateString > rejects partial date 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDateString > rejects invalid format 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidSkill > accepts valid skills 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidPriority > accepts valid priorities 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidDifficulty > rejects invalid difficulties 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidPriority > rejects invalid priorities 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidCategory > rejects invalid categories 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidSkill > rejects invalid skills 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidDifficulty > accepts valid difficulties 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isDateInRange > returns true for end date 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isDateInRange > returns true for dates within range 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isDateInRange > returns false for date before range 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isDateInRange > returns false for date after range 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]      → expected [ { field: 'tasks', …(3) } ] to deeply equal []
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isDateInRange > returns true for start date 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    × validateDailyPlanItem > returns no errors for a valid day 3ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for invalid date format 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for missing dayNumber 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns no errors for a valid rest day (zero minutes, no tasks) 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for negative dayNumber 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > passes week number check when correct 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for invalid weekNumber 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for invalid phaseName 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for week number mismatch when planStartDate provided 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for too short mainGoal 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for negative estimatedTotalMinutes 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for invalid difficulty 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for missing mainGoal 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]     at spy (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/tinyspy@4.0.4/node_modules/[4mtinyspy[24m/dist/index.js:47:80)
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for excessive estimatedTotalMinutes 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for invalid priority 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateDailyPlanItem > validates task estimatedMinutes 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error when minutes > 0 but no tasks 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error when minutes === 0 but tasks present 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateDailyPlanItem > validates task title 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateDailyPlanItem > returns error for invalid status 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateDailyPlanItem > validates task category 0ms
+[2026-07-05T14:45:01.711Z] [INFO] [stderr]    ✓ isValidCategory > accepts valid categories 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateDailyPlanItem > passes with all task fields filled 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    × validateChunkDays > returns valid for correct chunk 1ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateChunkDays > detects missing dates 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateDailyPlanItem > validates task skill 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateChunkDays > detects duplicate dates 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateChunkDays > detects date outside chunk range 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateChunkDays > detects day number outside chunk range 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateChunkDays > detects duplicate day numbers 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateChunkDays > includes individual day validation errors 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateFullPlan > detects missing day numbers 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    × validateFullPlan > returns valid for complete valid plan 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateFullPlan > detects duplicate dates 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateFullPlan > detects duplicate day numbers 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateChunkDays > handles empty days array 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateChunkDays > detects date continuity gap within chunk 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateFullPlan > detects date before today 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateFullPlan > handles empty plan 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateFullPlan > detects date after exam date 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateFullPlan > detects gap dates 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findMissingDayNumbers > returns empty for complete plan 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]      → expected false to be true // Object.is equality
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findMissingDates > finds missing dates 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findMissingDayNumbers > handles empty plan 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findMissingDates > returns empty for complete plan 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findDuplicateDayNumbers > returns empty when no duplicates 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findDuplicateDayNumbers > detects duplicate day numbers 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    × findInvalidDayNumbers > returns empty for all valid days 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]      → expected false to be true // Object.is equality
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]      → expected [ 1, 2 ] to deeply equal []
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findDuplicateDayNumbers > handles multiple duplicates 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    × findDaysNeedingRetry > returns empty for complete valid plan 1ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]      → expected [ 1, 2 ] to deeply equal [ 2 ]
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findDaysNeedingRetry > finds missing days 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findMissingDayNumbers > finds missing day numbers 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]      → expected [ { dayNumber: 1, …(2) }, …(14) ] to deeply equal []
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findDaysNeedingRetry > finds invalid days and includes reasons 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    × findInvalidDayNumbers > detects invalid days 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findMissingRanges > splits large missing range into chunk-sized pieces 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateNoExamDateOverlap > returns empty for days within exam date 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findMissingRanges > finds single missing range 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findMissingRanges > returns empty for complete plan 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ findMissingRanges > handles non-contiguous missing ranges 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveProgressReview.test.ts (74 tests) 5ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateNoExamDateOverlap > detects days after exam date 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateNoDuplicateDates > returns empty for unique dates 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveMessageInteractions.test.ts (40 tests) 5ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    ✓ validateNoDuplicateDates > detects duplicate dates 0ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveMessageTriggers.test.ts (39 tests) 4ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] An update to Progress inside a test was not wrapped in act(...).
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveMessageFrequency.test.ts (34 tests) 3ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] stderr | src/pages/Progress.test.tsx > Progress page > shows loading state initially
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] act(() => {
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] });
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] /* assert on the output */
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] When testing, code that causes React state updates should be wrapped into act(...):
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]   /* fire events that update state */
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] act(() => {
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] });
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] /* assert on the output */
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] An update to Progress inside a test was not wrapped in act(...).
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    × VocabularyReview > shows review settings initially 1009ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]  ✓ src/pages/Progress.test.tsx (17 tests) 81ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]  ❯ src/pages/VocabularyReview.test.tsx (9 tests | 9 failed) 9088ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]      → Unable to find an element with the text: Review Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.712Z] [INFO] [stderr]    × VocabularyReview > shows empty state when no reviews due 1010ms
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find role="button" and name `/start review/i`
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × VocabularyReview > shows empty state when all words are mastered 1009ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.712Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find role="button" and name `/start review/i`
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × VocabularyReview > shows review card with word in word-to-meaning mode 1007ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find role="button" and name `/start review/i`
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find role="button" and name `/start review/i`
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × VocabularyReview > shows all four rating buttons 1010ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find role="button" and name `/start review/i`
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × VocabularyReview > moves to next card after rating 1010ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × VocabularyReview > calls put with updated review entry when rating 1010ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find role="button" and name `/start review/i`
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × VocabularyReview > shows review stats 1010ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find role="button" and name `/start review/i`
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × VocabularyReview > shows completion screen when all words reviewed 1012ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find role="button" and name `/start review/i`
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × Vocabulary import → Word tab integration > shows empty state when no vocabulary exists 1006ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × Vocabulary import → Word tab integration > displays imported vocabulary words in the Word tab 1004ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find an element with the text: Your vocabulary notebook is empty.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]  ❯ tests/integration/vocabulary-import-wordtab.test.tsx (3 tests | 3 failed) 3015ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find an element with the text: ubiquitous. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    × Vocabulary import → Word tab integration > refreshes the word list when vocabulary-changed event fires (simulating import) 1005ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]      → Unable to find an element with the text: Your vocabulary notebook is empty.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    ✓ useProactiveSettings > loads default settings when nothing is stored 1ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]  ❯ src/features/aiTutor/tests/ProactiveSettings.test.tsx (49 tests | 28 failed) 2755ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.714Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    ✓ useProactiveSettings > updates settings via update function 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ useProactiveSettings > loads existing settings from localStorage 0ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr]    ✓ useProactiveSettings > tracks unsaved changes 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ useProactiveSettings > saves settings to localStorage 0ms
+[2026-07-05T14:45:01.713Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ useProactiveSettings > resets settings to defaults 3ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ useProactiveSettings > clears validation errors on update 1ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ validateProactiveSettings > returns no errors for valid settings 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ useProactiveSettings > recovers gracefully when save fails silently 1ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ useProactiveSettings > shows saved indicator after saving  2554ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ validateProactiveSettings > returns error for maxMessagesPerDay out of range 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ validateProactiveSettings > returns error when no notification channels selected 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ loadProactiveSettings > merges partial stored settings with defaults 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ validateProactiveSettings > returns error for empty preferredStudyTime 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ loadProactiveSettings > merges partial categories with default categories 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ useProactiveSettings > validates settings before saving and sets validation errors 1ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ loadProactiveSettings > returns defaults when localStorage has invalid JSON 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ saveProactiveSettings > persists settings to localStorage 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]      → Unable to find an element with the text: Proactive Tutor Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-05T14:45:01.714Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]      → Unable to find an element with the text: Local-First Notice. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ resetProactiveSettings > resets to defaults and saves to localStorage 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    × ProactiveSettings > renders the header 19ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr] 
+[2026-07-05T14:45:01.714Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    × ProactiveSettings > renders enable toggle 9ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    ✓ loadProactiveSettings > returns defaults when localStorage is empty 0ms
+[2026-07-05T14:45:01.714Z] [INFO] [stderr] [36m<body />[39m
+[2026-07-05T14:45:01.714Z] [INFO] [stderr] Ignored nodes: comments, script, style
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]      → Unable to find an element with the text: Enable Proactive Tutor Messages. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[2026-07-05T14:45:01.714Z] [INFO] [stderr] [0m
+[2026-07-05T14:45:01.714Z] [INFO] [stderr]    × ProactiveSettings > renders local-first notice 10ms
+[2026-07-05T14:45:09.824Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] @@ -33,8 +33,22 @@
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]  } from '../../types'
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +  return {
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    id: 'task-1',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]    PlanPhaseName,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]  import type { TaskCategory } from '../../../../models'
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    skill: 'Vocabulary',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    title: 'Learn 20 new IELTS words',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    estimatedMinutes: 20,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    isCompleted: false,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    ...overrides,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    notes: '',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +function createMockTask(overrides: Partial<DailyStudyTask> = {}): DailyStudyTask {
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +}
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]    return {
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]  function createMockDay(overrides: Partial<DailyPlanItem> = {}): DailyPlanItem {
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] @@ -47,9 +61,9 @@
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]    const now = new Date().toISOString()
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      id: 'day-1',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      listeningTask: null,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      writingTask: null,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +  }
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      speakingTask: null,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    vocabularyTask: null,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      grammarTask: null,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      reviewTask: null,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      optionalTasks: [],
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      estimatedTotalMinutes: 60,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] @@ -63,22 +77,8 @@
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      readingTask: null,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]    }
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]      ...overrides,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]  
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]  }
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -function createMockTask(overrides: Partial<DailyStudyTask> = {}): DailyStudyTask {
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    id: 'task-1',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    title: 'Learn 20 new IELTS words',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -  return {
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    description: 'Study vocabulary list',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    estimatedMinutes: 20,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    isCompleted: false,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    category: 'Vocabulary',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    notes: '',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    vocabularyTask: createMockTask(),
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -  }
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    description: 'Study vocabulary list',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    ...overrides,
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]  const mockMeta: StudyPlanCalculatedMeta = {
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -    skill: 'Vocabulary',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] +    category: 'Vocabulary',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]    examDate: '2026-01-15',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] [0m
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] 
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -}
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]    today: '2026-01-01',
+[2026-07-05T14:45:09.825Z] [INFO] [stderr] -
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]  
+[2026-07-05T14:45:09.825Z] [INFO] [stderr]    totalDays: 15,
+[2026-07-05T14:45:10.005Z] [INFO] [stdout] The mock days need at least one task when `estimatedTotalMinutes > 0`. Let me fix the test helper:
+[2026-07-05T14:45:14.727Z] [INFO] [stdout] Now I need to fix the rest day test - it sets `estimatedTotalMinutes: 0` but the default now includes a task. I need to set the vocabularyTask to null for that test:
+[2026-07-05T14:45:14.730Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:45:14.730Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:14.730Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:14.730Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:14.730Z] [INFO] [stderr]    const day = createMockDay({
+[2026-07-05T14:45:14.730Z] [INFO] [stderr]      estimatedTotalMinutes: 0,
+[2026-07-05T14:45:14.730Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:14.730Z] [INFO] [stderr] @@ -307,8 +307,9 @@
+[2026-07-05T14:45:14.730Z] [INFO] [stderr]      priority: 'low',
+[2026-07-05T14:45:14.730Z] [INFO] [stderr]      difficulty: 'easy',
+[2026-07-05T14:45:14.730Z] [INFO] [stderr]    })
+[2026-07-05T14:45:14.730Z] [INFO] [stderr] +    vocabularyTask: null,
+[2026-07-05T14:45:14.731Z] [INFO] [stderr] 
+[2026-07-05T14:45:14.731Z] [INFO] [stderr]  })
+[2026-07-05T14:45:14.731Z] [INFO] [stderr]    expect(errors).toEqual([])
+[2026-07-05T14:45:14.730Z] [INFO] [stderr]    const errors = validateDailyPlanItem(day)
+[2026-07-05T14:45:14.731Z] [INFO] [stderr] [0m
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] ===================================================================
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] @@ -395,15 +395,9 @@
+[2026-07-05T14:45:18.953Z] [INFO] [stderr]    const day = createMockDay({
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] -    readingTask: null,
+[2026-07-05T14:45:18.953Z] [INFO] [stderr]  
+[2026-07-05T14:45:18.953Z] [INFO] [stderr]      estimatedTotalMinutes: 60,
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] -    listeningTask: null,
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:18.953Z] [INFO] [stderr]  it('returns error when minutes > 0 but no tasks', () => {
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] -    writingTask: null,
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] -    reviewTask: null,
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] -    speakingTask: null,
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+[2026-07-05T14:45:18.953Z] [INFO] [stderr]    const errors = validateDailyPlanItem(day)
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] -    grammarTask: null,
+[2026-07-05T14:45:18.953Z] [INFO] [stderr]    })
+[2026-07-05T14:45:18.953Z] [INFO] [stderr]  })
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] [0m
+[2026-07-05T14:45:18.953Z] [INFO] [stderr]      vocabularyTask: null,
+[2026-07-05T14:45:18.953Z] [INFO] [stderr]    expect(errors.some(e => e.field === 'tasks')).toBe(true)
+[2026-07-05T14:45:18.953Z] [INFO] [stderr] 
+[2026-07-05T14:45:41.373Z] [INFO] [stderr] [0m$ [0mpnpm test -- --reporter verbose 2>&1 | grep -E "(✓|×|❯|Tests)" | head -100
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]  ✓ src/pages/Progress.test.tsx (17 tests) 105ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]  ❯ src/pages/VocabularyReview.test.tsx (9 tests | 9 failed) 9045ms
+[2026-07-05T14:45:41.372Z] [INFO] [stderr] ✓ ../../packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts (85 tests) 32ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × VocabularyReview > shows review settings initially 1006ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]  ✓ ../../packages/ai-tutor/src/tests/proactiveProgressReview.test.ts (74 tests) 5ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × VocabularyReview > shows review card with word in word-to-meaning mode 1005ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × VocabularyReview > calls put with updated review entry when rating 1008ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × VocabularyReview > shows empty state when no reviews due 1005ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × VocabularyReview > shows all four rating buttons 1003ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × VocabularyReview > shows empty state when all words are mastered 1005ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × VocabularyReview > moves to next card after rating 1005ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × VocabularyReview > shows completion screen when all words reviewed 1004ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × Vocabulary import → Word tab integration > shows empty state when no vocabulary exists 1006ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]  ❯ tests/integration/vocabulary-import-wordtab.test.tsx (3 tests | 3 failed) 3012ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    ✓ useProactiveSettings > loads default settings when nothing is stored 2ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]  ❯ src/features/aiTutor/tests/ProactiveSettings.test.tsx (49 tests | 28 failed) 2966ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × Vocabulary import → Word tab integration > refreshes the word list when vocabulary-changed event fires (simulating import) 1002ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × Vocabulary import → Word tab integration > displays imported vocabulary words in the Word tab 1004ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    ✓ useProactiveSettings > tracks unsaved changes 1ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    ✓ useProactiveSettings > updates settings via update function 1ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    ✓ useProactiveSettings > loads existing settings from localStorage 1ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    ✓ useProactiveSettings > saves settings to localStorage 2ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    × VocabularyReview > shows review stats 1004ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ useProactiveSettings > shows saved indicator after saving  2602ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]    ✓ useProactiveSettings > resets settings to defaults 3ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ useProactiveSettings > validates settings before saving and sets validation errors 2ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ useProactiveSettings > clears validation errors on update 1ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ validateProactiveSettings > returns error for maxMessagesPerDay out of range 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ validateProactiveSettings > returns error when no notification channels selected 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ validateProactiveSettings > returns error for empty preferredStudyTime 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ loadProactiveSettings > returns defaults when localStorage is empty 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ loadProactiveSettings > merges partial categories with default categories 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ validateProactiveSettings > returns no errors for valid settings 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ loadProactiveSettings > merges partial stored settings with defaults 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ loadProactiveSettings > returns defaults when localStorage has invalid JSON 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    × ProactiveSettings > renders the header 32ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    × ProactiveSettings > renders local-first notice 48ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ saveProactiveSettings > persists settings to localStorage 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ resetProactiveSettings > resets to defaults and saves to localStorage 0ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    × ProactiveSettings > renders enable toggle 9ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    × ProactiveSettings > shows advanced settings when enabled 10ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    × ProactiveSettings > renders daily reminder time input 12ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders preferred study time input 8ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders weak skill priority multi-select 9ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders notification channel options 11ms
+[2026-07-05T14:45:41.373Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/validation.test.ts (84 tests) 9ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders auto weekly review toggle 8ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders max messages per day input 7ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders auto-suggest exercises toggle 19ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders save and reset buttons 22ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders close button when onClose is provided 9ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > shows saved indicator after saving changes 15ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > calls onClose when close button is clicked 11ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > disables save button when no changes are made 12ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > enables save button after making changes 9ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > resets settings when reset button is clicked 6ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders message categories section 9ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > toggles a message category when clicked 13ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > displays validation errors for invalid settings 6ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > hides advanced settings when disabled 6ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > has accessible role for the settings panel 15ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > opens and closes multi-select dropdown 4ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    ✓ ProactiveSettings with onClose > renders without close button when onClose is not provided 4ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > renders quiet hours section 6ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings Integration > persists changes to localStorage after save 5ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings Integration > loads saved settings from localStorage on mount 6ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the HeroSection with product name 12ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]  ❯ src/pages/landing/__tests__/LandingPage.test.tsx (14 tests | 14 failed) 145ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the FeatureGrid heading 13ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the SolutionSection heading 7ms
+[2026-07-05T14:45:41.374Z] [INFO] [stderr]    ✓ useProactiveSettings > recovers gracefully when save fails silently 3ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the ProblemSection heading 7ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the PrivacySection heading 8ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the HowItWorksSection heading 9ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the CreatorSection heading 9ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the FAQSection heading 11ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the DonationSection heading 10ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    × LandingPage > renders a Start Learning Free CTA link 10ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    × LandingPage > sets the document title 14ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    × LandingPage > renders the FinalCTASection heading 16ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    × LandingPage > renders an Install Chrome Extension link 11ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]  ❯ src/tests/storage/DatabaseMigration.test.ts (51 tests | 21 failed) 94ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    × AppDatabase versioning and schema > opens at version 4 4ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × ProactiveSettings > toggles notification channels when clicked 11ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ AppDatabase versioning and schema > registers all v1 stores 2ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ AppDatabase versioning and schema > registers all v2 and v3 stores (v1 + new tables) 2ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    × AppDatabase versioning and schema > has exactly 28 tables 3ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Table indexes > indexes tasks by date, category, isDone 1ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Table indexes > indexes vocabulary by topic, status, difficulty 1ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    × AppDatabase versioning and schema > upgrades from version 1 to version 2 preserving v1 data 0ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Table indexes > indexes v2 tables with tags and isFavorite where applicable 1ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Validation rejects corrupted data > rejects vocabulary with invalid difficulty 2ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Validation rejects corrupted data > rejects vocabulary with missing word 2ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Validation rejects corrupted data > rejects vocabulary with invalid status 1ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Validation rejects corrupted data > rejects grammarNote with missing explanation 2ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Validation rejects corrupted data > rejects mistake with invalid skill 2ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Validation rejects corrupted data > rejects speaking question with invalid part 5ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Validation rejects corrupted data > rejects writing prompt with invalid taskType 2ms
+[2026-07-05T14:45:41.376Z] [INFO] [stderr]    ✓ Validation rejects corrupted data > rejects items with non-object type 1ms
+[2026-07-05T14:45:41.375Z] [INFO] [stderr]    × LandingPage > renders the ExtensionSection heading 7ms
+[2026-07-05T14:45:41.377Z] [INFO] [stderr] [0m
+[2026-07-05T14:45:45.683Z] [INFO] [stdout] All 84 validation tests pass. Let me verify TypeScript compilation:
+[2026-07-05T14:45:46.060Z] [INFO] [stderr] $ tsc --noEmit
+[2026-07-05T14:45:46.060Z] [INFO] [stderr] [0m
+[2026-07-05T14:45:46.060Z] [INFO] [stderr] [0m$ [0mpnpm run typecheck 2>&1 | tail -30
+[2026-07-05T14:45:49.905Z] [INFO] [stdout] TypeScript compiles cleanly. Let me also confirm the existing study plan tests still pass:
+[2026-07-05T14:46:49.913Z] [INFO] [stderr] 
+[2026-07-05T14:46:49.913Z] [INFO] [stderr] <shell_metadata>
+[2026-07-05T14:46:49.913Z] [INFO] [stderr] shell tool terminated command after exceeding timeout 60000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+[2026-07-05T14:46:49.913Z] [INFO] [stderr] </shell_metadata>
+[2026-07-05T14:46:49.912Z] [INFO] [stderr] [0m$ [0mpnpm test -- src/features/studyPlan 2>&1 | tail -20
+[2026-07-05T14:46:49.913Z] [INFO] [stderr] (no output)
+[2026-07-05T14:46:49.913Z] [INFO] [stderr] [0m
+[2026-07-05T14:46:54.491Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-05T14:46:54.491Z] [INFO] [stderr] 
+[2026-07-05T14:46:54.491Z] [INFO] [stderr] [0m$ [0mpnpm vitest run --config vitest.config.ts src/features/studyPlan/utils/__tests__/dateUtils.test.ts src/features/studyPlan/utils/__tests__/validation.test.ts src/features/studyPlan/services/__tests__/globalStrategyService.test.ts 2>&1 | tail -30
+[2026-07-05T14:46:54.491Z] [INFO] [stderr]  ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts (14 tests) 1ms
+[2026-07-05T14:46:54.491Z] [INFO] [stderr] 
+[2026-07-05T14:46:54.491Z] [INFO] [stderr]       Tests  158 passed (158)
+[2026-07-05T14:46:54.491Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts (60 tests) 5ms
+[2026-07-05T14:46:54.491Z] [INFO] [stderr]  Test Files  3 passed (3)
+[2026-07-05T14:46:54.491Z] [INFO] [stderr]    Duration  460ms (transform 51ms, setup 49ms, collect 53ms, tests 16ms, environment 222ms, prepare 35ms)
+[2026-07-05T14:46:54.491Z] [INFO] [stderr]  ✓ src/features/studyPlan/utils/__tests__/validation.test.ts (84 tests) 10ms
+[2026-07-05T14:46:54.491Z] [INFO] [stderr] [0m
+[2026-07-05T14:46:54.491Z] [INFO] [stderr]    Start at  21:46:53
+[2026-07-05T14:46:57.770Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-05T14:46:57.770Z] [INFO] [stderr] [✓] Create comprehensive test file for validation utils
+[2026-07-05T14:46:57.770Z] [INFO] [stderr] [✓] Create src/features/studyPlan/utils/validation.ts with all validation functions
+[2026-07-05T14:46:57.770Z] [INFO] [stderr] [✓] Run tests to verify
+[2026-07-05T14:46:57.770Z] [INFO] [stderr] [0m
+[2026-07-05T14:46:57.865Z] [INFO] [stdout] All 158 tests pass across 3 study plan test files (84 validation tests, 60 dateUtils tests, 14 globalStrategy tests).
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] 
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] 
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] | Function | Purpose |
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] |---|---|
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] ## Completion Summary
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] | `validateDateString`, `isValidPhaseName`, `isValidPriority`, `isValidDifficulty`, `isValidSkill`, `isValidCategory`, `isDateInRange` | Simple predicate validators |
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] | `validateDailyPlanItem` | Validates a single `DailyPlanItem` — date format, day/week numbers, phase, goal, priority, difficulty, estimated minutes, task presence, task fields, status |
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] | `findMissingDayNumbers`, `findMissingDates`, `findDuplicateDayNumbers`, `findInvalidDayNumbers` | Identify specific problem days |
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] **Created** `src/features/studyPlan/utils/validation.ts` with 19 exported validation functions:
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] | `findMissingRanges` | Groups missing days into chunk-sized ranges for targeted regeneration |
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] **Also updated** `dailyPlanService.ts` to import validation from the new module (replacing inline constants and duplicate `validateChunkDays`).
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] | `validateChunkDays` | Validates an AI chunk response against `PlanChunkRequest` — date range, day numbers, continuity, duplicates, plus per-item checks |
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] 
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] | `findDaysNeedingRetry` | Returns structured retry list with reasons for each broken/missing day |
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] | `validateFullPlan` | Validates entire plan from today to exam date — every expected day present, no extras, no gaps, no date boundary violations |
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] 
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] | `validateNoExamDateOverlap`, `validateNoDuplicateDates` | Focused validators |
+[2026-07-05T14:47:03.586Z] [INFO] [stdout] **Tests**: 84 new tests covering all valid/invalid/edge cases — all passing.
+[2026-07-05T14:47:03.806Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-05T14:47:03.806Z] [INFO] Output:
+Let me explore the types and existing utilities more thoroughly.
+Now I have a thorough picture of the codebase. Let me create the validation utility.
+Now I'll create the validation utility with all required functions, then update `dailyPlanService.ts` to import from it, and write comprehensive tests.
+Now let me update `dailyPlanService.ts` to import from the new validation module, removing duplicated code:
+Now remove the duplicate `validateChunkDays` function from `dailyPlanService.ts`:
+I need to add back some type imports that are used in the file:
+The mock days need at least one task when `estimatedTotalMinutes > 0`. Let me fix the test helper:
+Now I need to fix the rest day test - it sets `estimatedTotalMinutes: 0` but the default now includes a task. I need to set the vocabularyTask to null for that test:
+All 84 validation tests pass. Let me verify TypeScript compilation:
+TypeScript compiles cleanly. Let me also confirm the existing study plan tests still pass:
+All 158 tests pass across 3 study plan test files (84 validation tests, 60 dateUtils tests, 14 globalStrategy tests).
+## Completion Summary
+
+**Created** `src/features/studyPlan/utils/validation.ts` with 19 exported validation functions:
+
+| Function | Purpose |
+|---|---|
+| `validateDateString`, `isValidPhaseName`, `isValidPriority`, `isValidDifficulty`, `isValidSkill`, `isValidCategory`, `isDateInRange` | Simple predicate validators |
+| `validateDailyPlanItem` | Validates a single `DailyPlanItem` — date format, day/week numbers, phase, goal, priority, difficulty, estimated minutes, task presence, task fields, status |
+| `validateChunkDays` | Validates an AI chunk response against `PlanChunkRequest` — date range, day numbers, continuity, duplicates, plus per-item checks |
+| `validateFullPlan` | Validates entire plan from today to exam date — every expected day present, no extras, no gaps, no date boundary violations |
+| `findMissingDayNumbers`, `findMissingDates`, `findDuplicateDayNumbers`, `findInvalidDayN
+[2026-07-05T14:47:03.806Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"studyPlan feature types utils services","maxFiles":20}
+[0m✱ [0mGlob "src/features/studyPlan/**/*"[90m 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"src/features/studyPlan types DailyPlanItem StudyPlanData PlanPhaseName DayPriority DayDifficulty DailyPlanStatus DailyStudyTask GlobalStudyStrategy","maxFiles":15}
+[0m✱ [0mGlob "src/features/studyPlan/**/*"[90m 0 matches[0m
+[0m✱ [0mGlob "src/features/studyPlan/**/*.ts"[90m 0 matches[0m
+[0m→ [0mRead apps/web/src/features/studyPlan
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/studyPlan/utils/dateUtils.ts"}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/studyPlan/services/dailyPlanService.ts"}
+[0m✱ [0mGlob "src/features/studyPlan/**/*.test.*"[90m 0 matches[0m
+[0m→ [0mRead apps/web/src/features/studyPlan/utils
+[0m→ [0mRead apps/web/src/features/studyPlan/utils/__tests__
+[0m✱ [0mGlob "apps/web/src/features/studyPlan/**/__tests__/**"[90m 2 matches[0m
+[0m→ [0mRead apps/web/package.json[90m [limit=30][0m
+[0m→ [0mRead apps/web/src/features/studyPlan/utils/__tests__/dateUtils.test.ts
+[0m→ [0mRead apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[0m→ [0mRead apps/web/vitest.config.ts
+[0m
+[0m# [0mTodos
+[•] Create src/features/studyPlan/utils/validation.ts with all validation functions
+[ ] Create comprehensive test file for validation utils
+[ ] Run tests to verify
+[0m
+[0m✱ [0mGrep "validateChunkDays"[90m 5 matches[0m
+[0m
+[0m← [0mWrite apps/web/src/features/studyPlan/utils/validation.ts
+Wrote file successfully.
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/services/dailyPlanService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+@@ -3,53 +3,22 @@
+ import type {
+   DailyPlanItem,
+   DailyStudyTask,
+   PlanChunkRequest,
+-  DayPriority,
+-  DayDifficulty,
+-  DailyPlanStatus,
+   PlanPhaseName,
+   StudySkill,
+-  ChunkValidationResult,
+   ValidationError,
+ } from '../types'
+ import type { TaskCategory } from '../../../models'
+-import { generateDateRange } from '../utils/dateUtils'
++import {
++  validateChunkDays,
++  VALID_PHASE_NAMES,
++  VALID_PRIORITIES,
++  VALID_DIFFICULTIES,
++  VALID_SKILLS,
++  ALLOWED_CATEGORIES,
++} from '../utils/validation'
+ 
+-const VALID_PHASE_NAMES: PlanPhaseName[] = [
+-  'Foundation',
+-  'Skill Improvement',
+-  'Weakness Fixing',
+-  'Mock Test',
+-  'Final Review',
+-]
+-
+-const VALID_PRIORITIES: DayPriority[] = ['low', 'medium', 'high', 'critical']
+-
+-const VALID_DIFFICULTIES: DayDifficulty[] = ['easy', 'medium', 'hard']
+-
+-const VALID_SKILLS: StudySkill[] = [
+-  'Vocabulary',
+-  'Reading',
+-  'Listening',
+-  'Writing',
+-  'Speaking',
+-  'Grammar',
+-]
+-
+-const ALLOWED_CATEGORIES: TaskCategory[] = [
+-  'Vocabulary',
+-  'Reading',
+-  'Listening',
+-  'Writing Task 1',
+-  'Writing Task 2',
+-  'Speaking Part 1',
+-  'Speaking Part 2',
+-  'Speaking Part 3',
+-  'Grammar',
+-  'Mock Test',
+-]
+-
+ interface GeneratedTaskInput {
+   skill: string
+   title: string
+   description: string
+
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/services/dailyPlanService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+@@ -379,141 +379,8 @@
+ 
+   return { days, error: null }
+ }
+ 
+-export function validateChunkDays(
+-  days: DailyPlanItem[],
+-  request: PlanChunkRequest,
+-): ChunkValidationResult {
+-  const errors: ValidationError[] = []
+-  const missingDates: string[] = []
+-  const duplicateDates: string[] = []
+-  const invalidDays: number[] = []
+-
+-  const expectedDates = generateDateRange(request.chunkStartDate, request.chunkEndDate)
+-  const receivedDates = days.map(d => d.date)
+-  const dateSet = new Set<string>()
+-
+-  for (const date of receivedDates) {
+-    if (dateSet.has(date)) {
+-      duplicateDates.push(date)
+-    } else {
+-      dateSet.add(date)
+-    }
+-  }
+-
+-  for (const expectedDate of expectedDates) {
+-    if (!dateSet.has(expectedDate)) {
+-      missingDates.push(expectedDate)
+-    }
+-  }
+-
+-  for (const date of receivedDates) {
+-    if (!expectedDates.includes(date)) {
+-      errors.push({
+-        field: 'date',
+-        message: `Unexpected date outside chunk range: ${date}. Expected range: ${request.chunkStartDate} to ${request.chunkEndDate}.`,
+-        date,
+-      })
+-    }
+-  }
+-
+-  for (const day of days) {
+-    if (!request.chunkDayNumbers.includes(day.dayNumber)) {
+-      errors.push({
+-        field: 'dayNumber',
+-        message: `Day number ${day.dayNumber} for date ${day.date} is not in the requested chunk day range: ${request.chunkDayNumbers.join(', ')}.`,
+-        dayNumber: day.dayNumber,
+-        date: day.date,
+-      })
+-      invalidDays.push(day.dayNumber)
+-    }
+-
+-    if (!VALID_PHASE_NAMES.includes(day.phaseName)) {
+-      errors.push({
+-        field: 'phaseName',
+-        message: `Invalid phase name "${day.phaseName}" for Day ${day.dayNumber}.`,
+-        dayNumber: day.dayNumber,
+-        date: day.date,
+-      })
+-      invalidDays.push(day.dayNumber)
+-    }
+-
+-    if (day.estimatedTotalMinutes < 0 || day.estimatedTotalMinutes > 600) {
+-      errors.push({
+-        field: 'estimatedTotalMinutes',
+-        message: `Unreasonable estimated total minutes: ${day.estimatedTotalMinutes} for Day ${day.dayNumber}.`,
+-        dayNumber: day.dayNumber,
+-        date: day.date,
+-      })
+-      invalidDays.push(day.dayNumber)
+-    }
+-
+-    const hasAnyTask =
+-      day.listeningTask !== null ||
+-      day.readingTask !== null ||
+-      day.writingTask !== null ||
+-      day.speakingTask !== null ||
+-      day.vocabularyTask !== null ||
+-      day.grammarTask !== null ||
+-      day.reviewTask !== null
+-
+-    if (day.estimatedTotalMinutes > 0 && !hasAnyTask) {
+-      errors.push({
+-        field: 'tasks',
+-        message: `Day ${day.dayNumber} has estimatedTotalMinutes > 0 but no tasks assigned.`,
+-        dayNumber: day.dayNumber,
+-        date: day.date,
+-      })
+-      invalidDays.push(day.dayNumber)
+-    }
+-  }
+-
+-  const sorted = [...days].sort((a, b) => a.dayNumber - b.dayNumber)
+-  for (let i = 1; i < sorted.length; i++) {
+-    const prevDate = new Date(sorted[i - 1].date + 'T00:00:00')
+-    const currDate = new Date(sorted[i].date + 'T00:00:00')
+-    const diffMs = currDate.getTime() - prevDate.getTime()
+-    const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24))
+-
+-    if (diffDays !== 1) {
+-      errors.push({
+-        field: 'dateContinuity',
+-        message: `Date gap between Day ${sorted[i - 1].dayNumber} (${sorted[i - 1].date}) and Day ${sorted[i].dayNumber} (${sorted[i].date}): ${diffDays} day(s) apart, expected 1.`,
+-        dayNumber: sorted[i].dayNumber,
+-        date: sorted[i].date,
+-      })
+-      invalidDays.push(sorted[i].dayNumber)
+-    }
+-  }
+-
+-  const uniqueDayNumbers = new Set(days.map(d => d.dayNumber))
+-  if (uniqueDayNumbers.size !== days.length) {
+-    const seen = new Set<number>()
+-    for (const d of days) {
+-      if (seen.has(d.dayNumber)) {
+-        errors.push({
+-          field: 'duplicateDayNumber',
+-          message: `Duplicate day number: ${d.dayNumber}.`,
+-          dayNumber: d.dayNumber,
+-          date: d.date,
+-        })
+-        invalidDays.push(d.dayNumber)
+-      }
+-      seen.add(d.dayNumber)
+-    }
+-  }
+-
+-  return {
+-    isValid:
+-      errors.length === 0 && missingDates.length === 0 && duplicateDates.length === 0,
+-    errors,
+-    missingDates,
+-    duplicateDates,
+-    invalidDays: [...new Set(invalidDays)],
+-  }
+-}
+-
+ export async function generateDailyPlanChunk(
+   request: PlanChunkRequest,
+   planId: string,
+   getConfig: () => ProviderConfig | null,
+
+[0m
+[0m→ [0mRead apps/web/src/features/studyPlan/services/dailyPlanService.ts[90m [limit=60][0m
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/services/dailyPlanService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+@@ -5,9 +5,8 @@
+   DailyStudyTask,
+   PlanChunkRequest,
+   PlanPhaseName,
+   StudySkill,
+-  ValidationError,
+ } from '../types'
+ import type { TaskCategory } from '../../../models'
+ import {
+   validateChunkDays,
+
+[0m
+[0m→ [0mRead apps/web/src/features/studyPlan/services/dailyPlanService.ts[90m [offset=61][0m
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/services/dailyPlanService.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/dailyPlanService.ts
+@@ -5,8 +5,11 @@
+   DailyStudyTask,
+   PlanChunkRequest,
+   PlanPhaseName,
+   StudySkill,
++  DayPriority,
++  DayDifficulty,
++  DailyPlanStatus,
+ } from '../types'
+ import type { TaskCategory } from '../../../models'
+ import {
+   validateChunkDays,
+
+[0m
+[0m# [0mTodos
+[✓] Create src/features/studyPlan/utils/validation.ts with all validation functions
+[•] Create comprehensive test file for validation utils
+[ ] Run tests to verify
+[0m
+[0m← [0mWrite apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+Wrote file successfully.
+[0m
+[0m# [0mTodos
+[✓] Create src/features/studyPlan/utils/validation.ts with all validation functions
+[✓] Create comprehensive test file for validation utils
+[•] Run tests to verify
+[0m
+[0m$ [0mpnpm test -- --reporter verbose 2>&1 | head -300
+$ vitest run --config vitest.config.ts -- --reporter verbose
+
+ RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+9:44:45 PM [vite] (client) warning: Duplicate key "learnerProfile" in object literal
+80 |      newContentCount: getNum('ielts-new-content-count'),
+81 |      ...overrides,
+82 |      learnerProfile: overrides.learnerProfile ? { ...profile, ...overrides.learnerProfile } : profile,
+   |      ^
+83 |    }
+84 |  }
+
+  Plugin: vite:esbuild
+  File: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts
+9:44:45 PM [vite] (client) warning: Duplicate key "learnerProfile" in object literal
+105|      newContentCount: getNewContentCount(),
+106|      ...overrides,
+107|      learnerProfile: mergedProfile,
+   |      ^
+108|    }
+109|  }
+
+  Plugin: vite:esbuild
+  File: /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveMessageTriggers.ts
+stderr | ../../packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts > Settings Persistence and Configuration > validates schema when saving — rejects invalid values
+[ProactiveMessageStorage] Invalid settings schema [
+  {
+    origin: [32m'number'[39m,
+    code: [32m'too_small'[39m,
+    minimum: [33m0[39m,
+    inclusive: [33mfalse[39m,
+    path: [ [32m'maxMessagesPerDay'[39m ],
+    message: [32m'Too small: expected number to be >0'[39m
+  }
+]
+
+stderr | ../../packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts > Event Bus Integration > error in one handler does not affect others
+ProactiveEventBus handler error: Error: Handler error
+    at /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts:564:42
+    at mockCall (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/@vitest+spy@3.2.6/node_modules/[4m@vitest/spy[24m/dist/index.js:96:15)
+    at spy (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/tinyspy@4.0.4/node_modules/[4mtinyspy[24m/dist/index.js:47:80)
+    at safeInvoke (/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveEventBus.ts:29:5)
+    at /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveEventBus.ts:42:39
+    at Set.forEach (<anonymous>)
+    at Object.emitNewMessage (/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/services/proactiveEventBus.ts:42:25)
+    at /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts:574:36
+    at Proxy.assertThrows (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/chai@5.3.3/node_modules/[4mchai[24m/index.js:2767:5)
+    at Proxy.methodWrapper (file:///Users/phamthanhhung/Desktop/MyProject/IELTS/node_modules/[4m.pnpm[24m/chai@5.3.3/node_modules/[4mchai[24m/index.js:1686:25)
+
+ ✓ ../../packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts (85 tests) 35ms
+ ❯ src/features/studyPlan/utils/__tests__/validation.test.ts (84 tests | 6 failed) 12ms
+   ✓ constants > VALID_PHASE_NAMES has correct values 0ms
+   ✓ constants > VALID_PRIORITIES has correct values 0ms
+   ✓ constants > VALID_DIFFICULTIES has correct values 0ms
+   ✓ constants > VALID_SKILLS has correct values 0ms
+   ✓ constants > ALLOWED_CATEGORIES includes mock test 0ms
+   ✓ validateDateString > accepts valid YYYY-MM-DD 0ms
+   ✓ validateDateString > rejects invalid format 0ms
+   ✓ validateDateString > rejects partial date 0ms
+   ✓ isValidPhaseName > accepts valid phase names 0ms
+   ✓ isValidPhaseName > rejects invalid phase names 0ms
+   ✓ isValidPriority > accepts valid priorities 0ms
+   ✓ isValidPriority > rejects invalid priorities 0ms
+   ✓ isValidDifficulty > accepts valid difficulties 0ms
+   ✓ isValidDifficulty > rejects invalid difficulties 0ms
+   ✓ isValidSkill > accepts valid skills 0ms
+   ✓ isValidSkill > rejects invalid skills 0ms
+   ✓ isValidCategory > accepts valid categories 0ms
+   ✓ isValidCategory > rejects invalid categories 0ms
+   ✓ isDateInRange > returns true for dates within range 0ms
+   ✓ isDateInRange > returns true for start date 0ms
+   ✓ isDateInRange > returns true for end date 0ms
+   ✓ isDateInRange > returns false for date before range 0ms
+   ✓ isDateInRange > returns false for date after range 0ms
+   × validateDailyPlanItem > returns no errors for a valid day 3ms
+     → expected [ { field: 'tasks', …(3) } ] to deeply equal []
+   ✓ validateDailyPlanItem > returns no errors for a valid rest day (zero minutes, no tasks) 0ms
+   ✓ validateDailyPlanItem > returns error for invalid date format 0ms
+   ✓ validateDailyPlanItem > returns error for missing dayNumber 0ms
+   ✓ validateDailyPlanItem > returns error for negative dayNumber 0ms
+   ✓ validateDailyPlanItem > returns error for invalid weekNumber 0ms
+   ✓ validateDailyPlanItem > returns error for week number mismatch when planStartDate provided 0ms
+   ✓ validateDailyPlanItem > passes week number check when correct 0ms
+   ✓ validateDailyPlanItem > returns error for invalid phaseName 0ms
+   ✓ validateDailyPlanItem > returns error for missing mainGoal 0ms
+   ✓ validateDailyPlanItem > returns error for too short mainGoal 0ms
+   ✓ validateDailyPlanItem > returns error for invalid priority 0ms
+   ✓ validateDailyPlanItem > returns error for invalid difficulty 0ms
+   ✓ validateDailyPlanItem > returns error for negative estimatedTotalMinutes 0ms
+   ✓ validateDailyPlanItem > returns error for excessive estimatedTotalMinutes 0ms
+   ✓ validateDailyPlanItem > returns error when minutes > 0 but no tasks 0ms
+   ✓ validateDailyPlanItem > returns error when minutes === 0 but tasks present 0ms
+   ✓ validateDailyPlanItem > validates task title 0ms
+   ✓ validateDailyPlanItem > validates task skill 0ms
+   ✓ validateDailyPlanItem > validates task estimatedMinutes 0ms
+   ✓ validateDailyPlanItem > validates task category 0ms
+   ✓ validateDailyPlanItem > returns error for invalid status 0ms
+   ✓ validateDailyPlanItem > passes with all task fields filled 0ms
+   × validateChunkDays > returns valid for correct chunk 1ms
+     → expected false to be true // Object.is equality
+   ✓ validateChunkDays > detects missing dates 0ms
+   ✓ validateChunkDays > detects duplicate dates 0ms
+   ✓ validateChunkDays > detects date outside chunk range 0ms
+   ✓ validateChunkDays > detects day number outside chunk range 0ms
+   ✓ validateChunkDays > detects date continuity gap within chunk 0ms
+   ✓ validateChunkDays > detects duplicate day numbers 0ms
+   ✓ validateChunkDays > includes individual day validation errors 0ms
+   ✓ validateChunkDays > handles empty days array 0ms
+   × validateFullPlan > returns valid for complete valid plan 0ms
+     → expected false to be true // Object.is equality
+   ✓ validateFullPlan > detects missing day numbers 0ms
+   ✓ validateFullPlan > detects duplicate dates 0ms
+   ✓ validateFullPlan > detects duplicate day numbers 0ms
+   ✓ validateFullPlan > detects date before today 0ms
+   ✓ validateFullPlan > detects date after exam date 0ms
+   ✓ validateFullPlan > detects gap dates 0ms
+   ✓ validateFullPlan > handles empty plan 0ms
+   ✓ findMissingDayNumbers > returns empty for complete plan 0ms
+   ✓ findMissingDayNumbers > finds missing day numbers 0ms
+   ✓ findMissingDayNumbers > handles empty plan 0ms
+   ✓ findMissingDates > returns empty for complete plan 0ms
+   ✓ findMissingDates > finds missing dates 0ms
+   ✓ findDuplicateDayNumbers > returns empty when no duplicates 0ms
+   ✓ findDuplicateDayNumbers > detects duplicate day numbers 0ms
+   ✓ findDuplicateDayNumbers > handles multiple duplicates 0ms
+   × findInvalidDayNumbers > returns empty for all valid days 0ms
+     → expected [ 1, 2 ] to deeply equal []
+   × findInvalidDayNumbers > detects invalid days 0ms
+     → expected [ 1, 2 ] to deeply equal [ 2 ]
+   × findDaysNeedingRetry > returns empty for complete valid plan 1ms
+     → expected [ { dayNumber: 1, …(2) }, …(14) ] to deeply equal []
+   ✓ findDaysNeedingRetry > finds missing days 0ms
+   ✓ findDaysNeedingRetry > finds invalid days and includes reasons 0ms
+   ✓ findMissingRanges > returns empty for complete plan 0ms
+   ✓ findMissingRanges > finds single missing range 0ms
+   ✓ findMissingRanges > splits large missing range into chunk-sized pieces 0ms
+   ✓ findMissingRanges > handles non-contiguous missing ranges 0ms
+   ✓ validateNoExamDateOverlap > returns empty for days within exam date 0ms
+   ✓ validateNoExamDateOverlap > detects days after exam date 0ms
+   ✓ validateNoDuplicateDates > returns empty for unique dates 0ms
+   ✓ validateNoDuplicateDates > detects duplicate dates 0ms
+ ✓ ../../packages/ai-tutor/src/tests/proactiveProgressReview.test.ts (74 tests) 5ms
+ ✓ ../../packages/ai-tutor/src/tests/proactiveMessageInteractions.test.ts (40 tests) 5ms
+ ✓ ../../packages/ai-tutor/src/tests/proactiveMessageFrequency.test.ts (34 tests) 3ms
+ ✓ ../../packages/ai-tutor/src/tests/proactiveMessageTriggers.test.ts (39 tests) 4ms
+stderr | src/pages/Progress.test.tsx > Progress page > shows loading state initially
+An update to Progress inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Progress inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/pages/Progress.test.tsx (17 tests) 81ms
+ ❯ src/pages/VocabularyReview.test.tsx (9 tests | 9 failed) 9088ms
+   × VocabularyReview > shows review settings initially 1009ms
+     → Unable to find an element with the text: Review Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × VocabularyReview > shows empty state when no reviews due 1010ms
+     → Unable to find role="button" and name `/start review/i`
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × VocabularyReview > shows empty state when all words are mastered 1009ms
+     → Unable to find role="button" and name `/start review/i`
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × VocabularyReview > shows review card with word in word-to-meaning mode 1007ms
+     → Unable to find role="button" and name `/start review/i`
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × VocabularyReview > shows all four rating buttons 1010ms
+     → Unable to find role="button" and name `/start review/i`
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × VocabularyReview > moves to next card after rating 1010ms
+     → Unable to find role="button" and name `/start review/i`
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × VocabularyReview > calls put with updated review entry when rating 1010ms
+     → Unable to find role="button" and name `/start review/i`
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × VocabularyReview > shows review stats 1010ms
+     → Unable to find role="button" and name `/start review/i`
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × VocabularyReview > shows completion screen when all words reviewed 1012ms
+     → Unable to find role="button" and name `/start review/i`
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+ ❯ tests/integration/vocabulary-import-wordtab.test.tsx (3 tests | 3 failed) 3015ms
+   × Vocabulary import → Word tab integration > shows empty state when no vocabulary exists 1006ms
+     → Unable to find an element with the text: Your vocabulary notebook is empty.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × Vocabulary import → Word tab integration > displays imported vocabulary words in the Word tab 1004ms
+     → Unable to find an element with the text: ubiquitous. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × Vocabulary import → Word tab integration > refreshes the word list when vocabulary-changed event fires (simulating import) 1005ms
+     → Unable to find an element with the text: Your vocabulary notebook is empty.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+ ❯ src/features/aiTutor/tests/ProactiveSettings.test.tsx (49 tests | 28 failed) 2755ms
+   ✓ useProactiveSettings > loads default settings when nothing is stored 1ms
+   ✓ useProactiveSettings > loads existing settings from localStorage 0ms
+   ✓ useProactiveSettings > updates settings via update function 0ms
+   ✓ useProactiveSettings > tracks unsaved changes 0ms
+   ✓ useProactiveSettings > saves settings to localStorage 0ms
+   ✓ useProactiveSettings > shows saved indicator after saving  2554ms
+   ✓ useProactiveSettings > resets settings to defaults 3ms
+   ✓ useProactiveSettings > validates settings before saving and sets validation errors 1ms
+   ✓ useProactiveSettings > recovers gracefully when save fails silently 1ms
+   ✓ useProactiveSettings > clears validation errors on update 1ms
+   ✓ validateProactiveSettings > returns no errors for valid settings 0ms
+   ✓ validateProactiveSettings > returns error for empty preferredStudyTime 0ms
+   ✓ validateProactiveSettings > returns error for maxMessagesPerDay out of range 0ms
+   ✓ validateProactiveSettings > returns error when no notification channels selected 0ms
+   ✓ loadProactiveSettings > returns defaults when localStorage is empty 0ms
+   ✓ loadProactiveSettings > merges partial stored settings with defaults 0ms
+   ✓ loadProactiveSettings > merges partial categories with default categories 0ms
+   ✓ loadProactiveSettings > returns defaults when localStorage has invalid JSON 0ms
+   ✓ saveProactiveSettings > persists settings to localStorage 0ms
+   ✓ resetProactiveSettings > resets to defaults and saves to localStorage 0ms
+   × ProactiveSettings > renders the header 19ms
+     → Unable to find an element with the text: Proactive Tutor Settings. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ProactiveSettings > renders local-first notice 10ms
+     → Unable to find an element with the text: Local-First Notice. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body />[39m
+   × ProactiveSettings > renders enable toggle 9ms
+     → Unable to find an element with the text: Enable Proactive Tutor Messages. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+@@ -33,8 +33,22 @@
+   PlanPhaseName,
+ } from '../../types'
+ import type { TaskCategory } from '../../../../models'
+ 
++function createMockTask(overrides: Partial<DailyStudyTask> = {}): DailyStudyTask {
++  return {
++    id: 'task-1',
++    skill: 'Vocabulary',
++    title: 'Learn 20 new IELTS words',
++    description: 'Study vocabulary list',
++    estimatedMinutes: 20,
++    category: 'Vocabulary',
++    isCompleted: false,
++    notes: '',
++    ...overrides,
++  }
++}
++
+ function createMockDay(overrides: Partial<DailyPlanItem> = {}): DailyPlanItem {
+   const now = new Date().toISOString()
+   return {
+     id: 'day-1',
+@@ -47,9 +61,9 @@
+     listeningTask: null,
+     readingTask: null,
+     writingTask: null,
+     speakingTask: null,
+-    vocabularyTask: null,
++    vocabularyTask: createMockTask(),
+     grammarTask: null,
+     reviewTask: null,
+     optionalTasks: [],
+     estimatedTotalMinutes: 60,
+@@ -63,22 +77,8 @@
+     ...overrides,
+   }
+ }
+ 
+-function createMockTask(overrides: Partial<DailyStudyTask> = {}): DailyStudyTask {
+-  return {
+-    id: 'task-1',
+-    skill: 'Vocabulary',
+-    title: 'Learn 20 new IELTS words',
+-    description: 'Study vocabulary list',
+-    estimatedMinutes: 20,
+-    category: 'Vocabulary',
+-    isCompleted: false,
+-    notes: '',
+-    ...overrides,
+-  }
+-}
+-
+ const mockMeta: StudyPlanCalculatedMeta = {
+   today: '2026-01-01',
+   examDate: '2026-01-15',
+   totalDays: 15,
+
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+@@ -307,8 +307,9 @@
+   const day = createMockDay({
+     estimatedTotalMinutes: 0,
+     priority: 'low',
+     difficulty: 'easy',
++    vocabularyTask: null,
+   })
+   const errors = validateDailyPlanItem(day)
+   expect(errors).toEqual([])
+ })
+
+[0m
+[0m← [0mEdit apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/__tests__/validation.test.ts
+@@ -395,15 +395,9 @@
+ 
+ it('returns error when minutes > 0 but no tasks', () => {
+   const day = createMockDay({
+     estimatedTotalMinutes: 60,
+-    listeningTask: null,
+-    readingTask: null,
+-    writingTask: null,
+-    speakingTask: null,
+     vocabularyTask: null,
+-    grammarTask: null,
+-    reviewTask: null,
+   })
+   const errors = validateDailyPlanItem(day)
+   expect(errors.some(e => e.field === 'tasks')).toBe(true)
+ })
+
+[0m
+[0m$ [0mpnpm test -- --reporter verbose 2>&1 | grep -E "(✓|×|❯|Tests)" | head -100
+✓ ../../packages/ai-tutor/src/tests/proactiveAITutorIntegration.test.ts (85 tests) 32ms
+ ✓ src/features/studyPlan/utils/__tests__/validation.test.ts (84 tests) 9ms
+ ✓ ../../packages/ai-tutor/src/tests/proactiveProgressReview.test.ts (74 tests) 5ms
+ ✓ src/pages/Progress.test.tsx (17 tests) 105ms
+ ❯ src/pages/VocabularyReview.test.tsx (9 tests | 9 failed) 9045ms
+   × VocabularyReview > shows review settings initially 1006ms
+   × VocabularyReview > shows empty state when no reviews due 1005ms
+   × VocabularyReview > shows empty state when all words are mastered 1005ms
+   × VocabularyReview > shows review card with word in word-to-meaning mode 1005ms
+   × VocabularyReview > shows all four rating buttons 1003ms
+   × VocabularyReview > moves to next card after rating 1005ms
+   × VocabularyReview > calls put with updated review entry when rating 1008ms
+   × VocabularyReview > shows review stats 1004ms
+   × VocabularyReview > shows completion screen when all words reviewed 1004ms
+ ❯ tests/integration/vocabulary-import-wordtab.test.tsx (3 tests | 3 failed) 3012ms
+   × Vocabulary import → Word tab integration > shows empty state when no vocabulary exists 1006ms
+   × Vocabulary import → Word tab integration > displays imported vocabulary words in the Word tab 1004ms
+   × Vocabulary import → Word tab integration > refreshes the word list when vocabulary-changed event fires (simulating import) 1002ms
+ ❯ src/features/aiTutor/tests/ProactiveSettings.test.tsx (49 tests | 28 failed) 2966ms
+   ✓ useProactiveSettings > loads default settings when nothing is stored 2ms
+   ✓ useProactiveSettings > loads existing settings from localStorage 1ms
+   ✓ useProactiveSettings > updates settings via update function 1ms
+   ✓ useProactiveSettings > tracks unsaved changes 1ms
+   ✓ useProactiveSettings > saves settings to localStorage 2ms
+   ✓ useProactiveSettings > shows saved indicator after saving  2602ms
+   ✓ useProactiveSettings > resets settings to defaults 3ms
+   ✓ useProactiveSettings > validates settings before saving and sets validation errors 2ms
+   ✓ useProactiveSettings > recovers gracefully when save fails silently 3ms
+   ✓ useProactiveSettings > clears validation errors on update 1ms
+   ✓ validateProactiveSettings > returns no errors for valid settings 0ms
+   ✓ validateProactiveSettings > returns error for empty preferredStudyTime 0ms
+   ✓ validateProactiveSettings > returns error for maxMessagesPerDay out of range 0ms
+   ✓ validateProactiveSettings > returns error when no notification channels selected 0ms
+   ✓ loadProactiveSettings > returns defaults when localStorage is empty 0ms
+   ✓ loadProactiveSettings > merges partial stored settings with defaults 0ms
+   ✓ loadProactiveSettings > merges partial categories with default categories 0ms
+   ✓ loadProactiveSettings > returns defaults when localStorage has invalid JSON 0ms
+   ✓ saveProactiveSettings > persists settings to localStorage 0ms
+   ✓ resetProactiveSettings > resets to defaults and saves to localStorage 0ms
+   × ProactiveSettings > renders the header 32ms
+   × ProactiveSettings > renders local-first notice 48ms
+   × ProactiveSettings > renders enable toggle 9ms
+   × ProactiveSettings > shows advanced settings when enabled 10ms
+   × ProactiveSettings > renders daily reminder time input 12ms
+   × ProactiveSettings > renders preferred study time input 8ms
+   × ProactiveSettings > renders weak skill priority multi-select 9ms
+   × ProactiveSettings > renders notification channel options 11ms
+   × ProactiveSettings > renders auto-suggest exercises toggle 19ms
+   × ProactiveSettings > renders auto weekly review toggle 8ms
+   × ProactiveSettings > renders quiet hours section 6ms
+   × ProactiveSettings > renders max messages per day input 7ms
+   × ProactiveSettings > renders message categories section 9ms
+   × ProactiveSettings > renders save and reset buttons 22ms
+   × ProactiveSettings > renders close button when onClose is provided 9ms
+   × ProactiveSettings > calls onClose when close button is clicked 11ms
+   × ProactiveSettings > shows saved indicator after saving changes 15ms
+   × ProactiveSettings > disables save button when no changes are made 12ms
+   × ProactiveSettings > enables save button after making changes 9ms
+   × ProactiveSettings > resets settings when reset button is clicked 6ms
+   × ProactiveSettings > toggles a message category when clicked 13ms
+   × ProactiveSettings > toggles notification channels when clicked 11ms
+   × ProactiveSettings > displays validation errors for invalid settings 6ms
+   × ProactiveSettings > hides advanced settings when disabled 6ms
+   × ProactiveSettings > has accessible role for the settings panel 15ms
+   × ProactiveSettings > opens and closes multi-select dropdown 4ms
+   ✓ ProactiveSettings with onClose > renders without close button when onClose is not provided 4ms
+   × ProactiveSettings Integration > persists changes to localStorage after save 5ms
+   × ProactiveSettings Integration > loads saved settings from localStorage on mount 6ms
+ ❯ src/pages/landing/__tests__/LandingPage.test.tsx (14 tests | 14 failed) 145ms
+   × LandingPage > renders the HeroSection with product name 12ms
+   × LandingPage > renders the ProblemSection heading 7ms
+   × LandingPage > renders the SolutionSection heading 7ms
+   × LandingPage > renders the FeatureGrid heading 13ms
+   × LandingPage > renders the ExtensionSection heading 7ms
+   × LandingPage > renders the PrivacySection heading 8ms
+   × LandingPage > renders the HowItWorksSection heading 9ms
+   × LandingPage > renders the CreatorSection heading 9ms
+   × LandingPage > renders the DonationSection heading 10ms
+   × LandingPage > renders the FAQSection heading 11ms
+   × LandingPage > renders the FinalCTASection heading 16ms
+   × LandingPage > renders a Start Learning Free CTA link 10ms
+   × LandingPage > renders an Install Chrome Extension link 11ms
+   × LandingPage > sets the document title 14ms
+ ❯ src/tests/storage/DatabaseMigration.test.ts (51 tests | 21 failed) 94ms
+   × AppDatabase versioning and schema > opens at version 4 4ms
+   ✓ AppDatabase versioning and schema > registers all v1 stores 2ms
+   ✓ AppDatabase versioning and schema > registers all v2 and v3 stores (v1 + new tables) 2ms
+   × AppDatabase versioning and schema > has exactly 28 tables 3ms
+   × AppDatabase versioning and schema > upgrades from version 1 to version 2 preserving v1 data 0ms
+   ✓ Table indexes > indexes vocabulary by topic, status, difficulty 1ms
+   ✓ Table indexes > indexes tasks by date, category, isDone 1ms
+   ✓ Table indexes > indexes v2 tables with tags and isFavorite where applicable 1ms
+   ✓ Validation rejects corrupted data > rejects vocabulary with invalid difficulty 2ms
+   ✓ Validation rejects corrupted data > rejects vocabulary with invalid status 1ms
+   ✓ Validation rejects corrupted data > rejects vocabulary with missing word 2ms
+   ✓ Validation rejects corrupted data > rejects grammarNote with missing explanation 2ms
+   ✓ Validation rejects corrupted data > rejects mistake with invalid skill 2ms
+   ✓ Validation rejects corrupted data > rejects writing prompt with invalid taskType 2ms
+   ✓ Validation rejects corrupted data > rejects speaking question with invalid part 5ms
+   ✓ Validation rejects corrupted data > rejects items with non-object type 1ms
+[0m
+[0m$ [0mpnpm run typecheck 2>&1 | tail -30
+$ tsc --noEmit
+[0m
+[0m$ [0mpnpm test -- src/features/studyPlan 2>&1 | tail -20
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 60000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mpnpm vitest run --config vitest.config.ts src/features/studyPlan/utils/__tests__/dateUtils.test.ts src/features/studyPlan/utils/__tests__/validation.test.ts src/features/studyPlan/services/__tests__/globalStrategyService.test.ts 2>&1 | tail -30
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ ✓ src/features/studyPlan/utils/__tests__/validation.test.ts (84 tests) 10ms
+ ✓ src/features/studyPlan/utils/__tests__/dateUtils.test.ts (60 tests) 5ms
+ ✓ src/features/studyPlan/services/__tests__/globalStrategyService.test.ts (14 tests) 1ms
+
+ Test Files  3 passed (3)
+      Tests  158 passed (158)
+   Start at  21:46:53
+   Duration  460ms (transform 51ms, setup 49ms, collect 53ms, tests 16ms, environment 222ms, prepare 35ms)
+[0m
+[0m# [0mTodos
+[✓] Create src/features/studyPlan/utils/validation.ts with all validation functions
+[✓] Create comprehensive test file for validation utils
+[✓] Run tests to verify
+[0m
+[2026-07-05T14:47:03.806Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-05T14:47:03.811Z] [INFO] Task completed successfully
