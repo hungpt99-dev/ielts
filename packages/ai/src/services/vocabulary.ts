@@ -3,7 +3,12 @@ import type { ProviderConfig } from '../client/types'
 import { buildVocabularyDetailsPrompt, buildVocabularyQuizPrompt } from '../prompts'
 import { vocabularyDetailsSchema, vocabularyQuizSchema } from '../schemas'
 import type { VocabularyDetails, VocabularyQuiz } from '../schemas'
-import { extractJSON } from '../utils'
+import { AiGenerateResultCache, extractJSON } from '../utils'
+
+const vocabularyCache = new AiGenerateResultCache<VocabularyDetails>({ ttlMs: 30 * 60 * 1000 })
+const quizCache = new AiGenerateResultCache<VocabularyQuiz>({ ttlMs: 30 * 60 * 1000 })
+
+export { vocabularyCache, quizCache }
 
 export async function generateVocabularyDetails(
   word: string,
@@ -11,6 +16,10 @@ export async function generateVocabularyDetails(
   topic: string,
   getConfig: () => ProviderConfig,
 ): Promise<{ data: VocabularyDetails | null; error: string | null }> {
+  const cacheKey = AiGenerateResultCache.generateKey('vocab-details', word, topic, sourceSentence.slice(0, 80))
+  const cached = vocabularyCache.get(cacheKey)
+  if (cached) return { data: cached, error: null }
+
   const config = getConfig()
 
   if (!config.apiKey) {
@@ -62,6 +71,7 @@ export async function generateVocabularyDetails(
       return { data: null, error: 'AI response had unexpected format. Try again.' }
     }
 
+    vocabularyCache.set(cacheKey, result.data)
     return { data: result.data, error: null }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'
@@ -77,6 +87,10 @@ export async function generateVocabularyQuiz(
   details: VocabularyDetails,
   getConfig: () => ProviderConfig,
 ): Promise<{ data: VocabularyQuiz | null; error: string | null }> {
+  const quizKey = AiGenerateResultCache.generateKey('vocab-quiz', word)
+  const cached = quizCache.get(quizKey)
+  if (cached) return { data: cached, error: null }
+
   const config = getConfig()
 
   if (!config.apiKey) {
@@ -100,6 +114,7 @@ export async function generateVocabularyQuiz(
     const result = vocabularyQuizSchema.safeParse(parsed)
     if (!result.success) return { data: null, error: 'AI response had unexpected format.' }
 
+    quizCache.set(quizKey, result.data)
     return { data: result.data, error: null }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'

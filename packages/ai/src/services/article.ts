@@ -3,7 +3,11 @@ import type { ProviderConfig } from '../client/types'
 import { buildArticleQuestionPrompt } from '../prompts'
 import { articleQuestionSchema } from '../schemas'
 import type { ArticleQuestionSet } from '../schemas'
-import { extractJSON } from '../utils'
+import { AiGenerateResultCache, extractJSON } from '../utils'
+
+const articleCache = new AiGenerateResultCache<ArticleQuestionSet>({ ttlMs: 30 * 60 * 1000 })
+
+export { articleCache }
 
 export async function generateArticleQuestions(
   articleContent: string,
@@ -12,6 +16,10 @@ export async function generateArticleQuestions(
   questionCount: number,
   getConfig: () => ProviderConfig,
 ): Promise<{ data: ArticleQuestionSet | null; error: string | null }> {
+  const cacheKey = AiGenerateResultCache.generateKey('article-questions', articleTitle, topic, String(questionCount))
+  const cached = articleCache.get(cacheKey)
+  if (cached) return { data: cached, error: null }
+
   const config = getConfig()
 
   if (!config.apiKey) {
@@ -38,6 +46,7 @@ export async function generateArticleQuestions(
       return { data: null, error: 'AI response had unexpected format. Try again.' }
     }
 
+    articleCache.set(cacheKey, result.data)
     return { data: result.data, error: null }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'

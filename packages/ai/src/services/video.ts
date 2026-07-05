@@ -18,13 +18,29 @@ import type {
   ListeningQuestions,
   ShadowingScripts,
 } from '../schemas'
-import { parseAndValidate } from '../utils'
+import { AiGenerateResultCache, parseAndValidate } from '../utils'
+
+const transcriptVocabCache = new AiGenerateResultCache<TranscriptVocabulary>({ ttlMs: 30 * 60 * 1000 })
+const transcriptSummaryCache = new AiGenerateResultCache<TranscriptSummary>({ ttlMs: 30 * 60 * 1000 })
+const listeningQuestionsCache = new AiGenerateResultCache<ListeningQuestions>({ ttlMs: 30 * 60 * 1000 })
+const shadowingScriptsCache = new AiGenerateResultCache<ShadowingScripts>({ ttlMs: 30 * 60 * 1000 })
+
+export {
+  transcriptVocabCache,
+  transcriptSummaryCache,
+  listeningQuestionsCache,
+  shadowingScriptsCache,
+}
 
 export async function generateVocabularyFromTranscript(
   transcript: string,
   videoTitle: string,
   getConfig: () => ProviderConfig,
 ): Promise<{ data: TranscriptVocabulary | null; error: string | null }> {
+  const cacheKey = AiGenerateResultCache.generateKey('video-vocab', videoTitle, transcript.slice(0, 80))
+  const cached = transcriptVocabCache.get(cacheKey)
+  if (cached) return { data: cached, error: null }
+
   const config = getConfig()
   if (!config.apiKey) {
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
@@ -38,7 +54,9 @@ export async function generateVocabularyFromTranscript(
   })
   if (error) return { data: null, error }
 
-  return parseAndValidate(content!, transcriptVocabularySchema)
+  const result = parseAndValidate(content!, transcriptVocabularySchema)
+  if (result.data) transcriptVocabCache.set(cacheKey, result.data)
+  return result
 }
 
 export async function generateSummaryFromTranscript(
@@ -46,6 +64,10 @@ export async function generateSummaryFromTranscript(
   videoTitle: string,
   getConfig: () => ProviderConfig,
 ): Promise<{ data: TranscriptSummary | null; error: string | null }> {
+  const cacheKey = AiGenerateResultCache.generateKey('video-summary', videoTitle, transcript.slice(0, 80))
+  const cached = transcriptSummaryCache.get(cacheKey)
+  if (cached) return { data: cached, error: null }
+
   const config = getConfig()
   if (!config.apiKey) {
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
@@ -59,7 +81,9 @@ export async function generateSummaryFromTranscript(
   })
   if (error) return { data: null, error }
 
-  return parseAndValidate(content!, transcriptSummarySchema)
+  const result = parseAndValidate(content!, transcriptSummarySchema)
+  if (result.data) transcriptSummaryCache.set(cacheKey, result.data)
+  return result
 }
 
 export async function generateListeningQuestions(
@@ -67,6 +91,10 @@ export async function generateListeningQuestions(
   videoTitle: string,
   getConfig: () => ProviderConfig,
 ): Promise<{ data: ListeningQuestions | null; error: string | null }> {
+  const cacheKey = AiGenerateResultCache.generateKey('video-listening', videoTitle, transcript.slice(0, 80))
+  const cached = listeningQuestionsCache.get(cacheKey)
+  if (cached) return { data: cached, error: null }
+
   const config = getConfig()
   if (!config.apiKey) {
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
@@ -80,13 +108,19 @@ export async function generateListeningQuestions(
   })
   if (error) return { data: null, error }
 
-  return parseAndValidate(content!, listeningQuestionSchema)
+  const result = parseAndValidate(content!, listeningQuestionSchema)
+  if (result.data) listeningQuestionsCache.set(cacheKey, result.data)
+  return result
 }
 
 export async function generateShadowingScripts(
   transcript: string,
   getConfig: () => ProviderConfig,
 ): Promise<{ data: ShadowingScripts | null; error: string | null }> {
+  const cacheKey = AiGenerateResultCache.generateKey('video-shadowing', transcript.slice(0, 80))
+  const cached = shadowingScriptsCache.get(cacheKey)
+  if (cached) return { data: cached, error: null }
+
   const config = getConfig()
   if (!config.apiKey) {
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
@@ -100,5 +134,7 @@ export async function generateShadowingScripts(
   })
   if (error) return { data: null, error }
 
-  return parseAndValidate(content!, shadowingScriptSchema)
+  const result = parseAndValidate(content!, shadowingScriptSchema)
+  if (result.data) shadowingScriptsCache.set(cacheKey, result.data)
+  return result
 }
