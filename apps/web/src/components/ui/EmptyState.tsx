@@ -193,7 +193,7 @@ export function EmptyStateCard({
         {title}
       </p>
       {description && (
-        <p className={`mt-2 w-full max-w-md text-center leading-relaxed ${compact ? 'text-xs' : 'text-sm'}`} style={{ color: 'var(--color-text-secondary)' }}>
+        <p className={`mt-2 w-full text-center leading-relaxed ${compact ? 'text-xs' : 'text-sm'}`} style={{ color: 'var(--color-text-secondary)' }}>
           {description}
         </p>
       )}

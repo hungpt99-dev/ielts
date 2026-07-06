@@ -258,7 +258,7 @@ export default function TodayPlanPage() {
 
   if (!planDay && !planId && tasks.length === 0) {
     return (
-      <PageContainer width="narrow">
+      <PageContainer width="full">
         <div
           className="flex flex-col items-center justify-center rounded-2xl p-8 text-center"
           style={{ border: '1px solid var(--color-border)' }}
@@ -272,7 +272,7 @@ export default function TodayPlanPage() {
           <p className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
             Nothing planned for today
           </p>
-          <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
             You haven't created a study plan yet. Let's build one to guide your IELTS journey!
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -290,7 +290,7 @@ export default function TodayPlanPage() {
 
   if (!planDay && tasks.length === 0) {
     return (
-      <PageContainer width="narrow">
+      <PageContainer width="full">
         <div
           className="flex flex-col items-center justify-center rounded-2xl p-8 text-center"
           style={{ border: '1px solid var(--color-border)' }}
@@ -304,7 +304,7 @@ export default function TodayPlanPage() {
           <p className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
             Today is a rest day
           </p>
-          <p className="mt-2 max-w-sm text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
             There are no tasks scheduled for today in your study plan. Enjoy your break!
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
