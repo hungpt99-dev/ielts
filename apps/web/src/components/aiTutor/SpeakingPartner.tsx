@@ -746,7 +746,7 @@ export function PartSelectorCard({ onSelect, disabled }: PartSelectorCardProps) 
 
   return (
     <div
-      className="mt-3 rounded-xl border-2 border-amber-200 bg-amber-50/50 p-4 dark:border-amber-800 dark:bg-amber-900/10"
+      className="mt-3 rounded-xl border-2 border-[var(--color-warning-light)] bg-[var(--color-warning-light)]/50 p-4 dark:border-[var(--color-warning-dark)] dark:bg-[var(--color-warning-dark)]/10"
       role="group"
       aria-labelledby={labelId}
     >
@@ -757,7 +757,7 @@ export function PartSelectorCard({ onSelect, disabled }: PartSelectorCardProps) 
         <button
           onClick={() => onSelect(1)}
           disabled={disabled}
-          className="flex flex-col items-center gap-1 rounded-lg border-2 border-amber-200 bg-white p-3 text-sm transition-colors hover:bg-amber-50 disabled:opacity-50 dark:border-amber-700 dark:bg-slate-700 dark:hover:bg-amber-900/20"
+          className="flex flex-col items-center gap-1 rounded-lg border-2 border-[var(--color-warning-light)] bg-[var(--color-surface)] p-3 text-sm transition-colors hover:bg-[var(--color-warning-light)] disabled:opacity-50 dark:border-[var(--color-warning-dark)] dark:bg-[var(--color-surface-secondary)] dark:hover:bg-[var(--color-warning-dark)]/20"
         >
           <span className="text-xl">1️⃣</span>
           <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>Part 1</span>
@@ -766,7 +766,7 @@ export function PartSelectorCard({ onSelect, disabled }: PartSelectorCardProps) 
         <button
           onClick={() => onSelect(2)}
           disabled={disabled}
-          className="flex flex-col items-center gap-1 rounded-lg border-2 border-amber-200 bg-white p-3 text-sm transition-colors hover:bg-amber-50 disabled:opacity-50 dark:border-amber-700 dark:bg-slate-700 dark:hover:bg-amber-900/20"
+          className="flex flex-col items-center gap-1 rounded-lg border-2 border-[var(--color-warning-light)] bg-[var(--color-surface)] p-3 text-sm transition-colors hover:bg-[var(--color-warning-light)] disabled:opacity-50 dark:border-[var(--color-warning-dark)] dark:bg-[var(--color-surface-secondary)] dark:hover:bg-[var(--color-warning-dark)]/20"
         >
           <span className="text-xl">2️⃣</span>
           <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>Part 2</span>
@@ -775,7 +775,7 @@ export function PartSelectorCard({ onSelect, disabled }: PartSelectorCardProps) 
         <button
           onClick={() => onSelect(3)}
           disabled={disabled}
-          className="flex flex-col items-center gap-1 rounded-lg border-2 border-amber-200 bg-white p-3 text-sm transition-colors hover:bg-amber-50 disabled:opacity-50 dark:border-amber-700 dark:bg-slate-700 dark:hover:bg-amber-900/20"
+          className="flex flex-col items-center gap-1 rounded-lg border-2 border-[var(--color-warning-light)] bg-[var(--color-surface)] p-3 text-sm transition-colors hover:bg-[var(--color-warning-light)] disabled:opacity-50 dark:border-[var(--color-warning-dark)] dark:bg-[var(--color-surface-secondary)] dark:hover:bg-[var(--color-warning-dark)]/20"
         >
           <span className="text-xl">3️⃣</span>
           <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>Part 3</span>
@@ -797,7 +797,7 @@ export function CueCardDisplay({ card }: CueCardDisplayProps) {
 
   return (
     <div
-      className="mt-3 rounded-xl border-2 border-amber-200 bg-white p-4 dark:border-amber-800 dark:bg-slate-800"
+      className="mt-3 rounded-xl border-2 border-[var(--color-warning-light)] bg-[var(--color-surface)] p-4 dark:border-[var(--color-warning-dark)] dark:bg-[var(--color-surface-secondary)]"
       aria-labelledby={labelId}
     >
       <div className="mb-3 flex items-center gap-2">
@@ -821,13 +821,13 @@ export function CueCardDisplay({ card }: CueCardDisplayProps) {
       <ul className="mb-3 space-y-1">
         {card.bulletPoints.map((bp, i) => (
           <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            <span className="mt-0.5 text-amber-500">•</span>
+            <span className="mt-0.5 text-[var(--color-warning)]">•</span>
             <span>{bp}</span>
           </li>
         ))}
       </ul>
 
-      <div className="rounded-lg bg-amber-50 p-2.5 dark:bg-amber-900/20">
+      <div className="rounded-lg bg-[var(--color-warning-light)] p-2.5 dark:bg-[var(--color-warning-dark)]/20">
         <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
           ⏱ Take 1 minute to prepare, then type your 1-2 minute response below.
         </p>
@@ -843,15 +843,15 @@ interface BandEstimateCardProps {
 }
 
 const BAND_COLORS: Record<string, string> = {
-  '9': 'text-green-600', '8.5': 'text-green-600', '8': 'text-green-600',
-  '7.5': 'text-blue-600', '7': 'text-blue-600', '6.5': 'text-blue-600',
-  '6': 'text-amber-600', '5.5': 'text-amber-600', '5': 'text-amber-600',
-  '4.5': 'text-red-600', '4': 'text-red-600', '3.5': 'text-red-600', '3': 'text-red-600',
+  '9': 'text-[var(--color-success)]', '8.5': 'text-[var(--color-success)]', '8': 'text-[var(--color-success)]',
+  '7.5': 'text-[var(--color-primary)]', '7': 'text-[var(--color-primary)]', '6.5': 'text-[var(--color-primary)]',
+  '6': 'text-[var(--color-warning)]', '5.5': 'text-[var(--color-warning)]', '5': 'text-[var(--color-warning)]',
+  '4.5': 'text-[var(--color-danger)]', '4': 'text-[var(--color-danger)]', '3.5': 'text-[var(--color-danger)]', '3': 'text-[var(--color-danger)]',
 }
 
 function getBandColor(band: number): string {
   const key = band.toString()
-  return BAND_COLORS[key] || 'text-slate-600'
+  return BAND_COLORS[key] || 'text-[var(--color-text-secondary)]'
 }
 
 export function BandEstimateCard({ band }: BandEstimateCardProps) {
@@ -859,7 +859,7 @@ export function BandEstimateCard({ band }: BandEstimateCardProps) {
 
   return (
     <div
-      className="mt-3 rounded-xl border-2 border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800"
+      className="mt-3 rounded-xl border-2 border-[var(--color-border)] bg-[var(--color-surface)] p-4 dark:border-[var(--color-border)] dark:bg-[var(--color-surface-secondary)]"
       aria-labelledby={labelId}
     >
       <p id={labelId} className="mb-3 text-sm font-bold" style={{ color: 'var(--color-text)' }}>
@@ -887,7 +887,7 @@ export function BandEstimateCard({ band }: BandEstimateCardProps) {
               <span style={{ color: 'var(--color-text-secondary)' }}>{item.label}</span>
               <span className={`font-medium ${getBandColor(item.value)}`}>{item.value}</span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-600">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--color-surface-alt)] dark:bg-[var(--color-surface-secondary)]">
               <div
                 className={`h-full rounded-full transition-all ${
                   item.value >= 7 ? 'bg-green-500' : item.value >= 6 ? 'bg-blue-500' : item.value >= 5 ? 'bg-amber-500' : 'bg-red-500'
@@ -918,15 +918,15 @@ export function FeedbackSummaryCard({ feedback, part: _part, onNext, onSwitchPar
       <BandEstimateCard band={feedback.bandEstimate} />
 
       {feedback.corrections.length > 0 && (
-        <div className="rounded-xl border-2 border-red-200 bg-red-50/50 p-4 dark:border-red-800 dark:bg-red-900/10">
-          <p className="mb-2 text-sm font-medium text-red-700 dark:text-red-400">🔍 Corrections</p>
+        <div className="rounded-xl border-2 border-[var(--color-danger-light)] bg-[var(--color-danger-light)]/50 p-4 dark:border-[var(--color-danger-dark)] dark:bg-[var(--color-danger-dark)]/10">
+          <p className="mb-2 text-sm font-medium text-[var(--color-danger)] dark:text-[var(--color-danger)]">🔍 Corrections</p>
           <div className="space-y-2">
             {feedback.corrections.map((c, i) => (
               <div key={i} className="text-xs">
-                <p className="text-red-600 dark:text-red-400">
+                <p className="text-[var(--color-danger)] dark:text-[var(--color-danger)]">
                   <span className="line-through">{c.original}</span>
                   {' → '}
-                  <span className="font-medium text-green-600 dark:text-green-400">{c.suggestion}</span>
+                  <span className="font-medium text-[var(--color-success)] dark:text-[var(--color-success)]">{c.suggestion}</span>
                 </p>
                 <p className="mt-0.5" style={{ color: 'var(--color-muted)' }}>{c.explanation}</p>
               </div>
@@ -936,8 +936,8 @@ export function FeedbackSummaryCard({ feedback, part: _part, onNext, onSwitchPar
       )}
 
       {feedback.betterPhrases.length > 0 && (
-        <div className="rounded-xl border-2 border-blue-200 bg-blue-50/50 p-4 dark:border-blue-800 dark:bg-blue-900/10">
-          <p className="mb-2 text-sm font-medium text-blue-700 dark:text-blue-400">💡 Suggested Phrases</p>
+        <div className="rounded-xl border-2 border-[var(--color-primary-light)] bg-[var(--color-primary-light)]/50 p-4 dark:border-[var(--color-primary-hover)] dark:bg-[var(--color-primary-hover)]/10">
+          <p className="mb-2 text-sm font-medium text-[var(--color-primary)] dark:text-[var(--color-primary)]">💡 Suggested Phrases</p>
           <div className="space-y-2">
             {feedback.betterPhrases.map((p, i) => (
               <div key={i} className="text-xs">
@@ -949,8 +949,8 @@ export function FeedbackSummaryCard({ feedback, part: _part, onNext, onSwitchPar
         </div>
       )}
 
-      <div className="rounded-xl border-2 border-green-200 bg-green-50/50 p-4 dark:border-green-800 dark:bg-green-900/10">
-        <p className="mb-1 text-sm font-medium text-green-700 dark:text-green-400">📝 Advice</p>
+      <div className="rounded-xl border-2 border-[var(--color-success-light)] bg-[var(--color-success-light)]/50 p-4 dark:border-[var(--color-success)] dark:bg-[var(--color-success)]/10">
+        <p className="mb-1 text-sm font-medium text-[var(--color-success)] dark:text-[var(--color-success)]">📝 Advice</p>
         <p className="whitespace-pre-wrap text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
           {feedback.generalAdvice}
         </p>
@@ -960,14 +960,14 @@ export function FeedbackSummaryCard({ feedback, part: _part, onNext, onSwitchPar
         <button
           onClick={onNext}
           disabled={disabled}
-          className="flex-1 rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700 disabled:opacity-50"
+          className="flex-1 rounded-lg bg-[var(--color-warning)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--color-warning-dark)] disabled:opacity-50"
         >
           Next Question →
         </button>
         <button
           onClick={onSwitchPart}
           disabled={disabled}
-          className="rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-50 disabled:opacity-50 dark:hover:bg-slate-700"
+          className="rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:bg-[var(--color-surface-alt)] disabled:opacity-50 dark:hover:bg-[var(--color-surface-secondary)]"
           style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
         >
           Switch Part

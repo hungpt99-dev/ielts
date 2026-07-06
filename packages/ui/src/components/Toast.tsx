@@ -7,17 +7,23 @@ import {
   useRef,
   type ReactNode,
 } from 'react'
+import { IconCheckCircle, IconAlertCircle, IconInfo, IconWarning } from '../icons/IconMap'
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning'
+export type ToastPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center'
 
 export interface ToastMessage {
   id: string
   type: ToastType
   message: string
+  action?: {
+    label: string
+    onClick: () => void
+  }
 }
 
-interface ToastContextValue {
-  showToast: (type: ToastType, message: string) => void
+export interface ToastContextValue {
+  showToast: (type: ToastType, message: string, action?: ToastMessage['action']) => void
 }
 
 const ToastContext = createContext<ToastContextValue>({
@@ -28,14 +34,14 @@ export function useToast(): ToastContextValue {
   return useContext(ToastContext)
 }
 
-const ICON: Record<ToastType, string> = {
-  success: '✓',
-  error: '✕',
-  info: 'ℹ',
-  warning: '⚠',
+const iconMap: Record<ToastType, ReactNode> = {
+  success: <IconCheckCircle size={16} />,
+  error: <IconAlertCircle size={16} />,
+  info: <IconInfo size={16} />,
+  warning: <IconWarning size={16} />,
 }
 
-const BG: Record<ToastType, string> = {
+const bgMap: Record<ToastType, string> = {
   success: 'var(--color-success)',
   error: 'var(--color-danger)',
   info: 'var(--color-info)',
@@ -70,43 +76,95 @@ function ToastItem({
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
-        padding: '10px 14px',
-        borderRadius: 'var(--radius-md)',
-        background: BG[toast.type],
-        color: 'var(--color-on-primary, #ffffff)',
-        fontSize: '13px',
-        lineHeight: '1.4',
-        boxShadow: 'var(--shadow-md)',
+        gap: 'var(--spacing-xs)',
+        padding: 'var(--spacing-xs) var(--spacing-sm)',
+        borderRadius: 'var(--radius-xl)',
+        background: bgMap[toast.type],
+        color: 'var(--color-on-primary)',
+        fontSize: 'var(--text-sm)',
+        fontFamily: 'var(--font-sans)',
+        lineHeight: 'var(--leading-normal)',
+        boxShadow: 'var(--shadow-lg)',
         pointerEvents: 'auto',
         opacity: exiting ? '0' : '1',
         transform: exiting ? 'translateX(100%)' : 'translateX(0)',
-        transition: 'opacity 0.2s ease, transform 0.2s ease',
-        maxWidth: '360px',
+        transition: 'opacity var(--transition-normal), transform var(--transition-normal)',
+        maxWidth: '400px',
         wordBreak: 'break-word',
+        fontWeight: 'var(--weight-medium)',
       }}
     >
-      <span aria-hidden="true" style={{ flexShrink: 0, fontSize: '14px', fontWeight: 700 }}>
-        {ICON[toast.type]}
+      <span
+        aria-hidden="true"
+        style={{
+          flexShrink: 0,
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '16px',
+          height: '16px',
+        }}
+      >
+        {iconMap[toast.type]}
       </span>
-      <span>{toast.message}</span>
+      <span style={{ flex: 1 }}>{toast.message}</span>
+      {toast.action && (
+        <button
+          type="button"
+          onClick={() => {
+            toast.action!.onClick()
+            onRemove(toast.id)
+          }}
+          style={{
+            flexShrink: 0,
+            background: 'var(--color-overlay)',
+            border: '1px solid var(--color-border-light)',
+            borderRadius: 'var(--radius-md)',
+            padding: 'var(--spacing-2xs) var(--spacing-xs)',
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-semibold)',
+            color: 'inherit',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            transition: 'background var(--transition-fast)',
+          }}
+        >
+          {toast.action.label}
+        </button>
+      )}
     </div>
   )
 }
 
-export function ToastProvider({ children }: { children: ReactNode }) {
+export interface ToastProviderProps {
+  children: ReactNode
+  position?: ToastPosition
+}
+
+export function ToastProvider({ children, position = 'bottom-right' }: ToastProviderProps) {
   const [toasts, setToasts] = useState<ToastMessage[]>([])
   const counterRef = useRef(0)
 
-  const showToast = useCallback((type: ToastType, message: string) => {
+  const showToast = useCallback((type: ToastType, message: string, action?: ToastMessage['action']) => {
     counterRef.current += 1
     const id = `toast-${counterRef.current}-${Date.now()}`
-    setToasts((prev) => [...prev, { id, type, message }])
+    setToasts((prev) => [...prev, { id, type, message, action }])
   }, [])
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id))
   }, [])
+
+  const positionStyle = (() => {
+    switch (position) {
+      case 'top-left': return { top: 'var(--spacing-lg)', left: 'var(--spacing-lg)' } as const
+      case 'top-right': return { top: 'var(--spacing-lg)', right: 'var(--spacing-lg)' } as const
+      case 'top-center': return { top: 'var(--spacing-lg)', left: '50%', transform: 'translateX(-50%)' } as const
+      case 'bottom-left': return { bottom: 'var(--spacing-lg)', left: 'var(--spacing-lg)' } as const
+      case 'bottom-center': return { bottom: 'var(--spacing-lg)', left: '50%', transform: 'translateX(-50%)' } as const
+      default: return { bottom: 'var(--spacing-lg)', right: 'var(--spacing-lg)' } as const
+    }
+  })()
 
   return (
     <ToastContext.Provider value={{ showToast }}>
@@ -114,13 +172,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       <div
         style={{
           position: 'fixed',
-          bottom: '16px',
-          right: '16px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '8px',
-          zIndex: 2147483647,
+          gap: 'var(--spacing-xs)',
+          zIndex: 'var(--z-toast)',
           pointerEvents: 'none',
+          ...positionStyle,
         }}
       >
         {toasts.map((t) => (

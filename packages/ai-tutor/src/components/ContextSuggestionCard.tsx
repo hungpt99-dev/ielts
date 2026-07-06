@@ -1,4 +1,5 @@
 import type { ContextSuggestion } from '../types'
+import { IconExplain, IconClose } from '../../../ui/src/icons/IconMap'
 
 interface ContextSuggestionCardProps {
   suggestion: ContextSuggestion
@@ -13,26 +14,33 @@ export function ContextSuggestionCard({
 }: ContextSuggestionCardProps) {
   return (
     <div
-      className="mx-4 mt-2 w-full max-w-xs rounded-xl border p-3 text-left text-xs"
+      className="mx-4 w-full max-w-xs rounded-xl border p-3 text-left text-xs"
       style={{
-        borderColor: 'var(--color-primary-light)',
-        backgroundColor: 'color-mix(in srgb, var(--color-primary) 6%, transparent)',
+        borderColor: 'var(--color-tutor-border)',
+        backgroundColor: 'var(--color-tutor-background)',
+        boxShadow: 'var(--shadow-tutor)',
         animation: 'chat-fade-in 0.3s ease-out',
       }}
     >
       <div className="mb-1.5 flex items-start justify-between gap-2">
-        <p className="text-xs font-semibold" style={{ color: 'var(--color-text)' }}>
-          {suggestion.title}
-        </p>
+        <div className="flex items-center gap-2">
+          <span
+            className="flex h-6 w-6 items-center justify-center rounded-full text-[10px]"
+            style={{ backgroundColor: 'var(--color-tutor-accent-light)', color: 'var(--color-tutor-accent)' }}
+          >
+            <IconExplain size={12} />
+          </span>
+          <p className="text-xs font-semibold" style={{ color: 'var(--color-tutor-text)' }}>
+            {suggestion.title}
+          </p>
+        </div>
         <button
           onClick={onDismiss}
-          className="flex h-4 w-4 shrink-0 items-center justify-center rounded text-[10px] transition-colors hover:opacity-70"
+          className="flex h-5 w-5 shrink-0 items-center justify-center rounded text-[10px] transition-colors hover:opacity-70"
           style={{ color: 'var(--color-muted)' }}
           aria-label="Dismiss suggestion"
         >
-          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <IconClose size={12} />
         </button>
       </div>
       <p className="mb-2 leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
@@ -42,7 +50,7 @@ export function ContextSuggestionCard({
         onClick={onAction}
         className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
         style={{
-          backgroundColor: 'var(--color-primary)',
+          backgroundColor: 'var(--color-tutor-accent)',
           color: 'var(--color-on-primary)',
         }}
         type="button"

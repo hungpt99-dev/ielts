@@ -1,29 +1,50 @@
+import { type ReactNode } from 'react'
+
 interface LoadingSpinnerProps {
   size?: 'sm' | 'md' | 'lg'
   message?: string
   fullPage?: boolean
+  fullHeight?: boolean
 }
 
 const sizeMap = {
-  sm: 'h-5 w-5 border-2',
-  md: 'h-8 w-8 border-[3px]',
-  lg: 'h-12 w-12 border-4',
+  sm: { width: 'var(--spacing-lg)', height: 'var(--spacing-lg)', borderWidth: '2px' },
+  md: { width: 'var(--spacing-2xl)', height: 'var(--spacing-2xl)', borderWidth: '3px' },
+  lg: { width: 'var(--spacing-3xl)', height: 'var(--spacing-3xl)', borderWidth: '4px' },
 }
 
-export default function LoadingSpinner({ size = 'md', message, fullPage }: LoadingSpinnerProps) {
+export default function LoadingSpinner({ size = 'md', message, fullPage, fullHeight }: LoadingSpinnerProps) {
+  const s = sizeMap[size]
+
+  const spinner = (
+    <div
+      style={{
+        width: s.width,
+        height: s.height,
+        border: `${s.borderWidth} solid var(--color-border)`,
+        borderTopColor: 'var(--color-primary)',
+        borderRadius: 'var(--radius-full)',
+        animation: 'spin 0.6s linear infinite',
+      }}
+      role="status"
+      aria-label="Loading"
+    />
+  )
+
   const content = (
-    <div className={`flex flex-col items-center justify-center gap-3 ${fullPage ? 'h-full min-h-[200px]' : ''}`}>
-      <div
-        className={`animate-spin rounded-full border-t-transparent ${sizeMap[size]}`}
-        style={{
-          borderColor: 'var(--color-primary)',
-          borderTopColor: 'transparent',
-        }}
-        role="status"
-        aria-label="Loading"
-      />
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 'var(--spacing-sm)',
+        minHeight: fullHeight ? 'var(--spacing-3xl)' : undefined,
+      }}
+    >
+      {spinner}
       {message && (
-        <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
+        <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: 'var(--color-muted)', fontFamily: 'var(--font-sans)' }}>
           {message}
         </p>
       )}
@@ -32,7 +53,15 @@ export default function LoadingSpinner({ size = 'md', message, fullPage }: Loadi
 
   if (fullPage) {
     return (
-      <div className="flex h-full min-h-[50vh] items-center justify-center">
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '50vh',
+          width: '100%',
+        }}
+      >
         {content}
       </div>
     )

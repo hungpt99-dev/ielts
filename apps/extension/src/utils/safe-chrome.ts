@@ -120,23 +120,15 @@ export function safeFetchProviderConfig(): Promise<{
     try {
       const [syncResult, localResult] = await Promise.all([
         safeSyncGet<any>(['extensionSettings']),
-        safeStorageGet<any>(['aiApiKey']),
+        safeStorageGet<any>(['aiApiKey', 'aiBaseUrl', 'aiModel']),
       ])
-      const settings = syncResult.extensionSettings || {}
+      const syncSettings = syncResult.extensionSettings || {}
 
-      // Primary: read from chrome.storage.local (where the options page saves it)
-      let apiKey = localResult.aiApiKey || ''
+      const apiKey = localResult.aiApiKey || syncSettings.aiApiKey || ''
+      const baseUrl = localResult.aiBaseUrl || syncSettings.aiBaseUrl || OPENAI_BASE_URL
+      const model = localResult.aiModel || syncSettings.aiModel || DEFAULT_MODEL
 
-      // Fallback: check if the key is in sync storage (legacy migration path)
-      if (!apiKey) {
-        apiKey = settings.aiApiKey || ''
-      }
-
-      return {
-        apiKey,
-        baseUrl: settings.aiBaseUrl || OPENAI_BASE_URL,
-        model: settings.aiModel || DEFAULT_MODEL,
-      }
+      return { apiKey, baseUrl, model }
     } catch {
       return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_MODEL }
     }

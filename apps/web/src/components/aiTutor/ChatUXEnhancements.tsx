@@ -96,7 +96,7 @@ export function MissingKeyBanner({ onOpenSettings }: MissingKeyBannerProps) {
             className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
             style={{
               backgroundColor: 'var(--color-primary)',
-              color: 'var(--color-on-primary, #ffffff)',
+              color: 'var(--color-on-primary)',
             }}
             type="button"
           >
@@ -239,13 +239,17 @@ export function MessageBubble({ role, content, timestamp, formatTime }: MessageB
             role === 'user'
               ? {
                   backgroundColor: 'var(--color-primary)',
-                  color: 'var(--color-on-primary, #ffffff)',
+                  color: 'var(--color-on-primary)',
                   borderBottomRightRadius: '4px',
+                  overflowWrap: 'break-word',
+                  wordBreak: 'break-word',
                 }
               : {
                   backgroundColor: 'var(--color-surface-alt)',
                   color: 'var(--color-text)',
                   borderBottomLeftRadius: '4px',
+                  overflowWrap: 'break-word',
+                  wordBreak: 'break-word',
                 }
           }
         >
@@ -393,7 +397,7 @@ export function ProactiveMessagePreview({
           className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
           style={{
             backgroundColor: 'var(--color-primary)',
-            color: 'var(--color-on-primary, #ffffff)',
+            color: 'var(--color-on-primary)',
           }}
           type="button"
         >

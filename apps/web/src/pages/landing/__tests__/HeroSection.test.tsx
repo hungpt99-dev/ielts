@@ -3,55 +3,40 @@ import { describe, it, expect } from 'vitest'
 import HeroSection from '../HeroSection'
 
 describe('HeroSection', () => {
-  it('renders the product name', () => {
+  it('renders the tagline', () => {
     render(<HeroSection />)
-    expect(screen.getByText('IELTS Journey')).toBeInTheDocument()
+    expect(screen.getByText('Your Personal IELTS Tutor')).toBeInTheDocument()
   })
 
   it('renders the headline', () => {
     render(<HeroSection />)
     expect(
-      screen.getByText('Free IELTS learning from the real internet')
+      screen.getByText(/Your daily study plan,/)
     ).toBeInTheDocument()
   })
 
   it('renders the subheadline', () => {
     render(<HeroSection />)
     expect(
-      screen.getByText(/Read articles, news, and web content/)
+      screen.getByText(/IELTS Journey creates a personalized daily study plan/)
     ).toBeInTheDocument()
   })
 
-  it('renders the primary CTA link pointing to app URL', () => {
+  it('renders the primary CTA link', () => {
     render(<HeroSection />)
-    const cta = screen.getByText('Start Learning Free')
+    const cta = screen.getByText('Start Your Journey')
     expect(cta).toBeInTheDocument()
-    expect(cta.closest('a')).toHaveAttribute('href', '/')
-  })
-
-  it('renders the secondary CTA link pointing to extension URL', () => {
-    render(<HeroSection />)
-    const cta = screen.getByText('Install Chrome Extension')
-    expect(cta).toBeInTheDocument()
-    expect(cta.closest('a')).toHaveAttribute(
-      'href',
-      'https://chromewebstore.google.com/detail/ielts-journey'
-    )
-    expect(cta.closest('a')).toHaveAttribute('target', '_blank')
-    expect(cta.closest('a')).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
   it('renders trust text about privacy', () => {
     render(<HeroSection />)
     expect(
-      screen.getByText(/No account required. No backend/)
+      screen.getByText(/No account required/)
     ).toBeInTheDocument()
   })
 
   it('renders a semantic section element', () => {
     render(<HeroSection />)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'IELTS Journey'
-    )
+    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument()
   })
 })

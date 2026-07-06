@@ -3,17 +3,18 @@ import { loadVocabulary, type PopupVocabEntry, type PopupVocabStats } from '../s
 import { getAllVocabulary } from '../../storage/vocabularyStore'
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { speakText } from '../services/textToSpeech'
+import { IconVolume, IconWarning, IconVocabulary, IconBack, IconSearch } from '@ielts/ui'
 import WordDetails from './WordDetails'
 
 interface SavedWordsViewProps {
   onBack: () => void
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  new: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  learning: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  reviewing: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  mastered: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+const STATUS_STYLE: Record<string, { bg: string; color: string }> = {
+  new: { bg: 'var(--color-primary-light)', color: 'var(--color-primary)' },
+  learning: { bg: 'var(--color-warning-light)', color: 'var(--color-warning-dark)' },
+  reviewing: { bg: 'var(--color-skill-reading-light)', color: 'var(--color-skill-reading)' },
+  mastered: { bg: 'var(--color-success-light)', color: 'var(--color-success-dark)' },
 }
 
 const DIFFICULTY_LABELS: Record<string, string> = {
@@ -113,8 +114,24 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
 
   if (loading) {
     return (
-      <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-muted)', fontSize: '13px' }}>
-        Loading vocabulary...
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 'var(--spacing-2xl) var(--spacing-md)',
+        gap: 'var(--spacing-sm)',
+        minHeight: '400px',
+      }}>
+        <div style={{
+          width: 'var(--spacing-lg)',
+          height: 'var(--spacing-lg)',
+          border: '3px solid var(--color-border)',
+          borderTopColor: 'var(--color-primary)',
+          borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite',
+        }} />
+        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>Loading vocabulary...</span>
       </div>
     )
   }
@@ -122,20 +139,23 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
   if (error && entries.length === 0) {
     return (
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 16px', borderBottom: '1px solid var(--color-border)' }}>
-          <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', padding: '4px', color: 'var(--color-text-secondary)' }} aria-label="Back">
-            ←
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', padding: 'var(--spacing-sm) var(--spacing-md)', borderBottom: '1px solid var(--color-border)' }}>
+          <button onClick={onBack} style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-2xs)', background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--spacing-2xs)', color: 'var(--color-text-secondary)', borderRadius: 'var(--radius-lg)' }} aria-label="Back">
+            <IconBack size={16} />
           </button>
-          <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>Vocabulary</span>
+          <IconVocabulary size={16} style={{ color: 'var(--color-skill-reading)' }} />
+          <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>Vocabulary</span>
         </div>
-        <div role="alert" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 16px', gap: '12px', textAlign: 'center' }}>
-          <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
+        <div role="alert" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--spacing-2xl) var(--spacing-md)', gap: 'var(--spacing-sm)', textAlign: 'center' }}>
+          <div style={{ width: 'var(--spacing-2xl)', height: 'var(--spacing-2xl)', borderRadius: 'var(--radius-full)', background: 'var(--color-danger-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <IconWarning size={24} style={{ color: 'var(--color-danger)' }} />
+          </div>
           <span style={{ fontSize: '13px', color: 'var(--color-danger)' }}>{error}</span>
           <button
             onClick={() => window.location.reload()}
             style={{
-              padding: '8px 16px',
-              borderRadius: 'var(--radius-md)',
+              padding: 'var(--spacing-xs) var(--spacing-md)',
+              borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
@@ -152,71 +172,73 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 16px', borderBottom: '1px solid var(--color-border)' }}>
-        <button onClick={onBack} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', padding: '4px', color: 'var(--color-text-secondary)' }} aria-label="Back">
-          ←
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', padding: 'var(--spacing-sm) var(--spacing-md)', borderBottom: '1px solid var(--color-border)' }}>
+        <button onClick={onBack} style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-2xs)', background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--spacing-2xs)', color: 'var(--color-text-secondary)', borderRadius: 'var(--radius-lg)' }} aria-label="Back">
+          <IconBack size={16} />
         </button>
-        <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>Vocabulary</span>
+        <IconVocabulary size={16} style={{ color: 'var(--color-skill-reading)' }} />
+        <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>Vocabulary</span>
         {stats && (
-          <span style={{ marginLeft: 'auto', fontSize: '12px', color: 'var(--color-muted)' }}>
+          <span style={{ marginLeft: 'auto', fontSize: 'var(--text-xs)', color: 'var(--color-muted)', background: 'var(--color-surface-alt)', padding: 'var(--spacing-3xs) var(--spacing-xs)', borderRadius: 'var(--radius-full)' }}>
             {stats.total} words
           </span>
         )}
       </div>
 
       {stats && (
-        <div style={{ display: 'flex', gap: '8px', padding: '10px 16px', borderBottom: '1px solid var(--color-border)', fontSize: '12px' }}>
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <div style={{ fontWeight: 600, color: 'var(--color-text)' }}>{stats.total}</div>
-            <div style={{ color: 'var(--color-muted)', fontSize: '10px' }}>Total</div>
-          </div>
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <div style={{ fontWeight: 600, color: '#3b82f6' }}>{stats.newCount}</div>
-            <div style={{ color: 'var(--color-muted)', fontSize: '10px' }}>New</div>
-          </div>
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <div style={{ fontWeight: 600, color: '#f59e0b' }}>{stats.learningCount}</div>
-            <div style={{ color: 'var(--color-muted)', fontSize: '10px' }}>Learning</div>
-          </div>
-          <div style={{ flex: 1, textAlign: 'center' }}>
-            <div style={{ fontWeight: 600, color: '#22c55e' }}>{stats.masteredCount}</div>
-            <div style={{ color: 'var(--color-muted)', fontSize: '10px' }}>Mastered</div>
-          </div>
+        <div style={{ display: 'flex', gap: 'var(--spacing-xs)', padding: 'var(--spacing-sm) var(--spacing-md)', borderBottom: '1px solid var(--color-border)' }}>
+          {[
+            { label: 'Total', count: stats.total, color: 'var(--color-text)' },
+            { label: 'New', count: stats.newCount, color: 'var(--color-primary)' },
+            { label: 'Learning', count: stats.learningCount, color: 'var(--color-warning)' },
+            { label: 'Mastered', count: stats.masteredCount, color: 'var(--color-success)' },
+          ].map(s => (
+            <div key={s.label} style={{ flex: 1, textAlign: 'center', padding: 'var(--spacing-2xs)', background: 'var(--color-surface-alt)', borderRadius: 'var(--radius-lg)' }}>
+              <div style={{ fontWeight: 'var(--weight-bold)', fontSize: 'var(--text-sm)', color: s.color }}>{s.count}</div>
+              <div style={{ color: 'var(--color-muted)', fontSize: '10px' }}>{s.label}</div>
+            </div>
+          ))}
         </div>
       )}
 
-      <div style={{ padding: '8px 16px', borderBottom: '1px solid var(--color-border)' }}>
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search words..."
-          style={{
-            width: '100%',
-            padding: '8px 12px',
-            borderRadius: '8px',
-            border: '1px solid var(--color-border)',
-            background: 'var(--color-surface)',
-            color: 'var(--color-text)',
-            fontSize: '13px',
-            boxSizing: 'border-box',
-          }}
-        />
-        <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
+      <div style={{ padding: 'var(--spacing-xs) var(--spacing-md)', borderBottom: '1px solid var(--color-border)' }}>
+        <div style={{ position: 'relative' }}>
+          <IconSearch size={14} style={{ position: 'absolute', left: 'var(--spacing-sm)', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-muted)', pointerEvents: 'none' }} />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search words..."
+            style={{
+              width: '100%',
+              padding: 'var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-xl)',
+              borderRadius: 'var(--radius-xl)',
+              border: '1px solid var(--color-border)',
+              background: 'var(--color-surface)',
+              color: 'var(--color-text)',
+              fontSize: '13px',
+              boxSizing: 'border-box',
+              fontFamily: 'var(--font-sans)',
+            }}
+          />
+        </div>
+        <div style={{ display: 'flex', gap: '6px', marginTop: 'var(--spacing-xs)' }}>
           {(['all', 'new', 'learning', 'mastered'] as const).map(f => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               style={{
                 flex: 1,
-                padding: '4px 8px',
-                borderRadius: '6px',
+                padding: 'var(--spacing-2xs) var(--spacing-xs)',
+                borderRadius: 'var(--radius-lg)',
                 border: 'none',
                 fontSize: '11px',
-                fontWeight: filter === f ? 600 : 400,
+                fontWeight: filter === f ? 'var(--weight-semibold)' : 'var(--weight-normal)',
                 cursor: 'pointer',
                 background: filter === f ? 'var(--color-primary)' : 'var(--color-surface-alt)',
                 color: filter === f ? 'white' : 'var(--color-text-secondary)',
+                fontFamily: 'var(--font-sans)',
+                transition: 'all var(--transition-fast)',
               }}
             >
               {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
@@ -226,12 +248,13 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
             value={sortBy}
             onChange={e => setSortBy(e.target.value as typeof sortBy)}
             style={{
-              padding: '4px 8px',
-              borderRadius: '6px',
+              padding: 'var(--spacing-2xs) var(--spacing-xs)',
+              borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--color-border)',
               fontSize: '11px',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
+              fontFamily: 'var(--font-sans)',
             }}
           >
             <option value="newest">Newest</option>
@@ -242,8 +265,11 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
 
       <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
         {filtered.length === 0 ? (
-          <div style={{ padding: '40px 16px', textAlign: 'center', color: 'var(--color-muted)', fontSize: '13px' }}>
-            {search || filter !== 'all' ? 'No words match your search.' : 'No vocabulary saved yet.'}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 'var(--spacing-2xl) var(--spacing-md)', gap: 'var(--spacing-xs)', textAlign: 'center' }}>
+            <IconVocabulary size={32} style={{ color: 'var(--color-muted)', opacity: 0.4 }} />
+            <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
+              {search || filter !== 'all' ? 'No words match your search.' : 'No vocabulary saved yet.'}
+            </span>
           </div>
         ) : (
           filtered.map(entry => (
@@ -255,69 +281,77 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
               tabIndex={0}
               aria-label={`View details for ${entry.word}`}
               style={{
-                padding: '10px 16px',
-                borderBottom: '1px solid var(--color-border)',
+                padding: 'var(--spacing-sm) var(--spacing-md)',
+                borderBottom: '1px solid var(--color-border-light)',
                 cursor: 'pointer',
                 transition: 'background 0.15s ease',
               }}
               onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'var(--color-surface-alt)' }}
               onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'transparent' }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--spacing-xs)' }}>
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>
-                    {entry.word}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2xs)', flexWrap: 'wrap' }}>
+                    <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>
+                      {entry.word}
+                    </span>
                     <button
-                    onClick={(e) => { e.stopPropagation(); speakText(entry.word) }}
-                    title={`Pronounce "${entry.word}"`}
-                    aria-label={`Listen to pronunciation of ${entry.word}`}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '24px',
-                      height: '24px',
-                      border: 'none',
-                      borderRadius: '4px',
-                      background: 'transparent',
-                      color: 'var(--color-muted)',
-                      cursor: 'pointer',
-                      padding: 0,
-                      lineHeight: 1,
-                      flexShrink: 0,
-                      verticalAlign: 'middle',
-                    }}
-                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-text-secondary)' }}
-                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-muted)' }}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M11 5L6 9H2v6h4l5 4V5z" />
-                      <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" />
-                    </svg>
-                  </button>
-                  {entry.pronunciation && (
-                    <span style={{ marginLeft: '2px', fontSize: '11px', color: 'var(--color-muted)' }}>
-                      /{entry.pronunciation}/
-                    </span>
-                  )}
-                  {entry.partOfSpeech && (
-                    <span style={{ marginLeft: '6px', fontSize: '10px', fontStyle: 'italic', color: 'var(--color-muted)' }}>
-                      {entry.partOfSpeech}
-                    </span>
-                  )}
+                      onClick={(e) => { e.stopPropagation(); speakText(entry.word) }}
+                      title={`Pronounce "${entry.word}"`}
+                      aria-label={`Listen to pronunciation of ${entry.word}`}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: 'var(--spacing-lg)',
+                        height: 'var(--spacing-lg)',
+                        border: 'none',
+                        borderRadius: 'var(--radius-md)',
+                        background: 'transparent',
+                        color: 'var(--color-muted)',
+                        cursor: 'pointer',
+                        padding: 0,
+                        lineHeight: 1,
+                        flexShrink: 0,
+                      }}
+                      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--color-surface-alt)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-primary)' }}
+                      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-muted)' }}
+                    >
+                      <IconVolume size={14} />
+                    </button>
+                    {entry.pronunciation && (
+                      <span style={{ fontSize: '11px', color: 'var(--color-muted)', fontFamily: 'var(--font-mono)' }}>
+                        /{entry.pronunciation}/
+                      </span>
+                    )}
+                    {entry.partOfSpeech && (
+                      <span style={{ fontSize: '10px', fontStyle: 'italic', color: 'var(--color-muted)' }}>
+                        {entry.partOfSpeech}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_COLORS[entry.status] || ''}`}>
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '10px',
+                  fontWeight: 'var(--weight-medium)',
+                  background: STATUS_STYLE[entry.status]?.bg || 'var(--color-surface-alt)',
+                  color: STATUS_STYLE[entry.status]?.color || 'var(--color-text-secondary)',
+                  whiteSpace: 'nowrap',
+                }}>
                   {entry.status}
                 </span>
               </div>
               {entry.meaning && (
-                <p style={{ margin: '2px 0 0', fontSize: '12px', color: 'var(--color-text-secondary)', lineHeight: 1.4 }}>
+                <p style={{ margin: 'var(--spacing-2xs) 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', lineHeight: 1.4 }}>
                   {entry.meaning}
                 </p>
               )}
-              <div style={{ display: 'flex', gap: '6px', marginTop: '4px', fontSize: '10px', color: 'var(--color-muted)' }}>
-                {entry.topic && <span>{entry.topic}</span>}
+              <div style={{ display: 'flex', gap: '6px', marginTop: 'var(--spacing-2xs)', fontSize: '10px', color: 'var(--color-muted)' }}>
+                {entry.topic && <span>#{entry.topic}</span>}
                 {entry.difficulty && <span>{DIFFICULTY_LABELS[entry.difficulty] || entry.difficulty}</span>}
               </div>
             </div>
@@ -325,7 +359,7 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
         )}
       </div>
 
-      <div style={{ padding: '8px 16px', borderTop: '1px solid var(--color-border)', fontSize: '11px', color: 'var(--color-muted)', textAlign: 'center' }}>
+      <div style={{ padding: 'var(--spacing-xs) var(--spacing-md)', borderTop: '1px solid var(--color-border)', fontSize: '11px', color: 'var(--color-muted)', textAlign: 'center' }}>
         {filtered.length} of {entries.length} words shown
       </div>
     </div>

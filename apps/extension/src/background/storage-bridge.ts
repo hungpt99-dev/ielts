@@ -14,36 +14,7 @@ export interface SyncStatus {
   lastSyncResult: 'success' | 'partial' | 'failed' | null
 }
 
-const DB_NAME = 'ielts-journey-extension'
-const DB_VERSION = 1
-
-function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION)
-    request.onupgradeneeded = () => {
-      const db = request.result
-      if (!db.objectStoreNames.contains('learningEntries')) {
-        const store = db.createObjectStore('learningEntries', { keyPath: 'id' })
-        store.createIndex('category', 'category', { unique: false })
-        store.createIndex('createdAt', 'createdAt', { unique: false })
-      }
-      if (!db.objectStoreNames.contains('vocabulary')) {
-        db.createObjectStore('vocabulary', { keyPath: 'id' })
-      }
-      if (!db.objectStoreNames.contains('articles')) {
-        db.createObjectStore('articles', { keyPath: 'id' })
-      }
-      if (!db.objectStoreNames.contains('mistakes')) {
-        db.createObjectStore('mistakes', { keyPath: 'id' })
-      }
-      if (!db.objectStoreNames.contains('videos')) {
-        db.createObjectStore('videos', { keyPath: 'id' })
-      }
-    }
-    request.onsuccess = () => resolve(request.result)
-    request.onerror = () => reject(request.error)
-  })
-}
+import { openDB } from '../storage/db'
 
 async function putInIDB<T>(storeName: string, entry: T): Promise<void> {
   const db = await openDB()

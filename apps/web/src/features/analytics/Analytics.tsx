@@ -9,6 +9,8 @@ import type {
 } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconProgress } from '@ielts/ui'
 
 type DateRange = '7d' | '30d' | '90d' | 'all'
 
@@ -375,16 +377,12 @@ export default function Analytics() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-            Progress Analytics
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-            Track your IELTS learning journey over time
-          </p>
-        </div>
-        <div className="flex gap-2" role="group" aria-label="Date range filter">
+      <PageHeader
+        icon={<IconProgress size={22} />}
+        title="Progress Analytics"
+        description="Track your IELTS learning journey over time"
+        actions={
+          <div className="flex gap-2" role="group" aria-label="Date range filter">
           {RANGE_OPTIONS.map(opt => (
             <button
               key={opt.value}
@@ -399,7 +397,8 @@ export default function Analytics() {
             </button>
           ))}
         </div>
-      </div>
+      }
+    />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>

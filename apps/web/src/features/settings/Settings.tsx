@@ -19,6 +19,8 @@ import AISettings from './AISettings'
 import { ConfigProvider } from '../configuration/configSlice'
 import BasicSettingsForm from '../configuration/components/BasicSettingsForm'
 import AdvancedSettingsForm from '../configuration/components/AdvancedSettingsForm'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconSettings } from '@ielts/ui'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health',
@@ -276,14 +278,11 @@ export default function Settings() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--color-text)]">
-          Settings
-        </h1>
-        <p className="mt-1 text-sm text-[var(--color-text-secondary)]">
-          Configure your IELTS learning goals and preferences
-        </p>
-      </div>
+      <PageHeader
+        icon={<IconSettings size={22} />}
+        title="Settings"
+        description="Configure your IELTS learning goals and preferences"
+      />
 
       {feedback && (
         <div

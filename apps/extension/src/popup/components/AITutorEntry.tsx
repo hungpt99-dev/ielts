@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { IconAITutor, IconBack, IconAlertCircle, IconLoading } from '@ielts/ui'
 import MiniTutor from './MiniTutor'
 
 interface AITutorEntryProps {
@@ -44,7 +45,6 @@ export default function AITutorEntry({ onBack }: AITutorEntryProps) {
             return
           }
         } catch {
-          // Content script not available — fall through
         }
 
         try {
@@ -87,25 +87,16 @@ export default function AITutorEntry({ onBack }: AITutorEntryProps) {
         <div style={containerStyle}>
           <div style={headerStyle}>
             <button onClick={onBack} style={backBtnStyle} aria-label="Go back to dashboard">
-              ← Back
+              <IconBack size={14} /> <span>Back</span>
             </button>
             <div style={headerTitleStyle}>
-              <span style={{ fontSize: '16px' }}>🎓</span>
-              <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>AI Tutor</span>
+              <IconAITutor size={16} style={{ color: 'var(--color-tutor-accent)' }} />
+              <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>AI Tutor</span>
             </div>
           </div>
           <div style={centerStyle}>
-            <div
-              style={{
-                width: '24px',
-                height: '24px',
-                border: '3px solid var(--color-border)',
-                borderTopColor: 'var(--color-primary)',
-                borderRadius: '50%',
-                animation: 'aitutor-spin 0.7s linear infinite',
-              }}
-            />
-            <p style={{ color: 'var(--color-muted)', fontSize: '13px' }}>Getting page context...</p>
+            <IconLoading size={24} style={{ animation: 'aitutor-spin 0.7s linear infinite' }} />
+            <p style={{ color: 'var(--color-muted)', fontSize: 'var(--text-sm)' }}>Getting page context...</p>
           </div>
           <style>{`
             @keyframes aitutor-spin {
@@ -121,30 +112,41 @@ export default function AITutorEntry({ onBack }: AITutorEntryProps) {
         <div style={containerStyle}>
           <div style={headerStyle}>
             <button onClick={onBack} style={backBtnStyle} aria-label="Go back to dashboard">
-              ← Back
+              <IconBack size={14} /> <span>Back</span>
             </button>
             <div style={headerTitleStyle}>
-              <span style={{ fontSize: '16px' }}>🎓</span>
-              <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>AI Tutor</span>
+              <IconAITutor size={16} style={{ color: 'var(--color-tutor-accent)' }} />
+              <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>AI Tutor</span>
             </div>
           </div>
           <div style={centerStyle}>
-            <div style={{ fontSize: '32px', marginBottom: '4px' }}>⚠️</div>
-            <p style={{ fontSize: '13px', color: 'var(--color-danger)', textAlign: 'center', lineHeight: '1.5' }}>
+            <div
+              style={{
+                width: 'var(--spacing-2xl)',
+                height: 'var(--spacing-2xl)',
+                borderRadius: 'var(--radius-full)',
+                background: 'var(--color-danger-light)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 'var(--spacing-2xs)',
+              }}
+            >
+              <IconAlertCircle size={28} style={{ color: 'var(--color-danger)' }} />
+            </div>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-danger)', textAlign: 'center', lineHeight: '1.5', fontWeight: 'var(--weight-medium)' }}>
               Could not access page context
             </p>
-            <p style={{ fontSize: '12px', color: 'var(--color-muted)', textAlign: 'center', maxWidth: '280px' }}>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', textAlign: 'center', maxWidth: '400px' }}>
               {fetchError}
             </p>
-            <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+            <div style={{ display: 'flex', gap: 'var(--spacing-xs)', marginTop: 'var(--spacing-xs)' }}>
               <button onClick={onBack} style={secondaryBtnStyle}>
                 Back
               </button>
               <button
                 onClick={() => {
-                  setLoading(true)
                   setFetchError(null)
-                  setLoading(false)
                   setReady(true)
                 }}
                 style={primaryBtnStyle}
@@ -174,26 +176,32 @@ export default function AITutorEntry({ onBack }: AITutorEntryProps) {
 const containerStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  padding: '16px',
+  padding: 'var(--spacing-md)',
   minHeight: '500px',
-  gap: '12px',
+  gap: 'var(--spacing-sm)',
+  width: 'var(--ext-width)',
+  boxSizing: 'border-box',
 }
 
 const headerStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: '8px',
+  gap: 'var(--spacing-xs)',
 }
 
 const backBtnStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 'var(--spacing-2xs)',
   background: 'none',
   border: 'none',
   color: 'var(--color-primary)',
   cursor: 'pointer',
-  fontSize: '12px',
-  fontWeight: 500,
-  padding: '4px 8px',
-  borderRadius: '6px',
+  fontSize: 'var(--text-xs)',
+  fontWeight: 'var(--weight-medium)',
+  padding: 'var(--spacing-2xs) var(--spacing-xs)',
+  borderRadius: 'var(--radius-lg)',
+  fontFamily: 'var(--font-sans)',
 }
 
 const headerTitleStyle: React.CSSProperties = {
@@ -207,29 +215,29 @@ const centerStyle: React.CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '40px 16px',
-  gap: '12px',
+  padding: '40px var(--spacing-md)',
+  gap: 'var(--spacing-sm)',
   flex: 1,
 }
 
 const primaryBtnStyle: React.CSSProperties = {
-  padding: '8px 16px',
-  borderRadius: '8px',
+  padding: 'var(--spacing-xs) var(--spacing-md)',
+  borderRadius: 'var(--radius-lg)',
   border: 'none',
   background: 'var(--color-primary)',
-  color: '#fff',
-  fontSize: '12px',
-  fontWeight: 500,
+  color: 'var(--color-text-inverse)',
+  fontSize: 'var(--text-xs)',
+  fontWeight: 'var(--weight-medium)',
   cursor: 'pointer',
 }
 
 const secondaryBtnStyle: React.CSSProperties = {
-  padding: '8px 16px',
-  borderRadius: '8px',
+  padding: 'var(--spacing-xs) var(--spacing-md)',
+  borderRadius: 'var(--radius-lg)',
   border: '1px solid var(--color-border)',
   background: 'var(--color-surface)',
   color: 'var(--color-text)',
-  fontSize: '12px',
-  fontWeight: 500,
+  fontSize: 'var(--text-xs)',
+  fontWeight: 'var(--weight-medium)',
   cursor: 'pointer',
 }

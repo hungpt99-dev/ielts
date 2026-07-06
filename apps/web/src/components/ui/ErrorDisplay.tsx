@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import Button from './Button'
 
-type ErrorDisplayVariant = 'inline' | 'card' | 'banner'
+type ErrorDisplayVariant = 'inline' | 'card' | 'banner' | 'page'
 
 interface ErrorDisplayProps {
   message?: string
@@ -12,13 +12,29 @@ interface ErrorDisplayProps {
   title?: string
   icon?: ReactNode
   children?: ReactNode
+  helpLink?: string
+  helpLinkText?: string
 }
 
-const defaultIcon = (
-  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-)
+function WarningIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+  )
+}
+
+function AlertCircleIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
+    </svg>
+  )
+}
 
 function getErrorInfo(error: unknown): { message: string; title: string } {
   if (error instanceof Error) {
@@ -37,11 +53,13 @@ export default function ErrorDisplay({
   title,
   icon,
   children,
+  helpLink,
+  helpLinkText,
 }: ErrorDisplayProps) {
   const errorInfo = error ? getErrorInfo(error) : null
-  const displayTitle = title ?? errorInfo?.title ?? 'Error'
-  const displayMessage = message ?? errorInfo?.message ?? 'An unexpected error occurred.'
-  const displayIcon = icon ?? defaultIcon
+  const displayTitle = title ?? errorInfo?.title ?? 'Something went wrong'
+  const displayMessage = message ?? errorInfo?.message ?? 'An unexpected error occurred. Please try again.'
+  const displayIcon = icon ?? (variant === 'page' ? <WarningIcon /> : <AlertCircleIcon />)
 
   if (variant === 'inline') {
     return (
@@ -92,6 +110,62 @@ export default function ErrorDisplay({
           </Button>
         )}
         {children}
+      </div>
+    )
+  }
+
+  if (variant === 'page') {
+    return (
+      <div
+        className="flex min-h-[300px] items-center justify-center p-8"
+        role="alert"
+      >
+        <div className="max-w-md text-center">
+          <div
+            className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full"
+            style={{
+              backgroundColor: 'var(--color-danger-light)',
+              color: 'var(--color-danger)',
+            }}
+          >
+            {displayIcon}
+          </div>
+          <h2
+            className="text-xl font-semibold"
+            style={{ color: 'var(--color-text)', fontFamily: 'var(--font-sans)', margin: 0 }}
+          >
+            {displayTitle}
+          </h2>
+          <p
+            className="mt-2 text-sm"
+            style={{ color: 'var(--color-text-secondary)', fontFamily: 'var(--font-sans)', lineHeight: 'var(--leading-relaxed)' }}
+          >
+            {displayMessage}
+          </p>
+          <div className="mt-6 flex items-center justify-center gap-3">
+            {onRetry && (
+              <Button variant="primary" size="md" onClick={onRetry}>
+                {retryLabel}
+              </Button>
+            )}
+            {helpLink && (
+              <a
+                href={helpLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--color-primary)',
+                  fontFamily: 'var(--font-sans)',
+                  textDecoration: 'underline',
+                }}
+              >
+                {helpLinkText || 'Get help'}
+              </a>
+            )}
+          </div>
+          {children}
+        </div>
       </div>
     )
   }

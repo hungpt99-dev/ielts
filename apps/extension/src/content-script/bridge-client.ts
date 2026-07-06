@@ -1,4 +1,5 @@
 import { safeSendMessage, safeStorageGet, safeStorageSet } from '../utils/safe-chrome'
+import { getAllVocabulary } from '../storage/vocabularyStore'
 
 interface BridgeMessage {
   source: 'ielts-extension' | 'ielts-page'
@@ -40,13 +41,12 @@ function forwardToPage(data: unknown): void {
 }
 
 async function forwardVocabToPage(): Promise<void> {
-  const [savedResult, vocabResult] = await Promise.all([
+  const [savedResult, vocabEntries] = await Promise.all([
     safeStorageGet<any[]>('savedItems'),
-    safeStorageGet<any[]>('vocabulary'),
+    getAllVocabulary().catch(() => []),
   ])
 
   const savedItems = savedResult.savedItems || []
-  const vocabItems = vocabResult.vocabulary || []
 
   const vocabFromSaved = savedItems
     .filter((item: Record<string, unknown>) => item.category === 'vocabulary')
@@ -56,7 +56,7 @@ async function forwardVocabToPage(): Promise<void> {
       data: item,
     }))
 
-  const vocabFromDict = vocabItems.map((item: Record<string, unknown>) => ({
+  const vocabFromDict = vocabEntries.map((item: Record<string, unknown>) => ({
     source: 'ielts-extension' as const,
     action: 'VOCAB_SAVED' as const,
     data: item,
@@ -76,7 +76,18 @@ function handlePageMessage(event: MessageEvent): void {
   if (event.data.source !== 'ielts-page') return
 
   if (event.data.action === 'SETTINGS_CHANGED' && event.data.data) {
-    forwardToBackground(event.data.data as Record<string, unknown>)
+    const data = event.data.data as Record<string, unknown>
+
+    const localPatch: Record<string, unknown> = {}
+    if (typeof data.aiApiKey === 'string') localPatch.aiApiKey = data.aiApiKey
+    if (typeof data.aiBaseUrl === 'string') localPatch.aiBaseUrl = data.aiBaseUrl
+    if (typeof data.aiModel === 'string') localPatch.aiModel = data.aiModel
+    if (typeof data.themeMode === 'string') localPatch.themeMode = data.themeMode
+    if (Object.keys(localPatch).length > 0) {
+      safeStorageSet(localPatch)
+    }
+
+    forwardToBackground(data)
   }
 
   if (event.data.action === 'REQUEST_EXTENSION_VOCAB') {
@@ -92,14 +103,14 @@ function handlePageMessage(event: MessageEvent): void {
       )
       if (!exists) {
         items.unshift(data)
-        safeStorageSet({ vocabulary: items })
+        safeStorageSet({ vocabulary: items }).catch(() => {})
       }
-    })
+    }).catch(() => {})
   }
 
   if (event.data.action === 'VOCAB_LIST_SYNC' && Array.isArray(event.data.data)) {
     const list = event.data.data as Record<string, unknown>[]
-    safeStorageSet({ vocabulary: list })
+    safeStorageSet({ vocabulary: list }).catch(() => {})
   }
 }
 
@@ -108,6 +119,14 @@ function handleBackgroundMessage(message: unknown): void {
   const msg = message as Record<string, unknown>
   if (msg.type === 'SETTINGS_SYNC' && msg.payload) {
     forwardToPage(msg.payload)
+  }
+  if (msg.type === 'VOCAB_SAVED' && msg.payload) {
+    try {
+      window.postMessage(
+        { source: 'ielts-extension', action: 'VOCAB_SAVED', data: msg.payload },
+        window.location.origin,
+      )
+    } catch { /* ignore */ }
   }
 }
 

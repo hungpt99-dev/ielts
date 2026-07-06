@@ -1,15 +1,14 @@
+import PageHeader from '../../components/layout/PageHeader'
+import { IconTarget } from '@ielts/ui'
+
 export default function Recruit() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 py-8">
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold" style={{ color: 'var(--color-text)' }}>
-          Recruit
-        </h1>
-        <p className="text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-          Interested in contributing to IELTS Journey or collaborating on a project?
-          I am always open to working with talented individuals and teams.
-        </p>
-      </div>
+      <PageHeader
+        icon={<IconTarget size={22} />}
+        title="Recruit"
+        description="Interested in contributing to IELTS Journey or collaborating on a project? I am always open to working with talented individuals and teams."
+      />
 
       <div className="space-y-4">
         <h2 className="text-xl font-semibold" style={{ color: 'var(--color-text)' }}>

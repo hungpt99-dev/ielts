@@ -1,63 +1,62 @@
+import { Card } from '@ielts/ui'
+
 const solutions = [
   {
-    title: 'Structured IELTS Roadmap',
-    description:
-      'Follow a clear learning path designed around your target band, exam date, and current level — no more guessing what to study next.',
+    title: 'AI Study Roadmap',
+    description: 'Set your target band and exam date. Our AI builds a day-by-day plan from today to exam day.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+      </svg>
+    ),
   },
   {
-    title: 'Daily Study Tasks',
-    description:
-      'Every day, you see exactly what you need to learn and complete. Open the app and start studying right away.',
+    title: 'Daily Learning Missions',
+    description: 'Every morning, your dashboard shows exactly what to study. No planning, no deciding — just start.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z" />
+      </svg>
+    ),
   },
   {
-    title: 'Ready-Made Learning Content',
-    description:
-      'Click a task and immediately access the lesson, exercise, or practice activity you need. No searching across websites.',
-  },
-  {
-    title: 'All Skills in One Place',
-    description:
-      'Vocabulary, grammar, reading, listening, writing, and speaking practice are organized so you can focus on what matters most.',
-  },
-  {
-    title: 'Focus on Learning, Not Searching',
-    description:
-      'Stop wasting time looking for materials. IELTS Journey brings everything you need into one simple dashboard.',
-  },
-  {
-    title: 'Simple and Clear Progress',
-    description:
-      'Track completed tasks, study streaks, and weak areas. See your progress and stay motivated every day.',
+    title: 'Visible Progress',
+    description: 'See your estimated band score improve, track completed tasks, and know when you\'re ready for the exam.',
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+    ),
   },
 ]
 
 export default function SolutionSection() {
   return (
-    <section
-      className="bg-[var(--color-surface)] px-4 py-16 sm:py-20 lg:py-24"
-      id="solution"
+    <section className="px-4 py-16 sm:py-20 lg:py-24" id="solution"
+      style={{ background: 'var(--color-surface)' }}
     >
       <div className="mx-auto max-w-5xl">
-        <h2 className="text-center text-3xl font-bold tracking-tight text-[var(--color-text)] sm:text-4xl">
-          How IELTS Journey helps
+        <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl"
+          style={{ color: 'var(--color-text)' }}>
+          IELTS Journey gives you what&apos;s missing.
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-lg leading-relaxed text-[var(--color-text-secondary)]">
-          Instead of searching across dozens of websites, you get a clear daily
-          plan with everything you need to study.
+        <p className="mx-auto mt-4 max-w-2xl text-center text-lg leading-relaxed"
+          style={{ color: 'var(--color-text-secondary)' }}>
+          Instead of guessing what to study, get a clear daily plan with everything you need.
         </p>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
           {solutions.map((item) => (
-            <div
-              key={item.title}
-              className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-alt)] p-6"
-            >
-              <h3 className="text-lg font-semibold text-[var(--color-text)]">
+            <Card key={item.title} variant="elevated" padding="lg" accentLeft tint="success">
+              <div style={{ color: 'var(--color-success)', marginBottom: 'var(--spacing-xs)' }}>
+                {item.icon}
+              </div>
+              <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
                 {item.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-secondary)]">
+              <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
                 {item.description}
               </p>
-            </div>
+            </Card>
           ))}
         </div>
       </div>

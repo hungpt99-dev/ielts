@@ -2,6 +2,8 @@ import { useState } from 'react'
 import PublicApiSearch from '../features/publicApiIntegration/components/PublicApiSearch'
 import ImportedContentManager from '../features/publicApiIntegration/components/ImportedContentManager'
 import Card, { CardContent } from '../components/ui/Card'
+import PageHeader from '../components/layout/PageHeader'
+import { IconDownload } from '@ielts/ui'
 
 type Tab = 'search' | 'imported'
 
@@ -9,16 +11,12 @@ export default function PublicApiImportPage() {
   const [activeTab, setActiveTab] = useState<Tab>('search')
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-          Public API Content
-        </h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Search open educational resources, dictionaries, articles, and videos.
-          Import content into your local database for IELTS practice.
-        </p>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+      <PageHeader
+        icon={<IconDownload size={20} />}
+        title="Public API Content"
+        description="Search open educational resources, dictionaries, articles, and videos. Import content into your local database for IELTS practice."
+      />
 
       <Card padding={false}>
         <div className="flex border-b border-slate-200 dark:border-slate-700">

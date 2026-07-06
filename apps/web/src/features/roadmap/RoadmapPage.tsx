@@ -13,14 +13,16 @@ import {
   saveRoadmap,
 } from './roadmapService'
 import type { RoadmapData, RoadmapPhase, RoadmapWeek, RoadmapDay, RoadmapRecommendation, RoadmapUserProfile } from './roadmapService'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconStudyPlan } from '@ielts/ui'
 
 const SKILL_COLORS: Record<string, string> = {
-  Vocabulary: '#8b5cf6',
-  Reading: 'var(--color-primary)',
-  Writing: 'var(--color-warning)',
-  Listening: 'var(--color-success)',
-  Speaking: 'var(--color-danger)',
-  Grammar: '#ec4899',
+  Vocabulary: 'var(--color-info)',
+  Reading: 'var(--color-skill-reading)',
+  Writing: 'var(--color-skill-writing)',
+  Listening: 'var(--color-skill-listening)',
+  Speaking: 'var(--color-skill-speaking)',
+  Grammar: 'var(--color-success)',
 }
 
 function getSkillColor(skill: string): string {
@@ -29,14 +31,14 @@ function getSkillColor(skill: string): string {
 
 function getSkillBg(skill: string): string {
   const colors: Record<string, string> = {
-    Vocabulary: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
-    Reading: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
-    Writing: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
-    Listening: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
-    Speaking: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
-    Grammar: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300',
+    Vocabulary: 'bg-[var(--color-info-light)] text-[var(--color-info-dark)]',
+    Reading: 'bg-[var(--color-skill-reading-light)] text-[var(--color-skill-reading-dark)]',
+    Writing: 'bg-[var(--color-skill-writing-light)] text-[var(--color-skill-writing-dark)]',
+    Listening: 'bg-[var(--color-skill-listening-light)] text-[var(--color-skill-listening-dark)]',
+    Speaking: 'bg-[var(--color-skill-speaking-light)] text-[var(--color-skill-speaking-dark)]',
+    Grammar: 'bg-[var(--color-success-light)] text-[var(--color-success-dark)]',
   }
-  return colors[skill] ?? 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
+  return colors[skill] ?? 'bg-[var(--color-surface-alt)] text-[var(--color-text-secondary)]'
 }
 
 function formatDate(dateStr: string): string {
@@ -445,24 +447,19 @@ export default function RoadmapPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-            {getGreeting()}, IELTS Learner
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-            Your personalized IELTS learning roadmap
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          {profile && (
-            <div className="flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs" style={{ borderColor: 'var(--color-border)' }}>
-              <span style={{ color: 'var(--color-muted)' }}>Goal:</span>
-              <span className="font-semibold" style={{ color: 'var(--color-text)' }}>
-                {profile.studyGoal === 'academic' ? 'IELTS Academic' : 'IELTS General'}
-              </span>
-            </div>
+      <PageHeader
+        icon={<IconStudyPlan size={22} />}
+        title={`${getGreeting()}, IELTS Learner`}
+        description="Your personalized IELTS learning roadmap"
+        actions={
+          <div className="flex items-center gap-3">
+            {profile && (
+              <div className="flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs" style={{ borderColor: 'var(--color-border)' }}>
+                <span style={{ color: 'var(--color-muted)' }}>Goal:</span>
+                <span className="font-semibold" style={{ color: 'var(--color-text)' }}>
+                  {profile.studyGoal === 'academic' ? 'IELTS Academic' : 'IELTS General'}
+                </span>
+              </div>
           )}
           <button
             onClick={handleRegenerate}
@@ -474,10 +471,11 @@ export default function RoadmapPage() {
           >
             Regenerate
           </button>
-        </div>
-      </div>
+          </div>
+        }
+      />
 
-      {/* Overall Progress */}
+        {/* Overall Progress */}
       <Card>
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between">

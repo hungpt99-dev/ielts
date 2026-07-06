@@ -5,6 +5,8 @@ import { saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { findWord } from '../services/popupDataService'
 import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
+import { MESSAGE_TYPES, STORAGE_KEYS, PROGRESS_KEYS } from '../../storage/db'
+import { IconVocabulary, IconClose, IconCheck, IconVolume } from '@ielts/ui'
 import type { LearningEntry } from '../../types'
 
 function speakWord(word: string) {
@@ -148,6 +150,14 @@ Respond with valid JSON in this exact format:
   }
 }
 
+function generateId(): string {
+  try {
+    return crypto.randomUUID()
+  } catch {
+    return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}-${Math.random().toString(36).slice(2, 11)}`
+  }
+}
+
 export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCollectorProps) {
   const [pageInfo, setPageInfo] = useState<PageInfo>({ title: '', url: '', selectedText: '' })
   const [word, setWord] = useState('')
@@ -172,6 +182,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
       const tab = tabs[0]
       if (!tab.id) return
       chrome.tabs.sendMessage(tab.id, { type: 'GET_PAGE_INFO' }, (response) => {
+        if (chrome.runtime.lastError) return
         const title = response?.title || tab.title || ''
         const url = response?.url || tab.url || ''
         const selectedText = response?.selectedText || ''
@@ -247,8 +258,9 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
         .filter(Boolean)
 
       const now = new Date().toISOString()
+      const id = generateId()
       const entry: ExtensionVocabEntry = extensionVocabSchema.parse({
-        id: crypto.randomUUID(),
+        id,
         word: wordTrimmed,
         sourceSentence: sourceSentence.trim(),
         pageTitle: pageInfo.title,
@@ -276,11 +288,15 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
         updatedAt: now,
       })
 
-      await saveVocabularyEntry(entry)
+      try {
+        await saveVocabularyEntry(entry)
+      } catch (err) {
+        console.warn('[VocabularyCollector] IndexedDB save failed, falling back to chrome.storage:', err)
+      }
 
       try {
-        const learningEntry: LearningEntry = {
-          id: crypto.randomUUID(),
+        await saveEntry({
+          id: generateId(),
           text: wordTrimmed,
           category: 'vocabulary',
           topic: topic.trim() || 'general',
@@ -293,18 +309,40 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
           status: 'new',
           createdAt: now,
           updatedAt: now,
-        }
-        await saveEntry(learningEntry)
-      } catch {
-        /* non-critical */
+        } as LearningEntry)
+      } catch (err) {
+        console.warn('[VocabularyCollector] learningEntries save failed (non-critical):', err)
       }
 
-      await incrementDailyProgress('wordsAdded', 1)
+      try {
+        await incrementDailyProgress(PROGRESS_KEYS.WORDS_ADDED, 1)
+      } catch (err) {
+        console.warn('[VocabularyCollector] progress increment failed (non-critical):', err)
+      }
+
+      try {
+        const raw = await new Promise<any[]>((resolve) => {
+          chrome.storage.local.get([STORAGE_KEYS.VOCABULARY], (r) => resolve(r.vocabulary || []))
+        })
+        raw.push(entry)
+        await new Promise<void>((resolve) => {
+          chrome.storage.local.set({ [STORAGE_KEYS.VOCABULARY]: raw, [STORAGE_KEYS.LAST_SYNC_TIME]: now }, resolve)
+        })
+      } catch (err) {
+        console.warn('[VocabularyCollector] chrome.storage sync failed (non-critical):', err)
+      }
+
+      try {
+        await chrome.runtime.sendMessage({ type: MESSAGE_TYPES.VOCAB_SAVED, payload: entry })
+      } catch {
+        // Background may not be available (popup closed, etc.)
+      }
 
       setSaved(true)
       setTimeout(() => onSaved(), 1200)
-    } catch {
-      setErrors({ submit: 'Failed to save. Please try again.' })
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      setErrors({ submit: `Failed to save: ${message}` })
     } finally {
       setSaving(false)
     }
@@ -317,27 +355,26 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '48px 24px',
-        gap: '12px',
+        padding: 'var(--spacing-2xl) var(--spacing-lg)',
+        gap: 'var(--spacing-sm)',
       }}>
         <div style={{
           width: '56px',
           height: '56px',
-          borderRadius: '50%',
+          borderRadius: 'var(--radius-full)',
           background: 'var(--color-success)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '28px',
-          color: '#fff',
+          color: 'var(--color-text-inverse)',
         }}>
-          ✓
+          <IconCheck size={28} />
         </div>
-        <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text)' }}>
+        <div style={{ fontSize: 'var(--text-base)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-text)' }}>
           Vocabulary saved!
         </div>
         {addToReview && (
-          <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+          <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
             Added to spaced repetition review
           </div>
         )}
@@ -349,22 +386,29 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: '16px',
+      gap: 'var(--spacing-md)',
+      padding: 'var(--spacing-md)',
+      width: 'var(--ext-width)',
+      boxSizing: 'border-box',
     }}>
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 0 8px',
+        padding: '0 0 var(--spacing-xs)',
         borderBottom: '1px solid var(--color-border)',
       }}>
         <h2 style={{
-          fontSize: '16px',
-          fontWeight: 600,
+          fontSize: 'var(--text-base)',
+          fontWeight: 'var(--weight-semibold)',
           color: 'var(--color-text)',
           margin: 0,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--spacing-xs)',
         }}>
-          📖 Vocabulary Collector
+          <IconVocabulary size={16} />
+          Vocabulary Collector
         </h2>
         <button
           type="button"
@@ -378,26 +422,28 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
             fontSize: '18px',
             padding: '4px',
             lineHeight: 1,
+            display: 'inline-flex',
+            alignItems: 'center',
           }}
         >
-          ✕
+          <IconClose size={18} />
         </button>
       </div>
 
       {errors.submit && (
         <div role="alert" style={{
-          padding: '8px 12px',
+          padding: 'var(--spacing-xs) var(--spacing-sm)',
           background: 'var(--color-danger)',
-          color: '#fff',
+          color: 'var(--color-text-inverse)',
           borderRadius: 'var(--radius-md)',
-          fontSize: '13px',
+          fontSize: 'var(--text-sm)',
         }}>
           {errors.submit}
         </div>
       )}
 
       <Field label="Word *">
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: 'var(--spacing-xs)' }}>
           <input
             type="text"
             value={word}
@@ -410,31 +456,31 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
             aria-describedby={errors.word ? 'vocab-word-error' : undefined}
             style={{
               flex: 1,
-              padding: '8px 12px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: errors.word ? '1px solid var(--color-danger)' : '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '14px',
-              fontWeight: 600,
+              fontSize: 'var(--text-base)',
+              fontWeight: 'var(--weight-semibold)',
             }}
           />
         </div>
         {errors.word && (
-          <span id="vocab-word-error" role="alert" style={{ fontSize: '12px', color: 'var(--color-danger)' }}>{errors.word}</span>
+          <span id="vocab-word-error" role="alert" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-danger)' }}>{errors.word}</span>
         )}
         {existingWord && (
           <div style={{
-            marginTop: '6px',
-            padding: '8px 10px',
+            marginTop: 'var(--spacing-2xs)',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             background: 'var(--color-surface-alt)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
-            fontSize: '12px',
+            fontSize: 'var(--text-xs)',
             color: 'var(--color-text-secondary)',
             lineHeight: 1.4,
           }}>
-            <span style={{ fontWeight: 600 }}>Already saved:</span>{' '}
+            <span style={{ fontWeight: 'var(--weight-semibold)' }}>Already saved:</span>{' '}
             {existingWord.word} — {existingWord.meaning}
           </div>
         )}
@@ -448,19 +494,19 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
           placeholder="Sentence where you found this word..."
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             lineHeight: 1.5,
             resize: 'vertical',
             fontFamily: 'var(--font-sans)',
           }}
         />
         {pageInfo.title && (
-          <span style={{ fontSize: '11px', color: 'var(--color-muted)', marginTop: '2px' }}>
+          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '2px' }}>
             From: {pageInfo.title}
           </span>
         )}
@@ -469,7 +515,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '12px',
+        gap: 'var(--spacing-sm)',
       }}>
         <Field label="Topic">
           <input
@@ -479,12 +525,12 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
             placeholder="e.g. education"
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           />
         </Field>
@@ -494,12 +540,12 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
             onChange={e => setDifficulty(e.target.value as typeof difficulty)}
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           >
             <option value="">Not specified</option>
@@ -518,12 +564,12 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
           placeholder="comma, separated"
           style={{
             width: '100%',
-            padding: '8px 10px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
           }}
         />
       </Field>
@@ -536,12 +582,12 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
           placeholder="Why you want to remember this word..."
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             lineHeight: 1.5,
             resize: 'vertical',
             fontFamily: 'var(--font-sans)',
@@ -553,17 +599,17 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '8px 12px',
+        padding: 'var(--spacing-xs) var(--spacing-sm)',
         borderRadius: 'var(--radius-md)',
         border: '1px solid var(--color-border)',
         background: 'var(--color-surface)',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-            🧠 AI Enrichment
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+            <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-2xs)' }}>
+              <IconVocabulary size={14} /> AI Enrichment
+            </span>
           {aiDetails && (
-            <span style={{ fontSize: '11px', color: 'var(--color-success)' }}>✓ Enriched</span>
+            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-success)', display: 'inline-flex', alignItems: 'center', gap: '2px' }}><IconCheck size={11} /> Enriched</span>
           )}
         </div>
         <button
@@ -572,13 +618,13 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
           disabled={aiLoading || !word.trim()}
           aria-busy={aiLoading}
           style={{
-            padding: '6px 14px',
+            padding: 'var(--spacing-xs) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: 'none',
             background: aiLoading ? 'var(--color-primary-hover)' : 'var(--color-primary)',
-            color: '#ffffff',
-            fontSize: '12px',
-            fontWeight: 600,
+            color: 'var(--color-text-inverse)',
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-semibold)',
             cursor: aiLoading || !word.trim() ? 'not-allowed' : 'pointer',
             opacity: aiLoading || !word.trim() ? 0.7 : 1,
           }}
@@ -589,12 +635,12 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
 
       {aiError && (
         <div style={{
-          padding: '8px 12px',
-          background: '#fef2f2',
+          padding: 'var(--spacing-xs) var(--spacing-sm)',
+          background: 'var(--color-danger-light)',
           borderRadius: 'var(--radius-md)',
-          fontSize: '12px',
-          color: '#dc2626',
-          border: '1px solid #fecaca',
+          fontSize: 'var(--text-xs)',
+          color: 'var(--color-danger)',
+          border: '1px solid var(--color-danger-light)',
         }}>
           {aiError}
           {aiError.includes('API key') && (
@@ -605,9 +651,9 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
                 marginLeft: '8px',
                 background: 'none',
                 border: 'none',
-                color: '#2563eb',
+                color: 'var(--color-primary)',
                 cursor: 'pointer',
-                fontSize: '12px',
+                fontSize: 'var(--text-xs)',
                 textDecoration: 'underline',
               }}
             >
@@ -622,26 +668,26 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',
-          padding: '12px',
+          padding: 'var(--spacing-sm)',
           borderRadius: 'var(--radius-md)',
           border: '1px solid var(--color-border)',
           background: 'var(--color-surface-alt)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
             {aiDetails.partOfSpeech && (
               <span style={{
                 padding: '1px 6px',
-                borderRadius: '4px',
-                background: '#dbeafe',
-                color: '#1d4ed8',
-                fontSize: '11px',
-                fontWeight: 600,
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--color-primary-light)',
+                color: 'var(--color-primary-hover)',
+                fontSize: 'var(--text-xs)',
+                fontWeight: 'var(--weight-semibold)',
               }}>
                 {aiDetails.partOfSpeech}
               </span>
             )}
             {aiDetails.pronunciation && (
-              <span style={{ fontSize: '12px', color: 'var(--color-muted)', fontFamily: 'monospace' }}>
+              <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', fontFamily: 'monospace' }}>
                 {aiDetails.pronunciation}
               </span>
             )}
@@ -658,7 +704,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
                   width: '24px',
                   height: '24px',
                   border: 'none',
-                  borderRadius: '4px',
+                  borderRadius: 'var(--radius-md)',
                   background: 'transparent',
                   color: 'var(--color-muted)',
                   cursor: 'pointer',
@@ -667,30 +713,27 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
                 onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-text-secondary)' }}
                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-muted)' }}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M11 5L6 9H2v6h4l5 4V5z" />
-                  <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" />
-                </svg>
+                <IconVolume size={14} />
               </button>
             )}
           </div>
 
-          <div style={{ fontSize: '13px', color: 'var(--color-text)', lineHeight: 1.5 }}>
+          <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text)', lineHeight: 1.5 }}>
             <strong>Meaning:</strong> {aiDetails.meaning}
           </div>
 
           {aiDetails.meaningVi && (
-            <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+            <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
               <strong>Vietnamese:</strong> {aiDetails.meaningVi}
             </div>
           )}
 
           <div style={{
-            padding: '8px 10px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             background: 'var(--color-surface)',
             borderRadius: 'var(--radius-sm)',
             borderLeft: '3px solid var(--color-primary)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             color: 'var(--color-text)',
             lineHeight: 1.5,
             fontStyle: 'italic',
@@ -698,20 +741,20 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
             “{aiDetails.exampleSentence}”
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-sm)' }}>
             {aiDetails.synonyms.length > 0 && (
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted)', marginBottom: '4px' }}>
+                <div style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-muted)', marginBottom: 'var(--spacing-2xs)' }}>
                   Synonyms
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                   {aiDetails.synonyms.map((s, i) => (
                     <span key={i} style={{
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      background: '#f0fdf4',
-                      color: '#15803d',
-                      fontSize: '12px',
+                      padding: '2px var(--spacing-xs)',
+                      borderRadius: 'var(--radius-md)',
+                      background: 'var(--color-success-light)',
+                      color: 'var(--color-success-dark)',
+                      fontSize: 'var(--text-xs)',
                     }}>
                       {s}
                     </span>
@@ -721,17 +764,17 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
             )}
             {aiDetails.antonyms.length > 0 && (
               <div>
-                <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted)', marginBottom: '4px' }}>
+                <div style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-muted)', marginBottom: 'var(--spacing-2xs)' }}>
                   Antonyms
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                   {aiDetails.antonyms.map((a, i) => (
                     <span key={i} style={{
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      background: '#fef2f2',
-                      color: '#dc2626',
-                      fontSize: '12px',
+                      padding: '2px var(--spacing-xs)',
+                      borderRadius: 'var(--radius-md)',
+                      background: 'var(--color-danger-light)',
+                      color: 'var(--color-danger)',
+                      fontSize: 'var(--text-xs)',
                     }}>
                       {a}
                     </span>
@@ -743,16 +786,16 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
 
           {aiDetails.collocations.length > 0 && (
             <div>
-              <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted)', marginBottom: '4px' }}>
+              <div style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-muted)', marginBottom: 'var(--spacing-2xs)' }}>
                 Collocations
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3xs)' }}>
                 {aiDetails.collocations.map((c, i) => (
                   <div key={i} style={{
-                    padding: '4px 8px',
+                    padding: 'var(--spacing-2xs) var(--spacing-xs)',
                     background: 'var(--color-surface)',
-                    borderRadius: '4px',
-                    fontSize: '12px',
+                    borderRadius: 'var(--radius-md)',
+                    fontSize: 'var(--text-xs)',
                     color: 'var(--color-text)',
                   }}>
                     {c}
@@ -764,17 +807,17 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
 
           {aiDetails.wordFamily.length > 0 && (
             <div>
-              <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--color-muted)', marginBottom: '4px' }}>
+              <div style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-muted)', marginBottom: 'var(--spacing-2xs)' }}>
                 Word Family
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                 {aiDetails.wordFamily.map((wf, i) => (
                   <span key={i} style={{
-                    padding: '2px 8px',
-                    borderRadius: '4px',
-                    background: '#f3e8ff',
-                    color: '#7c3aed',
-                    fontSize: '12px',
+                    padding: '2px var(--spacing-xs)',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--color-skill-reading-light)',
+                    color: 'var(--color-skill-reading)',
+                    fontSize: 'var(--text-xs)',
                   }}>
                     {wf}
                   </span>
@@ -788,9 +831,9 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
       <label style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
+        gap: 'var(--spacing-xs)',
         cursor: 'pointer',
-        padding: '6px 0',
+        padding: 'var(--spacing-xs) var(--spacing-sm)',
       }}>
         <input
           type="checkbox"
@@ -798,14 +841,14 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
           onChange={e => setAddToReview(e.target.checked)}
           style={{ width: '16px', height: '16px', cursor: 'pointer' }}
         />
-        <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
+        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
           Add to spaced repetition review
         </span>
       </label>
 
       <div style={{
         display: 'flex',
-        gap: '8px',
+        gap: 'var(--spacing-xs)',
         justifyContent: 'flex-end',
         paddingTop: '8px',
         borderTop: '1px solid var(--color-border)',
@@ -814,12 +857,12 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
           type="button"
           onClick={onCancel}
           style={{
-            padding: '8px 16px',
+            padding: 'var(--spacing-xs) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             cursor: 'pointer',
           }}
         >
@@ -830,13 +873,13 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
           onClick={handleSave}
           disabled={saving || !word.trim()}
           style={{
-            padding: '8px 20px',
+            padding: 'var(--spacing-xs) var(--spacing-lg)',
             borderRadius: 'var(--radius-md)',
             border: 'none',
             background: saving || !word.trim() ? 'var(--color-primary-hover)' : 'var(--color-primary)',
-            color: '#ffffff',
-            fontSize: '13px',
-            fontWeight: 600,
+            color: 'var(--color-text-inverse)',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--weight-semibold)',
             cursor: saving || !word.trim() ? 'not-allowed' : 'pointer',
             opacity: saving || !word.trim() ? 0.7 : 1,
           }}
@@ -850,8 +893,8 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-      <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
         {label}
       </label>
       {children}

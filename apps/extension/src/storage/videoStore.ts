@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { openDB, STORE_NAMES } from './db'
 
 export const videoQuestionSchema = z.object({
   type: z.enum(['multiple-choice', 'short-answer', 'gap-fill', 'true-false']),
@@ -61,35 +62,13 @@ export type VideoVocabItem = z.infer<typeof videoVocabItemSchema>
 export type ShadowingItem = z.infer<typeof shadowingItemSchema>
 export type VideoEntry = z.infer<typeof videoEntrySchema>
 
-const DB_NAME = 'ielts-journey-extension'
-const DB_VERSION = 4
-const STORE_NAME = 'videos'
-
-function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION)
-
-    request.onupgradeneeded = () => {
-      const db = request.result
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
-        store.createIndex('platform', 'platform', { unique: false })
-        store.createIndex('topic', 'topic', { unique: false })
-        store.createIndex('status', 'status', { unique: false })
-        store.createIndex('createdAt', 'createdAt', { unique: false })
-      }
-    }
-
-    request.onsuccess = () => resolve(request.result)
-    request.onerror = () => reject(request.error)
-  })
-}
+const STORE = STORE_NAMES.VIDEOS
 
 export async function saveVideoEntry(entry: VideoEntry): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.put(entry)
     tx.oncomplete = () => { db.close(); resolve() }
     tx.onerror = () => { db.close(); reject(tx.error) }
@@ -99,8 +78,8 @@ export async function saveVideoEntry(entry: VideoEntry): Promise<void> {
 export async function getAllVideos(): Promise<VideoEntry[]> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.getAll()
     request.onsuccess = () => { db.close(); resolve(request.result as VideoEntry[]) }
     request.onerror = () => { db.close(); reject(request.error) }
@@ -110,8 +89,8 @@ export async function getAllVideos(): Promise<VideoEntry[]> {
 export async function getVideoById(id: string): Promise<VideoEntry | undefined> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.get(id)
     request.onsuccess = () => { db.close(); resolve(request.result as VideoEntry | undefined) }
     request.onerror = () => { db.close(); reject(request.error) }
@@ -121,8 +100,8 @@ export async function getVideoById(id: string): Promise<VideoEntry | undefined> 
 export async function updateVideoEntry(id: string, updates: Partial<VideoEntry>): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     const getRequest = store.get(id)
     getRequest.onsuccess = () => {
       const existing = getRequest.result as VideoEntry | undefined
@@ -138,8 +117,8 @@ export async function updateVideoEntry(id: string, updates: Partial<VideoEntry>)
 export async function deleteVideoEntry(id: string): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.delete(id)
     tx.oncomplete = () => { db.close(); resolve() }
     tx.onerror = () => { db.close(); reject(tx.error) }

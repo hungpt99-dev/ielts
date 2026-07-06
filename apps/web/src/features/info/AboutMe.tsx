@@ -1,20 +1,22 @@
+import PageHeader from '../../components/layout/PageHeader'
+import { IconUser } from '@ielts/ui'
+
 export default function AboutMe() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 py-8">
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold" style={{ color: 'var(--color-text)' }}>
-          About the Developer
-        </h1>
-        <p className="text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-          I am a full-stack developer passionate about building tools that make education accessible
-          to everyone. IELTS Journey was born from the belief that high-quality test preparation
-          should not come with a high price tag.
-        </p>
-        <p className="leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-          I enjoy working with modern web technologies — React, TypeScript, Node.js, and browser
-          extension APIs — and I am always looking for new challenges and opportunities to grow.
-        </p>
-      </div>
+      <PageHeader
+        icon={<IconUser size={22} />}
+        title="About the Developer"
+      />
+      <p className="text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+        I am a full-stack developer passionate about building tools that make education accessible
+        to everyone. IELTS Journey was born from the belief that high-quality test preparation
+        should not come with a high price tag.
+      </p>
+      <p className="leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+        I enjoy working with modern web technologies — React, TypeScript, Node.js, and browser
+        extension APIs — and I am always looking for new challenges and opportunities to grow.
+      </p>
 
       <div className="space-y-4">
         <h2 className="text-xl font-semibold" style={{ color: 'var(--color-text)' }}>

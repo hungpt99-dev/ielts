@@ -697,9 +697,350 @@ apps/extension/
 
 ---
 
-## 14. Vietnamese-Specific Assumptions & Hard-Coded Content
+## 14. UX/UI Analysis — Website and Extension
 
-### 14.1 Data Model Level
+### 14.1 Theme & Design Token System Assessment
+
+#### 14.1.1 Current State
+
+The project has **four separate** CSS custom property definitions that are intended to be the same design token system, but differ in values and completeness:
+
+| Location | Prefix | Background | Success | Warning | Danger |
+|----------|--------|-----------|---------|---------|--------|
+| `packages/theme/src/cssVariables.css` | `--color-*` | `#f8fafc` | `#22c55e` | `#f59e0b` | `#ef4444` |
+| `apps/web/src/styles/theme.css` | `--color-*` | `#f8fafc` | `#22c55e` | `#f59e0b` | `#ef4444` |
+| `apps/extension/src/popup/index.css` | `--color-*` | `#ffffff` | `#16a34a` | `#d97706` | `#dc2626` |
+| `apps/extension/src/content-script/sharedStyles.ts` | `--ielts-*` | `#ffffff` | `#16a34a` | `#d97706` | `#dc2626` |
+
+**Key differences:**
+- **Popup background**: `#ffffff` (white) vs web `#f8fafc` (light gray) — creates visual disconnect
+- **Success/warning/danger**: Different hex values between web and extension
+- **`--color-on-primary` / `--color-on-danger`**: Missing from extension popup CSS (only in web and theme package)
+- **`--color-surface-secondary`**: Not in the typed `DesignTokens` interface but exists in CSS
+- **Font stack**: `--font-sans` uses `'Segoe UI'` in web but not in extension
+
+#### 14.1.2 Missing Token Categories
+
+| Category | Missing Tokens | Impact |
+|----------|---------------|--------|
+| **Skill colors** | No `--color-skill-reading`, `--color-skill-listening`, `--color-skill-writing`, `--color-skill-speaking` | Each feature page hard-codes its own skill colors. In Dashboard.tsx alone, `text-orange-500`, `text-blue-600`, `text-green-600`, `text-indigo-600`, `text-purple-600` are used as static Tailwind colors. |
+| **Difficulty colors** | No `--color-difficulty-easy`, `--color-difficulty-medium`, `--color-difficulty-hard` | Vocabulary badges and exercise difficulty labels use random colors across files. |
+| **Task status colors** | No `--color-task-todo`, `--color-task-done`, `--color-task-overdue` | Today's plan on dashboard uses `border-green-200 bg-green-50` for done / `border-slate-200 bg-white` for todo — hard-coded Tailwind colors. |
+| **AI Tutor colors** | No `--color-tutor-primary`, `--color-tutor-bg`, `--color-tutor-text` | AI Tutor bubble colors, avatar colors, and message backgrounds are hard-coded in aiTutor components. |
+| **Elevation/overlay** | No `--elevation-tooltip`, `--elevation-drawer`, `--elevation-modal` | Modal, toast, and tooltip z-index values are raw numbers (e.g., Toast z-index: `2147483647`). |
+| **Typography scale** | No `--text-xs` through `--text-4xl` semantic tokens | Font sizes use Tailwind classes (`text-sm`, `text-xs`, `text-2xl`) inconsistently — no shared typographic scale across components. |
+| **Font weight tokens** | No `--font-normal`, `--font-medium`, `--font-semibold`, `--font-bold` | Font weights are raw Tailwind classes (`font-medium`, `font-bold`, `font-semibold`). |
+| **Animation tokens** | No `--ease-in-out`, `--duration-slow` | Only `--transition-fast` (150ms) and `--transition-normal` (200ms) exist. |
+| **Accent color integration** | Theme package provides 8 accent presets, but none are exposed as CSS variables in web or extension | Accent color switching works only at the JS context level — no Tailwind integration for accent-aware utility classes. |
+
+#### 14.1.3 Token Usage Audit
+
+- **Appropriate usage** (`var(--color-*)`): Layout.tsx (sidebar, background, borders), some AI Tutor components, Card.tsx
+- **Mixed usage**: Dashboard.tsx (uses `var(--color-primary)` for charts but `text-blue-600` / `text-green-600` / `text-orange-500` / `text-indigo-600` / `text-purple-600` for stats)
+- **Hard-coded only**: Settings.tsx (all form inputs use `border-slate-300`, `bg-white`, `text-slate-900`, `dark:bg-slate-700`), ListeningJournal.tsx, Mistakes.tsx, GrammarNotes.tsx, Progress.tsx
+- **Extension**: PopupDashboard.tsx (uses `var(--color-*)` correctly but with hex fallbacks like `var(--color-warning, #d97706)`)
+
+---
+
+### 14.2 Website UX/UI Weaknesses
+
+#### 14.2.1 Dashboard — Main Learning Command Center
+
+**Current state (pages/Dashboard.tsx and features/dashboard/Dashboard.tsx):**
+
+| Issue | Details | Severity |
+|-------|---------|----------|
+| **No personal greeting with user name** | Uses generic "IELTS Learner" — not personalized | High |
+| **No exam countdown** | Exam date exists in settings but is not displayed on dashboard | High |
+| **No target band gap visualization** | Band gap (`bandGap`) is computed but only shown as tiny text: "current: X.X (Y.Y to go)" | High |
+| **No progress rings** | Stats are plain numbers (streak, progress %) without ring/radial visualization | Medium |
+| **Study streak shown as number** | `text-3xl font-bold text-orange-500` with "days" label — no fire/streak icon visualization | Medium |
+| **Weak skills shown as generic red badges** | `rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-600` — no severity or detail | Medium |
+| **Proactive suggestions use emoji icons** | 💪, 📖, 🎯, ✏️, 📰, 💡 — platform-dependent rendering, inconsistent on different OS | Medium |
+| **Today's Plan is a basic list** | Flat checkbox-style list — no progress bar, no estimated time visualization, no categorization | High |
+| **Skill distribution only in last 7 days** | Pie chart shows session counts, not skill competence — not actionable | Medium |
+| **Weekly bar chart is too small** | 192px height, cramped — uses Recharts with tiny margins | Low |
+| **"Reviews Due" is a static purple number** | No link to review page, no breakdown by vocabulary/mistakes/grammar | Medium |
+| **Two competing implementations** | `pages/Dashboard.tsx` vs `features/dashboard/Dashboard.tsx` — different styles, different data sources | High |
+| **No AI Tutor recommendation card** | AI suggestions exist but are in a secondary "Proactive Suggestions" section — not prominent | High |
+| **No continue learning button** | No quick-resume action for the user's last activity | Medium |
+| **No weekly progress summary** | Weekly data shown but no natural language summary or highlight | Medium |
+| **No quick action buttons** | No visible "Start Practice", "Review Vocabulary", "Open AI Tutor" buttons | Medium |
+| **Hard-coded header colors** | `text-orange-500` (streak), `text-blue-600` (progress), `text-green-600` (hours), `text-indigo-600` (band) | Medium |
+
+**Desired state (per requirements):**
+- Friendly greeting with user name or time-appropriate greeting
+- Target IELTS band + current estimated level with visual comparison
+- Exam countdown with prominent display
+- Today's learning mission (not just task list — estimated time, categorized tasks, completion progress)
+- AI Tutor recommendation card (not secondary suggestions box)
+- Study streak with visual indicator (fire icon, progress ring)
+- Skill progress cards with donut/ring visualization
+- Weak skill warning with actionable buttons
+- Weekly progress summary in natural language
+- Continue learning / quick resume button
+- Quick actions row (Review, Practice, AI Tutor, Vocabulary)
+
+#### 14.2.2 Navigation & Layout
+
+| Issue | Details | Severity |
+|-------|---------|----------|
+| **16 items in sidebar** | Too many navigation items with no visual hierarchy — overwhelming for new users | High |
+| **No sidebar grouping** | No logical sections (Study, Practice, Progress, Settings) or visual separators | Medium |
+| **Non-IELTS routes in sidebar** | "Public API", "Artifacts", "Info", "Backup" are not learning features | Medium |
+| **Mobile bottom nav has only 5 items** | Desktop has 16 items, mobile drops to 5 — significant discovery gap | High |
+| **Mobile nav has no "more" menu** | All non-visible routes are unreachable from mobile nav without hamburger menu | High |
+| **No route for AI Tutor chat** | AI Tutor is accessed via floating button on every page — no dedicated route | Low |
+| **Sidebar uses inline SVG icons** | 16 SVG path strings defined inline in layout, no icon component abstraction | Medium |
+| **Sidebar uses Tailwind hover colors** | `hover:bg-[var(--color-surface-alt)]` — correct token usage pattern but no active state indicator | Low |
+
+#### 14.2.3 AI Tutor Experience
+
+| Issue | Details | Severity |
+|-------|---------|----------|
+| **Two separate entry points** | `FloatingTutorButton.tsx` + `ChatIcon.tsx` both in layout — confusing dual entry | High |
+| **AI Tutor Chat (AITutorChat.tsx) is 2833 lines** | Monolithic file handling all modes (teaching, speaking, writing, reading) | Critical |
+| **Vietnamese hard-coded fallback responses** | 7+ functions with full Vietnamese strings for explanations, feedback, greetings | High |
+| **No contextual help inside lessons** | AI Tutor is only a chat popup — not contextual to current page or activity | Medium |
+| **No follow-up suggestions** | After AI Tutor response, no suggested next actions or questions | Medium |
+| **No AI Tutor recommendation on dashboard** | Suggestions engine exists but output is secondary "Proactive Suggestions" section | High |
+| **Floating button z-index** | `zIndex: 9999` — may conflict with page modals | Low |
+| **Chat popup position hard-coded** | Fixed 380px width, 560px height, bottom-right offset in JS tokens | Low |
+
+#### 14.2.4 Empty, Loading, and Error States
+
+| Page | Empty State | Loading State | Error State | Notes |
+|------|------------|---------------|-------------|-------|
+| Dashboard | No state — `if (!data) return null` | Spinner (hard-coded Tailwind spinner) | `text-red-600` message | No friendly empty state |
+| Vocabulary | Varies by view | Varies by view | Varies by view | Inconsistent across views |
+| Settings | N/A | N/A | N/A | No loading/error needed |
+| Progress | Some inline text | Spinner | Inline error | No consistent pattern |
+| AI Tutor Chat | No messages state | Chat loading indicator | Error toast | Better than most |
+
+**Problems:**
+- `EmptyState.tsx` component exists but is only used in ~3 feature pages
+- Most pages implement empty/loading/error inline with Tailwind classes
+- No skeleton loading pattern — all pages use full-page spinners
+- No friendly messages with actionable buttons
+- No retry buttons for most error states
+- No consistent error boundary pattern
+
+#### 14.2.5 Settings Page
+
+| Issue | Details | Severity |
+|-------|---------|----------|
+| **Hard-coded Tailwind input styles** | 30+ lines of identical `w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100` repeated for every input | Critical |
+| **Hard-coded dark mode toggle** | 25-line inline toggle switch implementation instead of using `ToggleSwitch.tsx` component | High |
+| **Hard-coded tag/chip buttons** | Weak skills, preferred topics, study schedule all use inline `button` elements with duplicate Tailwind classes | High |
+| **No visual section grouping** | Cards are stacked vertically with no icons, color coding, or visual hierarchy | Medium |
+| **Save notification uses inline green banner** | No Toast notification system — hand-rolled green success banner | Medium |
+| **CORS proxy section is misplaced** | Advanced settings feature for Public API (to-be-removed feature) in main settings | Low |
+| **Dark mode toggle not using ThemeContext accent** | Only toggles dark class, no accent color selection UI | Medium |
+| **Data management link is thin** | One link to `/settings/data` — export/import functionality is hidden | Low |
+
+#### 14.2.6 Mobile Experience
+
+| Issue | Details | Severity |
+|-------|---------|----------|
+| **Bottom nav has only 5 links** | Home, Plan, Vocab, Review, Progress — 11 other pages require sidebar hamburger | High |
+| **AI Tutor floating button overlaps content** | Bottom-right fixed position may overlap mobile bottom nav | Medium |
+| **Chat popup uses `100vw` / `100dvh`** | Full-screen on mobile is appropriate but no transition/animation | Low |
+| **Dashboard cards stack 1-column** | `grid-cols-1 sm:grid-cols-2 lg:grid-cols-4` — works on mobile | OK |
+| **No touch-optimized interactions** | No swipe gestures, no pull-to-refresh, no long-press actions | Medium |
+| **Settings form inputs are small** | `px-3 py-2` — 32px height, below recommended 44px touch target | Medium |
+| **Sidebar overlay on mobile** | Fixed sidebar with overlay — works but slow transition (200ms) | Low |
+
+---
+
+### 14.3 Extension UX/UI Weaknesses
+
+#### 14.3.1 Popup Dashboard
+
+| Issue | Details | Severity |
+|-------|---------|----------|
+| **Fixed 400px width** | No responsive behavior — issues on narrower browser popups or split-screen | Medium |
+| **Hard-coded `padding: 16px` in every view** | App.tsx duplicates `padding: '16px', minHeight: '500px'` for every view wrapper | High |
+| **8 quick action buttons in a flat list** | No categorization or visual hierarchy — AI Tutor, Collect Vocab, Save Text, Save Article, Video Helper, Saved Words, Start Review, Public Content | High |
+| **Emoji icons for all actions** | 🤖, 📖, ✏️, 📰, 🎬, 📚, 🔄, 🌐 — platform-dependent rendering, inconsistent across OS | High |
+| **Action colors are hard-coded hex** | `'#6366f1'`, `'#3b82f6'`, `'#8b5cf6'`, `'#10b981'`, `'#ec4899'`, `'#f59e0b'`, `'#06b6d4'` in PopupDashboard.tsx | High |
+| **No user greeting when logged in** | Only shows user name in header — no personalization | Medium |
+| **No today's learning mission** | Shows words added, notes, articles, reviews due — no curated mission | High |
+| **No band/target information** | Extension popup doesn't show IELTS goal information | Medium |
+| **No sync status indicator** | No visual indicator of whether extension data is synced with website | High |
+| **No connection feeling to website** | Header has "I" icon, "IELTS Journey" title — different from website's layout and feel | High |
+| **"Public Content" action is misplaced** | Non-IELTS feature (external API search) as a primary action | Medium |
+| **Video Helper is a primary action** | YouTube/video helper is niche but shown alongside core vocabulary and AI Tutor | Medium |
+| **Footer links (Settings, Backup, Dashboard)** | Small, light-weight footer — but Backup is a secondary action | Low |
+| **Streak badge uses emoji icon** | `STREET_ICON` SVG (lightning bolt) — actually OK, but the badge uses `streak > 0 ? 'var(--color-warning-light)' : 'var(--color-surface-alt)'` which references a non-existent fallback | Low |
+| **`handleQuickSavePage` directly manipulates chrome.storage** | Business logic (creating entries, updating progress) mixed with UI component | Medium |
+| **ActionButton has inline event handlers** | `onMouseEnter`, `onMouseLeave`, `onFocus`, `onBlur` all update `style` directly — not using React state or CSS | Low |
+
+#### 14.3.2 Content Script UI
+
+| Issue | Details | Severity |
+|-------|---------|----------|
+| **Selection panel uses vanilla DOM** | `selectionPanel.ts` creates and manages DOM elements directly — fragile, no React | Medium |
+| **Emoji icons for all actions** | 📖 (Save Word), 📝 (Save Sentence), ⚠️ (Mistake Note), 💡 (Explain), ✂️ (Simplify), 🌐 (Translate), 🎯 (IELTS Vocab) | Medium |
+| **Toast notification hard-coded** | `background: '#2563eb'`, `borderRadius: '8px'`, `boxShadow: '0 4px 12px rgba(0,0,0,0.15)'` in `saveSelectedText.ts` | High |
+| **No Shadow DOM isolation** | Content script uses `all: initial` CSS reset and scoped class names — not true Shadow DOM | Medium |
+| **Duplicate event listeners** | Multiple `mouseup`, `mousedown` handlers registered across different content script modules | Medium |
+| **Highlight engine uses hard-coded yellow** | `rgba(255, 213, 79, 0.35)` for light, `rgba(251, 191, 36, 0.3)` for dark — not theme tokens | Medium |
+| **Video helper badge hard-coded** | `background: '#0f172a'`, `borderRadius: '10px'`, gradient icon `linear-gradient(135deg, #3b82f6, #7c3aed)` | Medium |
+| **Proactive panel generates raw HTML** | `proactiveMessagePanel.tsx` is a `.tsx` file that generates HTML strings — not using React | Medium |
+| **Bridge client for website sync is incomplete** | `bridge-client.ts` defines message protocol but web app has no matching receiver | High |
+
+#### 14.3.3 Extension Vocabulary UX
+
+| Issue | Details | Severity |
+|-------|---------|----------|
+| **SavedWordsView not reviewed** | Could not examine in detail | — |
+| **WordDetails displays hard-coded Vietnamese** | `title="Nghĩa (Vietnamese)"` — Vietnamese label | Medium |
+| **VocabularyCollector has Vietnamese label** | `<strong>Nghĩa:</strong>` — Vietnamese for "Meaning" | Medium |
+| **No difficulty badge color tokens** | Vocabulary difficulty badges likely use hard-coded colors | Likely |
+| **No visual review status indicator** | SM-2 review status (new/learning/mastered) likely uses text or simple badge | Likely |
+
+#### 14.3.4 Extension Options Page
+
+| Issue | Details | Severity |
+|-------|---------|----------|
+| **Duplicate CSS variables** | `options/index.css` duplicates the same CSS variables as `popup/index.css` | High |
+| **Inline styles in ui.tsx** | All UI components (Section, Field, ToggleField) use inline `style` objects | Medium |
+| **Hard-coded input/button styles** | `inputStyle`, `selectStyle`, `buttonStyle` constants in ui.tsx | Medium |
+| **No shared component import from website** | Extension options page has its own bespoke UI components | Medium |
+
+---
+
+### 14.4 Duplicated UI Between Website and Extension
+
+| Component | Website Location | Extension Location | Similarity |
+|-----------|-----------------|-------------------|------------|
+| Card | `src/components/ui/Card.tsx` | `src/popup/components/DashboardCard.tsx` | Different APIs, similar purpose |
+| Badge | `src/components/ui/Badge.tsx` | Not in extension | Present only in web |
+| Button | `src/components/ui/Button.tsx` | Extension has `ActionButton` (inline), `footerLinkStyle`, `quickBtnStyle` | Completely different implementation |
+| EmptyState | `src/components/ui/EmptyState.tsx` | `src/popup/components/EmptyState.tsx` | Same concept, different implementation |
+| LoadingSpinner | `src/components/ui/LoadingSpinner.tsx` | Inline spinner in PopupDashboard | Web has component, extension has inline |
+| ErrorBoundary | `src/components/ui/ErrorBoundary.tsx` | `src/popup/components/ErrorBoundary.tsx` | Same concept, different implementation |
+| Toast | `src/components/ui/Toast.tsx` + `packages/ui/src/components/Toast.tsx` | Imported from `packages/ui` | **Only shared component** |
+| PronounceButton | `src/components/ui/PronounceButton.tsx` | Inline in `WordDetails.tsx` | Different implementations |
+| Modal | `src/components/ui/Modal.tsx` | Not in extension | Present only in web |
+| ConfirmDialog | `src/components/ui/ConfirmDialog.tsx` | Not in extension | Present only in web |
+| Input/Select/Textarea | `src/components/ui/Input.tsx` etc. | Inline in options/ui.tsx | Different implementations |
+| AI Tutor components | `src/components/aiTutor/*` (12 files) | `AITutorEntry.tsx`, `MiniTutor.tsx` | Completely different implementations |
+
+**Key finding:** Only 1 component (Toast) is shared via `packages/ui/`. All other UI components are independently implemented in web and extension with different APIs, styling approaches, and features.
+
+---
+
+### 14.5 Hard-Coded Design Values — Consolidated List
+
+> Note: The existing sections 15‑20 in the original report (Vietnamese assumptions, stale features, extension issues, localization, product alignment) are now numbered 15‑21, located after this UX/UI section.
+
+#### 14.5.1 Theme Tokens Missing From Components
+
+These are the most critical hard-coded values that should be replaced with theme tokens:
+
+| Location | Value(s) | Usage | Suggested Token |
+|----------|----------|-------|-----------------|
+| Dashboard.tsx:135 | `text-orange-500` | Streak count color | `var(--color-warning)` |
+| Dashboard.tsx:146 | `text-blue-600 dark:text-blue-400` | Progress percent color | `var(--color-primary)` |
+| Dashboard.tsx:159 | `text-green-600 dark:text-green-400` | Study hours color | `var(--color-success)` |
+| Dashboard.tsx:170 | `text-indigo-600 dark:text-indigo-400` | Band number color | `var(--color-primary)` |
+| Dashboard.tsx:287 | `text-purple-600 dark:text-purple-400` | Reviews due color | `var(--color-info)` |
+| Dashboard.tsx:312 | `bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400` | Weak skill badge | `var(--color-danger-light)` / `var(--color-danger)` |
+| Layout.tsx:74-76 | `w-64 border-r ... -translate-x-full` | Sidebar width (hard-coded 16rem) | Should be token |
+| Layout.tsx:171-176 | Bottom nav styles with `var(--color-surface)` | Mobile nav — correct pattern | ✓ |
+| Settings.tsx:165-166 | `border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500` (spanning 150+ chars) | Input styling — repeated 30+ times | Should use Input component |
+| PopupDashboard.tsx:316-372 | `'#6366f1'`, `'#3b82f6'`, `'#8b5cf6'`, `'#10b981'`, `'#ec4899'`, `'#f59e0b'`, `'#06b6d4'` | Extension action button colors | Should use skill/category color tokens |
+| saveSelectedText.ts:26-40 | `background: '#2563eb'`, `borderRadius: '8px'` | Toast in content script | `var(--ielts-primary)` |
+| highlightStyles.ts | `rgba(255, 213, 79, 0.35)` | Highlight color | `var(--ielts-warning)` with opacity |
+| videoHelper.ts:95-133 | `background: '#0f172a'`, `borderRadius: '10px'` | Video helper badge | Theme tokens |
+| selectionPanel.ts:214 | `boxShadow: '0 8px 28px rgba(0,0,0,0.35)'` | Selection panel shadow | `var(--shadow-lg)` |
+| App.tsx (extension):31-86 | `padding: '16px', minHeight: '500px'` — repeated 8 times | View wrapper | Should be shared layout component |
+| types.ts (extension) | `vocabulary: '#3b82f6'`, `phrase: '#8b5cf6'`, etc. | Category colors | Should be CSS tokens |
+
+#### 14.5.2 Duplicate CSS Variable Definitions
+
+| Variable | web theme.css | extension popup/index.css | extension sharedStyles.ts |
+|----------|--------------|--------------------------|---------------------------|
+| `--color-background` | `#f8fafc` | `#ffffff` | `--ielts-bg: #ffffff` |
+| `--color-success` | `#22c55e` | `#16a34a` | `--ielts-success: #16a34a` |
+| `--color-warning` | `#f59e0b` | `#d97706` | `--ielts-warning: #d97706` |
+| `--color-danger` | `#ef4444` | `#dc2626` | `--ielts-danger: #dc2626` |
+| `--font-sans` | `system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif` | `system-ui, -apple-system, sans-serif` | `system-ui, -apple-system, sans-serif` |
+| `--shadow-sm` | `0 1px 2px 0 rgb(0 0 0 / 0.05)` | `0 1px 2px rgba(0, 0, 0, 0.05)` | Not defined |
+| `--shadow-md` | `0 4px 6px -1px rgb(0 0 0 / 0.1)` | `0 4px 6px rgba(0, 0, 0, 0.07)` | Not defined |
+| `--shadow-lg` | `0 10px 15px -3px rgb(0 0 0 / 0.1)` | `0 10px 15px rgba(0, 0, 0, 0.1)` | Not defined |
+
+**All 3 files have different values for the same token concepts.** The content script uses `--ielts-*` prefix (correct isolation) but duplicates all values.
+
+---
+
+### 14.6 Extension Style Safety
+
+| Concern | Current State | Assessment |
+|---------|--------------|------------|
+| **Shadow DOM** | Not used — uses `all: initial` CSS reset on `.ielts-toolbar`, `.ielts-dict-panel`, `.ielts-ai-panel`, `.ielts-toast` | Medium risk — `all: initial` is aggressive but scoped |
+| **CSS isolation** | Uses `--ielts-*` prefixed variables to avoid host page conflicts | Good |
+| **Global pollution** | Content script adds a `<style>` element to `document.head` with `#ielts-content-styles` id | Minimal — single style element |
+| **Duplicate UI injection** | `init()` checks `document.getElementById(PANEL_ID)` before creating — prevents duplicates | Good |
+| **Event listener cleanup** | No cleanup mechanism when extension is disabled/removed | Medium |
+| **MutationObserver for dynamic pages** | Highlight engine uses `TreeWalker` on each call — no MutationObserver for dynamic content | Medium |
+| **Highlight safety** | Skips `script`, `style`, `iframe`, `svg`, `noscript`, `textarea`, `input`, `select`, `hidden` elements, and `contentEditable` | Good |
+| **Max text nodes limit** | 10,000 node limit prevents performance issues on large pages | Good |
+| **Popup isolated from host** | Popup renders in extension's own context (not content script) | Good |
+
+**Key finding:** Content script UI is reasonably safe but lacks Shadow DOM. The `all: initial` CSS reset on injected elements is mostly effective but may not protect against every host page style inheritance.
+
+---
+
+### 14.7 Website-Extension Consistency Gaps
+
+| Aspect | Website | Extension | Gap |
+|--------|---------|-----------|-----|
+| **Color scheme** | Light gray bg `#f8fafc` | White bg `#ffffff` | Different base background |
+| **Card styling** | Rounded-lg with shadow-sm | Styled via inline objects | Different visual treatment |
+| **Button styling** | Tailwind-based Button component | Custom inline ActionButton | Different hover/focus/active states |
+| **Typography** | Uses `'Segoe UI'` in font stack | Does not include `'Segoe UI'` | Slightly different font rendering |
+| **Loading state** | `LoadingSpinner` component | Inline spinner | Different animation/spinner style |
+| **Empty state** | Centered icon + message + action | Similar pattern but different styling | Close but not identical |
+| **Error display** | `ErrorDisplay` component (3 variants) | Simple inline error + retry | Different error patterns |
+| **AI Tutor** | Floating button + chat popup | `AITutorEntry` view | Completely different UX |
+| **Vocabulary display** | Table/card grid in web | `SavedWordsView` list | Different layout patterns |
+| **Review flow** | `VocabularyReview.tsx` page | `ReviewSession.tsx` component | Different review UX |
+| **Settings** | Page-based, Tailwind-styled | Options page, custom inline styles | Different visual language |
+| **Header** | Headbar with nav icon + AI tutor + dark mode | Header with "I" icon + streak + dark mode | Different hierarchy |
+| **Product identity** | Full app layout with sidebar | Compact popup layout | Extension feels like separate tool |
+
+**Overall assessment:** The website and extension share the same `--color-*` variable names (mostly) but differ in background color, component styling, visual density, and UX patterns. The extension does not "feel like a small version of IELTS Journey" — it feels like a separate browser tool.
+
+---
+
+### 14.8 UX/UI Refactoring Priority Matrix
+
+| Priority | Area | Effort | Impact | Description |
+|----------|------|--------|--------|-------------|
+| **P0** | Centralize design tokens | Medium | Critical | Unify 4 CSS variable definitions; add missing token categories (skill colors, typography scale, elevation); eliminate hard-coded colors |
+| **P0** | Redesign Dashboard | High | Critical | Add personal greeting, exam countdown, band progress, today's mission, AI Tutor recommendation, study streak visualization, skill progress cards |
+| **P0** | Build shared UI component library | High | Critical | Move components to `packages/ui/`; create shared Button, Card, EmptyState, Modal, Toast, LoadingSkeleton for both web and extension |
+| **P1** | Fix website-extension design inconsistency | Medium | High | Align background colors, card styles, button styles, typography, empty/loading/error states |
+| **P1** | Redesign extension popup | High | High | Remove hard-coded padding/height; add today's mission, sync status, band info; replace emoji icons with SVG; add visual hierarchy to quick actions |
+| **P1** | Redesign Today's Plan as Today's Mission | Medium | High | Add estimated time, categorized tasks, completion progress visualization, AI Tutor note |
+| **P1** | Replace hard-coded Tailwind colors in legacy pages | High | High | Settings.tsx, ListeningJournal.tsx, Mistakes.tsx, GrammarNotes.tsx, Progress.tsx — use theme tokens |
+| **P1** | Improve AI Tutor visibility | Medium | High | Dedicated chat route, dashboard recommendation card, contextual help, follow-up suggestions |
+| **P2** | Add missing empty/loading/error states | Medium | Medium | Skeleton loading patterns, friendly empty states with actions, retry buttons, consistent error boundaries |
+| **P2** | Improve mobile experience | Medium | Medium | Add "more" menu to bottom nav, increase touch targets (44px), optimize dashboard for mobile |
+| **P2** | Create extension content script component framework | Medium | Medium | Use React/Preact for content script UI; add Shadow DOM isolation; replace vanilla DOM manipulation |
+| **P2** | Alphabetize sidebar navigation | Low | Medium | Group sidebar items (Study: plan, vocab, review, grammar; Practice: reading, listening, writing, speaking; Progress: mistakes, mock tests, topics, progress; Settings) |
+| **P3** | Add extension sync status | Low | Medium | Visual indicator of last sync, connection status to website data |
+| **P3** | Remove non-IELTS features from sidebar | Low | Medium | Remove "Public API", "Artifacts", "Info", "Backup" — consolidate data management into Settings |
+| **P3** | Add accent color theme UI to Settings | Low | Low | Expose accent color picker in Settings page (supported by ThemeProvider but no UI) |
+| **P3** | Improve animation quality | Low | Low | Add page transitions, card hover animations, skeleton loaders with shimmer |
+
+---
+
+## 15. Vietnamese-Specific Assumptions & Hard-Coded Content
+
+### 15.1 Data Model Level
 
 | Location | Issue | Impact |
 |----------|-------|--------|
@@ -787,9 +1128,9 @@ Vietnamese support is implemented as **code-level branching** (`if (language ===
 
 ---
 
-## 15. Inappropriate / Stale / Unused Features
+## 16. Inappropriate / Stale / Unused Features
 
-### 15.1 Features to Remove (Not IELTS-Related)
+### 16.1 Features to Remove (Not IELTS-Related)
 
 | Feature | File | Reason |
 |---------|------|--------|
@@ -803,7 +1144,7 @@ Vietnamese support is implemented as **code-level branching** (`if (language ===
 | **Send Feedback** | `apps/web/src/features/info/SendFeedback.tsx` | Could be useful but currently just a form with no backend |
 | **WebsiteInfo** | `apps/web/src/features/info/WebsiteInfo.tsx` | Meta info page about the website itself |
 
-### 15.2 Features to Review (Potentially Remove or Refactor)
+### 16.2 Features to Review (Potentially Remove or Refactor)
 
 | Feature | File | Reason |
 |---------|------|--------|

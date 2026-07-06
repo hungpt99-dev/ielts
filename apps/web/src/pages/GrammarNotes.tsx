@@ -6,6 +6,8 @@ import { useToast } from '../components/ui/Toast'
 import Card, { CardContent } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
+import PageHeader from '../components/layout/PageHeader'
+import { IconGrammar } from '@ielts/ui'
 
 const RELATED_SKILLS = ['reading', 'listening', 'writing', 'speaking'] as const
 
@@ -18,9 +20,9 @@ const GRAMMAR_TOPICS = [
 ]
 
 const STATUS_OPTIONS: { value: GrammarStatus; label: string; color: string }[] = [
-  { value: 'weak', label: 'Weak', color: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
-  { value: 'reviewing', label: 'Reviewing', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
-  { value: 'mastered', label: 'Mastered', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
+  { value: 'weak', label: 'Weak', color: 'bg-[var(--color-danger-light)] text-[var(--color-danger)] dark:bg-[var(--color-danger)]/20 dark:text-[var(--color-danger-light)]' },
+  { value: 'reviewing', label: 'Reviewing', color: 'bg-[var(--color-warning-light)] text-[var(--color-warning)] dark:bg-[var(--color-warning)]/20 dark:text-[var(--color-warning-light)]' },
+  { value: 'mastered', label: 'Mastered', color: 'bg-[var(--color-success-light)] text-[var(--color-success)] dark:bg-[var(--color-success)]/20 dark:text-[var(--color-success-light)]' },
 ]
 
 function formatDate(dateStr: string): string {
@@ -248,23 +250,20 @@ export default function GrammarNotes() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Grammar Notebook
-          </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Track grammar topics, explanations, example sentences, and common mistakes
-          </p>
-        </div>
-        <Button onClick={openCreateForm} size="lg">
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-          Add Note
-        </Button>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+      <PageHeader
+        icon={<IconGrammar size={20} />}
+        title="Grammar Notebook"
+        description="Track grammar topics, explanations, example sentences, and common mistakes"
+        actions={
+          <Button onClick={openCreateForm} size="lg">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Note
+          </Button>
+        }
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -527,7 +526,7 @@ export default function GrammarNotes() {
                 </span>
                 <ul className="mt-1 space-y-1.5">
                   {detailNote.exampleSentences.map((s, i) => (
-                    <li key={i} className="rounded-lg bg-blue-50 px-3 py-2 text-slate-700 dark:bg-blue-900/20 dark:text-slate-300">
+                    <li key={i} className="rounded-lg px-3 py-2 text-slate-700 dark:text-slate-300" style={{ backgroundColor: 'var(--color-primary-light)' }}>
                       "{s}"
                     </li>
                   ))}
@@ -541,7 +540,7 @@ export default function GrammarNotes() {
                 </span>
                 <ul className="mt-1 space-y-1.5">
                   {detailNote.commonMistakes.map((m, i) => (
-                    <li key={i} className="rounded-lg bg-red-50 px-3 py-2 text-red-700 dark:bg-red-900/20 dark:text-red-300">
+                    <li key={i} className="rounded-lg px-3 py-2" style={{ backgroundColor: 'var(--color-danger-light)', color: 'var(--color-danger)' }}>
                       ✗ {m}
                     </li>
                   ))}
@@ -555,7 +554,7 @@ export default function GrammarNotes() {
                 </span>
                 <ul className="mt-1 space-y-1.5">
                   {detailNote.correctedExamples.map((c, i) => (
-                    <li key={i} className="rounded-lg bg-emerald-50 px-3 py-2 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300">
+                    <li key={i} className="rounded-lg px-3 py-2" style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}>
                       ✓ {c}
                     </li>
                   ))}

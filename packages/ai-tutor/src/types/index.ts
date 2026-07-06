@@ -122,4 +122,6 @@ export interface ChatWidgetProps {
   title?: string
   subtitle?: string
   placeholder?: string
+  voiceButton?: ReactNode
+  voiceInput?: string
 }

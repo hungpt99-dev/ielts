@@ -26,12 +26,12 @@ const POS_ORDER: Record<string, number> = {
 }
 
 const POS_COLORS: Record<string, string> = {
-  noun: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
-  verb: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
-  adjective: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
-  adverb: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
-  preposition: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300',
-  conjunction: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300',
+  noun: 'bg-[var(--color-primary-light)] text-[var(--color-primary-dark)]',
+  verb: 'bg-[var(--color-success-light)] text-[var(--color-success-dark)]',
+  adjective: 'bg-[var(--color-skill-reading-light)] text-[var(--color-skill-reading-dark)]',
+  adverb: 'bg-[var(--color-skill-listening-light)] text-[var(--color-skill-listening-dark)]',
+  preposition: 'bg-[var(--color-warning-light)] text-[var(--color-warning-dark)]',
+  conjunction: 'bg-[var(--color-info-light)] text-[var(--color-info-dark)]',
 }
 
 function isEncodedJson(s: string): boolean {
@@ -90,7 +90,7 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
   if (!hasAnyData && !onGenerate) return null
 
   return (
-    <div>
+    <div className="w-full">
       <div className="flex items-center justify-between mb-3">
         <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
           Word Forms

@@ -5,36 +5,23 @@ import HowItWorksSection from '../HowItWorksSection'
 describe('HowItWorksSection', () => {
   it('renders the section heading', () => {
     render(<HowItWorksSection />)
-    expect(screen.getByText('How it works')).toBeInTheDocument()
-  })
-
-  it('renders the description', () => {
-    render(<HowItWorksSection />)
-    expect(
-      screen.getByText(/Four simple steps to turn your daily reading into IELTS practice/)
-    ).toBeInTheDocument()
+    expect(screen.getByText('Start learning in 4 simple steps.')).toBeInTheDocument()
   })
 
   it('renders all four steps', () => {
     render(<HowItWorksSection />)
-    expect(screen.getByText('Read any article online')).toBeInTheDocument()
-    expect(
-      screen.getByText('Highlight and save vocabulary')
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText('Generate IELTS exercises')
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText('Review progress in your dashboard')
-    ).toBeInTheDocument()
+    expect(screen.getByText('Set Your Goal')).toBeInTheDocument()
+    expect(screen.getByText('AI Builds Your Plan')).toBeInTheDocument()
+    expect(screen.getByText('Study Daily')).toBeInTheDocument()
+    expect(screen.getByText('Track & Improve')).toBeInTheDocument()
   })
 
-  it('renders step numbers', () => {
+  it('renders step badges', () => {
     render(<HowItWorksSection />)
-    expect(screen.getByText('1')).toBeInTheDocument()
-    expect(screen.getByText('2')).toBeInTheDocument()
-    expect(screen.getByText('3')).toBeInTheDocument()
-    expect(screen.getByText('4')).toBeInTheDocument()
+    expect(screen.getByText('Step 1')).toBeInTheDocument()
+    expect(screen.getByText('Step 2')).toBeInTheDocument()
+    expect(screen.getByText('Step 3')).toBeInTheDocument()
+    expect(screen.getByText('Step 4')).toBeInTheDocument()
   })
 
   it('renders a semantic section with heading level 2', () => {
@@ -44,6 +31,6 @@ describe('HowItWorksSection', () => {
 
   it('has an id attribute', () => {
     render(<HowItWorksSection />)
-    expect(screen.getByText('How it works').closest('section')).toHaveAttribute('id', 'how-it-works')
+    expect(screen.getByText('Start learning in 4 simple steps.').closest('section')).toHaveAttribute('id', 'how-it-works')
   })
 })

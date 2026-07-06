@@ -3,6 +3,8 @@ import type { TopicProgress } from '../models'
 import { DatabaseService } from '../services/storage/Database'
 import Card, { CardContent } from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import PageHeader from '../components/layout/PageHeader'
+import { IconProgress } from '@ielts/ui'
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr)
@@ -63,10 +65,10 @@ export default function TopicsProgress() {
   }, [topics, search, sortBy, sortDesc])
 
   const getProgressColor = (pct: number): string => {
-    if (pct >= 80) return 'bg-emerald-500'
-    if (pct >= 60) return 'bg-blue-500'
-    if (pct >= 40) return 'bg-amber-500'
-    return 'bg-red-500'
+    if (pct >= 80) return 'bg-[var(--color-primary)]'
+    if (pct >= 60) return 'bg-[var(--color-primary)]'
+    if (pct >= 40) return 'bg-[var(--color-warning)]'
+    return 'bg-[var(--color-danger)]'
   }
 
   const getProgressLabel = (pct: number): string => {
@@ -98,15 +100,12 @@ export default function TopicsProgress() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-          Topics Progress
-        </h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Track your progress across IELTS topics and skills
-        </p>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+      <PageHeader
+        icon={<IconProgress size={20} />}
+        title="Topics Progress"
+        description="Track your progress across IELTS topics and skills"
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -220,12 +219,12 @@ export default function TopicsProgress() {
                     </h3>
                     <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
                       topic.progressPercent >= 80
-                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'
+                        ? 'bg-[var(--color-success-light)] text-[var(--color-success-dark)]'
                         : topic.progressPercent >= 60
-                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300'
+                        ? 'bg-[var(--color-primary-light)] text-[var(--color-primary-dark)]'
                         : topic.progressPercent >= 40
-                        ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'
-                        : 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300'
+                        ? 'bg-[var(--color-warning-light)] text-[var(--color-warning-dark)]'
+                        : 'bg-[var(--color-danger-light)] text-[var(--color-danger-dark)]'
                     }`}>
                       {getProgressLabel(topic.progressPercent)}
                     </span>
@@ -261,7 +260,7 @@ export default function TopicsProgress() {
                   {topic.weakPoints.map((wp, i) => (
                     <span
                       key={i}
-                      className="inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-medium text-red-600 dark:bg-red-900/20 dark:text-red-400"
+                      className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-danger-light)', color: 'var(--color-danger-dark)' }}
                     >
                       {wp}
                     </span>

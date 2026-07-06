@@ -31,9 +31,13 @@ export default function ToggleSwitch({ enabled, onChange, label, description, id
         }`}
       >
         <span
-          className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform dark:bg-slate-200 ${
+          className={`pointer-events-none inline-block h-5 w-5 rounded-full transition-transform ${
             enabled ? 'translate-x-5' : 'translate-x-0'
           }`}
+          style={{
+            backgroundColor: 'var(--color-text-inverse)',
+            boxShadow: 'var(--shadow-sm)',
+          }}
         />
       </button>
     </div>

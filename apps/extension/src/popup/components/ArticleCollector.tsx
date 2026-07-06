@@ -4,6 +4,7 @@ import type { ExtensionArticleEntry, ArticleQuestion } from '../../storage/artic
 import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
 import type { LearningEntry } from '../../types'
+import { IconArticle, IconClose, IconCheck, IconHelpCircle, IconBookText } from '@ielts/ui'
 
 interface ArticleCollectorProps {
   onSaved: () => void
@@ -155,6 +156,7 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
       const tab = tabs[0]
       if (!tab.id) return
       chrome.tabs.sendMessage(tab.id, { type: 'GET_PAGE_INFO' }, (response) => {
+        if (chrome.runtime.lastError) return
         const pageTitle = response?.title || tab.title || ''
         const pageUrl = response?.url || tab.url || ''
         const selectedText = response?.selectedText || ''
@@ -268,32 +270,31 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '48px 24px',
-        gap: '12px',
+        padding: 'var(--spacing-2xl) var(--spacing-lg)',
+        gap: 'var(--spacing-sm)',
       }}>
-        <div style={{
-          width: '56px',
-          height: '56px',
-          borderRadius: '50%',
-          background: 'var(--color-success)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '28px',
-          color: '#fff',
-        }}>
-          ✓
-        </div>
-        <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text)' }}>
+          <div style={{
+            width: '56px',
+            height: '56px',
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--color-success)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--color-text-inverse)',
+          }}>
+            <IconCheck size={28} />
+          </div>
+        <div style={{ fontSize: 'var(--text-base)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-text)' }}>
           Article saved!
         </div>
         {aiQuestions.length > 0 && (
-          <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+          <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
             {aiQuestions.length} IELTS questions generated
           </div>
         )}
         {isReadingPractice && (
-          <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+          <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
             Marked as Reading practice
           </div>
         )}
@@ -305,48 +306,54 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: '16px',
+      gap: 'var(--spacing-md)',
+      padding: 'var(--spacing-md)',
+      width: 'var(--ext-width)',
+      boxSizing: 'border-box',
     }}>
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 0 8px',
+        padding: '0 0 var(--spacing-xs)',
         borderBottom: '1px solid var(--color-border)',
       }}>
         <h2 style={{
-          fontSize: '16px',
-          fontWeight: 600,
+          fontSize: 'var(--text-base)',
+          fontWeight: 'var(--weight-semibold)',
           color: 'var(--color-text)',
           margin: 0,
         }}>
-          📰 Article Collector
+          <IconArticle size={16} style={{ color: 'var(--color-skill-listening)' }} /> Article Collector
         </h2>
         <button
           type="button"
           onClick={onCancel}
           aria-label="Cancel"
           style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 'var(--spacing-xl)',
+            height: 'var(--spacing-xl)',
             background: 'none',
             border: 'none',
             color: 'var(--color-muted)',
             cursor: 'pointer',
-            fontSize: '18px',
-            padding: '4px',
-            lineHeight: 1,
+            borderRadius: 'var(--radius-lg)',
           }}
         >
-          ✕
+          <IconClose size={18} />
         </button>
       </div>
 
       {errors.submit && (
         <div style={{
-          padding: '8px 12px',
+          padding: 'var(--spacing-xs) var(--spacing-sm)',
           background: 'var(--color-danger)',
-          color: '#fff',
+          color: 'var(--color-text-inverse)',
           borderRadius: 'var(--radius-md)',
-          fontSize: '13px',
+          fontSize: 'var(--text-sm)',
         }}>
           {errors.submit}
         </div>
@@ -363,17 +370,17 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           placeholder="Article title"
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: errors.title ? '1px solid var(--color-danger)' : '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '14px',
-            fontWeight: 600,
+            fontSize: 'var(--text-base)',
+            fontWeight: 'var(--weight-semibold)',
           }}
         />
         {errors.title && (
-          <span style={{ fontSize: '12px', color: 'var(--color-danger)' }}>{errors.title}</span>
+          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-danger)' }}>{errors.title}</span>
         )}
       </Field>
 
@@ -385,12 +392,12 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           placeholder="Paste or type the full article content here..."
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             lineHeight: 1.5,
             resize: 'vertical',
             fontFamily: 'var(--font-sans)',
@@ -406,19 +413,19 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           placeholder="Selected text from the page (auto-populated)"
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             lineHeight: 1.5,
             resize: 'vertical',
             fontFamily: 'var(--font-sans)',
           }}
         />
         {pageInfo.title && !content.trim() && (
-          <span style={{ fontSize: '11px', color: 'var(--color-muted)', marginTop: '2px' }}>
+          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '2px' }}>
             From: {pageInfo.title}
           </span>
         )}
@@ -427,7 +434,7 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '12px',
+        gap: 'var(--spacing-sm)',
       }}>
         <Field label="IELTS Topic">
           <select
@@ -435,12 +442,12 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
             onChange={e => setTopic(e.target.value)}
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           >
             <option value="">Select topic</option>
@@ -457,12 +464,12 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
             onChange={e => setDifficulty(e.target.value as typeof difficulty)}
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           >
             <option value="">Not specified</option>
@@ -481,12 +488,12 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           placeholder="comma, separated"
           style={{
             width: '100%',
-            padding: '8px 10px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
           }}
         />
       </Field>
@@ -499,12 +506,12 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           placeholder="Why you want to save this article..."
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             lineHeight: 1.5,
             resize: 'vertical',
             fontFamily: 'var(--font-sans)',
@@ -515,9 +522,9 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
       <label style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
+        gap: 'var(--spacing-xs)',
         cursor: 'pointer',
-        padding: '8px 12px',
+        padding: 'var(--spacing-xs) var(--spacing-sm)',
         borderRadius: 'var(--radius-md)',
         border: isReadingPractice ? '1px solid var(--color-primary)' : '1px solid var(--color-border)',
         background: isReadingPractice ? 'var(--color-surface-alt)' : 'var(--color-surface)',
@@ -528,16 +535,16 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           onChange={e => setIsReadingPractice(e.target.checked)}
           style={{ width: '16px', height: '16px', cursor: 'pointer' }}
         />
-        <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-          📖 Mark as Reading practice material
-        </span>
+          <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
+            <IconBookText size={14} /> Mark as Reading practice material
+          </span>
       </label>
 
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px',
-        padding: '12px',
+        gap: 'var(--spacing-xs)',
+        padding: 'var(--spacing-sm)',
         borderRadius: 'var(--radius-md)',
         border: '1px solid var(--color-border)',
         background: 'var(--color-surface)',
@@ -547,12 +554,12 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}>
-              🧠 AI Question Generation
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
+              <IconHelpCircle size={14} /> AI Question Generation
             </span>
             {aiQuestions.length > 0 && (
-              <span style={{ fontSize: '11px', color: 'var(--color-success)' }}>
+              <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-success)' }}>
                 {aiQuestions.length} questions ready
               </span>
             )}
@@ -566,9 +573,9 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
               borderRadius: 'var(--radius-md)',
               border: 'none',
               background: aiLoading ? 'var(--color-primary-hover)' : 'var(--color-primary)',
-              color: '#ffffff',
-              fontSize: '12px',
-              fontWeight: 600,
+              color: 'var(--color-text-inverse)',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-semibold)',
               cursor: aiLoading ? 'not-allowed' : 'pointer',
               opacity: aiLoading ? 0.7 : 1,
             }}
@@ -579,12 +586,12 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
 
         {aiError && (
           <div style={{
-            padding: '8px 12px',
-            background: '#fef2f2',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
+            background: 'var(--color-danger-light)',
             borderRadius: 'var(--radius-md)',
-            fontSize: '12px',
-            color: '#dc2626',
-            border: '1px solid #fecaca',
+            fontSize: 'var(--text-xs)',
+            color: 'var(--color-danger)',
+            border: '1px solid var(--color-danger-light)',
           }}>
             {aiError}
             {aiError.includes('API key') && (
@@ -595,9 +602,9 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                   marginLeft: '8px',
                   background: 'none',
                   border: 'none',
-                  color: '#2563eb',
+                  color: 'var(--color-primary)',
                   cursor: 'pointer',
-                  fontSize: '12px',
+                  fontSize: 'var(--text-xs)',
                   textDecoration: 'underline',
                 }}
               >
@@ -617,7 +624,7 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                 border: 'none',
                 color: 'var(--color-primary)',
                 cursor: 'pointer',
-                fontSize: '12px',
+                fontSize: 'var(--text-xs)',
                 padding: '4px 0',
                 textDecoration: 'underline',
               }}
@@ -629,8 +636,8 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '12px',
-                marginTop: '8px',
+                gap: 'var(--spacing-sm)',
+                marginTop: 'var(--spacing-xs)',
               }}>
                 {aiQuestions.map((q, i) => (
                   <div key={i} style={{
@@ -647,40 +654,40 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                     }}>
                       <span style={{
                         padding: '1px 6px',
-                        borderRadius: '4px',
-                        background: '#dbeafe',
-                        color: '#1d4ed8',
-                        fontSize: '10px',
-                        fontWeight: 600,
+                        borderRadius: 'var(--radius-md)',
+                        background: 'var(--color-primary-light)',
+                        color: 'var(--color-primary-hover)',
+                        fontSize: 'var(--text-xs)',
+                        fontWeight: 'var(--weight-semibold)',
                         textTransform: 'uppercase',
                       }}>
                         {q.type}
                       </span>
                       <span style={{
                         padding: '1px 6px',
-                        borderRadius: '4px',
-                        background: q.difficulty === 'hard' ? '#fef2f2' : q.difficulty === 'medium' ? '#fffbeb' : '#f0fdf4',
-                        color: q.difficulty === 'hard' ? '#dc2626' : q.difficulty === 'medium' ? '#d97706' : '#15803d',
-                        fontSize: '10px',
-                        fontWeight: 600,
+                        borderRadius: 'var(--radius-md)',
+                        background: q.difficulty === 'hard' ? 'var(--color-danger-light)' : q.difficulty === 'medium' ? 'var(--color-warning-light)' : 'var(--color-success-light)',
+                        color: q.difficulty === 'hard' ? 'var(--color-danger-dark)' : q.difficulty === 'medium' ? 'var(--color-warning-dark)' : 'var(--color-success-dark)',
+                        fontSize: 'var(--text-xs)',
+                        fontWeight: 'var(--weight-semibold)',
                       }}>
                         {q.difficulty}
                       </span>
                       {q.bandScore && (
                         <span style={{
-                          fontSize: '10px',
+                          fontSize: 'var(--text-xs)',
                           color: 'var(--color-muted)',
                         }}>
                           Band {q.bandScore}
                         </span>
                       )}
                     </div>
-                    <div style={{ fontSize: '13px', color: 'var(--color-text)', fontWeight: 500, marginBottom: '4px' }}>
+                    <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text)', fontWeight: 'var(--weight-medium)', marginBottom: '4px' }}>
                       {i + 1}. {q.question}
                     </div>
                     {q.passage && (
                       <div style={{
-                        fontSize: '11px',
+                        fontSize: 'var(--text-xs)',
                         color: 'var(--color-muted)',
                         fontStyle: 'italic',
                         padding: '4px 8px',
@@ -694,7 +701,7 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '4px' }}>
                         {q.options.map((opt, oi) => (
                           <div key={oi} style={{
-                            fontSize: '12px',
+                            fontSize: 'var(--text-xs)',
                             color: 'var(--color-text-secondary)',
                             padding: '2px 4px',
                           }}>
@@ -703,10 +710,10 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                         ))}
                       </div>
                     )}
-                    <div style={{ fontSize: '12px', color: 'var(--color-success)', marginTop: '4px' }}>
+                    <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-success)', marginTop: '4px' }}>
                       ✓ {q.correctAnswer}
                     </div>
-                    <div style={{ fontSize: '11px', color: 'var(--color-muted)', marginTop: '2px' }}>
+                    <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '2px' }}>
                       {q.explanation}
                     </div>
                   </div>
@@ -719,7 +726,7 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
 
       <div style={{
         display: 'flex',
-        gap: '8px',
+        gap: 'var(--spacing-xs)',
         justifyContent: 'flex-end',
         paddingTop: '8px',
         borderTop: '1px solid var(--color-border)',
@@ -728,12 +735,12 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           type="button"
           onClick={onCancel}
           style={{
-            padding: '8px 16px',
+            padding: 'var(--spacing-xs) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             cursor: 'pointer',
           }}
         >
@@ -744,13 +751,13 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           onClick={handleSave}
           disabled={saving || !title.trim()}
           style={{
-            padding: '8px 20px',
+            padding: 'var(--spacing-xs) var(--spacing-lg)',
             borderRadius: 'var(--radius-md)',
             border: 'none',
             background: saving || !title.trim() ? 'var(--color-primary-hover)' : 'var(--color-primary)',
-            color: '#ffffff',
-            fontSize: '13px',
-            fontWeight: 600,
+            color: 'var(--color-text-inverse)',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--weight-semibold)',
             cursor: saving || !title.trim() ? 'not-allowed' : 'pointer',
             opacity: saving || !title.trim() ? 0.7 : 1,
           }}
@@ -764,8 +771,8 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-      <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+      <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
         {label}
       </label>
       {children}

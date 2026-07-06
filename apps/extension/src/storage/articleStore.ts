@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { openDB, STORE_NAMES } from './db'
 
 export const articleQuestionSchema = z.object({
   type: z.enum(['multiple-choice', 'true-false', 'short-answer', 'gap-fill', 'matching']),
@@ -35,9 +36,7 @@ export const extensionArticleSchema = z.object({
 export type ArticleQuestion = z.infer<typeof articleQuestionSchema>
 export type ExtensionArticleEntry = z.infer<typeof extensionArticleSchema>
 
-const DB_NAME = 'ielts-journey-extension'
-const DB_VERSION = 3
-const STORE_NAME = 'articles'
+const STORE = STORE_NAMES.ARTICLES
 
 export const IELTS_TOPICS = [
   'education',
@@ -55,31 +54,11 @@ export const IELTS_TOPICS = [
   'general',
 ] as const
 
-function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION)
-
-    request.onupgradeneeded = () => {
-      const db = request.result
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
-        store.createIndex('topic', 'topic', { unique: false })
-        store.createIndex('status', 'status', { unique: false })
-        store.createIndex('isReadingPractice', 'isReadingPractice', { unique: false })
-        store.createIndex('createdAt', 'createdAt', { unique: false })
-      }
-    }
-
-    request.onsuccess = () => resolve(request.result)
-    request.onerror = () => reject(request.error)
-  })
-}
-
 export async function saveArticleEntry(entry: ExtensionArticleEntry): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.put(entry)
     tx.oncomplete = () => { db.close(); resolve() }
     tx.onerror = () => { db.close(); reject(tx.error) }
@@ -89,8 +68,8 @@ export async function saveArticleEntry(entry: ExtensionArticleEntry): Promise<vo
 export async function getAllArticles(): Promise<ExtensionArticleEntry[]> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.getAll()
     request.onsuccess = () => { db.close(); resolve(request.result as ExtensionArticleEntry[]) }
     request.onerror = () => { db.close(); reject(request.error) }
@@ -100,8 +79,8 @@ export async function getAllArticles(): Promise<ExtensionArticleEntry[]> {
 export async function getArticleById(id: string): Promise<ExtensionArticleEntry | undefined> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.get(id)
     request.onsuccess = () => { db.close(); resolve(request.result as ExtensionArticleEntry | undefined) }
     request.onerror = () => { db.close(); reject(request.error) }
@@ -111,8 +90,8 @@ export async function getArticleById(id: string): Promise<ExtensionArticleEntry 
 export async function updateArticleEntry(id: string, updates: Partial<ExtensionArticleEntry>): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     const getRequest = store.get(id)
     getRequest.onsuccess = () => {
       const existing = getRequest.result as ExtensionArticleEntry | undefined
@@ -128,8 +107,8 @@ export async function updateArticleEntry(id: string, updates: Partial<ExtensionA
 export async function deleteArticleEntry(id: string): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.delete(id)
     tx.oncomplete = () => { db.close(); resolve() }
     tx.onerror = () => { db.close(); reject(tx.error) }

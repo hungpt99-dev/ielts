@@ -13,6 +13,8 @@ import LQuestion from './components/ListeningQuestion'
 import { SAMPLE_EXERCISES } from './data/exercises'
 import { generateId } from '../../utils'
 import { generateListeningExercise } from '../../services/ai/AIService'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconListening } from '@ielts/ui'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -391,30 +393,27 @@ export default function ListeningPractice() {
     <div className="mx-auto max-w-6xl space-y-6">
       {view === 'browse' && (
         <>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-                Listening Practice
-              </h1>
-              <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-                Practice IELTS listening with transcript-based exercises
-              </p>
+          <PageHeader
+            icon={<IconListening size={22} />}
+            title="Listening Practice"
+            description="Practice IELTS listening with transcript-based exercises"
+            actions={
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => setAiModalOpen(true)} variant="secondary">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  AI Generate
+                </Button>
+                <Button onClick={handleViewHistory} variant="secondary">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  History
+                </Button>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Button onClick={() => setAiModalOpen(true)} variant="secondary">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                AI Generate
-              </Button>
-              <Button onClick={handleViewHistory} variant="secondary">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                History
-              </Button>
-            </div>
-          </div>
+          }
+        />
 
           <Card>
             <CardContent>
@@ -498,15 +497,15 @@ export default function ListeningPractice() {
                           style={{
                             backgroundColor:
                               exercise.difficulty === 'easy'
-                                ? 'var(--color-success-light, #f0fdf4)'
+                                ? 'var(--color-success-light)'
                                 : exercise.difficulty === 'hard'
-                                  ? 'var(--color-danger-light, #fef2f2)'
+                                  ? 'var(--color-danger-light)'
                                   : 'var(--color-primary-light)',
                             color:
                               exercise.difficulty === 'easy'
-                                ? 'var(--color-success, #16a34a)'
+                                ? 'var(--color-success)'
                                 : exercise.difficulty === 'hard'
-                                  ? 'var(--color-danger, #dc2626)'
+                                  ? 'var(--color-danger)'
                                   : 'var(--color-primary)',
                           }}
                         >
@@ -608,6 +607,7 @@ export default function ListeningPractice() {
               variant="ghost"
               size="sm"
               onClick={() => setShowTranscript(!showTranscript)}
+              className="whitespace-nowrap"
             >
               <svg className="mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 {showTranscript ? (
@@ -718,10 +718,10 @@ export default function ListeningPractice() {
                   style={{
                     color:
                       results.accuracy >= 80
-                        ? 'var(--color-success, #16a34a)'
+                        ? 'var(--color-success)'
                         : results.accuracy >= 60
-                          ? 'var(--color-warning, #d97706)'
-                          : 'var(--color-danger, #dc2626)',
+                          ? 'var(--color-warning)'
+                          : 'var(--color-danger)',
                   }}
                 >
                   {results.accuracy}%
@@ -787,7 +787,7 @@ export default function ListeningPractice() {
                         <p className="mt-1" style={{ color: 'var(--color-danger)' }}>
                           Your answer: {getUserAnswerLabel(r.question, r.answer)}
                         </p>
-                        <p style={{ color: 'var(--color-success, #16a34a)' }}>
+                        <p style={{ color: 'var(--color-success)' }}>
                           Correct answer: {getAnswerLabel(r.question)}
                         </p>
                         <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
@@ -1005,7 +1005,7 @@ export default function ListeningPractice() {
               <option value="hard">Hard (Band 7-9)</option>
             </select>
           </div>
-          <p className="text-xs" style={{ color: 'var(--color-warning, #d97706)' }}>
+          <p className="text-xs" style={{ color: 'var(--color-warning)' }}>
             This will use your AI API key configured in Settings. A listening transcript with gap-fill and multiple-choice questions will be generated. No audio will be attached.
           </p>
           {aiError && (
@@ -1058,10 +1058,10 @@ export default function ListeningPractice() {
                   style={{
                     color:
                       historyDetail.accuracy >= 80
-                        ? 'var(--color-success, #16a34a)'
+                        ? 'var(--color-success)'
                         : historyDetail.accuracy >= 60
-                          ? 'var(--color-warning, #d97706)'
-                          : 'var(--color-danger, #dc2626)',
+                          ? 'var(--color-warning)'
+                          : 'var(--color-danger)',
                   }}
                 >
                   {historyDetail.score}/{historyDetail.totalQuestions} ({historyDetail.accuracy}%)
@@ -1104,7 +1104,7 @@ export default function ListeningPractice() {
                     >
                       <p className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>{m.question}</p>
                       <p className="mt-1 text-xs" style={{ color: 'var(--color-danger)' }}>Your answer: {m.userAnswer}</p>
-                      <p className="text-xs" style={{ color: 'var(--color-success, #16a34a)' }}>Correct: {m.correctAnswer}</p>
+                      <p className="text-xs" style={{ color: 'var(--color-success)' }}>Correct: {m.correctAnswer}</p>
                       <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>{m.explanation}</p>
                     </div>
                   ))}

@@ -102,7 +102,7 @@ export function ToggleField({
             width: '20px',
             height: '20px',
             borderRadius: '50%',
-            background: '#ffffff',
+            background: 'var(--color-text-inverse)',
             transition: 'left 0.2s',
           }}
         />

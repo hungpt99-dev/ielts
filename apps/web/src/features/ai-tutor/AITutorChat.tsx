@@ -4,12 +4,16 @@ import { ChatPopup } from '@ielts/ai-tutor'
 import { aiTutorService } from './aiTutorService'
 import type { PersonalizationContext } from '../personalization/types'
 import type { TutorDailyBriefing } from './aiTutorService'
+import { VoiceProvider } from '../../voice/VoiceProvider'
+import { useVoice } from '../../voice/useVoice'
+import VoiceButton from '../../voice/components/VoiceButton'
 
 interface AITutorChatProps {
   isOpen: boolean
   onClose: () => void
   hasAiKey?: boolean
   onOpenSettings?: () => void
+  initialContext?: string
 }
 
 function getTimeBasedGreeting(): string {
@@ -19,16 +23,82 @@ function getTimeBasedGreeting(): string {
   return 'Good evening'
 }
 
-export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings }: AITutorChatProps) {
+function getMotivationalTip(): string {
+  const tips = [
+    'Consistency beats intensity. Study a little every day, and you will see real progress.',
+    'Focus on your weakest skill first. That is where you gain the most bands.',
+    'Review vocabulary in context, not in isolation. Read articles and note useful words.',
+    'Practice speaking out loud, even if you are alone. Your mouth needs practice too.',
+    'Read actively — underline key points, summarize paragraphs, question the author.',
+    'Mistakes are proof that you are trying. Each error teaches you something valuable.',
+    'Twenty minutes of focused practice beats two hours of distraction every time.',
+    'Your IELTS journey is a marathon, not a sprint. Enjoy the process.',
+  ]
+  return tips[Math.floor(Math.random() * tips.length)]
+}
+
+function ChatWithVoice({ isOpen, onClose, hasAiKey, onOpenSettings, context, contextSuggestions, handleSendMessage, handleQuickAction, subtitle }: {
+  isOpen: boolean
+  onClose: () => void
+  hasAiKey?: boolean
+  onOpenSettings?: () => void
+  context: PersonalizationContext | null
+  contextSuggestions: ContextSuggestion[]
+  handleSendMessage: (text: string) => Promise<string>
+  handleQuickAction: (action: string) => void
+  subtitle: string
+}) {
+  const [voiceInput, setVoiceInput] = useState('')
+  const { speak, ttsEnabled } = useVoice()
+
+  const handleVoiceSendMessage = useCallback(async (text: string): Promise<string> => {
+    const response = await handleSendMessage(text)
+    if (ttsEnabled && response) speak(response)
+    return response
+  }, [handleSendMessage, speak, ttsEnabled])
+
+  return (
+    <ChatPopup
+      isOpen={isOpen}
+      onClose={onClose}
+      hasAiKey={hasAiKey}
+      onOpenSettings={onOpenSettings}
+      onSendMessage={handleVoiceSendMessage}
+      onQuickAction={handleQuickAction}
+      contextSuggestions={contextSuggestions.length > 0 ? contextSuggestions : undefined}
+      title="AI Tutor"
+      subtitle={subtitle}
+      placeholder="Ask me anything about IELTS..."
+      voiceButton={
+        <VoiceButton
+          onTranscript={(text) => setVoiceInput(text)}
+        />
+      }
+      voiceInput={voiceInput}
+    />
+  )
+}
+
+export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings, initialContext }: AITutorChatProps) {
   const [context, setContext] = useState<PersonalizationContext | null>(null)
   const [briefing, setBriefing] = useState<TutorDailyBriefing | null>(null)
   const [contextSuggestions, setContextSuggestions] = useState<ContextSuggestion[]>([])
+  const [userName, setUserName] = useState('IELTS Learner')
   const loadingRef = useRef(false)
 
   useEffect(() => {
     if (!isOpen || loadingRef.current) return
     loadingRef.current = true
     let cancelled = false
+
+    // Load user name
+    try {
+      const raw = localStorage.getItem('ielts-onboarding')
+      if (raw) {
+        const data = JSON.parse(raw)
+        if (data.name) setUserName(data.name)
+      }
+    } catch { /* ignore */ }
 
     ;(async () => {
       try {
@@ -41,6 +111,27 @@ export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings 
         setBriefing(b)
 
         const suggestions: ContextSuggestion[] = []
+        const greeting = getTimeBasedGreeting()
+        const name = ctx.userName || 'IELTS Learner'
+        setUserName(name)
+
+        if (initialContext) {
+          suggestions.push({
+            title: `Context: ${initialContext}`,
+            message: `I remember you were working on this. Let's continue where you left off.`,
+            action: 'teach-me',
+            actionLabel: 'Continue',
+          })
+        }
+
+        suggestions.push({
+          title: `${greeting}, ${name}`,
+          message: `You are at Band ${ctx.profile.currentBand} working toward ${ctx.profile.targetBand}. ${
+            b.whyTodayMatters || b.examCountdownMessage || getMotivationalTip()
+          }`,
+          action: 'teach-me',
+          actionLabel: 'What should I study?',
+        })
 
         if (b.whyTodayMatters) {
           suggestions.push({
@@ -65,27 +156,34 @@ export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings 
           suggestions.push({
             title: task.title,
             message: task.contextExplanation,
-            action: 'make-exercise',
+            action: 'teach-me',
             actionLabel: task.actionLabel,
           })
         }
 
-        if (b.examCountdownMessage) {
+        if (ctx.profile.dueReviews && ctx.profile.dueReviews > 0) {
           suggestions.push({
-            title: 'Exam countdown',
-            message: b.examCountdownMessage,
-            action: 'teach-me',
-            actionLabel: 'View plan',
+            title: 'Vocabulary review due',
+            message: `You have ${ctx.profile.dueReviews} words waiting for review. A quick review session keeps your vocabulary fresh.`,
+            action: 'quiz-me',
+            actionLabel: `Review ${ctx.profile.dueReviews} words`,
           })
         }
 
-        setContextSuggestions(suggestions.slice(0, 3))
+        setContextSuggestions(suggestions.slice(0, 4))
       } catch {
+        const greeting = getTimeBasedGreeting()
         setContextSuggestions([
           {
-            title: 'Welcome to IELTS Journey',
-            message: "I'm your AI Tutor. Ask me anything about your IELTS preparation, or use the quick actions below to get started.",
+            title: `${greeting}! Welcome to IELTS Journey`,
+            message: `I am your AI Tutor. I can help you plan your study, review mistakes, build vocabulary, and keep you motivated. What would you like help with today?`,
+            action: 'teach-me',
             actionLabel: 'Get started',
+          },
+          {
+            title: 'Quick tip for today',
+            message: getMotivationalTip(),
+            actionLabel: 'Tell me more',
           },
         ])
       } finally {
@@ -96,19 +194,22 @@ export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings 
     return () => {
       cancelled = true
     }
-  }, [isOpen])
+  }, [isOpen, initialContext])
 
   const handleSendMessage = useCallback(async (text: string): Promise<string> => {
     const ctx = context ?? await aiTutorService.buildContext()
     const response = await aiTutorService.answerQuestion(text, ctx)
     if (response) return response
-    return "I'm here to help with your IELTS journey! You can ask me:\n\n• What should I study today?\n• What are my weak skills?\n• How many days until my exam?\n• Review my mistakes\n• Create vocabulary exercises\n• Motivate me!\n\nWhat would you like help with?"
+    return "I am here to help with your IELTS journey! Ask me about what to study today, your weak skills, exam countdown, mistake review, vocabulary exercises, or anything else. What can I help with?"
   }, [context])
 
   const handleQuickAction = useCallback((action: string) => {
     if (action === 'practice-with-me') {
       window.dispatchEvent(new CustomEvent('toggle-ai-tutor-chat'))
       window.location.hash = '#/dashboard'
+    } else if (action === 'teach-me') {
+      window.dispatchEvent(new CustomEvent('toggle-ai-tutor-chat'))
+      window.location.hash = '#/plan'
     }
   }, [])
 
@@ -117,15 +218,18 @@ export default function AITutorChat({ isOpen, onClose, hasAiKey, onOpenSettings 
     : 'IELTS Coach'
 
   return (
-    <ChatPopup
-      isOpen={isOpen}
-      onClose={onClose}
-      hasAiKey={hasAiKey}
-      onOpenSettings={onOpenSettings}
-      onSendMessage={handleSendMessage}
-      contextSuggestions={contextSuggestions.length > 0 ? contextSuggestions : undefined}
-      title="AI Tutor"
-      subtitle={subtitle}
-    />
+    <VoiceProvider>
+      <ChatWithVoice
+        isOpen={isOpen}
+        onClose={onClose}
+        hasAiKey={hasAiKey}
+        onOpenSettings={onOpenSettings}
+        context={context}
+        contextSuggestions={contextSuggestions}
+        handleSendMessage={handleSendMessage}
+        handleQuickAction={handleQuickAction}
+        subtitle={subtitle}
+      />
+    </VoiceProvider>
   )
 }

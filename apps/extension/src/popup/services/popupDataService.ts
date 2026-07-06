@@ -29,7 +29,7 @@ export async function loadVocabulary(): Promise<{
     getAllVocabulary().catch(() => [] as PopupVocabEntry[]),
   ])
 
-  const storageEntries: PopupVocabEntry[] = (storageResult.vocabulary || [])
+  const storageEntries: PopupVocabEntry[] = (Array.isArray(storageResult) ? storageResult : [])
     .filter((item: Record<string, unknown>) => item.word)
     .map(normalizeEntry)
 

@@ -11,6 +11,7 @@ import {
 import { saveVocabularyEntry, type ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveArticleEntry, type ExtensionArticleEntry } from '../../storage/articleStore'
 import { incrementDailyProgress } from '../../services/storage'
+import { IconBack, IconSearch, IconInfo } from '@ielts/ui'
 
 interface ImportExportSectionProps {
   onBack: () => void
@@ -144,8 +145,8 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '12px',
-        padding: '16px',
+        gap: 'var(--spacing-sm)',
+        padding: 'var(--spacing-md)',
         minHeight: '500px',
       }}
     >
@@ -153,7 +154,7 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
+          gap: 'var(--spacing-sm)',
         }}
       >
         <button
@@ -161,7 +162,7 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
           style={{
             background: 'var(--color-surface)',
             border: '1px solid var(--color-border)',
-            borderRadius: 'var(--radius-md)',
+            borderRadius: 'var(--radius-lg)',
             width: '32px',
             height: '32px',
             display: 'flex',
@@ -169,16 +170,15 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
             justifyContent: 'center',
             cursor: 'pointer',
             color: 'var(--color-text)',
-            fontSize: '16px',
             flexShrink: 0,
           }}
           aria-label="Back"
         >
-          ←
+          <IconBack size={16} />
         </button>
         <h1
           style={{
-            fontSize: '16px',
+            fontSize: 'var(--text-base)',
             fontWeight: 700,
             color: 'var(--color-text)',
             margin: 0,
@@ -200,12 +200,12 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
           onClick={() => setActiveTab('search')}
           style={{
             flex: 1,
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             border: 'none',
             background: activeTab === 'search' ? 'var(--color-primary)' : 'var(--color-surface)',
-            color: activeTab === 'search' ? '#ffffff' : 'var(--color-text)',
-            fontSize: '12px',
-            fontWeight: 600,
+            color: activeTab === 'search' ? 'var(--color-text-inverse)' : 'var(--color-text)',
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-semibold)',
             cursor: 'pointer',
           }}
         >
@@ -215,12 +215,12 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
           onClick={() => { setActiveTab('imported'); setPreview(null) }}
           style={{
             flex: 1,
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             border: 'none',
             background: activeTab === 'imported' ? 'var(--color-primary)' : 'var(--color-surface)',
-            color: activeTab === 'imported' ? '#ffffff' : 'var(--color-text)',
-            fontSize: '12px',
-            fontWeight: 600,
+            color: activeTab === 'imported' ? 'var(--color-text-inverse)' : 'var(--color-text)',
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-semibold)',
             cursor: 'pointer',
           }}
         >
@@ -229,8 +229,8 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
       </div>
 
       {activeTab === 'search' ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-xs)' }}>
             <select
               value={source}
               onChange={(e) => {
@@ -242,12 +242,12 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
               }}
               style={{
                 flex: 1,
-                padding: '8px 10px',
+                padding: 'var(--spacing-xs) var(--spacing-sm)',
                 borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--color-border)',
                 background: 'var(--color-surface)',
                 color: 'var(--color-text)',
-                fontSize: '12px',
+                fontSize: 'var(--text-xs)',
               }}
               aria-label="Content source"
             >
@@ -260,12 +260,12 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
           </div>
 
           {sourceInfo && (
-            <p style={{ fontSize: '11px', color: 'var(--color-muted)', margin: 0, lineHeight: '1.4' }}>
+            <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', margin: 0, lineHeight: '1.4' }}>
               {sourceInfo.description}
             </p>
           )}
 
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: 'var(--spacing-xs)' }}>
             <input
               type="search"
               value={query}
@@ -275,12 +275,12 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
               aria-label="Search query"
               style={{
                 flex: 1,
-                padding: '8px 12px',
+                padding: 'var(--spacing-xs) var(--spacing-sm)',
                 borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--color-border)',
                 background: 'var(--color-surface)',
                 color: 'var(--color-text)',
-                fontSize: '13px',
+                fontSize: 'var(--text-sm)',
               }}
             />
             <button
@@ -291,9 +291,9 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
                 borderRadius: 'var(--radius-md)',
                 border: 'none',
                 background: 'var(--color-primary)',
-                color: '#ffffff',
-                fontSize: '12px',
-                fontWeight: 600,
+                color: 'var(--color-text-inverse)',
+                fontSize: 'var(--text-xs)',
+                fontWeight: 'var(--weight-semibold)',
                 cursor: loading || !query.trim() ? 'not-allowed' : 'pointer',
                 opacity: loading || !query.trim() ? 0.6 : 1,
               }}
@@ -308,9 +308,9 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
               style={{
                 padding: '10px 12px',
                 borderRadius: 'var(--radius-md)',
-                background: 'var(--color-error-light, #fef2f2)',
-                color: 'var(--color-error, #ef4444)',
-                fontSize: '12px',
+background: 'var(--color-danger-light)',
+                 color: 'var(--color-danger)',
+                fontSize: 'var(--text-xs)',
                 lineHeight: '1.4',
               }}
             >
@@ -326,9 +326,9 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '24px',
-                gap: '8px',
+                gap: 'var(--spacing-xs)',
                 color: 'var(--color-muted)',
-                fontSize: '13px',
+                fontSize: 'var(--text-sm)',
               }}
             >
               <div
@@ -353,20 +353,20 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '24px 16px',
-                gap: '8px',
+                gap: 'var(--spacing-xs)',
                 color: 'var(--color-muted)',
-                fontSize: '13px',
+                fontSize: 'var(--text-sm)',
                 textAlign: 'center',
               }}
             >
-              <span aria-hidden="true" style={{ fontSize: '24px', opacity: 0.3 }}>🔍</span>
+              <IconSearch size={24} style={{ opacity: 0.3 }} />
               No results found for "{query}". Try a different search term or source.
             </div>
           )}
 
           {results.length > 0 && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'var(--color-muted)', fontWeight: 600 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+              <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', fontWeight: 'var(--weight-semibold)' }}>
                 Results ({results.length})
               </span>
               {results.map((result) => (
@@ -380,7 +380,7 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
                     width: '100%',
                     padding: '10px 12px',
                     background: preview?.id === result.id
-                      ? 'var(--color-primary-light, #eef2ff)'
+                      ? 'var(--color-primary-light)'
                       : 'var(--color-surface)',
                     border: preview?.id === result.id
                       ? '1px solid var(--color-primary)'
@@ -392,23 +392,23 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 600, fontSize: '13px' }}>
+                    <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)' }}>
                       {result.title}
                     </span>
                     <span style={{
-                      fontSize: '10px',
+                      fontSize: 'var(--text-xs)',
                       padding: '2px 6px',
                       borderRadius: 'var(--radius-sm)',
-                      background: 'var(--color-surface-alt, #f1f5f9)',
+                      background: 'var(--color-surface-alt)',
                       color: 'var(--color-muted)',
                     }}>
                       {result.contentType}
                     </span>
                   </div>
-                  <span style={{ fontSize: '11px', color: 'var(--color-muted)', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                     {result.snippet || 'No preview available.'}
                   </span>
-                  <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
                     {result.sourceName} &middot; {result.licenseName}
                   </span>
                 </button>
@@ -419,11 +419,11 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
           {previewLoading && (
             <div
               style={{
-                padding: '12px',
+                padding: 'var(--spacing-sm)',
                 borderRadius: 'var(--radius-md)',
                 background: 'var(--color-surface)',
                 border: '1px solid var(--color-border)',
-                fontSize: '12px',
+                fontSize: 'var(--text-xs)',
                 color: 'var(--color-muted)',
                 textAlign: 'center',
               }}
@@ -435,17 +435,17 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
           {preview && !previewLoading && (
             <div
               style={{
-                padding: '12px',
+                padding: 'var(--spacing-sm)',
                 borderRadius: 'var(--radius-md)',
                 background: 'var(--color-surface)',
                 border: '1px solid var(--color-primary)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '8px',
+                gap: 'var(--spacing-xs)',
               }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontWeight: 600, fontSize: '13px' }}>{preview.title}</span>
+                <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)' }}>{preview.title}</span>
                 <button
                   onClick={() => setPreview(null)}
                   style={{
@@ -453,8 +453,8 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
                     border: 'none',
                     color: 'var(--color-muted)',
                     cursor: 'pointer',
-                    fontSize: '14px',
-                    padding: '2px 4px',
+                    fontSize: 'var(--text-xs)',
+                    padding: '2px var(--spacing-2xs)',
                   }}
                   aria-label="Close preview"
                 >
@@ -463,7 +463,7 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
               </div>
               <div
                 style={{
-                  fontSize: '11px',
+                  fontSize: 'var(--text-xs)',
                   color: 'var(--color-muted)',
                   maxHeight: '100px',
                   overflow: 'auto',
@@ -473,7 +473,7 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
               >
                 {preview.content}
               </div>
-              <div style={{ fontSize: '10px', color: 'var(--color-muted)' }}>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
                 {preview.attribution}
               </div>
               <button
@@ -481,13 +481,13 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
                 disabled={importing}
                 style={{
                   width: '100%',
-                  padding: '8px 12px',
+                  padding: 'var(--spacing-xs) var(--spacing-sm)',
                   borderRadius: 'var(--radius-md)',
                   border: 'none',
                   background: 'var(--color-primary)',
-                  color: '#ffffff',
-                  fontSize: '12px',
-                  fontWeight: 600,
+                  color: 'var(--color-text-inverse)',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--weight-semibold)',
                   cursor: importing ? 'not-allowed' : 'pointer',
                   opacity: importing ? 0.6 : 1,
                 }}
@@ -501,30 +501,30 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
           )}
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
           <section
             style={{
               background: 'var(--color-surface)',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-lg)',
-              padding: '12px',
+              padding: 'var(--spacing-sm)',
             }}
           >
             <h2
               style={{
-                fontSize: '12px',
-                fontWeight: 600,
+                fontSize: 'var(--text-xs)',
+                fontWeight: 'var(--weight-semibold)',
                 color: 'var(--color-muted)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                margin: '0 0 8px',
+                margin: '0 0 var(--spacing-xs)',
               }}
             >
               Open in Web App
             </h2>
             <p
               style={{
-                fontSize: '12px',
+                fontSize: 'var(--text-xs)',
                 color: 'var(--color-text-secondary)',
                 margin: '0 0 12px',
                 lineHeight: '1.4',
@@ -537,13 +537,13 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
               onClick={() => chrome.tabs.create({ url: 'https://ielts-journey.app/public-api' })}
               style={{
                 width: '100%',
-                padding: '10px 16px',
+                padding: 'var(--spacing-sm) var(--spacing-md)',
                 borderRadius: 'var(--radius-md)',
                 border: 'none',
                 background: 'var(--color-primary)',
-                color: '#ffffff',
-                fontSize: '13px',
-                fontWeight: 600,
+                color: 'var(--color-text-inverse)',
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--weight-semibold)',
                 cursor: 'pointer',
               }}
             >
@@ -556,24 +556,24 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
               background: 'var(--color-surface)',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-lg)',
-              padding: '12px',
+              padding: 'var(--spacing-sm)',
             }}
           >
             <h2
               style={{
-                fontSize: '12px',
-                fontWeight: 600,
+                fontSize: 'var(--text-xs)',
+                fontWeight: 'var(--weight-semibold)',
                 color: 'var(--color-muted)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                margin: '0 0 8px',
+                margin: '0 0 var(--spacing-xs)',
               }}
             >
               Backup & Restore
             </h2>
             <p
               style={{
-                fontSize: '12px',
+                fontSize: 'var(--text-xs)',
                 color: 'var(--color-text-secondary)',
                 margin: '0 0 12px',
                 lineHeight: '1.4',
@@ -586,13 +586,13 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
               onClick={() => chrome.tabs.create({ url: 'https://ielts-journey.app/import-export' })}
               style={{
                 width: '100%',
-                padding: '10px 16px',
+                padding: 'var(--spacing-sm) var(--spacing-md)',
                 borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--color-border)',
                 background: 'var(--color-surface)',
                 color: 'var(--color-text)',
-                fontSize: '13px',
-                fontWeight: 600,
+                fontSize: 'var(--text-sm)',
+                fontWeight: 'var(--weight-semibold)',
                 cursor: 'pointer',
               }}
             >
@@ -605,13 +605,13 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
               background: 'var(--color-surface)',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-lg)',
-              padding: '12px',
-              fontSize: '12px',
+              padding: 'var(--spacing-sm)',
+              fontSize: 'var(--text-xs)',
               color: 'var(--color-text-secondary)',
               lineHeight: '1.5',
             }}
           >
-            <strong style={{ color: 'var(--color-text)' }}>💡 About Data Sync</strong>
+            <strong style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-2xs)', color: 'var(--color-text)' }}><IconInfo size={14} /> About Data Sync</strong>
             <p style={{ margin: '4px 0 0' }}>
               The extension stores data locally using IndexedDB and chrome.storage. The website
               stores data in its own IndexedDB (separate origin). To sync between them:

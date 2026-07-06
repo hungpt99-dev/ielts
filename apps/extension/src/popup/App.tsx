@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ToastProvider } from '../../../../packages/ui/src/components/Toast'
 import ErrorBoundary from './components/ErrorBoundary'
 import PopupDashboard from './components/PopupDashboard'
@@ -15,9 +15,16 @@ import ReviewSession from './components/ReviewSession'
 
 type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'reviewSession'
 
+type NavFn = (view: ViewState) => void
+
 function App() {
   const [view, setView] = useState<ViewState>('dashboard')
   const [key, setKey] = useState(0)
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [view])
 
   const handleSaved = () => {
     setView('dashboard')
@@ -25,40 +32,42 @@ function App() {
   }
 
   const renderView = () => {
+    const sharedCardStyle = { minHeight: 'var(--ext-min-height)' }
+
     switch (view) {
       case 'saveForm':
         return (
-          <div style={{ padding: '16px', minHeight: '500px' }}>
+          <div style={sharedCardStyle}>
             <SaveTextForm onSaved={handleSaved} onCancel={() => setView('dashboard')} />
           </div>
         )
       case 'vocabularyCollector':
         return (
-          <div style={{ padding: '16px', minHeight: '500px' }}>
+          <div style={sharedCardStyle}>
             <VocabularyCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
           </div>
         )
       case 'articleCollector':
         return (
-          <div style={{ padding: '16px', minHeight: '500px' }}>
+          <div style={sharedCardStyle}>
             <ArticleCollector onSaved={handleSaved} onCancel={() => setView('dashboard')} />
           </div>
         )
       case 'videoHelper':
         return (
-          <div style={{ padding: '16px', minHeight: '500px' }}>
+          <div style={sharedCardStyle}>
             <VideoHelper onSaved={handleSaved} onCancel={() => setView('dashboard')} />
           </div>
         )
       case 'backupRestore':
         return (
-          <div style={{ padding: '16px', minHeight: '500px' }}>
+          <div style={sharedCardStyle}>
             <BackupRestore onBack={() => setView('dashboard')} />
           </div>
         )
       case 'importExport':
         return (
-          <div style={{ padding: '16px', minHeight: '500px' }}>
+          <div style={sharedCardStyle}>
             <ImportExportSection onBack={() => setView('dashboard')} />
           </div>
         )
@@ -68,7 +77,7 @@ function App() {
         return <SavedWordsView onBack={() => setView('dashboard')} />
       case 'pendingReviews':
         return (
-          <div style={{ padding: '16px', minHeight: '500px' }}>
+          <div style={sharedCardStyle}>
             <PendingReviews
               onStartReview={() => setView('reviewSession')}
               onBack={() => setView('dashboard')}
@@ -77,22 +86,33 @@ function App() {
         )
       case 'reviewSession':
         return (
-          <div style={{ padding: '0', minHeight: '500px' }}>
-            <ReviewSession
-              onComplete={() => setView('dashboard')}
-              onBack={() => setView('pendingReviews')}
-            />
-          </div>
+          <ReviewSession
+            onComplete={() => setView('dashboard')}
+            onBack={() => setView('pendingReviews')}
+          />
         )
       default:
-        return <PopupDashboard key={key} onNavigate={setView} />
+        return <PopupDashboard key={key} onNavigate={setView as NavFn} />
     }
   }
 
   return (
     <ErrorBoundary>
       <ToastProvider>
-        {renderView()}
+        <div
+          ref={scrollRef}
+          style={{
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            WebkitOverflowScrolling: 'touch',
+            overscrollBehavior: 'contain',
+            maxHeight: '100dvh',
+            height: '100%',
+            width: 'var(--ext-width)',
+          }}
+        >
+          {renderView()}
+        </div>
       </ToastProvider>
     </ErrorBoundary>
   )

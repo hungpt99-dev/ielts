@@ -4,6 +4,8 @@ import { DatabaseService } from '../../../services/storage/Database'
 import { getDailyReviewQueue, calculateNextReview, getInitialReviewEntry } from '../../../utils/spaced-repetition'
 import Card, { CardContent } from '../../../components/ui/Card'
 import Button from '../../../components/ui/Button'
+import PageHeader from '../../../components/layout/PageHeader'
+import { IconVocabularyReview } from '@ielts/ui'
 
 type ReviewMode = 'word-to-meaning' | 'meaning-to-word' | 'gap-fill' | 'collocation'
 
@@ -15,10 +17,10 @@ const REVIEW_MODES: { value: ReviewMode; label: string }[] = [
 ]
 
 const RATING_BUTTONS: { rating: ReviewRating; label: string; color: string }[] = [
-  { rating: 'again', label: 'Again', color: 'bg-red-500 hover:bg-red-600 focus-visible:ring-red-400 dark:bg-red-700 dark:hover:bg-red-800' },
-  { rating: 'hard', label: 'Hard', color: 'bg-orange-500 hover:bg-orange-600 focus-visible:ring-orange-400 dark:bg-orange-700 dark:hover:bg-orange-800' },
-  { rating: 'good', label: 'Good', color: 'bg-blue-500 hover:bg-blue-600 focus-visible:ring-blue-400 dark:bg-blue-700 dark:hover:bg-blue-800' },
-  { rating: 'easy', label: 'Easy', color: 'bg-green-500 hover:bg-green-600 focus-visible:ring-green-400 dark:bg-green-700 dark:hover:bg-green-800' },
+  { rating: 'again', label: 'Again', color: 'bg-[var(--color-danger)] hover:bg-[var(--color-danger)]/80 focus-visible:ring-[var(--color-danger)]/50 dark:bg-[var(--color-danger)]/80 dark:hover:bg-[var(--color-danger)]' },
+  { rating: 'hard', label: 'Hard', color: 'bg-[var(--color-warning)] hover:bg-[var(--color-warning)]/80 focus-visible:ring-[var(--color-warning)]/50 dark:bg-[var(--color-warning)]/80 dark:hover:bg-[var(--color-warning)]' },
+  { rating: 'good', label: 'Good', color: 'bg-[var(--color-primary)] hover:bg-[var(--color-primary)]/80 focus-visible:ring-[var(--color-primary)]/50 dark:bg-[var(--color-primary)]/80 dark:hover:bg-[var(--color-primary)]' },
+  { rating: 'easy', label: 'Easy', color: 'bg-[var(--color-success)] hover:bg-[var(--color-success)]/80 focus-visible:ring-[var(--color-success)]/50 dark:bg-[var(--color-success)]/80 dark:hover:bg-[var(--color-success)]' },
 ]
 
 function getToday(): string {
@@ -205,35 +207,32 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-            Vocabulary Review
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-            Spaced repetition review
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <label htmlFor="review-mode" className="sr-only">Review mode</label>
-          <select
-            id="review-mode"
-            aria-label="Review mode"
-            value={mode}
-            onChange={e => setMode(e.target.value as ReviewMode)}
-            className="rounded-lg border px-3 py-2 text-xs focus:outline-none focus:ring-1"
-            style={{
-              borderColor: 'var(--color-border)',
-              backgroundColor: 'var(--color-surface)',
-              color: 'var(--color-text-secondary)',
-            }}
-          >
-            {REVIEW_MODES.map(m => (
-              <option key={m.value} value={m.value}>{m.label}</option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <PageHeader
+        icon={<IconVocabularyReview size={22} />}
+        title="Vocabulary Review"
+        description="Spaced repetition review"
+        actions={
+          <div className="flex items-center gap-3">
+            <label htmlFor="review-mode" className="sr-only">Review mode</label>
+            <select
+              id="review-mode"
+              aria-label="Review mode"
+              value={mode}
+              onChange={e => setMode(e.target.value as ReviewMode)}
+              className="rounded-lg border px-3 py-2 text-xs focus:outline-none focus:ring-1"
+              style={{
+                borderColor: 'var(--color-border)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text-secondary)',
+              }}
+            >
+              {REVIEW_MODES.map(m => (
+                <option key={m.value} value={m.value}>{m.label}</option>
+              ))}
+            </select>
+          </div>
+        }
+      />
 
       <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-muted)' }}>
         <div className="h-2 flex-1 overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>

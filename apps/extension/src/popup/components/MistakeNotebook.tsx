@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { ExtensionMistakeEntry } from '../../storage/mistakeStore'
+import { IconAdd, IconInfo } from '@ielts/ui'
 import {
   MISTAKE_SKILLS,
   STATUS_OPTIONS,
@@ -295,13 +296,13 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
-        padding: '16px',
+        gap: 'var(--spacing-sm)',
+        padding: 'var(--spacing-md)',
         minHeight: '500px',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', marginBottom: '8px' }}>
           <button onClick={onBack} style={backBtnStyle}>← Back</button>
-          <h1 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text)', margin: 0 }}>
+          <h1 style={{ fontSize: 'var(--text-base)', fontWeight: 700, color: 'var(--color-text)', margin: 0 }}>
             Mistake Notebook
           </h1>
         </div>
@@ -324,13 +325,13 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
-        padding: '16px',
+        gap: 'var(--spacing-sm)',
+        padding: 'var(--spacing-md)',
         minHeight: '500px',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', marginBottom: '8px' }}>
           <button onClick={onBack} style={backBtnStyle}>← Back</button>
-          <h1 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text)', margin: 0 }}>
+          <h1 style={{ fontSize: 'var(--text-base)', fontWeight: 700, color: 'var(--color-text)', margin: 0 }}>
             Mistake Notebook
           </h1>
         </div>
@@ -340,13 +341,13 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
           alignItems: 'center',
           justifyContent: 'center',
           flex: 1,
-          gap: '12px',
+          gap: 'var(--spacing-sm)',
         }}>
-          <span style={{ fontSize: '14px', color: '#ef4444' }}>{error}</span>
+          <span style={{ fontSize: '14px', color: 'var(--color-danger)' }}>{error}</span>
           <button
             onClick={loadEntries}
             style={{
-              padding: '8px 16px',
+              padding: 'var(--spacing-xs) var(--spacing-md)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
@@ -366,8 +367,8 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: '12px',
-      padding: '16px',
+      gap: 'var(--spacing-sm)',
+      padding: 'var(--spacing-md)',
       minHeight: '500px',
     }}>
       {/* Toast */}
@@ -378,13 +379,13 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
           right: '12px',
           left: '12px',
           zIndex: 100,
-          padding: '10px 16px',
+          padding: 'var(--spacing-sm) var(--spacing-md)',
           borderRadius: 'var(--radius-md)',
           fontSize: '13px',
-          fontWeight: 500,
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-          background: toast.type === 'success' ? '#10b981' : '#ef4444',
-          color: '#fff',
+          fontWeight: 'var(--weight-medium)',
+          boxShadow: '0 4px 12px color-mix(in srgb, #000 15%, transparent)',
+          background: toast.type === 'success' ? 'var(--color-success)' : 'var(--color-danger)',
+          color: 'var(--color-text-inverse)',
           textAlign: 'center',
         }}>
           {toast.message}
@@ -393,23 +394,23 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
           <button onClick={onBack} style={backBtnStyle}>← Back</button>
-          <h1 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--color-text)', margin: 0 }}>
+          <h1 style={{ fontSize: 'var(--text-base)', fontWeight: 700, color: 'var(--color-text)', margin: 0 }}>
             Mistake Notebook
           </h1>
         </div>
-        <div style={{ display: 'flex', gap: '6px' }}>
+        <div style={{ display: 'flex', gap: 'var(--spacing-2xs)' }}>
           <button
             onClick={() => setViewMode(viewMode === 'all' ? 'daily-review' : 'all')}
             style={{
-              padding: '6px 10px',
+              padding: 'var(--spacing-2xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: viewMode === 'daily-review' ? 'var(--color-primary)' : 'var(--color-surface)',
-              color: viewMode === 'daily-review' ? '#fff' : 'var(--color-text)',
+              color: viewMode === 'daily-review' ? 'var(--color-text-inverse)' : 'var(--color-text)',
               fontSize: '11px',
-              fontWeight: 600,
+              fontWeight: 'var(--weight-semibold)',
               cursor: 'pointer',
             }}
           >
@@ -423,9 +424,9 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 borderRadius: '50%',
-                background: viewMode === 'daily-review' ? 'rgba(255,255,255,0.2)' : 'var(--color-primary)',
-                color: '#fff',
-                fontSize: '10px',
+                background: viewMode === 'daily-review' ? 'color-mix(in srgb, #fff 20%, transparent)' : 'var(--color-primary)',
+                color: 'var(--color-text-inverse)',
+                fontSize: 'var(--text-xs)',
                 fontWeight: 700,
               }}>
                 {stats.dailyReviewCount}
@@ -435,22 +436,20 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
           <button
             onClick={openCreateForm}
             style={{
-              padding: '6px 12px',
+              padding: 'var(--spacing-xs) var(--spacing-md)',
               borderRadius: 'var(--radius-md)',
               border: 'none',
               background: 'var(--color-primary)',
-              color: '#fff',
-              fontSize: '12px',
-              fontWeight: 600,
+              color: 'var(--color-text-inverse)',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-semibold)',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '4px',
+              gap: 'var(--spacing-2xs)',
             }}
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 4v16m8-8H4" />
-            </svg>
+            <IconAdd size={14} />
             Add
           </button>
         </div>
@@ -459,23 +458,20 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
       {/* Daily Review Banner */}
       {viewMode === 'daily-review' && dailyReviewEntries.length > 0 && (
         <div style={{
-          padding: '12px',
+          padding: 'var(--spacing-sm)',
           borderRadius: 'var(--radius-md)',
-          background: '#fef3c7',
-          border: '1px solid #f59e0b',
+          background: 'var(--color-warning-light)',
+          border: '1px solid var(--color-warning)',
           display: 'flex',
           alignItems: 'flex-start',
-          gap: '8px',
+          gap: 'var(--spacing-xs)',
         }}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '1px' }}>
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 8v4M12 16h.01" />
-          </svg>
+          <IconInfo size={18} color="var(--color-warning-dark)" style={{ flexShrink: 0, marginTop: '1px' }} />
           <div>
-            <p style={{ margin: 0, fontSize: '12px', fontWeight: 600, color: '#92400e' }}>
+            <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-warning-darker)' }}>
               {dailyReviewEntries.length} mistake{dailyReviewEntries.length > 1 ? 's' : ''} to review today
             </p>
-            <p style={{ margin: '2px 0 0', fontSize: '11px', color: '#a16207' }}>
+            <p style={{ margin: 'var(--spacing-3xs) 0 0', fontSize: '11px', color: 'var(--color-warning-dark)' }}>
               Review and mark mistakes as fixed to track progress
             </p>
           </div>
@@ -486,19 +482,19 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '6px',
+        gap: 'var(--spacing-2xs)',
       }}>
-        <StatCard label="New" value={stats.newCount} color="#ef4444" />
-        <StatCard label="Reviewing" value={stats.reviewingCount} color="#f59e0b" />
-        <StatCard label="Fixed" value={stats.fixedCount} color="#10b981" />
+        <StatCard label="New" value={stats.newCount} color="var(--color-danger)" />
+        <StatCard label="Reviewing" value={stats.reviewingCount} color="var(--color-warning)" />
+        <StatCard label="Fixed" value={stats.fixedCount} color="var(--color-success)" />
       </div>
 
       {/* Filters */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px',
-        padding: '10px 12px',
+        gap: 'var(--spacing-xs)',
+        padding: 'var(--spacing-sm) var(--spacing-sm)',
         borderRadius: 'var(--radius-md)',
         border: '1px solid var(--color-border)',
         background: 'var(--color-surface)',
@@ -513,13 +509,13 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
             padding: '7px 10px',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
-            background: 'var(--color-surface-alt, #f8fafc)',
+            background: 'var(--color-surface-alt)',
             color: 'var(--color-text)',
-            fontSize: '12px',
+            fontSize: 'var(--text-xs)',
             boxSizing: 'border-box',
           }}
         />
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 'var(--spacing-2xs)', flexWrap: 'wrap' }}>
           <select
             value={skillFilter}
             onChange={(e) => setSkillFilter(e.target.value as ExtensionMistakeEntry['skill'] | '')}
@@ -553,18 +549,18 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
       </div>
 
       {/* Entries List */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
         {filteredEntries.length === 0 ? (
           <div style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '40px 20px',
-            gap: '8px',
+            padding: 'var(--spacing-2xl) var(--spacing-md)',
+            gap: 'var(--spacing-xs)',
             flex: 1,
           }}>
-            <span style={{ fontSize: '32px', opacity: 0.3 }}>✓</span>
+            <span style={{ fontSize: 'var(--text-4xl)', opacity: 0.3 }}>✓</span>
             <span style={{ fontSize: '13px', color: 'var(--color-muted)', textAlign: 'center' }}>
               {viewMode === 'daily-review'
                 ? 'No mistakes to review. Great job!'
@@ -576,14 +572,14 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
               <button
                 onClick={openCreateForm}
                 style={{
-                  marginTop: '4px',
-                  padding: '8px 16px',
+                  marginTop: 'var(--spacing-2xs)',
+                  padding: 'var(--spacing-xs) var(--spacing-md)',
                   borderRadius: 'var(--radius-md)',
                   border: 'none',
                   background: 'var(--color-primary)',
-                  color: '#fff',
-                  fontSize: '12px',
-                  fontWeight: 600,
+                  color: 'var(--color-text-inverse)',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--weight-semibold)',
                   cursor: 'pointer',
                 }}
               >
@@ -596,21 +592,21 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
             <div
               key={entry.id}
               style={{
-                padding: '10px 12px',
+                padding: 'var(--spacing-sm) var(--spacing-sm)',
                 borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--color-border)',
                 background: 'var(--color-surface)',
                 cursor: 'pointer',
-                transition: 'border-color 0.15s',
+                transition: 'border-color var(--transition-fast)',
               }}
               onClick={() => setDetailEntry(detailEntry?.id === entry.id ? null : entry)}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 'var(--spacing-xs)' }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{
                     margin: 0,
-                    fontSize: '12px',
-                    fontWeight: 600,
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--weight-semibold)',
                     color: 'var(--color-text)',
                     lineHeight: 1.4,
                     display: '-webkit-box',
@@ -621,9 +617,9 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                     {entry.mistake}
                   </p>
                   <p style={{
-                    margin: '3px 0 0',
+                    margin: 'var(--spacing-3xs) 0 0',
                     fontSize: '11px',
-                    color: '#10b981',
+                    color: 'var(--color-success)',
                     lineHeight: 1.3,
                     display: '-webkit-box',
                     WebkitLineClamp: 1,
@@ -633,36 +629,36 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                     {entry.correction}
                   </p>
                 </div>
-                <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
+                <div style={{ display: 'flex', gap: 'var(--spacing-2xs)', flexShrink: 0 }}>
                   <span style={{
-                    fontSize: '10px',
+                    fontSize: 'var(--text-xs)',
                     padding: '2px 6px',
-                    borderRadius: '999px',
-                    fontWeight: 500,
-                    background: (STATUS_OPTIONS.find(s => s.value === entry.status)?.color ?? '#888') + '20',
-                    color: STATUS_OPTIONS.find(s => s.value === entry.status)?.color ?? '#888',
+                    borderRadius: 'var(--radius-full)',
+                    fontWeight: 'var(--weight-medium)',
+                    background: `color-mix(in srgb, ${STATUS_OPTIONS.find(s => s.value === entry.status)?.color ?? 'var(--color-muted)'} 15%, transparent)`,
+                    color: STATUS_OPTIONS.find(s => s.value === entry.status)?.color ?? 'var(--color-muted)',
                   }}>
                     {STATUS_OPTIONS.find(s => s.value === entry.status)?.label ?? entry.status}
                   </span>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '6px', marginTop: '6px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: 'var(--spacing-2xs)', marginTop: '6px', flexWrap: 'wrap' }}>
                 <span style={{
-                  fontSize: '10px',
-                  padding: '1px 6px',
-                  borderRadius: '999px',
-                  fontWeight: 500,
-                  background: (MISTAKE_SKILLS.find(s => s.value === entry.skill)?.color ?? '#888') + '15',
-                  color: MISTAKE_SKILLS.find(s => s.value === entry.skill)?.color ?? '#888',
+                  fontSize: 'var(--text-xs)',
+                  padding: '1px var(--spacing-2xs)',
+                  borderRadius: 'var(--radius-full)',
+                  fontWeight: 'var(--weight-medium)',
+                  background: `color-mix(in srgb, ${MISTAKE_SKILLS.find(s => s.value === entry.skill)?.color ?? 'var(--color-muted)'} 10%, transparent)`,
+                  color: MISTAKE_SKILLS.find(s => s.value === entry.skill)?.color ?? 'var(--color-muted)',
                 }}>
                   {MISTAKE_SKILLS.find(s => s.value === entry.skill)?.label ?? entry.skill}
                 </span>
-                <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>
+                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
                   {formatDate(entry.date)}
                 </span>
                 {entry.repetitionCount > 0 && (
-                  <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
                     {entry.repetitionCount}x
                   </span>
                 )}
@@ -677,28 +673,28 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                 }}>
                   {entry.explanation && (
                     <div style={{ marginBottom: '6px' }}>
-                      <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Explanation</span>
-                      <p style={{ margin: '2px 0 0', fontSize: '11px', color: 'var(--color-text)', lineHeight: 1.4 }}>{entry.explanation}</p>
+                      <span style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Explanation</span>
+                      <p style={{ margin: 'var(--spacing-3xs) 0 0', fontSize: '11px', color: 'var(--color-text)', lineHeight: 1.4 }}>{entry.explanation}</p>
                     </div>
                   )}
                   {entry.source && (
                     <div style={{ marginBottom: '6px' }}>
-                      <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Source</span>
-                      <p style={{ margin: '2px 0 0', fontSize: '11px', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>{entry.source}</p>
+                      <span style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Source</span>
+                      <p style={{ margin: 'var(--spacing-3xs) 0 0', fontSize: '11px', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>{entry.source}</p>
                     </div>
                   )}
                   {entry.topic && (
                     <div style={{ marginBottom: '6px' }}>
-                      <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Topic: <strong>{entry.topic}</strong></span>
+                      <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>Topic: <strong>{entry.topic}</strong></span>
                     </div>
                   )}
 
                   {/* Actions */}
-                  <div style={{ display: 'flex', gap: '6px', marginTop: '8px', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: 'var(--spacing-2xs)', marginTop: '8px', flexWrap: 'wrap' }}>
                     {entry.status !== 'fixed' && (
                       <button
                         onClick={(e) => { e.stopPropagation(); handleStatusChange(entry, 'fixed') }}
-                        style={actionBtnStyle('#10b981')}
+                        style={actionBtnStyle('var(--color-success)')}
                       >
                         ✓ Fixed
                       </button>
@@ -706,7 +702,7 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                     {entry.status === 'new' && (
                       <button
                         onClick={(e) => { e.stopPropagation(); handleStatusChange(entry, 'reviewing') }}
-                        style={actionBtnStyle('#f59e0b')}
+                        style={actionBtnStyle('var(--color-warning)')}
                       >
                         Reviewing
                       </button>
@@ -724,11 +720,11 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                       Edit
                     </button>
                     {deleteConfirm === entry.id ? (
-                      <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                        <span style={{ fontSize: '11px', color: '#ef4444' }}>Sure?</span>
+                      <div style={{ display: 'flex', gap: 'var(--spacing-2xs)', alignItems: 'center' }}>
+                        <span style={{ fontSize: '11px', color: 'var(--color-danger)' }}>Sure?</span>
                         <button
                           onClick={(e) => { e.stopPropagation(); handleDelete(entry.id) }}
-                          style={{ ...actionBtnStyle('#ef4444'), padding: '3px 8px', fontSize: '11px' }}
+                          style={{ ...actionBtnStyle('var(--color-danger)'), padding: '3px 8px', fontSize: '11px' }}
                         >
                           Yes
                         </button>
@@ -742,7 +738,7 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                     ) : (
                       <button
                         onClick={(e) => { e.stopPropagation(); confirmDelete(entry.id) }}
-                        style={actionBtnStyle('#ef4444')}
+                        style={actionBtnStyle('var(--color-danger)')}
                       >
                         Delete
                       </button>
@@ -763,7 +759,7 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
             position: 'fixed',
             inset: 0,
             zIndex: 50,
-            background: 'rgba(0,0,0,0.4)',
+            background: 'color-mix(in srgb, #000 40%, transparent)',
             display: 'flex',
             alignItems: 'flex-end',
             justifyContent: 'center',
@@ -776,15 +772,15 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
               maxHeight: '85vh',
               overflowY: 'auto',
               background: 'var(--color-bg)',
-              borderRadius: '16px 16px 0 0',
-              padding: '20px 16px',
+              borderRadius: 'var(--radius-xl) var(--radius-xl) 0 0',
+              padding: 'var(--spacing-lg) var(--spacing-md)',
               display: 'flex',
               flexDirection: 'column',
               gap: '14px',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: 'var(--color-text)' }}>
+              <h2 style={{ margin: 0, fontSize: 'var(--text-base)', fontWeight: 700, color: 'var(--color-text)' }}>
                 {editingEntry ? 'Edit Mistake' : 'Add Mistake'}
               </h2>
               <button onClick={handleCloseModal} style={{
@@ -802,19 +798,19 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
 
             {formError && (
               <div style={{
-                padding: '8px 12px',
+                padding: 'var(--spacing-xs) var(--spacing-sm)',
                 borderRadius: 'var(--radius-md)',
-                background: '#fef2f2',
-                color: '#dc2626',
-                fontSize: '12px',
-                border: '1px solid #fecaca',
+                background: 'var(--color-danger-light)',
+                color: 'var(--color-danger)',
+                fontSize: 'var(--text-xs)',
+                border: '1px solid var(--color-danger-light)',
               }}>
                 {formError}
               </div>
             )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Original Mistake *</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+              <label style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>Original Mistake *</label>
               <textarea
                 value={form.mistake}
                 onChange={(e) => setForm(prev => ({ ...prev, mistake: e.target.value }))}
@@ -824,19 +820,19 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
               />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Correction *</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+              <label style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>Correction *</label>
               <textarea
                 value={form.correction}
                 onChange={(e) => setForm(prev => ({ ...prev, correction: e.target.value }))}
                 rows={2}
                 placeholder="The correct version..."
-                style={{ ...inputStyle, color: '#10b981' }}
+                style={{ ...inputStyle, color: 'var(--color-success)' }}
               />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Explanation</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+              <label style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>Explanation</label>
               <textarea
                 value={form.explanation}
                 onChange={(e) => setForm(prev => ({ ...prev, explanation: e.target.value }))}
@@ -846,9 +842,9 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
               />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Skill</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-sm)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                <label style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>Skill</label>
                 <select
                   value={form.skill}
                   onChange={(e) => setForm(prev => ({ ...prev, skill: e.target.value as ExtensionMistakeEntry['skill'] }))}
@@ -859,8 +855,8 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                   ))}
                 </select>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Topic</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                <label style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>Topic</label>
                 <input
                   type="text"
                   value={form.topic}
@@ -871,9 +867,9 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Status</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-sm)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                <label style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>Status</label>
                 <select
                   value={form.status}
                   onChange={(e) => setForm(prev => ({ ...prev, status: e.target.value as ExtensionMistakeEntry['status'] }))}
@@ -884,8 +880,8 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                   ))}
                 </select>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Date</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                <label style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>Date</label>
                 <input
                   type="date"
                   value={form.date}
@@ -895,8 +891,8 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <label style={{ fontSize: '12px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>Source (URL or context)</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+              <label style={{ fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>Source (URL or context)</label>
               <input
                 type="text"
                 value={form.source}
@@ -906,11 +902,11 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
               />
             </div>
 
-            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', paddingTop: '4px', borderTop: '1px solid var(--color-border)' }}>
+            <div style={{ display: 'flex', gap: 'var(--spacing-xs)', justifyContent: 'flex-end', paddingTop: '4px', borderTop: '1px solid var(--color-border)' }}>
               <button
                 onClick={handleCloseModal}
                 style={{
-                  padding: '8px 16px',
+                  padding: 'var(--spacing-xs) var(--spacing-md)',
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--color-border)',
                   background: 'var(--color-surface)',
@@ -925,13 +921,13 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                 onClick={handleSave}
                 disabled={saving}
                 style={{
-                  padding: '8px 20px',
+                  padding: 'var(--spacing-xs) var(--spacing-lg)',
                   borderRadius: 'var(--radius-md)',
                   border: 'none',
                   background: saving ? 'var(--color-primary-hover)' : 'var(--color-primary)',
-                  color: '#fff',
+                  color: 'var(--color-text-inverse)',
                   fontSize: '13px',
-                  fontWeight: 600,
+                  fontWeight: 'var(--weight-semibold)',
                   cursor: saving ? 'not-allowed' : 'pointer',
                   opacity: saving ? 0.7 : 1,
                 }}
@@ -958,7 +954,7 @@ function StatCard({ label, value, color }: { label: string; value: number; color
       <p style={{ margin: 0, fontSize: '20px', fontWeight: 700, color, fontVariantNumeric: 'tabular-nums' }}>
         {value}
       </p>
-      <p style={{ margin: '2px 0 0', fontSize: '10px', color: 'var(--color-muted)', fontWeight: 500 }}>
+      <p style={{ margin: 'var(--spacing-3xs) 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-muted)', fontWeight: 'var(--weight-medium)' }}>
         {label}
       </p>
     </div>
@@ -971,12 +967,12 @@ const backBtnStyle: React.CSSProperties = {
   color: 'var(--color-primary)',
   cursor: 'pointer',
   fontSize: '13px',
-  fontWeight: 500,
-  padding: '4px 0',
+  fontWeight: 'var(--weight-medium)',
+  padding: 'var(--spacing-2xs) 0',
 }
 
 const filterSelectStyle: React.CSSProperties = {
-  padding: '5px 8px',
+  padding: 'var(--spacing-2xs) var(--spacing-xs)',
   borderRadius: 'var(--radius-md)',
   border: '1px solid var(--color-border)',
   background: 'var(--color-surface)',
@@ -989,21 +985,21 @@ const filterSelectStyle: React.CSSProperties = {
 
 function actionBtnStyle(color: string): React.CSSProperties {
   return {
-    padding: '4px 10px',
+    padding: 'var(--spacing-2xs) var(--spacing-sm)',
     borderRadius: 'var(--radius-md)',
     border: `1px solid ${color}`,
     background: 'transparent',
     color,
     fontSize: '11px',
-    fontWeight: 500,
+    fontWeight: 'var(--weight-medium)',
     cursor: 'pointer',
-    transition: 'background 0.15s',
+    transition: 'background var(--transition-fast)',
   }
 }
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  padding: '8px 10px',
+  padding: 'var(--spacing-xs) var(--spacing-sm)',
   borderRadius: 'var(--radius-md)',
   border: '1px solid var(--color-border)',
   background: 'var(--color-surface)',

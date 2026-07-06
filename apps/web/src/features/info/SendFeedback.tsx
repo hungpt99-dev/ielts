@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import Button from '../../components/ui/Button'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconMail } from '@ielts/ui'
 
 interface FeedbackForm {
   message: string
@@ -12,7 +14,13 @@ export default function SendFeedback() {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    console.log('Feedback submitted:', form)
+    try {
+      const existing = JSON.parse(localStorage.getItem('ielts-feedback') || '[]')
+      existing.push({ ...form, submittedAt: new Date().toISOString() })
+      localStorage.setItem('ielts-feedback', JSON.stringify(existing))
+    } catch {
+      // Fallback: at least log it
+    }
     setSubmitted(true)
     setForm({ message: '', contact: '' })
   }
@@ -45,14 +53,11 @@ export default function SendFeedback() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-8 py-8">
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold" style={{ color: 'var(--color-text)' }}>
-          Send Feedback
-        </h1>
-        <p className="text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-          Have a suggestion, found a bug, or just want to say hello? Send me a message below.
-        </p>
-      </div>
+      <PageHeader
+        icon={<IconMail size={22} />}
+        title="Send Feedback"
+        description="Have a suggestion, found a bug, or just want to say hello? Send me a message below."
+      />
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">

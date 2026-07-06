@@ -1,35 +1,13 @@
 import type { LearningEntry, SaveCategory } from '../types'
+import { openDB, STORE_NAMES } from './db'
 
-const DB_NAME = 'ielts-journey-extension'
-const DB_VERSION = 1
-const STORE_NAME = 'learningEntries'
-
-function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION)
-
-    request.onupgradeneeded = () => {
-      const db = request.result
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
-        store.createIndex('category', 'category', { unique: false })
-        store.createIndex('createdAt', 'createdAt', { unique: false })
-        store.createIndex('topic', 'topic', { unique: false })
-        store.createIndex('skill', 'skill', { unique: false })
-        store.createIndex('status', 'status', { unique: false })
-      }
-    }
-
-    request.onsuccess = () => resolve(request.result)
-    request.onerror = () => reject(request.error)
-  })
-}
+const STORE = STORE_NAMES.LEARNING_ENTRIES
 
 export async function saveEntry(entry: LearningEntry): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.put(entry)
     tx.oncomplete = () => {
       db.close()
@@ -45,8 +23,8 @@ export async function saveEntry(entry: LearningEntry): Promise<void> {
 export async function getAllEntries(): Promise<LearningEntry[]> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.getAll()
     request.onsuccess = () => {
       db.close()
@@ -62,8 +40,8 @@ export async function getAllEntries(): Promise<LearningEntry[]> {
 export async function getEntriesByCategory(category: SaveCategory): Promise<LearningEntry[]> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const index = store.index('category')
     const request = index.getAll(category)
     request.onsuccess = () => {
@@ -80,8 +58,8 @@ export async function getEntriesByCategory(category: SaveCategory): Promise<Lear
 export async function getEntryById(id: string): Promise<LearningEntry | undefined> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.get(id)
     request.onsuccess = () => {
       db.close()
@@ -97,8 +75,8 @@ export async function getEntryById(id: string): Promise<LearningEntry | undefine
 export async function updateEntry(id: string, updates: Partial<LearningEntry>): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     const getRequest = store.get(id)
     getRequest.onsuccess = () => {
       const existing = getRequest.result as LearningEntry | undefined
@@ -121,8 +99,8 @@ export async function updateEntry(id: string, updates: Partial<LearningEntry>): 
 export async function deleteEntry(id: string): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.delete(id)
     tx.oncomplete = () => {
       db.close()
@@ -146,8 +124,8 @@ export async function getTodayEntries(): Promise<LearningEntry[]> {
 export async function getEntriesByDateRange(start: string, end: string): Promise<LearningEntry[]> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const index = store.index('createdAt')
     const range = IDBKeyRange.bound(start, end)
     const request = index.getAll(range)
@@ -195,8 +173,8 @@ export async function getStats(): Promise<{
 export async function clearAllEntries(): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.clear()
     tx.oncomplete = () => {
       db.close()

@@ -67,6 +67,7 @@ interface MessageMap {
   AI_EXPLAIN: AiExplainPayload
   MINI_TUTOR_TRIGGER: MiniTutorOpenPayload
   SETTINGS_SYNC: SharedSettingsPatch
+  VOCAB_SAVED: Record<string, unknown>
 }
 
 export type ExtensionMessage<K extends keyof MessageMap = keyof MessageMap> = {
@@ -269,6 +270,18 @@ export function initMessaging(): void {
         type: 'MINI_TUTOR_TRIGGER',
         payload: { action, text },
       })
+    }
+  })
+
+  registerHandler('VOCAB_SAVED', async (_msg) => {
+    const msg = _msg as ExtensionMessage<'VOCAB_SAVED'>
+    const tabs = await chrome.tabs.query({})
+    for (const tab of tabs) {
+      if (!tab.id) continue
+      chrome.tabs.sendMessage(tab.id, {
+        type: 'VOCAB_SAVED',
+        payload: msg.payload,
+      }).catch(() => {})
     }
   })
 

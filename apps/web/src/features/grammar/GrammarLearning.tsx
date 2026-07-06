@@ -8,6 +8,8 @@ import Modal from '../../components/ui/Modal'
 import Exercise, { type GrammarExerciseItem } from './components/Exercise'
 import { generateId } from '../../utils'
 import { generateGrammarExercises } from '../../services/ai/AIService'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconGrammar } from '@ielts/ui'
 
 const GRAMMAR_TOPICS = [
   'Tenses', 'Articles', 'Prepositions', 'Conditionals', 'Modal Verbs',
@@ -442,14 +444,21 @@ export default function GrammarLearning() {
 
   const weaknessTopics = useMemo(() => {
     const weakNotes = notes.filter(n => n.status === 'weak').map(n => n.topic)
-    const mistakeTopicCounts: Record<string, number> = {}
+    const byTopic: Record<string, MistakeEntry[]> = {}
     for (const m of mistakes) {
-      const topicMatch = m.source.replace('Grammar - ', '')
-      mistakeTopicCounts[topicMatch] = (mistakeTopicCounts[topicMatch] || 0) + 1
+      const topic = m.source.replace('Grammar - ', '')
+      if (!byTopic[topic]) byTopic[topic] = []
+      byTopic[topic].push(m)
     }
-    const sorted = Object.entries(mistakeTopicCounts)
-      .sort((a, b) => b[1] - a[1])
-      .map(([topic, count]) => ({ topic, mistakes: count, weak: weakNotes.includes(topic) }))
+    const sorted = Object.entries(byTopic)
+      .sort((a, b) => b[1].length - a[1].length)
+      .map(([topic, topicMistakes]) => ({
+        topic,
+        mistakes: topicMistakes.length,
+        weak: weakNotes.includes(topic),
+        recentMistakes: topicMistakes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 2),
+        lastDate: topicMistakes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0]?.createdAt,
+      }))
     return sorted
   }, [notes, mistakes])
 
@@ -663,16 +672,11 @@ export default function GrammarLearning() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-            Grammar Learning
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-            Learn and practice IELTS grammar topics
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        icon={<IconGrammar size={22} />}
+        title="Grammar Learning"
+        description="Learn and practice IELTS grammar topics"
+      />
 
       <div
         className="flex flex-wrap items-center gap-2 rounded-lg border p-1"
@@ -917,7 +921,7 @@ export default function GrammarLearning() {
         </>
       )}
 
-      {tab === 'topics' && exerciseMode && (
+      {(tab === 'topics' || tab === 'exercises') && exerciseMode && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
@@ -929,18 +933,19 @@ export default function GrammarLearning() {
               </p>
             </div>
             <Button variant="ghost" size="sm" onClick={() => { setExerciseMode(false) }}>
-              Back to Topics
+              Back to {tab === 'exercises' ? 'Exercises' : 'Topics'}
             </Button>
           </div>
           <Exercise
             exercises={exercises}
             topic={selectedTopic}
             onComplete={handleExerciseComplete}
+            onGenerateAi={generateAiExercises}
           />
         </div>
       )}
 
-      {tab === 'exercises' && (
+      {tab === 'exercises' && !exerciseMode && (
         <div className="space-y-4">
           <Card>
             <CardContent>
@@ -1070,41 +1075,54 @@ export default function GrammarLearning() {
                   {weaknessTopics.map(wt => (
                     <div
                       key={wt.topic}
-                      className="flex items-center justify-between rounded-lg p-3"
+                      onClick={() => { startExercises(wt.topic); setTab('exercises') }}
+                      className="cursor-pointer rounded-lg border p-3 transition-colors hover:border-[var(--color-primary)]"
                       style={{
-                        backgroundColor: wt.weak ? 'var(--color-danger-light)' : 'var(--color-surface-alt)',
+                        borderColor: 'var(--color-border)',
+                        backgroundColor: 'var(--color-surface-alt)',
                       }}
                     >
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                          {wt.topic}
-                        </span>
-                        {wt.weak && (
-                          <span className="rounded px-1.5 py-0.5 text-[10px] font-medium"
-                            style={{
-                              backgroundColor: 'var(--color-danger)',
-                              color: 'white',
-                            }}
-                          >
-                            Weak
-                          </span>
-                        )}
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                              {wt.topic}
+                            </span>
+                            {wt.weak && (
+                              <span className="rounded px-1.5 py-0.5 text-[10px] font-medium"
+                                style={{
+                                  backgroundColor: 'var(--color-danger-light)',
+                                  color: 'var(--color-danger)',
+                                }}
+                              >
+                                Weak
+                              </span>
+                            )}
+                          </div>
+                          <p className="mt-0.5 text-xs" style={{ color: 'var(--color-muted)' }}>
+                            {wt.mistakes} mistake{wt.mistakes !== 1 ? 's' : ''}
+                          </p>
+                        </div>
+                        <svg className="h-4 w-4 shrink-0" style={{ color: 'var(--color-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                          {wt.mistakes} mistake{wt.mistakes !== 1 ? 's' : ''}
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => { setSelectedTopic(wt.topic); setTab('exercises') }}
-                          className="p-1"
-                        >
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                          </svg>
-                        </Button>
-                      </div>
+                      {wt.recentMistakes.length > 0 && (
+                        <div className="mt-2 space-y-1.5 border-t pt-2" style={{ borderColor: 'var(--color-border)' }}>
+                          {wt.recentMistakes.map(m => (
+                            <div key={m.id}>
+                              <p className="text-xs" style={{ color: 'var(--color-text)' }}>{m.mistake}</p>
+                              <p className="mt-0.5 text-xs" style={{ color: 'var(--color-success)' }}>✓ {m.correction}</p>
+                              <p className="text-[10px]" style={{ color: 'var(--color-muted)' }}>{formatDate(m.createdAt)}</p>
+                            </div>
+                          ))}
+                          {wt.mistakes > 2 && (
+                            <p className="text-[10px]" style={{ color: 'var(--color-muted)' }}>
+                              +{wt.mistakes - 2} more
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

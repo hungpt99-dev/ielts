@@ -12,6 +12,7 @@ export { WelcomeState } from './components/WelcomeState'
 export { ChatStyles } from './components/ChatStyles'
 export { useExitAnimation } from './components/useExitAnimation'
 export { ContextSuggestionCard } from './components/ContextSuggestionCard'
+export { ErrorBanner } from './components/ErrorBanner'
 
 export { useProactiveMessages, DEFAULT_QUICK_ACTIONS, ACTION_LABELS, PROACTIVE_CATEGORY_LABELS, PROACTIVE_PRIORITY_LABELS } from './hooks/useProactiveMessages'
 export { useChatWidget } from './hooks/useChatWidget'

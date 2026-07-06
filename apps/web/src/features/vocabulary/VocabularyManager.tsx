@@ -9,6 +9,8 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner'
 import WordForm from './components/WordForm'
 import ReviewMode from './components/ReviewMode'
 import PronounceButton from '../../components/ui/PronounceButton'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconVocabulary } from '@ielts/ui'
 import {
   computeStats,
   filterVocabulary,
@@ -33,16 +35,16 @@ const STATUSES: VocabStatus[] = ['new', 'learning', 'reviewing', 'mastered']
 const DIFFICULTIES: VocabDifficulty[] = ['easy', 'medium', 'hard']
 
 const STATUS_COLORS: Record<VocabStatus, string> = {
-  new: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  learning: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  reviewing: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  mastered: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+  new: 'bg-[var(--color-primary-light)] text-[var(--color-primary)] dark:bg-[var(--color-primary)]/20 dark:text-[var(--color-primary-light)]',
+  learning: 'bg-[var(--color-skill-listening-light)] text-[var(--color-skill-listening)] dark:bg-[var(--color-skill-listening)]/20 dark:text-[var(--color-skill-listening-light)]',
+  reviewing: 'bg-[var(--color-skill-reading-light)] text-[var(--color-skill-reading)] dark:bg-[var(--color-skill-reading)]/20 dark:text-[var(--color-skill-reading-light)]',
+  mastered: 'bg-[var(--color-success-light)] text-[var(--color-success)] dark:bg-[var(--color-success)]/20 dark:text-[var(--color-success-light)]',
 }
 
 const DIFFICULTY_COLORS: Record<VocabDifficulty, string> = {
-  easy: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-  medium: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  hard: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+  easy: 'bg-[var(--color-success-light)] text-[var(--color-success)] dark:bg-[var(--color-success)]/20 dark:text-[var(--color-success-light)]',
+  medium: 'bg-[var(--color-warning-light)] text-[var(--color-warning)] dark:bg-[var(--color-warning)]/20 dark:text-[var(--color-warning-light)]',
+  hard: 'bg-[var(--color-danger-light)] text-[var(--color-danger)] dark:bg-[var(--color-danger)]/20 dark:text-[var(--color-danger-light)]',
 }
 
 interface VocabularyManagerProps {
@@ -244,36 +246,33 @@ export default function VocabularyManager({
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Vocabulary Notebook
-          </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Build your IELTS vocabulary with words, meanings, and examples
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button onClick={() => setTab('exercises')} variant="secondary" disabled={entries.length === 0}>
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
-            Exercises
-          </Button>
-          <Button onClick={() => setTab('review')} variant="secondary">
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            Review
-          </Button>
-          <Button onClick={openCreateForm}>
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-            Add Word
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        icon={<IconVocabulary size={22} />}
+        title="Vocabulary Notebook"
+        description="Build your IELTS vocabulary with words, meanings, and examples"
+        actions={
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={() => setTab('exercises')} variant="secondary" disabled={entries.length === 0}>
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              Exercises
+            </Button>
+            <Button onClick={() => setTab('review')} variant="secondary">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Review
+            </Button>
+            <Button onClick={openCreateForm}>
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Word
+            </Button>
+          </div>
+        }
+      />
 
       {stats && !compact && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
@@ -482,10 +481,11 @@ export default function VocabularyManager({
                     {entry.tags.map(tag => (
                       <span
                         key={tag}
-                        className="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
-                      >
-                        {tag}
-                      </span>
+                      className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
+                      style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}
+                    >
+                      {tag}
+                    </span>
                     ))}
                   </div>
                 </div>
@@ -572,10 +572,10 @@ export default function VocabularyManager({
                     key={rating}
                     onClick={() => handleQuickRate(entry, rating)}
                     className={`rounded px-2 py-0.5 text-[10px] font-medium transition-colors ${
-                      rating === 'again' ? 'bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400' :
-                      rating === 'hard' ? 'bg-orange-100 text-orange-600 hover:bg-orange-200 dark:bg-orange-900/30 dark:text-orange-400' :
-                      rating === 'good' ? 'bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400' :
-                      'bg-green-100 text-green-600 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400'
+                      rating === 'again' ? 'bg-[var(--color-danger-light)] text-[var(--color-danger)] hover:bg-[var(--color-danger)]/10 dark:bg-[var(--color-danger)]/30 dark:text-[var(--color-danger-light)]' :
+                      rating === 'hard' ? 'bg-[var(--color-warning-light)] text-[var(--color-warning)] hover:bg-[var(--color-warning)]/10 dark:bg-[var(--color-warning)]/30 dark:text-[var(--color-warning-light)]' :
+                      rating === 'good' ? 'bg-[var(--color-primary-light)] text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 dark:bg-[var(--color-primary)]/30 dark:text-[var(--color-primary-light)]' :
+                      'bg-[var(--color-success-light)] text-[var(--color-success)] hover:bg-[var(--color-success)]/10 dark:bg-[var(--color-success)]/30 dark:text-[var(--color-success-light)]'
                     }`}
                     title={`Rate as ${rating}`}
                   >
@@ -646,10 +646,11 @@ function WordDetail({ entry, onEdit, onClose }: { entry: VocabularyEntry; onEdit
         {entry.tags.map(tag => (
           <span
             key={tag}
-            className="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
-          >
-            {tag}
-          </span>
+          className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
+          style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}
+        >
+          {tag}
+        </span>
         ))}
       </div>
 
@@ -687,7 +688,8 @@ function WordDetail({ entry, onEdit, onClose }: { entry: VocabularyEntry; onEdit
               {entry.collocations.map((c, i) => (
                 <span
                   key={i}
-                  className="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+                  className="rounded-lg px-2.5 py-1 text-xs font-medium"
+                  style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}
                 >
                   {c}
                 </span>
@@ -702,7 +704,8 @@ function WordDetail({ entry, onEdit, onClose }: { entry: VocabularyEntry; onEdit
               {entry.synonyms.map((s, i) => (
                 <span
                   key={i}
-                  className="rounded-lg bg-green-50 px-2.5 py-1 text-xs font-medium text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                  className="rounded-lg px-2.5 py-1 text-xs font-medium"
+                  style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}
                 >
                   {s}
                 </span>
@@ -719,7 +722,8 @@ function WordDetail({ entry, onEdit, onClose }: { entry: VocabularyEntry; onEdit
             {entry.antonyms.map((a, i) => (
               <span
                 key={i}
-                className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-medium text-red-600 dark:bg-red-900/30 dark:text-red-400"
+                className="rounded-lg px-2.5 py-1 text-xs font-medium"
+                style={{ backgroundColor: 'var(--color-danger-light)', color: 'var(--color-danger)' }}
               >
                 {a}
               </span>
@@ -805,19 +809,16 @@ function ExerciseMode({ entries, onBack }: { entries: VocabularyEntry[]; onBack:
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Vocabulary Exercises
-          </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Generate practice exercises from your saved words
-          </p>
-        </div>
-        <Button variant="ghost" onClick={onBack}>
-          Back to Vocabulary
-        </Button>
-      </div>
+      <PageHeader
+        icon={<IconVocabulary size={22} />}
+        title="Vocabulary Exercises"
+        description="Generate practice exercises from your saved words"
+        actions={
+          <Button variant="ghost" onClick={onBack}>
+            Back to Vocabulary
+          </Button>
+        }
+      />
 
       <Card>
         <CardContent>
@@ -837,7 +838,7 @@ function ExerciseMode({ entries, onBack }: { entries: VocabularyEntry[]; onBack:
                   onClick={() => toggleSelect(entry)}
                   className={`rounded-lg border px-3 py-1.5 text-sm transition-colors ${
                     selectedIds.has(entry.id)
-                      ? 'border-blue-500 bg-blue-50 text-blue-700 dark:border-blue-400 dark:bg-blue-900/30 dark:text-blue-300'
+                      ? 'border-[var(--color-primary)] bg-[var(--color-primary-light)] text-[var(--color-primary)]'
                       : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300'
                   }`}
                 >
@@ -866,7 +867,7 @@ function ExerciseMode({ entries, onBack }: { entries: VocabularyEntry[]; onBack:
                       {ex.estimatedMinutes} min &middot; {ex.wordsToUse.length} words
                     </p>
                   </div>
-                  <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                  <span className="rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
                     {ex.skill}
                   </span>
                 </div>
@@ -881,7 +882,7 @@ function ExerciseMode({ entries, onBack }: { entries: VocabularyEntry[]; onBack:
                   {ex.wordsToUse.map((w, j) => (
                     <span
                       key={j}
-                      className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
+                      className="rounded-full px-2.5 py-0.5 text-xs font-medium" style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}
                     >
                       {w}
                     </span>

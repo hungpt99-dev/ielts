@@ -1,16 +1,14 @@
+import PageHeader from '../../components/layout/PageHeader'
+import { IconHeart } from '@ielts/ui'
+
 export default function Donate() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 py-8">
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold" style={{ color: 'var(--color-text)' }}>
-          Support IELTS Journey
-        </h1>
-        <p className="text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-          IELTS Journey is and will always be free. If you find the app useful and would like
-          to support its development, you can make a donation. Your contribution helps cover
-          hosting costs, domain fees, and development time.
-        </p>
-      </div>
+      <PageHeader
+        icon={<IconHeart size={22} />}
+        title="Support IELTS Journey"
+        description="IELTS Journey is and will always be free. If you find the app useful and would like to support its development, you can make a donation. Your contribution helps cover hosting costs, domain fees, and development time."
+      />
 
       <div className="rounded-xl border p-6" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-alt)' }}>
         <h2 className="text-xl font-semibold" style={{ color: 'var(--color-text)' }}>

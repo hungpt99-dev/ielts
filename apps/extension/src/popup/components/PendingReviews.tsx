@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getDueCount } from '../services/reviewService'
+import { IconCheckCircle, IconRefresh, IconAlertCircle } from '@ielts/ui'
 
 interface PendingReviewsProps {
   onStartReview: () => void
@@ -40,20 +41,20 @@ export default function PendingReviews({ onStartReview, onBack }: PendingReviews
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '300px',
-          gap: '12px',
+          gap: 'var(--spacing-sm)',
         }}
       >
         <div
           style={{
-            width: '24px',
-            height: '24px',
+            width: 'var(--spacing-lg)',
+            height: 'var(--spacing-lg)',
             border: '3px solid var(--color-border)',
             borderTopColor: 'var(--color-primary)',
             borderRadius: '50%',
             animation: 'spin 0.8s linear infinite',
           }}
         />
-        <span style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
+        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
           Checking vocabulary…
         </span>
       </div>
@@ -70,23 +71,25 @@ export default function PendingReviews({ onStartReview, onBack }: PendingReviews
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '300px',
-          padding: '16px',
-          gap: '12px',
+          padding: 'var(--spacing-md)',
+          gap: 'var(--spacing-sm)',
           textAlign: 'center',
         }}
       >
-        <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
-        <span style={{ fontSize: '13px', color: 'var(--color-danger)' }}>{error}</span>
+        <div style={{ width: 'var(--spacing-2xl)', height: 'var(--spacing-2xl)', borderRadius: 'var(--radius-full)', background: 'var(--color-danger-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <IconAlertCircle size={24} style={{ color: 'var(--color-danger)' }} />
+        </div>
+        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-danger)' }}>{error}</span>
         <button
           onClick={loadDueCount}
           style={{
-            padding: '8px 16px',
+            padding: 'var(--spacing-xs) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
             cursor: 'pointer',
-            fontSize: '13px',
+            fontSize: 'var(--text-xs)',
           }}
         >
           Retry
@@ -98,8 +101,8 @@ export default function PendingReviews({ onStartReview, onBack }: PendingReviews
             border: 'none',
             color: 'var(--color-primary)',
             cursor: 'pointer',
-            fontSize: '13px',
-            padding: '4px',
+            fontSize: 'var(--text-xs)',
+            padding: 'var(--spacing-2xs)',
           }}
         >
           Back to Dashboard
@@ -117,49 +120,49 @@ export default function PendingReviews({ onStartReview, onBack }: PendingReviews
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '300px',
-          padding: '24px 16px',
-          gap: '12px',
+          padding: 'var(--spacing-lg) var(--spacing-md)',
+          gap: 'var(--spacing-sm)',
           textAlign: 'center',
         }}
       >
         <div
           style={{
-            width: '48px',
-            height: '48px',
+            width: 'var(--spacing-2xl)',
+            height: 'var(--spacing-2xl)',
             borderRadius: '50%',
-            background: 'var(--color-primary-light, #dbeafe)',
+            background: 'var(--color-primary-light)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '24px',
+            fontSize: 'var(--text-2xl)',
           }}
         >
-          ✅
+          <IconCheckCircle size={24} style={{ color: 'var(--color-primary)' }} />
         </div>
         <h2
           style={{
-            fontSize: '16px',
-            fontWeight: 600,
+            fontSize: 'var(--text-base)',
+            fontWeight: 'var(--weight-semibold)',
             color: 'var(--color-text)',
             margin: 0,
           }}
         >
           All caught up!
         </h2>
-        <p style={{ fontSize: '13px', color: 'var(--color-muted)', margin: 0, maxWidth: '280px' }}>
+        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', margin: 0, maxWidth: '400px' }}>
           No vocabulary due for review. Add new words or check back later.
         </p>
         <button
           onClick={onBack}
           style={{
-            marginTop: '8px',
-            padding: '8px 16px',
+            marginTop: 'var(--spacing-xs)',
+            padding: 'var(--spacing-xs) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
             cursor: 'pointer',
-            fontSize: '13px',
+            fontSize: 'var(--text-xs)',
           }}
         >
           Back to Dashboard
@@ -176,38 +179,38 @@ export default function PendingReviews({ onStartReview, onBack }: PendingReviews
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '300px',
-        padding: '24px 16px',
-        gap: '16px',
+        padding: 'var(--spacing-lg) var(--spacing-md)',
+        gap: 'var(--spacing-md)',
         textAlign: 'center',
       }}
     >
       <div
         style={{
-          width: '64px',
-          height: '64px',
+          width: 'var(--spacing-3xl)',
+          height: 'var(--spacing-3xl)',
           borderRadius: '50%',
-          background: 'var(--color-warning-light, #fef3c7)',
+          background: 'var(--color-warning-light)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '28px',
+          fontSize: 'var(--text-3xl)',
         }}
       >
-        🔄
-      </div>
+          <IconRefresh size={24} style={{ color: 'var(--color-warning)' }} />
+        </div>
 
-      <div>
-        <h2
+        <div>
+          <h2
           style={{
-            fontSize: '20px',
-            fontWeight: 700,
+            fontSize: 'var(--text-xl)',
+            fontWeight: 'var(--weight-bold)',
             color: 'var(--color-text)',
             margin: 0,
           }}
         >
           {dueCount} Review{dueCount !== 1 ? 's' : ''} Due
         </h2>
-        <p style={{ fontSize: '13px', color: 'var(--color-muted)', marginTop: '4px', marginBottom: 0 }}>
+        <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: 'var(--spacing-2xs)', marginBottom: 0 }}>
           You have {dueCount} word{dueCount !== 1 ? 's' : ''} ready to review.
           Regular review helps you remember vocabulary long-term.
         </p>
@@ -218,15 +221,15 @@ export default function PendingReviews({ onStartReview, onBack }: PendingReviews
         style={{
           width: '100%',
           maxWidth: '240px',
-          padding: '12px 24px',
+          padding: 'var(--spacing-sm) var(--spacing-lg)',
           borderRadius: 'var(--radius-md)',
           border: 'none',
-          background: 'linear-gradient(135deg, var(--color-primary), #7c3aed)',
-          color: '#fff',
-          fontSize: '15px',
-          fontWeight: 600,
+          background: 'var(--color-primary)',
+          color: 'var(--color-text-inverse)',
+          fontSize: 'var(--text-sm)',
+          fontWeight: 'var(--weight-semibold)',
           cursor: 'pointer',
-          transition: 'opacity 0.15s',
+          transition: 'var(--transition-fast)',
         }}
         onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9' }}
         onMouseLeave={(e) => { e.currentTarget.style.opacity = '1' }}
@@ -241,8 +244,8 @@ export default function PendingReviews({ onStartReview, onBack }: PendingReviews
           border: 'none',
           color: 'var(--color-primary)',
           cursor: 'pointer',
-          fontSize: '13px',
-          padding: '4px',
+          fontSize: 'var(--text-xs)',
+          padding: 'var(--spacing-2xs)',
         }}
       >
         Back to Dashboard

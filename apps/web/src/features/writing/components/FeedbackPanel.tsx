@@ -122,7 +122,7 @@ export default function FeedbackPanel({ feedback }: FeedbackPanelProps) {
                       style={{
                         backgroundColor:
                           m.category === 'grammar'
-                            ? 'var(--color-danger-light, #fef2f2)'
+                            ? 'var(--color-danger-light)'
                             : m.category === 'vocabulary'
                               ? 'var(--color-primary-light)'
                               : m.category === 'coherence'
@@ -168,8 +168,8 @@ export default function FeedbackPanel({ feedback }: FeedbackPanelProps) {
             <div
               className="whitespace-pre-wrap rounded-lg border p-4 text-sm leading-relaxed"
               style={{
-                borderColor: 'var(--color-success, #16a34a)',
-                backgroundColor: 'var(--color-success-light, #f0fdf4)',
+                borderColor: 'var(--color-success)',
+                backgroundColor: 'var(--color-success-light)',
                 color: 'var(--color-text)',
                 fontFamily: 'Georgia, serif',
               }}

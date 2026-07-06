@@ -19,6 +19,8 @@ export default function ChatPopup({
   subtitle = 'Online · IELTS Coach',
   placeholder = 'Type a message...',
   className,
+  voiceButton,
+  voiceInput,
 }: ChatPopupProps) {
   const [hasAiKey, setHasAiKey] = useState(hasAiKeyProp ?? false)
 
@@ -55,6 +57,8 @@ export default function ChatPopup({
       subtitle={subtitle}
       placeholder={placeholder}
       className={className}
+      voiceButton={voiceButton}
+      voiceInput={voiceInput}
     />
   )
 }

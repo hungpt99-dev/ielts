@@ -1,5 +1,6 @@
 import { Component } from 'react'
 import type { ReactNode, ErrorInfo } from 'react'
+import { IconAlertCircle } from '@ielts/ui'
 
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -57,8 +58,8 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '500px',
-          padding: '24px 16px',
-          gap: '12px',
+          padding: 'var(--spacing-lg) var(--spacing-md)',
+          gap: 'var(--spacing-sm)',
           textAlign: 'center',
         }}
       >
@@ -66,25 +67,22 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
           style={{
             width: '48px',
             height: '48px',
-            borderRadius: '50%',
-            background: 'var(--color-danger-light, #fef2f2)',
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--color-danger-light)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '24px',
+            fontSize: 'var(--text-2xl)',
           }}
           aria-hidden="true"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-danger, #ef4444)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 8v4M12 16h.01" />
-          </svg>
+          <IconAlertCircle size={24} color="var(--color-danger)" />
         </div>
 
         <h2
           style={{
-            fontSize: '16px',
-            fontWeight: 600,
+            fontSize: 'var(--text-base)',
+            fontWeight: 'var(--weight-semibold)',
             color: 'var(--color-text)',
             margin: 0,
           }}
@@ -94,7 +92,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
 
         <p
           style={{
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             color: 'var(--color-muted)',
             maxWidth: '300px',
             lineHeight: 1.5,
@@ -106,9 +104,9 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
 
         <p
           style={{
-            fontSize: '12px',
+            fontSize: 'var(--text-xs)',
             color: 'var(--color-muted)',
-            maxWidth: '280px',
+            maxWidth: '400px',
             margin: 0,
           }}
         >
@@ -121,13 +119,13 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
               width: '100%',
               maxWidth: '320px',
               textAlign: 'left',
-              fontSize: '11px',
+              fontSize: 'var(--text-xs)',
             }}
           >
             <summary
               style={{
                 cursor: 'pointer',
-                fontWeight: 500,
+                fontWeight: 'var(--weight-medium)',
                 color: 'var(--color-muted)',
               }}
             >
@@ -136,11 +134,11 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
             <pre
               style={{
                 marginTop: '8px',
-                padding: '8px 10px',
+                padding: 'var(--spacing-xs) var(--spacing-sm)',
                 borderRadius: 'var(--radius-md)',
                 background: 'var(--color-surface-alt)',
                 color: 'var(--color-text)',
-                fontSize: '10px',
+                fontSize: 'var(--text-xs)',
                 lineHeight: 1.5,
                 overflow: 'auto',
                 maxHeight: '150px',
@@ -153,18 +151,18 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
           </details>
         )}
 
-        <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+        <div style={{ display: 'flex', gap: 'var(--spacing-xs)', marginTop: '4px' }}>
           <button
             onClick={this.handleRetry}
             style={{
-              padding: '8px 16px',
+              padding: 'var(--spacing-xs) var(--spacing-md)',
               borderRadius: 'var(--radius-md)',
               border: 'none',
               background: 'var(--color-primary)',
-              color: '#fff',
+              color: 'var(--color-text-inverse)',
               cursor: 'pointer',
-              fontSize: '13px',
-              fontWeight: 500,
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--weight-medium)',
             }}
           >
             Try Again

@@ -111,10 +111,10 @@ export default function SelfEvaluation({ result, onChange }: SelfEvaluationProps
             style={{
               color: getScoreColor(averageScore),
               backgroundColor: averageScore >= 7
-                ? 'var(--color-success-light, #f0fdf4)'
+                ? 'var(--color-success-light)'
                 : averageScore >= 5
-                  ? 'var(--color-warning-light, #fefce8)'
-                  : 'var(--color-danger-light, #fef2f2)',
+                  ? 'var(--color-warning-light)'
+                  : 'var(--color-danger-light)',
             }}
           >
             {averageScore.toFixed(1)} / {maxScore} &mdash; {getScoreLabel(averageScore)}

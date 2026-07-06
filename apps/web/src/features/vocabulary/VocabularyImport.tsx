@@ -29,8 +29,6 @@ export default function VocabularyImport({ onImportComplete, className }: Vocabu
 
       onImportComplete(count)
       emitVocabularyChanged()
-    } catch (err) {
-      throw err
     } finally {
       if (fileInputRef.current) {
         fileInputRef.current.value = ''

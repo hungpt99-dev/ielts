@@ -1,79 +1,160 @@
-import type { DesignTokens } from './types'
+import type { ColorTokens } from './colors'
+import { COLORS, DARK_COLORS } from './colors'
+import type { RadiusTokens } from './radius'
+import { RADIUS } from './radius'
+import type { SpacingTokens } from './spacing'
+import { SPACING } from './spacing'
+import type { TypographyTokens } from './typography'
+import { TYPOGRAPHY } from './typography'
+
+export type { ColorTokens, RadiusTokens, SpacingTokens, TypographyTokens }
+export { COLORS, DARK_COLORS, RADIUS, SPACING, TYPOGRAPHY }
+
+export interface DesignTokens {
+  color: ColorTokens
+  radius: RadiusTokens
+  spacing: SpacingTokens
+  font: TypographyTokens
+  shadow: ShadowTokens
+  zIndex: ZIndexTokens
+  breakpoint: BreakpointTokens
+  transition: TransitionTokens
+  animation: AnimationTokens
+  extension: ExtensionTokens
+}
+
+export interface ShadowTokens {
+  xs: string
+  sm: string
+  md: string
+  lg: string
+  xl: string
+  '2xl': string
+  inner: string
+  colored: string
+  tutor: string
+  elevated: string
+}
+
+export interface ZIndexTokens {
+  dropdown: string
+  sticky: string
+  fixed: string
+  modalBackdrop: string
+  modal: string
+  popover: string
+  toast: string
+  tooltip: string
+  aiTutor: string
+  extensionMenu: string
+  highlight: string
+}
+
+export interface BreakpointTokens {
+  sm: string
+  md: string
+  lg: string
+  xl: string
+  '2xl': string
+}
+
+export interface TransitionTokens {
+  fast: string
+  normal: string
+  slow: string
+}
+
+export interface AnimationTokens {
+  fadeIn: string
+  slideUp: string
+  slideDown: string
+  slideInRight: string
+  slideInLeft: string
+  slideInUp: string
+  pulse: string
+  spin: string
+  scaleIn: string
+}
+
+export interface ExtensionTokens {
+  width: string
+  minHeight: string
+  maxHeight: string
+}
 
 export const TOKENS: DesignTokens = {
-  color: {
-    background: '#f8fafc',
-    surface: '#ffffff',
-    surfaceAlt: '#f1f5f9',
-    primary: '#2563eb',
-    primaryHover: '#1d4ed8',
-    primaryLight: '#dbeafe',
-    text: '#0f172a',
-    textSecondary: '#475569',
-    muted: '#94a3b8',
-    border: '#e2e8f0',
-    success: '#22c55e',
-    successLight: '#dcfce7',
-    warning: '#f59e0b',
-    warningLight: '#fef3c7',
-    danger: '#ef4444',
-    dangerLight: '#fee2e2',
-    info: '#3b82f6',
-    infoLight: '#dbeafe',
-  },
-  radius: {
-    sm: '0.375rem',
-    md: '0.5rem',
-    lg: '0.75rem',
-    xl: '1rem',
-  },
-  spacing: {
-    xs: '0.25rem',
-    sm: '0.5rem',
-    md: '1rem',
-    lg: '1.5rem',
-    xl: '2rem',
-  },
+  color: COLORS,
+  radius: RADIUS,
+  spacing: SPACING,
+  font: TYPOGRAPHY,
   shadow: {
+    xs: '0 1px 1px 0 rgb(0 0 0 / 0.03)',
     sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
     md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
     lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+    xl: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
+    '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+    inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
+    colored: '0 4px 14px 0 rgb(37 99 235 / 0.3)',
+    tutor: '0 4px 14px 0 rgb(14 165 233 / 0.2)',
+    elevated: '0 8px 32px 0 rgb(0 0 0 / 0.12)',
   },
-  font: {
-    sans: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
-    mono: '"JetBrains Mono", "Fira Code", monospace',
+  zIndex: {
+    dropdown: '100',
+    sticky: '200',
+    fixed: '300',
+    modalBackdrop: '400',
+    modal: '500',
+    popover: '600',
+    toast: '700',
+    tooltip: '800',
+    aiTutor: '900',
+    extensionMenu: '1000',
+    highlight: '2147483647',
+  },
+  breakpoint: {
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
+    '2xl': '1536px',
   },
   transition: {
     fast: '150ms ease',
     normal: '200ms ease',
+    slow: '300ms ease',
+  },
+  animation: {
+    fadeIn: 'fadeIn var(--transition-normal)',
+    slideUp: 'slideUp var(--transition-normal)',
+    slideDown: 'slideDown var(--transition-normal)',
+    slideInRight: 'slideInRight var(--transition-normal)',
+    slideInLeft: 'slideInLeft var(--transition-normal)',
+    slideInUp: 'slideInUp var(--transition-normal)',
+    pulse: 'pulse 1.5s ease-in-out infinite',
+    spin: 'spin 0.6s linear infinite',
+    scaleIn: 'scaleIn var(--transition-normal)',
+  },
+  extension: {
+    width: '400px',
+    minHeight: '500px',
+    maxHeight: '600px',
   },
 }
 
 export const DARK_TOKENS: Partial<DesignTokens> = {
-  color: {
-    background: '#0f172a',
-    surface: '#1e293b',
-    surfaceAlt: '#0f172a',
-    primary: '#3b82f6',
-    primaryHover: '#60a5fa',
-    primaryLight: '#1e3a5f',
-    text: '#f1f5f9',
-    textSecondary: '#94a3b8',
-    muted: '#64748b',
-    border: '#334155',
-    success: '#22c55e',
-    successLight: '#14532d',
-    warning: '#f59e0b',
-    warningLight: '#78350f',
-    danger: '#ef4444',
-    dangerLight: '#7f1d1d',
-    info: '#3b82f6',
-    infoLight: '#1e3a5f',
-  },
+  color: DARK_COLORS as ColorTokens,
   shadow: {
+    xs: '0 1px 1px 0 rgb(0 0 0 / 0.2)',
     sm: '0 1px 2px 0 rgb(0 0 0 / 0.3)',
     md: '0 4px 6px -1px rgb(0 0 0 / 0.4)',
     lg: '0 10px 15px -3px rgb(0 0 0 / 0.4)',
+    xl: '0 20px 25px -5px rgb(0 0 0 / 0.4)',
+    '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.5)',
+    inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.1)',
+    colored: '0 4px 14px 0 rgb(59 130 246 / 0.4)',
+    tutor: '0 4px 14px 0 rgb(56 189 248 / 0.3)',
+    elevated: '0 8px 32px 0 rgb(0 0 0 / 0.35)',
   },
 }
 
@@ -89,5 +170,4 @@ export const ACCENT_COLOR_PRESETS = [
 ] as const
 
 export const DEFAULT_ACCENT_COLOR = '#2563eb'
-
 export const THEME_MODES = ['light', 'dark', 'system'] as const

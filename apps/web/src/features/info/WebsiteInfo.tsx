@@ -1,16 +1,14 @@
+import PageHeader from '../../components/layout/PageHeader'
+import { IconInfo } from '@ielts/ui'
+
 export default function WebsiteInfo() {
   return (
     <div className="mx-auto max-w-3xl space-y-8 py-8">
-      <div className="space-y-4">
-        <h1 className="text-3xl font-bold" style={{ color: 'var(--color-text)' }}>
-          About IELTS Journey
-        </h1>
-        <p className="text-lg leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-          IELTS Journey is a free, all-in-one platform designed to help you prepare for the IELTS exam.
-          From vocabulary building and reading practice to writing feedback and speaking exercises,
-          everything you need is right here — no subscriptions, no hidden fees.
-        </p>
-      </div>
+      <PageHeader
+        icon={<IconInfo size={22} />}
+        title="About IELTS Journey"
+        description="IELTS Journey is a free, all-in-one platform designed to help you prepare for the IELTS exam. From vocabulary building and reading practice to writing feedback and speaking exercises, everything you need is right here — no subscriptions, no hidden fees."
+      />
 
       <div className="space-y-4">
         <h2 className="text-xl font-semibold" style={{ color: 'var(--color-text)' }}>

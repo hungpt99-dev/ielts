@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { openDB, STORE_NAMES } from './db'
 
 export const extensionMistakeSchema = z.object({
   id: z.string(),
@@ -32,35 +33,13 @@ export const STATUS_OPTIONS: { value: ExtensionMistakeEntry['status']; label: st
   { value: 'fixed', label: 'Fixed', color: '#10b981' },
 ]
 
-const DB_NAME = 'ielts-journey-extension'
-const DB_VERSION = 5
-const STORE_NAME = 'mistakes'
-
-function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION)
-
-    request.onupgradeneeded = () => {
-      const db = request.result
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
-        store.createIndex('status', 'status', { unique: false })
-        store.createIndex('skill', 'skill', { unique: false })
-        store.createIndex('topic', 'topic', { unique: false })
-        store.createIndex('createdAt', 'createdAt', { unique: false })
-      }
-    }
-
-    request.onsuccess = () => resolve(request.result)
-    request.onerror = () => reject(request.error)
-  })
-}
+const STORE = STORE_NAMES.MISTAKES
 
 export async function saveMistakeEntry(entry: ExtensionMistakeEntry): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.put(entry)
     tx.oncomplete = () => { db.close(); resolve() }
     tx.onerror = () => { db.close(); reject(tx.error) }
@@ -70,8 +49,8 @@ export async function saveMistakeEntry(entry: ExtensionMistakeEntry): Promise<vo
 export async function getAllMistakes(): Promise<ExtensionMistakeEntry[]> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.getAll()
     request.onsuccess = () => { db.close(); resolve(request.result as ExtensionMistakeEntry[]) }
     request.onerror = () => { db.close(); reject(request.error) }
@@ -81,8 +60,8 @@ export async function getAllMistakes(): Promise<ExtensionMistakeEntry[]> {
 export async function getMistakeById(id: string): Promise<ExtensionMistakeEntry | undefined> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.get(id)
     request.onsuccess = () => { db.close(); resolve(request.result as ExtensionMistakeEntry | undefined) }
     request.onerror = () => { db.close(); reject(request.error) }
@@ -92,8 +71,8 @@ export async function getMistakeById(id: string): Promise<ExtensionMistakeEntry 
 export async function updateMistakeEntry(id: string, updates: Partial<ExtensionMistakeEntry>): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     const getRequest = store.get(id)
     getRequest.onsuccess = () => {
       const existing = getRequest.result as ExtensionMistakeEntry | undefined
@@ -109,8 +88,8 @@ export async function updateMistakeEntry(id: string, updates: Partial<ExtensionM
 export async function deleteMistakeEntry(id: string): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.delete(id)
     tx.oncomplete = () => { db.close(); resolve() }
     tx.onerror = () => { db.close(); reject(tx.error) }

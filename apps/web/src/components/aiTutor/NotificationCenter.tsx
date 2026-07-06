@@ -141,7 +141,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
               className="flex min-w-[18px] items-center justify-center rounded-full px-1.5 text-[10px] font-bold leading-tight"
               style={{
                 backgroundColor: 'var(--color-danger)',
-                color: 'var(--color-on-danger, #fff)',
+                color: 'var(--color-text-inverse)',
               }}
             >
               {unreadCount}
@@ -182,7 +182,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
                 className="flex min-w-[14px] items-center justify-center rounded-full px-1 text-[9px] font-bold leading-tight"
                 style={{
                   backgroundColor: 'var(--color-danger)',
-                  color: 'var(--color-on-danger, #fff)',
+                  color: 'var(--color-text-inverse)',
                 }}
               >
                 {unreadCountFor(cat)}
@@ -274,7 +274,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
                         className="rounded-lg px-2.5 py-1 text-xs font-medium transition-colors hover:opacity-80"
                         style={{
                           backgroundColor: 'var(--color-primary)',
-                          color: 'var(--color-on-primary, #ffffff)',
+                          color: 'var(--color-on-primary)',
                         }}
                         type="button"
                       >

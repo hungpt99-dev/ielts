@@ -104,6 +104,7 @@ export default function ModeSelector({ selectedMode, onModeChange, disabled }: M
               role="radio"
               aria-checked={isSelected}
               aria-label={label}
+              title={description || label}
               disabled={disabled}
               onClick={() => onModeChange(mode)}
               className={`flex flex-col items-center gap-1.5 rounded-xl border-2 p-3 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${

@@ -5,9 +5,9 @@ interface LoadingSpinnerProps {
 }
 
 const sizeMap = {
-  sm: { width: '16px', height: '16px', borderWidth: '2px' },
-  md: { width: '24px', height: '24px', borderWidth: '3px' },
-  lg: { width: '32px', height: '32px', borderWidth: '4px' },
+  sm: { width: 'var(--spacing-md)', height: 'var(--spacing-md)', borderWidth: 'var(--spacing-3xs)' },
+  md: { width: 'var(--spacing-lg)', height: 'var(--spacing-lg)', borderWidth: '3px' },
+  lg: { width: 'var(--spacing-xl)', height: 'var(--spacing-xl)', borderWidth: 'var(--spacing-2xs)' },
 }
 
 const minHeightMap = {
@@ -27,7 +27,7 @@ export default function LoadingSpinner({ size = 'md', message, fullPage }: Loadi
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '12px',
+        gap: 'var(--spacing-sm)',
         minHeight: fullPage ? '500px' : minHeightMap[size],
       }}
     >
@@ -37,12 +37,12 @@ export default function LoadingSpinner({ size = 'md', message, fullPage }: Loadi
           height: dims.height,
           border: `${dims.borderWidth} solid var(--color-border)`,
           borderTopColor: 'var(--color-primary)',
-          borderRadius: '50%',
+          borderRadius: 'var(--radius-full)',
           animation: 'loading-spinner-spin 0.8s linear infinite',
         }}
       />
       {message && (
-        <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
           {message}
         </span>
       )}

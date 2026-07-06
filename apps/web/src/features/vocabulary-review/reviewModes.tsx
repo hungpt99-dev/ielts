@@ -150,7 +150,7 @@ export function GapFill({ vocab }: ModeRendererProps) {
       </p>
       <p className="mt-4 text-lg leading-relaxed text-slate-900 dark:text-slate-100">
         {gap.before}
-        <span className="rounded-md bg-yellow-100 px-1 font-bold text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">
+        <span className="rounded-md px-1 font-bold" style={{ backgroundColor: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
           {maskWord(vocab.word)}
         </span>
         {gap.after}
@@ -184,7 +184,7 @@ export function Collocation({ vocab }: ModeRendererProps) {
             {vocab.collocations.map((c, i) => (
               <span
                 key={i}
-                className="rounded-lg bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                className="rounded-lg px-3 py-1.5 text-sm font-medium" style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}
               >
                 {c}
               </span>
@@ -199,7 +199,7 @@ export function Collocation({ vocab }: ModeRendererProps) {
             {vocab.synonyms.map((s, i) => (
               <span
                 key={i}
-                className="rounded-lg bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                className="rounded-lg px-2.5 py-1 text-xs font-medium" style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}
               >
                 {s}
               </span>
@@ -214,7 +214,7 @@ export function Collocation({ vocab }: ModeRendererProps) {
             {vocab.antonyms.map((a, i) => (
               <span
                 key={i}
-                className="rounded-lg bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                className="rounded-lg px-2.5 py-1 text-xs font-medium" style={{ backgroundColor: 'var(--color-danger-light)', color: 'var(--color-danger)' }}
               >
                 {a}
               </span>
@@ -259,10 +259,10 @@ export function MultipleChoice({
           const isSelected = opt === selected
           let bg = 'bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600'
           if (answered) {
-            if (isCorrect) bg = 'bg-green-50 border-green-400 dark:bg-green-900/30 dark:border-green-600'
-            else if (isSelected && !isCorrect) bg = 'bg-red-50 border-red-400 dark:bg-red-900/30 dark:border-red-600'
+            if (isCorrect) bg = 'bg-[var(--color-success-light)] border-[var(--color-success)]'
+            else if (isSelected && !isCorrect) bg = 'bg-[var(--color-danger-light)] border-[var(--color-danger)]'
           } else if (isSelected) {
-            bg = 'bg-blue-50 border-blue-400 dark:bg-blue-900/30 dark:border-blue-600'
+            bg = 'bg-[var(--color-primary-light)] border-[var(--color-primary)]'
           }
           return (
             <button
@@ -317,7 +317,7 @@ export function TypingMode({ vocab, onReveal, revealed }: ModeRendererProps) {
       )}
       {revealed && (
         <div className="mt-4">
-          <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+          <p className="text-2xl font-bold text-[var(--color-success)]">
             {vocab.word}
           </p>
           {vocab.pronunciation && (

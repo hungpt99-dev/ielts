@@ -16,6 +16,8 @@ import {
 } from './reviewService'
 import { getModeRenderer } from './reviewModes'
 import SessionSummary from './SessionSummary'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconVocabularyReview } from '@ielts/ui'
 
 const ALL_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -156,10 +158,12 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
 
   if (showConfig) {
     return (
-      <div className="mx-auto max-w-2xl">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-6">
-          Review Settings
-        </h1>
+      <div className="mx-auto max-w-7xl">
+        <PageHeader
+          icon={<IconVocabularyReview size={22} />}
+          title="Review Settings"
+          description="Configure your review session"
+        />
 
         <div className="space-y-6">
           <Card>
@@ -349,7 +353,7 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
 
   if (queue.length === 0) {
     return (
-      <div className="mx-auto max-w-2xl">
+      <div className="mx-auto max-w-7xl">
         <Card className="text-center">
           <CardContent className="py-12">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
@@ -372,26 +376,22 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Vocabulary Review
-          </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            {REVIEW_MODES.find(m => m.value === currentMode)?.label ?? currentMode}
-            {' · '}Press <kbd className="rounded border bg-slate-100 px-1 font-mono text-xs dark:bg-slate-700">Space</kbd> to reveal
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={cycleMode}>
-            Cycle Mode
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => setShowConfig(true)}>
-            Settings
-          </Button>
-        </div>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-6">
+      <PageHeader
+        icon={<IconVocabularyReview size={22} />}
+        title="Vocabulary Review"
+        description={`${REVIEW_MODES.find(m => m.value === currentMode)?.label ?? currentMode} · Press Space to reveal`}
+        actions={
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={cycleMode}>
+              Cycle Mode
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setShowConfig(true)}>
+              Settings
+            </Button>
+          </div>
+        }
+      />
 
       <div data-testid="review-progress" className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">

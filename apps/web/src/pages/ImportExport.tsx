@@ -5,6 +5,8 @@ import type { AppExportData } from '../models'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import ErrorDisplay from '../components/ui/ErrorDisplay'
+import PageHeader from '../components/layout/PageHeader'
+import { IconDatabase } from '@ielts/ui'
 
 const REQUIRED_ARRAYS = [
   'vocabulary', 'vocabularyReviews', 'tasks', 'readingSessions',
@@ -153,15 +155,12 @@ export default function ImportExport() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-          Import / Export Backup
-        </h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Back up your IELTS data or restore from a previous backup
-        </p>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+      <PageHeader
+        icon={<IconDatabase size={20} />}
+        title="Import / Export Backup"
+        description="Back up your IELTS data or restore from a previous backup"
+      />
 
       {success && (
         <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/30 dark:text-green-400">
@@ -232,15 +231,15 @@ export default function ImportExport() {
       </Card>
 
       {showConfirm && importPreview && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-label="Import confirmation">
-          <div className="w-full max-w-lg rounded-xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-600 dark:bg-slate-800">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-overlay)' }} role="dialog" aria-modal="true" aria-label="Import confirmation">
+          <div className="w-[480px] max-w-full rounded-xl border p-6 shadow-xl" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
               Import Data?
             </h3>
-            <p className="mt-2 text-sm text-red-600 dark:text-red-400 font-medium">
+            <p className="mt-2 text-sm font-medium" style={{ color: 'var(--color-danger)' }}>
               This will overwrite ALL your current data with the backup data.
             </p>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
               The backup was created on{' '}
               <span className="font-medium">
                 {new Date(importPreview.exportedAt).toLocaleString()}
@@ -250,15 +249,15 @@ export default function ImportExport() {
 
             <div className="mt-4 max-h-48 overflow-y-auto space-y-1">
               {countRecords(importPreview).map(r => (
-                <div key={r.label} className="flex items-center justify-between rounded bg-slate-50 px-3 py-1.5 text-sm dark:bg-slate-700/50">
-                  <span className="text-slate-600 dark:text-slate-400">{r.label}</span>
-                  <span className="font-medium text-slate-900 dark:text-slate-100">{r.count}</span>
+                <div key={r.label} className="flex items-center justify-between rounded px-3 py-1.5 text-sm" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                  <span style={{ color: 'var(--color-text-secondary)' }}>{r.label}</span>
+                  <span className="font-medium" style={{ color: 'var(--color-text)' }}>{r.count}</span>
                 </div>
               ))}
               {importPreview.settings && (
-                <div className="flex items-center justify-between rounded bg-slate-50 px-3 py-1.5 text-sm dark:bg-slate-700/50">
-                  <span className="text-slate-600 dark:text-slate-400">Settings</span>
-                  <span className="font-medium text-slate-900 dark:text-slate-100">included</span>
+                <div className="flex items-center justify-between rounded px-3 py-1.5 text-sm" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                  <span style={{ color: 'var(--color-text-secondary)' }}>Settings</span>
+                  <span className="font-medium" style={{ color: 'var(--color-text)' }}>included</span>
                 </div>
               )}
             </div>

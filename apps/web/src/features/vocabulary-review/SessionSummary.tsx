@@ -42,7 +42,7 @@ export default function SessionSummary({ items, ratings, totalTimeMs, onRestart,
     .slice(0, 5)
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
+    <div className="mx-auto max-w-7xl space-y-6">
       <Card className="text-center">
         <CardContent className="py-8">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">

@@ -87,7 +87,7 @@ export default function DashboardProactiveMessages() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate('/ai-tutor')}
+            onClick={() => navigate('/tutor')}
           >
             View all
           </Button>

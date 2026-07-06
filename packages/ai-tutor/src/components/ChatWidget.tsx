@@ -1,6 +1,6 @@
-import React, { useEffect, useCallback, useMemo } from 'react'
+import React, { useEffect, useCallback, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import type { ChatWidgetProps, ChatMessage, ContextSuggestion, QuickAction } from '../types'
+import type { ChatWidgetProps, ChatMessage, ContextSuggestion } from '../types'
 import { MessageStorage } from '../services/messageStorage'
 import { useChatWidget } from '../hooks/useChatWidget'
 import { ChatBubble } from './ChatBubble'
@@ -14,6 +14,16 @@ import { WelcomeState } from './WelcomeState'
 import { ChatStyles } from './ChatStyles'
 import { useExitAnimation } from './useExitAnimation'
 import { ContextSuggestionCard } from './ContextSuggestionCard'
+import { IconBell, IconDelete, IconClose, IconSend } from '../../../ui/src/icons/IconMap'
+
+const DEFAULT_QUICK_PROMPTS = [
+  { label: 'Quiz me', action: 'quiz-me' },
+  { label: 'Teach me', action: 'teach-me' },
+  { label: 'Explain simply', action: 'explain-simply' },
+  { label: 'Give examples', action: 'give-examples' },
+  { label: 'Practice with me', action: 'practice-with-me' },
+  { label: 'Correct my English', action: 'correct-english' },
+]
 
 export { ChatBubble } from './ChatBubble'
 export { QuickActions } from './QuickActions'
@@ -37,9 +47,11 @@ export function ChatWidget({
   onSendMessage: externalSendMessage,
   onQuickAction: externalQuickAction,
   onClearChat: externalClearChat,
-  title = 'AI Tutor Assistant',
-  subtitle = 'Online · IELTS Coach',
-  placeholder = 'Type a message...',
+  title = 'AI Tutor',
+  subtitle = 'IELTS Coach',
+  placeholder = 'Ask me anything about IELTS...',
+  voiceButton,
+  voiceInput,
 }: ChatWidgetProps) {
   const { shouldRender, animationStyle } = useExitAnimation({ isOpen })
 
@@ -52,7 +64,6 @@ export function ChatWidget({
     inputValue,
     sendError,
     messagesEndRef,
-    inputRef,
     popupRef,
     setInputValue,
     setShowNotifications,
@@ -73,6 +84,8 @@ export function ChatWidget({
     contextSuggestions: externalSuggestions,
   })
 
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
   useEffect(() => {
     if (!isOpen) return
     MessageStorage.recordOpen()
@@ -85,15 +98,23 @@ export function ChatWidget({
 
   useEffect(() => {
     if (!isOpen) return
-    const timer = setTimeout(() => inputRef.current?.focus(), 300)
+    const timer = setTimeout(() => textareaRef.current?.focus(), 300)
     return () => clearTimeout(timer)
-  }, [isOpen, inputRef])
+  }, [isOpen])
 
   useEffect(() => {
     if (!isOpen || !popupRef.current) return
     const firstFocusable = popupRef.current.querySelector('button, [tabindex]:not([tabindex="-1"])') as HTMLElement | null
     firstFocusable?.focus()
   }, [isOpen, popupRef])
+
+  const prevVoiceInput = useRef(voiceInput)
+  useEffect(() => {
+    if (!voiceInput || voiceInput === prevVoiceInput.current) return
+    prevVoiceInput.current = voiceInput
+    setInputValue(voiceInput)
+    setTimeout(() => handleSendMessage(), 50)
+  }, [voiceInput, setInputValue, handleSendMessage])
 
   const contextSuggestions = useMemo(
     () => externalSuggestions ?? (internalContextSuggestion ? [internalContextSuggestion] : []),
@@ -161,7 +182,28 @@ export function ChatWidget({
     [handleQuickAction, contextSuggestionDismissed, setInternalContextSuggestion],
   )
 
+  const handlePromptClick = useCallback(
+    (action: string) => {
+      handleQuickAction(action)
+    },
+    [handleQuickAction],
+  )
+
+  const handleSaveNote = useCallback((content: string) => {
+    try {
+      const notes = JSON.parse(localStorage.getItem('savedAiNotes') || '[]')
+      notes.push({ id: Date.now().toString(), content, createdAt: new Date().toISOString() })
+      localStorage.setItem('savedAiNotes', JSON.stringify(notes))
+    } catch { /* ignore */ }
+  }, [])
+
+  const handleCopy = useCallback((content: string) => {
+    navigator.clipboard.writeText(content).catch(() => {})
+  }, [])
+
   const showWelcome = !hasMessages && !isTyping && contextSuggestions.length === 0
+
+  const quickPrompts = DEFAULT_QUICK_PROMPTS
 
   const popup = (
     <>
@@ -173,15 +215,34 @@ export function ChatWidget({
         aria-label="AI Tutor chat"
         className={className}
         style={{
-          ...popupContainerStyle,
-          ...(isMobileFullscreen ? mobileFullscreenStyle : desktopStyle),
-          ...animationStyle,
+          display: 'flex',
+          flexDirection: 'column',
+          borderRadius: isMobileFullscreen ? '0' : '16px',
+          border: isMobileFullscreen ? 'none' : '1px solid',
+          zIndex: 9999,
+          position: 'fixed',
+          overflow: 'hidden',
           backgroundColor: 'var(--color-surface)',
           borderColor: 'var(--color-border)',
           boxShadow: 'var(--shadow-lg)',
+          ...(isMobileFullscreen
+            ? {
+                width: '100vw',
+                height: '100dvh',
+                bottom: '0',
+                right: '0',
+              }
+            : {
+                width: '380px',
+                height: '560px',
+                maxHeight: 'calc(100vh - 120px)',
+                bottom: 'calc(24px + 56px + 16px)',
+                right: '24px',
+              }),
+          ...animationStyle,
         }}
       >
-        <ChatHeader
+        <Header
           title={title}
           subtitle={subtitle}
           unreadCount={proactive.unreadCount}
@@ -207,7 +268,7 @@ export function ChatWidget({
           />
         ) : (
           <>
-            <ChatMessagesArea
+            <MessagesArea
               messages={messages}
               isTyping={isTyping}
               showWelcome={showWelcome}
@@ -219,9 +280,11 @@ export function ChatWidget({
               messagesEndRef={messagesEndRef}
               onSuggestionDismiss={handleSuggestionDismiss}
               onSuggestionAction={handleSuggestionAction}
+              onSaveNote={handleSaveNote}
+              onCopy={handleCopy}
             />
 
-            {pendingProactive.length > 0 && (
+            {hasMessages && pendingProactive.length > 0 && (
               <div
                 className="flex shrink-0 flex-col gap-2 border-t px-4 py-3"
                 style={{ borderColor: 'var(--color-border)' }}
@@ -241,17 +304,46 @@ export function ChatWidget({
               </div>
             )}
 
-            {showActions && (
-              <QuickActionsRow actions={currentActions} onAction={handleQuickAction} />
+            {showActions && hasMessages && currentActions.length > 0 && (
+              <div
+                className="flex shrink-0 flex-wrap gap-1.5 border-t px-4 py-3"
+                style={{ borderColor: 'var(--color-border)' }}
+              >
+                <QuickActions actions={currentActions} onAction={handleQuickAction} />
+              </div>
             )}
 
-            <ChatInput
-              ref={inputRef}
+            {showWelcome && (
+              <div
+                className="flex shrink-0 flex-wrap justify-center gap-1.5 border-t px-4 py-3"
+                style={{ borderColor: 'var(--color-border)' }}
+              >
+                {quickPrompts.slice(0, 4).map((prompt) => (
+                  <button
+                    key={prompt.action}
+                    onClick={() => handlePromptClick(prompt.action)}
+                    className="rounded-full px-3 py-1.5 text-xs font-medium transition-all hover:opacity-80"
+                    style={{
+                      backgroundColor: 'var(--color-tutor-accent)',
+                      color: '#ffffff',
+                      border: 'none',
+                    }}
+                    type="button"
+                  >
+                    {prompt.label}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <ChatInputArea
+              ref={textareaRef}
               value={inputValue}
               onChange={setInputValue}
               onSend={handleSendMessage}
               placeholder={placeholder}
               disabled={isTyping}
+              voiceButton={voiceButton}
             />
           </>
         )}
@@ -264,7 +356,7 @@ export function ChatWidget({
   return createPortal(popup, document.body)
 }
 
-function ChatHeader({
+function Header({
   title,
   subtitle,
   unreadCount,
@@ -284,16 +376,23 @@ function ChatHeader({
   return (
     <div
       className="flex shrink-0 items-center gap-3 border-b px-4 py-3"
-      style={{ borderColor: 'var(--color-border)' }}
+      style={{
+        borderColor: 'var(--color-border)',
+        background: 'linear-gradient(135deg, var(--color-tutor-background), var(--color-surface))',
+      }}
     >
-      <TutorAvatar size={40} />
+      <TutorAvatar size={36} showStatus isOnline />
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+        <p className="truncate text-sm font-semibold" style={{ color: 'var(--color-tutor-text)' }}>
           {title}
         </p>
-        <p className="flex items-center gap-1 text-[11px]" style={{ color: 'var(--color-success)' }}>
-          <span>{subtitle}</span>
+        <p className="flex items-center gap-1 text-[11px]" style={{ color: 'var(--color-text-secondary)' }}>
+          <span
+            className="inline-block h-1.5 w-1.5 rounded-full"
+            style={{ backgroundColor: 'var(--color-success)' }}
+          />
+          {subtitle}
         </p>
       </div>
 
@@ -301,13 +400,11 @@ function ChatHeader({
         <button
           onClick={onToggleNotifications}
           className="relative flex h-8 w-8 items-center justify-center rounded-lg text-sm transition-colors hover:opacity-80"
-          style={{ color: showNotifications ? 'var(--color-primary)' : 'var(--color-muted)' }}
+          style={{ color: showNotifications ? 'var(--color-tutor-accent)' : 'var(--color-muted)' }}
           aria-label="Notification center"
           title="Notifications"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
+          <IconBell size={16} />
           {unreadCount > 0 && (
             <span
               className="absolute -right-0.5 -top-0.5 flex min-w-[16px] items-center justify-center rounded-full px-1 text-[10px] font-bold leading-tight"
@@ -326,11 +423,9 @@ function ChatHeader({
           className="flex h-8 w-8 items-center justify-center rounded-lg text-sm transition-colors hover:opacity-80"
           style={{ color: 'var(--color-muted)' }}
           aria-label="Clear chat"
-          title="Clear chat"
+          title="Clear conversation"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
+          <IconDelete size={16} />
         </button>
 
         <button
@@ -340,16 +435,14 @@ function ChatHeader({
           aria-label="Close chat"
           title="Minimize"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <IconClose size={16} />
         </button>
       </div>
     </div>
   )
 }
 
-function ChatMessagesArea({
+function MessagesArea({
   messages,
   isTyping,
   showWelcome,
@@ -361,6 +454,8 @@ function ChatMessagesArea({
   messagesEndRef,
   onSuggestionDismiss,
   onSuggestionAction,
+  onSaveNote,
+  onCopy,
 }: {
   messages: ChatMessage[]
   isTyping: boolean
@@ -373,11 +468,19 @@ function ChatMessagesArea({
   messagesEndRef: React.RefObject<HTMLDivElement | null>
   onSuggestionDismiss: () => void
   onSuggestionAction: (suggestion: ContextSuggestion) => void
+  onSaveNote: (content: string) => void
+  onCopy: (content: string) => void
 }) {
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-3" style={{ scrollBehavior: 'smooth' }}>
+    <div
+      className="flex-1 overflow-y-auto"
+      style={{
+        scrollBehavior: 'smooth',
+        backgroundColor: 'color-mix(in srgb, var(--color-background) 60%, var(--color-tutor-background) 40%)',
+      }}
+    >
       {showWelcome && (
-        <div className="flex h-full flex-col items-center justify-center py-4 text-center">
+        <div className="flex h-full flex-col items-center justify-center px-4 py-4 text-center">
           {!hasAiKey && onOpenSettings && (
             <MissingKeyBanner onOpenSettings={onOpenSettings} />
           )}
@@ -386,7 +489,7 @@ function ChatMessagesArea({
       )}
 
       {!showWelcome && contextSuggestions.length > 0 && (
-        <div className="flex h-full flex-col items-center justify-center gap-2 px-2">
+        <div className="flex h-full flex-col items-center justify-center gap-2 px-4 py-4">
           {!hasAiKey && onOpenSettings && (
             <MissingKeyBanner onOpenSettings={onOpenSettings} />
           )}
@@ -402,9 +505,15 @@ function ChatMessagesArea({
       )}
 
       {messages.length > 0 && (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4 px-4 py-4">
           {messages.map(msg => (
-            <ChatBubble key={msg.id} message={msg} />
+            <ChatBubble
+              key={msg.id}
+              message={msg}
+              showActionBar={msg.role === 'assistant'}
+              onSaveNote={msg.role === 'assistant' ? onSaveNote : undefined}
+              onCopy={msg.role === 'assistant' ? onCopy : undefined}
+            />
           ))}
           {isTyping && <TypingIndicator />}
           <div ref={messagesEndRef} />
@@ -413,10 +522,11 @@ function ChatMessagesArea({
 
       {sendError && (
         <div
-          className="mx-2 mt-2 rounded-lg px-3 py-2 text-xs"
+          className="mx-4 mb-2 rounded-lg px-3 py-2 text-xs"
           style={{
             backgroundColor: 'color-mix(in srgb, var(--color-danger) 8%, transparent)',
             color: 'var(--color-danger)',
+            animation: 'chat-slide-up 0.2s ease-out',
           }}
           role="alert"
         >
@@ -427,98 +537,74 @@ function ChatMessagesArea({
   )
 }
 
-function QuickActionsRow({
-  actions,
-  onAction,
-}: {
-  actions: QuickAction[]
-  onAction: (action: string) => void
-}) {
-  return (
-    <div
-      className="flex shrink-0 flex-wrap gap-1.5 border-t px-4 py-3"
-      style={{ borderColor: 'var(--color-border)' }}
-    >
-      <QuickActions actions={actions} onAction={onAction} />
-    </div>
-  )
-}
-
-const ChatInput = React.forwardRef<HTMLInputElement, {
+const ChatInputArea = React.forwardRef<HTMLTextAreaElement, {
   value: string
   onChange: (value: string) => void
   onSend: () => void
   placeholder: string
   disabled: boolean
-}>(function ChatInput({ value, onChange, onSend, placeholder, disabled }, ref) {
+  voiceButton?: React.ReactNode
+}>(function ChatInputArea({ value, onChange, onSend, placeholder, disabled, voiceButton }, ref) {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      onSend()
+    }
+  }, [onSend])
+
+  const rows = useMemo(() => {
+    const lines = value.split('\n').length
+    return Math.min(Math.max(lines, 1), 4)
+  }, [value])
+
   return (
     <div
-      className="flex shrink-0 gap-2 border-t px-4 py-3"
-      style={{ borderColor: 'var(--color-border)' }}
+      className="flex shrink-0 items-end gap-2 border-t px-4 py-3"
+      style={{
+        borderColor: 'var(--color-border)',
+        backgroundColor: 'var(--color-surface)',
+      }}
     >
-      <input
-        ref={ref}
-        type="text"
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        onKeyDown={e => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault()
-            onSend()
-          }
-        }}
-        placeholder={placeholder}
-        disabled={disabled}
-        className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm outline-none disabled:opacity-50"
+      <div
+        className="relative flex flex-1 items-end rounded-xl border px-3 py-2 transition-colors"
         style={{
-          backgroundColor: 'var(--color-surface-secondary)',
-          color: 'var(--color-text)',
-          border: '1px solid var(--color-border)',
+          borderColor: 'var(--color-border)',
+          backgroundColor: 'var(--color-background)',
         }}
-        aria-label="Chat message input"
-      />
+      >
+        <textarea
+          ref={ref}
+          value={value}
+          onChange={e => onChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          disabled={disabled}
+          rows={rows}
+          className="min-h-[24px] w-full resize-none bg-transparent text-sm outline-none disabled:opacity-50"
+          style={{
+            color: 'var(--color-text)',
+            fontFamily: 'var(--font-sans)',
+            lineHeight: '1.5',
+          }}
+          aria-label="Message to AI Tutor"
+        />
+      </div>
+
+      {voiceButton}
+
       <button
         onClick={onSend}
         disabled={!value.trim() || disabled}
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm transition-colors hover:opacity-80 disabled:opacity-40"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm transition-all hover:opacity-80 disabled:opacity-40"
         style={{
-          backgroundColor: 'var(--color-primary)',
+          backgroundColor: !value.trim() || disabled ? 'var(--color-surface-alt)' : 'var(--color-tutor-accent)',
           color: 'var(--color-on-primary)',
         }}
         aria-label="Send message"
         title="Send"
       >
-        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" />
-        </svg>
+        <IconSend size={20} />
       </button>
     </div>
   )
 })
-
-const popupContainerStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  borderRadius: '16px',
-  border: '1px solid',
-  zIndex: 9999,
-  position: 'fixed',
-  overflow: 'hidden',
-}
-
-const desktopStyle: React.CSSProperties = {
-  width: '380px',
-  height: '560px',
-  maxHeight: 'calc(100vh - 120px)',
-  bottom: 'calc(24px + 56px + 16px)',
-  right: '24px',
-}
-
-const mobileFullscreenStyle: React.CSSProperties = {
-  width: '100vw',
-  height: '100dvh',
-  bottom: '0',
-  right: '0',
-  borderRadius: '0',
-  border: 'none',
-}

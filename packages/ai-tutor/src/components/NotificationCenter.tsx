@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import type { ProactiveMessage, ProactiveMessageCategory } from '../types'
 import { PROACTIVE_CATEGORY_LABELS, PROACTIVE_PRIORITY_LABELS, formatMessageTime } from '../hooks/useProactiveMessages'
+import { IconBell, IconClose, IconClock, IconDelete } from '../../../ui/src/icons/IconMap'
 
 interface NotificationCenterProps {
   isOpen: boolean
@@ -59,9 +60,7 @@ export function NotificationCenter({
         style={{ borderColor: 'var(--color-border)' }}
       >
         <div className="flex items-center gap-2">
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
+          <IconBell size={20} />
           <h3 className="text-sm font-semibold">Notifications</h3>
           {unreadCount > 0 && (
             <span
@@ -81,9 +80,7 @@ export function NotificationCenter({
           style={{ color: 'var(--color-muted)' }}
           aria-label="Close notifications"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <IconClose size={16} />
         </button>
       </div>
 
@@ -211,9 +208,7 @@ function EmptyState({ activeFilter }: { activeFilter: string }) {
         className="flex h-14 w-14 items-center justify-center rounded-full text-2xl"
         style={{ backgroundColor: 'var(--color-surface-alt)' }}
       >
-        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} style={{ color: 'var(--color-muted)' }}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
+        <IconBell size={24} style={{ color: 'var(--color-muted)' }} />
       </div>
       <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
         {activeFilter === 'all' ? 'No notifications yet' : 'No notifications in this category'}
@@ -332,9 +327,7 @@ function MessageRow({
             type="button"
             title="Snooze 1 hour"
           >
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <IconClock size={12} />
             Snooze
           </button>
 
@@ -345,9 +338,7 @@ function MessageRow({
             type="button"
             title="Dismiss"
           >
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <IconClose size={12} />
             Dismiss
           </button>
 
@@ -358,9 +349,7 @@ function MessageRow({
             type="button"
             title="Delete"
           >
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
+            <IconDelete size={12} />
             Delete
           </button>
         </div>

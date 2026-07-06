@@ -12,9 +12,12 @@ export interface OnboardingData {
   examDate: string
   dailyStudyMinutes: number
   weakSkills: string[]
+  strongSkills: string[]
   preferredTopics: string[]
   studyGoal: StudyGoal
   preferredSchedule: ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[]
+  preferredLanguage: string
+  tutorStyle: 'encouraging' | 'direct' | 'detailed'
 }
 
 export function isOnboardingComplete(): boolean {
@@ -156,6 +159,9 @@ export async function completeOnboarding(data: OnboardingData): Promise<void> {
 
   saveAppSettings(settings)
   localStorage.setItem('ielts-onboarding-complete', 'true')
+  localStorage.setItem('ielts-preferred-language', data.preferredLanguage || 'en')
+  localStorage.setItem('ielts-tutor-style', data.tutorStyle || 'encouraging')
+  localStorage.setItem('ielts-strong-skills', JSON.stringify(data.strongSkills || []))
 
   const existingTasks = await DatabaseService.getAll('tasks')
   if (existingTasks.length === 0) {

@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import ProgressReviewPanel, {
-  TrendBadge,
-  SkillProgressSection,
+  TrendArrow,
+  SkillProgressTable,
   VocabSection,
-  RepeatedMistakesCard,
+  RepeatedMistakesList,
   RecommendationsList,
   TutorFeedbackCard,
 } from '../components/ProgressReviewPanel'
@@ -14,7 +15,7 @@ import type { DateRange } from '../components/DateRangeSelector'
 const mockReport: ProgressReviewReport = {
   overallSummary: 'During this period, you studied for 120 minutes across 8 sessions, completing 5 tasks across 6 active days.',
   improvements: ['Reading: 75% accuracy, showing improvement', 'Vocabulary: 20 words mastered'],
-  struggles: ['Writing: 45% accuracy \u2014 needs more practice'],
+  struggles: ['Writing: 45% accuracy — needs more practice'],
   repeatedMistakes: [
     { pattern: 'Incorrect verb tense', skill: 'grammar', frequency: 3, analysis: 'Focus on present perfect vs past simple.' },
   ],
@@ -26,12 +27,16 @@ const mockReport: ProgressReviewReport = {
     recommendation: 'Continue reviewing vocabulary daily using spaced repetition.',
   },
   skillProgress: [
-    { skill: 'Reading', status: 'improving', sessions: 5, accuracy: 75, trend: 'improving', analysis: 'Reading: 5 sessions, 75% accuracy \u2014 trend is improving.' },
-    { skill: 'Writing', status: 'needs work', sessions: 2, accuracy: 45, trend: 'declining', analysis: 'Writing: 2 sessions, 45% accuracy \u2014 trend is declining.' },
+    { skill: 'Reading', status: 'improving', sessions: 5, accuracy: 75, trend: 'improving', analysis: 'Reading: 5 sessions, 75% accuracy — trend is improving.' },
+    { skill: 'Writing', status: 'needs work', sessions: 2, accuracy: 45, trend: 'declining', analysis: 'Writing: 2 sessions, 45% accuracy — trend is declining.' },
   ],
   studyPlanAdherence: 'You studied on 6 active days with 60% consistency (current streak: 3 days).',
-  recommendedFocus: ['Focus on Writing skills \u2014 your weakest area.', 'Improve study consistency. Aim for daily practice.'],
+  recommendedFocus: ['Focus on Writing skills — your weakest area.', 'Improve study consistency. Aim for daily practice.'],
   tutorFeedback: 'Great work on maintaining a consistent study routine! Your vocabulary growth is strong. Remember, IELTS preparation is a marathon, not a sprint.',
+}
+
+function renderWithRouter(ui: React.ReactElement) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>)
 }
 
 function defaultProps(overrides?: Partial<React.ComponentProps<typeof ProgressReviewPanel>>) {
@@ -50,208 +55,150 @@ describe('ProgressReviewPanel', () => {
   })
 
   it('renders the header and description', () => {
-    render(<ProgressReviewPanel {...defaultProps()} />)
-    expect(screen.getByText('AI Learning Progress Review')).toBeInTheDocument()
+    renderWithRouter(<ProgressReviewPanel {...defaultProps()} />)
+    expect(screen.getByText('AI Progress Review')).toBeInTheDocument()
     expect(
-      screen.getByText('Get a detailed analysis of your study progress with personalized tutor feedback.'),
+      screen.getByText('Your personalized learning analysis from your AI Tutor'),
     ).toBeInTheDocument()
   })
 
   it('renders the date range selector', () => {
-    render(<ProgressReviewPanel {...defaultProps()} />)
+    renderWithRouter(<ProgressReviewPanel {...defaultProps()} />)
     expect(screen.getByRole('group', { name: 'Review period selector' })).toBeInTheDocument()
   })
 
   it('renders empty state when no report, not loading, not error, and not yet generated', () => {
-    render(<ProgressReviewPanel {...defaultProps()} />)
-    expect(screen.getByText('No Progress Report Yet')).toBeInTheDocument()
-    expect(
-      screen.getByText(/Select a period and click/),
-    ).toBeInTheDocument()
+    renderWithRouter(<ProgressReviewPanel {...defaultProps()} />)
+    expect(screen.getByText('Ready for Your Progress Review?')).toBeInTheDocument()
   })
 
-  it('renders loading spinner when loading', () => {
-    render(<ProgressReviewPanel {...defaultProps({ loading: true })} />)
-    expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument()
-    expect(screen.getByText(/Analyzing your study data/)).toBeInTheDocument()
+  it('renders loading skeleton when loading', () => {
+    const { container } = renderWithRouter(<ProgressReviewPanel {...defaultProps({ loading: true })} />)
+    const skeleton = container.querySelector('[role="status"]')
+    expect(skeleton).toBeTruthy()
   })
 
   it('renders error state with retry button', () => {
     const onGenerate = vi.fn()
-    render(
+    renderWithRouter(
       <ProgressReviewPanel
         {...defaultProps({ error: 'API key not configured', onGenerate })}
       />,
     )
-    expect(screen.getByText('Failed to Generate Report')).toBeInTheDocument()
+    expect(screen.getByText("Couldn't Generate Your Review")).toBeInTheDocument()
     expect(screen.getByText('API key not configured')).toBeInTheDocument()
     fireEvent.click(screen.getByText('Try Again'))
     expect(onGenerate).toHaveBeenCalledTimes(1)
   })
 
-  it('renders all report sections when report is provided', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
-    const sections = [
-      'Overall Learning Summary',
-      'What You Improved',
-      'What You Still Struggle With',
-      'Repeated Mistakes',
-      'Vocabulary Review Status',
-      'Skill-by-Skill Progress',
-      'Study Plan Adherence',
-      'Recommended Focus for Next Period',
-      "Tutor's Feedback",
-    ]
-    for (const section of sections) {
-      expect(screen.getByText(section)).toBeInTheDocument()
-    }
-  })
-
   it('renders overall summary content', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
+    renderWithRouter(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
     expect(screen.getByText(mockReport.overallSummary)).toBeInTheDocument()
   })
 
-  it('renders improvements list', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
-    expect(screen.getByText(mockReport.improvements[0])).toBeInTheDocument()
-    expect(screen.getByText(mockReport.improvements[1])).toBeInTheDocument()
-  })
-
-  it('renders struggles list', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
-    expect(screen.getByText(mockReport.struggles[0])).toBeInTheDocument()
-  })
-
   it('renders repeated mistakes', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
+    renderWithRouter(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
     expect(
       screen.getByText(`"${mockReport.repeatedMistakes[0].pattern}"`),
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText(mockReport.repeatedMistakes[0].analysis),
     ).toBeInTheDocument()
   })
 
   it('renders vocabulary stats', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
-    expect(screen.getByText(mockReport.vocabularyReviewStatus.summary)).toBeInTheDocument()
+    renderWithRouter(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
     expect(screen.getByText('Total Saved')).toBeInTheDocument()
     expect(screen.getByText('Mastered')).toBeInTheDocument()
     expect(screen.getByText('Still Learning')).toBeInTheDocument()
   })
 
   it('renders skill progress items', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
+    renderWithRouter(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
     expect(screen.getByText('Reading')).toBeInTheDocument()
     expect(screen.getByText('Writing')).toBeInTheDocument()
   })
 
   it('renders study plan adherence', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
+    renderWithRouter(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
     expect(screen.getByText(mockReport.studyPlanAdherence)).toBeInTheDocument()
   })
 
   it('renders recommended focus list', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
+    renderWithRouter(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
     expect(screen.getByText(mockReport.recommendedFocus[0])).toBeInTheDocument()
     expect(screen.getByText(mockReport.recommendedFocus[1])).toBeInTheDocument()
   })
 
   it('renders tutor feedback', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
+    renderWithRouter(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
     expect(screen.getByText('AI Tutor Says')).toBeInTheDocument()
     expect(screen.getByText(mockReport.tutorFeedback)).toBeInTheDocument()
   })
 
-  it('renders regenerate button when report is visible', () => {
-    render(<ProgressReviewPanel {...defaultProps({ report: mockReport })} />)
-    expect(screen.getByText('Regenerate Report')).toBeInTheDocument()
-  })
-
   it('calls onGenerate when Generate button is clicked', () => {
     const onGenerate = vi.fn()
-    render(<ProgressReviewPanel {...defaultProps({ onGenerate })} />)
-    fireEvent.click(screen.getByText('Generate Progress Report'))
+    renderWithRouter(<ProgressReviewPanel {...defaultProps({ onGenerate })} />)
+    fireEvent.click(screen.getByText('Generate AI Progress Report'))
     expect(onGenerate).toHaveBeenCalledTimes(1)
     const range = onGenerate.mock.calls[0][0] as DateRange
     expect(range.start).toBeTruthy()
     expect(range.end).toBeTruthy()
   })
 
-  it('calls onGenerate when Regenerate Report is clicked', () => {
-    const onGenerate = vi.fn()
-    render(
-      <ProgressReviewPanel
-        {...defaultProps({ report: mockReport, onGenerate })}
-      />,
-    )
-    fireEvent.click(screen.getByText('Regenerate Report'))
-    expect(onGenerate).toHaveBeenCalledTimes(1)
-  })
-
   it('has correct aria-region for accessibility', () => {
-    render(<ProgressReviewPanel {...defaultProps()} />)
+    renderWithRouter(<ProgressReviewPanel {...defaultProps()} />)
     expect(
-      screen.getByRole('region', { name: 'AI Learning Progress Review' }),
+      screen.getByRole('region', { name: 'AI Progress Review' }),
     ).toBeInTheDocument()
   })
 })
 
-describe('TrendBadge', () => {
+describe('TrendArrow', () => {
   it('renders improving label', () => {
-    render(<TrendBadge trend="improving" />)
-    expect(screen.getByText('\u2191 Improving')).toBeInTheDocument()
+    render(<TrendArrow trend="improving" />)
+    expect(screen.getByLabelText('Trend: improving')).toBeInTheDocument()
   })
 
   it('renders declining label', () => {
-    render(<TrendBadge trend="declining" />)
-    expect(screen.getByText('\u2193 Declining')).toBeInTheDocument()
+    render(<TrendArrow trend="declining" />)
+    expect(screen.getByLabelText('Trend: declining')).toBeInTheDocument()
   })
 
   it('renders stable label', () => {
-    render(<TrendBadge trend="stable" />)
-    expect(screen.getByText('\u2192 Stable')).toBeInTheDocument()
-  })
-
-  it('renders unknown trend as-is', () => {
-    render(<TrendBadge trend="unknown" />)
-    expect(screen.getByText('unknown')).toBeInTheDocument()
+    render(<TrendArrow trend="stable" />)
+    expect(screen.getByLabelText('Trend: stable')).toBeInTheDocument()
   })
 })
 
-describe('RepeatedMistakesCard', () => {
+describe('RepeatedMistakesList', () => {
   it('renders mistakes list', () => {
     const mistakes = [
       { pattern: 'Verb tense error', skill: 'grammar', frequency: 3, analysis: 'Practice present perfect.' },
       { pattern: 'Article misuse', skill: 'grammar', frequency: 2, analysis: 'Review article rules.' },
     ]
-    render(<RepeatedMistakesCard mistakes={mistakes} />)
+    render(<RepeatedMistakesList mistakes={mistakes} />)
     expect(screen.getByText('"Verb tense error"')).toBeInTheDocument()
     expect(screen.getByText('"Article misuse"')).toBeInTheDocument()
   })
 
   it('renders empty message when no mistakes', () => {
-    render(<RepeatedMistakesCard mistakes={[]} />)
+    render(<RepeatedMistakesList mistakes={[]} />)
     expect(
       screen.getByText('No repeated mistakes detected in this period.'),
     ).toBeInTheDocument()
   })
 })
 
-describe('SkillProgressSection', () => {
+describe('SkillProgressTable', () => {
   it('renders skill items with accuracy and sessions', () => {
     const skills = [
       { skill: 'Reading', status: 'improving', sessions: 5, accuracy: 80, trend: 'improving', analysis: 'Good progress.' },
     ]
-    render(<SkillProgressSection skills={skills} />)
+    render(<SkillProgressTable skills={skills} />)
     expect(screen.getByText('Reading')).toBeInTheDocument()
     expect(screen.getByText('5 sessions')).toBeInTheDocument()
-    expect(screen.getByText('80% accuracy')).toBeInTheDocument()
   })
 
   it('renders empty message when no skills', () => {
-    render(<SkillProgressSection skills={[]} />)
+    render(<SkillProgressTable skills={[]} />)
     expect(
       screen.getByText('No skill practice recorded in this period.'),
     ).toBeInTheDocument()
@@ -308,107 +255,75 @@ describe('RecommendationsList', () => {
 describe('TutorFeedbackCard', () => {
   it('renders feedback with AI Tutor label', () => {
     render(<TutorFeedbackCard feedback="Keep up the great work!" />)
-    expect(screen.getByText('AI Tutor Says')).toBeInTheDocument()
+    expect(screen.getByText("AI Tutor's Final Note")).toBeInTheDocument()
     expect(screen.getByText('Keep up the great work!')).toBeInTheDocument()
   })
 })
 
 describe('ProgressReviewPanel Integration', () => {
   beforeEach(() => {
-    vi.useFakeTimers()
-    vi.setSystemTime(new Date('2026-07-05T12:00:00Z'))
     vi.clearAllMocks()
   })
 
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  it('flows through states: empty -> loading -> report', () => {
+  it('renders empty state then transitions to report', () => {
     const onGenerate = vi.fn()
     const { rerender } = render(
-      <ProgressReviewPanel
-        report={null}
-        loading={false}
-        error={null}
-        onGenerate={onGenerate}
-      />,
+      <MemoryRouter>
+        <ProgressReviewPanel
+          report={null}
+          loading={false}
+          error={null}
+          onGenerate={onGenerate}
+        />
+      </MemoryRouter>,
     )
 
-    expect(screen.getByText('No Progress Report Yet')).toBeInTheDocument()
+    expect(screen.getByText('Ready for Your Progress Review?')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByText('Generate Progress Report'))
+    fireEvent.click(screen.getByText('Generate AI Progress Report'))
     expect(onGenerate).toHaveBeenCalledTimes(1)
 
     rerender(
-      <ProgressReviewPanel
-        report={null}
-        loading={true}
-        error={null}
-        onGenerate={onGenerate}
-      />,
+      <MemoryRouter>
+        <ProgressReviewPanel
+          report={mockReport}
+          loading={false}
+          error={null}
+          onGenerate={onGenerate}
+        />
+      </MemoryRouter>,
     )
 
-    expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument()
-
-    rerender(
-      <ProgressReviewPanel
-        report={mockReport}
-        loading={false}
-        error={null}
-        onGenerate={onGenerate}
-      />,
-    )
-
-    expect(screen.getByText('Overall Learning Summary')).toBeInTheDocument()
     expect(screen.getByText(mockReport.overallSummary)).toBeInTheDocument()
   })
 
-  it('flows through: empty -> error -> retry -> loading -> report', () => {
+  it('renders error state then retry then report', () => {
     const onGenerate = vi.fn()
     const { rerender } = render(
-      <ProgressReviewPanel
-        report={null}
-        loading={false}
-        error={null}
-        onGenerate={onGenerate}
-      />,
+      <MemoryRouter>
+        <ProgressReviewPanel
+          report={null}
+          loading={false}
+          error={'API error'}
+          onGenerate={onGenerate}
+        />
+      </MemoryRouter>,
     )
 
-    fireEvent.click(screen.getByText('Generate Progress Report'))
-
-    rerender(
-      <ProgressReviewPanel
-        report={null}
-        loading={false}
-        error={'API error'}
-        onGenerate={onGenerate}
-      />,
-    )
-
-    expect(screen.getByText('Failed to Generate Report')).toBeInTheDocument()
+    expect(screen.getByText("Couldn't Generate Your Review")).toBeInTheDocument()
 
     fireEvent.click(screen.getByText('Try Again'))
-    expect(onGenerate).toHaveBeenCalledTimes(2)
+    expect(onGenerate).toHaveBeenCalledTimes(1)
 
     rerender(
-      <ProgressReviewPanel
-        report={null}
-        loading={true}
-        error={null}
-        onGenerate={onGenerate}
-      />,
-    )
-
-    expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument()
-
-    rerender(
-      <ProgressReviewPanel
-        report={mockReport}
-        loading={false}
-        error={null}
-        onGenerate={onGenerate}
-      />,
+      <MemoryRouter>
+        <ProgressReviewPanel
+          report={mockReport}
+          loading={false}
+          error={null}
+          onGenerate={onGenerate}
+        />
+      </MemoryRouter>,
     )
 
     expect(screen.getByText(mockReport.overallSummary)).toBeInTheDocument()

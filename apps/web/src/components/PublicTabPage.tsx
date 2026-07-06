@@ -17,6 +17,7 @@ const navLinks = [
 const skills = [
   'Java', 'Spring Boot', 'Kafka', 'Redis',
   'MySQL', 'Docker', 'Kubernetes', 'TypeScript',
+  'React', 'Next.js', 'PostgreSQL', 'AWS',
 ]
 
 function NavPills() {
@@ -153,10 +154,10 @@ const sections = [
           </div>
           <div className="space-y-2 text-center sm:text-left">
             <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-              Hi, I&apos;m Hung <span className="text-2xl">👨‍💻</span>
+              Pham Thanh Hung (Harry) <span className="text-2xl">👨‍💻</span>
             </h3>
             <p className="text-base italic leading-relaxed" style={{ color: 'var(--color-muted)' }}>
-              A backend developer who believes clean code is not optional — it&apos;s respect for the next dev.
+              Fullstack Software Engineer in Fintech
             </p>
           </div>
         </div>
@@ -164,13 +165,14 @@ const sections = [
         <div className="space-y-4">
           <div className="rounded-xl border p-5" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-alt)' }}>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-              I&apos;m not just a Java developer. I&apos;m the kind of engineer who reads logs like novels,
-              enjoys debugging more than scrolling social media, and smiles every time I delete
-              100 lines of legacy code no longer needed.
+              I&apos;m a fullstack software engineer currently working in the fintech industry,
+              where I build and maintain systems that handle money, data, and trust at scale.
+              I work across the entire stack — from backend services in Java and Spring Boot
+              to frontend applications in React and TypeScript.
             </p>
             <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-              I currently work in fintech, building systems that matter — where bugs are money
-              and performance is trust.
+              In fintech, every bug costs real money and every millisecond impacts the user experience.
+              That&apos;s what drives me to write clean, observable, and resilient code.
             </p>
           </div>
         </div>
@@ -185,9 +187,10 @@ const sections = [
             </h3>
             <ul className="space-y-2">
               {[
-                'Design systems that can grow without breaking',
+                'Design and build fullstack applications from the ground up',
                 'Write backend services that are readable, testable, and observable',
-                'Ship things. Refactor things. Automate things.',
+                'Build frontends with React, TypeScript, and modern tooling',
+                'Ship reliable fintech systems where correctness is critical',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                   <span className="mt-1.5 block h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: 'var(--color-primary)' }} />
@@ -205,12 +208,12 @@ const sections = [
               What Drives Me
             </h3>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-              I don&apos;t want to just <em>code</em> — I want to <em>build</em>.
-              Build systems that scale. Build code that lasts.
-              Build myself into an architect who makes complexity feel simple.
+              I believe great software is built at the intersection of discipline and creativity.
+              Whether it&apos;s designing a new microservice or refactoring a messy frontend,
+              I care about code quality, system resilience, and developer experience.
             </p>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--color-muted)', fontStyle: 'italic' }}>
-              Cloud-native, event-driven, observable-by-default — that&apos;s where I&apos;m headed.
+              Fullstack isn&apos;t just about knowing both sides — it&apos;s about making them work together seamlessly.
             </p>
           </div>
         </div>
@@ -274,17 +277,17 @@ const sections = [
 
         <div className="flex flex-wrap justify-center gap-3">
           <a
-            href="mailto:hungpt591@gmail.com"
+            href="mailto:pthung591@gmail.com"
             className="inline-flex h-10 items-center gap-2 rounded-xl px-5 text-sm font-semibold shadow-sm transition-all hover:scale-105"
             style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-white)' }}
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            hungpt591@gmail.com
+            pthung591@gmail.com
           </a>
           <a
-            href="https://github.com/hungpt1999"
+            href="https://github.com/hungpt99-dev/ielts"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex h-10 items-center gap-2 rounded-xl border-2 px-5 text-sm font-semibold transition-all hover:scale-105"
@@ -293,7 +296,7 @@ const sections = [
             <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
             </svg>
-            hungpt1999
+            hungpt99-dev
           </a>
         </div>
       </div>
@@ -357,33 +360,37 @@ const sections = [
         </p>
 
         <div
-          className="mx-auto max-w-sm overflow-hidden rounded-2xl border-2 text-center shadow-lg transition-all hover:shadow-xl"
+          className="w-full overflow-hidden rounded-2xl border-2 text-center shadow-lg transition-all hover:shadow-xl"
           style={{
-            borderColor: '#fbbf24',
-            backgroundColor: '#fffbeb',
+            borderColor: 'var(--color-warning)',
+            backgroundColor: 'var(--color-warning-light)',
           }}
         >
           <div className="px-6 pb-2 pt-8">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full shadow-md" style={{ backgroundColor: '#fef3c7' }}>
-              <svg className="h-10 w-10" viewBox="0 0 24 24" fill="#92400e">
-                <path d="M2 21V19H20V21H2ZM20 8V5H22V11H20V10H18V11H14C12.9 11 12 10.1 12 9V5H6C4.9 5 4 5.9 4 7H2V7C2 5.5 2.8 4.2 4 3.6V3C4 2.4 4.4 2 5 2H11.5L12 2.5L15.5 2H19C19.6 2 20 2.4 20 3V3.6C20.7 4 21.2 4.7 21.5 5.5C21.8 6.3 22 7.1 22 8H20ZM18 8H16V10H18V8ZM14 8H12V10H14V8Z" />
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full shadow-md" style={{ backgroundColor: 'var(--color-warning-light)' }}>
+              <svg className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning-dark)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
+                <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
+                <line x1="6" y1="2" x2="6" y2="4" />
+                <line x1="10" y1="2" x2="10" y2="4" />
+                <line x1="14" y1="2" x2="14" y2="4" />
               </svg>
             </div>
-            <h3 className="mt-4 text-xl font-bold" style={{ color: '#92400e' }}>Buy Me a Coffee</h3>
-            <p className="mt-1 text-sm" style={{ color: '#b45309' }}>
+            <h3 className="mt-4 text-xl font-bold" style={{ color: 'var(--color-warning-dark)' }}>Buy Me a Coffee</h3>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-warning-dark)' }}>
               Your support means a lot!
             </p>
           </div>
 
-          <div className="border-t border-amber-200 px-6 py-5" style={{ backgroundColor: '#fef3c7' }}>
+          <div className="border-t border-amber-200 px-6 py-5" style={{ backgroundColor: 'var(--color-warning-light)' }}>
             <img
               src="/1783047807283_360225198377512995_3352638618091119450_b1e24afbc8810215cf87240c092f4bb8.jpg"
               alt="QR code for donation"
               className="mx-auto h-48 w-48 rounded-xl object-contain shadow-md"
-              style={{ backgroundColor: 'white' }}
+              style={{ backgroundColor: 'var(--color-surface)' }}
               loading="lazy"
             />
-            <p className="mt-3 text-xs" style={{ color: '#b45309' }}>
+            <p className="mt-3 text-xs" style={{ color: 'var(--color-warning-dark)' }}>
               Scan with your banking app to buy me a coffee
             </p>
           </div>
@@ -408,7 +415,13 @@ function FeedbackSection() {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    console.log('Feedback submitted:', form)
+    try {
+      const existing = JSON.parse(localStorage.getItem('ielts-feedback') || '[]')
+      existing.push({ ...form, submittedAt: new Date().toISOString() })
+      localStorage.setItem('ielts-feedback', JSON.stringify(existing))
+    } catch {
+      // Fallback: at least log it
+    }
     setSubmitted(true)
     setForm({ message: '', contact: '' })
   }
@@ -497,7 +510,7 @@ function FeedbackSection() {
 
 export default function PublicTabPage() {
   return (
-    <div className="mx-auto max-w-3xl space-y-8 py-6 sm:space-y-10 sm:py-10">
+    <div className="w-full space-y-8 py-6 sm:space-y-10 sm:py-10">
       <div className="space-y-5 text-center">
         <div
           className="mx-auto h-12 w-12 rounded-xl bg-gradient-to-br p-0.5"

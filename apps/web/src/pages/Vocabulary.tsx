@@ -8,6 +8,8 @@ import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
 import ErrorDisplay from '../components/ui/ErrorDisplay'
 import Pagination from '../components/ui/Pagination'
+import PageHeader from '../components/layout/PageHeader'
+import { IconVocabularyBook } from '@ielts/ui'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -26,16 +28,16 @@ const DIFFICULTIES: VocabDifficulty[] = ['easy', 'medium', 'hard']
 const STATUSES: VocabStatus[] = ['new', 'learning', 'reviewing', 'mastered']
 
 const STATUS_COLORS: Record<VocabStatus, string> = {
-  new: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  learning: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  reviewing: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  mastered: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+  new: 'bg-[var(--color-primary-light)] text-[var(--color-primary-dark)]',
+  learning: 'bg-[var(--color-warning-light)] text-[var(--color-warning-dark)]',
+  reviewing: 'bg-[var(--color-info-light)] text-[var(--color-info-dark)]',
+  mastered: 'bg-[var(--color-success-light)] text-[var(--color-success-dark)]',
 }
 
 const DIFFICULTY_COLORS: Record<VocabDifficulty, string> = {
-  easy: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-  medium: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  hard: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+  easy: 'bg-[var(--color-success-light)] text-[var(--color-success-dark)]',
+  medium: 'bg-[var(--color-warning-light)] text-[var(--color-warning-dark)]',
+  hard: 'bg-[var(--color-danger-light)] text-[var(--color-danger-dark)]',
 }
 
 interface VocabFormData {
@@ -338,23 +340,20 @@ export default function Vocabulary() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Vocabulary Notebook
-          </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Build your IELTS vocabulary with words, meanings, and examples
-          </p>
-        </div>
-        <Button onClick={openCreateForm} size="lg">
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-          Add Word
-        </Button>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+      <PageHeader
+        icon={<IconVocabularyBook size={20} />}
+        title="Vocabulary Notebook"
+        description="Build your IELTS vocabulary with words, meanings, and examples"
+        actions={
+          <Button onClick={openCreateForm} size="lg">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Word
+          </Button>
+        }
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         <Card>

@@ -1,43 +1,67 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { MistakeEntry, MistakeSkill, MistakeStatus } from '../models'
 import { DatabaseService } from '../services/storage/Database'
-import Card, { CardContent } from '../components/ui/Card'
+import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import Badge from '../components/ui/Badge'
 import Modal from '../components/ui/Modal'
+import { EmptyState } from '@ielts/ui/components/EmptyState'
+import SearchInput from '../components/ui/SearchInput'
 import { generateId } from '../utils'
 import ErrorDisplay from '../components/ui/ErrorDisplay'
 import { useToast } from '../components/ui/Toast'
 import Pagination from '../components/ui/Pagination'
+import {
+  IconAdd, IconEdit, IconDelete, IconEye, IconRefresh,
+  IconMistakeReview, IconMistakes, IconArrowRight,
+} from '@ielts/ui'
+import PageHeader from '../components/layout/PageHeader'
+import { LoadingSkeleton } from '@ielts/ui/components/LoadingSkeleton'
 
-const MISTAKE_SKILLS: { value: MistakeSkill; label: string; color: string }[] = [
-  { value: 'vocabulary', label: 'Vocabulary', color: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300' },
-  { value: 'grammar', label: 'Grammar', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
-  { value: 'reading', label: 'Reading', color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300' },
-  { value: 'listening', label: 'Listening', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
-  { value: 'writing', label: 'Writing', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
-  { value: 'speaking', label: 'Speaking', color: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300' },
-]
+const SKILL_BADGE_VARIANTS: Record<MistakeSkill, 'vocabulary' | 'grammar' | 'reading' | 'listening' | 'writing' | 'speaking'> = {
+  vocabulary: 'vocabulary',
+  grammar: 'grammar',
+  reading: 'reading',
+  listening: 'listening',
+  writing: 'writing',
+  speaking: 'speaking',
+}
 
-const STATUS_OPTIONS: { value: MistakeStatus; label: string; color: string }[] = [
-  { value: 'new', label: 'New', color: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
-  { value: 'reviewed', label: 'Reviewed', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
-  { value: 'resolved', label: 'Resolved', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
-]
+const STATUS_BADGE_VARIANTS: Record<MistakeStatus, 'danger' | 'warning' | 'success'> = {
+  new: 'danger',
+  reviewed: 'warning',
+  resolved: 'success',
+}
 
-const SORT_OPTIONS = ['newest', 'oldest', 'most-repeated', 'skill'] as const
-type SortOption = typeof SORT_OPTIONS[number]
+const SKILL_ICONS: Record<MistakeSkill, React.ReactNode> = {
+  vocabulary: <IconVocabulary size={14} />,
+  grammar: <IconGrammar size={14} />,
+  reading: <IconReading size={14} />,
+  listening: <IconListening size={14} />,
+  writing: <IconWriting size={14} />,
+  speaking: <IconSpeaking size={14} />,
+}
+
+type SortOption = 'newest' | 'oldest' | 'most-repeated' | 'skill'
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
-function getSkillStyle(skill: MistakeSkill): string {
-  return MISTAKE_SKILLS.find(s => s.value === skill)?.color ?? ''
+const MISTAKE_LABELS: Record<MistakeSkill, string> = {
+  vocabulary: 'Vocabulary',
+  grammar: 'Grammar',
+  reading: 'Reading',
+  listening: 'Listening',
+  writing: 'Writing',
+  speaking: 'Speaking',
 }
 
-function getStatusStyle(status: MistakeStatus): string {
-  return STATUS_OPTIONS.find(s => s.value === status)?.color ?? ''
+const STATUS_LABELS: Record<MistakeStatus, string> = {
+  new: 'New',
+  reviewed: 'Reviewed',
+  resolved: 'Resolved',
 }
 
 interface MistakeFormData {
@@ -256,102 +280,112 @@ export default function Mistakes() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: 'var(--spacing-md)' }}>
+        <LoadingSkeleton variant="text" width="200px" height="24px" />
+        <div style={{ marginTop: 'var(--spacing-md)' }}>
+          <LoadingSkeleton variant="card" height="80px" count={4} gap="var(--spacing-sm)" />
+        </div>
       </div>
     )
   }
 
   if (error) {
-    return <ErrorDisplay message={error} onRetry={loadEntries} />
+    return (
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: 'var(--spacing-md)' }}>
+        <ErrorDisplay title="Couldn't Load Mistakes" message={error} onRetry={loadEntries} />
+      </div>
+    )
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Mistake Notebook
-          </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Track, review, and resolve mistakes across all IELTS skills
-          </p>
-        </div>
-        <Button onClick={openCreateForm} size="lg">
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-          Add Mistake
-        </Button>
-      </div>
+    <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', paddingTop: 'var(--spacing-md)' }}>
+      <PageHeader
+        icon={<IconMistakeReview size={22} />}
+        title="Mistake Notebook"
+        description="Track, review, and resolve mistakes across all IELTS skills"
+        actions={
+          <Button onClick={openCreateForm} size="lg">
+            <IconAdd size={18} />
+            Add Mistake
+          </Button>
+        }
+      />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <Card>
-          <CardContent className="text-center">
-            <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Total</p>
-            <p className="mt-1 text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</p>
+      <div style={{ display: 'grid', gap: 'var(--spacing-sm)', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}>
+        <Card padding="md">
+          <CardContent>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>Total</p>
+              <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-2xl)', fontWeight: 'var(--weight-bold)', color: 'var(--color-primary)' }}>{stats.total}</p>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="text-center">
-            <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">New</p>
-            <p className="mt-1 text-2xl font-bold text-red-600 dark:text-red-400">{stats.newCount}</p>
+        <Card padding="md">
+          <CardContent>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>New</p>
+              <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-2xl)', fontWeight: 'var(--weight-bold)', color: 'var(--color-danger)' }}>{stats.newCount}</p>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="text-center">
-            <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Reviewed</p>
-            <p className="mt-1 text-2xl font-bold text-amber-600 dark:text-amber-400">{stats.reviewed}</p>
+        <Card padding="md">
+          <CardContent>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>Reviewed</p>
+              <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-2xl)', fontWeight: 'var(--weight-bold)', color: 'var(--color-warning)' }}>{stats.reviewed}</p>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="text-center">
-            <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">Resolved</p>
-            <p className="mt-1 text-2xl font-bold text-emerald-600 dark:text-emerald-400">{stats.resolved}</p>
+        <Card padding="md">
+          <CardContent>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>Resolved</p>
+              <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-2xl)', fontWeight: 'var(--weight-bold)', color: 'var(--color-success)' }}>{stats.resolved}</p>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="text-center">
-            <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Most Repeated
-            </p>
-            <p className="mt-1 text-lg font-bold text-violet-600 dark:text-violet-400 truncate">
-              {stats.mostRepeated
-                ? stats.mostRepeated.mistake.length > 20
-                  ? stats.mostRepeated.mistake.slice(0, 20) + '...'
-                  : stats.mostRepeated.mistake
-                : '—'}
-            </p>
-            {stats.mostRepeated && (
-              <p className="text-[10px] text-slate-400 dark:text-slate-500">
-                {stats.mostRepeated.repetitionCount}x repeated
+        <Card padding="md" tint="vocabulary">
+          <CardContent>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>
+                Most Repeated
               </p>
-            )}
+              <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-lg)', fontWeight: 'var(--weight-bold)', color: 'var(--color-info)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {stats.mostRepeated
+                  ? stats.mostRepeated.mistake.length > 20
+                    ? stats.mostRepeated.mistake.slice(0, 20) + '...'
+                    : stats.mostRepeated.mistake
+                  : '—'}
+              </p>
+              {stats.mostRepeated && (
+                <p style={{ margin: '2px 0 0', fontSize: '10px', color: 'var(--color-muted)' }}>
+                  {stats.mostRepeated.repetitionCount}x repeated
+                </p>
+              )}
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {stats.skillRanking.length > 0 && (
-        <Card>
+        <Card padding="md">
+          <CardHeader>
+            <CardTitle>Mistakes by Skill</CardTitle>
+          </CardHeader>
           <CardContent>
-            <p className="mb-2 text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Mistakes by Skill
-            </p>
-            <div className="grid gap-2 sm:grid-cols-6">
-              {MISTAKE_SKILLS.map(skill => {
-                const count = stats.bySkill[skill.value] ?? 0
+            <div style={{ display: 'grid', gap: 'var(--spacing-sm)', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))' }}>
+              {(Object.keys(MISTAKE_LABELS) as MistakeSkill[]).map(skill => {
+                const count = stats.bySkill[skill] ?? 0
                 const maxCount = stats.skillRanking[0]?.[1] ?? 1
                 const width = maxCount > 0 ? (count / maxCount) * 100 : 0
+                const variant = SKILL_BADGE_VARIANTS[skill]
                 return (
-                  <div key={skill.value} className="text-center">
-                    <p className="text-xs text-slate-700 dark:text-slate-300">{skill.label}</p>
-                    <div className="mt-1 h-2 w-full rounded-full bg-slate-200 dark:bg-slate-700">
-                      <div
-                        className={`h-2 rounded-full transition-all ${skill.color.split(' ')[0]}`}
-                        style={{ width: `${width}%` }}
-                      />
+                  <div key={skill} style={{ textAlign: 'center' }}>
+                    <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>{MISTAKE_LABELS[skill]}</p>
+                    <div style={{ marginTop: 'var(--spacing-xs)', height: '8px', width: '100%', borderRadius: 'var(--radius-full)', background: 'var(--color-surface-alt)', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', borderRadius: 'var(--radius-full)', background: `var(--color-skill-${variant})`, width: `${width}%`, transition: 'width var(--transition-slow)' }} />
                     </div>
-                    <p className="mt-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">{count}</p>
+                    <p style={{ margin: '2px 0 0', fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-muted)' }}>{count}</p>
                   </div>
                 )
               })}
@@ -360,45 +394,64 @@ export default function Mistakes() {
         </Card>
       )}
 
-      <Card>
+      <Card padding="md">
         <CardContent>
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="min-w-[200px] flex-1">
-              <input
-                type="text"
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+            <div style={{ minWidth: '200px', flex: 1 }}>
+              <SearchInput
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search mistakes, corrections, explanations..."
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:placeholder-slate-500"
                 aria-label="Search mistakes"
               />
             </div>
             <select
               value={skillFilter}
               onChange={(e) => setSkillFilter(e.target.value as MistakeSkill | '')}
-              className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+              style={{
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--color-border)',
+                background: 'var(--color-surface)',
+                padding: '6px 12px',
+                fontSize: 'var(--text-sm)',
+                color: 'var(--color-text)',
+              }}
               aria-label="Filter by skill"
             >
               <option value="">All Skills</option>
-              {MISTAKE_SKILLS.map(s => (
-                <option key={s.value} value={s.value}>{s.label}</option>
+              {(Object.keys(MISTAKE_LABELS) as MistakeSkill[]).map(s => (
+                <option key={s} value={s}>{MISTAKE_LABELS[s]}</option>
               ))}
             </select>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as MistakeStatus | '')}
-              className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+              style={{
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--color-border)',
+                background: 'var(--color-surface)',
+                padding: '6px 12px',
+                fontSize: 'var(--text-sm)',
+                color: 'var(--color-text)',
+              }}
               aria-label="Filter by status"
             >
               <option value="">All Status</option>
-              {STATUS_OPTIONS.map(s => (
-                <option key={s.value} value={s.value}>{s.label}</option>
+              {(Object.keys(STATUS_LABELS) as MistakeStatus[]).map(s => (
+                <option key={s} value={s}>{STATUS_LABELS[s]}</option>
               ))}
             </select>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+              style={{
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--color-border)',
+                background: 'var(--color-surface)',
+                padding: '6px 12px',
+                fontSize: 'var(--text-sm)',
+                color: 'var(--color-text)',
+              }}
               aria-label="Sort by"
             >
               <option value="newest">Newest First</option>
@@ -411,137 +464,119 @@ export default function Mistakes() {
       </Card>
 
       {filteredEntries.length === 0 ? (
-        <Card>
-          <CardContent>
-            <div className="flex flex-col items-center justify-center py-12">
-              <svg className="mb-4 h-12 w-12 text-slate-300 dark:text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
-              </svg>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                {entries.length === 0 ? 'No mistakes recorded yet.' : 'No mistakes match your filters.'}
-              </p>
-              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
-                {entries.length === 0
-                  ? 'Start tracking your mistakes to identify weak points and improve.'
-                  : 'Try adjusting your search or filters.'}
-              </p>
-              {entries.length === 0 && (
-                <Button className="mt-4" size="sm" onClick={openCreateForm}>
-                  Add Your First Mistake
-                </Button>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <EmptyState
+          icon={<IconMistakes size={48} />}
+          title={entries.length === 0 ? 'No mistakes recorded yet.' : 'No mistakes match your filters.'}
+          description={entries.length === 0
+            ? 'Start tracking your mistakes to identify weak points and improve.'
+            : 'Try adjusting your search or filters.'}
+          action={entries.length === 0 ? { label: 'Add Your First Mistake', onClick: openCreateForm } : undefined}
+        />
       ) : (
-        <div className="space-y-3">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
           {paginatedEntries.map(entry => (
-            <div
-              key={entry.id}
-              className="rounded-lg border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${getSkillStyle(entry.skill)}`}>
-                      {MISTAKE_SKILLS.find(s => s.value === entry.skill)?.label}
-                    </span>
-                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${getStatusStyle(entry.status)}`}>
-                      {STATUS_OPTIONS.find(s => s.value === entry.status)?.label}
-                    </span>
+            <Card key={entry.id} padding="md" hoverable>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--spacing-md)' }}>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+                    <Badge variant={SKILL_BADGE_VARIANTS[entry.skill]} size="xs" icon={SKILL_ICONS[entry.skill]}>
+                      {MISTAKE_LABELS[entry.skill]}
+                    </Badge>
+                    <Badge variant={STATUS_BADGE_VARIANTS[entry.status]} size="xs">
+                      {STATUS_LABELS[entry.status]}
+                    </Badge>
                     {entry.repetitionCount > 0 && (
-                      <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300">
-                        {entry.repetitionCount}x repeated
-                      </span>
+                      <Badge variant="default" size="xs">{entry.repetitionCount}x repeated</Badge>
                     )}
                   </div>
                   <button
                     onClick={() => setDetailEntry(entry)}
-                    className="mt-1 text-left"
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginTop: 'var(--spacing-xs)', textAlign: 'left', display: 'block', width: '100%' }}
                   >
-                    <p className="text-sm font-medium text-slate-900 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
+                    <p style={{ margin: 0, fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text)' }}>
                       {entry.mistake}
                     </p>
                   </button>
-                  <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400 line-clamp-1">
-                    → {entry.correction}
+                  <p style={{ margin: '2px 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <IconArrowRight size={12} style={{ display: 'inline', marginRight: '2px' }} />
+                    {entry.correction}
                   </p>
-                  <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                  <div style={{ marginTop: 'var(--spacing-xs)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--spacing-sm)', fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
                     <span>{formatDate(entry.date)}</span>
                     {entry.source && <span>Source: {entry.source}</span>}
                   </div>
                 </div>
-                <div className="flex shrink-0 items-center gap-1">
-                  <div className="flex flex-col gap-0.5">
-                    {STATUS_OPTIONS.map(s => (
+                <div style={{ display: 'flex', flexShrink: 0, alignItems: 'center', gap: 'var(--spacing-2xs)' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    {(Object.keys(STATUS_LABELS) as MistakeStatus[]).map(s => (
                       <button
-                        key={s.value}
-                        onClick={() => handleStatusChange(entry, s.value)}
-                        className={`rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors ${
-                          entry.status === s.value
-                            ? s.color
-                            : 'text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300'
-                        }`}
-                        aria-label={`Mark as ${s.label}`}
+                        key={s}
+                        onClick={() => handleStatusChange(entry, s)}
+                        style={{
+                          borderRadius: 'var(--radius-sm)',
+                          padding: '1px 6px',
+                          fontSize: '10px',
+                          fontWeight: 'var(--weight-medium)',
+                          border: 'none',
+                          cursor: 'pointer',
+                          background: entry.status === s ? `var(--color-${STATUS_BADGE_VARIANTS[s]}-light)` : 'transparent',
+                          color: entry.status === s ? `var(--color-${STATUS_BADGE_VARIANTS[s]})` : 'var(--color-muted)',
+                        }}
+                        aria-label={`Mark as ${STATUS_LABELS[s]}`}
                       >
-                        {s.label}
+                        {STATUS_LABELS[s]}
                       </button>
                     ))}
                   </div>
                   <button
                     onClick={() => handleRepetitionIncrement(entry)}
-                    className="rounded p-1.5 text-slate-400 transition-colors hover:text-violet-600 dark:text-slate-500 dark:hover:text-violet-400"
+                    style={{
+                      borderRadius: 'var(--radius-md)',
+                      padding: '4px',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: 'var(--color-muted)',
+                    }}
                     aria-label="Mark as repeated"
                     title="Mark this mistake as repeated"
                   >
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
+                    <IconRefresh size={14} />
                   </button>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setDetailEntry(entry)}
                     aria-label="View details"
-                    className="p-1.5"
                   >
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
+                    <IconEye size={14} />
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => openEditForm(entry)}
                     aria-label="Edit mistake"
-                    className="p-1.5"
                   >
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
+                    <IconEdit size={14} />
                   </Button>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => handleDelete(entry.id)}
                     aria-label="Delete mistake"
-                    className="p-1.5 text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
                   >
-                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
+                    <IconDelete size={14} />
                   </Button>
                 </div>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       )}
 
       {filteredEntries.length > pageSize && (
-        <div className="flex items-center justify-between">
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', margin: 0 }}>
             Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, filteredEntries.length)} of {filteredEntries.length}
           </p>
           <Pagination page={page} totalPages={totalFilteredPages} onPageChange={setPage} />
@@ -550,66 +585,66 @@ export default function Mistakes() {
 
       <Modal open={!!detailEntry} onClose={() => setDetailEntry(null)} title="Mistake Details" size="lg">
         {detailEntry && (
-          <div className="space-y-4 text-sm max-h-[70vh] overflow-y-auto pr-1">
-            <div className="grid gap-4 sm:grid-cols-2">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', maxHeight: '70vh', overflowY: 'auto', paddingRight: 'var(--spacing-xs)' }}>
+            <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>
                   Skill
-                </span>
-                <p className="mt-0.5">
-                  <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getSkillStyle(detailEntry.skill)}`}>
-                    {MISTAKE_SKILLS.find(s => s.value === detailEntry.skill)?.label}
-                  </span>
                 </p>
+                <div style={{ marginTop: 'var(--spacing-xs)' }}>
+                  <Badge variant={SKILL_BADGE_VARIANTS[detailEntry.skill]} size="sm">
+                    {MISTAKE_LABELS[detailEntry.skill]}
+                  </Badge>
+                </div>
               </div>
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>
                   Status
-                </span>
-                <p className="mt-0.5">
-                  <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getStatusStyle(detailEntry.status)}`}>
-                    {STATUS_OPTIONS.find(s => s.value === detailEntry.status)?.label}
-                  </span>
                 </p>
+                <div style={{ marginTop: 'var(--spacing-xs)' }}>
+                  <Badge variant={STATUS_BADGE_VARIANTS[detailEntry.status]} size="sm">
+                    {STATUS_LABELS[detailEntry.status]}
+                  </Badge>
+                </div>
               </div>
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>
                   Date
-                </span>
-                <p className="mt-0.5 text-slate-900 dark:text-slate-100">{formatDate(detailEntry.date)}</p>
+                </p>
+                <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>{formatDate(detailEntry.date)}</p>
               </div>
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>
                   Times Repeated
-                </span>
-                <p className="mt-0.5 text-slate-900 dark:text-slate-100">{detailEntry.repetitionCount}</p>
+                </p>
+                <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>{detailEntry.repetitionCount}</p>
               </div>
             </div>
 
             <div>
-              <span className="text-xs font-medium uppercase tracking-wider text-red-500 dark:text-red-400">
+              <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-danger)' }}>
                 Mistake
-              </span>
-              <div className="mt-1 rounded-lg bg-red-50 px-4 py-3 text-red-700 dark:bg-red-900/20 dark:text-red-300">
+              </p>
+              <div style={{ marginTop: 'var(--spacing-xs)', padding: 'var(--spacing-sm) var(--spacing-md)', borderRadius: 'var(--radius-lg)', background: 'var(--color-danger-light)', color: 'var(--color-danger)' }}>
                 {detailEntry.mistake}
               </div>
             </div>
 
             <div>
-              <span className="text-xs font-medium uppercase tracking-wider text-emerald-500 dark:text-emerald-400">
+              <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-success)' }}>
                 Correction
-              </span>
-              <div className="mt-1 rounded-lg bg-emerald-50 px-4 py-3 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300">
+              </p>
+              <div style={{ marginTop: 'var(--spacing-xs)', padding: 'var(--spacing-sm) var(--spacing-md)', borderRadius: 'var(--radius-lg)', background: 'var(--color-success-light)', color: 'var(--color-success-dark)' }}>
                 {detailEntry.correction}
               </div>
             </div>
 
             {detailEntry.explanation && (
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>
                   Explanation
-                </span>
-                <p className="mt-0.5 whitespace-pre-wrap text-slate-700 dark:text-slate-300">
+                </p>
+                <p style={{ margin: 'var(--spacing-xs) 0 0', whiteSpace: 'pre-wrap', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
                   {detailEntry.explanation}
                 </p>
               </div>
@@ -617,17 +652,18 @@ export default function Mistakes() {
 
             {detailEntry.source && (
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-muted)' }}>
                   Source
-                </span>
-                <p className="mt-0.5 text-slate-700 dark:text-slate-300">
+                </p>
+                <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
                   {detailEntry.source}
                 </p>
               </div>
             )}
 
-            <div className="flex justify-end gap-3 pt-2">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--spacing-sm)', paddingTop: 'var(--spacing-xs)' }}>
               <Button variant="outline" onClick={() => { setDetailEntry(null); openEditForm(detailEntry) }}>
+                <IconEdit size={14} />
                 Edit
               </Button>
               <Button variant="secondary" onClick={() => setDetailEntry(null)}>
@@ -636,46 +672,64 @@ export default function Mistakes() {
             </div>
           </div>
         )}
-      </Modal>
+        </Modal>
 
       <Modal open={modalOpen} onClose={handleCloseModal} title={editingEntry ? 'Edit Mistake' : 'New Mistake'} size="lg">
-        <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
-          <div className="grid gap-4 sm:grid-cols-2">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)', maxHeight: '70vh', overflowY: 'auto', paddingRight: 'var(--spacing-xs)' }}>
+          <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
             <div>
-              <label htmlFor="mistake-skill" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Skill <span className="text-red-500">*</span>
+              <label htmlFor="mistake-skill" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
+                Skill <span style={{ color: 'var(--color-danger)' }}>*</span>
               </label>
               <select
                 id="mistake-skill"
                 value={form.skill}
                 onChange={(e) => setForm(prev => ({ ...prev, skill: e.target.value as MistakeSkill }))}
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                style={{
+                  marginTop: 'var(--spacing-xs)',
+                  width: '100%',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid var(--color-border)',
+                  background: 'var(--color-surface)',
+                  padding: '8px 12px',
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--color-text)',
+                }}
               >
-                {MISTAKE_SKILLS.map(s => (
-                  <option key={s.value} value={s.value}>{s.label}</option>
+                {(Object.keys(MISTAKE_LABELS) as MistakeSkill[]).map(s => (
+                  <option key={s} value={s}>{MISTAKE_LABELS[s]}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label htmlFor="mistake-status" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label htmlFor="mistake-status" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
                 Status
               </label>
               <select
                 id="mistake-status"
                 value={form.status}
                 onChange={(e) => setForm(prev => ({ ...prev, status: e.target.value as MistakeStatus }))}
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                style={{
+                  marginTop: 'var(--spacing-xs)',
+                  width: '100%',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid var(--color-border)',
+                  background: 'var(--color-surface)',
+                  padding: '8px 12px',
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--color-text)',
+                }}
               >
-                {STATUS_OPTIONS.map(s => (
-                  <option key={s.value} value={s.value}>{s.label}</option>
+                {(Object.keys(STATUS_LABELS) as MistakeStatus[]).map(s => (
+                  <option key={s} value={s}>{STATUS_LABELS[s]}</option>
                 ))}
               </select>
             </div>
           </div>
 
           <div>
-            <label htmlFor="mistake-mistake" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Mistake <span className="text-red-500">*</span>
+            <label htmlFor="mistake-mistake" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
+              Mistake <span style={{ color: 'var(--color-danger)' }}>*</span>
             </label>
             <textarea
               id="mistake-mistake"
@@ -683,13 +737,22 @@ export default function Mistakes() {
               onChange={(e) => setForm(prev => ({ ...prev, mistake: e.target.value }))}
               rows={2}
               placeholder="What was the mistake?"
-              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:placeholder-slate-500"
+              style={{
+                marginTop: 'var(--spacing-xs)',
+                width: '100%',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--color-border)',
+                background: 'var(--color-surface)',
+                padding: '8px 12px',
+                fontSize: 'var(--text-sm)',
+                color: 'var(--color-text)',
+              }}
             />
           </div>
 
           <div>
-            <label htmlFor="mistake-correction" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Correction <span className="text-red-500">*</span>
+            <label htmlFor="mistake-correction" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
+              Correction <span style={{ color: 'var(--color-danger)' }}>*</span>
             </label>
             <textarea
               id="mistake-correction"
@@ -697,12 +760,21 @@ export default function Mistakes() {
               onChange={(e) => setForm(prev => ({ ...prev, correction: e.target.value }))}
               rows={2}
               placeholder="What is the correct version?"
-              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:placeholder-slate-500"
+              style={{
+                marginTop: 'var(--spacing-xs)',
+                width: '100%',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--color-border)',
+                background: 'var(--color-surface)',
+                padding: '8px 12px',
+                fontSize: 'var(--text-sm)',
+                color: 'var(--color-text)',
+              }}
             />
           </div>
 
           <div>
-            <label htmlFor="mistake-explanation" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label htmlFor="mistake-explanation" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
               Explanation
             </label>
             <textarea
@@ -711,13 +783,22 @@ export default function Mistakes() {
               onChange={(e) => setForm(prev => ({ ...prev, explanation: e.target.value }))}
               rows={2}
               placeholder="Why was this a mistake? How to avoid it next time..."
-              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:placeholder-slate-500"
+              style={{
+                marginTop: 'var(--spacing-xs)',
+                width: '100%',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--color-border)',
+                background: 'var(--color-surface)',
+                padding: '8px 12px',
+                fontSize: 'var(--text-sm)',
+                color: 'var(--color-text)',
+              }}
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
             <div>
-              <label htmlFor="mistake-source" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label htmlFor="mistake-source" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
                 Source
               </label>
               <input
@@ -726,11 +807,20 @@ export default function Mistakes() {
                 value={form.source}
                 onChange={(e) => setForm(prev => ({ ...prev, source: e.target.value }))}
                 placeholder="e.g. Reading test 3, Writing task"
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:placeholder-slate-500"
+                style={{
+                  marginTop: 'var(--spacing-xs)',
+                  width: '100%',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid var(--color-border)',
+                  background: 'var(--color-surface)',
+                  padding: '8px 12px',
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--color-text)',
+                }}
               />
             </div>
             <div>
-              <label htmlFor="mistake-date" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label htmlFor="mistake-date" style={{ display: 'block', fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
                 Date
               </label>
               <input
@@ -738,12 +828,21 @@ export default function Mistakes() {
                 type="date"
                 value={form.date}
                 onChange={(e) => setForm(prev => ({ ...prev, date: e.target.value }))}
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                style={{
+                  marginTop: 'var(--spacing-xs)',
+                  width: '100%',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid var(--color-border)',
+                  background: 'var(--color-surface)',
+                  padding: '8px 12px',
+                  fontSize: 'var(--text-sm)',
+                  color: 'var(--color-text)',
+                }}
               />
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 pt-2">
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--spacing-sm)', paddingTop: 'var(--spacing-xs)' }}>
             <Button variant="secondary" onClick={handleCloseModal}>
               Cancel
             </Button>

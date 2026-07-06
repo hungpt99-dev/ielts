@@ -17,15 +17,19 @@ import type {
 } from '../models'
 import Card, { CardContent, CardHeader } from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import { LoadingSkeleton } from '../components/ui/LoadingSkeleton'
+import { ErrorState } from '../components/ui/EmptyState'
+import PageHeader from '../components/layout/PageHeader'
+import { IconSearch } from '@ielts/ui'
 
 const SEARCHABLE_TYPES = [
-  { value: 'vocabulary' as const, label: 'Vocabulary', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', color: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300' },
-  { value: 'reading' as const, label: 'Reading', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', color: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300' },
-  { value: 'listening' as const, label: 'Listening', icon: 'M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
-  { value: 'writing' as const, label: 'Writing', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
-  { value: 'speaking' as const, label: 'Speaking', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-300' },
-  { value: 'grammar' as const, label: 'Grammar', icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
-  { value: 'mistake' as const, label: 'Mistakes', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z', color: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
+  { value: 'vocabulary' as const, label: 'Vocabulary', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', color: 'bg-[var(--color-info-light)] text-[var(--color-info-dark)]' },
+  { value: 'reading' as const, label: 'Reading', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', color: 'bg-[var(--color-skill-reading-light)] text-[var(--color-skill-reading-dark)]' },
+  { value: 'listening' as const, label: 'Listening', icon: 'M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z', color: 'bg-[var(--color-skill-listening-light)] text-[var(--color-skill-listening-dark)]' },
+  { value: 'writing' as const, label: 'Writing', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z', color: 'bg-[var(--color-skill-writing-light)] text-[var(--color-skill-writing-dark)]' },
+  { value: 'speaking' as const, label: 'Speaking', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z', color: 'bg-[var(--color-skill-speaking-light)] text-[var(--color-skill-speaking-dark)]' },
+  { value: 'grammar' as const, label: 'Grammar', icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4', color: 'bg-[var(--color-success-light)] text-[var(--color-success-dark)]' },
+  { value: 'mistake' as const, label: 'Mistakes', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z', color: 'bg-[var(--color-danger-light)] text-[var(--color-danger-dark)]' },
 ]
 
 const IELTS_TOPICS = [
@@ -366,25 +370,29 @@ export default function Search() {
 
   if (error) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <Card className="max-w-md text-center">
-          <CardContent>
-            <p className="text-red-600 dark:text-red-400">{error}</p>
-            <Button variant="secondary" className="mt-4" onClick={loadAll}>Retry</Button>
-          </CardContent>
-        </Card>
-      </div>
+      <ErrorState
+        variant="card"
+        title="Failed to load search data"
+        message={error}
+        onRetry={loadAll}
+        retryLabel="Retry"
+      />
     )
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Search</h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Search across vocabulary, reading, listening, writing, speaking, grammar, and mistakes
-        </p>
-      </div>
+    <div
+      style={{
+        maxWidth: '1280px',
+        margin: '0 auto',
+        paddingTop: 'var(--spacing-md)',
+      }}
+    >
+      <PageHeader
+        icon={<IconSearch size={20} />}
+        title="Search"
+        description="Search across vocabulary, reading, listening, writing, speaking, grammar, and mistakes"
+      />
 
       <div className="relative">
         <div className="relative">
@@ -572,37 +580,76 @@ export default function Search() {
       )}
 
       {loading && (
-        <div className="flex justify-center py-12">
-          <div
-            role="status"
-            className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"
-          />
+        <div style={{ padding: 'var(--spacing-md) 0' }}>
+          <LoadingSkeleton variant="card" count={4} gap="var(--spacing-md)" />
         </div>
       )}
 
       {!loading && filteredResults.length === 0 && (
-        <Card className="text-center">
-          <CardContent className="py-12">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
-              <svg className="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div style={{ padding: 'var(--spacing-lg) 0' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              padding: 'var(--spacing-2xl) var(--spacing-md)',
+              borderRadius: 'var(--radius-xl)',
+              border: '1px dashed var(--color-border)',
+            }}
+          >
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: 'var(--radius-full)',
+                background: 'var(--color-surface-alt)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 'var(--spacing-md)',
+                color: 'var(--color-muted)',
+              }}
+            >
+              <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+            <h3
+              style={{
+                fontSize: 'var(--text-lg)',
+                fontWeight: 'var(--weight-semibold)',
+                color: 'var(--color-text)',
+                fontFamily: 'var(--font-sans)',
+                margin: 0,
+              }}
+            >
               {filters.query || activeFilterCount > 0 ? 'No results found' : 'Start searching'}
             </h3>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p
+              style={{
+                marginTop: 'var(--spacing-xs)',
+                fontSize: 'var(--text-sm)',
+                color: 'var(--color-text-secondary)',
+                fontFamily: 'var(--font-sans)',
+                lineHeight: 'var(--leading-relaxed)',
+                maxWidth: '360px',
+              }}
+            >
               {filters.query || activeFilterCount > 0
                 ? 'Try adjusting your search query or filters.'
                 : 'Type a word or phrase above to search across your IELTS data.'}
             </p>
             {(filters.query || activeFilterCount > 0) && (
-              <Button variant="secondary" className="mt-4" onClick={clearFilters}>
-                Clear filters
-              </Button>
+              <div style={{ marginTop: 'var(--spacing-md)' }}>
+                <Button variant="secondary" size="sm" onClick={clearFilters}>
+                  Clear filters
+                </Button>
+              </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {!loading && filteredResults.length > 0 && (

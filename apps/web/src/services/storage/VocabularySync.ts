@@ -126,7 +126,7 @@ function handleVocabChanged(): void {
 export function notifyExtensionVocabSaved(entry: VocabularyEntry): void {
   try {
     window.postMessage(
-      { source: 'ielts-page', action: 'VOCAB_SAVED', data: entry },
+      { source: 'ielts-page', action: 'VOCAB_SAVED_BY_WEB', data: entry },
       window.location.origin,
     )
   } catch { /* ignore */ }

@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react'
 import { DatabaseService, type ImportSummary } from '../../services/storage/Database'
 import { useToast } from '../../components/ui/Toast'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconDatabase } from '@ielts/ui'
 import type { AppExportData } from '../../models'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
@@ -179,15 +181,14 @@ export default function DataManagement() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--color-danger)' }}>
-          Data Management
-        </h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Export, import, and manage your learning data
-        </p>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+      <PageHeader
+        icon={<IconDatabase size={22} />}
+        title="Data Management"
+        description="Export, import, and manage your learning data"
+        iconBackground="var(--color-danger-light)"
+        iconColor="var(--color-danger)"
+      />
 
       <Card>
         <CardHeader>
@@ -307,47 +308,53 @@ export default function DataManagement() {
       </div>
 
       {importPreview && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-label="Import confirmation">
-          <div className="w-full max-w-lg rounded-xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-600 dark:bg-slate-800">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-overlay)' }} role="dialog" aria-modal="true" aria-label="Import confirmation">
+          <div className="w-[480px] max-w-full rounded-xl border p-6 shadow-xl" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
               Import Backup Data
             </h3>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
               Backup created on{' '}
-              <span className="font-medium">
+              <span className="font-medium" style={{ color: 'var(--color-text)' }}>
                 {new Date(importPreview.exportedAt).toLocaleString()}
               </span>
             </p>
 
             <div className="mt-4">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label className="block text-sm font-medium" style={{ color: 'var(--color-text)' }}>
                 Import Mode
               </label>
               <div className="mt-1 flex gap-2">
                 <button
                   type="button"
                   onClick={() => setImportMode('replace')}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    importMode === 'replace'
-                      ? 'bg-red-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600'
-                  }`}
+                  className="flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                  style={{
+                    backgroundColor: importMode === 'replace' ? 'var(--color-danger)' : 'var(--color-surface-alt)',
+                    color: importMode === 'replace' ? 'var(--color-on-primary)' : 'var(--color-text-secondary)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontFamily: 'var(--font-sans)',
+                  }}
                 >
                   Replace
                 </button>
                 <button
                   type="button"
                   onClick={() => setImportMode('merge')}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                    importMode === 'merge'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600'
-                  }`}
+                  className="flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+                  style={{
+                    backgroundColor: importMode === 'merge' ? 'var(--color-primary)' : 'var(--color-surface-alt)',
+                    color: importMode === 'merge' ? 'var(--color-on-primary)' : 'var(--color-text-secondary)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontFamily: 'var(--font-sans)',
+                  }}
                 >
                   Merge
                 </button>
               </div>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+              <p className="mt-1 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
                 {importMode === 'replace'
                   ? 'Clears all existing data before importing.'
                   : 'Keeps existing data and adds/updates with imported data.'}
@@ -355,16 +362,16 @@ export default function DataManagement() {
             </div>
 
             {importMode === 'replace' && (
-              <p className="mt-3 text-sm font-medium text-red-600 dark:text-red-400">
+              <p className="mt-3 text-sm font-medium" style={{ color: 'var(--color-danger)' }}>
                 This will overwrite ALL your current data!
               </p>
             )}
 
             <div className="mt-4 max-h-48 overflow-y-auto space-y-1">
               {countRecords(importPreview).map(r => (
-                <div key={r.key} className="flex items-center justify-between rounded bg-slate-50 px-3 py-1.5 text-sm dark:bg-slate-700/50">
-                  <span className="text-slate-600 dark:text-slate-400">{r.label}</span>
-                  <span className="font-medium text-slate-900 dark:text-slate-100">{r.count}</span>
+                <div key={r.key} className="flex items-center justify-between rounded px-3 py-1.5 text-sm" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                  <span style={{ color: 'var(--color-text-secondary)' }}>{r.label}</span>
+                  <span className="font-medium" style={{ color: 'var(--color-text)' }}>{r.count}</span>
                 </div>
               ))}
             </div>
@@ -386,16 +393,16 @@ export default function DataManagement() {
       )}
 
       {showResetConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-label="Reset confirmation">
-          <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-600 dark:bg-slate-800">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'var(--color-overlay)' }} role="dialog" aria-modal="true" aria-label="Reset confirmation">
+          <div className="w-[440px] max-w-full rounded-xl border p-6 shadow-xl" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
               Reset All Data?
             </h3>
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
               This will delete ALL your data including vocabulary, tasks, sessions, notes, mistakes,
               and mock tests. Settings will also be reset to defaults.
             </p>
-            <p className="mt-2 text-sm font-medium text-red-600 dark:text-red-400">
+            <p className="mt-2 text-sm font-medium" style={{ color: 'var(--color-danger)' }}>
               This action cannot be undone. Export a backup first.
             </p>
 

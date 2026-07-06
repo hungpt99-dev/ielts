@@ -139,14 +139,14 @@ export default function ExtensionProactiveMessages() {
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '100%',
-          padding: '10px 12px',
+          padding: 'var(--spacing-xs) var(--spacing-sm)',
           background: 'var(--color-surface)',
           border: 'none',
           borderBottom: expanded ? '1px solid var(--color-border)' : 'none',
           cursor: 'pointer',
           color: 'var(--color-text)',
-          fontSize: '12px',
-          fontWeight: 600,
+          fontSize: 'var(--text-xs)',
+          fontWeight: 'var(--weight-semibold)',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
         }}
@@ -162,10 +162,10 @@ export default function ExtensionProactiveMessages() {
                 minWidth: '18px',
                 height: '18px',
                 padding: '0 5px',
-                borderRadius: '999px',
+                borderRadius: 'var(--radius-full)',
                 background: 'var(--color-primary)',
-                color: '#fff',
-                fontSize: '10px',
+                color: 'var(--color-text-inverse)',
+                fontSize: 'var(--text-xs)',
                 fontWeight: 700,
                 lineHeight: 1,
               }}
@@ -176,9 +176,9 @@ export default function ExtensionProactiveMessages() {
         </span>
         <span
           style={{
-            fontSize: '10px',
+            fontSize: 'var(--text-xs)',
             color: 'var(--color-muted)',
-            transition: 'transform 0.15s',
+            transition: 'transform var(--transition-fast)',
             transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
           }}
         >
@@ -187,14 +187,14 @@ export default function ExtensionProactiveMessages() {
       </button>
 
       {expanded && (
-        <div style={{ padding: '8px 12px 12px', background: 'var(--color-background)' }}>
+        <div style={{ padding: 'var(--spacing-xs) var(--spacing-sm) var(--spacing-sm)', background: 'var(--color-background)' }}>
           {messages.map(msg => (
             <div
               key={msg.id}
               style={{
                 display: 'flex',
                 gap: '10px',
-                padding: '10px 12px',
+                padding: 'var(--spacing-xs) var(--spacing-sm)',
                 marginBottom: '8px',
                 borderRadius: 'var(--radius-md)',
                 background: msg.priority === 'high'
@@ -205,11 +205,11 @@ export default function ExtensionProactiveMessages() {
                     ? 'var(--color-warning)'
                     : 'var(--color-border)'
                 }`,
-                fontSize: '13px',
+                fontSize: 'var(--text-sm)',
                 lineHeight: '1.5',
               }}
             >
-              <span style={{ fontSize: '16px', flexShrink: 0, marginTop: '1px' }}>
+              <span style={{ fontSize: 'var(--text-base)', flexShrink: 0, marginTop: '1px' }}>
                 {getCategoryIcon(msg.category)}
               </span>
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -223,8 +223,8 @@ export default function ExtensionProactiveMessages() {
                 >
                   <span
                     style={{
-                      fontWeight: 600,
-                      fontSize: '12px',
+                      fontWeight: 'var(--weight-semibold)',
+                      fontSize: 'var(--text-xs)',
                       color: 'var(--color-text)',
                     }}
                   >
@@ -232,12 +232,12 @@ export default function ExtensionProactiveMessages() {
                   </span>
                   <span
                     style={{
-                      fontSize: '9px',
+                      fontSize: 'var(--text-xs)',
                       padding: '1px 5px',
-                      borderRadius: '999px',
+                      borderRadius: 'var(--radius-full)',
                       background: priorityBgColors[msg.priority] || 'transparent',
                       color: priorityColors[msg.priority] || 'var(--color-muted)',
-                      fontWeight: 500,
+                      fontWeight: 'var(--weight-medium)',
                       textTransform: 'uppercase',
                       letterSpacing: '0.04em',
                     }}
@@ -247,7 +247,7 @@ export default function ExtensionProactiveMessages() {
                 </div>
                 <p
                   style={{
-                    fontSize: '12px',
+                    fontSize: 'var(--text-xs)',
                     color: 'var(--color-text-secondary)',
                     margin: 0,
                     lineHeight: '1.5',
@@ -293,10 +293,10 @@ export default function ExtensionProactiveMessages() {
                       style={{
                         ...compactBtnStyle,
                         background: 'var(--color-primary)',
-                        color: '#fff',
+                        color: 'var(--color-text-inverse)',
                         border: 'none',
-                        fontWeight: 500,
-                        fontSize: '11px',
+                        fontWeight: 'var(--weight-medium)',
+                        fontSize: 'var(--text-xs)',
                         padding: '2px 8px',
                       }}
                     >
@@ -319,14 +319,14 @@ export default function ExtensionProactiveMessages() {
               style={{
                 display: 'block',
                 width: '100%',
-                padding: '6px',
+                padding: 'var(--spacing-2xs) var(--spacing-xs)',
                 borderRadius: 'var(--radius-sm)',
                 border: 'none',
                 background: 'var(--color-surface-alt)',
                 color: 'var(--color-muted)',
-                fontSize: '11px',
+                fontSize: 'var(--text-xs)',
                 cursor: 'pointer',
-                fontWeight: 500,
+                fontWeight: 'var(--weight-medium)',
               }}
             >
               Mark all as read
@@ -349,8 +349,8 @@ const compactBtnStyle: React.CSSProperties = {
   background: 'var(--color-surface)',
   color: 'var(--color-muted)',
   cursor: 'pointer',
-  fontSize: '11px',
+  fontSize: 'var(--text-xs)',
   lineHeight: 1,
   padding: 0,
-  transition: 'background 0.12s',
+  transition: 'var(--transition-fast)',
 }

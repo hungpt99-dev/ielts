@@ -9,6 +9,8 @@ import { SAMPLE_QUESTIONS, type SpeakingQuestion } from './data/questions'
 import { COMMON_PHRASES } from './data/phrases'
 import { generateId } from '../../utils'
 import { getSpeakingFeedback } from '../../services/ai/AIService'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconSpeaking } from '@ielts/ui'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -89,6 +91,8 @@ export default function SpeakingPractice() {
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
   const [aiFeedback, setAiFeedback] = useState<string | null>(null)
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
 
   const [timerSeconds, setTimerSeconds] = useState(0)
   const [timerRunning, setTimerRunning] = useState(false)
@@ -440,6 +444,31 @@ export default function SpeakingPractice() {
     }
   }
 
+  function speakFeedback(text: string) {
+    if (!('speechSynthesis' in window)) return
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'en-GB'
+    utterance.rate = 0.85
+    utterance.onend = () => setIsSpeaking(false)
+    utterance.onerror = () => setIsSpeaking(false)
+    utteranceRef.current = utterance
+    window.speechSynthesis.speak(utterance)
+    setIsSpeaking(true)
+  }
+
+  function stopSpeaking() {
+    window.speechSynthesis.cancel()
+    setIsSpeaking(false)
+    utteranceRef.current = null
+  }
+
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel()
+    }
+  }, [])
+
   function handleFinish() {
     stopTimer()
     if (recording) stopRecording()
@@ -513,36 +542,33 @@ export default function SpeakingPractice() {
     <div className="mx-auto max-w-6xl space-y-6">
       {view === 'browse' && (
         <>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-                Speaking Practice
-              </h1>
-              <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-                Practice IELTS Speaking Part 1, 2, and 3 with question bank, timer, and AI feedback
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button variant="outline" onClick={() => setPhrasesOpen(true)}>
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Speaking Phrases
-              </Button>
-              <Button variant="secondary" onClick={startCustomPractice}>
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Custom Practice
-              </Button>
-              <Button onClick={handleViewHistory} variant="secondary">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <PageHeader
+            icon={<IconSpeaking size={22} />}
+            title="Speaking Practice"
+            description="Practice IELTS Speaking Part 1, 2, and 3 with question bank, timer, and AI feedback"
+            actions={
+              <div className="flex flex-wrap gap-2">
+                <Button variant="outline" onClick={() => setPhrasesOpen(true)}>
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Speaking Phrases
+                </Button>
+                <Button variant="secondary" onClick={startCustomPractice}>
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Custom Practice
+                </Button>
+                <Button onClick={handleViewHistory} variant="secondary">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 History
               </Button>
             </div>
-          </div>
+          }
+        />
 
           {historyStats && (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -688,8 +714,8 @@ export default function SpeakingPractice() {
                             backgroundColor: question.part === 1
                               ? 'var(--color-primary-light)'
                               : question.part === 2
-                                ? 'var(--color-success-light, #f0fdf4)'
-                                : 'var(--color-warning-light, #fefce8)',
+                                ? 'var(--color-success-light)'
+                                : 'var(--color-warning-light)',
                             color: question.part === 1
                               ? 'var(--color-primary)'
                               : question.part === 2
@@ -703,7 +729,7 @@ export default function SpeakingPractice() {
                           <span
                             className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
                             style={{
-                              backgroundColor: 'var(--color-surface-alt, #f8fafc)',
+                              backgroundColor: 'var(--color-surface-alt)',
                               color: 'var(--color-muted)',
                             }}
                           >
@@ -791,7 +817,7 @@ export default function SpeakingPractice() {
                             </p>
                             <ul className="mt-1 space-y-1">
                               {selectedQuestion.cueCard.followUp.map((q, i) => (
-                                <li key={i} className="text-sm" style={{ color: 'var(--color-text-secondary, #475569)' }}>
+                                <li key={i} className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                                   • {q}
                                 </li>
                               ))}
@@ -806,7 +832,7 @@ export default function SpeakingPractice() {
                           Follow-up Questions
                         </p>
                         {selectedQuestion.followUp.map((q, i) => (
-                          <p key={i} className="text-sm" style={{ color: 'var(--color-text-secondary, #475569)' }}>
+                          <p key={i} className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                             • {q}
                           </p>
                         ))}
@@ -931,38 +957,84 @@ export default function SpeakingPractice() {
                     <div className="flex items-center gap-3">
                       <Button
                         onClick={() => {
-                          if (timerRunning || recording) {
+                          if (timerRunning) {
                             stopTimer()
-                            if (recording) {
-                              stopRecording()
-                            }
                           } else {
                             startTimer(timerMode, timerMode === 'countdown' ? timerSeconds || countdownTotal : undefined)
-                            if (recordingSupported) startRecording()
                           }
                         }}
-                        variant={timerRunning || recording ? 'secondary' : 'primary'}
+                        variant={timerRunning ? 'secondary' : 'primary'}
                         size="sm"
                       >
-                        {recording ? (
-                          <>
-                            <span className="mr-1.5 h-2 w-2 animate-pulse rounded-full bg-red-500" />
-                            Stop
-                          </>
-                        ) : timerRunning ? (
-                          'Pause'
-                        ) : (
-                          <>
-                            <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                            </svg>
-                            Start
-                          </>
-                        )}
+                        {timerRunning ? 'Pause' : 'Start Timer'}
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={resetTimer} disabled={timerRunning || recording}>
+                      <Button variant="ghost" size="sm" onClick={resetTimer} disabled={timerRunning}>
                         Reset
                       </Button>
+                      {recordingSupported && (
+                        <button
+                          onClick={() => recording ? stopRecording() : startRecording()}
+                          title={recording ? 'Stop recording' : 'Start recording'}
+                          aria-label={recording ? 'Stop recording' : 'Start recording'}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '40px',
+                            height: '40px',
+                            borderRadius: '12px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            background: recording ? 'var(--color-danger)' : 'var(--color-surface-alt)',
+                            color: recording ? '#ffffff' : 'var(--color-muted)',
+                            transition: 'all 0.2s ease',
+                            flexShrink: 0,
+                            outline: 'none',
+                          }}
+                        >
+                          {recording ? (
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                              <rect x="6" y="6" width="12" height="12" rx="2" />
+                            </svg>
+                          ) : (
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                              <line x1="12" y1="19" x2="12" y2="22" />
+                            </svg>
+                          )}
+                        </button>
+                      )}
+                      <button
+                        onClick={stopSpeaking}
+                        title="AI voice off"
+                        aria-label="Enable AI voice"
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '40px',
+                          height: '40px',
+                          borderRadius: '12px',
+                          border: 'none',
+                          cursor: 'pointer',
+                          background: 'var(--color-surface-alt)',
+                          color: isSpeaking ? 'var(--color-danger)' : 'var(--color-muted)',
+                          transition: 'all 0.2s ease',
+                          flexShrink: 0,
+                          outline: 'none',
+                        }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                          {isSpeaking && (
+                            <>
+                              <line x1="23" y1="9" x2="17" y2="15" />
+                              <line x1="17" y1="9" x2="23" y2="15" />
+                            </>
+                          )}
+                        </svg>
+                      </button>
                     </div>
                     {recording && (
                       <p className="mt-2 text-xs" style={{ color: 'var(--color-danger)' }}>
@@ -1327,8 +1399,8 @@ export default function SpeakingPractice() {
                             backgroundColor: session.part === 1
                               ? 'var(--color-primary-light)'
                               : session.part === 2
-                                ? 'var(--color-success-light, #f0fdf4)'
-                                : 'var(--color-warning-light, #fefce8)',
+                                ? 'var(--color-success-light)'
+                                : 'var(--color-warning-light)',
                             color: session.part === 1
                               ? 'var(--color-primary)'
                               : session.part === 2
@@ -1342,7 +1414,7 @@ export default function SpeakingPractice() {
                           <span
                             className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
                             style={{
-                              backgroundColor: 'var(--color-surface-alt, #f8fafc)',
+                              backgroundColor: 'var(--color-surface-alt)',
                               color: 'var(--color-muted)',
                             }}
                           >

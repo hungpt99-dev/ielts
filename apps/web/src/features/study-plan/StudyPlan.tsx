@@ -1,34 +1,75 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { TaskEntry } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
-import { today, formatDateLabel, isTodayDate, addDays, getWeekDates } from '../../utils'
+import { today, formatDateLabel, isTodayDate, getWeekDates } from '../../utils'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
+import Badge from '../../components/ui/Badge'
+import { EmptyStateCard } from '../../components/ui/EmptyState'
+import LoadingSpinner from '../../components/ui/LoadingSpinner'
 import CalendarView from '../planner/components/CalendarView'
-import { generateStudyPlan, loadPlan, type StudyPlanData, type StudyPlanPhase, type StudyPlanWeek } from './studyPlanService'
+import { generateStudyPlan, loadPlan, type StudyPlanData } from './studyPlanService'
+import PageHeader from '../../components/layout/PageHeader'
+import {
+  IconStudyPlan,
+  IconCheck,
+  IconCalendar,
+  IconClock,
+  IconProgress,
+  IconTarget,
+  IconAward,
+  IconFlame,
+  IconChevronDown,
+  IconAdd,
+  IconRefresh,
+  IconAlertCircle,
+  IconMistakes,
+} from '@ielts/ui'
 
-const CATEGORY_COLORS: Record<string, string> = {
-  'Vocabulary': 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  'Reading': 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  'Listening': 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-  'Writing Task 1': 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  'Writing Task 2': 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
-  'Speaking Part 1': 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300',
-  'Speaking Part 2': 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300',
-  'Speaking Part 3': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
-  'Grammar': 'bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300',
-  'Mock Test': 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+const PHASE_ACCENTS = [
+  { border: 'var(--color-skill-listening)', light: 'var(--color-skill-listening-light)', dark: 'var(--color-skill-listening-dark)' },
+  { border: 'var(--color-skill-reading)', light: 'var(--color-skill-reading-light)', dark: 'var(--color-skill-reading-dark)' },
+  { border: 'var(--color-skill-writing)', light: 'var(--color-skill-writing-light)', dark: 'var(--color-skill-writing-dark)' },
+  { border: 'var(--color-skill-speaking)', light: 'var(--color-skill-speaking-light)', dark: 'var(--color-skill-speaking-dark)' },
+  { border: 'var(--color-primary)', light: 'var(--color-primary-light)', dark: 'var(--color-primary-dark)' },
+]
+
+const CATEGORY_BADGE: Record<string, { variant: 'listening' | 'reading' | 'writing' | 'speaking' | 'grammar' | 'vocabulary' | 'primary' | 'danger' }> = {
+  'Vocabulary': { variant: 'vocabulary' },
+  'Reading': { variant: 'reading' },
+  'Listening': { variant: 'listening' },
+  'Writing Task 1': { variant: 'writing' },
+  'Writing Task 2': { variant: 'writing' },
+  'Speaking Part 1': { variant: 'speaking' },
+  'Speaking Part 2': { variant: 'speaking' },
+  'Speaking Part 3': { variant: 'speaking' },
+  'Grammar': { variant: 'grammar' },
+  'Mock Test': { variant: 'danger' },
 }
 
-const SKILL_COLORS: Record<string, string> = {
-  reading: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
-  listening: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
-  writing: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
-  speaking: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
-  vocabulary: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
-  grammar: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-300',
-  mixed: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300',
+const SKILL_BADGE: Record<string, { variant: 'listening' | 'reading' | 'writing' | 'speaking' | 'vocabulary' | 'grammar' | 'default' }> = {
+  reading: { variant: 'reading' },
+  listening: { variant: 'listening' },
+  writing: { variant: 'writing' },
+  speaking: { variant: 'speaking' },
+  vocabulary: { variant: 'vocabulary' },
+  grammar: { variant: 'grammar' },
+  mixed: { variant: 'default' },
+}
+
+function PhaseIcon({ index }: { index: number }) {
+  const icons = [IconTarget, IconAward, IconFlame, IconProgress, IconCheck]
+  const Icon = icons[index % icons.length]
+  return <Icon size={18} />
+}
+
+function getCategoryBadgeVariant(category: string) {
+  return CATEGORY_BADGE[category]?.variant ?? 'primary'
+}
+
+function getSkillBadgeVariant(skillFocus: string) {
+  return SKILL_BADGE[skillFocus]?.variant ?? 'default'
 }
 
 export default function StudyPlan() {
@@ -185,19 +226,22 @@ export default function StudyPlan() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <div role="status" className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      <div className="flex h-full min-h-[50dvh] items-center justify-center">
+        <LoadingSpinner size="lg" message="Loading study plan..." />
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="flex h-full items-center justify-center">
-        <Card className="max-w-md text-center">
-          <CardContent>
-            <p className="text-red-600 dark:text-red-400">{error}</p>
-            <Button variant="secondary" className="mt-4" onClick={loadData}>Retry</Button>
+      <div className="flex h-full min-h-[50dvh] items-center justify-center px-4">
+        <Card className="w-full max-w-md text-center">
+          <CardContent className="flex flex-col items-center gap-3 py-6 sm:py-8">
+            <IconAlertCircle size={32} style={{ color: 'var(--color-danger)' }} />
+            <p style={{ color: 'var(--color-text-secondary)' }}>{error}</p>
+            <Button variant="primary" size="sm" onClick={loadData} icon={<IconRefresh size={14} />}>
+              Retry
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -205,84 +249,87 @@ export default function StudyPlan() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Study Plan</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            {plan ? 'Learning phases with daily tasks' : 'Generate a personalised study plan'}
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={() => setShowGenerateModal(true)} loading={generating}>
-            {plan ? 'Regenerate' : 'Generate Plan'}
-          </Button>
-        </div>
-      </div>
+    <div className="mx-auto max-w-6xl pb-20 lg:pb-6" style={{ maxWidth: '1280px' }}>
+      <PageHeader
+        icon={<IconStudyPlan size={22} />}
+        title="Study Plan"
+        description={plan ? 'Track your learning journey phase by phase' : 'Create your personalised IELTS study roadmap'}
+        actions={
+          <div className="flex gap-2">
+            <Button onClick={() => setShowGenerateModal(true)} loading={generating} icon={<IconAdd size={16} />}>
+              {plan ? 'Regenerate' : 'Generate Plan'}
+            </Button>
+          </div>
+        }
+      />
 
       {generatedCount > 0 && (
-        <div className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-700 dark:bg-green-900/30 dark:text-green-400">
-          Plan generated with {generatedCount} tasks across {plan?.phases.length ?? 0} phases
+        <div className="mb-6 flex items-center gap-2 rounded-2xl px-4 py-3 text-sm" style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success-dark)' }}>
+          <IconCheck size={16} />
+          <span>Plan generated with <strong>{generatedCount}</strong> tasks across <strong>{plan?.phases.length ?? 0}</strong> phases</span>
         </div>
       )}
 
-      <div className="flex gap-1 rounded-lg border p-1" style={{ backgroundColor: 'var(--color-surface-alt)', borderColor: 'var(--color-border)' }}>
+      <div className="mb-6 flex gap-1 rounded-2xl p-1.5" style={{ backgroundColor: 'var(--color-surface-alt)', border: '1px solid var(--color-border)' }}>
         {[
-          { key: 'phases', label: 'Phases' },
-          { key: 'calendar', label: 'Calendar' },
-          { key: 'week', label: 'This Week' },
+          { key: 'phases' as const, label: 'Phases', icon: <IconStudyPlan size={16} /> },
+          { key: 'calendar' as const, label: 'Calendar', icon: <IconCalendar size={16} /> },
+          { key: 'week' as const, label: 'This Week', icon: <IconClock size={16} /> },
         ].map(t => (
           <button
             key={t.key}
-            onClick={() => setTab(t.key as typeof tab)}
-            className={`flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+            onClick={() => setTab(t.key)}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${
               tab === t.key
-                ? 'bg-[var(--color-primary)] text-white shadow-sm'
-                : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface)]'
+                ? 'bg-[var(--color-surface)] text-[var(--color-primary)] shadow-sm'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text)]'
             }`}
           >
-            {t.label}
+            {t.icon}
+            <span className="hidden sm:inline">{t.label}</span>
           </button>
         ))}
       </div>
 
       {!plan && !generating && (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
-              No study plan yet. Generate a personalised plan with AI or start adding tasks manually.
-            </p>
-            <Button onClick={() => setShowGenerateModal(true)}>Generate Plan</Button>
-          </CardContent>
-        </Card>
+        <EmptyStateCard
+          variant="plan"
+          title="No study plan yet"
+          description="Generate a personalised roadmap from today to your exam day. AI will craft daily tasks for each phase."
+          action={{ label: 'Generate Plan', onClick: () => setShowGenerateModal(true) }}
+        />
       )}
 
       {tab === 'phases' && plan && (
         <div className="space-y-6">
           {phaseStats && (
-            <div className="grid gap-4 sm:grid-cols-4">
-              <Card>
-                <CardContent className="py-4 text-center">
-                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{phaseStats.progress}%</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Overall Progress</p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              <Card variant="elevated" padding="sm" className="text-center">
+                <CardContent className="flex flex-col items-center gap-1 py-3">
+                  <IconTarget size={20} style={{ color: 'var(--color-primary)' }} />
+                  <p className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>{phaseStats.progress}%</p>
+                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Overall Progress</p>
                 </CardContent>
               </Card>
-              <Card>
-                <CardContent className="py-4 text-center">
-                  <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{phaseStats.completedTasks}</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Completed</p>
+              <Card variant="elevated" padding="sm" className="text-center">
+                <CardContent className="flex flex-col items-center gap-1 py-3">
+                  <IconCheck size={20} style={{ color: 'var(--color-success)' }} />
+                  <p className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--color-success)' }}>{phaseStats.completedTasks}</p>
+                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Completed</p>
                 </CardContent>
               </Card>
-              <Card>
-                <CardContent className="py-4 text-center">
-                  <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{phaseStats.totalTasks}</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Total Tasks</p>
+              <Card variant="elevated" padding="sm" className="text-center">
+                <CardContent className="flex flex-col items-center gap-1 py-3">
+                  <IconProgress size={20} style={{ color: 'var(--color-text)' }} />
+                  <p className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--color-text)' }}>{phaseStats.totalTasks}</p>
+                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Total Tasks</p>
                 </CardContent>
               </Card>
-              <Card>
-                <CardContent className="py-4 text-center">
-                  <p className="text-2xl font-bold text-red-600 dark:text-red-400">{missedTasks.length}</p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Missed</p>
+              <Card variant="elevated" padding="sm" className="text-center">
+                <CardContent className="flex flex-col items-center gap-1 py-3">
+                  <IconMistakes size={20} style={{ color: 'var(--color-danger)' }} />
+                  <p className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--color-danger)' }}>{missedTasks.length}</p>
+                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Missed</p>
                 </CardContent>
               </Card>
             </div>
@@ -290,6 +337,7 @@ export default function StudyPlan() {
 
           {plan.phases.map((phase, pIdx) => {
             const isExpanded = expandedPhase === pIdx
+            const accent = PHASE_ACCENTS[pIdx % PHASE_ACCENTS.length]
             const phaseTasks = tasks.filter(t => {
               const weekDates = phase.weeks.flatMap(w => w.days.map(d => d.date))
               return weekDates.includes(t.date.slice(0, 10))
@@ -299,35 +347,55 @@ export default function StudyPlan() {
             const phasePct = phaseTotal > 0 ? Math.round((phaseDone / phaseTotal) * 100) : 0
 
             return (
-              <Card key={pIdx}>
-                <CardHeader>
-                  <button
-                    onClick={() => setExpandedPhase(isExpanded ? null : pIdx)}
-                    className="flex w-full items-center justify-between text-left"
-                  >
-                    <div>
-                      <CardTitle>{phase.name}</CardTitle>
-                      <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                        {phase.description} — {phase.targetBandRange}
+              <Card
+                key={pIdx}
+                variant="elevated"
+                padding="none"
+                className="overflow-hidden"
+                style={{ borderLeft: `4px solid ${accent.border}` }}
+              >
+                <button
+                  onClick={() => setExpandedPhase(isExpanded ? null : pIdx)}
+                  className="flex w-full items-center justify-between gap-3 p-4 sm:p-5 text-left transition-colors hover:bg-[var(--color-surface-alt)]"
+                >
+                  <div className="flex min-w-0 flex-1 items-center gap-3">
+                    <div
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                      style={{ backgroundColor: accent.light, color: accent.dark }}
+                    >
+                      <PhaseIcon index={pIdx} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base sm:text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
+                          {phase.name}
+                        </h3>
+                        <Badge variant="default" size="xs">{phase.targetBandRange}</Badge>
+                      </div>
+                      <p className="mt-0.5 text-xs sm:text-sm line-clamp-1" style={{ color: 'var(--color-text-secondary)' }}>
+                        {phase.description}
                       </p>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{phasePct}%</p>
-                        <p className="text-xs text-slate-400">{phaseDone}/{phaseTotal}</p>
-                      </div>
-                      <svg className={`h-5 w-5 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-                  </button>
-                  <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
-                    <div className="h-full rounded-full bg-blue-500 transition-all" style={{ width: `${phasePct}%` }} />
                   </div>
-                </CardHeader>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <div className="hidden sm:block text-right">
+                      <p className="text-sm font-semibold" style={{ color: accent.border }}>{phasePct}%</p>
+                      <p className="text-xs" style={{ color: 'var(--color-muted)' }}>{phaseDone}/{phaseTotal}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="h-2 w-16 sm:w-20 overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${phasePct}%`, backgroundColor: accent.border }} />
+                      </div>
+                      <IconChevronDown
+                        size={18}
+                        style={{ color: 'var(--color-muted)', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 200ms ease' }}
+                      />
+                    </div>
+                  </div>
+                </button>
 
                 {isExpanded && (
-                  <CardContent className="space-y-4">
+                  <div className="border-t px-4 sm:px-5 py-4 sm:py-5 space-y-4 sm:space-y-5" style={{ borderColor: 'var(--color-border)' }}>
                     {phase.weeks.map((week, wIdx) => {
                       const weekDates = week.days.map(d => d.date)
                       const weekTaskList = tasks.filter(t => weekDates.includes(t.date.slice(0, 10)))
@@ -336,69 +404,102 @@ export default function StudyPlan() {
                       const weekPct = weekTotal > 0 ? Math.round((weekDone / weekTotal) * 100) : 0
 
                       return (
-                        <div key={wIdx} className="rounded-lg border p-4" style={{ borderColor: 'var(--color-border)' }}>
+                        <div key={wIdx}>
                           <div className="flex items-center justify-between mb-3">
-                            <div>
-                              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                            <div className="min-w-0 flex-1 pr-2">
+                              <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                                 Week {week.weekNumber}: {week.focus}
                               </p>
-                              <p className="text-xs text-slate-500 dark:text-slate-400">{week.goal}</p>
+                              <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-secondary)' }}>{week.goal}</p>
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-slate-500">
-                              <span>{weekDone}/{weekTotal}</span>
-                              <div className="h-2 w-16 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
-                                <div className="h-full rounded-full bg-blue-500 transition-all" style={{ width: `${weekPct}%` }} />
+                            <div className="flex shrink-0 items-center gap-2">
+                              <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>{weekDone}/{weekTotal}</span>
+                              <div className="h-2 w-16 overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${weekPct}%`, backgroundColor: 'var(--color-primary)' }} />
                               </div>
                             </div>
                           </div>
 
-                          <div className="space-y-2">
-                            {week.days.map((day, dIdx) => {
-                              const dayTaskList = tasks.filter(t => t.date.slice(0, 10) === day.date)
-                              if (dayTaskList.length === 0 && day.items.length === 0) return null
+                          {week.days.length > 0 && (
+                            <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--color-border)' }}>
+                              {week.days.map((day, dIdx) => {
+                                const dayTaskList = tasks.filter(t => t.date.slice(0, 10) === day.date)
+                                if (dayTaskList.length === 0 && day.items.length === 0) return null
+                                const isToday = isTodayDate(day.date)
 
-                              return (
-                                <div key={dIdx} className="flex items-start gap-3 rounded-lg p-2 hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                  <div className="w-16 shrink-0 text-xs text-slate-400">
-                                    {formatDateLabel(day.date)}
-                                  </div>
-                                  <div className="flex-1 min-w-0 space-y-1">
-                                    <div className="flex flex-wrap items-center gap-1">
-                                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${SKILL_COLORS[day.skillFocus] || SKILL_COLORS.mixed}`}>
-                                        {day.skillFocus}
+                                return (
+                                  <div
+                                    key={dIdx}
+                                    className={`flex items-start gap-3 px-3 sm:px-4 py-3 transition-colors hover:bg-[var(--color-surface-alt)] ${
+                                      dIdx < week.days.length - 1 ? 'border-b' : ''
+                                    }`}
+                                    style={{ borderColor: 'var(--color-border)', backgroundColor: isToday ? 'var(--color-primary-light)' : 'transparent' }}
+                                  >
+                                    <div className="flex w-14 sm:w-20 shrink-0 flex-col pt-0.5">
+                                      <span className="text-xs font-medium" style={{ color: isToday ? 'var(--color-primary)' : 'var(--color-muted)' }}>
+                                        {formatDateLabel(day.date)}
                                       </span>
-                                      {day.objective && (
-                                        <span className="text-xs text-slate-500 dark:text-slate-400">{day.objective}</span>
+                                      {isToday && (
+                                        <div className="mt-0.5 w-fit"><Badge variant="primary" size="xs">Today</Badge></div>
                                       )}
                                     </div>
-                                    {dayTaskList.map(task => (
-                                      <div key={task.id} className="flex items-center gap-2">
-                                        <input
-                                          type="checkbox"
-                                          checked={task.isDone}
-                                          onChange={() => handleToggleDone(task)}
-                                          className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                                        />
-                                        <span className={`text-xs ${task.isDone ? 'line-through text-slate-400' : 'text-slate-700 dark:text-slate-300'}`}>
-                                          {task.title}
-                                        </span>
-                                        <span className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[9px] font-medium ${CATEGORY_COLORS[task.category] || ''}`}>
-                                          {task.category}
-                                        </span>
-                                        {task.timeMinutes > 0 && (
-                                          <span className="text-[10px] text-slate-400">{task.timeMinutes}m</span>
+                                    <div className="min-w-0 flex-1 space-y-1.5">
+                                      <div className="flex flex-wrap items-center gap-1.5">
+                                        <Badge variant={getSkillBadgeVariant(day.skillFocus)} size="xs">
+                                          {day.skillFocus}
+                                        </Badge>
+                                        {day.objective && (
+                                          <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{day.objective}</span>
                                         )}
                                       </div>
-                                    ))}
+                                      {dayTaskList.length === 0 && day.items.map((item, iIdx) => (
+                                        <div key={iIdx} className="flex items-center gap-2 py-0.5">
+                                          <div className="h-4 w-4 shrink-0 rounded border-2" style={{ borderColor: 'var(--color-border)' }} />
+                                          <span className="text-xs sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+                                            {item.title}
+                                          </span>
+                                          {item.minutes > 0 && (
+                                            <span className="text-[10px] shrink-0" style={{ color: 'var(--color-muted)' }}>{item.minutes}m</span>
+                                          )}
+                                        </div>
+                                      ))}
+                                      {dayTaskList.map(task => (
+                                        <div key={task.id} className="flex items-center gap-2 py-0.5">
+                                          <button
+                                            onClick={() => handleToggleDone(task)}
+                                            className="flex items-center justify-center h-5 w-5 shrink-0 rounded-md border-2 transition-all"
+                                            style={{
+                                              borderColor: task.isDone ? 'var(--color-success)' : 'var(--color-border)',
+                                              backgroundColor: task.isDone ? 'var(--color-success)' : 'transparent',
+                                            }}
+                                            aria-label={task.isDone ? 'Mark task as not done' : 'Mark task as done'}
+                                          >
+                                            {task.isDone && <IconCheck size={12} style={{ color: 'white' }} />}
+                                          </button>
+                                          <span
+                                            className={`text-xs sm:text-sm min-w-0 ${task.isDone ? 'line-through' : ''}`}
+                                            style={{ color: task.isDone ? 'var(--color-muted)' : 'var(--color-text)' }}
+                                          >
+                                            {task.title}
+                                          </span>
+                                          <Badge variant={getCategoryBadgeVariant(task.category)} size="xs">
+                                            {task.category}
+                                          </Badge>
+                                          {task.timeMinutes > 0 && (
+                                            <span className="text-[10px] shrink-0" style={{ color: 'var(--color-muted)' }}>{task.timeMinutes}m</span>
+                                          )}
+                                        </div>
+                                      ))}
+                                    </div>
                                   </div>
-                                </div>
-                              )
-                            })}
-                          </div>
+                                )
+                              })}
+                            </div>
+                          )}
                         </div>
                       )
                     })}
-                  </CardContent>
+                  </div>
                 )}
               </Card>
             )
@@ -408,7 +509,7 @@ export default function StudyPlan() {
 
       {tab === 'calendar' && (
         <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 overflow-x-auto -mx-4 px-4">
             <CalendarView
               tasks={monthTasks}
               year={calendarYear}
@@ -420,28 +521,41 @@ export default function StudyPlan() {
             />
           </div>
           <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>{formatDateLabel(selectedDate)}</CardTitle>
+            <Card variant="elevated" padding="sm">
+              <CardHeader className="mb-2">
+                <div className="flex items-center gap-2">
+                  <IconCalendar size={16} style={{ color: 'var(--color-primary)' }} />
+                  <CardTitle>{formatDateLabel(selectedDate)}</CardTitle>
+                </div>
               </CardHeader>
               <CardContent>
                 {selectedDayTasks.length === 0 ? (
-                  <p className="text-sm text-slate-400 dark:text-slate-500">No tasks for this day</p>
+                  <div className="flex flex-col items-center gap-2 py-6">
+                    <IconCheck size={24} style={{ color: 'var(--color-muted)' }} />
+                    <p className="text-sm" style={{ color: 'var(--color-muted)' }}>No tasks for this day</p>
+                  </div>
                 ) : (
                   <div className="space-y-2">
                     {selectedDayTasks.map(task => (
-                      <div key={task.id} className="flex items-start gap-2">
-                        <input
-                          type="checkbox"
-                          checked={task.isDone}
-                          onChange={() => handleToggleDone(task)}
-                          className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-                        />
-                        <div>
-                          <p className={`text-sm ${task.isDone ? 'line-through text-slate-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                      <div key={task.id} className="flex items-start gap-2.5 rounded-xl p-2.5 transition-colors hover:bg-[var(--color-surface-alt)]">
+                        <button
+                          onClick={() => handleToggleDone(task)}
+                          className="flex items-center justify-center h-5 w-5 shrink-0 mt-0.5 rounded-md border-2 transition-all"
+                          style={{
+                            borderColor: task.isDone ? 'var(--color-success)' : 'var(--color-border)',
+                            backgroundColor: task.isDone ? 'var(--color-success)' : 'transparent',
+                          }}
+                          aria-label={task.isDone ? 'Mark task as not done' : 'Mark task as done'}
+                        >
+                          {task.isDone && <IconCheck size={12} style={{ color: 'white' }} />}
+                        </button>
+                        <div className="min-w-0 flex-1">
+                          <p className={`text-sm ${task.isDone ? 'line-through' : ''}`}
+                            style={{ color: task.isDone ? 'var(--color-muted)' : 'var(--color-text)' }}
+                          >
                             {task.title}
                           </p>
-                          <div className="flex gap-2 text-[10px] text-slate-400">
+                          <div className="mt-0.5 flex gap-2 text-xs" style={{ color: 'var(--color-muted)' }}>
                             <span>{task.category}</span>
                             {task.timeMinutes > 0 && <span>{task.timeMinutes}m</span>}
                           </div>
@@ -454,13 +568,22 @@ export default function StudyPlan() {
             </Card>
 
             {missedTasks.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Missed</CardTitle>
-                  <span className="text-sm font-medium text-red-600">{missedTasks.length}</span>
+              <Card variant="elevated" padding="sm">
+                <CardHeader className="mb-2">
+                  <div className="flex items-center gap-2">
+                    <IconMistakes size={16} style={{ color: 'var(--color-danger)' }} />
+                    <CardTitle>
+                      <span className="flex items-center justify-between gap-2">
+                        Missed Tasks
+                        <span className="text-sm font-bold" style={{ color: 'var(--color-danger)' }}>{missedTasks.length}</span>
+                      </span>
+                    </CardTitle>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Reschedule missed tasks from the Phase view</p>
+                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                    Reschedule missed tasks from the Phase view to stay on track.
+                  </p>
                 </CardContent>
               </Card>
             )}
@@ -469,27 +592,30 @@ export default function StudyPlan() {
       )}
 
       {tab === 'week' && (
-        <div className="space-y-4">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <Card>
-              <CardContent className="py-4 text-center">
-                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{weekStats.percent}%</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">This Week</p>
-                <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
-                  <div className="h-full rounded-full bg-green-500 transition-all" style={{ width: `${weekStats.percent}%` }} />
+        <div className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <Card variant="elevated" padding="sm" className="text-center">
+              <CardContent className="flex flex-col items-center gap-1 py-3">
+                <IconTarget size={20} style={{ color: 'var(--color-primary)' }} />
+                <p className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>{weekStats.percent}%</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>This Week Complete</p>
+                <div className="mt-1.5 h-1.5 w-full max-w-[120px] overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                  <div className="h-full rounded-full transition-all" style={{ width: `${weekStats.percent}%`, backgroundColor: 'var(--color-success)' }} />
                 </div>
               </CardContent>
             </Card>
-            <Card>
-              <CardContent className="py-4 text-center">
-                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{weekStats.done}/{weekStats.total}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Tasks Done</p>
+            <Card variant="elevated" padding="sm" className="text-center">
+              <CardContent className="flex flex-col items-center gap-1 py-3">
+                <IconCheck size={20} style={{ color: 'var(--color-success)' }} />
+                <p className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--color-text)' }}>{weekStats.done}/{weekStats.total}</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Tasks Done</p>
               </CardContent>
             </Card>
-            <Card>
-              <CardContent className="py-4 text-center">
-                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{weekStats.minutes}</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Minutes Studied</p>
+            <Card variant="elevated" padding="sm" className="text-center">
+              <CardContent className="flex flex-col items-center gap-1 py-3">
+                <IconClock size={20} style={{ color: 'var(--color-text)' }} />
+                <p className="text-xl sm:text-2xl font-bold" style={{ color: 'var(--color-text)' }}>{weekStats.minutes}</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Minutes Studied</p>
               </CardContent>
             </Card>
           </div>
@@ -497,44 +623,55 @@ export default function StudyPlan() {
           {allWeekDates.map(date => {
             const dayTasks = tasks.filter(t => t.date.slice(0, 10) === date)
             if (dayTasks.length === 0) return null
+            const isToday = isTodayDate(date)
+
             return (
-              <Card key={date}>
-                <CardHeader>
-                  <div className="flex items-center gap-3">
+              <Card
+                key={date}
+                variant={isToday ? 'elevated' : 'default'}
+                padding="sm"
+                className={isToday ? 'ring-2 ring-[var(--color-primary)]' : ''}
+              >
+                <CardHeader className="mb-2">
+                  <div className="flex items-center gap-2">
+                    <IconCalendar size={16} style={{ color: isToday ? 'var(--color-primary)' : 'var(--color-muted)' }} />
                     <CardTitle>{formatDateLabel(date)}</CardTitle>
-                    <span className={`text-xs font-medium ${isTodayDate(date) ? 'text-blue-600' : 'text-slate-400'}`}>
-                      {isTodayDate(date) ? 'Today' : ''}
-                    </span>
+                    {isToday && (
+                      <Badge variant="primary" size="xs">Today</Badge>
+                    )}
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     {dayTasks.map(task => (
-                      <div key={task.id} className="flex items-start gap-3 rounded-lg border p-3" style={{ borderColor: task.isDone ? 'var(--color-success)' : 'var(--color-border)', backgroundColor: task.isDone ? 'var(--color-success-light)' : 'var(--color-surface)' }}>
+                      <div
+                        key={task.id}
+                        className="flex items-start gap-3 rounded-xl p-2.5 transition-colors hover:bg-[var(--color-surface-alt)]"
+                      >
                         <button
                           onClick={() => handleToggleDone(task)}
-                          className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors ${
-                            task.isDone ? 'border-green-500 bg-green-500 text-white' : 'border-slate-300 hover:border-slate-400'
-                          }`}
+                          className="flex items-center justify-center h-6 w-6 shrink-0 mt-0.5 rounded-lg border-2 transition-all"
+                          style={{
+                            borderColor: task.isDone ? 'var(--color-success)' : 'var(--color-border)',
+                            backgroundColor: task.isDone ? 'var(--color-success)' : 'transparent',
+                          }}
                           aria-label={task.isDone ? 'Mark undone' : 'Mark done'}
                         >
-                          {task.isDone && (
-                            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
+                          {task.isDone && <IconCheck size={14} style={{ color: 'white' }} />}
                         </button>
                         <div className="min-w-0 flex-1">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${CATEGORY_COLORS[task.category] || ''}`}>
+                          <div className="flex flex-wrap items-center gap-1.5 mb-0.5">
+                            <Badge variant={getCategoryBadgeVariant(task.category)} size="xs">
                               {task.category}
-                            </span>
+                            </Badge>
                           </div>
-                          <p className={`mt-0.5 text-sm ${task.isDone ? 'line-through text-slate-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                          <p className={`text-sm ${task.isDone ? 'line-through' : ''}`}
+                            style={{ color: task.isDone ? 'var(--color-muted)' : 'var(--color-text)' }}
+                          >
                             {task.title}
                           </p>
                           {task.timeMinutes > 0 && (
-                            <p className="mt-0.5 text-xs text-slate-400">{task.timeMinutes}m</p>
+                            <p className="mt-0.5 text-xs" style={{ color: 'var(--color-muted)' }}>{task.timeMinutes}m</p>
                           )}
                         </div>
                       </div>
@@ -550,28 +687,121 @@ export default function StudyPlan() {
       <Modal open={showGenerateModal} onClose={() => generating ? null : setShowGenerateModal(false)} title="Generate Study Plan" size="md">
         <div className="space-y-4">
           {generating ? (
-            <div className="flex flex-col items-center gap-4 py-8">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
-              <p className="text-sm text-blue-700 dark:text-blue-400">
-                {totalPhases > 0
-                  ? `Generating phase ${generatingPhase} of ${totalPhases}...`
-                  : 'Generating study plan...'}
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                This may take a moment depending on your plan duration.
-              </p>
+            <div className="flex flex-col items-center gap-5 py-6">
+              {totalPhases > 0 ? (
+                <div className="flex w-full flex-col gap-4">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm font-bold"
+                      style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}
+                    >
+                      {generatingPhase}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-semibold leading-tight" style={{ color: 'var(--color-text)' }}>
+                        {generatingPhase === 1
+                          ? 'Analyzing your goals and timeline'
+                          : generatingPhase === totalPhases
+                            ? 'Finalizing your study roadmap'
+                            : `Building phase ${generatingPhase} of your plan`}
+                      </p>
+                      <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                        Phase {generatingPhase} of {totalPhases}
+                      </p>
+                    </div>
+                    <span
+                      className="shrink-0 text-xs font-semibold tabular-nums"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      {Math.round((generatingPhase / totalPhases) * 100)}%
+                    </span>
+                  </div>
+                  <div className="flex h-3 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                    <div
+                      className="h-full rounded-full transition-all duration-700 ease-out"
+                      style={{
+                        width: `${(generatingPhase / totalPhases) * 100}%`,
+                        background: 'linear-gradient(90deg, var(--color-primary), var(--color-primary-hover))',
+                        boxShadow: '0 0 8px color-mix(in srgb, var(--color-primary) 40%, transparent)',
+                      }}
+                    />
+                  </div>
+                  <div className="flex w-full items-center justify-between px-0.5">
+                    {Array.from({ length: totalPhases }, (_, i) => (
+                      <div
+                        key={i}
+                        className="flex flex-col items-center gap-1.5"
+                        style={{ width: `${100 / totalPhases}%` }}
+                      >
+                        <div
+                          className="h-2.5 w-2.5 rounded-full transition-all duration-500"
+                          style={{
+                            backgroundColor: i < generatingPhase
+                              ? 'var(--color-primary)'
+                              : i === generatingPhase
+                                ? 'var(--color-primary)'
+                                : 'var(--color-border)',
+                            opacity: i < generatingPhase ? 1 : i === generatingPhase ? 0.9 : 0.3,
+                            transform: i === generatingPhase ? 'scale(1.3)' : 'scale(1)',
+                          }}
+                        />
+                        <span
+                          className="text-[10px] leading-none transition-all duration-300"
+                          style={{
+                            color: i <= generatingPhase ? 'var(--color-primary)' : 'var(--color-muted)',
+                            fontWeight: i <= generatingPhase ? 'var(--weight-semibold)' : 'var(--weight-normal)',
+                          }}
+                        >
+                          {totalPhases <= 6 ? `Phase ${i + 1}` : `${(i + 1) * Math.round(100 / totalPhases)}%`}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2 rounded-xl px-3 py-2" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                    <span className="inline-block h-2 w-2 animate-pulse rounded-full" style={{ backgroundColor: 'var(--color-primary)' }} />
+                    <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
+                      {generatingPhase < totalPhases
+                        ? `Generating next phase...`
+                        : 'Saving your plan...'}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-4 py-4">
+                  <div className="flex h-2 w-64 overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                    <div
+                      className="h-full w-1/3 animate-pulse rounded-full"
+                      style={{ backgroundColor: 'var(--color-primary)' }}
+                    />
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                      Preparing your study plan
+                    </p>
+                    <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                      Analyzing your IELTS level and study preferences...
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                AI will generate a structured study plan with learning phases and daily tasks tailored to your level, weak areas, and available study time.
-              </p>
-              <p className="text-xs text-amber-600 dark:text-amber-400">
-                This will replace your existing plan and tasks on the scheduled dates.
-              </p>
-              <div className="flex justify-end gap-3">
+              <div className="flex items-start gap-3 rounded-2xl p-3 sm:p-4" style={{ backgroundColor: 'var(--color-primary-light)' }}>
+                <IconStudyPlan size={20} style={{ color: 'var(--color-primary)', marginTop: '2px' }} />
+                <div>
+                  <p className="text-sm" style={{ color: 'var(--color-text)' }}>
+                    AI will generate a structured study plan with learning phases and daily tasks tailored to your level, weak areas, and available study time.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2 rounded-xl px-3 py-2.5 text-xs" style={{ backgroundColor: 'var(--color-warning-light)', color: 'var(--color-warning-dark)' }}>
+                <IconAlertCircle size={14} className="shrink-0 mt-0.5" />
+                <span>This will replace your existing plan and tasks on the scheduled dates.</span>
+              </div>
+              <div className="flex justify-end gap-3 pt-2">
                 <Button variant="secondary" onClick={() => setShowGenerateModal(false)}>Cancel</Button>
-                <Button onClick={handleGenerate} loading={generating}>
+                <Button onClick={handleGenerate} loading={generating} icon={<IconAdd size={16} />}>
                   Generate Plan
                 </Button>
               </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useToast } from '../../../../../packages/ui/src/components/Toast'
+import { IconBack, IconDownload, IconUpload, IconInfo } from '@ielts/ui'
 import {
   exportExtensionData,
   importExtensionData,
@@ -169,8 +170,8 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
-        padding: '16px',
+        gap: 'var(--spacing-md)',
+        padding: 'var(--spacing-md)',
         minHeight: '500px',
       }}
     >
@@ -178,7 +179,7 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '12px',
+          gap: 'var(--spacing-sm)',
         }}
       >
         <button
@@ -186,7 +187,7 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
           style={{
             background: 'var(--color-surface)',
             border: '1px solid var(--color-border)',
-            borderRadius: 'var(--radius-md)',
+            borderRadius: 'var(--radius-lg)',
             width: '32px',
             height: '32px',
             display: 'flex',
@@ -194,16 +195,15 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
             justifyContent: 'center',
             cursor: 'pointer',
             color: 'var(--color-text)',
-            fontSize: '16px',
             flexShrink: 0,
           }}
           aria-label="Back"
         >
-          ←
+          <IconBack size={16} />
         </button>
         <h1
           style={{
-            fontSize: '16px',
+            fontSize: 'var(--text-base)',
             fontWeight: 700,
             color: 'var(--color-text)',
             margin: 0,
@@ -219,25 +219,25 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
           background: 'var(--color-surface)',
           border: '1px solid var(--color-border)',
           borderRadius: 'var(--radius-lg)',
-          padding: '12px',
+          padding: 'var(--spacing-sm)',
         }}
       >
         <h2
           style={{
-            fontSize: '12px',
-            fontWeight: 600,
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-semibold)',
             color: 'var(--color-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            margin: '0 0 8px',
+            margin: '0 0 var(--spacing-xs)',
           }}
         >
           Sync Status
         </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)', fontSize: 'var(--text-sm)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ color: 'var(--color-text-secondary)' }}>Last Sync</span>
-            <span style={{ color: 'var(--color-text)', fontWeight: 500 }}>
+            <span style={{ color: 'var(--color-text)', fontWeight: 'var(--weight-medium)' }}>
               {formatDate(syncStatus?.lastSyncAt ?? null)}
             </span>
           </div>
@@ -245,10 +245,10 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
             <span style={{ color: 'var(--color-text-secondary)' }}>Pending Items</span>
             <span
               style={{
-                color: (syncStatus?.pendingItems.length ?? 0) > 0
-                  ? 'var(--color-warning, #d97706)'
-                  : 'var(--color-text)',
-                fontWeight: 500,
+color: (syncStatus?.pendingItems.length ?? 0) > 0
+                    ? 'var(--color-warning)'
+                    : 'var(--color-text)',
+                fontWeight: 'var(--weight-medium)',
               }}
             >
               {syncStatus?.pendingItems.length ?? 0}
@@ -258,13 +258,13 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
             <span style={{ color: 'var(--color-text-secondary)' }}>Last Result</span>
             <span
               style={{
-                fontWeight: 500,
+                fontWeight: 'var(--weight-medium)',
                 color:
-                  syncStatus?.lastSyncResult === 'success'
-                    ? 'var(--color-success, #10b981)'
-                    : syncStatus?.lastSyncResult === 'failed'
-                      ? 'var(--color-error, #ef4444)'
-                      : 'var(--color-text)',
+syncStatus?.lastSyncResult === 'success'
+                      ? 'var(--color-success)'
+                      : syncStatus?.lastSyncResult === 'failed'
+                        ? 'var(--color-danger)'
+                        : 'var(--color-text)',
               }}
             >
               {syncStatus?.lastSyncResult ?? 'N/A'}
@@ -275,15 +275,15 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
           <button
             onClick={handleClearPending}
             style={{
-              marginTop: '8px',
+              marginTop: 'var(--spacing-xs)',
               width: '100%',
-              padding: '6px 12px',
+              padding: 'var(--spacing-2xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '12px',
-              fontWeight: 500,
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-medium)',
               cursor: 'pointer',
             }}
           >
@@ -298,26 +298,26 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
           background: 'var(--color-surface)',
           border: '1px solid var(--color-border)',
           borderRadius: 'var(--radius-lg)',
-          padding: '12px',
+          padding: 'var(--spacing-sm)',
         }}
       >
         <h2
           style={{
-            fontSize: '12px',
-            fontWeight: 600,
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-semibold)',
             color: 'var(--color-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            margin: '0 0 8px',
+            margin: '0 0 var(--spacing-xs)',
           }}
         >
           Export Data
         </h2>
         <p
           style={{
-            fontSize: '12px',
+            fontSize: 'var(--text-xs)',
             color: 'var(--color-text-secondary)',
-            margin: '0 0 12px',
+            margin: '0 0 var(--spacing-sm)',
             lineHeight: '1.4',
           }}
         >
@@ -329,18 +329,18 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
           disabled={exporting}
           style={{
             width: '100%',
-            padding: '10px 16px',
+            padding: 'var(--spacing-sm) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: 'none',
             background: 'var(--color-primary)',
-            color: '#ffffff',
-            fontSize: '13px',
-            fontWeight: 600,
+            color: 'var(--color-text-inverse)',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--weight-semibold)',
             cursor: exporting ? 'not-allowed' : 'pointer',
             opacity: exporting ? 0.6 : 1,
           }}
         >
-          {exporting ? 'Exporting...' : '📥 Download Backup'}
+          {exporting ? 'Exporting...' : <><IconDownload size={14} /> Download Backup</>}
         </button>
       </section>
 
@@ -350,26 +350,26 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
           background: 'var(--color-surface)',
           border: '1px solid var(--color-border)',
           borderRadius: 'var(--radius-lg)',
-          padding: '12px',
+          padding: 'var(--spacing-sm)',
         }}
       >
         <h2
           style={{
-            fontSize: '12px',
-            fontWeight: 600,
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-semibold)',
             color: 'var(--color-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            margin: '0 0 8px',
+            margin: '0 0 var(--spacing-xs)',
           }}
         >
           Import Data
         </h2>
         <p
           style={{
-            fontSize: '12px',
+            fontSize: 'var(--text-xs)',
             color: 'var(--color-text-secondary)',
-            margin: '0 0 12px',
+            margin: '0 0 var(--spacing-sm)',
             lineHeight: '1.4',
           }}
         >
@@ -379,15 +379,15 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
         <div
           style={{
             display: 'flex',
-            gap: '8px',
-            marginBottom: '12px',
+            gap: 'var(--spacing-xs)',
+            marginBottom: 'var(--spacing-sm)',
           }}
         >
           <button
             onClick={() => setImportMode('merge')}
             style={{
               flex: 1,
-              padding: '6px 12px',
+              padding: 'var(--spacing-2xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: importMode === 'merge'
                 ? '2px solid var(--color-primary)'
@@ -396,8 +396,8 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
                 ? 'var(--color-primary-light, transparent)'
                 : 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '11px',
-              fontWeight: 500,
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-medium)',
               cursor: 'pointer',
             }}
           >
@@ -407,17 +407,17 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
             onClick={() => setImportMode('replace')}
             style={{
               flex: 1,
-              padding: '6px 12px',
+              padding: 'var(--spacing-2xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: importMode === 'replace'
-                ? '2px solid var(--color-error, #ef4444)'
+                ? '2px solid var(--color-danger)'
                 : '1px solid var(--color-border)',
               background: importMode === 'replace'
-                ? 'var(--color-error-light, transparent)'
+                ? 'var(--color-danger-light)'
                 : 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '11px',
-              fontWeight: 500,
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-medium)',
               cursor: 'pointer',
             }}
           >
@@ -430,20 +430,20 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '8px',
+            gap: 'var(--spacing-xs)',
             width: '100%',
-            padding: '10px 16px',
+            padding: 'var(--spacing-sm) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: '2px dashed var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-primary)',
-            fontSize: '13px',
-            fontWeight: 600,
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--weight-semibold)',
             cursor: importing ? 'not-allowed' : 'pointer',
             opacity: importing ? 0.6 : 1,
           }}
         >
-          {importing ? 'Importing...' : '📤 Upload Backup'}
+          {importing ? 'Importing...' : <><IconUpload size={14} /> Upload Backup</>}
           <input
             id="import-file-input"
             type="file"
@@ -463,25 +463,25 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
             background: 'var(--color-surface)',
             border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-lg)',
-            padding: '12px',
+            padding: 'var(--spacing-sm)',
           }}
         >
           <h2
             style={{
-              fontSize: '12px',
-              fontWeight: 600,
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-semibold)',
               color: 'var(--color-muted)',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
-              margin: '0 0 8px',
+              margin: '0 0 var(--spacing-xs)',
             }}
           >
             Import Result
           </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '13px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: 'var(--text-sm)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ color: 'var(--color-text-secondary)' }}>Added</span>
-              <span style={{ color: 'var(--color-success, #10b981)', fontWeight: 600 }}>
+              <span style={{ color: 'var(--color-success)', fontWeight: 'var(--weight-semibold)' }}>
                 {result.added}
               </span>
             </div>
@@ -489,8 +489,8 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
               <span style={{ color: 'var(--color-text-secondary)' }}>Failed</span>
               <span
                 style={{
-                  color: result.failed > 0 ? 'var(--color-error, #ef4444)' : 'var(--color-text)',
-                  fontWeight: 600,
+                  color: result.failed > 0 ? 'var(--color-danger)' : 'var(--color-text)',
+                  fontWeight: 'var(--weight-semibold)',
                 }}
               >
                 {result.failed}
@@ -499,20 +499,20 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
             {result.errors.length > 0 && (
               <div
                 style={{
-                  marginTop: '8px',
+                  marginTop: 'var(--spacing-xs)',
                   padding: '8px',
-                  background: 'var(--color-surface-alt, #f8f9fa)',
-                  borderRadius: 'var(--radius-md)',
-                  maxHeight: '120px',
-                  overflow: 'auto',
-                }}
-              >
-                {result.errors.map((err, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      fontSize: '11px',
-                      color: 'var(--color-error, #ef4444)',
+background: 'var(--color-surface-alt)',
+                   borderRadius: 'var(--radius-md)',
+                   maxHeight: '120px',
+                   overflow: 'auto',
+                 }}
+               >
+                 {result.errors.map((err, i) => (
+                   <div
+                     key={i}
+                     style={{
+                       fontSize: 'var(--text-xs)',
+                       color: 'var(--color-danger)',
                       padding: '2px 0',
                       wordBreak: 'break-all',
                     }}
@@ -526,15 +526,15 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
           <button
             onClick={() => setResult(null)}
             style={{
-              marginTop: '8px',
+              marginTop: 'var(--spacing-xs)',
               width: '100%',
-              padding: '6px 12px',
+              padding: 'var(--spacing-2xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '12px',
-              fontWeight: 500,
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-medium)',
               cursor: 'pointer',
             }}
           >
@@ -549,13 +549,13 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
           background: 'var(--color-surface)',
           border: '1px solid var(--color-border)',
           borderRadius: 'var(--radius-lg)',
-          padding: '12px',
-          fontSize: '12px',
+          padding: 'var(--spacing-sm)',
+          fontSize: 'var(--text-xs)',
           color: 'var(--color-text-secondary)',
           lineHeight: '1.5',
         }}
       >
-        <strong style={{ color: 'var(--color-text)' }}>💡 About Website Sync</strong>
+        <strong style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-2xs)', color: 'var(--color-text)' }}><IconInfo size={14} /> About Website Sync</strong>
         <p style={{ margin: '4px 0 0' }}>
           The extension and the IELTS Journey website store data in separate databases due to
           browser security (IndexedDB is origin-bound). To sync data:

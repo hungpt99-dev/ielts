@@ -6,6 +6,7 @@ import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
 import { saveVocabularyEntry, extensionVocabSchema } from '../../storage/vocabularyStore'
 import { saveArticleEntry, extensionArticleSchema } from '../../storage/articleStore'
+import { IconClose, IconCheck } from '@ielts/ui'
 
 interface SaveTextFormProps {
   onSaved: () => void
@@ -36,21 +37,21 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
       const tab = tabs[0]
       if (!tab.id) return
       chrome.tabs.sendMessage(tab.id, { type: 'GET_PAGE_INFO' }, (response) => {
-        if (response) {
-          setPageInfo({
-            title: response.title || tab.title || '',
-            url: response.url || tab.url || '',
-            selectedText: response.selectedText || '',
-          })
-          if (response.selectedText) {
-            setForm(prev => ({ ...prev, text: response.selectedText }))
-          }
-        } else {
+        if (chrome.runtime.lastError) {
           setPageInfo({
             title: tab.title || '',
             url: tab.url || '',
             selectedText: '',
           })
+          return
+        }
+        setPageInfo({
+          title: response?.title || tab.title || '',
+          url: response?.url || tab.url || '',
+          selectedText: response?.selectedText || '',
+        })
+        if (response?.selectedText) {
+          setForm(prev => ({ ...prev, text: response.selectedText }))
         }
       })
     })
@@ -192,8 +193,8 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '48px 24px',
-        gap: '12px',
+        padding: 'var(--spacing-2xl) var(--spacing-lg)',
+        gap: 'var(--spacing-sm)',
       }}>
         <div style={{
           width: '56px',
@@ -204,14 +205,14 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
           alignItems: 'center',
           justifyContent: 'center',
           fontSize: '28px',
-          color: '#fff',
+          color: 'var(--color-text-inverse)',
         }}>
-          ✓
+          <IconCheck size={28} />
         </div>
-        <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text)' }}>
+        <div style={{ fontSize: 'var(--text-base)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-text)' }}>
           Saved successfully!
         </div>
-        <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+        <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
           {CATEGORY_LABELS[form.category]}
         </div>
       </div>
@@ -222,18 +223,21 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
     <form onSubmit={handleSubmit} aria-label="Save text form" style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: '16px',
+      gap: 'var(--spacing-md)',
+      padding: 'var(--spacing-md)',
+      width: 'var(--ext-width)',
+      boxSizing: 'border-box',
     }}>
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 0 8px',
+        padding: '0 0 var(--spacing-xs)',
         borderBottom: '1px solid var(--color-border)',
       }}>
         <h2 style={{
-          fontSize: '16px',
-          fontWeight: 600,
+          fontSize: 'var(--text-base)',
+          fontWeight: 'var(--weight-semibold)',
           color: 'var(--color-text)',
           margin: 0,
         }}>
@@ -244,33 +248,36 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
           onClick={onCancel}
           aria-label="Cancel"
           style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 'var(--spacing-xl)',
+            height: 'var(--spacing-xl)',
             background: 'none',
             border: 'none',
             color: 'var(--color-muted)',
             cursor: 'pointer',
-            fontSize: '18px',
-            padding: '4px',
-            lineHeight: 1,
+            borderRadius: 'var(--radius-lg)',
           }}
         >
-          ✕
+          <IconClose size={18} />
         </button>
       </div>
 
       {errors.submit && (
         <div role="alert" style={{
-          padding: '8px 12px',
+          padding: 'var(--spacing-xs) var(--spacing-sm)',
           background: 'var(--color-danger)',
-          color: '#fff',
+          color: 'var(--color-text-inverse)',
           borderRadius: 'var(--radius-md)',
-          fontSize: '13px',
+          fontSize: 'var(--text-sm)',
         }}>
           {errors.submit}
         </div>
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+        <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
           Selected Text
         </label>
         <textarea
@@ -281,29 +288,29 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
           aria-describedby={errors.text ? 'text-error' : undefined}
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: errors.text ? '1px solid var(--color-danger)' : '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             lineHeight: 1.5,
             resize: 'vertical',
             fontFamily: 'var(--font-sans)',
           }}
         />
         {errors.text && (
-          <span id="text-error" role="alert" style={{ fontSize: '12px', color: 'var(--color-danger)' }}>{errors.text}</span>
+          <span id="text-error" role="alert" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-danger)' }}>{errors.text}</span>
         )}
         {pageInfo.title && (
-          <span style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
+          <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
             From: {pageInfo.title}
           </span>
         )}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+        <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
           Category
         </label>
         <div style={{
@@ -320,16 +327,16 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '8px 10px',
+                padding: 'var(--spacing-xs) var(--spacing-sm)',
                 borderRadius: 'var(--radius-md)',
                 border: form.category === cat
                   ? `2px solid ${CATEGORY_COLORS[cat]}`
                   : '1px solid var(--color-border)',
                 background: form.category === cat ? 'var(--color-primary-light)' : 'var(--color-surface)',
                 color: 'var(--color-text)',
-                fontSize: '12px',
+                fontSize: 'var(--text-xs)',
                 cursor: 'pointer',
-                transition: 'all 0.15s',
+                transition: 'var(--transition-fast)',
                 textAlign: 'left',
               }}
             >
@@ -343,10 +350,10 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '12px',
+        gap: 'var(--spacing-sm)',
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+          <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
             Topic
           </label>
           <input
@@ -356,17 +363,17 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
             placeholder="e.g. education, environment"
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+          <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
             Skill
           </label>
           <select
@@ -374,12 +381,12 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
             onChange={e => handleChange('skill', e.target.value)}
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           >
             {SKILL_OPTIONS.map(s => (
@@ -392,10 +399,10 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
       <div style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '12px',
+        gap: 'var(--spacing-sm)',
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+          <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
             Difficulty
           </label>
           <select
@@ -403,12 +410,12 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
             onChange={e => handleChange('difficulty', e.target.value)}
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           >
             <option value="">Not specified</option>
@@ -418,7 +425,7 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
           </select>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+          <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
             Tags
           </label>
           <input
@@ -428,19 +435,19 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
             placeholder="comma, separated"
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           />
         </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-        <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>
+        <label style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text-secondary)' }}>
           Personal Note
         </label>
         <textarea
@@ -450,12 +457,12 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
           placeholder="Add a personal note..."
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             lineHeight: 1.5,
             resize: 'vertical',
             fontFamily: 'var(--font-sans)',
@@ -465,22 +472,24 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
 
       <div style={{
         display: 'flex',
-        gap: '8px',
+        gap: 'var(--spacing-xs)',
         justifyContent: 'flex-end',
-        paddingTop: '8px',
+        paddingTop: 'var(--spacing-xs)',
         borderTop: '1px solid var(--color-border)',
       }}>
         <button
           type="button"
           onClick={onCancel}
           style={{
-            padding: '8px 16px',
+            padding: 'var(--spacing-sm) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             cursor: 'pointer',
+            touchAction: 'manipulation',
+            minHeight: '44px',
           }}
         >
           Cancel
@@ -490,15 +499,17 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
           disabled={saving}
           aria-busy={saving}
           style={{
-            padding: '8px 20px',
+            padding: 'var(--spacing-sm) var(--spacing-lg)',
             borderRadius: 'var(--radius-md)',
             border: 'none',
             background: saving ? 'var(--color-primary-hover)' : 'var(--color-primary)',
-            color: '#ffffff',
-            fontSize: '13px',
-            fontWeight: 600,
+            color: 'var(--color-text-inverse)',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--weight-semibold)',
             cursor: saving ? 'not-allowed' : 'pointer',
             opacity: saving ? 0.7 : 1,
+            touchAction: 'manipulation',
+            minHeight: '44px',
           }}
         >
           {saving ? 'Saving...' : 'Save'}

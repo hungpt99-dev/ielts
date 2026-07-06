@@ -1,37 +1,51 @@
-import { APP_URL, EXTENSION_URL } from './config'
+import { Button, Badge } from '@ielts/ui'
+import { APP_URL } from './config'
 
 export default function FinalCTASection() {
   return (
-    <section className="bg-[var(--color-background)] text-[var(--color-text)] px-4 py-16 sm:py-20 lg:py-24">
+    <section className="px-4 py-20 sm:py-28 lg:py-32"
+      style={{
+        background: 'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%)',
+      }}
+    >
       <div className="mx-auto max-w-3xl text-center">
-        <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Start your IELTS learning journey today
+        <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          Start your IELTS journey today.
         </h2>
-        <p className="mt-4 text-lg text-[var(--color-text-secondary)]">
-          Free, private, and built for real learners.
+        <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed"
+          style={{ color: 'rgba(255,255,255,0.85)' }}>
+          No account required. No credit card. Your data stays in your browser.
         </p>
         <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <a
-            href={APP_URL}
-            className="inline-flex h-12 items-center justify-center rounded-xl bg-[var(--color-primary)] px-8 text-base font-semibold shadow-sm transition-all hover:scale-105"
-            style={{ color: 'var(--color-white)' }}
-          >
-            Start Learning Free
+          <a href={APP_URL}>
+            <Button variant="primary" size="lg"
+              style={{
+                background: 'white',
+                color: 'var(--color-primary)',
+                border: '2px solid white',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.15)',
+              }}>
+              Start Learning Free
+            </Button>
           </a>
-          <a
-            href={EXTENSION_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-12 items-center justify-center rounded-xl border-2 border-[var(--color-primary)] px-8 text-base font-semibold text-[var(--color-primary)] transition-all hover:scale-105"
-          >
-            Install Chrome Extension
+          <a href="#features">
+            <Button variant="ghost" size="lg"
+              style={{ color: 'rgba(255,255,255,0.9)', borderColor: 'rgba(255,255,255,0.3)' }}>
+              Explore the Features
+            </Button>
           </a>
-          <a
-            href="#donation"
-            className="inline-flex h-12 items-center justify-center rounded-xl border border-[var(--color-border)] px-8 text-base font-semibold text-[var(--color-text-secondary)] transition-all hover:scale-105"
-          >
-            Support the Project
-          </a>
+        </div>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          {['100% Free', 'Open Source', 'Privacy First', 'Works Offline'].map((item) => (
+            <Badge key={item} variant="default" size="sm"
+              style={{
+                background: 'rgba(255,255,255,0.15)',
+                color: 'rgba(255,255,255,0.9)',
+                border: '1px solid rgba(255,255,255,0.2)',
+              }}>
+              {item}
+            </Badge>
+          ))}
         </div>
       </div>
     </section>

@@ -10,6 +10,8 @@ import Modal from '../../components/ui/Modal'
 import CalendarView from './components/CalendarView'
 import { taskFormSchema, type TaskFormData } from './validation'
 import { generateAISchedule, type AiPhase } from './aiPlannerService'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconTodayPlan } from '@ielts/ui'
 
 const CATEGORIES: TaskCategory[] = [
   'Vocabulary', 'Reading', 'Listening',
@@ -19,16 +21,16 @@ const CATEGORIES: TaskCategory[] = [
 ]
 
 const CATEGORY_COLORS: Record<TaskCategory, string> = {
-  'Vocabulary': 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  'Reading': 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  'Listening': 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-  'Writing Task 1': 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  'Writing Task 2': 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
-  'Speaking Part 1': 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300',
-  'Speaking Part 2': 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300',
-  'Speaking Part 3': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
-  'Grammar': 'bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300',
-  'Mock Test': 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+  'Vocabulary': 'bg-[var(--color-info-light)] text-[var(--color-info-dark)]',
+  'Reading': 'bg-[var(--color-skill-reading-light)] text-[var(--color-skill-reading-dark)]',
+  'Listening': 'bg-[var(--color-skill-listening-light)] text-[var(--color-skill-listening-dark)]',
+  'Writing Task 1': 'bg-[var(--color-skill-writing-light)] text-[var(--color-skill-writing-dark)]',
+  'Writing Task 2': 'bg-[var(--color-skill-writing-light)] text-[var(--color-skill-writing-dark)]',
+  'Speaking Part 1': 'bg-[var(--color-skill-speaking-light)] text-[var(--color-skill-speaking-dark)]',
+  'Speaking Part 2': 'bg-[var(--color-skill-speaking-light)] text-[var(--color-skill-speaking-dark)]',
+  'Speaking Part 3': 'bg-[var(--color-skill-speaking-light)] text-[var(--color-skill-speaking-dark)]',
+  'Grammar': 'bg-[var(--color-success-light)] text-[var(--color-success-dark)]',
+  'Mock Test': 'bg-[var(--color-danger-light)] text-[var(--color-danger-dark)]',
 }
 
 interface ScheduleConfig {
@@ -319,30 +321,27 @@ export default function Planner() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-            Study Planner
-          </h1>
-          <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-            Plan, track, and manage your IELTS study schedule
-          </p>
+      <PageHeader
+        icon={<IconTodayPlan size={22} />}
+        title="Study Planner"
+        description="Plan, track, and manage your IELTS study schedule"
+        actions={
+          <div className="flex gap-2">
+            <Button onClick={handleGenerateSchedule}>
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              Auto Schedule
+            </Button>
+            <Button onClick={openCreateTask} variant="secondary">
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Task
+            </Button>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={handleGenerateSchedule}>
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            Auto Schedule
-          </Button>
-          <Button onClick={openCreateTask} variant="secondary">
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-            Add Task
-          </Button>
-        </div>
-      </div>
+      }
+    />
 
       <div
         className="flex gap-1 rounded-lg border p-1"

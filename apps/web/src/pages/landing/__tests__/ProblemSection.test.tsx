@@ -6,19 +6,16 @@ describe('ProblemSection', () => {
   it('renders the section heading', () => {
     render(<ProblemSection />)
     expect(
-      screen.getByText('The struggle is real')
+      screen.getByText('Studying for IELTS alone is hard.')
     ).toBeInTheDocument()
   })
 
-  it('renders all seven problems as list items', () => {
+  it('renders the four problem cards', () => {
     render(<ProblemSection />)
-    expect(screen.getByText('They do not know where to start.')).toBeInTheDocument()
-    expect(screen.getByText('They do not know the correct learning path.')).toBeInTheDocument()
-    expect(screen.getByText('They waste time searching across too many websites.')).toBeInTheDocument()
-    expect(screen.getByText('They study randomly without a clear plan.')).toBeInTheDocument()
-    expect(screen.getByText('They do not know what to focus on each day.')).toBeInTheDocument()
-    expect(screen.getByText('They feel overwhelmed by too many resources.')).toBeInTheDocument()
-    expect(screen.getByText('They lose motivation because progress is not clear.')).toBeInTheDocument()
+    expect(screen.getByText('Too many resources')).toBeInTheDocument()
+    expect(screen.getByText('No structure')).toBeInTheDocument()
+    expect(screen.getByText('No feedback')).toBeInTheDocument()
+    expect(screen.getByText('No progress visibility')).toBeInTheDocument()
   })
 
   it('renders a semantic section with heading level 2', () => {
@@ -28,6 +25,6 @@ describe('ProblemSection', () => {
 
   it('has an id attribute for navigation', () => {
     render(<ProblemSection />)
-    expect(screen.getByText(/The struggle is real/).closest('section')).toHaveAttribute('id', 'problems')
+    expect(screen.getByText(/Studying for IELTS alone/).closest('section')).toHaveAttribute('id', 'problems')
   })
 })

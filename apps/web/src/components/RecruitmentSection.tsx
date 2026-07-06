@@ -62,7 +62,7 @@ export default function RecruitmentSection() {
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <a
-            href="https://github.com"
+            href="https://github.com/hungpt99-dev/ielts"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex h-11 items-center gap-2 rounded-xl bg-[var(--color-primary)] px-6 text-sm font-semibold shadow-sm transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"

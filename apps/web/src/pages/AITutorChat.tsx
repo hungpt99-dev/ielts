@@ -1,4 +1,9 @@
 import { useState, useEffect, useCallback, useRef, useId } from 'react'
+import { VoiceProvider } from '../voice/VoiceProvider'
+import { useVoice } from '../voice/useVoice'
+import VoiceButton from '../voice/components/VoiceButton'
+import TtsToggle from '../voice/components/TtsToggle'
+import RecordingIndicator from '../voice/components/RecordingIndicator'
 import type { AssistantMode, ChatMessage, ChatSession } from '../types'
 import type { TutorMemory, UserTutorPreferences, ProactiveSuggestion } from '../models/aiTutorModels'
 import { DEFAULT_TUTOR_PREFERENCES } from '../models/aiTutorModels'
@@ -34,7 +39,11 @@ import {
   aiGenerateLesson,
 } from '../components/aiTutor/aiTutorHelper'
 import React from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { generateId } from '../utils'
+import { IconAlertCircle, IconRefresh, IconAITutor, IconHash, IconMessageCircle, IconExplain, IconFolderOpen, IconDelete, IconClose, IconSend, IconLoading, IconVocabularyBook, IconVocabulary, IconGrammar, IconEdit, IconMistakes, IconCheckCircle, IconTarget, IconBookText, IconListening, IconTodayPlan, IconStar, IconShield, IconDownload, IconWriting, IconArticle, IconTimer, IconSpeaking, IconReading } from '@ielts/ui'
+import PageContainer from '../components/layout/PageContainer'
+import PageHeader from '../components/layout/PageHeader'
 import {
   type SpeakingPhase,
   type SpeakingQuestionItem,
@@ -492,7 +501,7 @@ function SocraticQuestionCard({ question, round, maxRounds, onSubmit, disabled }
 
   if (submitted) {
     return (
-      <div className="mt-2 animate-pulse rounded-lg bg-purple-50 p-3 text-center text-xs text-purple-600 dark:bg-purple-900/20 dark:text-purple-400">
+      <div className="mt-2 animate-pulse rounded-lg p-3 text-center text-xs" style={{ backgroundColor: 'var(--color-tutor-background)', color: 'var(--color-tutor-text)' }}>
         Thinking about your answer...
       </div>
     )
@@ -500,7 +509,7 @@ function SocraticQuestionCard({ question, round, maxRounds, onSubmit, disabled }
 
   return (
     <div
-      className="mt-3 rounded-xl border-2 border-purple-200 bg-purple-50/50 p-4 dark:border-purple-800 dark:bg-purple-900/10"
+      className="mt-3 rounded-xl border-2 p-4" style={{ borderColor: 'var(--color-tutor-border)', backgroundColor: 'var(--color-tutor-background)' }}
       role="form"
       aria-labelledby={labelId}
     >
@@ -511,7 +520,7 @@ function SocraticQuestionCard({ question, round, maxRounds, onSubmit, disabled }
         {question.hint && (
           <button
             onClick={() => setShowHint(!showHint)}
-            className="rounded-full border px-2 py-0.5 text-[10px] font-medium transition-colors hover:bg-purple-100 dark:hover:bg-purple-800"
+            className="rounded-full border px-2 py-0.5 text-[10px] font-medium transition-colors hover:bg-[var(--color-tutor-accent-light)]" style={{ borderColor: 'var(--color-tutor-border)' }}
             style={{ borderColor: 'var(--color-border)', color: 'var(--color-primary)' }}
             type="button"
           >
@@ -525,7 +534,7 @@ function SocraticQuestionCard({ question, round, maxRounds, onSubmit, disabled }
       </p>
 
       {showHint && question.hint && (
-        <div className="mb-3 rounded-lg bg-purple-100 p-2.5 text-xs text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
+        <div className="mb-3 rounded-lg p-2.5 text-xs" style={{ backgroundColor: 'var(--color-tutor-background)', color: 'var(--color-tutor-text)' }}>
           💡 {question.hint}
         </div>
       )}
@@ -725,9 +734,35 @@ function formatDate(dateStr: string): string {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
+// ── Voice auto-speak ─────────────────────────────────────────────
+
+function VoiceResponseSpeaker({ messages }: { messages: ChatMessage[] }) {
+  const { speak, ttsEnabled } = useVoice()
+  const lastSpoken = useRef(0)
+
+  useEffect(() => {
+    if (!ttsEnabled) {
+      lastSpoken.current = messages.length
+      return
+    }
+    if (messages.length > lastSpoken.current) {
+      const newMessages = messages.slice(lastSpoken.current)
+      for (const msg of newMessages) {
+        if (msg.role === 'assistant' && msg.content) {
+          speak(msg.content)
+        }
+      }
+      lastSpoken.current = messages.length
+    }
+  }, [messages, speak, ttsEnabled])
+
+  return null
+}
+
 // ── Chat Page ───────────────────────────────────────────────────
 
 export default function AITutorChat() {
+  const skipAutoSpeak = useRef(false)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [session, setSession] = useState<ChatSession | null>(null)
   const [input, setInput] = useState('')
@@ -811,6 +846,71 @@ export default function AITutorChat() {
     } catch {
       // Use defaults
     }
+  }, [])
+
+  // Consume navigation context (from Ask AI buttons)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const contextSentRef = useRef(false)
+
+  useEffect(() => {
+    if (contextSentRef.current) return
+
+    const stateContext = location.state as { prompt?: string; type?: string; title?: string } | null
+    const params = new URLSearchParams(location.search)
+    const queryPrompt = params.get('q')
+
+    const prompt = stateContext?.prompt || queryPrompt
+    if (!prompt) return
+
+    contextSentRef.current = true
+
+    const timer = setTimeout(async () => {
+      try {
+        const prefs = LocalTutorStorage.loadPreferences()
+        const mode = prefs.preferredMode || 'ielts-tutor'
+
+        const now = new Date().toISOString()
+        const sessionId = generateId()
+        const newSession: ChatSession = {
+          id: sessionId,
+          mode,
+          language: prefs.language || 'both',
+          topic: stateContext?.type || 'general',
+          messageCount: 0,
+          createdAt: now,
+          updatedAt: now,
+        }
+        await LocalTutorStorage.createSession(newSession)
+        setSession(newSession)
+        setMessages([])
+
+        await new Promise(r => setTimeout(r, 100))
+
+        const userMsg: ChatMessage = {
+          id: generateId(),
+          sessionId,
+          role: 'user',
+          content: prompt,
+          mode,
+          createdAt: now,
+        }
+        await LocalTutorStorage.addMessage(userMsg)
+        setMessages([userMsg])
+
+        setTimeout(async () => {
+          setInput(prompt)
+          await new Promise(r => setTimeout(r, 50))
+          sendMessage(prompt)
+        }, 200)
+      } catch {
+        // Context auto-send failed silently
+      }
+    }, 300)
+
+    navigate(location.pathname, { replace: true })
+
+    return () => clearTimeout(timer)
   }, [])
 
   // Initialize topic context manager
@@ -1769,9 +1869,14 @@ export default function AITutorChat() {
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-[3px] border-blue-600 border-t-transparent" role="status" aria-label="Loading" />
-          <p className="text-sm" style={{ color: 'var(--color-muted)' }}>Loading your tutor...</p>
+        <div className="flex flex-col items-center gap-5">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl" style={{ backgroundColor: 'var(--color-tutor-accent-light)' }}>
+            <div className="h-7 w-7 animate-spin rounded-full border-[3px] border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} role="status" aria-label="Loading" />
+          </div>
+          <div className="text-center">
+            <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Loading your tutor...</p>
+            <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>Preparing your personalized learning assistant</p>
+          </div>
         </div>
       </div>
     )
@@ -1780,12 +1885,18 @@ export default function AITutorChat() {
   if (error && !session) {
     return (
       <div className="flex h-full items-center justify-center">
-        <div className="max-w-md rounded-xl border border-slate-200 bg-white p-6 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800">
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <div className="max-w-md rounded-2xl p-8 text-center" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full" style={{ backgroundColor: 'var(--color-danger-light)' }}>
+            <IconAlertCircle size={28} style={{ color: 'var(--color-danger)' }} />
+          </div>
+          <p className="text-sm font-semibold" style={{ color: 'var(--color-danger)' }}>Failed to load chat</p>
+          <p className="mt-1 text-xs" style={{ color: 'var(--color-text-secondary)' }}>{error}</p>
           <button
             onClick={() => { setError(null); setLoading(true); loadOrCreateSession(mode) }}
-            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-transparent px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800"
+            className="mt-5 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-medium text-white transition-colors hover:opacity-90"
+            style={{ backgroundColor: 'var(--color-primary)' }}
           >
+            <IconRefresh size={16} />
             Retry
           </button>
         </div>
@@ -1793,68 +1904,35 @@ export default function AITutorChat() {
     )
   }
 
-  const quickActions: { key: string; label: string; icon: string }[] = [
-    { key: 'teach-me', label: 'Teach Me', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
-    { key: 'quiz-me', label: 'Quiz Me', icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { key: 'correct-english', label: 'Correct Me', icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z' },
-    { key: 'explain-simply', label: 'Explain Simply', icon: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' },
-    { key: 'give-examples', label: 'Examples', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
-    { key: 'make-exercise', label: 'Exercise', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
-    { key: 'remind-later', label: 'Remind', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' },
-    { key: 'practice-with-me', label: 'Practice', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
+  const quickActions: { key: string; label: string; icon: React.ReactNode }[] = [
+    { key: 'teach-me', label: 'Teach Me', icon: <IconVocabulary size={12} /> },
+    { key: 'quiz-me', label: 'Quiz Me', icon: <IconCheckCircle size={12} /> },
+    { key: 'correct-english', label: 'Correct Me', icon: <IconEdit size={12} /> },
+    { key: 'explain-simply', label: 'Explain Simply', icon: <IconExplain size={12} /> },
+    { key: 'give-examples', label: 'Examples', icon: <IconBookText size={12} /> },
+    { key: 'make-exercise', label: 'Exercise', icon: <IconEdit size={12} /> },
+    { key: 'remind-later', label: 'Remind', icon: <IconTimer size={12} /> },
+    { key: 'practice-with-me', label: 'Practice', icon: <IconTarget size={12} /> },
   ]
 
   return (
-    <div className="mx-auto flex h-full max-w-4xl flex-col">
-      {/* Header */}
-      <div className="mb-4 flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-                AI Tutor Assistant
-              </h1>
-              <p className="mt-0.5 text-sm" style={{ color: 'var(--color-muted)' }}>
-                Your personal IELTS learning companion
-              </p>
-              {currentTopicName && (
-                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-blue-100 px-2.5 py-0.5 text-[11px] font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-                  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 20l4-16 4 16m-6-4h6" />
-                  </svg>
-                  Topic: {currentTopicName}
-                </span>
-              )}
-              {mode === 'friendly-chat' && (
-                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-[11px] font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
-                  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                  Friend Mode — Casual chat with gentle corrections
-                </span>
-              )}
-              {mode === 'socratic-tutor' && (
-                <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-purple-100 px-2.5 py-0.5 text-[11px] font-medium text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">
-                  <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                  Socratic Mode — Guided questions for deeper learning
-                </span>
-              )}
-            </div>
-          <div className="flex items-center gap-2">
-            {/* Language toggle */}
+    <VoiceProvider>
+    <PageContainer width="wide" className="pt-4 sm:pt-6">
+      <PageHeader
+        icon={<IconAITutor size={22} />}
+        title="AI Tutor"
+        description="Your IELTS learning companion"
+        actions={
+          <div className="flex items-center gap-1.5">
             <div className="flex overflow-hidden rounded-lg border" style={{ borderColor: 'var(--color-border)' }}>
               {(['english', 'vietnamese', 'both'] as Language[]).map(lang => (
                 <button
                   key={lang}
                   onClick={() => handleLanguageChange(lang)}
-                  className={`px-3 py-1.5 text-xs font-medium transition-colors ${
-                    language === lang
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-700'
-                  }`}
+                  className="px-2.5 py-1.5 text-[11px] font-medium transition-colors"
                   style={{
-                    color: language === lang ? 'white' : 'var(--color-text-secondary)',
+                    backgroundColor: language === lang ? 'var(--color-primary)' : 'transparent',
+                    color: language === lang ? 'var(--color-on-primary)' : 'var(--color-text-secondary)',
                   }}
                 >
                   {lang === 'english' ? 'EN' : lang === 'vietnamese' ? 'VI' : 'EN/VI'}
@@ -1863,60 +1941,76 @@ export default function AITutorChat() {
             </div>
             <button
               onClick={openMemoryPanel}
-              className="rounded-lg p-2 text-sm transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
+              className="rounded-lg p-2 text-sm transition-colors hover:bg-[var(--color-surface-alt)]"
               style={{ color: 'var(--color-muted)' }}
               aria-label="Assistant memory"
-              title="Assistant memory"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
+              <IconFolderOpen size={16} />
             </button>
             <button
               onClick={clearChat}
-              className="rounded-lg p-2 text-sm transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
+              className="rounded-lg p-2 text-sm transition-colors hover:bg-[var(--color-surface-alt)]"
               style={{ color: 'var(--color-muted)' }}
               aria-label="Clear chat"
-              title="Clear chat"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
+              <IconDelete size={16} />
             </button>
           </div>
-        </div>
-
-        <ModeSelector selectedMode={mode} onModeChange={handleModeChange} disabled={sending} />
+        }
+      />
+      <div className="flex flex-wrap items-center gap-1.5">
+        {currentTopicName && (
+          <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
+            <IconHash size={10} />
+            {currentTopicName}
+          </span>
+        )}
+        {mode === 'friendly-chat' && (
+          <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}>
+            <IconMessageCircle size={10} />
+            Friend Mode
+          </span>
+        )}
+        {mode === 'socratic-tutor' && (
+          <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-skill-reading-light)', color: 'var(--color-skill-reading)' }}>
+            <IconExplain size={10} />
+            Socratic Mode
+          </span>
+        )}
       </div>
+
+      <ModeSelector selectedMode={mode} onModeChange={handleModeChange} disabled={sending} />
 
       {/* Mode description */}
       {session && session.messageCount === 0 && (
-        <div className="mb-4 rounded-xl border p-4" style={{
-          borderColor: 'var(--color-border)',
-          backgroundColor: 'var(--color-surface-alt)',
+        <div className="mb-4 rounded-2xl p-5" style={{
+          background: 'linear-gradient(135deg, var(--color-tutor-background), var(--color-surface))',
+          border: '1px solid var(--color-tutor-border)',
         }}>
           <div className="flex items-start gap-3">
-            <span className="mt-0.5 text-lg" aria-hidden="true">
-              {mode === 'friendly-chat' ? '💬' : mode === 'ielts-tutor' ? '🎓' : mode === 'speaking-partner' ? '🗣️' : mode === 'writing-coach' ? '✍️' : mode === 'grammar-teacher' ? '📚' : mode === 'vocabulary-coach' ? '📖' : mode === 'reading-explainer' ? '📰' : mode === 'listening-coach' ? '🎧' : mode === 'study-planner' ? '📅' : mode === 'socratic-tutor' ? '🧠' : '⭐'}
-            </span>
-            <div className="flex-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-              <p className="font-medium" style={{ color: 'var(--color-text)' }}>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: 'var(--color-tutor-accent-light)' }}>
+              <span className="flex items-center justify-center" aria-hidden="true">
+                {mode === 'friendly-chat' ? <IconMessageCircle size={16} /> : mode === 'ielts-tutor' ? <IconAITutor size={16} /> : mode === 'speaking-partner' ? <IconSpeaking size={16} /> : mode === 'writing-coach' ? <IconWriting size={16} /> : mode === 'grammar-teacher' ? <IconGrammar size={16} /> : mode === 'vocabulary-coach' ? <IconVocabulary size={16} /> : mode === 'reading-explainer' ? <IconReading size={16} /> : mode === 'listening-coach' ? <IconListening size={16} /> : mode === 'study-planner' ? <IconTodayPlan size={16} /> : mode === 'socratic-tutor' ? <IconExplain size={16} /> : <IconStar size={16} />}
+              </span>
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold" style={{ color: 'var(--color-tutor-text)' }}>
                 {MODE_GREETINGS[mode]}
               </p>
-              <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
+              <p className="mt-1 text-xs leading-relaxed" style={{ color: 'var(--color-tutor-text)', opacity: 0.8 }}>
                 {MODE_PROMPT[mode]}
               </p>
               {mode === 'friendly-chat' ? (
-                <p className="mt-2 text-xs" style={{ color: 'var(--color-muted)' }}>
+                <p className="mt-2 text-xs leading-relaxed" style={{ color: 'var(--color-tutor-text)', opacity: 0.7 }}>
                   💡 I'm your learning friend! I'll chat naturally, correct your English gently, and connect everything to your IELTS journey.
                 </p>
               ) : mode === 'socratic-tutor' ? (
-                <p className="mt-2 text-xs" style={{ color: 'var(--color-muted)' }}>
+                <p className="mt-2 text-xs leading-relaxed" style={{ color: 'var(--color-tutor-text)', opacity: 0.7 }}>
                   💡 I'll guide you with questions instead of giving direct answers. You'll discover insights yourself — and remember them much longer!
                 </p>
               ) : (
-                <p className="mt-2 text-xs" style={{ color: 'var(--color-muted)' }}>
-                  💡 Currently explaining in: <strong>{language === 'english' ? 'English' : language === 'vietnamese' ? 'Vietnamese' : 'English + Vietnamese'}</strong>. Use the EN/VI/Both toggle to switch.
+                <p className="mt-2 text-xs leading-relaxed" style={{ color: 'var(--color-tutor-text)', opacity: 0.7 }}>
+                  💡 Currently explaining in: <strong>{language === 'english' ? 'English' : language === 'vietnamese' ? 'Vietnamese' : 'English + Vietnamese'}</strong>
                 </p>
               )}
             </div>
@@ -1942,9 +2036,7 @@ export default function AITutorChat() {
               className="shrink-0 rounded-lg p-1 text-green-500 transition-colors hover:bg-green-100 dark:hover:bg-green-800"
               aria-label="Dismiss check-in"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <IconClose size={16} />
             </button>
           </div>
         </div>
@@ -2007,9 +2099,7 @@ export default function AITutorChat() {
       {contextManager.hasPermission() && !showContextDialog && contextPreviewItems.length > 0 && (
         <div className="mb-3 flex items-center gap-1.5">
           <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/30 dark:text-green-300">
-            <svg className="h-2.5 w-2.5" fill="currentColor" viewBox="0 0 8 8">
-              <circle cx="4" cy="4" r="3" />
-            </svg>
+            <span className="h-2.5 w-2.5 rounded-full bg-current" />
             Context active
           </span>
           <span className="text-[10px]" style={{ color: 'var(--color-muted)' }}>
@@ -2031,10 +2121,13 @@ export default function AITutorChat() {
 
       {/* Error banner */}
       {error && (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+        <div className="mb-4 rounded-xl p-3 text-sm" style={{ backgroundColor: 'var(--color-danger-light)', border: '1px solid var(--color-danger)', color: 'var(--color-danger)' }}>
           <div className="flex items-center justify-between">
-            <span>{error}</span>
-            <button onClick={() => setError(null)} className="ml-2 font-medium hover:underline" aria-label="Dismiss error">
+            <div className="flex items-center gap-2">
+              <IconAlertCircle size={16} />
+              <span>{error}</span>
+            </div>
+            <button onClick={() => setError(null)} className="ml-2 shrink-0 rounded-lg px-2 py-1 text-xs font-medium hover:opacity-70" aria-label="Dismiss error">
               Dismiss
             </button>
           </div>
@@ -2044,21 +2137,23 @@ export default function AITutorChat() {
       {/* Chat messages */}
       <div
         ref={listRef}
-        className="flex-1 overflow-y-auto rounded-xl border px-4 py-4"
+        className="overflow-y-auto rounded-2xl px-4 py-4 shadow-sm max-h-[60vh] min-h-[200px]"
         style={{
-          borderColor: 'var(--color-border)',
+          border: '1px solid var(--color-border)',
           backgroundColor: 'var(--color-surface)',
         }}
       >
         {messages.length === 0 ? (
-          <div className="flex h-full flex-col items-center justify-center py-12 text-center">
-            <div className="mb-4 text-4xl" aria-hidden="true">
-              {mode === 'friendly-chat' ? '💬' : mode === 'ielts-tutor' ? '🎓' : mode === 'speaking-partner' ? '🗣️' : mode === 'writing-coach' ? '✍️' : mode === 'grammar-teacher' ? '📚' : mode === 'vocabulary-coach' ? '📖' : mode === 'reading-explainer' ? '📰' : mode === 'listening-coach' ? '🎧' : mode === 'study-planner' ? '📅' : mode === 'socratic-tutor' ? '🧠' : '⭐'}
+          <div className="flex h-full w-full flex-col items-center justify-center py-12 text-center px-4">
+            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl shadow-sm" style={{ backgroundColor: 'var(--color-tutor-accent-light)' }}>
+              <span className="text-2xl" aria-hidden="true">
+                {mode === 'friendly-chat' ? '💬' : mode === 'ielts-tutor' ? '🎓' : mode === 'speaking-partner' ? '🗣️' : mode === 'writing-coach' ? '✍️' : mode === 'grammar-teacher' ? '📚' : mode === 'vocabulary-coach' ? '📖' : mode === 'reading-explainer' ? '📰' : mode === 'listening-coach' ? '🎧' : mode === 'study-planner' ? '📅' : mode === 'socratic-tutor' ? '🧠' : '⭐'}
+              </span>
             </div>
-            <p className="font-medium" style={{ color: 'var(--color-text)' }}>
-              {mode === 'friendly-chat' ? "Let's have a friendly chat! 🎯" : mode === 'socratic-tutor' ? "Let's learn through questioning! 🧠" : mode === 'speaking-partner' ? "Let's practice IELTS Speaking! 🗣️" : mode === 'reading-explainer' ? "Share an article to discuss! 📰" : mode === 'listening-coach' ? "Share a transcript to explore! 🎧" : 'Start a conversation with your AI Tutor'}
+            <p className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>
+              {mode === 'friendly-chat' ? "Let's have a friendly chat!" : mode === 'socratic-tutor' ? "Let's learn through questioning!" : mode === 'speaking-partner' ? "Let's practice IELTS Speaking!" : mode === 'reading-explainer' ? "Share an article to discuss!" : mode === 'listening-coach' ? "Share a transcript to explore!" : 'Start a conversation with your AI Tutor'}
             </p>
-            <p className="mt-1 max-w-sm text-sm" style={{ color: 'var(--color-muted)' }}>
+            <p className="mt-1.5 text-sm leading-relaxed" style={{ color: 'var(--color-muted)' }}>
               {mode === 'friendly-chat'
                 ? "Chat with me like a friend! I'll gently correct your English and connect our conversation to your IELTS learning journey."
                 : mode === 'socratic-tutor'
@@ -2223,33 +2318,40 @@ export default function AITutorChat() {
                 <React.Fragment key={msg.id}>
                   {showDate && (
                     <div className="flex justify-center">
-                      <span className="rounded-full bg-slate-100 px-3 py-1 text-[10px] font-medium text-slate-500 dark:bg-slate-700 dark:text-slate-400">
+                      <span className="rounded-full px-3 py-1 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-surface-alt)', color: 'var(--color-muted)' }}>
                         {formatDate(msg.createdAt)}
                       </span>
                     </div>
                   )}
-                  <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`flex items-end gap-2 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+                    {!isUser && (
+                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: 'var(--color-tutor-accent-light)' }}>
+                        <IconAITutor size={14} style={{ color: 'var(--color-tutor-accent)' }} />
+                      </div>
+                    )}
                     <div
-                      className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+                      className={`max-w-[85%] sm:max-w-[75%] px-4 py-3 shadow-sm ${
                         isUser
-                          ? 'rounded-br-md bg-blue-600 text-white'
-                          : 'rounded-bl-md border bg-white dark:bg-slate-700'
+                          ? 'rounded-2xl rounded-br-sm'
+                          : 'rounded-2xl rounded-bl-sm'
                       }`}
                       style={{
-                        borderColor: isUser ? 'transparent' : 'var(--color-border)',
+                        backgroundColor: isUser ? 'var(--color-primary)' : 'var(--color-surface-alt)',
+                        borderBottomRightRadius: isUser ? '4px' : undefined,
+                        borderBottomLeftRadius: !isUser ? '4px' : undefined,
                       }}
                     >
-                      <div className={`whitespace-pre-wrap text-sm leading-relaxed ${
-                        isUser ? 'text-white' : ''
+                      <div className={`whitespace-pre-wrap break-words text-sm leading-relaxed ${
+                        isUser ? 'text-[var(--color-on-primary)]' : 'text-[var(--color-text)]'
                       }`}>
                         {msg.content}
                       </div>
-                      <div className={`mt-1 flex items-center gap-1.5 text-[10px] ${
-                        isUser ? 'text-blue-200' : 'text-slate-400 dark:text-slate-500'
+                      <div className={`mt-1.5 flex items-center gap-1.5 text-[10px] ${
+                        isUser ? 'text-[var(--color-on-primary)]' : 'text-[var(--color-muted)]'
                       }`}>
                         {!isUser && msg.mode === 'friendly-chat' && (
-                          <span className="inline-flex items-center gap-0.5 rounded-full bg-green-100 px-1.5 py-0.5 text-[9px] font-medium text-green-600 dark:bg-green-900/30 dark:text-green-400">
-                            💬 friend
+                          <span className="inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-medium" style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}>
+                            friend
                           </span>
                         )}
                         {formatTime(msg.createdAt)}
@@ -2293,9 +2395,7 @@ export default function AITutorChat() {
                             {savingMsgId === msg.id ? (
                               <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
                             ) : (
-                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-                              </svg>
+                              <IconDownload size={12} />
                             )}
                             Save
                           </button>
@@ -2312,11 +2412,11 @@ export default function AITutorChat() {
                               style={{ borderColor: 'var(--color-border)' }}
                             >
                               {[
-                                { type: 'note' as const, label: '📝 Save as Note', icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z' },
-                                { type: 'vocabulary' as const, label: '📖 Save as Vocabulary', icon: 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253' },
-                                { type: 'grammar' as const, label: '📚 Save as Grammar Note', icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4' },
-                                { type: 'exercise' as const, label: '✏️ Save as Exercise', icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2' },
-                                { type: 'mistake' as const, label: '⚠️ Save as Mistake', icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z' },
+                                { type: 'note' as const, label: 'Save as Note', icon: <IconEdit size={12} /> },
+                                { type: 'vocabulary' as const, label: 'Save as Vocabulary', icon: <IconVocabularyBook size={12} /> },
+                                { type: 'grammar' as const, label: 'Save as Grammar Note', icon: <IconGrammar size={12} /> },
+                                { type: 'exercise' as const, label: 'Save as Exercise', icon: <IconEdit size={12} /> },
+                                { type: 'mistake' as const, label: 'Save as Mistake', icon: <IconMistakes size={12} /> },
                               ].map(item => (
                                 <button
                                   key={item.type}
@@ -2324,6 +2424,7 @@ export default function AITutorChat() {
                                   className="flex items-center gap-2 rounded-md px-3 py-1.5 text-[11px] font-medium transition-colors hover:bg-slate-100 dark:hover:bg-slate-700 whitespace-nowrap"
                                   style={{ color: 'var(--color-text)' }}
                                 >
+                                  {item.icon}
                                   {item.label}
                                 </button>
                               ))}
@@ -2422,6 +2523,37 @@ export default function AITutorChat() {
                 />
               </div>
             )}
+            {sending && (
+              <div
+                className="flex items-end gap-2"
+                style={{ animation: 'chat-message-in 0.25s ease-out' }}
+              >
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: 'var(--color-tutor-accent-light)' }}>
+                  <IconAITutor size={14} style={{ color: 'var(--color-tutor-accent)' }} />
+                </div>
+                <div
+                  className="flex items-center gap-1.5 rounded-2xl px-4 py-3"
+                  style={{
+                    backgroundColor: 'var(--color-surface-alt)',
+                    borderRadius: '18px 18px 18px 4px',
+                  }}
+                  aria-label="AI Tutor is typing"
+                  role="status"
+                >
+                  {[0, 160, 320].map(delay => (
+                    <span
+                      key={delay}
+                      className="h-2 w-2 rounded-full"
+                      style={{
+                        backgroundColor: 'var(--color-tutor-accent)',
+                        animation: 'typing-bounce 1.4s ease-in-out infinite',
+                        animationDelay: `${delay}ms`,
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
             <div ref={listEndRef} />
           </div>
         )}
@@ -2435,15 +2567,14 @@ export default function AITutorChat() {
               key={action.key}
               onClick={() => handleQuickAction(action.key)}
               disabled={sending}
-              className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors hover:bg-slate-50 disabled:opacity-50 dark:hover:bg-slate-700"
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium transition-all hover:brightness-95 disabled:opacity-50"
               style={{
-                borderColor: 'var(--color-border)',
+                border: '1px solid var(--color-border)',
                 color: 'var(--color-text-secondary)',
+                backgroundColor: 'var(--color-surface)',
               }}
             >
-              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d={action.icon} />
-              </svg>
+              {action.icon}
               {action.label}
             </button>
           ))}
@@ -2453,37 +2584,37 @@ export default function AITutorChat() {
       {/* Proactive Suggestions */}
       {suggestions.length > 0 && (
         <div className="mt-3 space-y-2">
-          <p className="flex items-center gap-1.5 text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
-            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
+          <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
+            <IconExplain size={14} />
             Suggestions
           </p>
           {suggestions.slice(0, 3).map(s => (
             <div
               key={s.id}
-              className="flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50/50 p-3 dark:border-blue-900/30 dark:bg-blue-900/10"
+              className="flex items-start gap-3 rounded-2xl p-4"
+              style={{ backgroundColor: 'var(--color-tutor-background)', border: '1px solid var(--color-tutor-border)' }}
               role="alert"
             >
               <div className="mt-0.5 shrink-0">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-xs dark:bg-blue-900/30">
-                  {s.type === 'weakness-practice' ? '💪' : s.type === 'vocabulary-review' ? '📖' : s.type === 'exam-prep' ? '🎯' : s.type === 'mistake-review' ? '✏️' : s.type === 'article-practice' ? '📰' : '💡'}
+                <span className="flex h-8 w-8 items-center justify-center rounded-full text-sm" style={{ backgroundColor: 'var(--color-tutor-accent-light)' }}>
+                  {s.type === 'weakness-practice' ? <IconShield size={14} /> : s.type === 'vocabulary-review' ? <IconVocabularyBook size={14} /> : s.type === 'exam-prep' ? <IconTarget size={14} /> : s.type === 'mistake-review' ? <IconEdit size={14} /> : s.type === 'article-practice' ? <IconArticle size={14} /> : <IconExplain size={14} />}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{s.title}</p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{s.title}</p>
                 <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{s.description}</p>
-                <div className="mt-2 flex items-center gap-2">
+                <div className="mt-3 flex items-center gap-2">
                   <button
                     onClick={() => handleAcceptSuggestion(s.id, s.action)}
-                    className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-medium text-white transition-colors hover:bg-blue-700"
+                    className="inline-flex items-center gap-1 rounded-xl px-3.5 py-1.5 text-[11px] font-medium text-white transition-all hover:brightness-110"
+                    style={{ backgroundColor: 'var(--color-primary)' }}
                   >
                     {s.actionLabel || 'Accept'}
                   </button>
                   <button
                     onClick={() => handleDismissSuggestion(s.id)}
-                    className="inline-flex items-center gap-1 rounded-lg border px-3 py-1.5 text-[11px] font-medium transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
-                    style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
+                    className="inline-flex items-center gap-1 rounded-xl px-3.5 py-1.5 text-[11px] font-medium transition-colors"
+                    style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)' }}
                   >
                     Dismiss
                   </button>
@@ -2494,44 +2625,67 @@ export default function AITutorChat() {
         </div>
       )}
 
+      <VoiceResponseSpeaker messages={messages} />
+      <RecordingIndicator />
+      <style>{`
+        @keyframes typing-bounce {
+          0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+          30% { transform: translateY(-6px); opacity: 1; }
+        }
+      `}</style>
       {/* Input area */}
-      <div className="mt-3 mb-4 flex items-end gap-2">
-        <div className="relative flex-1">
+      <div className="mt-3 mb-4 flex items-center gap-2">
+        <div
+          className="relative flex flex-1 items-center rounded-2xl border px-4"
+          style={{
+            height: '52px',
+            borderColor: 'var(--color-border)',
+            backgroundColor: 'var(--color-surface)',
+            boxSizing: 'border-box',
+          }}
+        >
           <textarea
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask your AI tutor anything..."
-            rows={2}
             disabled={sending}
-            className="w-full resize-none rounded-xl border px-4 py-3 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+            className="h-full w-full resize-none bg-transparent text-sm outline-none leading-[52px] disabled:opacity-50"
             style={{
-              borderColor: 'var(--color-border)',
-              backgroundColor: 'var(--color-surface)',
               color: 'var(--color-text)',
+              fontFamily: 'var(--font-sans)',
+              border: 'none',
+              padding: 0,
             }}
             aria-label="Message input"
           />
-          <span className="absolute bottom-2 right-3 text-[10px]" style={{ color: 'var(--color-muted)' }}>
-            Enter to send · Shift+Enter for new line
+          <span className="absolute right-3 text-[10px]" style={{ color: 'var(--color-muted)', lineHeight: '52px' }}>
+            Enter ↵
           </span>
         </div>
+        <TtsToggle buttonHeight={52} />
+        <VoiceButton
+          onTranscript={(text) => sendMessage(text)}
+          disabled={!session}
+          buttonHeight={52}
+          size={20}
+        />
         <button
-          onClick={sendMessage}
+          onClick={() => sendMessage()}
           disabled={!input.trim() || sending || !session}
-          className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-400"
+          className="flex shrink-0 items-center justify-center rounded-2xl text-white shadow-sm transition-all hover:brightness-110 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+          style={{
+            width: '52px',
+            height: '52px',
+            backgroundColor: 'var(--color-primary)',
+          }}
           aria-label="Send message"
         >
           {sending ? (
-            <svg className="h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-            </svg>
+            <IconLoading size={20} className="animate-spin" />
           ) : (
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
+            <IconSend size={20} />
           )}
         </button>
       </div>
@@ -2539,15 +2693,15 @@ export default function AITutorChat() {
       {/* ── Memory Panel Modal ─────────────────────────────────── */}
       {showMemoryPanel && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto pt-12 pb-8"
-          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: 'var(--color-overlay)' }}
           onClick={closeMemoryPanel}
           role="dialog"
           aria-modal="true"
           aria-label="Assistant memory management"
         >
           <div
-            className="relative w-full max-w-lg mx-4 rounded-xl border shadow-xl"
+            className="flex max-h-[85vh] w-[480px] flex-col rounded-xl border shadow-xl"
             style={{
               backgroundColor: 'var(--color-surface)',
               borderColor: 'var(--color-border)',
@@ -2555,7 +2709,7 @@ export default function AITutorChat() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b px-5 py-4" style={{ borderColor: 'var(--color-border)' }}>
+            <div className="flex shrink-0 items-center justify-between border-b px-5 py-4" style={{ borderColor: 'var(--color-border)' }}>
               <div>
                 <h2 className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>
                   Assistant Memory
@@ -2566,28 +2720,27 @@ export default function AITutorChat() {
               </div>
               <button
                 onClick={closeMemoryPanel}
-                className="rounded-lg p-1.5 transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
+                className="rounded-lg p-1.5 transition-colors"
+                style={{ color: 'var(--color-text-secondary)' }}
                 aria-label="Close memory panel"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <IconClose size={16} />
               </button>
             </div>
 
             {memoryLoading ? (
               <div className="flex items-center justify-center py-16">
-                <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-blue-600 border-t-transparent" role="status" aria-label="Loading" />
+                <div className="h-6 w-6 animate-spin rounded-full border-[3px] border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} role="status" aria-label="Loading" />
               </div>
             ) : (
-              <div className="max-h-[70vh] overflow-y-auto px-5 py-4 space-y-5">
+              <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
                 {/* Stats summary */}
                 {memoryStats && (
                   <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--color-muted)' }}>
                       Overview
                     </h3>
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                       {[
                         { label: 'Sessions', value: memoryStats.sessionCount },
                         { label: 'Messages', value: memoryStats.messageCount },
@@ -2638,20 +2791,19 @@ export default function AITutorChat() {
                           </div>
                           <button
                             onClick={() => handleRemoveWeakPoint(i)}
-                            className="shrink-0 rounded p-1 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                            className="shrink-0 rounded p-1 transition-colors"
+                            style={{ color: 'var(--color-muted)' }}
                             aria-label={`Remove weak point: ${wp.skill}`}
                           >
-                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <IconClose size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
 
-                {/* Mistake Patterns */}
+    {/* Mistake Patterns */}
                 {memoryData && memoryData.repeatedMistakePatterns.length > 0 && (
                   <div>
                     <h3 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--color-muted)' }}>
@@ -2674,12 +2826,11 @@ export default function AITutorChat() {
                           </div>
                           <button
                             onClick={() => handleRemoveMistakePattern(i)}
-                            className="shrink-0 rounded p-1 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                            className="shrink-0 rounded p-1 transition-colors"
+                            style={{ color: 'var(--color-muted)' }}
                             aria-label={`Remove mistake pattern: ${mp.pattern}`}
                           >
-                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <IconClose size={14} />
                           </button>
                         </div>
                       ))}
@@ -2715,12 +2866,11 @@ export default function AITutorChat() {
                           </div>
                           <button
                             onClick={() => handleRemoveGoal(g.id)}
-                            className="shrink-0 rounded p-1 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                            className="shrink-0 rounded p-1 transition-colors"
+                            style={{ color: 'var(--color-muted)' }}
                             aria-label={`Remove goal: ${g.title}`}
                           >
-                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <IconClose size={14} />
                           </button>
                         </div>
                       ))}
@@ -2748,7 +2898,7 @@ export default function AITutorChat() {
                             {fs.summary}
                           </p>
                           {fs.improvement && (
-                            <p className="text-[11px] mt-0.5 text-green-600 dark:text-green-400">
+                            <p className="text-[11px] mt-0.5" style={{ color: 'var(--color-success)' }}>
                               Improvement: {fs.improvement}
                             </p>
                           )}
@@ -2775,42 +2925,41 @@ export default function AITutorChat() {
                   <button
                     onClick={handleExportMemory}
                     disabled={memoryExporting}
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors hover:bg-slate-50 disabled:opacity-50 dark:hover:bg-slate-700"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors disabled:opacity-50"
                     style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
                   >
                     {memoryExporting ? (
                       <>
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
                         Exporting...
                       </>
                     ) : (
                       <>
-                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
+                        <IconDownload size={16} />
                         Export memory as JSON
                       </>
                     )}
                   </button>
 
                   {confirmDelete === 'memory' ? (
-                    <div className="rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-900/20">
-                      <p className="text-xs font-medium text-red-700 dark:text-red-400">
+                    <div className="rounded-lg border p-3" style={{ backgroundColor: 'var(--color-danger-light)', borderColor: 'var(--color-danger)' }}>
+                      <p className="text-xs font-medium" style={{ color: 'var(--color-danger)' }}>
                         Clear all assistant memory (weak points, goals, feedback)?
                       </p>
-                      <p className="text-[10px] mt-1 text-red-600 dark:text-red-300">
+                      <p className="text-[10px] mt-1" style={{ color: 'var(--color-danger-dark)' }}>
                         Chat history and preferences will be kept.
                       </p>
                       <div className="flex items-center gap-2 mt-3">
                         <button
                           onClick={handleDeleteMemory}
-                          className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-red-700"
+                          className="rounded-lg px-3 py-1.5 text-xs font-medium text-white transition-colors"
+                          style={{ backgroundColor: 'var(--color-danger)' }}
                         >
                           Yes, clear memory
                         </button>
                         <button
                           onClick={() => setConfirmDelete(null)}
-                          className="rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
+                          className="rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors"
                           style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
                         >
                           Cancel
@@ -2818,23 +2967,24 @@ export default function AITutorChat() {
                       </div>
                     </div>
                   ) : confirmDelete === 'all' ? (
-                    <div className="rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-900/20">
-                      <p className="text-xs font-medium text-red-700 dark:text-red-400">
+                    <div className="rounded-lg border p-3" style={{ backgroundColor: 'var(--color-danger-light)', borderColor: 'var(--color-danger)' }}>
+                      <p className="text-xs font-medium" style={{ color: 'var(--color-danger)' }}>
                         Delete ALL assistant data?
                       </p>
-                      <p className="text-[10px] mt-1 text-red-600 dark:text-red-300">
+                      <p className="text-[10px] mt-1" style={{ color: 'var(--color-danger-dark)' }}>
                         This includes chat history, memory, reminders, notes, and preferences. This cannot be undone.
                       </p>
                       <div className="flex items-center gap-2 mt-3">
                         <button
                           onClick={handleDeleteAllMemory}
-                          className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-red-700"
+                          className="rounded-lg px-3 py-1.5 text-xs font-medium text-white transition-colors"
+                          style={{ backgroundColor: 'var(--color-danger)' }}
                         >
                           Yes, delete everything
                         </button>
                         <button
                           onClick={() => setConfirmDelete(null)}
-                          className="rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-slate-100 dark:hover:bg-slate-700"
+                          className="rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors"
                           style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
                         >
                           Cancel
@@ -2845,13 +2995,15 @@ export default function AITutorChat() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => setConfirmDelete('memory')}
-                        className="flex-1 rounded-lg border border-red-200 px-4 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                        className="flex-1 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors"
+                        style={{ borderColor: 'var(--color-danger)', color: 'var(--color-danger)' }}
                       >
                         Clear Memory
                       </button>
                       <button
                         onClick={() => setConfirmDelete('all')}
-                        className="flex-1 rounded-lg border border-red-200 px-4 py-2.5 text-sm font-medium text-red-700 transition-colors hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20"
+                        className="flex-1 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors"
+                        style={{ borderColor: 'var(--color-danger)', color: 'var(--color-danger)' }}
                       >
                         Delete All
                       </button>
@@ -2869,6 +3021,7 @@ export default function AITutorChat() {
           </div>
         </div>
       )}
-    </div>
+    </PageContainer>
+    </VoiceProvider>
   )
 }

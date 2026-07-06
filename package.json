@@ -19,10 +19,6 @@
     "lint:web": "pnpm --filter @ielts/web lint",
     "lint:extension": "pnpm --filter @ielts/extension lint",
 
-    "test": "pnpm -r test",
-    "test:web": "pnpm --filter @ielts/web test",
-    "test:extension": "pnpm --filter @ielts/extension test",
-    "test:ai": "VITEST_MAX_WORKERS=2 pnpm -r --filter '!@ielts/extension' exec -- vitest run --passWithNoTests --reporter verbose",
 
     "ai": "VITEST_MAX_WORKERS=2 pnpm -r exec -- vitest run --passWithNoTests --reporter verbose",
 

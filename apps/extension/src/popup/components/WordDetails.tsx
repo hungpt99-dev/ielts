@@ -1,17 +1,24 @@
 import { useState } from 'react'
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { speakText } from '../services/textToSpeech'
+import { IconVolume, IconBack, IconVocabulary } from '@ielts/ui'
 
 interface WordDetailsProps {
   entry: ExtensionVocabEntry
   onBack: () => void
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  new: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  learning: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  reviewing: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  mastered: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+const STATUS_STYLE: Record<string, { bg: string; color: string }> = {
+  new: { bg: 'var(--color-primary-light)', color: 'var(--color-primary)' },
+  learning: { bg: 'var(--color-warning-light)', color: 'var(--color-warning-dark)' },
+  reviewing: { bg: 'var(--color-skill-reading-light)', color: 'var(--color-skill-reading)' },
+  mastered: { bg: 'var(--color-success-light)', color: 'var(--color-success-dark)' },
+}
+
+const DIFFICULTY_STYLE: Record<string, { bg: string; color: string }> = {
+  easy: { bg: 'var(--color-success-light)', color: 'var(--color-success-dark)' },
+  medium: { bg: 'var(--color-warning-light)', color: 'var(--color-warning-dark)' },
+  hard: { bg: 'var(--color-danger-light)', color: 'var(--color-danger)' },
 }
 
 function PronounceButton({ word }: { word: string }) {
@@ -35,133 +42,153 @@ function PronounceButton({ word }: { word: string }) {
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '28px',
-        height: '28px',
+        width: 'var(--spacing-xl)',
+        height: 'var(--spacing-xl)',
         border: '1px solid var(--color-border)',
-        borderRadius: 'var(--radius-sm)',
+        borderRadius: 'var(--radius-lg)',
         background: playing ? 'var(--color-primary-light)' : 'var(--color-surface)',
         color: playing ? 'var(--color-primary)' : 'var(--color-muted)',
         cursor: 'pointer',
         padding: 0,
         lineHeight: 1,
         flexShrink: 0,
-        transition: 'all 0.15s ease',
+        transition: 'var(--transition-fast)',
       }}
       onMouseEnter={e => {
-        if (!playing) (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-text-secondary)'
+        if (!playing) { (e.currentTarget as HTMLButtonElement).style.background = 'var(--color-surface-alt)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-primary)' }
       }}
       onMouseLeave={e => {
-        if (!playing) (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-muted)'
+        if (!playing) { (e.currentTarget as HTMLButtonElement).style.background = 'var(--color-surface)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--color-muted)' }
       }}
     >
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M11 5L6 9H2v6h4l5 4V5z" />
-        <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" />
-      </svg>
+      <IconVolume size={14} />
     </button>
   )
 }
 
 export default function WordDetails({ entry, onBack }: WordDetailsProps) {
   return (
-    <div style={{ minHeight: '500px', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '500px', display: 'flex', flexDirection: 'column', width: 'var(--ext-width)' }}>
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
-        padding: '12px 16px',
+        gap: 'var(--spacing-xs)',
+        padding: 'var(--spacing-sm) var(--spacing-md)',
         borderBottom: '1px solid var(--color-border)',
       }}>
         <button
           onClick={onBack}
           style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 'var(--spacing-xl)',
+            height: 'var(--spacing-xl)',
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            fontSize: '16px',
-            padding: '4px',
+            padding: 'var(--spacing-2xs)',
             color: 'var(--color-text-secondary)',
+            borderRadius: 'var(--radius-lg)',
           }}
           aria-label="Back"
         >
-          ←
+          <IconBack size={16} />
         </button>
-        <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>
+        <IconVocabulary size={16} style={{ color: 'var(--color-skill-reading)' }} />
+        <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>
           Word Details
         </span>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-          <h2 style={{
-            fontSize: '22px',
-            fontWeight: 700,
-            color: 'var(--color-text)',
-            margin: 0,
-            lineHeight: 1.2,
-          }}>
-            {entry.word}
-          </h2>
+      <div style={{ flex: 1, overflowY: 'auto', padding: 'var(--spacing-md)' }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--spacing-sm)',
+          marginBottom: 'var(--spacing-md)',
+          padding: 'var(--spacing-md)',
+          background: 'var(--color-surface-alt)',
+          borderRadius: 'var(--radius-xl)',
+          border: '1px solid var(--color-border-light)',
+        }}>
+          <div style={{ flex: 1 }}>
+            <h2 style={{
+              fontSize: 'var(--text-2xl)',
+              fontWeight: 'var(--weight-bold)',
+              color: 'var(--color-text)',
+              margin: 0,
+              lineHeight: 1.2,
+            }}>
+                {entry.word}
+            </h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-xs)', marginTop: 'var(--spacing-xs)' }}>
+              {entry.partOfSpeech && (
+                <span style={{
+                  padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                  borderRadius: 'var(--radius-full)',
+                  background: 'var(--color-primary-light)',
+                  color: 'var(--color-primary)',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--weight-semibold)',
+                }}>
+                  {entry.partOfSpeech}
+                </span>
+              )}
+              {entry.pronunciation && (
+                <span style={{
+                  fontSize: 'var(--text-xs)',
+                  color: 'var(--color-muted)',
+                  fontFamily: 'var(--font-mono)',
+                }}>
+                  /{entry.pronunciation}/
+                </span>
+              )}
+              {entry.difficulty && DIFFICULTY_STYLE[entry.difficulty] && (
+                <span style={{
+                  padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                  borderRadius: 'var(--radius-full)',
+                  background: DIFFICULTY_STYLE[entry.difficulty].bg,
+                  color: DIFFICULTY_STYLE[entry.difficulty].color,
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--weight-medium)',
+                }}>
+                  {entry.difficulty.charAt(0).toUpperCase() + entry.difficulty.slice(1)}
+                </span>
+              )}
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                borderRadius: 'var(--radius-full)',
+                fontSize: 'var(--text-xs)',
+                fontWeight: 'var(--weight-medium)',
+                background: STATUS_STYLE[entry.status]?.bg || 'var(--color-surface-alt)',
+                color: STATUS_STYLE[entry.status]?.color || 'var(--color-text-secondary)',
+              }}>
+                {entry.status}
+              </span>
+              {entry.topic && (
+                <span style={{
+                  padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                  borderRadius: 'var(--radius-full)',
+                  background: 'var(--color-surface-alt)',
+                  color: 'var(--color-text-secondary)',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--weight-medium)',
+                }}>
+                  #{entry.topic}
+                </span>
+              )}
+            </div>
+          </div>
           <PronounceButton word={entry.word} />
         </div>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-          {entry.partOfSpeech && (
-            <span style={{
-              padding: '2px 8px',
-              borderRadius: '4px',
-              background: 'var(--color-primary-light)',
-              color: 'var(--color-primary)',
-              fontSize: '11px',
-              fontWeight: 600,
-            }}>
-              {entry.partOfSpeech}
-            </span>
-          )}
-          {entry.pronunciation && (
-            <span style={{
-              fontSize: '13px',
-              color: 'var(--color-muted)',
-              fontFamily: 'monospace',
-            }}>
-              /{entry.pronunciation}/
-            </span>
-          )}
-          {entry.difficulty && (
-            <span style={{
-              padding: '2px 8px',
-              borderRadius: '4px',
-              background: entry.difficulty === 'hard' ? 'var(--color-danger-light)' :
-                entry.difficulty === 'easy' ? 'var(--color-success-light)' : 'var(--color-surface-alt)',
-              color: entry.difficulty === 'hard' ? 'var(--color-danger)' :
-                entry.difficulty === 'easy' ? 'var(--color-success)' : 'var(--color-text-secondary)',
-              fontSize: '11px',
-              fontWeight: 500,
-            }}>
-              {entry.difficulty.charAt(0).toUpperCase() + entry.difficulty.slice(1)}
-            </span>
-          )}
-          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_COLORS[entry.status] || ''}`}>
-            {entry.status}
-          </span>
-          {entry.topic && (
-            <span style={{
-              padding: '2px 8px',
-              borderRadius: '4px',
-              background: 'var(--color-surface-alt)',
-              color: 'var(--color-text-secondary)',
-              fontSize: '11px',
-              fontWeight: 500,
-            }}>
-              #{entry.topic}
-            </span>
-          )}
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
           {entry.meaning && (
             <DetailSection title="Meaning">
-              <p style={{ fontSize: '14px', color: 'var(--color-text)', lineHeight: 1.5, margin: 0 }}>
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text)', lineHeight: 1.5, margin: 0 }}>
                 {entry.meaning}
               </p>
             </DetailSection>
@@ -169,7 +196,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
 
           {entry.meaningVi && (
             <DetailSection title="Vietnamese Meaning">
-              <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.5, margin: 0 }}>
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', lineHeight: 1.5, margin: 0 }}>
                 {entry.meaningVi}
               </p>
             </DetailSection>
@@ -178,11 +205,11 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
           {entry.exampleSentence && (
             <DetailSection title="Example">
               <div style={{
-                padding: '10px 12px',
+                padding: 'var(--spacing-xs) var(--spacing-sm)',
                 background: 'var(--color-surface)',
-                borderRadius: 'var(--radius-sm)',
+                borderRadius: 'var(--radius-lg)',
                 borderLeft: '3px solid var(--color-primary)',
-                fontSize: '13px',
+                fontSize: 'var(--text-xs)',
                 color: 'var(--color-text)',
                 lineHeight: 1.5,
                 fontStyle: 'italic',
@@ -194,14 +221,14 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
 
           {entry.synonyms.length > 0 && (
             <DetailSection title="Synonyms">
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                 {entry.synonyms.map((s, i) => (
                   <span key={i} style={{
-                    padding: '2px 8px',
-                    borderRadius: '4px',
+                    padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                    borderRadius: 'var(--radius-full)',
                     background: 'var(--color-success-light)',
                     color: 'var(--color-success)',
-                    fontSize: '12px',
+                    fontSize: 'var(--text-xs)',
                   }}>
                     {s}
                   </span>
@@ -212,14 +239,14 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
 
           {entry.antonyms.length > 0 && (
             <DetailSection title="Antonyms">
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                 {entry.antonyms.map((a, i) => (
                   <span key={i} style={{
-                    padding: '2px 8px',
-                    borderRadius: '4px',
+                    padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                    borderRadius: 'var(--radius-full)',
                     background: 'var(--color-danger-light)',
                     color: 'var(--color-danger)',
-                    fontSize: '12px',
+                    fontSize: 'var(--text-xs)',
                   }}>
                     {a}
                   </span>
@@ -230,14 +257,14 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
 
           {entry.wordFamily.length > 0 && (
             <DetailSection title="Word Family">
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                 {entry.wordFamily.map((wf, i) => (
                   <span key={i} style={{
-                    padding: '2px 8px',
-                    borderRadius: '4px',
-                    background: '#f3e8ff',
-                    color: '#7c3aed',
-                    fontSize: '12px',
+                    padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                    borderRadius: 'var(--radius-full)',
+                    background: 'var(--color-primary-light)',
+                    color: 'var(--color-primary)',
+                    fontSize: 'var(--text-xs)',
                   }}>
                     {wf}
                   </span>
@@ -248,13 +275,13 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
 
           {entry.collocations.length > 0 && (
             <DetailSection title="Collocations">
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
                 {entry.collocations.map((c, i) => (
                   <div key={i} style={{
-                    padding: '4px 8px',
+                    padding: 'var(--spacing-2xs) var(--spacing-xs)',
                     background: 'var(--color-surface)',
-                    borderRadius: '4px',
-                    fontSize: '12px',
+                    borderRadius: 'var(--radius-lg)',
+                    fontSize: 'var(--text-xs)',
                     color: 'var(--color-text)',
                   }}>
                     {c}
@@ -266,7 +293,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
 
           {entry.sourceSentence && (
             <DetailSection title="Source Sentence">
-              <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.5, margin: 0 }}>
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', lineHeight: 1.5, margin: 0 }}>
                 "{entry.sourceSentence}"
               </p>
             </DetailSection>
@@ -274,7 +301,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
 
           {entry.personalNote && (
             <DetailSection title="Personal Note">
-              <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', lineHeight: 1.5, margin: 0, fontStyle: 'italic' }}>
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', lineHeight: 1.5, margin: 0, fontStyle: 'italic' }}>
                 {entry.personalNote}
               </p>
             </DetailSection>
@@ -282,15 +309,15 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
 
           {entry.tags.length > 0 && (
             <DetailSection title="Tags">
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                 {entry.tags.map((tag, i) => (
                   <span key={i} style={{
-                    padding: '2px 8px',
-                    borderRadius: '4px',
+                    padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                    borderRadius: 'var(--radius-full)',
                     background: 'var(--color-primary-light)',
                     color: 'var(--color-primary)',
-                    fontSize: '11px',
-                    fontWeight: 500,
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--weight-medium)',
                   }}>
                     {tag}
                   </span>
@@ -301,7 +328,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
 
           {entry.pageTitle && (
             <DetailSection title="Source">
-              <div style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>
+              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
                 <div>{entry.pageTitle}</div>
                 {entry.pageUrl && (
                   <a
@@ -311,7 +338,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
                     style={{
                       color: 'var(--color-primary)',
                       textDecoration: 'none',
-                      fontSize: '11px',
+                      fontSize: 'var(--text-xs)',
                       wordBreak: 'break-all',
                     }}
                   >
@@ -324,10 +351,10 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
         </div>
 
         <div style={{
-          marginTop: '16px',
-          padding: '8px 0',
+          marginTop: 'var(--spacing-md)',
+          padding: 'var(--spacing-xs) 0',
           borderTop: '1px solid var(--color-border)',
-          fontSize: '11px',
+          fontSize: 'var(--text-xs)',
           color: 'var(--color-muted)',
           display: 'flex',
           justifyContent: 'space-between',
@@ -346,12 +373,12 @@ function DetailSection({ title, children }: { title: string; children: React.Rea
   return (
     <div>
       <h3 style={{
-        fontSize: '11px',
-        fontWeight: 600,
+        fontSize: 'var(--text-xs)',
+        fontWeight: 'var(--weight-semibold)',
         color: 'var(--color-muted)',
         textTransform: 'uppercase',
         letterSpacing: '0.05em',
-        margin: '0 0 6px',
+        margin: '0 0 var(--spacing-2xs)',
       }}>
         {title}
       </h3>

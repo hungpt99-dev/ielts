@@ -1,12 +1,19 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import DateRangeSelector from './DateRangeSelector'
 import type { DateRange } from './DateRangeSelector'
-import ReportSection from './ReportSection'
-import Card, { CardContent } from '../../../components/ui/Card'
+import Card, { CardHeader, CardTitle } from '../../../components/ui/Card'
 import Button from '../../../components/ui/Button'
 import Badge from '../../../components/ui/Badge'
-import LoadingSpinner from '../../../components/ui/LoadingSpinner'
 import ErrorDisplay from '../../../components/ui/ErrorDisplay'
+import { EmptyState } from '@ielts/ui/components/EmptyState'
+import { LoadingSkeleton } from '@ielts/ui/components/LoadingSkeleton'
+import { ProgressBar } from '@ielts/ui/components/ProgressBar'
+import {
+  IconAITutor, IconCheckCircle, IconAlertCircle, IconInfo,
+  IconProgress, IconBack, IconAIProgressReview,
+} from '@ielts/ui'
+import PageHeader from '../../../components/layout/PageHeader'
 
 interface RepeatedMistake {
   pattern: string
@@ -51,126 +58,269 @@ interface ProgressReviewPanelProps {
   onGenerate: (range: DateRange) => void
 }
 
-const SKILL_ACCENT_COLORS: Record<string, string> = {
-  reading: 'var(--color-primary)',
-  listening: 'var(--color-success)',
-  writing: 'var(--color-warning)',
-  speaking: 'var(--color-danger)',
-}
+type GenerationPhase = 'idle' | 'collecting' | 'analyzing' | 'building' | 'complete'
 
-const TREND_LABELS: Record<string, { label: string; variant: 'success' | 'danger' | 'default' }> = {
-  improving: { label: '↑ Improving', variant: 'success' },
-  declining: { label: '↓ Declining', variant: 'danger' },
-  stable: { label: '→ Stable', variant: 'default' },
-}
-
-const STATUS_VARIANTS: Record<string, 'success' | 'warning' | 'danger' | 'info' | 'default'> = {
+const STATUS_BADGE: Record<string, 'success' | 'warning' | 'danger' | 'info' | 'default'> = {
   improving: 'success',
   'needs work': 'warning',
   strong: 'success',
-  'insufficient practice': 'default',
+  developing: 'warning',
+  stable: 'default',
 }
 
-function TrendBadge({ trend }: { trend: string }) {
-  const info = TREND_LABELS[trend] ?? { label: trend, variant: 'default' as const }
-  return <Badge variant={info.variant}>{info.label}</Badge>
+function TrendArrow({ trend }: { trend: string }) {
+  const color = trend === 'improving' ? 'var(--color-success)' : trend === 'declining' ? 'var(--color-danger)' : 'var(--color-muted)'
+  const arrow = trend === 'improving' ? '↑' : trend === 'declining' ? '↓' : '→'
+  return (
+    <span style={{ color, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)' }} aria-label={`Trend: ${trend}`}>
+      {arrow}
+    </span>
+  )
 }
 
-function RepeatedMistakesCard({ mistakes }: { mistakes: RepeatedMistake[] }) {
+function GenerationProgress({ phase }: { phase: GenerationPhase }) {
+  const steps = [
+    { key: 'collecting', label: 'Reading your learning data' },
+    { key: 'analyzing', label: 'Analyzing mistake patterns' },
+    { key: 'building', label: 'Building your report' },
+  ]
+  const currentIdx = steps.findIndex(s => s.key === phase)
+
+  return (
+    <div
+      style={{
+        padding: 'var(--spacing-lg)',
+        borderRadius: 'var(--radius-xl)',
+        background: 'var(--color-surface)',
+        border: '1px solid var(--color-border-light)',
+        boxShadow: 'var(--shadow-sm)',
+      }}
+      role="status"
+      aria-live="polite"
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', marginBottom: 'var(--spacing-md)' }}>
+        <IconProgress size={20} style={{ color: 'var(--color-tutor-accent)' }} aria-hidden="true" />
+        <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>
+          {phase === 'collecting' ? 'Collecting your study data...' :
+           phase === 'analyzing' ? 'AI Tutor is analyzing your progress...' :
+           phase === 'building' ? 'Building your report...' :
+           'Report ready!'}
+        </span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
+        {steps.map((step, i) => {
+          const isDone = i < currentIdx
+          const isActive = i === currentIdx
+          return (
+            <div key={step.key} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+              <span
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '10px',
+                  fontWeight: 'var(--weight-bold)',
+                  background: isDone ? 'var(--color-success)' : isActive ? 'var(--color-primary)' : 'var(--color-surface-alt)',
+                  color: isDone || isActive ? '#fff' : 'var(--color-muted)',
+                  flexShrink: 0,
+                }}
+              >
+                {isDone ? <IconCheckCircle size={12} /> : isActive ? <IconProgress size={12} /> : (i + 1).toString()}
+              </span>
+              <span
+                style={{
+                  fontSize: 'var(--text-sm)',
+                  color: isDone ? 'var(--color-success)' : isActive ? 'var(--color-text)' : 'var(--color-muted)',
+                  fontWeight: isActive ? 'var(--weight-medium)' : 'var(--weight-normal)',
+                }}
+              >
+                {step.label}
+              </span>
+            </div>
+          )
+        })}
+      </div>
+      {phase !== 'idle' && phase !== 'complete' && (
+        <div style={{ marginTop: 'var(--spacing-md)' }}>
+          <div
+            style={{
+              height: '4px',
+              borderRadius: 'var(--radius-full)',
+              background: 'var(--color-border)',
+              overflow: 'hidden',
+            }}
+          >
+            <div
+              style={{
+                height: '100%',
+                borderRadius: 'var(--radius-full)',
+                background: 'var(--color-primary)',
+                width: `${((currentIdx + 1) / steps.length) * 100}%`,
+                transition: 'width var(--transition-slow)',
+              }}
+            />
+          </div>
+          <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: 'var(--spacing-xs)', textAlign: 'right' }}>
+            This usually takes 5-10 seconds
+          </p>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function SummarySection({ report, isAiGenerated }: { report: ProgressReviewReport; isAiGenerated: boolean }) {
+  return (
+    <div
+      style={{
+        padding: 'var(--spacing-lg)',
+        borderRadius: 'var(--radius-xl)',
+        background: 'var(--color-tutor-background)',
+        border: `1px solid ${isAiGenerated ? 'var(--color-tutor-border)' : 'var(--color-border-light)'}`,
+        borderLeft: `4px solid var(--color-tutor-accent)`,
+        boxShadow: 'var(--shadow-tutor)',
+      }}
+    >
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-sm)' }}>
+        <IconAITutor size={20} style={{ color: 'var(--color-tutor-accent)', flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', flexWrap: 'wrap' }}>
+            <span
+              style={{
+                fontSize: 'var(--text-xs)',
+                fontWeight: 'var(--weight-semibold)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                color: 'var(--color-tutor-accent)',
+              }}
+            >
+              AI Tutor Says
+            </span>
+            {isAiGenerated ? (
+              <Badge variant="info" size="sm">AI-Powered</Badge>
+            ) : (
+              <Badge variant="default" size="sm">Data Summary</Badge>
+            )}
+          </div>
+          <p
+            style={{
+              margin: 'var(--spacing-xs) 0 0',
+              fontSize: 'var(--text-sm)',
+              lineHeight: '1.7',
+              color: 'var(--color-text-secondary)',
+            }}
+          >
+            {report.overallSummary}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function StrengthsWeaknessesSection({ improvements, struggles }: { improvements: string[]; struggles: string[] }) {
+  return (
+    <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
+      <div
+        style={{
+          padding: 'var(--spacing-md)',
+          borderRadius: 'var(--radius-xl)',
+          background: 'var(--color-surface)',
+          border: '1px solid var(--color-border-light)',
+          borderLeft: '3px solid var(--color-success)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', marginBottom: 'var(--spacing-sm)' }}>
+          <IconCheckCircle size={16} style={{ color: 'var(--color-success)' }} />
+          <h3 style={{ margin: 0, fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-success)' }}>
+            Strengths & Improvements
+          </h3>
+        </div>
+        {improvements.length === 0 ? (
+          <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
+            No significant improvements detected in this period.
+          </p>
+        ) : (
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }} role="list" aria-label="Improvements">
+            {improvements.map((item, i) => (
+              <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-xs)', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
+                <IconCheckCircle size={14} style={{ color: 'var(--color-success)', flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div
+        style={{
+          padding: 'var(--spacing-md)',
+          borderRadius: 'var(--radius-xl)',
+          background: 'var(--color-surface)',
+          border: '1px solid var(--color-border-light)',
+          borderLeft: '3px solid var(--color-warning)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', marginBottom: 'var(--spacing-sm)' }}>
+          <IconAlertCircle size={16} style={{ color: 'var(--color-warning)' }} />
+          <h3 style={{ margin: 0, fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-warning)' }}>
+            Areas Needing Attention
+          </h3>
+        </div>
+        {struggles.length === 0 ? (
+          <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
+            No particular struggles identified.
+          </p>
+        ) : (
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }} role="list" aria-label="Struggles">
+            {struggles.map((item, i) => (
+              <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-xs)', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
+                <IconAlertCircle size={14} style={{ color: 'var(--color-danger)', flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function RepeatedMistakesList({ mistakes }: { mistakes: RepeatedMistake[] }) {
   if (mistakes.length === 0) {
     return (
-      <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
+      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', margin: 0 }}>
         No repeated mistakes detected in this period.
       </p>
     )
   }
   return (
-    <ul className="space-y-3" role="list" aria-label="Repeated mistakes">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
       {mistakes.map((m, i) => (
-        <li
+        <div
           key={i}
-          className="rounded-lg border p-3"
-          style={{ borderColor: 'var(--color-border)' }}
+          style={{
+            padding: 'var(--spacing-sm) var(--spacing-md)',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--color-border-light)',
+            background: 'var(--color-surface)',
+          }}
         >
-          <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+                <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text)' }}>
                   "{m.pattern}"
                 </span>
-                <Badge size="sm" variant="warning">{m.skill}</Badge>
-                <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                  ×{m.frequency}
-                </span>
+                <Badge variant="warning" size="sm">{m.skill}</Badge>
+                <Badge variant="danger" size="sm">×{m.frequency}</Badge>
               </div>
-              <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
                 {m.analysis}
               </p>
             </div>
-          </div>
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-function SkillProgressSection({ skills }: { skills: SkillProgressItem[] }) {
-  if (skills.length === 0) {
-    return (
-      <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
-        No skill practice recorded in this period.
-      </p>
-    )
-  }
-  return (
-    <div className="space-y-4">
-      {skills.map((s) => (
-        <div key={s.skill}>
-          <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <span
-                className="h-2.5 w-2.5 rounded-full"
-                style={{ backgroundColor: SKILL_ACCENT_COLORS[s.skill] ?? 'var(--color-muted)' }}
-              />
-              <span className="text-sm font-medium capitalize" style={{ color: 'var(--color-text)' }}>
-                {s.skill}
-              </span>
-              <Badge
-                size="sm"
-                variant={STATUS_VARIANTS[s.status] ?? 'default'}
-              >
-                {s.status}
-              </Badge>
-              <TrendBadge trend={s.trend} />
-            </div>
-            <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
-              {s.sessions} session{s.sessions !== 1 ? 's' : ''}
-            </span>
-          </div>
-            <div
-              className="h-2 w-full overflow-hidden rounded-full"
-              style={{ backgroundColor: 'var(--color-border)' }}
-              role="progressbar"
-              aria-valuenow={s.accuracy}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-label={`${s.skill} accuracy: ${s.accuracy}%`}
-            >
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{
-                  width: `${s.accuracy}%`,
-                  backgroundColor: SKILL_ACCENT_COLORS[s.skill] ?? 'var(--color-primary)',
-                }}
-              />
-            </div>
-          <div className="mt-1 flex items-center justify-between">
-            <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-              {s.analysis}
-            </p>
-            <span className="text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
-              {s.accuracy}% accuracy
-            </span>
           </div>
         </div>
       ))}
@@ -183,75 +333,91 @@ function VocabSection({ vocab }: { vocab: VocabReviewStatus }) {
   const mastered = vocab.mastered || 0
   const learning = vocab.stillLearning || 0
   const masteredPercent = total > 0 ? Math.round((mastered / total) * 100) : 0
-  const learningPercent = total > 0 ? Math.round((learning / total) * 100) : 0
 
   return (
-    <div className="space-y-3">
-      <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-        {vocab.summary}
-      </p>
-      <div className="grid grid-cols-3 gap-3">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--spacing-sm)' }}>
         <div
-          className="rounded-lg p-3 text-center"
-          style={{ backgroundColor: 'var(--color-surface-alt)' }}
+          style={{ textAlign: 'center', padding: 'var(--spacing-sm)', borderRadius: 'var(--radius-lg)', background: 'var(--color-surface-alt)' }}
           aria-label={`Total Saved: ${total}`}
         >
-          <p className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-            {total}
-          </p>
-          <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
-            Total Saved
-          </p>
+          <p style={{ margin: 0, fontSize: 'var(--text-2xl)', fontWeight: 'var(--weight-bold)', color: 'var(--color-text)' }}>{total}</p>
+          <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>Total Saved</p>
         </div>
         <div
-          className="rounded-lg p-3 text-center"
-          style={{ backgroundColor: 'var(--color-success-light)' }}
+          style={{ textAlign: 'center', padding: 'var(--spacing-sm)', borderRadius: 'var(--radius-lg)', background: 'var(--color-success-light)' }}
           aria-label={`Mastered: ${mastered}`}
         >
-          <p className="text-2xl font-bold" style={{ color: 'var(--color-success)' }}>
-            {mastered}
-          </p>
-          <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
-            Mastered
-          </p>
+          <p style={{ margin: 0, fontSize: 'var(--text-2xl)', fontWeight: 'var(--weight-bold)', color: 'var(--color-success)' }}>{mastered}</p>
+          <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>Mastered</p>
         </div>
         <div
-          className="rounded-lg p-3 text-center"
-          style={{ backgroundColor: 'var(--color-warning-light)' }}
+          style={{ textAlign: 'center', padding: 'var(--spacing-sm)', borderRadius: 'var(--radius-lg)', background: 'var(--color-warning-light)' }}
           aria-label={`Still Learning: ${learning}`}
         >
-          <p className="text-2xl font-bold" style={{ color: 'var(--color-warning)' }}>
-            {learning}
-          </p>
-          <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
-            Still Learning
-          </p>
+          <p style={{ margin: 0, fontSize: 'var(--text-2xl)', fontWeight: 'var(--weight-bold)', color: 'var(--color-warning)' }}>{learning}</p>
+          <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>Still Learning</p>
+        </div>
+      </div>
+      <div>
+        <ProgressBar value={masteredPercent} variant="success" size="sm" showLabel label={`${masteredPercent}% mastered`} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '2px' }}>
+          <span>{masteredPercent}% mastered</span>
+          <span>{learning > 0 ? `${Math.round((learning / total) * 100)}% in progress` : ''}</span>
         </div>
       </div>
       <div
-        className="h-2 w-full overflow-hidden rounded-full"
-        style={{ backgroundColor: 'var(--color-border)' }}
-        role="progressbar"
-        aria-valuenow={masteredPercent}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={`Vocabulary mastery: ${masteredPercent}%`}
+        style={{
+          padding: 'var(--spacing-sm) var(--spacing-md)',
+          borderRadius: 'var(--radius-lg)',
+          background: 'var(--color-tutor-background)',
+          border: '1px solid var(--color-tutor-border)',
+        }}
       >
-        <div
-          className="h-full rounded-full transition-all"
-          style={{
-            width: `${masteredPercent}%`,
-            background: `linear-gradient(90deg, var(--color-success) 0%, var(--color-primary) 100%)`,
-          }}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+          <IconAITutor size={14} style={{ color: 'var(--color-tutor-accent)' }} />
+          <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-medium)', color: 'var(--color-tutor-accent)' }}>
+            AI Tutor's Vocabulary Tip
+          </p>
+        </div>
+        <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
+          {vocab.recommendation}
+        </p>
       </div>
-      <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-muted)' }}>
-        <span>{masteredPercent}% mastered</span>
-        <span>{learningPercent}% in progress</span>
-      </div>
-      <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-        {vocab.recommendation}
+    </div>
+  )
+}
+
+function SkillProgressTable({ skills }: { skills: SkillProgressItem[] }) {
+  if (skills.length === 0) {
+    return (
+      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', margin: 0 }}>
+        No skill practice recorded in this period.
       </p>
+    )
+  }
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+      {skills.map((s) => (
+        <div key={s.skill} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--spacing-xs)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-medium)', color: 'var(--color-text)', textTransform: 'capitalize' }}>
+                {s.skill}
+              </span>
+              <Badge variant={STATUS_BADGE[s.status] ?? 'default'} size="sm">{s.status}</Badge>
+              <TrendArrow trend={s.trend} />
+            </div>
+            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
+              {s.sessions} session{s.sessions !== 1 ? 's' : ''}
+            </span>
+          </div>
+          <ProgressBar value={s.accuracy} variant={s.trend === 'improving' ? 'success' : s.trend === 'declining' ? 'danger' : 'primary'} size="xs" />
+          <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+            {s.analysis}
+          </p>
+        </div>
+      ))}
     </div>
   )
 }
@@ -259,25 +425,33 @@ function VocabSection({ vocab }: { vocab: VocabReviewStatus }) {
 function RecommendationsList({ items }: { items: string[] }) {
   if (items.length === 0) {
     return (
-      <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
+      <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', margin: 0 }}>
         No specific recommendations available.
       </p>
     )
   }
   return (
-    <ol className="space-y-2" role="list" aria-label="Recommended focus areas">
+    <ol style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }} role="list" aria-label="Recommended focus areas">
       {items.map((item, i) => (
-        <li key={i} className="flex items-start gap-3 text-sm">
+        <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-sm)' }}>
           <span
-            className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold"
             style={{
-              backgroundColor: 'var(--color-primary-light)',
+              display: 'flex',
+              width: '24px',
+              height: '24px',
+              borderRadius: '50%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-bold)',
+              background: 'var(--color-primary-light)',
               color: 'var(--color-primary)',
+              flexShrink: 0,
             }}
           >
             {i + 1}
           </span>
-          <span style={{ color: 'var(--color-text-secondary)' }}>{item}</span>
+          <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', paddingTop: '2px' }}>{item}</span>
         </li>
       ))}
     </ol>
@@ -287,34 +461,40 @@ function RecommendationsList({ items }: { items: string[] }) {
 function TutorFeedbackCard({ feedback }: { feedback: string }) {
   return (
     <div
-      className="rounded-xl border-l-4 p-4 sm:p-5"
       style={{
-        borderLeftColor: 'var(--color-primary)',
-        borderColor: 'var(--color-border)',
-        backgroundColor: 'var(--color-surface)',
+        padding: 'var(--spacing-lg)',
+        borderRadius: 'var(--radius-xl)',
+        background: 'var(--color-tutor-background)',
+        border: '1px solid var(--color-tutor-border)',
+        borderLeft: '4px solid var(--color-tutor-accent)',
       }}
     >
-      <div className="flex items-start gap-3">
-        <svg
-          className="mt-0.5 h-5 w-5 shrink-0"
-          style={{ color: 'var(--color-primary)' }}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-          aria-hidden="true"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-        </svg>
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-primary)' }}>
-            AI Tutor Says
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-sm)' }}>
+        <IconInfo size={20} style={{ color: 'var(--color-tutor-accent)', flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+        <div>
+          <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-tutor-accent)' }}>
+            AI Tutor's Final Note
           </p>
-          <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+          <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-sm)', lineHeight: '1.7', color: 'var(--color-text-secondary)' }}>
             {feedback}
           </p>
         </div>
       </div>
+    </div>
+  )
+}
+
+function ReportSkeleton() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+      <LoadingSkeleton variant="card" height="80px" />
+      <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: '1fr 1fr' }}>
+        <LoadingSkeleton variant="card" height="120px" />
+        <LoadingSkeleton variant="card" height="120px" />
+      </div>
+      <LoadingSkeleton variant="card" height="100px" />
+      <LoadingSkeleton variant="chart" height="150px" />
+      <LoadingSkeleton variant="card" height="80px" />
     </div>
   )
 }
@@ -325,10 +505,11 @@ export default function ProgressReviewPanel({
   error,
   onGenerate,
 }: ProgressReviewPanelProps) {
+  const navigate = useNavigate()
   const [dateRange, setDateRange] = useState<DateRange>(() => {
     const end = new Date()
     const start = new Date()
-    start.setDate(start.getDate() - 7)
+    start.setDate(start.getDate() - 30)
     return {
       start: start.toISOString().slice(0, 10),
       end: end.toISOString().slice(0, 10),
@@ -336,6 +517,8 @@ export default function ProgressReviewPanel({
   })
 
   const [hasGenerated, setHasGenerated] = useState(false)
+  const [genPhase, setGenPhase] = useState<GenerationPhase>('idle')
+  const genTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleRangeChange = useCallback((range: DateRange) => {
     setDateRange(range)
@@ -343,6 +526,13 @@ export default function ProgressReviewPanel({
 
   const handleGenerate = useCallback(() => {
     setHasGenerated(true)
+    setGenPhase('collecting')
+    genTimeoutRef.current = setTimeout(() => setGenPhase('analyzing'), 800)
+    setTimeout(() => {
+      if (genTimeoutRef.current) {
+        setGenPhase('building')
+      }
+    }, 3000)
     onGenerate(dateRange)
   }, [onGenerate, dateRange])
 
@@ -354,23 +544,59 @@ export default function ProgressReviewPanel({
 
   useEffect(() => {
     if (report && !loading && !error) {
-      reportRef.current?.focus()
+      setGenPhase('complete')
+      setTimeout(() => {
+        reportRef.current?.focus()
+      }, 100)
+    }
+    if (!loading && !report && error) {
+      setGenPhase('idle')
+    }
+    return () => {
+      if (genTimeoutRef.current) {
+        clearTimeout(genTimeoutRef.current)
+      }
     }
   }, [report, loading, error])
 
+  const isAiGenerated = !error || !error.includes('data-driven')
+
   return (
-    <div className="mx-auto max-w-6xl space-y-6" role="region" aria-label="AI Learning Progress Review">
+    <div
+      style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md)' }}
+      role="region"
+      aria-label="AI Progress Review"
+    >
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-          AI Learning Progress Review
-        </h1>
-        <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-          Get a detailed analysis of your study progress with personalized tutor feedback.
-        </p>
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '4px 0',
+            fontSize: 'var(--text-sm)',
+            color: 'var(--color-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            marginBottom: 'var(--spacing-xs)',
+          }}
+          aria-label="Go back to previous page"
+        >
+          <IconBack size={14} />
+          Back
+        </button>
+        <PageHeader
+          icon={<IconAIProgressReview size={22} />}
+          title="AI Progress Review"
+          description="Your personalized learning analysis from your AI Tutor"
+        />
       </div>
 
-      {/* Live region for screen reader announcements */}
+      {/* Screen reader announcements */}
       <div
         className="sr-only"
         role="status"
@@ -382,225 +608,173 @@ export default function ProgressReviewPanel({
         {!loading && error && 'Failed to generate report.'}
       </div>
 
-      {/* Date Range Selector */}
+      {/* Period & Generation Controls */}
       <Card>
-        <CardContent>
+        <div style={{ padding: 'var(--spacing-md)' }}>
           <DateRangeSelector value={dateRange} onChange={handleRangeChange} />
-          <div className="mt-4">
-            <Button size="md" loading={loading} onClick={handleGenerate}>
-              Generate Progress Report
+          <div style={{ marginTop: 'var(--spacing-md)' }}>
+            <Button
+              variant="primary"
+              size="md"
+              loading={loading}
+              onClick={handleGenerate}
+              aria-label={hasGenerated ? 'Regenerate progress report for current period' : 'Generate progress report for current period'}
+            >
+              {hasGenerated ? 'Regenerate Report' : 'Generate AI Progress Report'}
             </Button>
           </div>
-        </CardContent>
+          {dateRange.start && dateRange.end && (
+            <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-muted)', textAlign: 'center' }}>
+              Analyzing data from {new Date(dateRange.start).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} to {new Date(dateRange.end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </p>
+          )}
+        </div>
       </Card>
 
-      {/* Loading State */}
-      {loading && (
-        <LoadingSpinner
-          size="lg"
-          fullPage
-          message="Analyzing your study data and generating your personalized progress report..."
-        />
+      {/* Generation Progress */}
+      {loading && genPhase !== 'idle' && genPhase !== 'complete' && (
+        <GenerationProgress phase={genPhase} />
       )}
 
-      {/* Error State */}
-      {!loading && error && (
+      {/* Loading State */}
+      {loading && genPhase === 'idle' && <ReportSkeleton />}
+
+      {/* Error State (no report fallback) */}
+      {!loading && error && !report && (
         <Card>
-          <CardContent>
+          <div style={{ padding: 'var(--spacing-md)' }}>
             <ErrorDisplay
               variant="card"
-              title="Failed to Generate Report"
+              title="Couldn't Generate Your Review"
               message={error}
               onRetry={handleRetry}
               retryLabel="Try Again"
             />
-          </CardContent>
+          </div>
         </Card>
       )}
 
-      {/* Empty State */}
+      {/* Warning banner when AI failed but fallback report exists */}
+      {!loading && error && report && (
+        <div
+          style={{
+            padding: 'var(--spacing-sm) var(--spacing-md)',
+            borderRadius: 'var(--radius-lg)',
+            background: 'var(--color-warning-light)',
+            border: '1px solid var(--color-warning)',
+            fontSize: 'var(--text-sm)',
+            color: 'var(--color-text-secondary)',
+          }}
+          role="alert"
+        >
+          {error.includes('Failed to parse') ? 'Showing data summary instead of AI-powered analysis.' : error}
+        </div>
+      )}
+
+      {/* Empty State - No Report Yet */}
       {!loading && !error && !report && !hasGenerated && (
         <Card>
-          <CardContent>
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <svg
-                className="mb-4 h-16 w-16"
-                style={{ color: 'var(--color-muted)' }}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1}
-                aria-hidden="true"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-              </svg>
-              <p className="text-sm font-medium" style={{ color: 'var(--color-muted)' }}>
-                No Progress Report Yet
-              </p>
-              <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
-                Select a period and click "Generate Progress Report" to see your AI-powered learning review.
-              </p>
-            </div>
-          </CardContent>
+          <div style={{ padding: 'var(--spacing-lg)', textAlign: 'center' }}>
+            <EmptyState
+              icon={<IconProgress size={48} />}
+              title="Ready for Your Progress Review?"
+              description="Generate an AI-powered analysis of your recent study data. Your AI Tutor will analyze your practice sessions, vocabulary learning, and mistake patterns to create a personalized progress report."
+              action={
+                <Button variant="primary" size="md" onClick={handleGenerate}>
+                  Generate Your First Report
+                </Button>
+              }
+              tip="For the most useful review, we recommend at least 7 days of study with a few practice sessions."
+            />
+          </div>
         </Card>
       )}
 
       {/* Report Content */}
-      {!loading && !error && report && (
+      {!loading && report && (
         <div
           ref={reportRef}
           tabIndex={-1}
-          className="space-y-6 focus:outline-none"
+          className="focus:outline-none"
+          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}
         >
-          {/* Overall Summary */}
-          <ReportSection
-            title="Overall Learning Summary"
-            accentColor="var(--color-primary)"
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
-              </svg>
-            }
-          >
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-              {report.overallSummary}
-            </p>
-          </ReportSection>
+          {/* Section 1: AI Tutor Summary */}
+          <SummarySection report={report} isAiGenerated={isAiGenerated && genPhase === 'complete'} />
 
-          {/* Improvements */}
-          <ReportSection
-            title="What You Improved"
-            accentColor="var(--color-success)"
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            }
-          >
-            {report.improvements.length === 0 ? (
-              <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
-                No significant improvements detected in this period.
+          {/* Section 2: Strengths & Weaknesses */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Strengths & Weaknesses</CardTitle>
+            </CardHeader>
+            <div style={{ padding: '0 var(--spacing-md) var(--spacing-md)' }}>
+              <StrengthsWeaknessesSection improvements={report.improvements} struggles={report.struggles} />
+            </div>
+          </Card>
+
+          {/* Section 3: Repeated Mistakes */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Repeated Mistake Patterns</CardTitle>
+            </CardHeader>
+            <div style={{ padding: '0 var(--spacing-md) var(--spacing-md)' }}>
+              <RepeatedMistakesList mistakes={report.repeatedMistakes} />
+            </div>
+          </Card>
+
+          {/* Section 4: Vocabulary Review Status */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Vocabulary Review Status</CardTitle>
+            </CardHeader>
+            <div style={{ padding: '0 var(--spacing-md) var(--spacing-md)' }}>
+              <VocabSection vocab={report.vocabularyReviewStatus} />
+            </div>
+          </Card>
+
+          {/* Section 5: Skill-by-Skill Progress */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Skill-by-Skill Progress</CardTitle>
+            </CardHeader>
+            <div style={{ padding: '0 var(--spacing-md) var(--spacing-md)' }}>
+              <SkillProgressTable skills={report.skillProgress} />
+            </div>
+          </Card>
+
+          {/* Section 6: Study Plan Adherence */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Study Plan Adherence</CardTitle>
+            </CardHeader>
+            <div style={{ padding: '0 var(--spacing-md) var(--spacing-md)' }}>
+              <p style={{ fontSize: 'var(--text-sm)', lineHeight: '1.7', color: 'var(--color-text-secondary)', margin: 0 }}>
+                {report.studyPlanAdherence}
               </p>
-            ) : (
-              <ul className="space-y-2" role="list" aria-label="Improvements">
-                {report.improvements.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm">
-                    <span className="mt-0.5 shrink-0" style={{ color: 'var(--color-success)' }} aria-hidden="true">✓</span>
-                    <span style={{ color: 'var(--color-text-secondary)' }}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </ReportSection>
+            </div>
+          </Card>
 
-          {/* Struggles */}
-          <ReportSection
-            title="What You Still Struggle With"
-            accentColor="var(--color-danger)"
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-              </svg>
-            }
-          >
-            {report.struggles.length === 0 ? (
-              <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
-                No particular struggles identified.
-              </p>
-            ) : (
-              <ul className="space-y-2" role="list" aria-label="Struggles">
-                {report.struggles.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm">
-                    <span className="mt-0.5 shrink-0" style={{ color: 'var(--color-danger)' }} aria-hidden="true">!</span>
-                    <span style={{ color: 'var(--color-text-secondary)' }}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </ReportSection>
+          {/* Section 7: Recommendations */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Recommended Focus for Next Period</CardTitle>
+            </CardHeader>
+            <div style={{ padding: '0 var(--spacing-md) var(--spacing-md)' }}>
+              <RecommendationsList items={report.recommendedFocus} />
+            </div>
+          </Card>
 
-          {/* Repeated Mistakes */}
-          <ReportSection
-            title="Repeated Mistakes"
-            accentColor="var(--color-warning)"
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-              </svg>
-            }
-          >
-            <RepeatedMistakesCard mistakes={report.repeatedMistakes} />
-          </ReportSection>
+          {/* Section 8: Tutor's Final Feedback */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Tutor's Feedback</CardTitle>
+            </CardHeader>
+            <div style={{ padding: '0 var(--spacing-md) var(--spacing-md)' }}>
+              <TutorFeedbackCard feedback={report.tutorFeedback} />
+            </div>
+          </Card>
 
-          {/* Vocabulary Review Status */}
-          <ReportSection
-            title="Vocabulary Review Status"
-            accentColor="#8b5cf6"
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-              </svg>
-            }
-          >
-            <VocabSection vocab={report.vocabularyReviewStatus} />
-          </ReportSection>
-
-          {/* Skill-by-Skill Progress */}
-          <ReportSection
-            title="Skill-by-Skill Progress"
-            accentColor="var(--color-info)"
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
-              </svg>
-            }
-          >
-            <SkillProgressSection skills={report.skillProgress} />
-          </ReportSection>
-
-          {/* Study Plan Adherence */}
-          <ReportSection
-            title="Study Plan Adherence"
-            accentColor="var(--color-info)"
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-              </svg>
-            }
-          >
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-              {report.studyPlanAdherence}
-            </p>
-          </ReportSection>
-
-          {/* Recommended Focus */}
-          <ReportSection
-            title="Recommended Focus for Next Period"
-            accentColor="var(--color-primary)"
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-              </svg>
-            }
-          >
-            <RecommendationsList items={report.recommendedFocus} />
-          </ReportSection>
-
-          {/* Tutor Feedback */}
-          <ReportSection
-            title="Tutor's Feedback"
-            accentColor="var(--color-primary)"
-            icon={
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
-              </svg>
-            }
-          >
-            <TutorFeedbackCard feedback={report.tutorFeedback} />
-          </ReportSection>
-
-          {/* Re-generate */}
-          <div className="flex justify-center pb-4">
+          {/* Regenerate */}
+          <div style={{ display: 'flex', justifyContent: 'center', padding: 'var(--spacing-md) 0' }}>
             <Button
               variant="outline"
               size="md"
@@ -612,8 +786,19 @@ export default function ProgressReviewPanel({
           </div>
         </div>
       )}
+
+      {/* No data empty state */}
+      {!loading && !error && !report && hasGenerated && (
+        <Card>
+          <div style={{ padding: 'var(--spacing-lg)' }}>
+            <p style={{ textAlign: 'center', fontSize: 'var(--text-sm)', color: 'var(--color-muted)', margin: 0 }}>
+              No study data found for the selected period. Try a different time range.
+            </p>
+          </div>
+        </Card>
+      )}
     </div>
   )
 }
 
-export { TrendBadge, SkillProgressSection, VocabSection, RepeatedMistakesCard, RecommendationsList, TutorFeedbackCard }
+export { TrendArrow, SummarySection, StrengthsWeaknessesSection, RepeatedMistakesList, VocabSection, SkillProgressTable, RecommendationsList, TutorFeedbackCard }

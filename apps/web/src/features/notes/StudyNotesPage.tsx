@@ -8,6 +8,8 @@ import EmptyState from '../../components/ui/EmptyState'
 import { useToast } from '../../components/ui/Toast'
 import { useAutosave } from '../../hooks/useAutosave'
 import { generateId } from '../../utils'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconBookText } from '@ielts/ui'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -310,22 +312,19 @@ export default function StudyNotesPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Study Notes
-          </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Write and organize your IELTS study notes, drafts, and ideas
-          </p>
-        </div>
-        <Button onClick={openCreateForm} size="lg">
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-          New Note
-        </Button>
-      </div>
+      <PageHeader
+        icon={<IconBookText size={22} />}
+        title="Study Notes"
+        description="Write and organize your IELTS study notes, drafts, and ideas"
+        actions={
+          <Button onClick={openCreateForm} size="lg">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            New Note
+          </Button>
+        }
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>

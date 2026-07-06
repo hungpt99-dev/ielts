@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { IconMessageSquare, IconClose } from '@ielts/ui'
 
 interface ChatButtonProps {
   onToggle?: (isOpen: boolean) => void
@@ -51,17 +52,17 @@ export default function ChatButton({ onToggle }: ChatButtonProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '6px',
-          padding: '10px 14px',
+          gap: 'var(--spacing-xs)',
+          padding: 'var(--spacing-sm) var(--spacing-md)',
           background: isOpen ? 'var(--color-surface-alt)' : 'var(--color-surface)',
           border: '1px solid var(--color-border)',
           borderRadius: 'var(--radius-lg)',
           cursor: 'pointer',
           color: 'var(--color-text)',
-          fontSize: '13px',
-          fontWeight: 500,
+          fontSize: 'var(--text-sm)',
+          fontWeight: 'var(--weight-medium)',
           fontFamily: 'inherit',
-          transition: 'all 0.15s ease',
+          transition: 'var(--transition-fast)',
           width: '100%',
         }}
         onMouseEnter={(e) => {
@@ -73,7 +74,7 @@ export default function ChatButton({ onToggle }: ChatButtonProps) {
           e.currentTarget.style.borderColor = 'var(--color-border)'
         }}
       >
-        <span style={{ fontSize: '16px', lineHeight: '1' }}>💬</span>
+        <IconMessageSquare size={16} />
         <span>{isOpen ? 'Close Chat' : 'Chat'}</span>
       </button>
 
@@ -84,18 +85,18 @@ export default function ChatButton({ onToggle }: ChatButtonProps) {
           aria-label="Chat"
           style={{
             position: 'absolute',
-            bottom: 'calc(100% + 8px)',
+            bottom: 'calc(100% + var(--spacing-xs))',
             left: '0',
             right: '0',
             background: 'var(--color-surface)',
             border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-lg)',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-            padding: '16px',
+            boxShadow: 'var(--shadow-lg)',
+            padding: 'var(--spacing-md)',
             minHeight: '200px',
             maxHeight: '400px',
             overflowY: 'auto',
-            zIndex: 100,
+            zIndex: 'var(--z-dropdown)',
           }}
         >
           <div
@@ -103,24 +104,26 @@ export default function ChatButton({ onToggle }: ChatButtonProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '12px',
+              marginBottom: 'var(--spacing-sm)',
             }}
           >
-            <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>
-              💬 Chat
+            <span style={{ fontWeight: 'var(--weight-semibold)', fontSize: 'var(--text-sm)', color: 'var(--color-text)', display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-2xs)' }}>
+              <IconMessageSquare size={14} /> Chat
             </span>
             <button
               onClick={() => setIsOpen(false)}
               aria-label="Close chat"
               style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 'var(--spacing-lg)',
+                height: 'var(--spacing-lg)',
                 background: 'none',
                 border: 'none',
                 color: 'var(--color-muted)',
                 cursor: 'pointer',
-                fontSize: '16px',
-                padding: '4px 8px',
-                borderRadius: '6px',
-                lineHeight: '1',
+                borderRadius: 'var(--radius-md)',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = 'var(--color-surface-alt)'
@@ -129,7 +132,7 @@ export default function ChatButton({ onToggle }: ChatButtonProps) {
                 e.currentTarget.style.background = 'none'
               }}
             >
-              ✕
+              <IconClose size={14} />
             </button>
           </div>
 
@@ -137,9 +140,9 @@ export default function ChatButton({ onToggle }: ChatButtonProps) {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '8px',
+              gap: 'var(--spacing-xs)',
               color: 'var(--color-text-secondary)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
               lineHeight: '1.5',
             }}
           >

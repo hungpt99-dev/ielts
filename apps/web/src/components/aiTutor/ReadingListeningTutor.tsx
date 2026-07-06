@@ -744,7 +744,7 @@ export function ActionSelectorCard({ onSelect, disabled }: ActionSelectorCardPro
 
   return (
     <div
-      className="mt-3 rounded-xl border-2 border-teal-200 bg-teal-50/50 p-4 dark:border-teal-800 dark:bg-teal-900/10"
+      className="mt-3 rounded-xl border-2 border-[var(--color-skill-listening-light)] bg-[var(--color-skill-listening-light)]/50 p-4 dark:border-[var(--color-skill-listening-dark)] dark:bg-[var(--color-skill-listening-dark)]/10"
       role="group"
       aria-labelledby={labelId}
     >
@@ -755,9 +755,10 @@ export function ActionSelectorCard({ onSelect, disabled }: ActionSelectorCardPro
         {READING_ACTIONS.map(action => (
           <button
             key={action.id}
+            title={action.description}
             onClick={() => onSelect(action.id)}
             disabled={disabled}
-            className="flex flex-col items-center gap-1 rounded-lg border-2 border-teal-200 bg-white p-3 text-sm transition-colors hover:bg-teal-50 disabled:opacity-50 dark:border-teal-700 dark:bg-slate-700 dark:hover:bg-teal-900/20"
+            className="flex flex-col items-center gap-1 rounded-lg border-2 border-[var(--color-skill-listening-light)] bg-[var(--color-surface)] p-3 text-sm transition-colors hover:bg-[var(--color-skill-listening-light)] disabled:opacity-50 dark:border-[var(--color-skill-listening-dark)] dark:bg-[var(--color-surface-secondary)] dark:hover:bg-[var(--color-skill-listening-dark)]/20"
           >
             <span className="text-xl">{action.icon}</span>
             <span className="text-xs font-medium text-center" style={{ color: 'var(--color-text)' }}>{action.label}</span>
@@ -784,14 +785,14 @@ export function VocabularyCard({ vocabulary, difficultWords }: VocabularyCardPro
       <p id={labelId} className="sr-only">Vocabulary extracted from content</p>
 
       {vocabulary.length > 0 && (
-        <div className="rounded-xl border-2 border-teal-200 bg-white p-4 dark:border-teal-800 dark:bg-slate-800">
+        <div className="rounded-xl border-2 border-[var(--color-skill-listening-light)] bg-[var(--color-surface)] p-4 dark:border-[var(--color-skill-listening-dark)] dark:bg-[var(--color-surface-secondary)]">
           <p className="mb-3 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
             📖 Topic-Specific Vocabulary
           </p>
           <div className="space-y-3">
             {vocabulary.map((v, i) => (
               <div key={i} className="border-b pb-2 last:border-0 last:pb-0" style={{ borderColor: 'var(--color-border)' }}>
-                <p className="text-sm font-semibold text-teal-700 dark:text-teal-400">{v.word}</p>
+                <p className="text-sm font-semibold text-[var(--color-skill-listening-dark)] dark:text-[var(--color-skill-listening)]">{v.word}</p>
                 <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{v.meaning}</p>
                 <p className="mt-0.5 text-[10px]" style={{ color: 'var(--color-muted)' }}>📌 {v.ieltsUse}</p>
               </div>
@@ -801,7 +802,7 @@ export function VocabularyCard({ vocabulary, difficultWords }: VocabularyCardPro
       )}
 
       {difficultWords.length > 0 && (
-        <div className="rounded-xl border-2 border-amber-200 bg-white p-4 dark:border-amber-800 dark:bg-slate-800">
+        <div className="rounded-xl border-2 border-[var(--color-warning-light)] bg-[var(--color-surface)] p-4 dark:border-[var(--color-warning-dark)] dark:bg-[var(--color-surface-secondary)]">
           <p className="mb-3 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
             🔤 Advanced Words
           </p>
@@ -809,10 +810,10 @@ export function VocabularyCard({ vocabulary, difficultWords }: VocabularyCardPro
             {difficultWords.map((dw, i) => (
               <div
                 key={i}
-                className="group relative rounded-lg border border-amber-200 bg-amber-50/50 px-2.5 py-1.5 dark:border-amber-700 dark:bg-amber-900/10"
+                className="group relative rounded-lg border border-[var(--color-warning-light)] bg-[var(--color-warning-light)]/50 px-2.5 py-1.5 dark:border-[var(--color-warning-dark)] dark:bg-[var(--color-warning-dark)]/10"
               >
                 <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>{dw.word}</span>
-                <div className="absolute bottom-full left-1/2 z-10 mb-2 hidden w-48 -translate-x-1/2 rounded-lg border bg-white p-2 shadow-lg group-hover:block dark:bg-slate-700" style={{ borderColor: 'var(--color-border)' }}>
+                <div className="absolute bottom-full left-1/2 z-10 mb-2 hidden w-48 -translate-x-1/2 rounded-lg border bg-[var(--color-surface)] p-2 shadow-lg group-hover:block dark:bg-[var(--color-surface-secondary)]" style={{ borderColor: 'var(--color-border)' }}>
                   <p className="text-[10px] leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>{dw.definition}</p>
                 </div>
               </div>
@@ -821,7 +822,7 @@ export function VocabularyCard({ vocabulary, difficultWords }: VocabularyCardPro
         </div>
       )}
 
-      <div className="rounded-lg bg-teal-50 p-2.5 text-center dark:bg-teal-900/20">
+      <div className="rounded-lg bg-[var(--color-skill-listening-light)] p-2.5 text-center dark:bg-[var(--color-skill-listening-dark)]/20">
         <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
           💡 Try writing 3 sentences using these words. Type **"save"** to save them!
         </p>
@@ -853,7 +854,7 @@ export function ComprehensionCard({ question, questionNumber, totalQuestions, on
 
   if (submitted) {
     return (
-      <div className="mt-2 animate-pulse rounded-lg bg-teal-50 p-3 text-center text-xs text-teal-600 dark:bg-teal-900/20 dark:text-teal-400">
+      <div className="mt-2 animate-pulse rounded-lg bg-[var(--color-skill-listening-light)] p-3 text-center text-xs text-[var(--color-skill-listening)] dark:bg-[var(--color-skill-listening-dark)]/20 dark:text-[var(--color-skill-listening)]">
         Reviewing your answer...
       </div>
     )
@@ -861,7 +862,7 @@ export function ComprehensionCard({ question, questionNumber, totalQuestions, on
 
   return (
     <div
-      className="mt-3 rounded-xl border-2 border-teal-200 bg-teal-50/50 p-4 dark:border-teal-800 dark:bg-teal-900/10"
+      className="mt-3 rounded-xl border-2 border-[var(--color-skill-listening-light)] bg-[var(--color-skill-listening-light)]/50 p-4 dark:border-[var(--color-skill-listening-dark)] dark:bg-[var(--color-skill-listening-dark)]/10"
       role="form"
       aria-labelledby={labelId}
     >
@@ -881,7 +882,7 @@ export function ComprehensionCard({ question, questionNumber, totalQuestions, on
         placeholder="Type your answer here..."
         rows={3}
         disabled={disabled}
-        className="mb-3 w-full resize-none rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+        className="mb-3 w-full resize-none rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-skill-listening)]"
         style={{
           borderColor: 'var(--color-border)',
           backgroundColor: 'var(--color-surface)',
@@ -892,7 +893,7 @@ export function ComprehensionCard({ question, questionNumber, totalQuestions, on
       <button
         onClick={handleSubmit}
         disabled={!answer.trim() || disabled}
-        className="w-full rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="w-full rounded-lg bg-[var(--color-skill-listening)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--color-skill-listening-dark)] disabled:cursor-not-allowed disabled:opacity-50"
       >
         Submit Answer
       </button>

@@ -1,0 +1,1386 @@
+{
+  "title": "IELTS Journey Full Website Redesign Implementation Plan",
+  "summary": "Step-by-step plan to implement the full IELTS Journey website redesign based on the provided design documentation and specs.",
+  "tasks": [
+    {
+      "title": "Inspect Existing Project Structure and UI Code",
+      "description": "Analyze the current IELTS Journey project structure including routes, pages, layouts, theme/styling approach, reusable components, dashboard, study plan, vocabulary, AI tutor, progress, and settings code. Identify hard-coded UI values and stale or duplicated UI components. Document findings and prepare a short implementation plan for redesign.",
+      "executor": "opencode",
+      "dependsOn": [],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Project structure and routes are fully mapped",
+        "Existing theme/styling approach is identified",
+        "Reusable components and their usage are documented",
+        "Hard-coded UI values and stale components are listed",
+        "Short implementation plan is produced"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm lint",
+          "pnpm test"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A documented analysis of the existing codebase and a short implementation plan for the redesign phases.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/redesign/inspection-report.md",
+          "description": "Inspection report documenting project structure, UI code, and redesign plan",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "analysis",
+      "actionType": "analyze",
+      "inputContext": "None",
+      "targetFiles": [
+        "docs/redesign/inspection-report.md"
+      ],
+      "targetArtifacts": [
+        "inspection-report.md"
+      ],
+      "evidence": [
+        "inspection-report.md file exists",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides foundational understanding and plan for the redesign implementation."
+    },
+    {
+      "title": "Implement or Improve Theme and Design Token System",
+      "description": "Create or enhance the centralized theme and design token system including color tokens, surface tokens, text tokens, border tokens, skill color tokens, AI Tutor color tokens, status tokens, spacing scale, border radius scale, shadow tokens, typography scale, breakpoints, animation tokens, and support for light and dark modes. Refactor existing components to use these tokens instead of hard-coded values.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Inspect Existing Project Structure and UI Code"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Theme tokens cover all required categories",
+        "Existing UI components use theme tokens instead of hard-coded styles",
+        "Light and dark mode support is verified",
+        "No visual regressions in existing UI"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "A robust, centralized theme token system integrated into the project with all UI components using semantic tokens.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "packages/theme/src/tokens.ts",
+          "description": "Add and update theme tokens for colors, spacing, typography, shadows, and animations",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/theme/src/cssVariables.css",
+          "description": "Add CSS custom properties for theme tokens",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/tailwind.config.ts",
+          "description": "Extend Tailwind theme with new tokens",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/**/*.tsx",
+          "description": "Refactor UI components to use theme tokens",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Inspection report on existing theme and styling",
+      "targetFiles": [
+        "packages/theme/src/tokens.ts",
+        "packages/theme/src/cssVariables.css",
+        "apps/web/tailwind.config.ts",
+        "packages/ui/src/components/Button.tsx",
+        "packages/ui/src/components/Card.tsx",
+        "packages/ui/src/components/Badge.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "theme token files updated",
+        "UI components use tokens",
+        "tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Establishes a consistent design foundation for the entire redesign."
+    },
+    {
+      "title": "Refine Existing Reusable UI Components per Redesign Specs",
+      "description": "Refine and enhance existing reusable UI components such as Button, Card, Badge, Modal, Drawer, Toast, ProgressBar, ProgressRing, SkillCard, StudyTaskCard, VocabularyWordCard, AITutorMessageCard, MobileBottomNavigation, LoadingSkeleton, EmptyState, and ErrorDisplay. Add new variants, improve accessibility, and ensure consistency with the new theme tokens and design guidelines.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Implement or Improve Theme and Design Token System"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "All specified components have new variants and improvements",
+        "Components use theme tokens exclusively",
+        "Accessibility improvements are verified",
+        "No regressions in existing pages using these components"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Reusable UI components are polished, consistent, accessible, and ready for use in redesigned pages.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/Button.tsx",
+          "description": "Add AI Tutor variant and theme token usage",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/Card.tsx",
+          "description": "Add left-accent border and tint variants",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/Badge.tsx",
+          "description": "Add grammar and vocabulary skill variants",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/Modal.tsx",
+          "description": "Add portal rendering and scrollbar compensation",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/Drawer.tsx",
+          "description": "Add drag-to-dismiss, backdrop blur, and focus trap",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/Toast.tsx",
+          "description": "Add action button, position variants, and SVG icons",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/ProgressBar.tsx",
+          "description": "Add skill variants and indeterminate mode",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/ProgressRing.tsx",
+          "description": "Add skill variants and label prop",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/SkillCard.tsx",
+          "description": "Add grammar and vocabulary types",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/StudyTaskCard.tsx",
+          "description": "Polish status visuals",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/VocabularyWordCard.tsx",
+          "description": "Add selected state and swipe support",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/AITutorMessageCard.tsx",
+          "description": "Add typing state, markdown support, and correction variant",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/MobileBottomNavigation.tsx",
+          "description": "Add glass effect and active indicator",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/LoadingSkeleton.tsx",
+          "description": "Add shimmer direction and new page types",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/EmptyState.tsx",
+          "description": "Refine messages and illustrations",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/components/ui/ErrorDisplay.tsx",
+          "description": "Refine error states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Theme tokens implemented",
+      "targetFiles": [
+        "packages/ui/src/components/Button.tsx",
+        "packages/ui/src/components/Card.tsx",
+        "packages/ui/src/components/Badge.tsx",
+        "packages/ui/src/components/Modal.tsx",
+        "packages/ui/src/components/Drawer.tsx",
+        "packages/ui/src/components/Toast.tsx",
+        "packages/ui/src/components/ProgressBar.tsx",
+        "packages/ui/src/components/ProgressRing.tsx",
+        "packages/ui/src/components/SkillCard.tsx",
+        "packages/ui/src/components/StudyTaskCard.tsx",
+        "packages/ui/src/components/VocabularyWordCard.tsx",
+        "packages/ui/src/components/AITutorMessageCard.tsx",
+        "packages/ui/src/components/MobileBottomNavigation.tsx",
+        "packages/ui/src/components/LoadingSkeleton.tsx",
+        "packages/ui/src/components/EmptyState.tsx",
+        "apps/web/src/components/ui/ErrorDisplay.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "component files modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 900000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides polished reusable components for consistent UI across redesigned pages."
+    },
+    {
+      "title": "Create New Reusable UI Components per Redesign Requirements",
+      "description": "Develop new reusable UI components that do not exist yet but are required by the redesign, including Select, DatePicker, Tabs, PracticeCard, MistakeCard, ProgressSummaryCard, AITutorRecommendationCard, VocabularyDetailPanel, and SettingsSectionCard. Ensure components follow existing API patterns, use theme tokens, are accessible, and consistent with the design system.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Refine Existing Reusable UI Components per Redesign Specs"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "All new components are implemented as per design specs",
+        "Components use theme tokens and are accessible",
+        "Components are consistent with existing UI patterns",
+        "Components are tested and documented"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "New reusable UI components are available for use in page redesigns.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "packages/ui/src/components/Select.tsx",
+          "description": "Custom Select component with dropdown, search, and keyboard support",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ui/src/components/DatePicker.tsx",
+          "description": "DatePicker component for selecting dates",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ui/src/components/Tabs.tsx",
+          "description": "Tabs component for tabbed navigation",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ui/src/components/PracticeCard.tsx",
+          "description": "PracticeCard component for practice tasks",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ui/src/components/MistakeCard.tsx",
+          "description": "MistakeCard component for mistake review",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ui/src/components/ProgressSummaryCard.tsx",
+          "description": "ProgressSummaryCard component for progress summaries",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ui/src/components/AITutorRecommendationCard.tsx",
+          "description": "AITutorRecommendationCard component for AI Tutor suggestions",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ui/src/components/VocabularyDetailPanel.tsx",
+          "description": "VocabularyDetailPanel component for vocabulary details",
+          "validationMethod": "file_exists"
+        },
+        {
+          "action": "create",
+          "target": "packages/ui/src/components/SettingsSectionCard.tsx",
+          "description": "SettingsSectionCard component for settings sections",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "create",
+      "inputContext": "Refined reusable components and theme tokens",
+      "targetFiles": [
+        "packages/ui/src/components/Select.tsx",
+        "packages/ui/src/components/DatePicker.tsx",
+        "packages/ui/src/components/Tabs.tsx",
+        "packages/ui/src/components/PracticeCard.tsx",
+        "packages/ui/src/components/MistakeCard.tsx",
+        "packages/ui/src/components/ProgressSummaryCard.tsx",
+        "packages/ui/src/components/AITutorRecommendationCard.tsx",
+        "packages/ui/src/components/VocabularyDetailPanel.tsx",
+        "packages/ui/src/components/SettingsSectionCard.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "new component files created",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 900000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides new reusable components required for full redesign pages."
+    },
+    {
+      "title": "Redesign Global Layout and Navigation Components",
+      "description": "Implement the new global layout and navigation system including desktop navigation, mobile navigation, bottom navigation on mobile, header behavior, AI Tutor shortcut, active page states, profile/settings access, and responsive layout. Ensure the user always knows their location, next actions, and how to access AI Tutor and today's study plan.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Create New Reusable UI Components per Redesign Requirements"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "New global layout matches redesign specs",
+        "Navigation is responsive and accessible",
+        "AI Tutor shortcut is integrated and visible",
+        "Active page states and profile access are clear",
+        "Mobile bottom navigation is implemented"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Global layout and navigation components are redesigned and fully functional across devices.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/components/layout/Layout.tsx",
+          "description": "Implement new sidebar with section grouping and updated navigation",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/components/layout/Header.tsx",
+          "description": "Update header with AI Tutor shortcut and profile access",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "packages/ui/src/components/MobileBottomNavigation.tsx",
+          "description": "Enhance mobile bottom navigation with glass effect and active indicator",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Reusable components and theme tokens",
+      "targetFiles": [
+        "apps/web/src/components/layout/Layout.tsx",
+        "apps/web/src/components/layout/Header.tsx",
+        "packages/ui/src/components/MobileBottomNavigation.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "layout and navigation files modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides the redesigned app shell and navigation for consistent user experience."
+    },
+    {
+      "title": "Redesign Dashboard Page as Main Learning Command Center",
+      "description": "Redesign the Dashboard page to become the main learning command center with friendly greeting, target IELTS band, current estimated level, exam countdown, today's learning mission, AI Tutor recommendation, study streak, skill progress cards, vocabulary review reminder, weak skill warning, weekly progress summary, continue learning button, and quick actions. Use reusable components and theme tokens. Add empty, loading, and error states. Ensure mobile responsiveness and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Global Layout and Navigation Components"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Dashboard UI matches redesign specs",
+        "All required dashboard elements are present and functional",
+        "Uses reusable components and theme tokens",
+        "Empty, loading, and error states are implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Dashboard page is fully redesigned as a personalized learning homepage with all specified features.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/dashboard/DashboardPage.tsx",
+          "description": "Implement redesigned dashboard UI and logic",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/dashboard/components/*.tsx",
+          "description": "Update or create dashboard subcomponents as needed",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Global layout and reusable components ready",
+      "targetFiles": [
+        "apps/web/src/pages/dashboard/DashboardPage.tsx",
+        "apps/web/src/features/dashboard/components/DashboardGreeting.tsx",
+        "apps/web/src/features/dashboard/components/SkillProgressCard.tsx",
+        "apps/web/src/features/dashboard/components/AITutorRecommendationCard.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "dashboard files modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 900000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Transforms dashboard into the main personalized learning command center."
+    },
+    {
+      "title": "Redesign Today's Study Plan Page with New UI and States",
+      "description": "Redesign the Today's Study Plan page using the new design documentation. Preserve existing data and logic. Use reusable components and theme tokens. Implement empty, loading, and error states with retry actions and helpful messages. Ensure mobile-first responsive layout and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Dashboard Page as Main Learning Command Center"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Today's Study Plan UI matches design specs",
+        "Data and logic are preserved",
+        "Empty, loading, and error states are implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Today's Study Plan page is fully redesigned with new UI and consistent states.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/today-plan/TodayPlanPage.tsx",
+          "description": "Implement redesigned Today's Study Plan UI and states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Dashboard redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/today-plan/TodayPlanPage.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "today-plan page modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Improves user experience for daily study planning."
+    },
+    {
+      "title": "Redesign Full Study Roadmap Page with Visual Journey and AI Tutor Integration",
+      "description": "Redesign the Full Study Roadmap page to provide a visual journey feel with timeline visualization, milestones, progress celebrations, distinct today marker, AI Tutor integration, and motivational elements. Replace flat accordion structure with a scrollable roadmap view. Implement phase transition animations and actionable AI Tutor recommendations. Ensure mobile responsiveness and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Today's Study Plan Page with New UI and States"
+      ],
+      "riskLevel": "high",
+      "acceptanceCriteria": [
+        "Roadmap UI matches detailed redesign specs",
+        "Visual timeline and milestones are implemented",
+        "Today is visually distinct and page scrolls to today on load",
+        "AI Tutor is integrated contextually",
+        "Phase transition celebrations and motivational elements present",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Full Study Roadmap page is redesigned as a motivating, visual journey with AI Tutor support.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/roadmap/FullStudyRoadmapPage.tsx",
+          "description": "Implement redesigned roadmap UI with timeline and AI Tutor integration",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/roadmap/components/*.tsx",
+          "description": "Update or create roadmap subcomponents for milestones, timeline, and celebrations",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Today's Study Plan redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/roadmap/FullStudyRoadmapPage.tsx",
+        "apps/web/src/features/roadmap/components/PhaseMilestone.tsx",
+        "apps/web/src/features/roadmap/components/Timeline.tsx",
+        "apps/web/src/features/roadmap/components/AIRecommendations.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "roadmap files modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": true,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 3000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 1200000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Transforms roadmap into a motivating visual journey with AI Tutor support."
+    },
+    {
+      "title": "Redesign AI Tutor Chat and Integration UI",
+      "description": "Redesign the AI Tutor chat page and integrate AI Tutor UI elements throughout the app including header shortcut, floating assistant button, recommendation cards, contextual suggestions, study plan support, vocabulary support, and progress support. Ensure the AI Tutor UI feels friendly, helpful, and integrated into the learning journey. Use reusable components and theme tokens. Implement empty, loading, and error states. Ensure mobile responsiveness and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Full Study Roadmap Page with Visual Journey and AI Tutor Integration"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "AI Tutor chat UI matches redesign specs",
+        "AI Tutor UI elements are integrated app-wide",
+        "Empty, loading, and error states implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "AI Tutor chat and integration UI are redesigned and fully functional.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/ai-tutor/ChatPage.tsx",
+          "description": "Implement redesigned AI Tutor chat UI",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/components/layout/Header.tsx",
+          "description": "Add AI Tutor header shortcut",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/components/AI/AssistantButton.tsx",
+          "description": "Implement floating AI Tutor assistant button",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/features/ai-tutor/components/*.tsx",
+          "description": "Update AI Tutor recommendation and contextual suggestion components",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Roadmap redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/ai-tutor/ChatPage.tsx",
+        "apps/web/src/components/layout/Header.tsx",
+        "apps/web/src/components/AI/AssistantButton.tsx",
+        "apps/web/src/features/ai-tutor/components/AITutorRecommendationCard.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "AI Tutor files modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 900000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Makes AI Tutor more visible, useful, and integrated into the learning journey."
+    },
+    {
+      "title": "Redesign Vocabulary Notebook and Vocabulary Review Pages",
+      "description": "Redesign the Vocabulary Notebook and Vocabulary Review pages using the new design documentation. Preserve existing data and logic. Use reusable components and theme tokens. Implement empty, loading, and error states with retry actions and helpful messages. Ensure mobile-first responsive layout and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign AI Tutor Chat and Integration UI"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Vocabulary Notebook and Review UIs match design specs",
+        "Data and logic are preserved",
+        "Empty, loading, and error states are implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Vocabulary Notebook and Review pages are fully redesigned with new UI and consistent states.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/vocabulary/NotebookPage.tsx",
+          "description": "Implement redesigned Vocabulary Notebook UI and states",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/vocabulary/ReviewPage.tsx",
+          "description": "Implement redesigned Vocabulary Review UI and states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "AI Tutor redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/vocabulary/NotebookPage.tsx",
+        "apps/web/src/pages/vocabulary/ReviewPage.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "vocabulary pages modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Improves vocabulary learning experience with modern UI and states."
+    },
+    {
+      "title": "Redesign Learning Progress and AI Progress Review Pages",
+      "description": "Redesign the Learning Progress and AI Progress Review pages using the new design documentation. Preserve existing data and logic. Use reusable components and theme tokens. Implement empty, loading, and error states with retry actions and helpful messages. Ensure mobile-first responsive layout and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Vocabulary Notebook and Vocabulary Review Pages"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Progress pages UI matches design specs",
+        "Data and logic are preserved",
+        "Empty, loading, and error states are implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Learning Progress and AI Progress Review pages are fully redesigned with new UI and consistent states.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/progress/LearningProgressPage.tsx",
+          "description": "Implement redesigned Learning Progress UI and states",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/progress/AIProgressReviewPage.tsx",
+          "description": "Implement redesigned AI Progress Review UI and states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Vocabulary pages redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/progress/LearningProgressPage.tsx",
+        "apps/web/src/pages/progress/AIProgressReviewPage.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "progress pages modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enhances progress tracking with modern UI and states."
+    },
+    {
+      "title": "Redesign Practice Pages (Reading, Listening, Writing, Speaking, Grammar)",
+      "description": "Redesign all practice pages including Reading, Listening, Writing, Speaking, and Grammar/Exercise pages using the new design documentation. Preserve existing data and logic. Use reusable components and theme tokens. Implement empty, loading, and error states with retry actions and helpful messages. Ensure mobile-first responsive layout and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Learning Progress and AI Progress Review Pages"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Practice pages UI matches design specs",
+        "Data and logic are preserved",
+        "Empty, loading, and error states are implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "All practice pages are fully redesigned with new UI and consistent states.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/practice/ReadingPracticePage.tsx",
+          "description": "Implement redesigned Reading Practice UI and states",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/practice/ListeningPracticePage.tsx",
+          "description": "Implement redesigned Listening Practice UI and states",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/practice/WritingPracticePage.tsx",
+          "description": "Implement redesigned Writing Practice UI and states",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/practice/SpeakingPracticePage.tsx",
+          "description": "Implement redesigned Speaking Practice UI and states",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/practice/GrammarExercisePage.tsx",
+          "description": "Implement redesigned Grammar/Exercise UI and states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Progress pages redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/practice/ReadingPracticePage.tsx",
+        "apps/web/src/pages/practice/ListeningPracticePage.tsx",
+        "apps/web/src/pages/practice/WritingPracticePage.tsx",
+        "apps/web/src/pages/practice/SpeakingPracticePage.tsx",
+        "apps/web/src/pages/practice/GrammarExercisePage.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "practice pages modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 900000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Improves practice experience with modern UI and consistent states."
+    },
+    {
+      "title": "Redesign Saved Content and Mistake Review Pages",
+      "description": "Redesign the Saved Articles/Saved Text and Mistake Review pages using the new design documentation. Preserve existing data and logic. Use reusable components and theme tokens. Implement empty, loading, and error states with retry actions and helpful messages. Ensure mobile-first responsive layout and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Practice Pages (Reading, Listening, Writing, Speaking, Grammar)"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Saved content and mistake review UIs match design specs",
+        "Data and logic are preserved",
+        "Empty, loading, and error states are implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Saved content and mistake review pages are fully redesigned with new UI and consistent states.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/saved/SavedArticlesPage.tsx",
+          "description": "Implement redesigned Saved Articles UI and states",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/mistake-review/MistakeReviewPage.tsx",
+          "description": "Implement redesigned Mistake Review UI and states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Practice pages redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/saved/SavedArticlesPage.tsx",
+        "apps/web/src/pages/mistake-review/MistakeReviewPage.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "saved content and mistake review pages modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Enhances saved content and mistake review experience with modern UI."
+    },
+    {
+      "title": "Redesign Settings and AI Provider Settings Pages",
+      "description": "Redesign the Settings and AI Provider Settings pages using the new design documentation. Preserve existing data and logic. Use reusable components and theme tokens. Implement empty, loading, and error states with retry actions and helpful messages. Ensure mobile-first responsive layout and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Saved Content and Mistake Review Pages"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Settings pages UI matches design specs",
+        "Data and logic are preserved",
+        "Empty, loading, and error states are implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Settings and AI Provider Settings pages are fully redesigned with new UI and consistent states.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/settings/SettingsPage.tsx",
+          "description": "Implement redesigned Settings UI and states",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/settings/AIProviderSettingsPage.tsx",
+          "description": "Implement redesigned AI Provider Settings UI and states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Saved content and mistake review redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/settings/SettingsPage.tsx",
+        "apps/web/src/pages/settings/AIProviderSettingsPage.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "settings pages modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Improves settings management with modern UI and consistent states."
+    },
+    {
+      "title": "Redesign Onboarding and Landing Pages",
+      "description": "Redesign the Onboarding and Landing pages using the new design documentation. Preserve existing data and logic. Use reusable components and theme tokens. Implement empty, loading, and error states with retry actions and helpful messages. Ensure mobile-first responsive layout and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Settings and AI Provider Settings Pages"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Onboarding and Landing pages UI match design specs",
+        "Data and logic are preserved",
+        "Empty, loading, and error states are implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Onboarding and Landing pages are fully redesigned with new UI and consistent states.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/onboarding/OnboardingPage.tsx",
+          "description": "Implement redesigned Onboarding UI and states",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/landing/LandingPage.tsx",
+          "description": "Implement redesigned Landing Page UI and states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Settings pages redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/onboarding/OnboardingPage.tsx",
+        "apps/web/src/pages/landing/LandingPage.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "onboarding and landing pages modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Improves first user experience with modern UI and consistent states."
+    },
+    {
+      "title": "Redesign Extension Connection Page",
+      "description": "Redesign the Extension Connection page using the new design documentation. Preserve existing data and logic. Use reusable components and theme tokens. Implement empty, loading, and error states with retry actions and helpful messages. Ensure mobile-first responsive layout and accessibility.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Onboarding and Landing Pages"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "Extension Connection page UI matches design specs",
+        "Data and logic are preserved",
+        "Empty, loading, and error states are implemented",
+        "Mobile layout is responsive and accessible"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Extension Connection page is fully redesigned with new UI and consistent states.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/extension/ExtensionConnectionPage.tsx",
+          "description": "Implement redesigned Extension Connection UI and states",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "Onboarding and Landing pages redesign completed",
+      "targetFiles": [
+        "apps/web/src/pages/extension/ExtensionConnectionPage.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "extension connection page modified",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Completes redesign of all major pages with consistent UI and states."
+    },
+    {
+      "title": "Implement Consistent Empty, Loading, and Error States Across All Pages",
+      "description": "Ensure every major page has consistent empty state, loading skeleton, and error state components with retry actions and helpful messages. Use reusable components and theme tokens. Verify no blank screens remain. Ensure accessibility and mobile responsiveness.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Redesign Extension Connection Page"
+      ],
+      "riskLevel": "medium",
+      "acceptanceCriteria": [
+        "All major pages have consistent empty, loading, and error states",
+        "Retry actions are implemented where needed",
+        "Helpful messages and clear next actions are present",
+        "No blank screens on any page",
+        "Accessibility and mobile responsiveness verified"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [
+          "pnpm test",
+          "pnpm lint"
+        ],
+        "requireGitDiff": true
+      },
+      "expectedResult": "Consistent and accessible empty, loading, and error states are implemented across the entire app.",
+      "outputPlan": [
+        {
+          "action": "modify",
+          "target": "apps/web/src/components/ui/EmptyState.tsx",
+          "description": "Refine and standardize empty state component",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/components/ui/LoadingSkeleton.tsx",
+          "description": "Refine and standardize loading skeleton component",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/components/ui/ErrorDisplay.tsx",
+          "description": "Refine and standardize error state component",
+          "validationMethod": "file_diff"
+        },
+        {
+          "action": "modify",
+          "target": "apps/web/src/pages/**/*.tsx",
+          "description": "Add consistent states to all major pages",
+          "validationMethod": "file_diff"
+        }
+      ],
+      "taskType": "coding",
+      "actionType": "modify",
+      "inputContext": "All page redesigns completed",
+      "targetFiles": [
+        "apps/web/src/components/ui/EmptyState.tsx",
+        "apps/web/src/components/ui/LoadingSkeleton.tsx",
+        "apps/web/src/components/ui/ErrorDisplay.tsx",
+        "apps/web/src/pages/**/*.tsx"
+      ],
+      "targetArtifacts": [],
+      "evidence": [
+        "state components modified",
+        "pages updated with states",
+        "lint and tests pass"
+      ],
+      "verificationCommand": "pnpm test",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 2,
+        "retryDelayMs": 2000,
+        "retryBackoff": "exponential"
+      },
+      "timeout": {
+        "durationMs": 900000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Ensures robust user experience with consistent states across the app."
+    },
+    {
+      "title": "Perform Comprehensive Testing and Validation of Redesigned Website",
+      "description": "Test all redesigned pages and components for correct rendering, functionality, responsiveness, accessibility, and theme token usage. Verify no hard-coded colors or spacing remain. Confirm existing user data displays correctly and no main routes are broken. Run lint, type checks, and focused tests. Document any remaining issues and recommended next steps.",
+      "executor": "shell",
+      "dependsOn": [
+        "Implement Consistent Empty, Loading, and Error States Across All Pages"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "All pages render correctly and are responsive",
+        "Accessibility standards are met",
+        "Theme tokens are used consistently with no hard-coded styles",
+        "Existing user data displays correctly",
+        "No main route is broken",
+        "Lint, type checks, and tests pass",
+        "Test report and issue list are produced"
+      ],
+      "commands": [
+        "pnpm lint",
+        "pnpm typecheck",
+        "pnpm test -- --run",
+        "pnpm test:accessibility",
+        "pnpm test:responsiveness"
+      ],
+      "validation": {
+        "commands": [
+          "pnpm test -- --run"
+        ],
+        "requireGitDiff": false
+      },
+      "expectedResult": "All redesigned features are verified working correctly with no regressions or accessibility issues.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "reports/redesign-test-report.md",
+          "description": "Comprehensive test report and issue list for the redesign",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "testing",
+      "actionType": "execute",
+      "inputContext": "All redesign tasks completed",
+      "targetFiles": [
+        "reports/redesign-test-report.md"
+      ],
+      "targetArtifacts": [
+        "redesign-test-report.md"
+      ],
+      "evidence": [
+        "lint and tests pass",
+        "test report file exists"
+      ],
+      "verificationCommand": "pnpm test -- --run",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 600000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Validates the quality and completeness of the full website redesign."
+    },
+    {
+      "title": "Generate Final Redesign Implementation Report",
+      "description": "Compile a final report summarizing all files changed, components created, theme tokens added or updated, pages redesigned, UX and mobile improvements made, accessibility improvements, tests performed, any remaining issues, and recommended next steps for the IELTS Journey full website redesign.",
+      "executor": "opencode",
+      "dependsOn": [
+        "Perform Comprehensive Testing and Validation of Redesigned Website"
+      ],
+      "riskLevel": "safe",
+      "acceptanceCriteria": [
+        "Final report covers all required summary points",
+        "Report is clear, concise, and actionable"
+      ],
+      "commands": [],
+      "validation": {
+        "commands": [],
+        "requireGitDiff": false
+      },
+      "expectedResult": "A comprehensive final report documenting the full redesign implementation and recommendations.",
+      "outputPlan": [
+        {
+          "action": "create",
+          "target": "docs/redesign/final-implementation-report.md",
+          "description": "Final report summarizing the full website redesign implementation",
+          "validationMethod": "file_exists"
+        }
+      ],
+      "taskType": "writing",
+      "actionType": "generate",
+      "inputContext": "Inspection report, redesign tasks, test report",
+      "targetFiles": [
+        "docs/redesign/final-implementation-report.md"
+      ],
+      "targetArtifacts": [
+        "final-implementation-report.md"
+      ],
+      "evidence": [
+        "final report file exists"
+      ],
+      "verificationCommand": "ls docs/redesign/final-implementation-report.md",
+      "approvalRequired": false,
+      "retryPolicy": {
+        "maxRetries": 1,
+        "retryDelayMs": 1000,
+        "retryBackoff": "linear"
+      },
+      "timeout": {
+        "durationMs": 300000,
+        "action": "fail"
+      },
+      "finalOutputContribution": "Provides a comprehensive summary and recommendations for the redesign project."
+    }
+  ]
+}

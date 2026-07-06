@@ -6,22 +6,15 @@ describe('SolutionSection', () => {
   it('renders the section heading', () => {
     render(<SolutionSection />)
     expect(
-      screen.getByText('Turn the real internet into your IELTS classroom')
+      screen.getByText("IELTS Journey gives you what's missing.")
     ).toBeInTheDocument()
   })
 
-  it('renders all six solution cards', () => {
+  it('renders the three solution cards', () => {
     render(<SolutionSection />)
-    expect(screen.getByText('Read anything online')).toBeInTheDocument()
-    expect(
-      screen.getByText('Extension works while you read')
-    ).toBeInTheDocument()
-    expect(
-      screen.getByText('Web app tracks your journey')
-    ).toBeInTheDocument()
-    expect(screen.getByText('AI-powered features')).toBeInTheDocument()
-    expect(screen.getByText('Local-first privacy')).toBeInTheDocument()
-    expect(screen.getByText('Personal study system')).toBeInTheDocument()
+    expect(screen.getByText('AI Study Roadmap')).toBeInTheDocument()
+    expect(screen.getByText('Daily Learning Missions')).toBeInTheDocument()
+    expect(screen.getByText('Visible Progress')).toBeInTheDocument()
   })
 
   it('renders a semantic section with heading level 2', () => {
@@ -31,6 +24,6 @@ describe('SolutionSection', () => {
 
   it('has an id attribute', () => {
     render(<SolutionSection />)
-    expect(screen.getByText(/Turn the real internet/).closest('section')).toHaveAttribute('id', 'solution')
+    expect(screen.getByText(/IELTS Journey gives you/).closest('section')).toHaveAttribute('id', 'solution')
   })
 })

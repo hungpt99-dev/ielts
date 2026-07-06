@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { buildReviewQueue, handleRating, type ReviewItem, type ReviewRating } from '../services/reviewService'
+import { IconCheckCircle, IconBack, IconAlertCircle } from '@ielts/ui'
 
 interface ReviewSessionProps {
   onComplete: () => void
@@ -7,10 +8,10 @@ interface ReviewSessionProps {
 }
 
 const RATING_BUTTONS: { rating: ReviewRating; label: string; color: string }[] = [
-  { rating: 'again', label: 'Again', color: '#ef4444' },
-  { rating: 'hard', label: 'Hard', color: '#f97316' },
-  { rating: 'good', label: 'Good', color: '#3b82f6' },
-  { rating: 'easy', label: 'Easy', color: '#22c55e' },
+  { rating: 'again', label: 'Again', color: 'var(--color-danger)' },
+  { rating: 'hard', label: 'Hard', color: 'var(--color-warning)' },
+  { rating: 'good', label: 'Good', color: 'var(--color-primary)' },
+  { rating: 'easy', label: 'Easy', color: 'var(--color-success)' },
 ]
 
 export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps) {
@@ -102,7 +103,7 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '400px',
-          gap: '12px',
+          gap: 'var(--spacing-sm)',
         }}
       >
         <div
@@ -111,11 +112,11 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
             height: '24px',
             border: '3px solid var(--color-border)',
             borderTopColor: 'var(--color-primary)',
-            borderRadius: '50%',
+            borderRadius: 'var(--radius-full)',
             animation: 'spin 0.8s linear infinite',
           }}
         />
-        <span style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
+        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
           Loading review queue…
         </span>
       </div>
@@ -132,23 +133,25 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '400px',
-          padding: '16px',
-          gap: '12px',
+          padding: 'var(--spacing-md)',
+          gap: 'var(--spacing-sm)',
           textAlign: 'center',
         }}
       >
-        <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
-        <span style={{ fontSize: '13px', color: 'var(--color-danger)' }}>{error}</span>
+        <div style={{ width: 'var(--spacing-2xl)', height: 'var(--spacing-2xl)', borderRadius: 'var(--radius-full)', background: 'var(--color-danger-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <IconAlertCircle size={24} style={{ color: 'var(--color-danger)' }} />
+        </div>
+        <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-danger)' }}>{error}</span>
         <button
           onClick={loadQueue}
           style={{
-            padding: '8px 16px',
+            padding: 'var(--spacing-xs) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
             cursor: 'pointer',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
           }}
         >
           Retry
@@ -160,8 +163,8 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
             border: 'none',
             color: 'var(--color-primary)',
             cursor: 'pointer',
-            fontSize: '13px',
-            padding: '4px',
+            fontSize: 'var(--text-sm)',
+            padding: 'var(--spacing-2xs)',
           }}
         >
           Back
@@ -182,8 +185,8 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '400px',
-          padding: '24px 16px',
-          gap: '16px',
+          padding: 'var(--spacing-lg) var(--spacing-md)',
+          gap: 'var(--spacing-md)',
           textAlign: 'center',
         }}
       >
@@ -191,7 +194,7 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           style={{
             width: '64px',
             height: '64px',
-            borderRadius: '50%',
+            borderRadius: 'var(--radius-full)',
             background: 'var(--color-primary-light, #dbeafe)',
             display: 'flex',
             alignItems: 'center',
@@ -199,19 +202,19 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
             fontSize: '28px',
           }}
         >
-          🎉
+          <IconCheckCircle size={28} style={{ color: 'var(--color-primary)' }} />
         </div>
         <h2
           style={{
-            fontSize: '20px',
-            fontWeight: 700,
+            fontSize: 'var(--text-xl)',
+            fontWeight: 'var(--weight-bold)',
             color: 'var(--color-text)',
             margin: 0,
           }}
         >
           Review Complete!
         </h2>
-        <p style={{ fontSize: '13px', color: 'var(--color-muted)', margin: 0 }}>
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', margin: 0 }}>
           Reviewed {queue.length} word{queue.length !== 1 ? 's' : ''} in {minutes > 0 ? `${minutes}m ` : ''}{seconds}s
         </p>
 
@@ -219,9 +222,9 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr',
-            gap: '8px',
+            gap: 'var(--spacing-xs)',
             width: '100%',
-            maxWidth: '280px',
+            maxWidth: '400px',
           }}
         >
           {(Object.entries(ratings) as [ReviewRating, number][]).map(([rating, count]) => {
@@ -230,31 +233,31 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
               <div
                 key={rating}
                 style={{
-                  padding: '8px 12px',
+                  padding: 'var(--spacing-xs) var(--spacing-sm)',
                   borderRadius: 'var(--radius-md)',
-                  background: `${btn.color}10`,
-                  border: `1px solid ${btn.color}30`,
+                  background: `color-mix(in srgb, ${btn.color} 10%, transparent)`,
+                  border: `1px solid color-mix(in srgb, ${btn.color} 30%, transparent)`,
                   textAlign: 'center',
                 }}
               >
-                <div style={{ fontSize: '11px', color: 'var(--color-muted)', fontWeight: 500 }}>{btn.label}</div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: btn.color }}>{count}</div>
+                <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', fontWeight: 'var(--weight-medium)' }}>{btn.label}</div>
+                <div style={{ fontSize: 'var(--text-lg)', fontWeight: 'var(--weight-bold)', color: btn.color }}>{count}</div>
               </div>
             )
           })}
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+        <div style={{ display: 'flex', gap: 'var(--spacing-xs)', marginTop: 'var(--spacing-xs)' }}>
           <button
             onClick={loadQueue}
             style={{
               padding: '10px 20px',
               borderRadius: 'var(--radius-md)',
               border: 'none',
-              background: 'linear-gradient(135deg, var(--color-primary), #7c3aed)',
-              color: '#fff',
-              fontSize: '14px',
-              fontWeight: 600,
+              background: 'var(--color-primary)',
+              color: 'var(--color-text-inverse)',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--weight-semibold)',
               cursor: 'pointer',
             }}
           >
@@ -268,8 +271,8 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '14px',
-              fontWeight: 500,
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--weight-medium)',
               cursor: 'pointer',
             }}
           >
@@ -289,8 +292,8 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '400px',
-          padding: '24px 16px',
-          gap: '12px',
+          padding: 'var(--spacing-lg) var(--spacing-md)',
+          gap: 'var(--spacing-sm)',
           textAlign: 'center',
         }}
       >
@@ -298,7 +301,7 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           style={{
             width: '48px',
             height: '48px',
-            borderRadius: '50%',
+            borderRadius: 'var(--radius-full)',
             background: 'var(--color-primary-light, #dbeafe)',
             display: 'flex',
             alignItems: 'center',
@@ -306,25 +309,25 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
             fontSize: '24px',
           }}
         >
-          ✅
+          <IconCheckCircle size={24} style={{ color: 'var(--color-primary)' }} />
         </div>
-        <h2 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text)', margin: 0 }}>
+        <h2 style={{ fontSize: 'var(--text-base)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-text)', margin: 0 }}>
           No words to review
         </h2>
-        <p style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
           All vocabulary is up to date.
         </p>
         <button
           onClick={onBack}
           style={{
-            marginTop: '8px',
-            padding: '8px 16px',
+            marginTop: 'var(--spacing-xs)',
+            padding: 'var(--spacing-xs) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
             cursor: 'pointer',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
           }}
         >
           Back to Dashboard
@@ -339,8 +342,8 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
         display: 'flex',
         flexDirection: 'column',
         minHeight: '400px',
-        padding: '16px',
-        gap: '16px',
+        padding: 'var(--spacing-md)',
+        gap: 'var(--spacing-md)',
       }}
     >
       <div
@@ -357,14 +360,14 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
             border: 'none',
             color: 'var(--color-primary)',
             cursor: 'pointer',
-            fontSize: '13px',
-            fontWeight: 500,
-            padding: '4px',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--weight-medium)',
+            padding: 'var(--spacing-2xs)',
           }}
         >
-          ← Back
+          <IconBack size={14} /> Back
         </button>
-        <span style={{ fontSize: '12px', color: 'var(--color-muted)', fontWeight: 500 }}>
+        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', fontWeight: 'var(--weight-medium)' }}>
           {currentIndex + 1} / {queue.length}
         </span>
       </div>
@@ -372,7 +375,7 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
       <div
         style={{
           height: '4px',
-          borderRadius: '2px',
+          borderRadius: 'var(--radius-xs)',
           background: 'var(--color-border)',
           overflow: 'hidden',
         }}
@@ -381,9 +384,9 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           style={{
             height: '100%',
             width: `${progressPct}%`,
-            borderRadius: '2px',
+            borderRadius: 'var(--radius-xs)',
             background: 'var(--color-primary)',
-            transition: 'width 0.3s ease',
+            transition: 'var(--transition-slow)',
           }}
         />
       </div>
@@ -395,13 +398,13 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '12px',
+          gap: 'var(--spacing-sm)',
         }}
       >
         <div
           style={{
             width: '100%',
-            padding: '24px 16px',
+            padding: 'var(--spacing-lg) var(--spacing-md)',
             borderRadius: 'var(--radius-lg)',
             background: 'var(--color-surface)',
             border: '1px solid var(--color-border)',
@@ -411,7 +414,7 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           <div
             style={{
               fontSize: '22px',
-              fontWeight: 700,
+              fontWeight: 'var(--weight-bold)',
               color: 'var(--color-text)',
               lineHeight: '1.3',
               wordBreak: 'break-word',
@@ -423,9 +426,9 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           {currentItem?.vocab.pronunciation && (
             <div
               style={{
-                fontSize: '13px',
+                fontSize: 'var(--text-sm)',
                 color: 'var(--color-muted)',
-                marginTop: '4px',
+                marginTop: 'var(--spacing-2xs)',
                 fontStyle: 'italic',
               }}
             >
@@ -436,10 +439,10 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           {currentItem?.vocab.partOfSpeech && (
             <div
               style={{
-                fontSize: '11px',
+                fontSize: 'var(--text-xs)',
                 color: 'var(--color-primary)',
-                marginTop: '4px',
-                fontWeight: 500,
+                marginTop: 'var(--spacing-2xs)',
+                fontWeight: 'var(--weight-medium)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
               }}
@@ -451,12 +454,12 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           {revealed && currentItem?.vocab.meaning && (
             <div
               style={{
-                marginTop: '16px',
-                paddingTop: '16px',
+                marginTop: 'var(--spacing-md)',
+                paddingTop: 'var(--spacing-md)',
                 borderTop: '1px solid var(--color-border)',
                 fontSize: '15px',
                 color: 'var(--color-text)',
-                lineHeight: '1.5',
+                lineHeight: 'var(--leading-normal)',
                 whiteSpace: 'pre-wrap',
                 wordBreak: 'break-word',
               }}
@@ -475,8 +478,8 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
-              fontWeight: 500,
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--weight-medium)',
               cursor: 'pointer',
             }}
           >
@@ -503,12 +506,12 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
                   borderRadius: 'var(--radius-md)',
                   border: 'none',
                   background: color,
-                  color: '#fff',
-                  fontSize: '13px',
-                  fontWeight: 600,
+                  color: 'var(--color-text-inverse)',
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: 'var(--weight-semibold)',
                   cursor: saving ? 'not-allowed' : 'pointer',
                   opacity: saving ? 0.6 : 1,
-                  transition: 'opacity 0.15s',
+                  transition: 'var(--transition-fast)',
                 }}
               >
                 {label}
@@ -521,7 +524,7 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
           style={{
             display: 'flex',
             gap: '6px',
-            fontSize: '11px',
+            fontSize: 'var(--text-xs)',
             color: 'var(--color-muted)',
             flexWrap: 'wrap',
             justifyContent: 'center',
@@ -539,12 +542,12 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
 const kbdStyle: React.CSSProperties = {
   display: 'inline-block',
   padding: '1px 5px',
-  fontSize: '10px',
-  fontFamily: 'monospace',
+  fontSize: 'var(--text-xs)',
+  fontFamily: 'var(--font-mono)',
   lineHeight: '1.4',
   color: 'var(--color-text)',
   background: 'var(--color-surface-alt, #f1f5f9)',
   border: '1px solid var(--color-border)',
-  borderRadius: '3px',
+  borderRadius: 'var(--radius-xs)',
   margin: '0 1px',
 }

@@ -3,6 +3,7 @@ import { extensionVocabSchema } from '../../storage/vocabularyStore'
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { incrementDailyProgress } from '../../services/storage'
+import { IconCheck, IconClose } from '@ielts/ui'
 
 interface QuickAddVocabProps {
   onSaved: () => void
@@ -45,6 +46,7 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
       const tab = tabs[0]
       if (!tab.id) return
       chrome.tabs.sendMessage(tab.id, { type: 'GET_PAGE_INFO' }, (response) => {
+        if (chrome.runtime.lastError) return
         const selectedText = response?.selectedText || ''
         if (selectedText) {
           const firstLine = selectedText.split('\n')[0].trim()
@@ -125,35 +127,35 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '48px 24px',
-          gap: '12px',
+          padding: 'var(--spacing-2xl) var(--spacing-lg)',
+          gap: 'var(--spacing-sm)',
         }}
       >
         <div
           style={{
             width: '56px',
             height: '56px',
-            borderRadius: '50%',
+            borderRadius: 'var(--radius-full)',
             background: 'var(--color-success)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '28px',
-            color: '#fff',
+            color: 'var(--color-text-inverse)',
           }}
         >
-          ✓
+          <IconCheck size={28} />
         </div>
         <div
           style={{
-            fontSize: '16px',
-            fontWeight: 600,
+            fontSize: 'var(--text-base)',
+            fontWeight: 'var(--weight-semibold)',
             color: 'var(--color-text)',
           }}
         >
           Vocabulary saved!
         </div>
-        <div style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
+        <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
           Added to spaced repetition review
         </div>
       </div>
@@ -165,7 +167,7 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
+        gap: 'var(--spacing-md)',
       }}
     >
       <div
@@ -179,8 +181,8 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
       >
         <h2
           style={{
-            fontSize: '16px',
-            fontWeight: 600,
+            fontSize: 'var(--text-base)',
+            fontWeight: 'var(--weight-semibold)',
             color: 'var(--color-text)',
             margin: 0,
           }}
@@ -192,16 +194,19 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
           onClick={onCancel}
           aria-label="Cancel"
           style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 'var(--spacing-xl)',
+            height: 'var(--spacing-xl)',
             background: 'none',
             border: 'none',
             color: 'var(--color-muted)',
             cursor: 'pointer',
-            fontSize: '18px',
-            padding: '4px',
-            lineHeight: 1,
+            borderRadius: 'var(--radius-lg)',
           }}
         >
-          ✕
+          <IconClose size={18} />
         </button>
       </div>
 
@@ -209,11 +214,11 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
         <div
           role="alert"
           style={{
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             background: 'var(--color-danger)',
-            color: '#fff',
+            color: 'var(--color-text-inverse)',
             borderRadius: 'var(--radius-md)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
           }}
         >
           {errors.submit}
@@ -223,8 +228,8 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <label
           style={{
-            fontSize: '13px',
-            fontWeight: 500,
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--weight-medium)',
             color: 'var(--color-text-secondary)',
           }}
         >
@@ -239,22 +244,22 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
           aria-describedby={errors.word ? 'quick-word-error' : undefined}
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: errors.word
               ? '1px solid var(--color-danger)'
               : '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '14px',
-            fontWeight: 600,
+            fontSize: 'var(--text-base)',
+            fontWeight: 'var(--weight-semibold)',
           }}
         />
         {errors.word && (
           <span
             id="quick-word-error"
             role="alert"
-            style={{ fontSize: '12px', color: 'var(--color-danger)' }}
+            style={{ fontSize: 'var(--text-xs)', color: 'var(--color-danger)' }}
           >
             {errors.word}
           </span>
@@ -264,8 +269,8 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <label
           style={{
-            fontSize: '13px',
-            fontWeight: 500,
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--weight-medium)',
             color: 'var(--color-text-secondary)',
           }}
         >
@@ -278,12 +283,12 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
           placeholder="Sentence where you found this word..."
           style={{
             width: '100%',
-            padding: '8px 12px',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             lineHeight: 1.5,
             resize: 'vertical',
             fontFamily: 'var(--font-sans)',
@@ -295,14 +300,14 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: '12px',
+          gap: 'var(--spacing-sm)',
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <label
             style={{
-              fontSize: '13px',
-              fontWeight: 500,
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--weight-medium)',
               color: 'var(--color-text-secondary)',
             }}
           >
@@ -315,20 +320,20 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
             placeholder="e.g. education"
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <label
             style={{
-              fontSize: '13px',
-              fontWeight: 500,
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--weight-medium)',
               color: 'var(--color-text-secondary)',
             }}
           >
@@ -341,12 +346,12 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
             placeholder="comma, separated"
             style={{
               width: '100%',
-              padding: '8px 10px',
+              padding: 'var(--spacing-xs) var(--spacing-sm)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-text)',
-              fontSize: '13px',
+              fontSize: 'var(--text-sm)',
             }}
           />
         </div>
@@ -365,12 +370,12 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
           type="button"
           onClick={onCancel}
           style={{
-            padding: '8px 16px',
+            padding: 'var(--spacing-xs) var(--spacing-md)',
             borderRadius: 'var(--radius-md)',
             border: '1px solid var(--color-border)',
             background: 'var(--color-surface)',
             color: 'var(--color-text)',
-            fontSize: '13px',
+            fontSize: 'var(--text-sm)',
             cursor: 'pointer',
           }}
         >
@@ -381,16 +386,16 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
           onClick={handleSave}
           disabled={saving || !form.word.trim()}
           style={{
-            padding: '8px 20px',
+            padding: 'var(--spacing-xs) var(--spacing-lg)',
             borderRadius: 'var(--radius-md)',
             border: 'none',
             background:
               saving || !form.word.trim()
                 ? 'var(--color-primary-hover)'
                 : 'var(--color-primary)',
-            color: '#ffffff',
-            fontSize: '13px',
-            fontWeight: 600,
+            color: 'var(--color-text-inverse)',
+            fontSize: 'var(--text-sm)',
+            fontWeight: 'var(--weight-semibold)',
             cursor: saving || !form.word.trim() ? 'not-allowed' : 'pointer',
             opacity: saving || !form.word.trim() ? 0.7 : 1,
           }}

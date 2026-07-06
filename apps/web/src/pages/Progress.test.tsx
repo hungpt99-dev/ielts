@@ -13,8 +13,6 @@ vi.mock('recharts', () => ({
   ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   BarChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Bar: () => <div>Bar</div>,
-  LineChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  Line: () => <div>Line</div>,
   PieChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Pie: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Cell: () => <div>Cell</div>,
@@ -22,7 +20,6 @@ vi.mock('recharts', () => ({
   YAxis: () => <div>YAxis</div>,
   CartesianGrid: () => <div>CartesianGrid</div>,
   Tooltip: () => <div>Tooltip</div>,
-  Legend: () => <div>Legend</div>,
 }))
 
 import Progress from './Progress'
@@ -48,17 +45,18 @@ describe('Progress page', () => {
   it('shows loading state initially', () => {
     mockGetAll.mockResolvedValue([])
     render(<Progress />)
-    const spinner = document.querySelector('.animate-spin')
-    expect(spinner).toBeInTheDocument()
+    const skeleton = document.querySelector('[role="status"]')
+    expect(skeleton).toBeInTheDocument()
   })
 
   it('renders content after data loads', async () => {
     emptyStoreMock()
     render(<Progress />)
 
-    await screen.findByText('Total Study Hours')
-    expect(screen.getByText('Total Study Hours')).toBeInTheDocument()
-    expect(screen.getByText('Tasks Completed')).toBeInTheDocument()
+    await screen.findByText('Learning Progress')
+    expect(screen.getByText('Learning Progress')).toBeInTheDocument()
+    expect(screen.getByText('Study Hours')).toBeInTheDocument()
+    expect(screen.getByText('Band Progress')).toBeInTheDocument()
     expect(screen.getByText('Study Streak')).toBeInTheDocument()
     expect(screen.getByText('Vocabulary')).toBeInTheDocument()
   })
@@ -71,36 +69,12 @@ describe('Progress page', () => {
     expect(screen.getByText('Roadmap Progress')).toBeInTheDocument()
   })
 
-  it('shows weekly activity section', async () => {
-    emptyStoreMock()
-    render(<Progress />)
-
-    await screen.findByText('Weekly Activity')
-    expect(screen.getByText('Weekly Activity')).toBeInTheDocument()
-  })
-
-  it('shows skill progress section', async () => {
-    emptyStoreMock()
-    render(<Progress />)
-
-    await screen.findByText('Skill Progress')
-    expect(screen.getByText('Skill Progress')).toBeInTheDocument()
-  })
-
-  it('shows skill balance section', async () => {
-    emptyStoreMock()
-    render(<Progress />)
-
-    await screen.findByText('Skill Balance')
-    expect(screen.getByText('Skill Balance')).toBeInTheDocument()
-  })
-
   it('shows weak skills section', async () => {
     emptyStoreMock()
     render(<Progress />)
 
-    await screen.findByText('Weak Skills')
-    expect(screen.getByText('Weak Skills')).toBeInTheDocument()
+    await screen.findByText('Mistakes')
+    expect(screen.getByText('Mistakes')).toBeInTheDocument()
   })
 
   it('shows recent activity section', async () => {
@@ -109,14 +83,6 @@ describe('Progress page', () => {
 
     await screen.findByText('Recent Activity')
     expect(screen.getByText('Recent Activity')).toBeInTheDocument()
-  })
-
-  it('shows monthly summary section', async () => {
-    emptyStoreMock()
-    render(<Progress />)
-
-    await screen.findByText('Monthly Summary')
-    expect(screen.getByText('Monthly Summary')).toBeInTheDocument()
   })
 
   it('shows error state when database fails', async () => {
@@ -137,8 +103,8 @@ describe('Progress page', () => {
     })
     render(<Progress />)
 
-    await screen.findByText('Total Study Hours')
-    expect(screen.getByText('Total Study Hours')).toBeInTheDocument()
+    await screen.findByText('Study Hours')
+    expect(screen.getByText('Study Hours')).toBeInTheDocument()
   })
 
   it('handles vocabulary data', async () => {
@@ -151,8 +117,8 @@ describe('Progress page', () => {
     })
     render(<Progress />)
 
-    await screen.findByText('Total Study Hours')
-    expect(screen.getByText('Vocabulary')).toBeInTheDocument()
+    await screen.findByText('Study Hours')
+    expect(screen.getByText('Vocab Words')).toBeInTheDocument()
   })
 
   it('renders from cached snapshot without database calls', async () => {
@@ -176,8 +142,8 @@ describe('Progress page', () => {
     mockGetAll.mockRejectedValue(new Error('should not be called'))
     render(<Progress />)
 
-    await screen.findByText('Total Study Hours')
-    expect(screen.getByText('10.0')).toBeInTheDocument()
+    await screen.findByText('Study Hours')
+    expect(screen.getByText('10.0h')).toBeInTheDocument()
   })
 
   it('handles mistakes with null skill', async () => {
@@ -189,8 +155,8 @@ describe('Progress page', () => {
     })
     render(<Progress />)
 
-    await screen.findByText('Weak Skills')
-    expect(screen.getByText('Weak Skills')).toBeInTheDocument()
+    await screen.findByText('Mistakes')
+    expect(screen.getByText('Mistakes')).toBeInTheDocument()
   })
 
   it('handles vocabulary with missing createdAt', async () => {
@@ -202,7 +168,7 @@ describe('Progress page', () => {
     })
     render(<Progress />)
 
-    await screen.findByText('Total Study Hours')
+    await screen.findByText('Study Hours')
   })
 
   it('handles empty recent activity', async () => {
@@ -217,7 +183,7 @@ describe('Progress page', () => {
     emptyStoreMock()
     render(<Progress />)
 
-    await screen.findByText('Weak Skills')
-    expect(screen.getByText('No mistakes logged yet. Keep practicing!')).toBeInTheDocument()
+    await screen.findByText('Mistakes')
+    expect(screen.getByText('No mistakes logged yet — that means you\'re practicing well!')).toBeInTheDocument()
   })
 })

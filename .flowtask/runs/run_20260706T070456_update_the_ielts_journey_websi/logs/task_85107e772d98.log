@@ -1,0 +1,1109 @@
+[2026-07-06T09:15:26.328Z] [INFO] Task started: Remove old inconsistent icons and unused icon imports from codebase
+[2026-07-06T09:15:26.330Z] [INFO] [info] [output-plan] [{"action":"modify","target":"apps/web/src/components/**/*.tsx","description":"Removed old icon imports and unused icon code","validationMethod":"file_diff"},{"action":"modify","target":"apps/extension/src/popup/components/**/*.tsx","description":"Removed old icon imports and unused icon code","validationMethod":"file_diff"}]
+[2026-07-06T09:15:26.901Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-06T09:15:26.901Z] [INFO] [stderr] [0m
+[2026-07-06T09:15:26.901Z] [INFO] [stderr] [0m
+[2026-07-06T09:15:31.932Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"icon usage, icon imports, icon components in apps/web and apps/extension","maxFiles":30}
+[2026-07-06T09:15:32.409Z] [INFO] [stderr] [0m✱ [0mGrep "import.*(Icon|icon).*from"[90m in apps/web/src · 19 matches[0m
+[2026-07-06T09:15:32.877Z] [INFO] [stderr] [0m✱ [0mGrep "import.*(Icon|icon).*from"[90m in apps/extension/src · 19 matches[0m
+[2026-07-06T09:15:37.958Z] [INFO] [stderr] [0m• [0mFind icon mapping and library[90m Explore Agent[0m
+[2026-07-06T09:15:51.830Z] [INFO] [stderr] [0m✓ [0mFind icon mapping and library[90m Explore Agent[0m
+[2026-07-06T09:15:55.402Z] [INFO] [stderr] [0m→ [0mRead packages/ui/src/icons/IconMap.ts
+[2026-07-06T09:15:55.598Z] [INFO] [stderr] [0m→ [0mRead packages/ui/src/icons/index.ts
+[2026-07-06T09:15:56.171Z] [INFO] [stderr] [0m✱ [0mGrep "from 'lucide-react'|from "lucide-react""[90m in . · 1 match[0m
+[2026-07-06T09:16:00.232Z] [INFO] [stderr] [0m
+[2026-07-06T09:16:00.232Z] [INFO] [stderr] [ ] Remove unused icon imports from website source files (apps/web/src)
+[2026-07-06T09:16:00.233Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-06T09:16:00.233Z] [INFO] [stderr] [ ] Remove unused icon imports from extension source files (apps/extension/src)
+[2026-07-06T09:16:00.233Z] [INFO] [stderr] [ ] Run pnpm lint to validate changes
+[2026-07-06T09:16:00.233Z] [INFO] [stderr] [•] Audit all icon imports from @ielts/ui across web and extension - identify which are used vs unused
+[2026-07-06T09:16:00.233Z] [INFO] [stderr] [0m
+[2026-07-06T09:16:10.920Z] [INFO] [stderr] [0m• [0mAudit web icon imports[90m Explore Agent[0m
+[2026-07-06T09:16:16.897Z] [INFO] [stderr] [0m• [0mAudit extension icon imports[90m Explore Agent[0m
+[2026-07-06T09:16:16.897Z] [INFO] [stdout] Let me audit all icon imports to identify unused ones. I'll read each file that imports icons and check usage.
+[2026-07-06T09:17:08.963Z] [INFO] [stderr] [0m✓ [0mAudit extension icon imports[90m Explore Agent[0m
+[2026-07-06T09:17:20.173Z] [INFO] [stderr] [0m✓ [0mAudit web icon imports[90m Explore Agent[0m
+[2026-07-06T09:17:24.557Z] [INFO] [stderr] [0m
+[2026-07-06T09:17:24.557Z] [INFO] [stderr] [✓] Audit all icon imports from @ielts/ui across web and extension - identify which are used vs unused
+[2026-07-06T09:17:24.557Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-06T09:17:24.558Z] [INFO] [stderr] [ ] Remove unused icon imports from extension source files (apps/extension/src)
+[2026-07-06T09:17:24.558Z] [INFO] [stderr] [0m
+[2026-07-06T09:17:24.557Z] [INFO] [stderr] [•] Remove unused icon imports from website source files (apps/web/src)
+[2026-07-06T09:17:24.558Z] [INFO] [stderr] [ ] Run pnpm lint to validate changes
+[2026-07-06T09:17:24.659Z] [INFO] [stdout] Good. The audit is clear. Unused icon imports exist only in 3 website files (extension has 0 unused). Let me fix them.
+[2026-07-06T09:17:27.282Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/TodayPlanPage.tsx[90m [limit=10, offset=1][0m
+[2026-07-06T09:17:27.719Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [limit=47, offset=38][0m
+[2026-07-06T09:17:28.198Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/Layout.tsx[90m [limit=42, offset=32][0m
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/pages/TodayPlanPage.tsx
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] [0m
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/TodayPlanPage.tsx
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] ===================================================================
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/TodayPlanPage.tsx
+[2026-07-06T09:17:31.915Z] [INFO] [stderr]  import { today, formatDateLabel } from '../utils'
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/TodayPlanPage.tsx
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] @@ -3,9 +3,9 @@
+[2026-07-06T09:17:31.915Z] [INFO] [stderr]  import { StudyPlanStore } from '../features/studyPlan/storage/studyPlanStore'
+[2026-07-06T09:17:31.915Z] [INFO] [stderr]  import type { TaskEntry } from '../models'
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] -import { IconListening, IconReading, IconWriting, IconSpeaking, IconVocabulary, IconGrammar, IconVocabularyReview, IconAITutor, IconCheckCircle, IconCheck, IconChevronDown, IconChevronLeft, IconChevronRight, IconClock, IconClose, IconRefresh, IconCalendar, IconPlus, IconMenu } from '@ielts/ui'
+[2026-07-06T09:17:31.915Z] [INFO] [stderr]    DailyPlanItem,
+[2026-07-06T09:17:31.915Z] [INFO] [stderr]    DailyPlanStatus,
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] +import { IconListening, IconReading, IconWriting, IconSpeaking, IconVocabulary, IconGrammar, IconVocabularyReview, IconAITutor, IconCheckCircle, IconCheck, IconChevronLeft, IconChevronRight, IconClock, IconMenu } from '@ielts/ui'
+[2026-07-06T09:17:31.915Z] [INFO] [stderr]  import type {
+[2026-07-06T09:17:31.915Z] [INFO] [stderr]    DailyStudyTask,
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] [0m
+[2026-07-06T09:17:31.915Z] [INFO] [stderr]  import { DatabaseService } from '../services/storage/Database'
+[2026-07-06T09:17:31.915Z] [INFO] [stderr] 
+[2026-07-06T09:17:33.452Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/pages/AITutorChat.tsx
+[2026-07-06T09:17:33.452Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
+[2026-07-06T09:17:33.452Z] [INFO] [stderr] ===================================================================
+[2026-07-06T09:17:33.452Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
+[2026-07-06T09:17:33.452Z] [INFO] [stderr] @@ -34,9 +34,9 @@
+[2026-07-06T09:17:33.452Z] [INFO] [stderr]    aiGenerateLesson,
+[2026-07-06T09:17:33.452Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
+[2026-07-06T09:17:33.452Z] [INFO] [stderr]  import React from 'react'
+[2026-07-06T09:17:33.452Z] [INFO] [stderr] +import { IconAlertCircle, IconRefresh, IconAITutor, IconHash, IconMessageCircle, IconExplain, IconFolderOpen, IconDelete, IconClose, IconSend, IconLoading, IconVocabularyBook, IconVocabulary, IconGrammar, IconEdit, IconMistakes, IconCheckCircle, IconTarget, IconBookText, IconListening, IconTodayPlan, IconStar, IconShield, IconDownload, IconWriting, IconArticle, IconTimer } from '@ielts/ui'
+[2026-07-06T09:17:33.452Z] [INFO] [stderr]  } from '../components/aiTutor/aiTutorHelper'
+[2026-07-06T09:17:33.453Z] [INFO] [stderr]  import { generateId } from '../utils'
+[2026-07-06T09:17:33.452Z] [INFO] [stderr] -import { IconAlertCircle, IconRefresh, IconAITutor, IconHash, IconMessageCircle, IconExplain, IconFolderOpen, IconDelete, IconClose, IconSend, IconLoading, IconVocabularyBook, IconVocabulary, IconGrammar, IconEdit, IconMistakes, IconCheckCircle, IconTarget, IconBookText, IconListening, IconTodayPlan, IconStar, IconShield, IconSun, IconLock, IconDownload, IconHelpCircle, IconVocabularyReview, IconWriting, IconArticle, IconTimer } from '@ielts/ui'
+[2026-07-06T09:17:33.453Z] [INFO] [stderr] 
+[2026-07-06T09:17:33.452Z] [INFO] [stderr]    type SpeakingPhase,
+[2026-07-06T09:17:33.452Z] [INFO] [stderr]  import {
+[2026-07-06T09:17:33.453Z] [INFO] [stderr]    type CueCard,
+[2026-07-06T09:17:33.453Z] [INFO] [stderr]    type SpeakingQuestionItem,
+[2026-07-06T09:17:33.453Z] [INFO] [stderr] [0m
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] @@ -33,9 +33,9 @@
+[2026-07-06T09:17:34.626Z] [INFO] [stderr]  import { MobileBottomNavigation } from '@ielts/ui'
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/Layout.tsx
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/Layout.tsx
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/components/Layout.tsx
+[2026-07-06T09:17:34.626Z] [INFO] [stderr]  import type { MobileNavItem } from '@ielts/ui'
+[2026-07-06T09:17:34.626Z] [INFO] [stderr]  
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] +import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconCheckCircle, IconProgress, IconBack, IconMinimize, IconClose, IconSettings, IconChevronDown, IconFlame } from '@ielts/ui'
+[2026-07-06T09:17:34.626Z] [INFO] [stderr]  import AITutorChat from '../features/ai-tutor/AITutorChat'
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] -import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconCheckCircle, IconProgress, IconBack, IconMinimize, IconClose, IconMessageCircle, IconSettings, IconChevronDown, IconFlame } from '@ielts/ui'
+[2026-07-06T09:17:34.626Z] [INFO] [stderr]  import TodayPlanPage from '../pages/TodayPlanPage'
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/Layout.tsx
+[2026-07-06T09:17:34.626Z] [INFO] [stderr]    return <Navigate to={`${to}#${hash}`} replace />
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] 
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] [0m
+[2026-07-06T09:17:34.626Z] [INFO] [stderr] ===================================================================
+[2026-07-06T09:17:34.626Z] [INFO] [stderr]  function RedirectWithHash({ to, hash }: { to: string; hash: string }) {
+[2026-07-06T09:17:34.626Z] [INFO] [stderr]  }
+[2026-07-06T09:17:39.218Z] [INFO] [stderr] [•] Run pnpm lint to validate changes
+[2026-07-06T09:17:39.218Z] [INFO] [stderr] [✓] Audit all icon imports from @ielts/ui across web and extension - identify which are used vs unused
+[2026-07-06T09:17:39.218Z] [INFO] [stderr] [0m
+[2026-07-06T09:17:39.218Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-06T09:17:39.218Z] [INFO] [stderr] [✓] Remove unused icon imports from website source files (apps/web/src)
+[2026-07-06T09:17:39.219Z] [INFO] [stderr] [✓] Remove unused icon imports from extension source files (apps/extension/src)
+[2026-07-06T09:17:43.012Z] [INFO] [stderr] [0m✱ [0mGrep "import.*Icon.*from ['"].*lucide-react['"]|import.*Icon.*from ['"].*phosphor|import.*from ['"].*react-icons"[90m in apps · 0 matches[0m
+[2026-07-06T09:17:43.678Z] [INFO] [stderr] [0m✱ [0mGrep "svg.*width.*height.*viewBox.*(?:fill|stroke)"[90m in apps/web/src/components · 5 matches[0m
+[2026-07-06T09:17:43.761Z] [INFO] [stdout] Let me also check for any other old icon patterns that might exist.
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] [0m$ [0mpnpm lint 2>&1
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/ai lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/settings lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] [0m
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] $ pnpm -r lint
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/ai-tutor lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/ai lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/exercises lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/ai lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/exercises lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] Scope: 12 of 13 workspace projects
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/theme lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/ai-tutor lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/ai-tutor lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/settings lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/exercises lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/theme lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/settings lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/storage lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/utils lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/utils lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/theme lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/content lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/utils lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/learning-engine lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/ui lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/extension lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/ui lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/content lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/learning-engine lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/ui lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/content lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/learning-engine lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/storage lint$ echo 'no linter configured'
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/extension lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint$ eslint .
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/extension lint: Done
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   288:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/NotificationCenter.tsx
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   2:10  warning  'TutorAvatar' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:    86:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:    96:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:    81:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:    91:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] packages/storage lint: no linter configured
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:    66:6  warning  React Hook useEffect has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   106:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/ReadingListeningTutor.tsx
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   101:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:    49:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   246:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   181:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   214:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   221:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   227:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   603:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   411:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   349:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   635:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   232:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   467:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   702:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   714:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   670:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   707:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   290:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/SpeakingPartner.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    79:53  warning  Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.961Z] [INFO] [stderr] apps/web lint:   280:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   294:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   286:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   306:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   336:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   331:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   327:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   626:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   320:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   313:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    521:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/TeachingMode.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   568:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   995:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    546:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    525:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    531:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   707:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    631:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    726:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   982:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    647:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    687:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/WritingTutor.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    741:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   1066:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   731:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    87:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   1035:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   1005:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   103:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   111:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    594:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   134:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    569:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   204:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   182:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   200:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   119:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   212:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   220:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   140:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   835:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   216:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   123:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   226:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   774:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   869:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   402:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   111:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   454:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   969:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   950:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/ui/LoadingSpinner.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   392:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   1:15  warning  'ReactNode' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/ui/EmptyState.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   52:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   24:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/context/SettingsContext.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   3:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/ui/Toast.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   208:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/AITutorChat.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/__tests__/aiTutorService.test.ts
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/context/ThemeContext.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    10:55   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   185:127  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   41:10  warning  'userName' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    12:58   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   39:10  warning  'briefing' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:     3:10  warning  'loadRoadmap' is defined but never used                                      @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   189:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   186:130  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   190:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    83:10  warning  'computeStreak' is defined but never used                                    @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    69:10  warning  'getToday' is defined but never used                                         @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:     4:43  warning  'VocabReviewEntry' is defined but never used                                 @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   112:11  warning  'settings' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    11:56   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   153:66  warning  'dayOfWeek' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   358:11  warning  'context' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:     3:23  warning  'getTodayTask' is defined but never used                                     @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    73:10  warning  'getExamCountdown' is defined but never used                                 @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   526:55  warning  'mistake' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   45:10  warning  'briefing' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   444:11  warning  'context' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:    72:9   error    'filtered' is never reassigned. Use 'const' instead                                                                             prefer-const
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/aiTutor/components/ProactiveMessageCard.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   204:27  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/artifacts/ArtifactsPage.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/components/AITutorPopup.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   1:48  warning  'afterEach' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/aiTutor/components/ProactiveMessageList.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:   198:27  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/aiTutor/tests/ProactiveSettings.test.tsx
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint:     8:10  warning  'EmptyState' is defined but never used                @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/configuration/configSlice.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:    11:7   warning  'CATEGORIES' is assigned a value but never used       @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   142:29  warning  '_removed' is assigned a value but never used                                                                                   @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:    21:7   warning  'CATEGORY_COLORS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   155:9   warning  'allTags' is assigned a value but never used          @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   44:10  warning  'getSkillColor' is defined but never used                   @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/mistakes/MistakeNotebook.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   194:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/onboarding/onboardingService.ts
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   34:7   warning  'SORT_OPTIONS' is assigned a value but only used as a type  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   85:27  warning  'i' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   82:12  warning  'getSkillTasks' is defined but never used                            @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   63:9   warning  'needsVocab' is assigned a value but never used                      @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/personalization/__tests__/personalizationService.test.ts
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   170:127  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   171:130  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   48:10  warning  'getStatusColor' is defined but never used                  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.962Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/aiTutorService.ts
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   175:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/planner/aiPlannerService.ts
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:    63:10  warning  'generateId' is defined but never used                                    @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:    59:7   warning  'FALLBACK_CATEGORIES' is assigned a value but never used                  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   251:3   warning  'params' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/progressReview/__tests__/ProgressReviewPanel.test.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   99:7  warning  'SIXTY_DAYS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/publicApiIntegration/components/ApiKeySettings.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/progressReview/services/__tests__/progressReviewService.test.ts
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   2:37  warning  'waitFor' is defined but never used    @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   599:27  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   101:6   warning  React Hook useEffect has a missing dependency: 'keySources'. Either include it or remove the dependency array                   react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   599:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   599:40  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   174:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   599:51  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/RoadmapPage.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   26:10  warning  'getSkillColor' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   13:3   warning  'saveRoadmap' is defined but never used    @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   9:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/components/RoadmapSummary.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   452:14  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   2:29  warning  'RoadmapWeek' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/components/PhaseSection.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   1:48  warning  'afterEach' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/roadmapService.ts
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:    75:38  warning  'targetBand' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   59:51  warning  'profile' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   260:10  warning  'getTaskMinutes' is defined but never used                                    @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   276:9   warning  'totalWeeks' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   192:62  warning  'objective' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   68:9   warning  'currentPhase' is assigned a value but never used                          @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   378:7  warning  'chunkErrors' is assigned a value but never used       @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:    62:7  warning  'PLAN_STORAGE_KEY' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/study-plan/studyPlanService.ts
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/speaking/SpeakingPractice.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:    83:45  warning  'targetBand' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   203:12  warning  'toggleTimer' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   119:10  warning  'taskTitle' is defined but never used                                     @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/components/DailyPlanList.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/components/__tests__/PlanControls.test.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/components/PlanGenerationProgress.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:     9:10  warning  'formatDateLabel' is defined but never used                               @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   648:61  warning  'taskId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   123:10  warning  'taskMinutes' is defined but never used                                   @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   282:9   warning  'doneTaskIds' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/hooks/__tests__/useStudyPlan.test.tsx
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   6:47  warning  'GenerationProgress' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   3:8   warning  'userEvent' is defined but never used           @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   158:9   warning  'isPast' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     3:10  warning  'render' is defined but never used              @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     2:48  warning  'afterEach' is defined but never used           @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   1:10  warning  'useMemo' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     3:18  warning  'screen' is defined but never used              @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    11:3   warning  'PlanStatus' is defined but never used          @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    21:49  warning  'deletePlan' is defined but never used          @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.963Z] [INFO] [stderr] apps/web lint:   256:10  warning  'getTaskDescription' is defined but never used                                @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     8:3   warning  'DailyPlanItem' is defined but never used       @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   225:11  warning  'plan' is assigned a value but never used       @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/hooks/useStudyPlan.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     3:43  warning  'waitFor' is defined but never used             @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   359:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/dailyPlanService.test.ts
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/orchestrator.ts
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   7:3  warning  'GlobalStudyStrategy' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   11:3   warning  'DailyPlanItem' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     9:3   warning  'GenerationProgress' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   6:3  warning  'DailyPlanItem' is defined but never used        @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   20:15  warning  'AICallResult' is defined but never used   @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   11:15  warning  'AICallResult' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   367:16  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/storage/__tests__/studyPlanStore.test.ts
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/storage/studyPlanStore.ts
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    9:3  warning  'DayPriority' is defined but never used     @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/validation.ts
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/tasks/ieltsContent.ts
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   14:3  warning  'DailyStudyTask' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   10:3  warning  'DayDifficulty' is defined but never used   @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary-review/ReviewSession.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   1:15  warning  'TaskEntry' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     6:8   warning  'Modal' is defined but never used                                          @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   69:7  warning  'TASK_FIELD_TO_SKILL' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   37:9   warning  'weakWords' is assigned a value but never used                       @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   460:13  warning  'plan1' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   15:7   warning  'LABELS' is assigned a value but never used                          @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/tasks/types.ts
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary-review/SessionSummary.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   1:15  warning  'TaskDetail' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    60:11  warning  'nextMode' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary-review/reviewModes.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   334:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   39:13  warning  'r' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   38:17  warning  'i' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   32:7  error  Unnecessary catch clause  no-useless-catch
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyManager.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   774:25  warning  'setSelectedWords' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    15:3   warning  'getAllTags' is defined but never used                 @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   202:18  warning  'handleToggleTag' is defined but never used            @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/vocabularyService.ts
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   219:33  warning  'count' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   774:10  warning  'selectedWords' is assigned a value but never used     @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   69:9   warning  'hasRichData' is assigned a value but never used                        @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/writing/WritingPromptsPage.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   137:9  warning  'newWords' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   41:32  warning  'word' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/components/WordFamilyDisplay.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   296:6  warning  React Hook useCallback has an unnecessary dependency: 'showToast'. Either exclude it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     27:3    warning  'generateMistakeReviewAI' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:   415:28  warning  'correct' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     24:3    warning  'ExerciseFeedbackCard' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     21:3    warning  'suggestNextTopics' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    213:10   warning  'getGentleCorrections' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     75:3    warning  'saveWritingFeedback' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     74:28   warning  'formatWritingFeedbackMessage' is defined but never used                                                              @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    352:10   warning  'generateSocraticFollowUp' is defined but never used                                                                  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    403:62   warning  'topic' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     76:3    warning  'saveWritingMistakesToNotebook' is defined but never used                                                             @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    403:97   warning  'language' is defined but never used. Allowed unused args must match /^_/u                                            @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     20:3    warning  'evaluateExerciseAnswer' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    790:10   warning  'suggestionsLoading' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    424:54   warning  'qType' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    578:10   warning  'getDailyCheckInMessage' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    403:77   warning  'userAnswer' is defined but never used. Allowed unused args must match /^_/u                                          @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:    247:10   warning  'formatCorrectionsAsText' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/DailyPlan.tsx
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   1535:6    warning  React Hook useCallback has a missing dependency: 'socraticHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    440:61   warning  'topic' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    669:10   warning  'generateResponse' is defined but never used                                                                          @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    743:10   warning  'friendCorrections' is assigned a value but never used                                                                @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   90:9  warning  The 'visibleDates' conditional could make the dependencies of useMemo Hook (at line 108) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'visibleDates' in its own useMemo() Hook  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   122:9   warning  'adjustedDayOfWeek' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Settings.tsx
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   1736:171  warning  Unexpected any. Specify a different type                                                                              @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/TodayPlanPage.tsx
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   36:3  warning  'IconBack' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   662:35  warning  'month' is assigned a value but never used              @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/landing/__tests__/CreatorSection.test.tsx
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   121:6  warning  React Hook useCallback has a missing dependency: 'showToast'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    60:10  warning  'getWeekNumber' is defined but never used               @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   162:18  warning  'handleUpdateDayStatus' is defined but never used       @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Vocabulary.tsx
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/roadmap/FullStudyRoadmapPage.tsx
+[2026-07-06T09:17:50.964Z] [INFO] [stderr] apps/web lint:     19:3    warning  'evaluateCheckingAnswer' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   3:13  warning  'config' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:     7:3   warning  'getTodayDay' is defined but never used            @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:     8:3   warning  'getNextIncompleteTask' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    15:3   warning  'RoadmapWeek' is defined but never used            @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:     6:3   warning  'getRecommendations' is defined but never used     @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    25:10  warning  'formatDate' is defined but never used             @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   236:9   warning  'todayStr' is assigned a value but never used      @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    10:3   warning  'getExamCountdown' is defined but never used       @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    260:11  warning  'count' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/NotebookPage.tsx
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    719:68  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   1018:68  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   237:9   warning  'bandGap' is assigned a value but never used       @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   1021:76  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    296:43  warning  'meaning' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    24:23  warning  'IconCheckSquare' is defined but never used                              @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    722:76  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/ReviewPage.tsx
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   321:11  warning  'db' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/Database.test.ts
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   945:55  warning  'color' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/__tests__/SettingsStorage.test.ts
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/tests/onboarding.test.ts
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   251:11  warning  'handler' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:    33:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   31:27  warning  'removeAppSettings' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] apps/web lint:   67:7  warning  'STORAGE_KEY' is assigned a value but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   200:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] apps/web lint:   207:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] apps/web lint:    26:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint:   251:32  warning  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] apps/web lint: ✖ 258 problems (2 errors, 256 warnings)
+[2026-07-06T09:17:50.965Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/Database.ts
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] apps/web lint:   186:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/web@0.1.0 lint: `eslint .`
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] apps/web lint: Failed
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] Exit status 1
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] [ELIFECYCLE] Command failed with exit code 1.
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] apps/web lint:   1 error and 0 warnings potentially fixable with the `--fix` option.
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] [0m
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web:
+[2026-07-06T09:17:50.966Z] [INFO] [stderr] apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/tests/integration/configurationIntegration.test.ts
+[2026-07-06T09:17:56.163Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/TodayPlanPage.tsx[90m [limit=1, offset=7][0m
+[2026-07-06T09:17:56.517Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [limit=1, offset=38][0m
+[2026-07-06T09:17:56.882Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/Layout.tsx[90m [limit=1, offset=37][0m
+[2026-07-06T09:17:57.021Z] [INFO] [stdout] Lint shows only pre-existing errors (none caused by my icon import removal). Let me verify the edits are clean:
+[2026-07-06T09:18:00.894Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/Settings.tsx[90m [limit=5, offset=34][0m
+[2026-07-06T09:18:01.333Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/vocabulary/ReviewPage.tsx[90m [limit=5, offset=22][0m
+[2026-07-06T09:18:01.437Z] [INFO] [stdout] I notice the lint output flagged `IconBack` unused in `Settings.tsx` and `IconCheckSquare` unused in `ReviewPage.tsx`. Let me clean those too.
+[2026-07-06T09:18:04.076Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/Settings.tsx[90m [offset=30, limit=12][0m
+[2026-07-06T09:18:04.516Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/vocabulary/ReviewPage.tsx[90m [offset=19, limit=10][0m
+[2026-07-06T09:18:07.362Z] [INFO] [stderr] [0m✱ [0mGrep "IconBack"[90m in apps/web/src/pages · 1 match[0m
+[2026-07-06T09:18:07.789Z] [INFO] [stderr] [0m✱ [0mGrep "IconCheckSquare"[90m in apps/web/src/pages/vocabulary · 1 match[0m
+[2026-07-06T09:18:10.910Z] [INFO] [stderr] [0m
+[2026-07-06T09:18:10.910Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Settings.tsx
+[2026-07-06T09:18:10.910Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/pages/Settings.tsx
+[2026-07-06T09:18:10.910Z] [INFO] [stderr] ===================================================================
+[2026-07-06T09:18:10.910Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Settings.tsx
+[2026-07-06T09:18:10.910Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Settings.tsx
+[2026-07-06T09:18:10.910Z] [INFO] [stderr]    IconDownload,
+[2026-07-06T09:18:10.910Z] [INFO] [stderr]    IconDelete,
+[2026-07-06T09:18:10.910Z] [INFO] [stderr] @@ -32,9 +32,8 @@
+[2026-07-06T09:18:10.910Z] [INFO] [stderr]    IconClose,
+[2026-07-06T09:18:10.910Z] [INFO] [stderr]    IconChevronDown,
+[2026-07-06T09:18:10.910Z] [INFO] [stderr]    IconExtension,
+[2026-07-06T09:18:10.910Z] [INFO] [stderr]  
+[2026-07-06T09:18:10.910Z] [INFO] [stderr]    IconUpload,
+[2026-07-06T09:18:10.911Z] [INFO] [stderr] [0m
+[2026-07-06T09:18:10.911Z] [INFO] [stderr] 
+[2026-07-06T09:18:10.910Z] [INFO] [stderr] -  IconBack,
+[2026-07-06T09:18:10.911Z] [INFO] [stderr]  } from '@ielts/ui'
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/ReviewPage.tsx
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/pages/vocabulary/ReviewPage.tsx
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/ReviewPage.tsx
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] @@ -20,9 +20,9 @@
+[2026-07-06T09:18:11.452Z] [INFO] [stderr]    IconChevronLeft, IconRotate, IconSettings, IconWarning,
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/ReviewPage.tsx
+[2026-07-06T09:18:11.452Z] [INFO] [stderr]  import { getModeRenderer } from '../../features/vocabulary-review/reviewModes'
+[2026-07-06T09:18:11.452Z] [INFO] [stderr]    IconSuccess, IconClose, IconCheckCircle, IconVocabulary,
+[2026-07-06T09:18:11.452Z] [INFO] [stderr]  } from '@ielts/ui'
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] ===================================================================
+[2026-07-06T09:18:11.452Z] [INFO] [stderr]    IconFlame, IconAITutor, IconRefresh, IconPlay,
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] -  IconEdit, IconLink, IconCheckSquare, IconMessageSquare,
+[2026-07-06T09:18:11.452Z] [INFO] [stderr]  import {
+[2026-07-06T09:18:11.452Z] [INFO] [stderr]  const ALL_TOPICS = [
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] +  IconEdit, IconLink, IconMessageSquare,
+[2026-07-06T09:18:11.452Z] [INFO] [stderr]  
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] [0m
+[2026-07-06T09:18:11.452Z] [INFO] [stderr] 
+[2026-07-06T09:18:17.994Z] [INFO] [stderr] apps/web lint:    72:9   error    'filtered' is never reassigned. Use 'const' instead                                                                             prefer-const
+[2026-07-06T09:18:17.994Z] [INFO] [stderr] apps/web lint: ✖ 256 problems (2 errors, 254 warnings)
+[2026-07-06T09:18:17.994Z] [INFO] [stderr] [0m
+[2026-07-06T09:18:17.994Z] [INFO] [stderr] apps/web lint:   1 error and 0 warnings potentially fixable with the `--fix` option.
+[2026-07-06T09:18:17.994Z] [INFO] [stderr] [0m$ [0mpnpm lint 2>&1 | grep -E "(IconBack|IconCheckSquare|error)" | head -20
+[2026-07-06T09:18:17.994Z] [INFO] [stderr] apps/web lint:   32:7  error  Unnecessary catch clause  no-useless-catch
+[2026-07-06T09:18:24.379Z] [INFO] [stderr] [0m$ [0mpnpm lint 2>&1 | grep -c "IconBack\|IconCheckSquare"
+[2026-07-06T09:18:24.379Z] [INFO] [stderr] 0
+[2026-07-06T09:18:24.379Z] [INFO] [stderr] [0m
+[2026-07-06T09:18:27.444Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-06T09:18:27.445Z] [INFO] [stderr] [✓] Audit all icon imports from @ielts/ui across web and extension - identify which are used vs unused
+[2026-07-06T09:18:27.445Z] [INFO] [stderr] [✓] Remove unused icon imports from extension source files (apps/extension/src)
+[2026-07-06T09:18:27.445Z] [INFO] [stderr] [0m
+[2026-07-06T09:18:27.445Z] [INFO] [stderr] [✓] Run pnpm lint to validate changes
+[2026-07-06T09:18:27.445Z] [INFO] [stderr] [✓] Remove unused icon imports from website source files (apps/web/src)
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] 
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] **Completion Summary:**
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] 
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] |------|--------------|
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] | File | Removed Icons |
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] | `pages/AITutorChat.tsx` | `IconSun`, `IconLock`, `IconHelpCircle`, `IconVocabularyReview` |
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] | `pages/vocabulary/ReviewPage.tsx` | `IconCheckSquare` |
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] | `pages/TodayPlanPage.tsx` | `IconChevronDown`, `IconClose`, `IconRefresh`, `IconCalendar`, `IconPlus` |
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] | `components/Layout.tsx` | `IconMessageCircle` |
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] 
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] 
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] **Validation:** `pnpm lint` shows 0 icon-related warnings (only 2 pre-existing errors unrelated to icons).
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] | `pages/Settings.tsx` | `IconBack` |
+[2026-07-06T09:18:31.105Z] [INFO] [stdout] **Extension:** All 77 icon imports across 19 files were verified as actively used — zero changes needed.
+[2026-07-06T09:18:31.106Z] [INFO] [stdout] Removed 12 unused icon imports across 5 files, all in `apps/web/src`:
+[2026-07-06T09:18:31.379Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-06T09:18:31.379Z] [INFO] Output:
+Let me audit all icon imports to identify unused ones. I'll read each file that imports icons and check usage.
+Good. The audit is clear. Unused icon imports exist only in 3 website files (extension has 0 unused). Let me fix them.
+Let me also check for any other old icon patterns that might exist.
+Lint shows only pre-existing errors (none caused by my icon import removal). Let me verify the edits are clean:
+I notice the lint output flagged `IconBack` unused in `Settings.tsx` and `IconCheckSquare` unused in `ReviewPage.tsx`. Let me clean those too.
+**Completion Summary:**
+
+Removed 12 unused icon imports across 5 files, all in `apps/web/src`:
+
+| File | Removed Icons |
+|------|--------------|
+| `pages/TodayPlanPage.tsx` | `IconChevronDown`, `IconClose`, `IconRefresh`, `IconCalendar`, `IconPlus` |
+| `pages/AITutorChat.tsx` | `IconSun`, `IconLock`, `IconHelpCircle`, `IconVocabularyReview` |
+| `components/Layout.tsx` | `IconMessageCircle` |
+| `pages/Settings.tsx` | `IconBack` |
+| `pages/vocabulary/ReviewPage.tsx` | `IconCheckSquare` |
+
+**Extension:** All 77 icon imports across 19 files were verified as actively used — zero changes needed.
+
+**Validation:** `pnpm lint` shows 0 icon-related warnings (only 2 pre-existing errors unrelated to icons).
+[2026-07-06T09:18:31.379Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"icon usage, icon imports, icon components in apps/web and apps/extension","maxFiles":30}
+[0m✱ [0mGrep "import.*(Icon|icon).*from"[90m in apps/web/src · 19 matches[0m
+[0m✱ [0mGrep "import.*(Icon|icon).*from"[90m in apps/extension/src · 19 matches[0m
+[0m• [0mFind icon mapping and library[90m Explore Agent[0m
+[0m✓ [0mFind icon mapping and library[90m Explore Agent[0m
+[0m→ [0mRead packages/ui/src/icons/IconMap.ts
+[0m→ [0mRead packages/ui/src/icons/index.ts
+[0m✱ [0mGrep "from 'lucide-react'|from "lucide-react""[90m in . · 1 match[0m
+[0m
+[0m# [0mTodos
+[•] Audit all icon imports from @ielts/ui across web and extension - identify which are used vs unused
+[ ] Remove unused icon imports from website source files (apps/web/src)
+[ ] Remove unused icon imports from extension source files (apps/extension/src)
+[ ] Run pnpm lint to validate changes
+[0m
+[0m• [0mAudit web icon imports[90m Explore Agent[0m
+[0m• [0mAudit extension icon imports[90m Explore Agent[0m
+[0m✓ [0mAudit extension icon imports[90m Explore Agent[0m
+[0m✓ [0mAudit web icon imports[90m Explore Agent[0m
+[0m
+[0m# [0mTodos
+[✓] Audit all icon imports from @ielts/ui across web and extension - identify which are used vs unused
+[•] Remove unused icon imports from website source files (apps/web/src)
+[ ] Remove unused icon imports from extension source files (apps/extension/src)
+[ ] Run pnpm lint to validate changes
+[0m
+[0m→ [0mRead apps/web/src/pages/TodayPlanPage.tsx[90m [limit=10, offset=1][0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [limit=47, offset=38][0m
+[0m→ [0mRead apps/web/src/components/Layout.tsx[90m [limit=42, offset=32][0m
+[0m
+[0m← [0mEdit apps/web/src/pages/TodayPlanPage.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/TodayPlanPage.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/TodayPlanPage.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/TodayPlanPage.tsx
+@@ -3,9 +3,9 @@
+ import { today, formatDateLabel } from '../utils'
+ import { DatabaseService } from '../services/storage/Database'
+ import { StudyPlanStore } from '../features/studyPlan/storage/studyPlanStore'
+ import type { TaskEntry } from '../models'
+-import { IconListening, IconReading, IconWriting, IconSpeaking, IconVocabulary, IconGrammar, IconVocabularyReview, IconAITutor, IconCheckCircle, IconCheck, IconChevronDown, IconChevronLeft, IconChevronRight, IconClock, IconClose, IconRefresh, IconCalendar, IconPlus, IconMenu } from '@ielts/ui'
++import { IconListening, IconReading, IconWriting, IconSpeaking, IconVocabulary, IconGrammar, IconVocabularyReview, IconAITutor, IconCheckCircle, IconCheck, IconChevronLeft, IconChevronRight, IconClock, IconMenu } from '@ielts/ui'
+ import type {
+   DailyPlanItem,
+   DailyPlanStatus,
+   DailyStudyTask,
+
+[0m
+[0m← [0mEdit apps/web/src/pages/AITutorChat.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
+@@ -34,9 +34,9 @@
+   aiGenerateLesson,
+ } from '../components/aiTutor/aiTutorHelper'
+ import React from 'react'
+ import { generateId } from '../utils'
+-import { IconAlertCircle, IconRefresh, IconAITutor, IconHash, IconMessageCircle, IconExplain, IconFolderOpen, IconDelete, IconClose, IconSend, IconLoading, IconVocabularyBook, IconVocabulary, IconGrammar, IconEdit, IconMistakes, IconCheckCircle, IconTarget, IconBookText, IconListening, IconTodayPlan, IconStar, IconShield, IconSun, IconLock, IconDownload, IconHelpCircle, IconVocabularyReview, IconWriting, IconArticle, IconTimer } from '@ielts/ui'
++import { IconAlertCircle, IconRefresh, IconAITutor, IconHash, IconMessageCircle, IconExplain, IconFolderOpen, IconDelete, IconClose, IconSend, IconLoading, IconVocabularyBook, IconVocabulary, IconGrammar, IconEdit, IconMistakes, IconCheckCircle, IconTarget, IconBookText, IconListening, IconTodayPlan, IconStar, IconShield, IconDownload, IconWriting, IconArticle, IconTimer } from '@ielts/ui'
+ import {
+   type SpeakingPhase,
+   type SpeakingQuestionItem,
+   type CueCard,
+
+[0m
+[0m← [0mEdit apps/web/src/components/Layout.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/Layout.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/Layout.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/Layout.tsx
+@@ -33,9 +33,9 @@
+ import { MobileBottomNavigation } from '@ielts/ui'
+ import type { MobileNavItem } from '@ielts/ui'
+ import AITutorChat from '../features/ai-tutor/AITutorChat'
+ import TodayPlanPage from '../pages/TodayPlanPage'
+-import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconCheckCircle, IconProgress, IconBack, IconMinimize, IconClose, IconMessageCircle, IconSettings, IconChevronDown, IconFlame } from '@ielts/ui'
++import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconCheckCircle, IconProgress, IconBack, IconMinimize, IconClose, IconSettings, IconChevronDown, IconFlame } from '@ielts/ui'
+ 
+ function RedirectWithHash({ to, hash }: { to: string; hash: string }) {
+   return <Navigate to={`${to}#${hash}`} replace />
+ }
+
+[0m
+[0m# [0mTodos
+[✓] Audit all icon imports from @ielts/ui across web and extension - identify which are used vs unused
+[✓] Remove unused icon imports from website source files (apps/web/src)
+[✓] Remove unused icon imports from extension source files (apps/extension/src)
+[•] Run pnpm lint to validate changes
+[0m
+[0m✱ [0mGrep "import.*Icon.*from ['"].*lucide-react['"]|import.*Icon.*from ['"].*phosphor|import.*from ['"].*react-icons"[90m in apps · 0 matches[0m
+[0m✱ [0mGrep "svg.*width.*height.*viewBox.*(?:fill|stroke)"[90m in apps/web/src/components · 5 matches[0m
+[0m
+[0m$ [0mpnpm lint 2>&1
+$ pnpm -r lint
+Scope: 12 of 13 workspace projects
+packages/ai lint$ echo 'no linter configured'
+packages/ai-tutor lint$ echo 'no linter configured'
+packages/exercises lint$ echo 'no linter configured'
+packages/settings lint$ echo 'no linter configured'
+packages/exercises lint: no linter configured
+packages/ai lint: no linter configured
+packages/ai-tutor lint: no linter configured
+packages/ai lint: Done
+packages/exercises lint: Done
+packages/settings lint: no linter configured
+packages/ai-tutor lint: Done
+packages/storage lint$ echo 'no linter configured'
+packages/theme lint$ echo 'no linter configured'
+packages/settings lint: Done
+packages/utils lint$ echo 'no linter configured'
+packages/storage lint: no linter configured
+packages/storage lint: Done
+packages/theme lint: no linter configured
+packages/theme lint: Done
+packages/utils lint: no linter configured
+packages/utils lint: Done
+packages/ui lint$ echo 'no linter configured'
+packages/content lint$ echo 'no linter configured'
+packages/learning-engine lint$ echo 'no linter configured'
+packages/ui lint: no linter configured
+packages/ui lint: Done
+packages/content lint: no linter configured
+packages/content lint: Done
+packages/learning-engine lint: no linter configured
+packages/learning-engine lint: Done
+apps/extension lint$ echo 'no linter configured'
+apps/web lint$ eslint .
+apps/extension lint: no linter configured
+apps/extension lint: Done
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/ChatUXEnhancements.tsx
+apps/web lint:   288:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/FloatingTutorButton.tsx
+apps/web lint:   2:10  warning  'TutorAvatar' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/NotificationCenter.tsx
+apps/web lint:    66:6  warning  React Hook useEffect has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+apps/web lint:    81:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:    86:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:    91:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:    96:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:   101:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:   106:6  warning  React Hook useCallback has a missing dependency: 'refreshMessages'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/ReadingListeningTutor.tsx
+apps/web lint:    49:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   181:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   214:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   221:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   227:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   232:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   246:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   280:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   349:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   411:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   467:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   603:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   635:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   670:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   702:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   707:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   714:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/SpeakingPartner.tsx
+apps/web lint:    79:53  warning  Unexpected any. Specify a different type                                                                                        @typescript-eslint/no-explicit-any
+apps/web lint:   286:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   290:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   294:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   306:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   313:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   320:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   327:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   331:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   336:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   568:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   626:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   707:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   731:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   982:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   995:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/TeachingMode.tsx
+apps/web lint:    521:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    525:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    531:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    546:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    569:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    594:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    631:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    647:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    687:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    726:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:    741:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   1005:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   1035:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   1066:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/aiTutor/WritingTutor.tsx
+apps/web lint:    87:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   103:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   111:14  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   119:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   123:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   134:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   140:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   182:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   200:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   204:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   208:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   212:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   216:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   220:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   226:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   392:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   402:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   454:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   774:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   835:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   869:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   950:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   969:23  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/ui/EmptyState.tsx
+apps/web lint:   111:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/ui/LoadingSpinner.tsx
+apps/web lint:   1:15  warning  'ReactNode' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/components/ui/Toast.tsx
+apps/web lint:   24:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/context/SettingsContext.tsx
+apps/web lint:   52:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/context/ThemeContext.tsx
+apps/web lint:   3:3  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/AITutorChat.tsx
+apps/web lint:   39:10  warning  'briefing' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint:   41:10  warning  'userName' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/__tests__/aiTutorService.test.ts
+apps/web lint:    10:55   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:    11:56   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:    12:58   warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   185:127  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   186:130  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   189:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   190:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/aiTutorService.ts
+apps/web lint:     3:10  warning  'loadRoadmap' is defined but never used                                      @typescript-eslint/no-unused-vars
+apps/web lint:     3:23  warning  'getTodayTask' is defined but never used                                     @typescript-eslint/no-unused-vars
+apps/web lint:     4:43  warning  'VocabReviewEntry' is defined but never used                                 @typescript-eslint/no-unused-vars
+apps/web lint:    69:10  warning  'getToday' is defined but never used                                         @typescript-eslint/no-unused-vars
+apps/web lint:    73:10  warning  'getExamCountdown' is defined but never used                                 @typescript-eslint/no-unused-vars
+apps/web lint:    83:10  warning  'computeStreak' is defined but never used                                    @typescript-eslint/no-unused-vars
+apps/web lint:   112:11  warning  'settings' is assigned a value but never used                                @typescript-eslint/no-unused-vars
+apps/web lint:   153:66  warning  'dayOfWeek' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:   358:11  warning  'context' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+apps/web lint:   444:11  warning  'context' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+apps/web lint:   526:55  warning  'mistake' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/ai-tutor/components/AITutorPopup.tsx
+apps/web lint:   45:10  warning  'briefing' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/aiTutor/components/ProactiveMessageCard.tsx
+apps/web lint:   204:27  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/aiTutor/components/ProactiveMessageList.tsx
+apps/web lint:    72:9   error    'filtered' is never reassigned. Use 'const' instead                                                                             prefer-const
+apps/web lint:   198:27  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/aiTutor/tests/ProactiveSettings.test.tsx
+apps/web lint:   1:48  warning  'afterEach' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/artifacts/ArtifactsPage.tsx
+apps/web lint:     8:10  warning  'EmptyState' is defined but never used                @typescript-eslint/no-unused-vars
+apps/web lint:    11:7   warning  'CATEGORIES' is assigned a value but never used       @typescript-eslint/no-unused-vars
+apps/web lint:    21:7   warning  'CATEGORY_COLORS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint:   155:9   warning  'allTags' is assigned a value but never used          @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/configuration/configSlice.tsx
+apps/web lint:   142:29  warning  '_removed' is assigned a value but never used                                                                                   @typescript-eslint/no-unused-vars
+apps/web lint:   194:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/mistakes/MistakeNotebook.tsx
+apps/web lint:   34:7   warning  'SORT_OPTIONS' is assigned a value but only used as a type  @typescript-eslint/no-unused-vars
+apps/web lint:   44:10  warning  'getSkillColor' is defined but never used                   @typescript-eslint/no-unused-vars
+apps/web lint:   48:10  warning  'getStatusColor' is defined but never used                  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/onboarding/onboardingService.ts
+apps/web lint:   63:9   warning  'needsVocab' is assigned a value but never used                      @typescript-eslint/no-unused-vars
+apps/web lint:   82:12  warning  'getSkillTasks' is defined but never used                            @typescript-eslint/no-unused-vars
+apps/web lint:   85:27  warning  'i' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/personalization/__tests__/personalizationService.test.ts
+apps/web lint:   170:127  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   171:130  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   174:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   175:110  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/planner/aiPlannerService.ts
+apps/web lint:    59:7   warning  'FALLBACK_CATEGORIES' is assigned a value but never used                  @typescript-eslint/no-unused-vars
+apps/web lint:    63:10  warning  'generateId' is defined but never used                                    @typescript-eslint/no-unused-vars
+apps/web lint:   251:3   warning  'params' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/progressReview/__tests__/ProgressReviewPanel.test.tsx
+apps/web lint:   1:48  warning  'afterEach' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint:   2:37  warning  'waitFor' is defined but never used    @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/progressReview/services/__tests__/progressReviewService.test.ts
+apps/web lint:   99:7  warning  'SIXTY_DAYS' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/publicApiIntegration/components/ApiKeySettings.tsx
+apps/web lint:   101:6   warning  React Hook useEffect has a missing dependency: 'keySources'. Either include it or remove the dependency array                   react-hooks/exhaustive-deps
+apps/web lint:   599:10  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   599:27  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   599:40  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   599:51  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/publicApiIntegration/components/PublicApiSearch.tsx
+apps/web lint:   452:14  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/RoadmapPage.tsx
+apps/web lint:   13:3   warning  'saveRoadmap' is defined but never used    @typescript-eslint/no-unused-vars
+apps/web lint:   26:10  warning  'getSkillColor' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/__tests__/aiRoadmapGenerator.test.ts
+apps/web lint:   9:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/components/PhaseSection.tsx
+apps/web lint:   2:29  warning  'RoadmapWeek' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/components/RoadmapSummary.tsx
+apps/web lint:   59:51  warning  'profile' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:   68:9   warning  'currentPhase' is assigned a value but never used                          @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/roadmap/roadmapService.ts
+apps/web lint:    75:38  warning  'targetBand' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:    83:45  warning  'targetBand' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:   192:62  warning  'objective' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+apps/web lint:   256:10  warning  'getTaskDescription' is defined but never used                                @typescript-eslint/no-unused-vars
+apps/web lint:   260:10  warning  'getTaskMinutes' is defined but never used                                    @typescript-eslint/no-unused-vars
+apps/web lint:   276:9   warning  'totalWeeks' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+apps/web lint:   282:9   warning  'doneTaskIds' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/speaking/SpeakingPractice.tsx
+apps/web lint:   203:12  warning  'toggleTimer' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/study-plan/studyPlanService.ts
+apps/web lint:    62:7  warning  'PLAN_STORAGE_KEY' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint:   378:7  warning  'chunkErrors' is assigned a value but never used       @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/components/DailyPlanList.tsx
+apps/web lint:     9:10  warning  'formatDateLabel' is defined but never used                               @typescript-eslint/no-unused-vars
+apps/web lint:   119:10  warning  'taskTitle' is defined but never used                                     @typescript-eslint/no-unused-vars
+apps/web lint:   123:10  warning  'taskMinutes' is defined but never used                                   @typescript-eslint/no-unused-vars
+apps/web lint:   158:9   warning  'isPast' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+apps/web lint:   648:61  warning  'taskId' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/components/PlanGenerationProgress.tsx
+apps/web lint:   1:10  warning  'useMemo' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/components/__tests__/PlanControls.test.tsx
+apps/web lint:   3:8   warning  'userEvent' is defined but never used           @typescript-eslint/no-unused-vars
+apps/web lint:   6:47  warning  'GenerationProgress' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/hooks/__tests__/useStudyPlan.test.tsx
+apps/web lint:     2:48  warning  'afterEach' is defined but never used           @typescript-eslint/no-unused-vars
+apps/web lint:     3:10  warning  'render' is defined but never used              @typescript-eslint/no-unused-vars
+apps/web lint:     3:18  warning  'screen' is defined but never used              @typescript-eslint/no-unused-vars
+apps/web lint:     3:43  warning  'waitFor' is defined but never used             @typescript-eslint/no-unused-vars
+apps/web lint:     8:3   warning  'DailyPlanItem' is defined but never used       @typescript-eslint/no-unused-vars
+apps/web lint:     9:3   warning  'GenerationProgress' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint:    11:3   warning  'PlanStatus' is defined but never used          @typescript-eslint/no-unused-vars
+apps/web lint:    21:49  warning  'deletePlan' is defined but never used          @typescript-eslint/no-unused-vars
+apps/web lint:   225:11  warning  'plan' is assigned a value but never used       @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/hooks/useStudyPlan.tsx
+apps/web lint:   359:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint:   367:16  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/orchestrator.ts
+apps/web lint:   6:3  warning  'DailyPlanItem' is defined but never used        @typescript-eslint/no-unused-vars
+apps/web lint:   7:3  warning  'GlobalStudyStrategy' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/dailyPlanService.test.ts
+apps/web lint:   11:3   warning  'DailyPlanItem' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint:   20:15  warning  'AICallResult' is defined but never used   @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/services/__tests__/globalStrategyService.test.ts
+apps/web lint:   11:15  warning  'AICallResult' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/storage/__tests__/studyPlanStore.test.ts
+apps/web lint:   460:13  warning  'plan1' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/storage/studyPlanStore.ts
+apps/web lint:    9:3  warning  'DayPriority' is defined but never used     @typescript-eslint/no-unused-vars
+apps/web lint:   10:3  warning  'DayDifficulty' is defined but never used   @typescript-eslint/no-unused-vars
+apps/web lint:   14:3  warning  'DailyStudyTask' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/studyPlan/utils/validation.ts
+apps/web lint:   69:7  warning  'TASK_FIELD_TO_SKILL' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/tasks/ieltsContent.ts
+apps/web lint:   1:15  warning  'TaskDetail' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/tasks/types.ts
+apps/web lint:   1:15  warning  'TaskEntry' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary-review/ReviewSession.tsx
+apps/web lint:     6:8   warning  'Modal' is defined but never used                                          @typescript-eslint/no-unused-vars
+apps/web lint:    60:11  warning  'nextMode' is assigned a value but never used                              @typescript-eslint/no-unused-vars
+apps/web lint:   415:28  warning  'correct' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary-review/SessionSummary.tsx
+apps/web lint:   15:7   warning  'LABELS' is assigned a value but never used                          @typescript-eslint/no-unused-vars
+apps/web lint:   37:9   warning  'weakWords' is assigned a value but never used                       @typescript-eslint/no-unused-vars
+apps/web lint:   38:17  warning  'i' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:   39:13  warning  'r' is assigned a value but never used                               @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary-review/reviewModes.tsx
+apps/web lint:   334:17  warning  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/Vocabulary.tsx
+apps/web lint:   219:33  warning  'count' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyImport.tsx
+apps/web lint:   32:7  error  Unnecessary catch clause  no-useless-catch
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/VocabularyManager.tsx
+apps/web lint:    15:3   warning  'getAllTags' is defined but never used                 @typescript-eslint/no-unused-vars
+apps/web lint:   202:18  warning  'handleToggleTag' is defined but never used            @typescript-eslint/no-unused-vars
+apps/web lint:   774:10  warning  'selectedWords' is assigned a value but never used     @typescript-eslint/no-unused-vars
+apps/web lint:   774:25  warning  'setSelectedWords' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/components/WordFamilyDisplay.tsx
+apps/web lint:   41:32  warning  'word' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:   69:9   warning  'hasRichData' is assigned a value but never used                        @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/vocabulary/vocabularyService.ts
+apps/web lint:   137:9  warning  'newWords' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/writing/WritingPromptsPage.tsx
+apps/web lint:   296:6  warning  React Hook useCallback has an unnecessary dependency: 'showToast'. Either exclude it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/AITutorChat.tsx
+apps/web lint:     19:3    warning  'evaluateCheckingAnswer' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+apps/web lint:     20:3    warning  'evaluateExerciseAnswer' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+apps/web lint:     21:3    warning  'suggestNextTopics' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+apps/web lint:     24:3    warning  'ExerciseFeedbackCard' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+apps/web lint:     27:3    warning  'generateMistakeReviewAI' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+apps/web lint:     74:28   warning  'formatWritingFeedbackMessage' is defined but never used                                                              @typescript-eslint/no-unused-vars
+apps/web lint:     75:3    warning  'saveWritingFeedback' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+apps/web lint:     76:3    warning  'saveWritingMistakesToNotebook' is defined but never used                                                             @typescript-eslint/no-unused-vars
+apps/web lint:    213:10   warning  'getGentleCorrections' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+apps/web lint:    247:10   warning  'formatCorrectionsAsText' is defined but never used                                                                   @typescript-eslint/no-unused-vars
+apps/web lint:    352:10   warning  'generateSocraticFollowUp' is defined but never used                                                                  @typescript-eslint/no-unused-vars
+apps/web lint:    403:62   warning  'topic' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+apps/web lint:    403:77   warning  'userAnswer' is defined but never used. Allowed unused args must match /^_/u                                          @typescript-eslint/no-unused-vars
+apps/web lint:    403:97   warning  'language' is defined but never used. Allowed unused args must match /^_/u                                            @typescript-eslint/no-unused-vars
+apps/web lint:    424:54   warning  'qType' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+apps/web lint:    440:61   warning  'topic' is defined but never used. Allowed unused args must match /^_/u                                               @typescript-eslint/no-unused-vars
+apps/web lint:    578:10   warning  'getDailyCheckInMessage' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+apps/web lint:    669:10   warning  'generateResponse' is defined but never used                                                                          @typescript-eslint/no-unused-vars
+apps/web lint:    743:10   warning  'friendCorrections' is assigned a value but never used                                                                @typescript-eslint/no-unused-vars
+apps/web lint:    790:10   warning  'suggestionsLoading' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+apps/web lint:   1535:6    warning  React Hook useCallback has a missing dependency: 'socraticHistory'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint:   1736:171  warning  Unexpected any. Specify a different type                                                                              @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/DailyPlan.tsx
+apps/web lint:   90:9  warning  The 'visibleDates' conditional could make the dependencies of useMemo Hook (at line 108) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'visibleDates' in its own useMemo() Hook  react-hooks/exhaustive-deps
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Settings.tsx
+apps/web lint:   36:3  warning  'IconBack' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/TodayPlanPage.tsx
+apps/web lint:    60:10  warning  'getWeekNumber' is defined but never used               @typescript-eslint/no-unused-vars
+apps/web lint:   122:9   warning  'adjustedDayOfWeek' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint:   162:18  warning  'handleUpdateDayStatus' is defined but never used       @typescript-eslint/no-unused-vars
+apps/web lint:   662:35  warning  'month' is assigned a value but never used              @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Vocabulary.tsx
+apps/web lint:   121:6  warning  React Hook useCallback has a missing dependency: 'showToast'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/landing/__tests__/CreatorSection.test.tsx
+apps/web lint:   3:13  warning  'config' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/roadmap/FullStudyRoadmapPage.tsx
+apps/web lint:     6:3   warning  'getRecommendations' is defined but never used     @typescript-eslint/no-unused-vars
+apps/web lint:     7:3   warning  'getTodayDay' is defined but never used            @typescript-eslint/no-unused-vars
+apps/web lint:     8:3   warning  'getNextIncompleteTask' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint:    10:3   warning  'getExamCountdown' is defined but never used       @typescript-eslint/no-unused-vars
+apps/web lint:    15:3   warning  'RoadmapWeek' is defined but never used            @typescript-eslint/no-unused-vars
+apps/web lint:    25:10  warning  'formatDate' is defined but never used             @typescript-eslint/no-unused-vars
+apps/web lint:   236:9   warning  'todayStr' is assigned a value but never used      @typescript-eslint/no-unused-vars
+apps/web lint:   237:9   warning  'bandGap' is assigned a value but never used       @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/NotebookPage.tsx
+apps/web lint:    260:11  warning  'count' is assigned a value but never used                                 @typescript-eslint/no-unused-vars
+apps/web lint:    296:43  warning  'meaning' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint:    719:68  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+apps/web lint:    722:76  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+apps/web lint:   1018:68  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+apps/web lint:   1021:76  warning  Unexpected any. Specify a different type                                   @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/ReviewPage.tsx
+apps/web lint:    24:23  warning  'IconCheckSquare' is defined but never used                              @typescript-eslint/no-unused-vars
+apps/web lint:   945:55  warning  'color' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/Database.test.ts
+apps/web lint:   321:11  warning  'db' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/Database.ts
+apps/web lint:   31:27  warning  'removeAppSettings' is defined but never used  @typescript-eslint/no-unused-vars
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/services/storage/__tests__/SettingsStorage.test.ts
+apps/web lint:   251:11  warning  'handler' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint:   251:32  warning  Unexpected any. Specify a different type      @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/tests/onboarding.test.ts
+apps/web lint:    26:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:    33:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   186:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   200:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint:   207:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+apps/web lint: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/tests/integration/configurationIntegration.test.ts
+apps/web lint:   67:7  warning  'STORAGE_KEY' is assigned a value but never used  @typescript-eslint/no-unused-vars
+apps/web lint: ✖ 258 problems (2 errors, 256 warnings)
+apps/web lint:   1 error and 0 warnings potentially fixable with the `--fix` option.
+apps/web lint: Failed
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/web@0.1.0 lint: `eslint .`
+Exit status 1
+[ELIFECYCLE] Command failed with exit code 1.
+[0m
+[0m→ [0mRead apps/web/src/pages/TodayPlanPage.tsx[90m [limit=1, offset=7][0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [limit=1, offset=38][0m
+[0m→ [0mRead apps/web/src/components/Layout.tsx[90m [limit=1, offset=37][0m
+[0m→ [0mRead apps/web/src/pages/Settings.tsx[90m [limit=5, offset=34][0m
+[0m→ [0mRead apps/web/src/pages/vocabulary/ReviewPage.tsx[90m [limit=5, offset=22][0m
+[0m→ [0mRead apps/web/src/pages/Settings.tsx[90m [offset=30, limit=12][0m
+[0m→ [0mRead apps/web/src/pages/vocabulary/ReviewPage.tsx[90m [offset=19, limit=10][0m
+[0m✱ [0mGrep "IconBack"[90m in apps/web/src/pages · 1 match[0m
+[0m✱ [0mGrep "IconCheckSquare"[90m in apps/web/src/pages/vocabulary · 1 match[0m
+[0m
+[0m← [0mEdit apps/web/src/pages/Settings.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Settings.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Settings.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/Settings.tsx
+@@ -32,9 +32,8 @@
+   IconClose,
+   IconDelete,
+   IconDownload,
+   IconUpload,
+-  IconBack,
+   IconExtension,
+   IconChevronDown,
+ } from '@ielts/ui'
+ 
+
+[0m
+[0m← [0mEdit apps/web/src/pages/vocabulary/ReviewPage.tsx
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/ReviewPage.tsx
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/ReviewPage.tsx
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/pages/vocabulary/ReviewPage.tsx
+@@ -20,9 +20,9 @@
+ import { getModeRenderer } from '../../features/vocabulary-review/reviewModes'
+ import {
+   IconChevronLeft, IconRotate, IconSettings, IconWarning,
+   IconSuccess, IconClose, IconCheckCircle, IconVocabulary,
+-  IconEdit, IconLink, IconCheckSquare, IconMessageSquare,
++  IconEdit, IconLink, IconMessageSquare,
+   IconFlame, IconAITutor, IconRefresh, IconPlay,
+ } from '@ielts/ui'
+ 
+ const ALL_TOPICS = [
+
+[0m
+[0m$ [0mpnpm lint 2>&1 | grep -E "(IconBack|IconCheckSquare|error)" | head -20
+apps/web lint:    72:9   error    'filtered' is never reassigned. Use 'const' instead                                                                             prefer-const
+apps/web lint:   32:7  error  Unnecessary catch clause  no-useless-catch
+apps/web lint: ✖ 256 problems (2 errors, 254 warnings)
+apps/web lint:   1 error and 0 warnings potentially fixable with the `--fix` option.
+[0m
+[0m$ [0mpnpm lint 2>&1 | grep -c "IconBack\|IconCheckSquare"
+0
+[0m
+[0m# [0mTodos
+[✓] Audit all icon imports from @ielts/ui across web and extension - identify which are used vs unused
+[✓] Remove unused icon imports from website source files (apps/web/src)
+[✓] Remove unused icon imports from extension source files (apps/extension/src)
+[✓] Run pnpm lint to validate changes
+[0m
+[2026-07-06T09:18:31.380Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-06T09:18:31.383Z] [INFO] Task completed successfully

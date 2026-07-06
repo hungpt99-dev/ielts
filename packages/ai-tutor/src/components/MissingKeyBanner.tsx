@@ -1,3 +1,5 @@
+import { IconSettings } from '../../../ui/src/icons/IconMap'
+
 interface MissingKeyBannerProps {
   onOpenSettings?: () => void
 }
@@ -13,7 +15,7 @@ export function MissingKeyBanner({ onOpenSettings }: MissingKeyBannerProps) {
     >
       <div className="p-3">
         <div className="mb-1 flex items-center gap-2">
-          <span className="text-sm" aria-hidden="true">⚙️</span>
+          <IconSettings size={16} aria-hidden="true" />
           <p className="font-semibold" style={{ color: 'var(--color-text)' }}>
             AI Key Not Configured
           </p>

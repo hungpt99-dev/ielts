@@ -1,9 +1,20 @@
-import { memo, useCallback, useMemo, useState, useEffect } from 'react'
+import { memo, useCallback, useMemo, useState, useEffect, type ReactNode } from 'react'
 import { useToast } from '../../../../../packages/ui/src/components/Toast'
+import { Card } from '../../../../../packages/ui/src/components/Card'
+import { Button } from '../../../../../packages/ui/src/components/Button'
+import { Badge } from '../../../../../packages/ui/src/components/Badge'
+import { EmptyState } from '../../../../../packages/ui/src/components/EmptyState'
+import { LoadingSkeleton } from '../../../../../packages/ui/src/components/LoadingSkeleton'
+import { ExtensionSyncStatusBadge } from '../../../../../packages/ui/src/components/ExtensionSyncStatusBadge'
+import type { SyncStatus } from '../../../../../packages/ui/src/components/ExtensionSyncStatusBadge'
+import {
+  IconVocabulary, IconBookText, IconArticle, IconRefresh, IconAITutor,
+  IconSave, IconEdit, IconStreak, IconSun, IconMoon, IconWarning,
+  IconExternalLink, IconMessageSquare, IconSpeaking,
+  IconSettings, IconDatabase
+} from '@ielts/ui'
 import { usePopupData } from '../hooks/usePopupData'
 import type { DailyProgress } from '../hooks/usePopupData'
-import DashboardCard from './DashboardCard'
-import ExtensionProactiveMessages from './ExtensionProactiveMessages'
 import type { LearningEntry } from '../../types'
 import { loadVocabulary } from '../services/popupDataService'
 import { getDueCount } from '../services/reviewService'
@@ -13,196 +24,192 @@ interface PopupDashboardProps {
   onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews') => void
 }
 
-interface ActionItem {
-  icon: string
-  label: string
-  description: string
-  onClick: () => void
-  color: string
-}
-
-const STREET_ICON = (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-  </svg>
-)
-
-const StreakBadge = memo(function StreakBadge({ streak }: { streak: number }) {
+const StatCard = memo(function StatCard({ label, value, icon }: { label: string; value: number; icon: ReactNode }) {
   return (
     <div
       style={{
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        gap: '6px',
-        padding: '4px 10px',
-        borderRadius: '999px',
-        background: streak > 0 ? 'var(--color-warning-light, #fef3c7)' : 'var(--color-surface-alt)',
-        color: streak > 0 ? 'var(--color-warning, #d97706)' : 'var(--color-muted)',
-        fontSize: '12px',
-        fontWeight: 600,
+        justifyContent: 'center',
+        gap: 'var(--spacing-2xs)',
+        padding: 'var(--spacing-sm) var(--spacing-xs)',
+        background: 'var(--color-surface)',
+        border: '1px solid var(--color-border-light)',
+        borderRadius: 'var(--radius-xl)',
+        minWidth: 0,
+        boxShadow: 'var(--shadow-sm)',
+        transition: 'box-shadow var(--transition-fast), transform var(--transition-fast)',
       }}
     >
-      {STREET_ICON}
-      <span>{streak} day{streak !== 1 ? 's' : ''}</span>
+      <span style={{ fontSize: 'var(--text-lg)', lineHeight: 1, display: 'inline-flex', alignItems: 'center', color: 'var(--color-primary)' }}>{icon}</span>
+      <span
+        style={{
+          fontSize: 'var(--text-base)',
+          fontWeight: 'var(--weight-bold)',
+          color: 'var(--color-text)',
+          fontFamily: 'var(--font-sans)',
+          lineHeight: 1,
+        }}
+      >
+        {value}
+      </span>
+      <span
+        style={{
+          fontSize: 'var(--text-xs)',
+          color: 'var(--color-text-secondary)',
+          fontFamily: 'var(--font-sans)',
+          fontWeight: 'var(--weight-medium)',
+          textAlign: 'center',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {label}
+      </span>
     </div>
   )
 })
 
-const ActionButton = memo(function ActionButton({
+const QuickActionBtn = memo(function QuickActionBtn({
   icon,
   label,
-  description,
   onClick,
-  color,
-}: ActionItem) {
-  const handleMouseEnter = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.currentTarget.style.background = 'var(--color-surface-alt)'
-      e.currentTarget.style.borderColor = color
-    },
-    [color],
-  )
-
-  const handleMouseLeave = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.currentTarget.style.background = 'var(--color-surface)'
-      e.currentTarget.style.borderColor = 'var(--color-border)'
-    },
-    [],
-  )
-
-  const handleFocus = useCallback(
-    (e: React.FocusEvent<HTMLButtonElement>) => {
-      e.currentTarget.style.borderColor = color
-    },
-    [color],
-  )
-
-  const handleBlur = useCallback(
-    (e: React.FocusEvent<HTMLButtonElement>) => {
-      e.currentTarget.style.borderColor = 'var(--color-border)'
-    },
-    [],
-  )
-
+}: {
+  icon: ReactNode
+  label: string
+  onClick: () => void
+}) {
   return (
     <button
       onClick={onClick}
       aria-label={label}
-      aria-describedby={description ? `${label}-desc` : undefined}
       style={{
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
-        gap: '12px',
-        width: '100%',
-        padding: '10px 14px',
+        justifyContent: 'center',
+        gap: 'var(--spacing-2xs)',
+        padding: 'var(--spacing-sm) var(--spacing-xs)',
+        minHeight: 'var(--spacing-2xl)',
         background: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-        borderRadius: 'var(--radius-lg)',
+        border: '1px solid var(--color-border-light)',
+        borderRadius: 'var(--radius-xl)',
         cursor: 'pointer',
-        textAlign: 'left',
-        transition: 'all 0.15s ease',
+        transition: 'all var(--transition-fast)',
         color: 'var(--color-text)',
-        fontSize: '13px',
-        lineHeight: '1.3',
+        fontFamily: 'var(--font-sans)',
+        minWidth: 0,
+        outline: 'none',
+        WebkitTapHighlightColor: 'transparent',
+        touchAction: 'manipulation',
+        boxShadow: 'var(--shadow-sm)',
       }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
     >
       <span
         style={{
-          width: '34px',
-          height: '34px',
-          borderRadius: 'var(--radius-md)',
-          background: `${color}15`,
+          fontSize: 'var(--text-xl)',
+          lineHeight: 1,
+          width: 'var(--spacing-xl)',
+          height: 'var(--spacing-xl)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: '16px',
-          flexShrink: 0,
-          color,
+          color: 'var(--color-primary)',
         }}
       >
         {icon}
       </span>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', minWidth: 0 }}>
-        <span style={{ fontWeight: 600, fontSize: '13px' }}>{label}</span>
-        {description && (
-          <span
-            id={`${label}-desc`}
-            style={{
-              fontSize: '11px',
-              color: 'var(--color-muted)',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            {description}
-          </span>
-        )}
-      </div>
+      <span
+        style={{
+          fontSize: 'var(--text-xs)',
+          fontWeight: 'var(--weight-medium)',
+          color: 'var(--color-text-secondary)',
+          fontFamily: 'var(--font-sans)',
+          textAlign: 'center',
+          lineHeight: 1.2,
+        }}
+      >
+        {label}
+      </span>
     </button>
   )
 })
 
 const ActivityItem = memo(function ActivityItem({ entry }: { entry: LearningEntry }) {
-  const MAX_TEXT_LENGTH = 60
-  const truncated = entry.text.length > MAX_TEXT_LENGTH
-    ? entry.text.slice(0, MAX_TEXT_LENGTH) + '…'
-    : entry.text
+  const MAX_TEXT_LENGTH = 55
+  const text = entry?.text || ''
+  const truncated = text.length > MAX_TEXT_LENGTH
+    ? text.slice(0, MAX_TEXT_LENGTH) + '…'
+    : text
+
+  const iconMap: Record<string, ReactNode> = {
+    vocabulary: <IconVocabulary />,
+    phrase: <IconMessageSquare />,
+    sentence: <IconEdit />,
+    grammar: <IconBookText />,
+    reading: <IconArticle />,
+    writing: <IconEdit />,
+    speaking: <IconSpeaking />,
+  }
 
   return (
     <div
       style={{
         display: 'flex',
-        alignItems: 'flex-start',
-        gap: '8px',
-        padding: '8px 0',
-        borderBottom: '1px solid var(--color-border)',
+        alignItems: 'center',
+        gap: 'var(--spacing-xs)',
+        padding: 'var(--spacing-xs) 0',
       }}
     >
-      <span style={{ fontSize: '14px', flexShrink: 0, marginTop: '1px' }}>
-        {entry.category === 'vocabulary' ? '📖' :
-         entry.category === 'phrase' ? '💬' :
-         entry.category === 'sentence' ? '📝' :
-         entry.category === 'grammar' ? '📚' :
-         entry.category === 'reading' ? '📰' :
-         entry.category === 'writing' ? '✍️' :
-         entry.category === 'speaking' ? '🎤' : '⚠️'}
+      <span style={{ fontSize: 'var(--text-sm)', flexShrink: 0, display: 'inline-flex' }}>
+        {iconMap[entry.category] || <IconWarning />}
       </span>
       <div style={{ minWidth: 0, flex: 1 }}>
-        <div
+        <span
           style={{
-            fontSize: '12px',
+            fontSize: 'var(--text-xs)',
             color: 'var(--color-text)',
-            lineHeight: '1.4',
+            fontFamily: 'var(--font-sans)',
+            lineHeight: 1.3,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
+            display: 'block',
           }}
         >
           {truncated}
-        </div>
-        {entry.topic && (
-          <span
-            style={{
-              fontSize: '10px',
-              color: 'var(--color-primary)',
-              fontWeight: 500,
-              marginTop: '2px',
-              display: 'inline-block',
-            }}
-          >
-            #{entry.topic}
-          </span>
-        )}
+        </span>
       </div>
+      {entry.topic && (
+        <Badge variant="primary" size="xs">
+          {entry.topic}
+        </Badge>
+      )}
     </div>
   )
 })
+
+function SyncBadge() {
+  const [status, setStatus] = useState<SyncStatus>('synced')
+
+  useEffect(() => {
+    const check = async () => {
+      try {
+        const result = await new Promise<any>(r => chrome.storage.local.get(['lastSyncTime'], r))
+        if (result.lastSyncTime) {
+          setStatus('synced')
+        }
+      } catch {
+        setStatus('disconnected')
+      }
+    }
+    check()
+    const interval = setInterval(check, 30000)
+    return () => clearInterval(interval)
+  }, [])
+
+  return <ExtensionSyncStatusBadge status={status} size="sm" />
+}
 
 export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
   const { showToast } = useToast()
@@ -223,24 +230,24 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
 
   useEffect(() => {
     setVocabCountLoading(true)
-    Promise.all([
-      loadVocabulary(),
-      getDueCount(),
-    ]).then(([vocabResult, dueResult]) => {
-      setVocabCount(vocabResult.stats.total)
-      setDueCount(dueResult)
-      if (dueResult !== progress.reviewDue) {
-        safeStorageGet<any>('dailyProgress').then((result) => {
-          const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
-          safeStorageSet({ dailyProgress: { ...current, reviewDue: dueResult } })
-        }).catch(() => {})
-      }
-    }).catch(() => {
-      setVocabCount(0)
-      setDueCount(0)
-    }).finally(() => {
-      setVocabCountLoading(false)
-    })
+    Promise.all([loadVocabulary(), getDueCount()])
+      .then(([vocabResult, dueResult]) => {
+        setVocabCount(vocabResult.stats.total)
+        setDueCount(dueResult)
+        if (dueResult !== progress.reviewDue) {
+          safeStorageGet<any>('dailyProgress').then((result) => {
+            const current = result.dailyProgress || { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 }
+            safeStorageSet({ dailyProgress: { ...current, reviewDue: dueResult } })
+          }).catch(() => {})
+        }
+      })
+      .catch(() => {
+        setVocabCount(0)
+        setDueCount(0)
+      })
+      .finally(() => {
+        setVocabCountLoading(false)
+      })
   }, [progress.reviewDue])
 
   const handleQuickSavePage = useCallback(async () => {
@@ -312,95 +319,40 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
     onNavigate('backupRestore')
   }, [onNavigate])
 
-  const actions = useMemo<ActionItem[]>(
+  const handleOpenInfo = useCallback(() => {
+    chrome.tabs.create({ url: 'https://ielts-journey.app/info' })
+  }, [])
+
+  const actions = useMemo(
     () => [
-      {
-        icon: '🤖',
-        label: 'AI Tutor',
-        description: 'Explain, simplify, and learn from any text',
-        onClick: () => onNavigate('miniTutor'),
-        color: '#6366f1',
-      },
-      {
-        icon: '📖',
-        label: 'Collect Vocabulary',
-        description: 'Save new words with AI enrichment',
-        onClick: () => onNavigate('vocabularyCollector'),
-        color: '#3b82f6',
-      },
-      {
-        icon: '✏️',
-        label: 'Save Selected Text',
-        description: 'Categorize and save text from web',
-        onClick: () => onNavigate('saveForm'),
-        color: '#8b5cf6',
-      },
-      {
-        icon: '📰',
-        label: 'Save Article',
-        description: 'Save page as reading material',
-        onClick: () => onNavigate('articleCollector'),
-        color: '#10b981',
-      },
-      {
-        icon: '🎬',
-        label: 'Video Helper',
-        description: 'Save YouTube & video content',
-        onClick: () => onNavigate('videoHelper'),
-        color: '#ec4899',
-      },
-      {
-        icon: '📚',
-        label: 'Saved Words',
-        description: vocabCountLoading ? 'Loading...' : `${vocabCount} word${vocabCount !== 1 ? 's' : ''}`,
-        onClick: () => onNavigate('savedWords'),
-        color: '#8b5cf6',
-      },
-      {
-        icon: '🔄',
-        label: 'Start Review',
-        description: `${dueCount} pending review${dueCount !== 1 ? 's' : ''}`,
-        onClick: handleStartReview,
-        color: '#f59e0b',
-      },
-      {
-        icon: '🌐',
-        label: 'Public Content',
-        description: 'Search, import, and export open content',
-        onClick: () => onNavigate('importExport'),
-        color: '#06b6d4',
-      },
+      { icon: <IconVocabulary />, label: 'Vocab', onClick: () => onNavigate('vocabularyCollector') },
+      { icon: <IconArticle />, label: 'Article', onClick: () => onNavigate('articleCollector') },
+      { icon: <IconRefresh />, label: 'Review', onClick: handleStartReview },
+      { icon: <IconAITutor />, label: 'AI Tutor', onClick: () => onNavigate('miniTutor') },
+      { icon: <IconSave />, label: 'Save Page', onClick: handleQuickSavePage },
+      { icon: <IconEdit />, label: 'Quick Note', onClick: handleQuickAddNote },
     ],
-    [onNavigate, dueCount, vocabCount, vocabCountLoading, handleStartReview],
+    [onNavigate, handleStartReview, handleQuickSavePage, handleQuickAddNote],
   )
 
   if (loading) {
     return (
       <div
-        role="status"
-        aria-label="Loading"
         style={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '500px',
-          gap: '12px',
+          gap: 'var(--spacing-md)',
+          padding: 'var(--spacing-md)',
+          minHeight: 'var(--ext-min-height)',
+          width: 'var(--ext-width)',
         }}
       >
-        <div
-          style={{
-            width: '24px',
-            height: '24px',
-            border: '3px solid var(--color-border)',
-            borderTopColor: 'var(--color-primary)',
-            borderRadius: '50%',
-            animation: 'spin 0.8s linear infinite',
-          }}
-        />
-        <span style={{ fontSize: '14px', color: 'var(--color-muted)' }}>
-          Loading your learning data…
-        </span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <LoadingSkeleton variant="text" width="140px" />
+          <LoadingSkeleton variant="text" width="60px" />
+        </div>
+        <LoadingSkeleton variant="card" count={2} gap="var(--spacing-sm)" />
+        <LoadingSkeleton variant="rect" count={3} gap="var(--spacing-xs)" />
       </div>
     )
   }
@@ -408,74 +360,68 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
   if (error) {
     return (
       <div
-        role="alert"
         style={{
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '500px',
-          padding: '16px',
-          gap: '12px',
-          textAlign: 'center',
+          minHeight: 'var(--ext-min-height)',
+          padding: 'var(--spacing-md)',
+          width: 'var(--ext-width)',
         }}
       >
-        <span style={{ fontSize: '32px' }} role="img" aria-label="error">⚠️</span>
-        <span style={{ fontSize: '14px', color: 'var(--color-danger)', fontWeight: 500 }}>
-          {error}
-        </span>
-        <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
-          Some data may not be available.
-        </span>
-        <button
-          onClick={() => { refreshProgress(); refreshRecent() }}
-          style={{
-            padding: '8px 16px',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--color-border)',
-            background: 'var(--color-surface)',
-            color: 'var(--color-text)',
-            cursor: 'pointer',
-            fontSize: '13px',
-          }}
-        >
-          Retry
-        </button>
+        <EmptyState
+          icon={<IconWarning />}
+          title="Something went wrong"
+          description={error}
+          action={
+            <Button variant="secondary" size="sm" onClick={() => { refreshProgress(); refreshRecent() }}>
+              Retry
+            </Button>
+          }
+        />
       </div>
     )
   }
+
+  const greeting = user?.isLoggedIn && user.name
+    ? `Hi, ${user.name.split(' ')[0]}!`
+    : 'Welcome!'
 
   return (
     <div
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
-        padding: '16px',
-        minHeight: '500px',
+        gap: 'var(--spacing-sm)',
+        padding: 'var(--spacing-md)',
+        minHeight: 'var(--ext-min-height)',
+        width: 'var(--ext-width)',
       }}
     >
-      <header
+      {/* Header */}
+      <div
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          paddingBottom: 'var(--spacing-2xs)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
           <div
             style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: 'var(--radius-md)',
-              background: 'linear-gradient(135deg, var(--color-primary), #7c3aed)',
+              width: 'var(--spacing-xl)',
+              height: 'var(--spacing-xl)',
+              borderRadius: 'var(--radius-lg)',
+              background: 'linear-gradient(135deg, var(--color-primary), var(--color-skill-reading))',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#fff',
-              fontSize: '16px',
-              fontWeight: 700,
+              color: 'var(--color-text-inverse)',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--weight-bold)',
               flexShrink: 0,
+              boxShadow: '0 2px 8px color-mix(in srgb, var(--color-primary) 30%, transparent)',
             }}
           >
             I
@@ -483,56 +429,56 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
           <div>
             <h1
               style={{
-                fontSize: '16px',
-                fontWeight: 700,
+                fontSize: 'var(--text-base)',
+                fontWeight: 'var(--weight-bold)',
                 color: 'var(--color-text)',
                 margin: 0,
+                fontFamily: 'var(--font-sans)',
+                lineHeight: 1.2,
                 letterSpacing: '-0.01em',
               }}
             >
               IELTS Journey
             </h1>
-            {user?.isLoggedIn && user.name && (
-              <span
-                style={{
-                  fontSize: '11px',
-                  color: 'var(--color-primary)',
-                  fontWeight: 500,
-                  display: 'block',
-                  marginTop: '1px',
-                }}
-              >
-                {user.name}
-              </span>
-            )}
-          </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {!user?.isLoggedIn ? (
-            <button
-              onClick={() => chrome.tabs.create({ url: 'https://ielts-journey.app/login' })}
+            <span
               style={{
-                fontSize: '11px',
-                padding: '4px 8px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--color-primary)',
-                background: 'transparent',
-                color: 'var(--color-primary)',
-                cursor: 'pointer',
-                fontWeight: 500,
+                fontSize: 'var(--text-xs)',
+                color: 'var(--color-text-secondary)',
+                fontFamily: 'var(--font-sans)',
+                fontWeight: 'var(--weight-normal)',
               }}
             >
-              Log In
-            </button>
-          ) : null}
-          <StreakBadge streak={progress.streak} />
+              {greeting}
+            </span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-3xs)',
+              padding: 'var(--spacing-3xs) var(--spacing-xs)',
+              borderRadius: 'var(--radius-full)',
+              background: progress.streak > 0 ? 'var(--color-warning-light)' : 'var(--color-surface-alt)',
+              color: progress.streak > 0 ? 'var(--color-warning-dark)' : 'var(--color-muted)',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-semibold)',
+              fontFamily: 'var(--font-sans)',
+              lineHeight: 1.2,
+            }}
+          >
+            <IconStreak size={12} style={{ flexShrink: 0 }} />
+            <span>{progress.streak}d</span>
+          </div>
+          <SyncBadge />
           <button
             onClick={toggleDarkMode}
             aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             style={{
-              width: '30px',
-              height: '30px',
-              borderRadius: 'var(--radius-md)',
+              width: 'var(--spacing-xl)',
+              height: 'var(--spacing-xl)',
+              borderRadius: 'var(--radius-lg)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               color: 'var(--color-muted)',
@@ -540,112 +486,204 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '14px',
-              transition: 'background 0.15s',
+              fontSize: 'var(--text-base)',
               padding: 0,
+              lineHeight: 1,
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation',
             }}
           >
-            {darkMode ? '☀️' : '🌙'}
+            {darkMode ? <IconSun size={16} /> : <IconMoon size={16} />}
           </button>
         </div>
-      </header>
+      </div>
 
-      <ExtensionProactiveMessages />
-
-      <section
+      {/* Quick Stats */}
+      <div
         style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '8px',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: 'var(--spacing-xs)',
         }}
       >
-        <DashboardCard label="Words Today" value={progress.wordsAdded} icon="📖" />
-        <DashboardCard label="Notes Today" value={progress.notesAdded} icon="✏️" />
-        <DashboardCard label="Articles" value={progress.articlesSaved} icon="📰" />
-        <DashboardCard
-          label="Review Due"
-          value={dueCount}
-          icon="🔄"
-          accent={dueCount > 0}
-        />
-      </section>
+        <StatCard label="Words" value={vocabCountLoading ? 0 : vocabCount} icon={<IconVocabulary />} />
+        <StatCard label="Due" value={dueCount} icon={<IconRefresh />} />
+        <StatCard label="Articles" value={progress.articlesSaved} icon={<IconArticle />} />
+        <StatCard label="Streak" value={progress.streak} icon={<IconStreak />} />
+      </div>
 
-      <section>
+      {/* AI Tutor Card */}
+      <div
+        style={{
+          background: 'var(--color-tutor-background)',
+          borderRadius: 'var(--radius-xl)',
+          padding: 'var(--spacing-sm) var(--spacing-md)',
+          border: '1px solid var(--color-tutor-border)',
+          boxShadow: 'var(--shadow-tutor)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+          <div
+            style={{
+              width: 'var(--spacing-xl)',
+              height: 'var(--spacing-xl)',
+              borderRadius: 'var(--radius-lg)',
+              background: 'var(--color-tutor-accent)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'var(--color-on-primary)',
+              flexShrink: 0,
+            }}
+          >
+            <IconAITutor size={18} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-tutor-text)', fontFamily: 'var(--font-sans)', lineHeight: 'var(--leading-tight)' }}>
+              AI Tutor
+            </span>
+            <p style={{ margin: 'var(--spacing-3xs) 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-tutor-text)', fontFamily: 'var(--font-sans)', lineHeight: 'var(--leading-normal)', opacity: 0.8 }}>
+              Ask me about any text, get explanations, or practice exercises.
+            </p>
+          </div>
+          <button
+            onClick={() => onNavigate('miniTutor')}
+            style={{
+              padding: 'var(--spacing-xs) var(--spacing-md)',
+              borderRadius: 'var(--radius-lg)',
+              border: 'none',
+              background: 'var(--color-tutor-accent)',
+              color: 'var(--color-on-primary)',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-semibold)',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+              transition: 'opacity var(--transition-fast)',
+              fontFamily: 'var(--font-sans)',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.9' }}
+            onMouseLeave={(e) => { e.currentTarget.style.opacity = '1' }}
+          >
+            Ask AI
+          </button>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div>
         <h2
           style={{
-            fontSize: '12px',
-            fontWeight: 600,
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-semibold)',
             color: 'var(--color-muted)',
+            fontFamily: 'var(--font-sans)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            margin: '0 0 8px',
+            margin: '0 0 var(--spacing-xs)',
           }}
         >
           Quick Actions
         </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 'var(--spacing-xs)',
+          }}
+        >
           {actions.map((action) => (
-            <ActionButton key={action.label} {...action} />
+            <QuickActionBtn key={action.label} {...action} />
           ))}
         </div>
-      </section>
+      </div>
 
+      {/* Saved Words & Review Links */}
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: '6px',
+          gap: 'var(--spacing-xs)',
         }}
       >
         <button
-          onClick={handleQuickSavePage}
-          style={quickBtnStyle}
-          aria-label="Save current page as reading material"
+          onClick={() => onNavigate('savedWords')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 'var(--spacing-2xs)',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
+            minHeight: 'var(--spacing-2xl)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--color-border-light)',
+            background: 'var(--color-surface)',
+            color: 'var(--color-text)',
+            cursor: 'pointer',
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-medium)',
+            fontFamily: 'var(--font-sans)',
+            transition: 'all var(--transition-fast)',
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation',
+            boxShadow: 'var(--shadow-sm)',
+          }}
         >
-          <span style={{ fontSize: '14px' }} aria-hidden="true">💾</span>
-          <span>Save Page</span>
+          <IconBookText size={14} style={{ color: 'var(--color-primary)' }} />
+          <span>{vocabCountLoading ? 'Words...' : `${vocabCount} Saved Words`}</span>
         </button>
         <button
-          onClick={handleQuickAddNote}
-          style={quickBtnStyle}
-          aria-label="Quick add a note"
+          onClick={handleStartReview}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 'var(--spacing-2xs)',
+            padding: 'var(--spacing-xs) var(--spacing-sm)',
+            minHeight: 'var(--spacing-2xl)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--color-warning)',
+            background: dueCount > 0 ? 'var(--color-warning-light)' : 'var(--color-surface)',
+            color: dueCount > 0 ? 'var(--color-warning-dark)' : 'var(--color-text)',
+            cursor: 'pointer',
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-medium)',
+            fontFamily: 'var(--font-sans)',
+            transition: 'all var(--transition-fast)',
+            WebkitTapHighlightColor: 'transparent',
+            touchAction: 'manipulation',
+            boxShadow: dueCount > 0 ? '0 2px 8px color-mix(in srgb, var(--color-warning) 25%, transparent)' : 'var(--shadow-sm)',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-warning-light)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = dueCount > 0 ? 'var(--color-warning-light)' : 'var(--color-surface)' }}
         >
-          <span style={{ fontSize: '14px' }} aria-hidden="true">📝</span>
-          <span>Quick Note</span>
+          <IconRefresh size={14} />
+          <span>{dueCount > 0 ? `${dueCount} Pending Review` : 'Start Review'}</span>
         </button>
       </div>
 
-      <section style={{ flex: 1 }}>
+      {/* Recent Activity */}
+      <Card variant="default" padding="sm" style={{ borderRadius: 'var(--radius-xl)' }}>
         <h2
           style={{
-            fontSize: '12px',
-            fontWeight: 600,
+            fontSize: 'var(--text-xs)',
+            fontWeight: 'var(--weight-semibold)',
             color: 'var(--color-muted)',
+            fontFamily: 'var(--font-sans)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            margin: '0 0 4px',
+            margin: '0 0 var(--spacing-xs)',
           }}
         >
           Today's Activity
         </h2>
         {recentEntries.length === 0 ? (
-          <div
-            role="status"
-            aria-label="No activity yet"
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '24px 16px',
-              gap: '8px',
-            }}
-          >
-            <span aria-hidden="true" style={{ fontSize: '28px', opacity: 0.3 }}>📚</span>
-            <span style={{ fontSize: '13px', color: 'var(--color-muted)', textAlign: 'center' }}>
-              No activity yet today. Start learning by saving text from any webpage!
-            </span>
-          </div>
+          <EmptyState
+            icon={<IconBookText size={20} />}
+            title="No activity yet"
+            description="Start learning by saving text from any webpage!"
+            compact
+          />
         ) : (
           <div>
             {recentEntries.map((entry) => (
@@ -653,76 +691,113 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
             ))}
           </div>
         )}
-      </section>
+      </Card>
 
-      <footer
+      {/* Footer */}
+      <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingTop: '12px',
-          borderTop: '1px solid var(--color-border)',
+          paddingTop: 'var(--spacing-sm)',
+          borderTop: '1px solid var(--color-border-light)',
+          marginTop: 'auto',
         }}
       >
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
           <button
             onClick={handleOpenSettings}
-            style={footerLinkStyle}
-            aria-label="Open extension settings"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-2xs)',
+              background: 'none',
+              border: 'none',
+              color: 'var(--color-text-secondary)',
+              cursor: 'pointer',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-medium)',
+              fontFamily: 'var(--font-sans)',
+              padding: 'var(--spacing-xs) var(--spacing-2xs)',
+              minHeight: 'var(--spacing-xl)',
+              borderRadius: 'var(--radius-lg)',
+              transition: 'all var(--transition-fast)',
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-alt)'; e.currentTarget.style.color = 'var(--color-text)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--color-text-secondary)' }}
           >
+            <IconSettings size={12} />
             Settings
           </button>
           <button
             onClick={handleBackup}
-            style={footerLinkStyle}
-            aria-label="Backup and restore data"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-2xs)',
+              background: 'none',
+              border: 'none',
+              color: 'var(--color-text-secondary)',
+              cursor: 'pointer',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-medium)',
+              fontFamily: 'var(--font-sans)',
+              padding: 'var(--spacing-xs) var(--spacing-2xs)',
+              minHeight: 'var(--spacing-xl)',
+              borderRadius: 'var(--radius-lg)',
+              transition: 'all var(--transition-fast)',
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-alt)'; e.currentTarget.style.color = 'var(--color-text)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--color-text-secondary)' }}
           >
+            <IconDatabase size={12} />
             Backup
           </button>
+          <button
+            onClick={handleOpenInfo}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-2xs)',
+              background: 'none',
+              border: 'none',
+              color: 'var(--color-text-secondary)',
+              cursor: 'pointer',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-medium)',
+              fontFamily: 'var(--font-sans)',
+              padding: 'var(--spacing-xs) var(--spacing-2xs)',
+              minHeight: 'var(--spacing-xl)',
+              borderRadius: 'var(--radius-lg)',
+              transition: 'all var(--transition-fast)',
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-alt)'; e.currentTarget.style.color = 'var(--color-text)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--color-text-secondary)' }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4" />
+              <path d="M12 8h.01" />
+            </svg>
+            Info
+          </button>
         </div>
-        <button
+        <Button
+          variant="ghost"
+          size="xs"
           onClick={handleOpenDashboard}
-          style={{
-            ...footerLinkStyle,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-          }}
+          icon={<IconExternalLink size={10} />}
+          iconPosition="right"
         >
           Open Dashboard
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-            <polyline points="15 3 21 3 21 9" />
-            <line x1="10" y1="14" x2="21" y2="3" />
-          </svg>
-        </button>
-      </footer>
+        </Button>
+      </div>
     </div>
   )
-}
-
-const quickBtnStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '6px',
-  padding: '8px 12px',
-  borderRadius: 'var(--radius-md)',
-  border: '1px solid var(--color-border)',
-  background: 'var(--color-surface)',
-  color: 'var(--color-text)',
-  fontSize: '12px',
-  fontWeight: 500,
-  cursor: 'pointer',
-  transition: 'background 0.15s',
-}
-
-const footerLinkStyle: React.CSSProperties = {
-  background: 'none',
-  border: 'none',
-  color: 'var(--color-primary)',
-  cursor: 'pointer',
-  fontSize: '12px',
-  fontWeight: 500,
-  padding: '4px 0',
 }

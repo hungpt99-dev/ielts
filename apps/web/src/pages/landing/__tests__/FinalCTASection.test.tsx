@@ -6,14 +6,7 @@ describe('FinalCTASection', () => {
   it('renders the section heading', () => {
     render(<FinalCTASection />)
     expect(
-      screen.getByText('Start your IELTS learning journey today')
-    ).toBeInTheDocument()
-  })
-
-  it('renders the tagline', () => {
-    render(<FinalCTASection />)
-    expect(
-      screen.getByText('Free, private, and built for real learners.')
+      screen.getByText('Start your IELTS journey today.')
     ).toBeInTheDocument()
   })
 
@@ -21,26 +14,13 @@ describe('FinalCTASection', () => {
     render(<FinalCTASection />)
     const cta = screen.getByText('Start Learning Free')
     expect(cta).toBeInTheDocument()
-    expect(cta.closest('a')).toHaveAttribute('href', '/')
+    expect(cta.closest('a')).toHaveAttribute('href', '/onboarding')
   })
 
-  it('renders Install Chrome Extension CTA with correct attributes', () => {
+  it('renders trust badges', () => {
     render(<FinalCTASection />)
-    const cta = screen.getByText('Install Chrome Extension')
-    expect(cta).toBeInTheDocument()
-    expect(cta.closest('a')).toHaveAttribute(
-      'href',
-      'https://chromewebstore.google.com/detail/ielts-journey'
-    )
-    expect(cta.closest('a')).toHaveAttribute('target', '_blank')
-    expect(cta.closest('a')).toHaveAttribute('rel', 'noopener noreferrer')
-  })
-
-  it('renders Support the Project CTA linking to donation section', () => {
-    render(<FinalCTASection />)
-    const cta = screen.getByText('Support the Project')
-    expect(cta).toBeInTheDocument()
-    expect(cta.closest('a')).toHaveAttribute('href', '#donation')
+    expect(screen.getByText('100% Free')).toBeInTheDocument()
+    expect(screen.getByText('Privacy First')).toBeInTheDocument()
   })
 
   it('renders a semantic section with heading level 2', () => {

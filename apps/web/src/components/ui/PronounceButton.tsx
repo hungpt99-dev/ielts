@@ -20,8 +20,8 @@ export default function PronounceButton({ word, className, size = 'sm' }: Pronou
   }, [word])
 
   const sizeStyles = size === 'sm'
-    ? { width: '28px', height: '28px', fontSize: '13px' }
-    : { width: '36px', height: '36px', fontSize: '16px' }
+    ? { width: 'var(--spacing-xl)', height: 'var(--spacing-xl)', fontSize: 'var(--text-sm)' }
+    : { width: 'var(--spacing-2xl)', height: 'var(--spacing-2xl)', fontSize: 'var(--text-base)' }
 
   return (
     <button
@@ -36,11 +36,11 @@ export default function PronounceButton({ word, className, size = 'sm' }: Pronou
         alignItems: 'center',
         justifyContent: 'center',
         border: 'none',
-        borderRadius: '6px',
+        borderRadius: 'var(--radius-sm)',
         background: 'transparent',
         color: 'var(--color-muted)',
         cursor: 'pointer',
-        transition: 'all 0.12s',
+        transition: 'all var(--transition-fast)',
         flexShrink: 0,
         padding: 0,
         lineHeight: 1,

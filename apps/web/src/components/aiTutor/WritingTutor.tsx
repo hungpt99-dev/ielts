@@ -1000,7 +1000,7 @@ export function TaskSelectorCard({ onSelect, disabled }: TaskSelectorCardProps) 
 
   return (
     <div
-      className="mt-3 rounded-xl border-2 border-blue-200 bg-blue-50/50 p-4 dark:border-blue-800 dark:bg-blue-900/10"
+      className="mt-3 rounded-xl border-2 border-[var(--color-primary-light)] bg-[var(--color-primary-light)]/50 p-4 dark:border-[var(--color-primary-hover)] dark:bg-[var(--color-primary-hover)]/10"
       role="group"
       aria-labelledby={labelId}
     >
@@ -1011,9 +1011,10 @@ export function TaskSelectorCard({ onSelect, disabled }: TaskSelectorCardProps) 
         {WRITING_TASK_ACTIONS.map(action => (
           <button
             key={action.id}
+            title={action.description}
             onClick={() => onSelect(action.id)}
             disabled={disabled}
-            className="flex flex-col items-center gap-1 rounded-lg border-2 border-blue-200 bg-white p-3 text-sm transition-colors hover:bg-blue-50 disabled:opacity-50 dark:border-blue-700 dark:bg-slate-700 dark:hover:bg-blue-900/20"
+            className="flex flex-col items-center gap-1 rounded-lg border-2 border-[var(--color-primary-light)] bg-[var(--color-surface)] p-3 text-sm transition-colors hover:bg-[var(--color-primary-light)] disabled:opacity-50 dark:border-[var(--color-primary-hover)] dark:bg-[var(--color-surface-secondary)] dark:hover:bg-[var(--color-primary-hover)]/20"
           >
             <span className="text-xl">{action.icon}</span>
             <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>{action.label}</span>
@@ -1032,15 +1033,15 @@ interface WritingBandCardProps {
 }
 
 const BAND_COLORS: Record<string, string> = {
-  '9': 'text-green-600', '8.5': 'text-green-600', '8': 'text-green-600',
-  '7.5': 'text-blue-600', '7': 'text-blue-600', '6.5': 'text-blue-600',
-  '6': 'text-amber-600', '5.5': 'text-amber-600', '5': 'text-amber-600',
-  '4.5': 'text-red-600', '4': 'text-red-600', '3.5': 'text-red-600', '3': 'text-red-600',
+  '9': 'text-[var(--color-success)]', '8.5': 'text-[var(--color-success)]', '8': 'text-[var(--color-success)]',
+  '7.5': 'text-[var(--color-primary)]', '7': 'text-[var(--color-primary)]', '6.5': 'text-[var(--color-primary)]',
+  '6': 'text-[var(--color-warning)]', '5.5': 'text-[var(--color-warning)]', '5': 'text-[var(--color-warning)]',
+  '4.5': 'text-[var(--color-danger)]', '4': 'text-[var(--color-danger)]', '3.5': 'text-[var(--color-danger)]', '3': 'text-[var(--color-danger)]',
 }
 
 function getBandColor(band: number): string {
   const key = band.toString()
-  return BAND_COLORS[key] || 'text-slate-600'
+  return BAND_COLORS[key] || 'text-[var(--color-text-secondary)]'
 }
 
 export function WritingBandCard({ band }: WritingBandCardProps) {
@@ -1048,7 +1049,7 @@ export function WritingBandCard({ band }: WritingBandCardProps) {
 
   return (
     <div
-      className="mt-3 rounded-xl border-2 border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800"
+      className="mt-3 rounded-xl border-2 border-[var(--color-border)] bg-[var(--color-surface)] p-4 dark:border-[var(--color-border)] dark:bg-[var(--color-surface-secondary)]"
       aria-labelledby={labelId}
     >
       <p id={labelId} className="mb-3 text-sm font-bold" style={{ color: 'var(--color-text)' }}>
@@ -1075,7 +1076,7 @@ export function WritingBandCard({ band }: WritingBandCardProps) {
               <span style={{ color: 'var(--color-text-secondary)' }}>{item.label}</span>
               <span className={`font-medium ${getBandColor(item.value)}`}>{item.value}</span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-600">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--color-surface-alt)] dark:bg-[var(--color-surface-secondary)]">
               <div
                 className={`h-full rounded-full transition-all ${
                   item.value >= 7 ? 'bg-green-500' : item.value >= 6 ? 'bg-blue-500' : item.value >= 5 ? 'bg-amber-500' : 'bg-red-500'
@@ -1105,8 +1106,8 @@ export function WritingFeedbackCard({ feedback, onNext, onCheckAnother, disabled
       <WritingBandCard band={feedback.bandEstimate} />
 
       {feedback.strengths.length > 0 && (
-        <div className="rounded-xl border-2 border-green-200 bg-green-50/50 p-4 dark:border-green-800 dark:bg-green-900/10">
-          <p className="mb-2 text-sm font-medium text-green-700 dark:text-green-400">\u2705 Strengths</p>
+        <div className="rounded-xl border-2 border-[var(--color-success-light)] bg-[var(--color-success-light)]/50 p-4 dark:border-[var(--color-success)] dark:bg-[var(--color-success)]/10">
+          <p className="mb-2 text-sm font-medium text-[var(--color-success)] dark:text-[var(--color-success)]">\u2705 Strengths</p>
           <ul className="space-y-1">
             {feedback.strengths.map((s, i) => (
               <li key={i} className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{s}</li>
@@ -1116,8 +1117,8 @@ export function WritingFeedbackCard({ feedback, onNext, onCheckAnother, disabled
       )}
 
       {feedback.weaknesses.length > 0 && (
-        <div className="rounded-xl border-2 border-amber-200 bg-amber-50/50 p-4 dark:border-amber-800 dark:bg-amber-900/10">
-          <p className="mb-2 text-sm font-medium text-amber-700 dark:text-amber-400">\ud83d\udca1 Areas to Improve</p>
+        <div className="rounded-xl border-2 border-[var(--color-warning-light)] bg-[var(--color-warning-light)]/50 p-4 dark:border-[var(--color-warning-dark)] dark:bg-[var(--color-warning-dark)]/10">
+          <p className="mb-2 text-sm font-medium text-[var(--color-warning)] dark:text-[var(--color-warning)]">\ud83d\udca1 Areas to Improve</p>
           <ul className="space-y-1">
             {feedback.weaknesses.map((w, i) => (
               <li key={i} className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{w}</li>
@@ -1127,15 +1128,15 @@ export function WritingFeedbackCard({ feedback, onNext, onCheckAnother, disabled
       )}
 
       {feedback.grammarIssues.length > 0 && (
-        <div className="rounded-xl border-2 border-red-200 bg-red-50/50 p-4 dark:border-red-800 dark:bg-red-900/10">
-          <p className="mb-2 text-sm font-medium text-red-700 dark:text-red-400">\ud83d\udd0d Grammar Issues</p>
+        <div className="rounded-xl border-2 border-[var(--color-danger-light)] bg-[var(--color-danger-light)]/50 p-4 dark:border-[var(--color-danger-dark)] dark:bg-[var(--color-danger-dark)]/10">
+          <p className="mb-2 text-sm font-medium text-[var(--color-danger)] dark:text-[var(--color-danger)]">\ud83d\udd0d Grammar Issues</p>
           <div className="space-y-2">
             {feedback.grammarIssues.map((g, i) => (
               <div key={i} className="text-xs">
-                <p className="text-red-600 dark:text-red-400">
+                <p className="text-[var(--color-danger)] dark:text-[var(--color-danger)]">
                   <span className="line-through">{g.original}</span>
                   {' \u2192 '}
-                  <span className="font-medium text-green-600 dark:text-green-400">{g.suggestion}</span>
+                  <span className="font-medium text-[var(--color-success)] dark:text-[var(--color-success)]">{g.suggestion}</span>
                 </p>
                 <p className="mt-0.5" style={{ color: 'var(--color-muted)' }}>{g.explanation}</p>
               </div>
@@ -1145,8 +1146,8 @@ export function WritingFeedbackCard({ feedback, onNext, onCheckAnother, disabled
       )}
 
       {feedback.vocabularySuggestions.length > 0 && (
-        <div className="rounded-xl border-2 border-purple-200 bg-purple-50/50 p-4 dark:border-purple-800 dark:bg-purple-900/10">
-          <p className="mb-2 text-sm font-medium text-purple-700 dark:text-purple-400">\ud83d\udcd6 Vocabulary Suggestions</p>
+        <div className="rounded-xl border-2 border-[var(--color-skill-reading-light)] bg-[var(--color-skill-reading-light)]/50 p-4 dark:border-[var(--color-skill-reading-dark)] dark:bg-[var(--color-skill-reading-dark)]/10">
+          <p className="mb-2 text-sm font-medium text-[var(--color-skill-reading)] dark:text-[var(--color-skill-reading)]">\ud83d\udcd6 Vocabulary Suggestions</p>
           <div className="space-y-2">
             {feedback.vocabularySuggestions.map((v, i) => (
               <div key={i} className="text-xs">
@@ -1161,8 +1162,8 @@ export function WritingFeedbackCard({ feedback, onNext, onCheckAnother, disabled
       )}
 
       {feedback.linkingWordSuggestions.length > 0 && (
-        <div className="rounded-xl border-2 border-blue-200 bg-blue-50/50 p-4 dark:border-blue-800 dark:bg-blue-900/10">
-          <p className="mb-2 text-sm font-medium text-blue-700 dark:text-blue-400">\ud83d\udd17 Linking Words</p>
+        <div className="rounded-xl border-2 border-[var(--color-primary-light)] bg-[var(--color-primary-light)]/50 p-4 dark:border-[var(--color-primary-hover)] dark:bg-[var(--color-primary-hover)]/10">
+          <p className="mb-2 text-sm font-medium text-[var(--color-primary)] dark:text-[var(--color-primary)]">\ud83d\udd17 Linking Words</p>
           <ul className="space-y-1">
             {feedback.linkingWordSuggestions.map((l, i) => (
               <li key={i} className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{l}</li>
@@ -1171,15 +1172,15 @@ export function WritingFeedbackCard({ feedback, onNext, onCheckAnother, disabled
         </div>
       )}
 
-      <div className="rounded-xl border-2 border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800">
+      <div className="rounded-xl border-2 border-[var(--color-border)] bg-[var(--color-surface)] p-4 dark:border-[var(--color-border)] dark:bg-[var(--color-surface-secondary)]">
         <p className="mb-1 text-sm font-medium" style={{ color: 'var(--color-text)' }}>\ud83d\udcdd Advice</p>
         <p className="whitespace-pre-wrap text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
           {feedback.generalAdvice}
         </p>
       </div>
 
-      <div className="rounded-xl border-2 border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-800 dark:bg-emerald-900/10">
-        <p className="mb-1 text-sm font-medium text-emerald-700 dark:text-emerald-400">\u2728 Improved Version</p>
+      <div className="rounded-xl border-2 border-[var(--color-success-light)] bg-[var(--color-success-light)]/50 p-4 dark:border-[var(--color-success-dark)] dark:bg-[var(--color-success-dark)]/10">
+        <p className="mb-1 text-sm font-medium text-[var(--color-success)] dark:text-[var(--color-success)]">\u2728 Improved Version</p>
         <p className="whitespace-pre-wrap text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
           {feedback.improvedVersion}
         </p>
@@ -1189,14 +1190,14 @@ export function WritingFeedbackCard({ feedback, onNext, onCheckAnother, disabled
         <button
           onClick={onNext}
           disabled={disabled}
-          className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+          className="flex-1 rounded-lg bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--color-primary-hover)] disabled:opacity-50"
         >
           Next Task \u2192
         </button>
         <button
           onClick={onCheckAnother}
           disabled={disabled}
-          className="rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-50 disabled:opacity-50 dark:hover:bg-slate-700"
+          className="rounded-lg border px-4 py-2 text-sm font-medium transition-colors hover:bg-[var(--color-surface-alt)] disabled:opacity-50 dark:hover:bg-[var(--color-surface-secondary)]"
           style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
         >
           Check Another Draft

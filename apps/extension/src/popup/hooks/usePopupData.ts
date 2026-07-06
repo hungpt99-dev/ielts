@@ -45,7 +45,7 @@ const DEFAULT_PROGRESS: DailyProgress = {
 
 async function loadProgress(): Promise<DailyProgress> {
   const result = await safeStorageGet<any>('dailyProgress')
-  return result.dailyProgress || DEFAULT_PROGRESS
+  return (result && typeof result === 'object' ? result : DEFAULT_PROGRESS) as DailyProgress
 }
 
 async function loadRecentEntries(): Promise<LearningEntry[]> {

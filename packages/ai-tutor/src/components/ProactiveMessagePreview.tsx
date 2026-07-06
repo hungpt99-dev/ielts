@@ -1,4 +1,5 @@
 import type { ProactiveMessage } from '../types'
+import { IconClock, IconClose } from '../../../ui/src/icons/IconMap'
 
 interface ProactiveMessagePreviewProps {
   message: ProactiveMessage
@@ -38,9 +39,7 @@ export function ProactiveMessagePreview({
               aria-label="Snooze"
               title="Snooze 1 hour"
             >
-              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <IconClock size={12} />
             </button>
           )}
           <button
@@ -50,9 +49,7 @@ export function ProactiveMessagePreview({
             aria-label="Dismiss"
             title="Dismiss"
           >
-            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <IconClose size={12} />
           </button>
         </div>
       </div>

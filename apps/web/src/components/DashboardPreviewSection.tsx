@@ -117,25 +117,25 @@ export default function DashboardPreviewSection() {
                     </span>
                   </div>
                   <div className="mt-3 space-y-2">
-                    <div className="flex items-center gap-3 rounded-lg bg-white/70 px-3 py-2">
+                    <div className="flex items-center gap-3 rounded-lg px-3 py-2" style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)' }}>
                       <div className="h-4 w-4 rounded border border-[var(--color-primary)]" />
                       <span className="text-sm text-[var(--color-text)]">
                         Reading Practice — Passage 1
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 rounded-lg bg-white/70 px-3 py-2">
+                    <div className="flex items-center gap-3 rounded-lg px-3 py-2" style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)' }}>
                       <div className="h-4 w-4 rounded border border-[var(--color-primary)]" />
                       <span className="text-sm text-[var(--color-text)]">
                         Vocabulary Review — 15 words
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 rounded-lg bg-white/70 px-3 py-2">
+                    <div className="flex items-center gap-3 rounded-lg px-3 py-2" style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)' }}>
                       <div className="h-4 w-4 rounded border border-[var(--color-primary)]" />
                       <span className="text-sm text-[var(--color-text)]">
                         Writing Task 2 — Essay Outline
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 rounded-lg bg-white/70 px-3 py-2">
+                    <div className="flex items-center gap-3 rounded-lg px-3 py-2" style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)' }}>
                       <div className="h-4 w-4 rounded border border-[var(--color-primary)]" />
                       <span className="text-sm text-[var(--color-text)]">
                         Listening — Section 3 Practice
@@ -264,13 +264,13 @@ export default function DashboardPreviewSection() {
                     AI Tutor
                   </span>
                   <div className="mt-2 space-y-2">
-                    <div className="rounded-lg bg-white/70 px-3 py-2">
+                    <div className="rounded-lg px-3 py-2" style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)' }}>
                       <p className="text-xs leading-relaxed text-[var(--color-text)]">
                         Your writing practice today focuses on Task 2 essays.
                         Review the structure from last week&apos;s lesson first.
                       </p>
                     </div>
-                    <div className="rounded-lg bg-white/70 px-3 py-2">
+                    <div className="rounded-lg px-3 py-2" style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)' }}>
                       <p className="text-xs leading-relaxed text-[var(--color-text)]">
                         You have 24 saved words. Would you like to review them
                         with a quick quiz?

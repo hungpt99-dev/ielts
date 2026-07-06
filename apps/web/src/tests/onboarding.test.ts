@@ -139,9 +139,12 @@ describe('completeOnboarding', () => {
     examDate: '2026-09-01',
     dailyStudyMinutes: 60,
     weakSkills: ['Writing', 'Speaking'],
+    strongSkills: ['Reading'],
     preferredTopics: ['Environment', 'Education'],
     studyGoal: 'academic' as const,
     preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri'] as ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[],
+    preferredLanguage: 'en',
+    tutorStyle: 'encouraging' as const,
   }
 
   it('saves app settings and marks onboarding as complete', async () => {

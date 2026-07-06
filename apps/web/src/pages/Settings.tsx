@@ -1,12 +1,43 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../context/SettingsContext'
 import { useTheme } from '../context/ThemeContext'
+import { DatabaseService } from '../services/storage/Database'
+import {
+  loadNotificationPrefs,
+  saveNotificationPrefs,
+  type NotificationPrefs,
+} from '../services/storage/SettingsStorage'
+import { testConnection } from '../services/ai/AIService'
+import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
+import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
-import AISettings from '../features/settings/AISettings'
-import type { CorsProxyConfig } from '../features/publicApiIntegration/types'
-import { DEFAULT_CORS_PROXY, CORS_PROXY_STORAGE_KEY } from '../features/publicApiIntegration/types'
+import Input from '../components/ui/Input'
+import Select from '../components/ui/Select'
+import ToggleSwitch from '../components/ui/ToggleSwitch'
+import ConfirmDialog from '../components/ui/ConfirmDialog'
+import { LoadingSkeleton } from '../components/ui/LoadingSkeleton'
+import { ErrorState } from '../components/ui/EmptyState'
+import PageHeader from '../components/layout/PageHeader'
+import {
+  IconTarget,
+  IconAITutor,
+  IconStudyPlan,
+  IconPalette,
+  IconBell,
+  IconSliders,
+  IconDatabase,
+  IconCheck,
+  IconSettings,
+  IconAlertCircle,
+  IconClose,
+  IconDelete,
+  IconDownload,
+  IconUpload,
+  IconExtension,
+  IconChevronDown,
+} from '@ielts/ui'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health',
@@ -38,32 +69,117 @@ interface FormErrors {
   studyReminder?: string
 }
 
-export default function Settings() {
-  const { settings, updateSettings } = useSettings()
-  const { dark, toggle } = useTheme()
+interface SettingsSection {
+  id: string
+  label: string
+  icon: React.ReactNode
+  description: string
+}
 
+function getSectionIcon(id: string): React.ReactNode {
+  const size = 18
+  switch (id) {
+    case 'goal': return <IconTarget size={size} />
+    case 'ai-tutor': return <IconAITutor size={size} />
+    case 'study-plan': return <IconStudyPlan size={size} />
+    case 'appearance': return <IconPalette size={size} />
+    case 'notifications': return <IconBell size={size} />
+    case 'advanced': return <IconSliders size={size} />
+    case 'data': return <IconDatabase size={size} />
+    default: return null
+  }
+}
+
+const SETTINGS_SECTIONS: SettingsSection[] = [
+  { id: 'goal', label: 'Goal', icon: getSectionIcon('goal')!, description: 'Target band, exam date & study goals' },
+  { id: 'ai-tutor', label: 'AI Tutor', icon: getSectionIcon('ai-tutor')!, description: 'AI provider, API key & model' },
+  { id: 'study-plan', label: 'Study Plan', icon: getSectionIcon('study-plan')!, description: 'Weak skills, topics & schedule' },
+  { id: 'appearance', label: 'Appearance', icon: getSectionIcon('appearance')!, description: 'Theme mode & accent color' },
+  { id: 'notifications', label: 'Notifications', icon: getSectionIcon('notifications')!, description: 'Study reminders & alerts' },
+  { id: 'advanced', label: 'Advanced', icon: getSectionIcon('advanced')!, description: 'Deep config & CORS proxy' },
+  { id: 'data', label: 'Data', icon: getSectionIcon('data')!, description: 'Export, import & manage data' },
+]
+
+function SectionIcon({ icon }: { icon: React.ReactNode }) {
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        width: 'var(--spacing-lg)',
+        height: 'var(--spacing-lg)',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'var(--color-primary)',
+      }}
+    >
+      {icon}
+    </span>
+  )
+}
+
+export default function Settings() {
+  const navigate = useNavigate()
+  const { settings, updateSettings } = useSettings()
+  const { mode: themeMode, accentColor, setMode: setThemeMode, setAccentColor } = useTheme()
+
+  const [activeSection, setActiveSection] = useState('goal')
   const [form, setForm] = useState({ ...settings })
   const [errors, setErrors] = useState<FormErrors>({})
-  const [saved, setSaved] = useState(false)
   const [dirty, setDirty] = useState(false)
+  const [notifications, setNotifications] = useState<NotificationPrefs>(loadNotificationPrefs)
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [pageError, setPageError] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
-  const [showAdvanced, setShowAdvanced] = useState(false)
-  const [corsProxy, setCorsProxy] = useState<CorsProxyConfig>(() => {
-    try {
-      const raw = localStorage.getItem(CORS_PROXY_STORAGE_KEY)
-      if (raw) {
-        const parsed = JSON.parse(raw) as CorsProxyConfig
-        if (parsed && typeof parsed.enabled === 'boolean' && typeof parsed.proxyUrl === 'string') {
-          return parsed
-        }
-      }
-    } catch {}
-    return { enabled: false, proxyUrl: DEFAULT_CORS_PROXY }
-  })
+  const [aiTesting, setAiTesting] = useState(false)
+  const [aiTestResult, setAiTestResult] = useState<{ ok: boolean; message: string } | null>(null)
+  const [aiApiKeyInput, setAiApiKeyInput] = useState(settings.aiApiKey)
+  const [aiProviderInput, setAiProviderInput] = useState(settings.aiProvider)
+  const [aiBaseUrlInput, setAiBaseUrlInput] = useState(settings.aiBaseUrl || settings.aiEndpoint || '')
+  const [aiModelInput, setAiModelInput] = useState(settings.aiModel)
+  const [aiEnabledInput, setAiEnabledInput] = useState(settings.aiEnabled)
+
+  const [confirmAction, setConfirmAction] = useState<{
+    title: string
+    message: string
+    action: () => Promise<void> | void
+    buttonLabel: string
+    buttonVariant: 'danger' | 'primary'
+  } | null>(null)
+
+  const [showAdvancedNetwork, setShowAdvancedNetwork] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 300)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     setForm({ ...settings })
+    setAiApiKeyInput(settings.aiApiKey)
+    setAiProviderInput(settings.aiProvider)
+    setAiBaseUrlInput(settings.aiBaseUrl || settings.aiEndpoint || '')
+    setAiModelInput(settings.aiModel)
+    setAiEnabledInput(settings.aiEnabled)
   }, [settings])
+
+  useEffect(() => {
+    saveNotificationPrefs(notifications)
+  }, [notifications])
+
+  const showFeedback = useCallback((type: 'success' | 'error', message: string) => {
+    setFeedback({ type, message })
+    setTimeout(() => setFeedback(null), 4000)
+  }, [])
+
+  const currentSectionData = useMemo(
+    () => SETTINGS_SECTIONS.find(s => s.id === activeSection) ?? SETTINGS_SECTIONS[0],
+    [activeSection],
+  )
 
   function validate(): FormErrors {
     const errs: FormErrors = {}
@@ -84,436 +200,1161 @@ export default function Settings() {
     return errs
   }
 
-  function handleSave() {
+  async function handleSave() {
     const errs = validate()
     setErrors(errs)
-    if (Object.keys(errs).length > 0) return
+    if (Object.keys(errs).length > 0) {
+      setActiveSection('goal')
+      return
+    }
 
-    updateSettings({ ...form, darkMode: dark })
-    setSaved(true)
-    setDirty(false)
-    setTimeout(() => setSaved(false), 2500)
+    setSaving(true)
+    try {
+      updateSettings({
+        ...form,
+        aiApiKey: aiApiKeyInput,
+        aiProvider: aiProviderInput,
+        aiBaseUrl: aiBaseUrlInput || '',
+        aiEndpoint: aiBaseUrlInput || '',
+        aiModel: aiModelInput,
+        aiEnabled: aiEnabledInput,
+      })
+      if (notifications.enabled && 'Notification' in window) {
+        Notification.requestPermission()
+      }
+      setDirty(false)
+      showFeedback('success', 'Settings saved successfully.')
+    } catch {
+      showFeedback('error', 'Failed to save settings.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   function handleReset() {
-    const confirmed = window.confirm('Reset all settings to default values?')
-    if (!confirmed) return
-    const defaultSettings = {
-      targetBand: 7.0,
-      currentBand: 5.5,
-      examDate: '',
-      dailyStudyMinutes: 60,
-      weakSkills: [],
-      preferredTopics: [],
-      studyReminder: 'Time to study IELTS!',
-      studyGoal: 'academic' as const,
-      preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const,
-      aiApiKey: '',
-      aiProvider: 'openai' as const,
-      aiBaseUrl: '',
-      aiEndpoint: '',
-      aiModel: 'gpt-4o-mini',
-      aiEnabled: false,
-      darkMode: false,
-    }
-    setForm(defaultSettings)
-    updateSettings(defaultSettings)
-    if (dark) toggle()
-    setDirty(true)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    setConfirmAction({
+      title: 'Reset Settings',
+      message: 'Reset all settings to default values? This will not affect your learning data.',
+      action: () => {
+        const defaults = {
+          targetBand: 7.0,
+          currentBand: 5.5,
+          examDate: '',
+          dailyStudyMinutes: 60,
+          weakSkills: [],
+          preferredTopics: [],
+          studyReminder: 'Time to study IELTS!',
+          studyGoal: 'academic' as const,
+          preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const,
+          aiApiKey: '',
+          aiProvider: 'openai' as const,
+          aiBaseUrl: '',
+          aiEndpoint: '',
+          aiModel: 'gpt-4o-mini',
+          aiEnabled: false,
+          darkMode: false,
+        }
+        setForm(defaults)
+        setAiApiKeyInput('')
+        setAiProviderInput('openai')
+        setAiBaseUrlInput('')
+        setAiModelInput('gpt-4o-mini')
+        setAiEnabledInput(false)
+        updateSettings(defaults)
+        setThemeMode('system')
+        setAccentColor('#2563eb')
+        setNotifications({ enabled: false, reminderTime: '09:00' })
+        setDirty(true)
+        showFeedback('success', 'Settings reset to defaults.')
+      },
+      buttonLabel: 'Reset Settings',
+      buttonVariant: 'danger',
+    })
   }
 
   function toggleArrayItem(arr: string[], item: string): string[] {
     return arr.includes(item) ? arr.filter(i => i !== item) : [...arr, item]
   }
 
-  return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-          Settings
-        </h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Configure your IELTS learning goals and preferences
-        </p>
-      </div>
+  async function handleExport() {
+    try {
+      const data = await DatabaseService.exportAll()
+      const json = JSON.stringify(data, null, 2)
+      const blob = new Blob([json], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const date = new Date().toISOString().slice(0, 10)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `ielts-backup-${date}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      showFeedback('success', 'Backup exported successfully.')
+    } catch (err) {
+      showFeedback('error', err instanceof Error ? err.message : 'Export failed')
+    }
+  }
 
-      {saved && (
-        <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/30 dark:text-green-400">
-          <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-          Settings saved successfully.
+  function handleFileSelected(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (evt) => {
+      try {
+        const raw = JSON.parse(evt.target?.result as string)
+        if (!raw || typeof raw.version !== 'number') {
+          showFeedback('error', 'Invalid backup file format.')
+          return
+        }
+        setConfirmAction({
+          title: 'Import Backup',
+          message: `Import backup created on ${new Date(raw.exportedAt).toLocaleString()}? This will overwrite ALL current data.`,
+          action: async () => {
+            try {
+              await DatabaseService.importAll(raw as AppExportData)
+              showFeedback('success', 'Data imported successfully.')
+            } catch (err) {
+              showFeedback('error', err instanceof Error ? err.message : 'Import failed.')
+            }
+          },
+          buttonLabel: 'Import & Overwrite',
+          buttonVariant: 'danger',
+        })
+      } catch {
+        showFeedback('error', 'Could not parse file.')
+      }
+    }
+    reader.onerror = () => showFeedback('error', 'Failed to read file')
+    reader.readAsText(file)
+    e.target.value = ''
+  }
+
+  function handleClearAll() {
+    setConfirmAction({
+      title: 'Clear All Data',
+      message: 'Delete ALL your data including vocabulary, tasks, sessions, notes, mistakes, and mock tests. This action cannot be undone. Export a backup first.',
+      action: async () => {
+        await DatabaseService.resetAll()
+        window.location.reload()
+      },
+      buttonLabel: 'Delete Everything',
+      buttonVariant: 'danger',
+    })
+  }
+
+  function handleRequestNotification() {
+    if (!('Notification' in window)) {
+      showFeedback('error', 'Notifications are not supported in this browser.')
+      return
+    }
+    Notification.requestPermission().then(perm => {
+      if (perm === 'granted') {
+        showFeedback('success', 'Notifications enabled.')
+      } else {
+        showFeedback('error', 'Notification permission denied.')
+      }
+    })
+  }
+
+  async function handleTestConnection() {
+    if (!aiApiKeyInput) {
+      setAiTestResult({ ok: false, message: 'Enter an API key first.' })
+      return
+    }
+    setAiTesting(true)
+    setAiTestResult(null)
+    try {
+      const result = await testConnection({
+        apiKey: aiApiKeyInput,
+        baseUrl: aiBaseUrlInput || OPENAI_BASE_URL,
+        model: aiModelInput || DEFAULT_MODEL,
+      })
+      setAiTestResult({ ok: result.ok, message: result.message })
+    } catch {
+      setAiTestResult({ ok: false, message: 'Connection test failed. Check your settings.' })
+    } finally {
+      setAiTesting(false)
+    }
+  }
+
+  function setSectionRef(id: string, el: HTMLDivElement | null) {
+    sectionRefs.current[id] = el
+  }
+
+  function scrollToSection(id: string) {
+    setActiveSection(id)
+  }
+
+  if (pageError) {
+    return (
+      <div style={{ maxWidth: '768px', margin: '0 auto' }}>
+        <ErrorState
+          title="Failed to load settings"
+          message={pageError}
+          onRetry={() => {
+            setPageError(null)
+            setLoading(true)
+            setTimeout(() => setLoading(false), 500)
+          }}
+          variant="card"
+        />
+      </div>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+        <div style={{ marginBottom: 'var(--spacing-lg)' }}>
+          <LoadingSkeleton variant="text" width="160px" height="28px" />
+          <div style={{ marginTop: 'var(--spacing-xs)' }}>
+            <LoadingSkeleton variant="text" width="280px" />
+          </div>
+        </div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '200px 1fr',
+            gap: 'var(--spacing-lg)',
+          }}
+          className="max-lg:hidden"
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+            <LoadingSkeleton variant="rect" count={7} height="40px" />
+          </div>
+          <LoadingSkeleton variant="card" height="400px" />
+        </div>
+        <div className="lg:hidden">
+          <LoadingSkeleton variant="card" height="400px" />
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ maxWidth: '1280px', margin: '0 auto', paddingTop: 'var(--spacing-md)' }}>
+      <PageHeader
+        icon={<IconSettings size={22} />}
+        title="Settings"
+        description="Configure your IELTS learning goals and preferences"
+      />
+
+      {feedback && (
+        <div
+          role="alert"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--spacing-xs)',
+            padding: 'var(--spacing-sm) var(--spacing-md)',
+            borderRadius: 'var(--radius-lg)',
+            marginBottom: 'var(--spacing-md)',
+            fontSize: 'var(--text-sm)',
+            border: '1px solid',
+            backgroundColor: feedback.type === 'success' ? 'var(--color-success-light)' : 'var(--color-danger-light)',
+            borderColor: feedback.type === 'success' ? 'var(--color-success)' : 'var(--color-danger)',
+            color: feedback.type === 'success' ? 'var(--color-success)' : 'var(--color-danger)',
+          }}
+        >
+          {feedback.type === 'success' ? <IconCheck size={16} /> : <IconAlertCircle size={16} />}
+          {feedback.message}
         </div>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>IELTS Goal Settings</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-5">
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <label htmlFor="target-band" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Target Band
-              </label>
-              <select
-                id="target-band"
-                value={form.targetBand}
-                onChange={(e) => { setForm(prev => ({ ...prev, targetBand: parseFloat(e.target.value) })); setDirty(true) }}
-                className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-slate-700 dark:text-slate-100 ${
-                  errors.targetBand ? 'border-red-400 dark:border-red-500' : 'border-slate-300 dark:border-slate-600'
-                }`}
-              >
-                {BAND_OPTIONS.map(b => (
-                  <option key={b} value={b}>{b.toFixed(1)}</option>
-                ))}
-              </select>
-              {errors.targetBand && <p className="mt-1 text-xs text-red-500">{errors.targetBand}</p>}
-            </div>
-            <div>
-              <label htmlFor="current-band" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Current Estimated Band
-              </label>
-              <select
-                id="current-band"
-                value={form.currentBand}
-                onChange={(e) => { setForm(prev => ({ ...prev, currentBand: parseFloat(e.target.value) })); setDirty(true) }}
-                className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-slate-700 dark:text-slate-100 ${
-                  errors.currentBand ? 'border-red-400 dark:border-red-500' : 'border-slate-300 dark:border-slate-600'
-                }`}
-              >
-                {BAND_OPTIONS.map(b => (
-                  <option key={b} value={b}>{b.toFixed(1)}</option>
-                ))}
-              </select>
-              {errors.currentBand && <p className="mt-1 text-xs text-red-500">{errors.currentBand}</p>}
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="exam-date" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Exam Date
-            </label>
-            <input
-              id="exam-date"
-              type="date"
-              value={form.examDate}
-              onChange={(e) => { setForm(prev => ({ ...prev, examDate: e.target.value })); setDirty(true) }}
-              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-100"
-            />
-            <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Leave empty if not yet scheduled</p>
-          </div>
-
-          <div>
-            <label htmlFor="daily-study" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Daily Study Time (minutes)
-            </label>
-            <input
-              id="daily-study"
-              type="number"
-              min={1}
-              max={1440}
-              value={form.dailyStudyMinutes}
-              onChange={(e) => { setForm(prev => ({ ...prev, dailyStudyMinutes: Math.max(1, parseInt(e.target.value) || 1) })); setDirty(true) }}
-              className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-slate-700 dark:text-slate-100 ${
-                errors.dailyStudyMinutes ? 'border-red-400 dark:border-red-500' : 'border-slate-300 dark:border-slate-600'
-              }`}
-            />
-            {errors.dailyStudyMinutes && <p className="mt-1 text-xs text-red-500">{errors.dailyStudyMinutes}</p>}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Weak Skills</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-2">
-            {SKILL_OPTIONS.map(skill => (
-              <button
-                key={skill}
-                type="button"
-                onClick={() => { setForm(prev => ({ ...prev, weakSkills: toggleArrayItem(prev.weakSkills, skill) })); setDirty(true) }}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                  form.weakSkills.includes(skill)
-                    ? 'bg-red-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600'
-                }`}
-              >
-                {skill}
-              </button>
-            ))}
-          </div>
-          <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">Select your weak areas to focus your study plan</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Preferred Topics</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-2">
-            {IELTS_TOPICS.map(topic => (
-              <button
-                key={topic}
-                type="button"
-                onClick={() => { setForm(prev => ({ ...prev, preferredTopics: toggleArrayItem(prev.preferredTopics, topic) })); setDirty(true) }}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                  form.preferredTopics.includes(topic)
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600'
-                }`}
-              >
-                {topic}
-              </button>
-            ))}
-          </div>
-          <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">Select topics you prefer to practice with</p>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Study Goal</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-3">
+      <div
+        style={{
+          display: 'flex',
+          gap: 'var(--spacing-lg)',
+          alignItems: 'flex-start',
+        }}
+      >
+        <aside
+          className="max-lg:hidden"
+          style={{
+            width: '220px',
+            flexShrink: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2px',
+            position: 'sticky',
+            top: 'var(--spacing-md)',
+          }}
+        >
+          {SETTINGS_SECTIONS.map((section) => (
             <button
+              key={section.id}
               type="button"
-              onClick={() => { setForm(prev => ({ ...prev, studyGoal: 'academic' })); setDirty(true) }}
-              className={`rounded-xl border-2 p-4 text-left transition-all ${
-                form.studyGoal === 'academic'
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-slate-200 dark:border-slate-700 hover:border-blue-300'
-              }`}
+              onClick={() => scrollToSection(section.id)}
+              role="tab"
+              aria-selected={activeSection === section.id}
+              aria-controls={`section-${section.id}`}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--spacing-sm)',
+                padding: 'var(--spacing-sm) var(--spacing-md)',
+                borderRadius: 'var(--radius-lg)',
+                border: 'none',
+                background: activeSection === section.id ? 'var(--color-primary-light)' : 'transparent',
+                color: activeSection === section.id ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                cursor: 'pointer',
+                fontSize: 'var(--text-sm)',
+                fontWeight: activeSection === section.id ? 600 : 400,
+                textAlign: 'left',
+                transition: 'all var(--transition-fast)',
+                width: '100%',
+              }}
+              onMouseEnter={(e) => {
+                if (activeSection !== section.id) {
+                  e.currentTarget.style.background = 'var(--color-surface-alt)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeSection !== section.id) {
+                  e.currentTarget.style.background = 'transparent'
+                }
+              }}
             >
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IELTS Academic</p>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">For university admission</p>
+              <SectionIcon icon={section.icon} />
+              <div>
+                <div style={{ fontWeight: activeSection === section.id ? 600 : 500 }}>{section.label}</div>
+                <div style={{ fontSize: '11px', color: 'var(--color-muted)', marginTop: '1px' }}>{section.description}</div>
+              </div>
             </button>
-            <button
-              type="button"
-              onClick={() => { setForm(prev => ({ ...prev, studyGoal: 'general' })); setDirty(true) }}
-              className={`rounded-xl border-2 p-4 text-left transition-all ${
-                form.studyGoal === 'general'
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-slate-200 dark:border-slate-700 hover:border-blue-300'
-              }`}
-            >
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">IELTS General</p>
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">For work or migration</p>
-            </button>
-          </div>
-        </CardContent>
-      </Card>
+          ))}
+        </aside>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Study Schedule</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="mb-3 text-sm text-slate-500 dark:text-slate-400">Which days do you plan to study?</p>
-          <div className="flex flex-wrap gap-2">
-            {DAYS_OF_WEEK.map(day => (
-              <button
-                key={day.value}
-                type="button"
-                onClick={() => { setForm(prev => ({ ...prev, preferredSchedule: toggleArrayItem(prev.preferredSchedule, day.value) as typeof prev.preferredSchedule })); setDirty(true) }}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                  form.preferredSchedule.includes(day.value as typeof form.preferredSchedule[number])
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600'
-                }`}
-              >
-                {day.label.slice(0, 3)}
-              </button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Study Reminder</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div>
-            <label htmlFor="reminder-text" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Reminder Text
-            </label>
-            <input
-              id="reminder-text"
-              type="text"
-              value={form.studyReminder}
-              onChange={(e) => { setForm(prev => ({ ...prev, studyReminder: e.target.value })); setDirty(true) }}
-              maxLength={200}
-              className={`mt-1 w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:bg-slate-700 dark:text-slate-100 ${
-                errors.studyReminder ? 'border-red-400 dark:border-red-500' : 'border-slate-300 dark:border-slate-600'
-              }`}
-              placeholder="e.g., Time to study IELTS!"
-            />
-            {errors.studyReminder && <p className="mt-1 text-xs text-red-500">{errors.studyReminder}</p>}
-            <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
-              {form.studyReminder.length}/200 characters
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <AISettings />
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Appearance</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Dark Mode</p>
-              <p className="text-xs text-slate-400 dark:text-slate-500">Switch between light and dark theme</p>
-            </div>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={dark}
-              onClick={toggle}
-              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
-                dark ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
-              }`}
-            >
-              <span
-                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform dark:bg-slate-200 ${
-                  dark ? 'translate-x-5' : 'translate-x-0'
-                }`}
-              />
-            </button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Data Management</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Export, import, and manage your learning data. All data is stored locally in your browser.
-          </p>
-          <Link
-            to="/settings/data"
-            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+        <div className="lg:hidden settings-mobile-tabs" style={{ marginBottom: 'var(--spacing-md)', width: '100%', overflowX: 'auto', position: 'relative', scrollbarWidth: 'thin' }}>
+          <div
+            role="tablist"
+            style={{
+              display: 'flex',
+              gap: 'var(--spacing-2xs)',
+              paddingBottom: 'var(--spacing-xs)',
+              minWidth: 'max-content',
+              WebkitOverflowScrolling: 'touch',
+            }}
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            Open Data Management
-          </Link>
-        </CardContent>
-      </Card>
+            {SETTINGS_SECTIONS.map((section) => (
+              <button
+                key={section.id}
+                type="button"
+                role="tab"
+                aria-selected={activeSection === section.id}
+                aria-controls={`section-${section.id}`}
+                onClick={() => scrollToSection(section.id)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-2xs)',
+                  padding: 'var(--spacing-xs) var(--spacing-sm)',
+                  borderRadius: 'var(--radius-lg)',
+                  border: 'none',
+                  background: activeSection === section.id ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
+                  color: activeSection === section.id ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                  cursor: 'pointer',
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: activeSection === section.id ? 600 : 400,
+                  whiteSpace: 'nowrap',
+                  transition: 'all var(--transition-fast)',
+                  minHeight: '44px',
+                }}
+              >
+                <SectionIcon icon={section.icon} />
+                {section.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-      <div className="pt-4">
+        <main
+          style={{ flex: 1, minWidth: 0 }}
+          id={`section-${activeSection}`}
+          role="tabpanel"
+          aria-labelledby={activeSection}
+        >
+          <div
+            ref={(el) => setSectionRef(activeSection, el)}
+            style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}
+          >
+            <Card>
+              <CardHeader>
+                <CardTitle style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+                  <SectionIcon icon={currentSectionData?.icon ?? ''} />
+                  {currentSectionData?.label ?? ''} Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {activeSection === 'goal' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                        gap: 'var(--spacing-md)',
+                      }}
+                    >
+                      <Select
+                        id="target-band"
+                        label="Target Band"
+                        value={form.targetBand}
+                        onChange={(e) => { setForm(prev => ({ ...prev, targetBand: parseFloat((e.target as HTMLSelectElement).value) })); setDirty(true) }}
+                        error={errors.targetBand}
+                        options={BAND_OPTIONS.map(b => ({ value: String(b), label: b.toFixed(1) }))}
+                      />
+                      <Select
+                        id="current-band"
+                        label="Current Estimated Band"
+                        value={form.currentBand}
+                        onChange={(e) => { setForm(prev => ({ ...prev, currentBand: parseFloat((e.target as HTMLSelectElement).value) })); setDirty(true) }}
+                        error={errors.currentBand}
+                        options={BAND_OPTIONS.map(b => ({ value: String(b), label: b.toFixed(1) }))}
+                      />
+                    </div>
+
+                    <Input
+                      id="exam-date"
+                      type="date"
+                      label="Exam Date"
+                      value={form.examDate}
+                      onChange={(e) => { setForm(prev => ({ ...prev, examDate: (e.target as HTMLInputElement).value })); setDirty(true) }}
+                      helperText={form.examDate
+                        ? `${Math.max(0, Math.ceil((new Date(form.examDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))} days until exam`
+                        : 'Leave empty if not yet scheduled'
+                      }
+                    />
+
+                    <Input
+                      id="daily-study"
+                      type="number"
+                      label="Daily Study Time (minutes)"
+                      min={1}
+                      max={1440}
+                      value={form.dailyStudyMinutes}
+                      onChange={(e) => { setForm(prev => ({ ...prev, dailyStudyMinutes: Math.max(1, parseInt((e.target as HTMLInputElement).value) || 1) })); setDirty(true) }}
+                      error={errors.dailyStudyMinutes}
+                      helperText={`${form.dailyStudyMinutes} min/day = ${Math.round(form.dailyStudyMinutes / 60 * 10) / 10}h/day`}
+                    />
+
+                    <div>
+                      <label
+                        style={{
+                          display: 'block',
+                          marginBottom: 'var(--spacing-xs)',
+                          fontSize: 'var(--text-sm)',
+                          fontWeight: 500,
+                          color: 'var(--color-text-secondary)',
+                        }}
+                      >
+                        Study Goal
+                      </label>
+                      <div
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr 1fr',
+                          gap: 'var(--spacing-sm)',
+                        }}
+                      >
+                        {(['academic', 'general'] as const).map((goal) => (
+                          <button
+                            key={goal}
+                            type="button"
+                            onClick={() => { setForm(prev => ({ ...prev, studyGoal: goal })); setDirty(true) }}
+                            style={{
+                              padding: 'var(--spacing-md)',
+                              borderRadius: 'var(--radius-xl)',
+                              border: `2px solid ${form.studyGoal === goal ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                              background: form.studyGoal === goal ? 'var(--color-primary-light)' : 'transparent',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              transition: 'all var(--transition-fast)',
+                            }}
+                          >
+                            <div style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>
+                              IELTS {goal.charAt(0).toUpperCase() + goal.slice(1)}
+                            </div>
+                            <div style={{ marginTop: 'var(--spacing-2xs)', fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+                              {goal === 'academic' ? 'For university admission' : 'For work or migration'}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeSection === 'ai-tutor' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+                    <div
+                      style={{
+                        padding: 'var(--spacing-md)',
+                        borderRadius: 'var(--radius-lg)',
+                        background: 'var(--color-primary-light)',
+                        border: '1px solid var(--color-border)',
+                        fontSize: 'var(--text-sm)',
+                        lineHeight: 1.6,
+                      }}
+                    >
+                      <p style={{ margin: '0 0 var(--spacing-xs)', fontWeight: 600, color: 'var(--color-text)' }}>
+                        Your Data Stays Local
+                      </p>
+                      <p style={{ margin: 0, color: 'var(--color-text-secondary)' }}>
+                        Your API key is stored only in this browser. It is never sent to any
+                        server except the AI provider you configure. The app works fully without an API key.
+                      </p>
+                    </div>
+
+                    <ToggleSwitch
+                      enabled={aiEnabledInput}
+                      onChange={(val) => { setAiEnabledInput(val); setDirty(true) }}
+                      label="Enable AI Features"
+                      description="Turn on AI-powered study tools including AI Tutor"
+                    />
+
+                    {aiEnabledInput && (
+                      <>
+                        <Select
+                          id="ai-provider"
+                          label="Provider"
+                          value={aiProviderInput}
+                          onChange={(e) => {
+                            const val = (e.target as HTMLSelectElement).value
+                            setAiProviderInput(val as 'openai' | 'custom')
+                            if (val === 'openai') {
+                              setAiBaseUrlInput('')
+                              setAiModelInput('gpt-4o-mini')
+                            }
+                            setAiTestResult(null)
+                            setDirty(true)
+                          }}
+                          options={[
+                            { value: 'openai', label: 'OpenAI' },
+                            { value: 'custom', label: 'Custom (OpenAI-compatible)' },
+                          ]}
+                        />
+
+                        <Input
+                          id="ai-key"
+                          type="password"
+                          label="API Key"
+                          value={aiApiKeyInput}
+                          onChange={(e) => { setAiApiKeyInput((e.target as HTMLInputElement).value); setAiTestResult(null); setDirty(true) }}
+                          placeholder="sk-..."
+                          autoComplete="off"
+                          helperText={
+                            aiApiKeyInput
+                              ? `${aiApiKeyInput.slice(0, 8)}...${aiApiKeyInput.slice(-4)}`
+                              : 'No API key set'
+                          }
+                        />
+
+                        <Input
+                          id="ai-base-url"
+                          type="text"
+                          label="Base URL"
+                          value={aiBaseUrlInput}
+                          onChange={(e) => { setAiBaseUrlInput((e.target as HTMLInputElement).value); setAiTestResult(null); setDirty(true) }}
+                          placeholder={OPENAI_BASE_URL}
+                        />
+
+                        <Input
+                          id="ai-model"
+                          type="text"
+                          label="Model"
+                          value={aiModelInput}
+                          onChange={(e) => { setAiModelInput((e.target as HTMLInputElement).value); setAiTestResult(null); setDirty(true) }}
+                          placeholder={DEFAULT_MODEL}
+                        />
+
+                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                          <Button variant="outline" size="sm" onClick={handleTestConnection} loading={aiTesting}>
+                            Test Connection
+                          </Button>
+                          {aiTestResult && (
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 'var(--spacing-2xs)',
+                                padding: 'var(--spacing-xs) var(--spacing-sm)',
+                                borderRadius: 'var(--radius-md)',
+                                fontSize: 'var(--text-sm)',
+                                background: aiTestResult.ok ? 'var(--color-success-light)' : 'var(--color-danger-light)',
+                                color: aiTestResult.ok ? 'var(--color-success)' : 'var(--color-danger)',
+                              }}
+                            >
+                              {aiTestResult.ok ? <IconCheck size={16} /> : <IconClose size={16} />}
+                              {aiTestResult.message}
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+
+                    {aiEnabledInput && !aiApiKeyInput && (
+                      <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
+                        AI features are enabled but no API key is configured. Enter an API key to use AI Tutor.
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {activeSection === 'study-plan' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+                    <div>
+                      <p style={{ margin: '0 0 var(--spacing-sm)', fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-text)' }}>
+                        Weak Skills
+                      </p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
+                        {SKILL_OPTIONS.map(skill => {
+                          const isSelected = form.weakSkills.includes(skill)
+                          return (
+                            <button
+                              key={skill}
+                              type="button"
+                              onClick={() => { setForm(prev => ({ ...prev, weakSkills: toggleArrayItem(prev.weakSkills, skill) })); setDirty(true) }}
+                              style={{
+                                padding: 'var(--spacing-xs) var(--spacing-sm)',
+                                borderRadius: 'var(--radius-lg)',
+                                border: '1px solid',
+                                borderColor: isSelected ? 'var(--color-danger)' : 'var(--color-border)',
+                                background: isSelected ? 'var(--color-danger-light)' : 'transparent',
+                                color: isSelected ? 'var(--color-danger)' : 'var(--color-text-secondary)',
+                                cursor: 'pointer',
+                                fontSize: 'var(--text-xs)',
+                                fontWeight: isSelected ? 600 : 400,
+                                transition: 'all var(--transition-fast)',
+                                minHeight: '36px',
+                              }}
+                            >
+                              {skill}
+                            </button>
+                          )
+                        })}
+                      </div>
+                      <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
+                        {form.weakSkills.length === 0
+                          ? 'Select your weak areas to focus your study plan'
+                          : `${form.weakSkills.length} skill${form.weakSkills.length > 1 ? 's' : ''} selected`
+                        }
+                      </p>
+                    </div>
+
+                    <div>
+                      <p style={{ margin: '0 0 var(--spacing-sm)', fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-text)' }}>
+                        Preferred Topics
+                      </p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
+                        {IELTS_TOPICS.map(topic => {
+                          const isSelected = form.preferredTopics.includes(topic)
+                          return (
+                            <button
+                              key={topic}
+                              type="button"
+                              onClick={() => { setForm(prev => ({ ...prev, preferredTopics: toggleArrayItem(prev.preferredTopics, topic) })); setDirty(true) }}
+                              style={{
+                                padding: 'var(--spacing-xs) var(--spacing-sm)',
+                                borderRadius: 'var(--radius-lg)',
+                                border: '1px solid',
+                                borderColor: isSelected ? 'var(--color-primary)' : 'var(--color-border)',
+                                background: isSelected ? 'var(--color-primary-light)' : 'transparent',
+                                color: isSelected ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                                cursor: 'pointer',
+                                fontSize: 'var(--text-xs)',
+                                fontWeight: isSelected ? 600 : 400,
+                                transition: 'all var(--transition-fast)',
+                                minHeight: '36px',
+                              }}
+                            >
+                              {topic}
+                            </button>
+                          )
+                        })}
+                      </div>
+                      <p style={{ margin: 'var(--spacing-xs) 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
+                        {form.preferredTopics.length === 0
+                          ? 'Select topics you prefer to practice with'
+                          : `${form.preferredTopics.length} topic${form.preferredTopics.length > 1 ? 's' : ''} selected`
+                        }
+                      </p>
+                    </div>
+
+                    <div>
+                      <p style={{ margin: '0 0 var(--spacing-sm)', fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-text)' }}>
+                        Study Schedule
+                      </p>
+                      <p style={{ margin: '0 0 var(--spacing-xs)', fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+                        Which days do you plan to study?
+                      </p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
+                        {DAYS_OF_WEEK.map(day => {
+                          const isSelected = form.preferredSchedule.includes(day.value as typeof form.preferredSchedule[number])
+                          return (
+                            <button
+                              key={day.value}
+                              type="button"
+                              onClick={() => { setForm(prev => ({ ...prev, preferredSchedule: toggleArrayItem(prev.preferredSchedule, day.value) as typeof prev.preferredSchedule })); setDirty(true) }}
+                              style={{
+                                padding: 'var(--spacing-xs) var(--spacing-sm)',
+                                borderRadius: 'var(--radius-lg)',
+                                border: '1px solid',
+                                borderColor: isSelected ? 'var(--color-primary)' : 'var(--color-border)',
+                                background: isSelected ? 'var(--color-primary-light)' : 'transparent',
+                                color: isSelected ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+                                cursor: 'pointer',
+                                fontSize: 'var(--text-xs)',
+                                fontWeight: isSelected ? 600 : 400,
+                                transition: 'all var(--transition-fast)',
+                                minHeight: '36px',
+                                minWidth: '44px',
+                              }}
+                              aria-label={day.label}
+                            >
+                              {day.label.slice(0, 3)}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+
+                    <Input
+                      id="reminder-text"
+                      type="text"
+                      label="Study Reminder"
+                      value={form.studyReminder}
+                      onChange={(e) => { setForm(prev => ({ ...prev, studyReminder: (e.target as HTMLInputElement).value })); setDirty(true) }}
+                      maxLength={200}
+                      error={errors.studyReminder}
+                      helperText={`${form.studyReminder.length}/200 characters`}
+                      placeholder="e.g., Time to study IELTS!"
+                    />
+                  </div>
+                )}
+
+                {activeSection === 'appearance' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+                    <Select
+                      id="theme-mode"
+                      label="Theme Mode"
+                      value={themeMode}
+                      onChange={(e) => { setThemeMode(e.target.value as ThemeMode); setDirty(true) }}
+                      options={[
+                        { value: 'light', label: 'Light' },
+                        { value: 'dark', label: 'Dark' },
+                        { value: 'system', label: 'System' },
+                      ]}
+                    />
+
+                    <div>
+                      <label
+                        style={{
+                          display: 'block',
+                          marginBottom: 'var(--spacing-sm)',
+                          fontSize: 'var(--text-sm)',
+                          fontWeight: 500,
+                          color: 'var(--color-text-secondary)',
+                        }}
+                      >
+                        Accent Color
+                      </label>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-md)' }}>
+                        {ACCENT_COLOR_PRESETS.map(c => (
+                          <button
+                            key={c.value}
+                            type="button"
+                            title={c.name}
+                            onClick={() => { setAccentColor(c.value); setDirty(true) }}
+                            style={{
+                              width: '36px',
+                              height: '36px',
+                              borderRadius: 'var(--radius-full)',
+                              border: '3px solid',
+                              borderColor: accentColor === c.value ? 'var(--color-primary)' : 'transparent',
+                              backgroundColor: c.value,
+                              cursor: 'pointer',
+                              transition: 'all var(--transition-fast)',
+                              outline: 'none',
+                              transform: accentColor === c.value ? 'scale(1.15)' : 'scale(1)',
+                            }}
+                            aria-label={`Set accent color to ${c.name}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <div
+                      style={{
+                        padding: 'var(--spacing-md)',
+                        borderRadius: 'var(--radius-lg)',
+                        background: 'var(--color-surface-alt)',
+                        border: '1px solid var(--color-border)',
+                      }}
+                    >
+                      <p style={{ margin: 0, fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-text)' }}>
+                        Preview
+                      </p>
+                      <div
+                        style={{
+                          marginTop: 'var(--spacing-sm)',
+                          padding: 'var(--spacing-md)',
+                          borderRadius: 'var(--radius-lg)',
+                          background: 'var(--color-surface)',
+                          border: '1px solid var(--color-border)',
+                        }}
+                      >
+                        <div style={{ display: 'flex', gap: 'var(--spacing-sm)', alignItems: 'center' }}>
+                          <div style={{
+                            width: '12px', height: '12px', borderRadius: 'var(--radius-full)',
+                            backgroundColor: 'var(--color-primary)',
+                          }} />
+                          <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text)' }}>
+                            Primary color preview
+                          </span>
+                          <span style={{
+                            padding: '2px 8px', borderRadius: 'var(--radius-md)',
+                            background: 'var(--color-primary)', color: 'var(--color-text-inverse)',
+                            fontSize: 'var(--text-xs)', fontWeight: 600,
+                          }}>
+                            Badge
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeSection === 'notifications' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+                    <ToggleSwitch
+                      enabled={notifications.enabled}
+                      onChange={(val) => {
+                        setNotifications(prev => ({ ...prev, enabled: val }))
+                        if (val) handleRequestNotification()
+                      }}
+                      label="Enable Notifications"
+                      description="Get reminded to study daily"
+                    />
+
+                    {notifications.enabled && (
+                      <>
+                        <Input
+                          id="reminder-time"
+                          type="time"
+                          label="Reminder Time"
+                          value={notifications.reminderTime}
+                          onChange={(e) => setNotifications(prev => ({ ...prev, reminderTime: (e.target as HTMLInputElement).value }))}
+                        />
+
+                        <div
+                          style={{
+                            padding: 'var(--spacing-sm) var(--spacing-md)',
+                            borderRadius: 'var(--radius-lg)',
+                            background: 'var(--color-surface-alt)',
+                            border: '1px solid var(--color-border)',
+                          }}
+                        >
+                          <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+                            {!('Notification' in window) && 'Notifications not supported in this browser. '}
+                            Study reminder set for{' '}
+                            <strong>{notifications.reminderTime}</strong>
+                            {notifications.enabled ? '. Notifications are active.' : ''}
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {activeSection === 'advanced' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+                    <div
+                      style={{
+                        padding: 'var(--spacing-sm) var(--spacing-md)',
+                        borderRadius: 'var(--radius-lg)',
+                        background: 'var(--color-warning-light)',
+                        border: '1px solid var(--color-warning)',
+                        fontSize: 'var(--text-sm)',
+                        color: 'var(--color-warning)',
+                      }}
+                    >
+                      Only change these settings if you know what you are doing.
+                    </div>
+
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() => setShowAdvancedNetwork(!showAdvancedNetwork)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                          padding: 'var(--spacing-sm)',
+                          borderRadius: 'var(--radius-lg)',
+                          border: 'none',
+                          background: 'transparent',
+                          cursor: 'pointer',
+                          color: 'var(--color-text)',
+                          fontSize: 'var(--text-sm)',
+                          fontWeight: 500,
+                        }}
+                      >
+                        <span>CORS Proxy Configuration</span>
+                        <IconChevronDown
+                          size={16}
+                          style={{
+                            transition: 'transform var(--transition-fast)',
+                            transform: showAdvancedNetwork ? 'rotate(180deg)' : 'none',
+                          }}
+                        />
+                      </button>
+
+                      {showAdvancedNetwork && (
+                        <div style={{ padding: 'var(--spacing-sm) 0', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+                          <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+                            Some public API sources (Tatoeba, OER Commons) do not support direct browser access due to CORS restrictions.
+                            Enable a CORS proxy to use them.
+                          </p>
+                          <CorsProxySection />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {activeSection === 'data' && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+                    <p style={{ margin: 0, fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
+                      Your data is stored locally in this browser. Download a backup regularly to avoid data loss.
+                    </p>
+
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-sm)' }}>
+                      <Button onClick={handleExport}>
+                        <IconDownload size={16} />
+                        Export Backup
+                      </Button>
+
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".json"
+                        onChange={handleFileSelected}
+                        style={{ display: 'none' }}
+                        aria-hidden="true"
+                      />
+                      <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
+                        <IconUpload size={16} />
+                        Import Backup
+                      </Button>
+
+                      <Button variant="danger" onClick={handleClearAll}>
+                        <IconDelete size={16} />
+                        Clear All Data
+                      </Button>
+                    </div>
+
+                    <div
+                      style={{
+                        padding: 'var(--spacing-md)',
+                        borderRadius: 'var(--radius-lg)',
+                        background: 'var(--color-surface-alt)',
+                        border: '1px solid var(--color-border)',
+                      }}
+                    >
+                      <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+                        All data is stored locally. No data is ever sent to any server.
+                        Regular backups are recommended in JSON format.
+                      </p>
+                    </div>
+
+                    <div
+                      style={{
+                        padding: 'var(--spacing-md)',
+                        borderRadius: 'var(--radius-lg)',
+                        background: 'var(--color-primary-light)',
+                        border: '1px solid var(--color-border)',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                        <IconExtension size={20} />
+                        <div style={{ flex: 1 }}>
+                          <p style={{ margin: 0, fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-text)' }}>
+                            Browser Extension
+                          </p>
+                          <p style={{ margin: '2px 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+                            Manage vocabulary sync, import articles, and check connection status
+                          </p>
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="primary"
+                          onClick={() => navigate('/settings/extension')}
+                        >
+                          Manage Extension
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 'var(--spacing-md)',
+                padding: 'var(--spacing-md) 0',
+                borderTop: '1px solid var(--color-border)',
+              }}
+            >
+              <Button onClick={handleSave} disabled={!dirty || saving} loading={saving}>
+                {saving ? 'Saving...' : 'Save Settings'}
+              </Button>
+              <Button variant="ghost" onClick={handleReset}>
+                Reset to Defaults
+              </Button>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <ConfirmDialog
+        open={confirmAction !== null}
+        onClose={() => setConfirmAction(null)}
+        title={confirmAction?.title ?? ''}
+        message={confirmAction?.message ?? ''}
+        confirmLabel={confirmAction?.buttonLabel}
+        cancelLabel="Cancel"
+        variant={confirmAction?.buttonVariant ?? 'danger'}
+        onConfirm={async () => {
+          await confirmAction?.action()
+        }}
+      />
+    </div>
+  )
+}
+
+function CorsProxySection() {
+  const [corsEnabled, setCorsEnabled] = useState(() => {
+    try {
+      const raw = localStorage.getItem('ielts-cors-proxy')
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        return parsed.enabled ?? false
+      }
+    } catch {}
+    return false
+  })
+  const [corsUrl, setCorsUrl] = useState(() => {
+    try {
+      const raw = localStorage.getItem('ielts-cors-proxy')
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        return parsed.proxyUrl || 'https://corsproxy.io/?'
+      }
+    } catch {}
+    return 'https://corsproxy.io/?'
+  })
+
+  useEffect(() => {
+    localStorage.setItem('ielts-cors-proxy', JSON.stringify({ enabled: corsEnabled, proxyUrl: corsUrl }))
+  }, [corsEnabled, corsUrl])
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div>
+          <p style={{ margin: 0, fontSize: 'var(--text-sm)', fontWeight: 500, color: 'var(--color-text)' }}>
+            Enable CORS Proxy
+          </p>
+          <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+            Routes requests through a proxy to bypass CORS restrictions
+          </p>
+        </div>
         <button
           type="button"
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="flex w-full items-center justify-between text-left"
+          role="switch"
+          aria-checked={corsEnabled}
+          onClick={() => setCorsEnabled(!corsEnabled)}
+          style={{
+            position: 'relative',
+            display: 'inline-flex',
+            height: '24px',
+            width: '44px',
+            flexShrink: 0,
+            cursor: 'pointer',
+            borderRadius: 'var(--radius-full)',
+            border: '2px solid transparent',
+            transition: 'background var(--transition-fast)',
+            background: corsEnabled ? 'var(--color-primary)' : 'var(--color-border)',
+          }}
         >
-          <div>
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Advanced</h2>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Additional configuration for advanced users</p>
-          </div>
-          <svg
-            className={`h-5 w-5 text-slate-400 transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
+          <span
+            style={{
+              display: 'inline-block',
+              height: '20px',
+              width: '20px',
+              borderRadius: 'var(--radius-full)',
+              background: 'white',
+              boxShadow: 'var(--shadow-sm)',
+              transition: 'transform var(--transition-fast)',
+              transform: corsEnabled ? 'translateX(20px)' : 'translateX(0)',
+            }}
+          />
         </button>
       </div>
 
-      {showAdvanced && (
-      <Card>
-        <CardHeader>
-          <CardTitle>CORS Proxy</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Some public API sources (Tatoeba, OER Commons) do not support direct browser access due to CORS restrictions.
-            Enable a CORS proxy to use them.
-          </p>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Enable CORS Proxy</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Routes requests through a proxy to bypass CORS</p>
-            </div>
-            <button
-              type="button"
-              role="switch"
-              aria-checked={corsProxy.enabled}
-              onClick={() => {
-                const next = { ...corsProxy, enabled: !corsProxy.enabled }
-                setCorsProxy(next)
-                localStorage.setItem(CORS_PROXY_STORAGE_KEY, JSON.stringify(next))
+      {corsEnabled && (
+        <div>
+          <label
+            htmlFor="cors-proxy-url"
+            style={{
+              display: 'block',
+              marginBottom: 'var(--spacing-2xs)',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 500,
+              color: 'var(--color-text-secondary)',
+            }}
+          >
+            Proxy URL
+          </label>
+          <div style={{ display: 'flex', gap: 'var(--spacing-xs)', alignItems: 'center' }}>
+            <input
+              id="cors-proxy-url"
+              type="url"
+              value={corsUrl}
+              onChange={(e) => setCorsUrl(e.target.value)}
+              placeholder="https://corsproxy.io/?"
+              style={{
+                flex: 1,
+                padding: 'var(--spacing-xs) var(--spacing-sm)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--color-border)',
+                background: 'var(--color-surface)',
+                color: 'var(--color-text)',
+                fontSize: 'var(--text-sm)',
               }}
-              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
-                corsProxy.enabled ? 'bg-blue-600' : 'bg-slate-300 dark:bg-slate-600'
-              }`}
-            >
-              <span
-                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transition-transform dark:bg-slate-200 ${
-                  corsProxy.enabled ? 'translate-x-5' : 'translate-x-0'
-                }`}
-              />
-            </button>
+            />
           </div>
-          {corsProxy.enabled && (
-            <div>
-              <label htmlFor="cors-proxy-url" className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                Proxy URL
-              </label>
-              <input
-                id="cors-proxy-url"
-                type="url"
-                value={corsProxy.proxyUrl}
-                onChange={(e) => {
-                  const next = { ...corsProxy, proxyUrl: e.target.value }
-                  setCorsProxy(next)
-                  localStorage.setItem(CORS_PROXY_STORAGE_KEY, JSON.stringify(next))
-                }}
-                placeholder={DEFAULT_CORS_PROXY}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
-              />
-              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                Use a CORS proxy service like{" "}
-                <a
-                  href="https://corsproxy.io/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 underline dark:text-blue-400"
-                >
-                  corsproxy.io
-                </a>{" "}
-                or host your own.
-              </p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+          <p style={{ margin: 'var(--spacing-2xs) 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
+            Use a service like{' '}
+            <a
+              href="https://corsproxy.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--color-primary)' }}
+            >
+              corsproxy.io
+            </a>{' '}
+            or host your own.
+          </p>
+        </div>
       )}
-
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <Button onClick={handleSave} disabled={!dirty}>
-          Save Settings
-        </Button>
-        <Button variant="ghost" onClick={handleReset}>
-          Reset to Defaults
-        </Button>
-      </div>
     </div>
   )
 }

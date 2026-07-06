@@ -49,22 +49,31 @@ export default function Question({ question, index, answer, onAnswer, showResult
               }`}
               style={{
                 color: isOptionCorrect
-                  ? 'var(--color-success, #16a34a)'
+                  ? 'var(--color-success)'
                   : isOptionWrong
-                    ? 'var(--color-danger, #dc2626)'
+                    ? 'var(--color-danger)'
                     : 'var(--color-text)',
               }}
             >
               <span
                 className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
                   isOptionCorrect
-                    ? 'bg-green-500 text-white'
+                    ? 'text-white'
                     : isOptionWrong
-                      ? 'bg-red-500 text-white'
+                      ? 'text-white'
                       : isSelected
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
+                        ? 'text-white'
+                        : 'text-[var(--color-text-secondary)]'
                 }`}
+                style={{
+                  backgroundColor: isOptionCorrect
+                    ? 'var(--color-success)'
+                    : isOptionWrong
+                      ? 'var(--color-danger)'
+                      : isSelected
+                        ? 'var(--color-primary)'
+                        : 'var(--color-surface-alt)',
+                }}
               >
                 {letter}
               </span>
@@ -111,9 +120,9 @@ export default function Question({ question, index, answer, onAnswer, showResult
               }`}
               style={
                 isOptionCorrect
-                  ? { backgroundColor: 'var(--color-success-light, #f0fdf4)', borderColor: 'var(--color-success, #16a34a)' }
+                  ? { backgroundColor: 'var(--color-success-light)', borderColor: 'var(--color-success)' }
                   : isOptionWrong
-                    ? { backgroundColor: 'var(--color-danger-light, #fef2f2)', borderColor: 'var(--color-danger, #dc2626)' }
+                    ? { backgroundColor: 'var(--color-danger-light)', borderColor: 'var(--color-danger)' }
                     : undefined
               }
             >
@@ -256,8 +265,8 @@ export default function Question({ question, index, answer, onAnswer, showResult
       style={
         showResult && isCorrect !== undefined
           ? {
-              borderColor: isCorrect ? 'var(--color-success, #16a34a)' : 'var(--color-danger, #dc2626)',
-              backgroundColor: isCorrect ? 'var(--color-success-light, #f0fdf4)' : 'var(--color-danger-light, #fef2f2)',
+              borderColor: isCorrect ? 'var(--color-success)' : 'var(--color-danger)',
+              backgroundColor: isCorrect ? 'var(--color-success-light)' : 'var(--color-danger-light)',
             }
           : {
               backgroundColor: 'var(--color-surface)',

@@ -1,33 +1,68 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useCallback, useRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
+import { IconClose } from '@ielts/ui'
 
 interface ModalProps {
   open: boolean
   onClose: () => void
-  title: string
+  title?: string
   children: ReactNode
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
+  footer?: ReactNode
+  closeOnOverlay?: boolean
+  showCloseButton?: boolean
 }
 
 const sizeClasses = {
-  sm: 'max-w-sm',
-  md: 'max-w-lg',
-  lg: 'max-w-2xl',
+  sm: 'w-[380px] max-w-full',
+  md: 'w-[500px] max-w-full',
+  lg: 'w-[660px] max-w-full',
+  xl: 'w-[880px] max-w-full',
+  full: 'w-full max-w-full mx-4',
 }
 
-export default function Modal({ open, onClose, title, children, size = 'md' }: ModalProps) {
+export default function Modal({
+  open,
+  onClose,
+  title,
+  children,
+  size = 'md',
+  footer,
+  closeOnOverlay = true,
+  showCloseButton = true,
+}: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
   const onCloseRef = useRef(onClose)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
   onCloseRef.current = onClose
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') onCloseRef.current()
+    if (e.key === 'Tab' && dialogRef.current) {
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      )
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault()
+          last?.focus()
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault()
+          first?.focus()
+        }
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (!open) return
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onCloseRef.current()
-    }
-
+    previousFocusRef.current = document.activeElement as HTMLElement
     document.addEventListener('keydown', handleKeyDown)
     document.body.style.overflow = 'hidden'
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
@@ -41,8 +76,9 @@ export default function Modal({ open, onClose, title, children, size = 'md' }: M
       document.removeEventListener('keydown', handleKeyDown)
       document.body.style.overflow = ''
       document.body.style.paddingRight = ''
+      previousFocusRef.current?.focus()
     }
-  }, [open])
+  }, [open, handleKeyDown])
 
   if (!open) return null
 
@@ -52,31 +88,90 @@ export default function Modal({ open, onClose, title, children, size = 'md' }: M
       role="dialog"
       aria-modal="true"
       aria-label={title}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 'var(--z-modal-backdrop)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 'var(--spacing-md)',
+        background: 'var(--color-overlay)',
+        animation: 'fadeIn var(--transition-fast)',
+      }}
       onClick={(e) => {
-        if (e.target === overlayRef.current) onClose()
+        if (closeOnOverlay && e.target === overlayRef.current) onClose()
       }}
     >
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`w-full ${sizeClasses[size]} max-h-[85vh] overflow-y-auto rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-xl focus:outline-none`}
+        style={{
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          borderRadius: 'var(--radius-2xl)',
+          border: '1px solid var(--color-border-light)',
+          background: 'var(--color-surface)',
+          boxShadow: 'var(--shadow-xl)',
+          outline: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          animation: 'slideUp var(--transition-normal)',
+        }}
+        className={sizeClasses[size]}
       >
-        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-4">
-          <h2 className="text-lg font-semibold text-[var(--color-text)]">
-            {title}
-          </h2>
-          <button
-            onClick={onClose}
-            aria-label="Close dialog"
-            className="rounded-lg p-1 text-[var(--color-muted)] hover:bg-[var(--color-surface-alt)] hover:text-[var(--color-text-secondary)]"
-          >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+        {(title || showCloseButton) && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: 'var(--spacing-md) var(--spacing-lg)',
+            borderBottom: '1px solid var(--color-border-light)',
+          }}>
+            {title && (
+              <h2 style={{ margin: 0, fontSize: 'var(--text-lg)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-text)', fontFamily: 'var(--font-sans)' }}>
+                {title}
+              </h2>
+            )}
+            {showCloseButton && (
+              <button
+                onClick={onClose}
+                aria-label="Close dialog"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 'var(--spacing-xl)',
+                  height: 'var(--spacing-xl)',
+                  borderRadius: 'var(--radius-full)',
+                  border: 'none',
+                  background: 'transparent',
+                  color: 'var(--color-muted)',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-fast)',
+                  marginLeft: 'auto',
+                }}
+              >
+                <IconClose size={18} />
+              </button>
+            )}
+          </div>
+        )}
+        <div style={{ padding: 'var(--spacing-lg)', flex: 1, overflowY: 'auto' }}>
+          {children}
         </div>
-        <div className="px-6 py-4">{children}</div>
+        {footer && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            gap: 'var(--spacing-sm)',
+            padding: 'var(--spacing-md) var(--spacing-lg)',
+            borderTop: '1px solid var(--color-border-light)',
+          }}>
+            {footer}
+          </div>
+        )}
       </div>
     </div>,
     document.body,

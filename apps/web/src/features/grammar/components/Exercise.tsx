@@ -19,9 +19,10 @@ interface ExerciseProps {
   exercises: GrammarExerciseItem[]
   topic: string
   onComplete: (results: { total: number; correct: number; mistakes: MistakeEntry[] }) => void
+  onGenerateAi?: (topic: string) => void
 }
 
-export default function Exercise({ exercises, topic, onComplete }: ExerciseProps) {
+export default function Exercise({ exercises, topic, onComplete, onGenerateAi }: ExerciseProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({})
   const [submitted, setSubmitted] = useState(false)
@@ -102,6 +103,20 @@ export default function Exercise({ exercises, topic, onComplete }: ExerciseProps
             <p className="text-sm font-medium" style={{ color: 'var(--color-muted)' }}>
               No exercises available for this topic.
             </p>
+            {onGenerateAi && (
+              <Button
+                className="mt-4"
+                size="sm"
+                onClick={() => onGenerateAi(topic)}
+                icon={
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                }
+              >
+                Generate with AI
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>

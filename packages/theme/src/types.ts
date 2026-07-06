@@ -1,3 +1,28 @@
+import type { ColorTokens } from './colors'
+import type { RadiusTokens } from './radius'
+import type { SpacingTokens } from './spacing'
+import type { TypographyTokens } from './typography'
+import type {
+  DesignTokens,
+  ShadowTokens,
+  ZIndexTokens,
+  BreakpointTokens,
+  TransitionTokens,
+  AnimationTokens,
+  ExtensionTokens,
+} from './tokens'
+
+export type { ColorTokens, RadiusTokens, SpacingTokens, TypographyTokens }
+export type {
+  DesignTokens,
+  ShadowTokens,
+  ZIndexTokens,
+  BreakpointTokens,
+  TransitionTokens,
+  AnimationTokens,
+  ExtensionTokens,
+}
+
 export type ThemeMode = 'light' | 'dark' | 'system'
 
 export interface ThemeContextValue {
@@ -7,53 +32,4 @@ export interface ThemeContextValue {
   setMode: (mode: ThemeMode) => void
   toggle: () => void
   setAccentColor: (color: string) => void
-}
-
-export interface DesignTokens {
-  color: {
-    background: string
-    surface: string
-    surfaceAlt: string
-    primary: string
-    primaryHover: string
-    primaryLight: string
-    text: string
-    textSecondary: string
-    muted: string
-    border: string
-    success: string
-    successLight: string
-    warning: string
-    warningLight: string
-    danger: string
-    dangerLight: string
-    info: string
-    infoLight: string
-  }
-  radius: {
-    sm: string
-    md: string
-    lg: string
-    xl: string
-  }
-  spacing: {
-    xs: string
-    sm: string
-    md: string
-    lg: string
-    xl: string
-  }
-  shadow: {
-    sm: string
-    md: string
-    lg: string
-  }
-  font: {
-    sans: string
-    mono: string
-  }
-  transition: {
-    fast: string
-    normal: string
-  }
 }

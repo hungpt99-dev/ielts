@@ -12,6 +12,8 @@ import type {
 } from '../models'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import PageHeader from '../components/layout/PageHeader'
+import { IconMistakeReview } from '@ielts/ui'
 
 interface ReviewGroup {
   id: string
@@ -236,23 +238,20 @@ export default function ReviewCenter() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Review Center
-          </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            {totalDue} item{totalDue !== 1 ? 's' : ''} need{totalDue === 1 ? 's' : ''} your attention
-          </p>
-        </div>
-        <Button variant="secondary" size="sm" onClick={loadReviewData}>
-          <svg className="-ml-0.5 mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-          Refresh
-        </Button>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+      <PageHeader
+        icon={<IconMistakeReview size={20} />}
+        title="Review Center"
+        description={`${totalDue} item${totalDue !== 1 ? 's' : ''} need${totalDue === 1 ? 's' : ''} your attention`}
+        actions={
+          <Button variant="secondary" size="sm" onClick={loadReviewData}>
+            <svg className="-ml-0.5 mr-1.5 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Refresh
+          </Button>
+        }
+      />
 
       <div className="grid gap-6">
         {groups

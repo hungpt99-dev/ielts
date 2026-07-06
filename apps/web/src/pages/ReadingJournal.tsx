@@ -5,6 +5,8 @@ import { DatabaseService } from '../services/storage/Database'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
+import PageHeader from '../components/layout/PageHeader'
+import { IconReading } from '@ielts/ui'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -276,23 +278,20 @@ export default function ReadingJournal() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            Reading Journal
-          </h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Track your IELTS Reading practice sessions and monitor progress
-          </p>
-        </div>
-        <Button onClick={openCreateForm} size="lg">
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-          Add Session
-        </Button>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+      <PageHeader
+        icon={<IconReading size={20} />}
+        title="Reading Journal"
+        description="Track your IELTS Reading practice sessions and monitor progress"
+        actions={
+          <Button onClick={openCreateForm} size="lg">
+            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Add Session
+          </Button>
+        }
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>

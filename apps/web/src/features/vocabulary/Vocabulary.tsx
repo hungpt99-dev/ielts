@@ -10,9 +10,12 @@ import ReviewMode from './components/ReviewMode'
 import VocabularyImport from './VocabularyImport'
 import { onVocabularyChanged } from './vocabularyEvents'
 import { onVocabSavedFromExtension, notifyExtensionVocabSaved } from '../../services/storage/VocabularySync'
-import PronounceButton from '../../components/ui/PronounceButton'
 import WordFamilyDisplay from './components/WordFamilyDisplay'
+import PronounceButton from '../../components/ui/PronounceButton'
 import { generateWordFamily } from './vocabularyService'
+import PageHeader from '../../components/layout/PageHeader'
+import VocabularyListItem from '../../components/vocabulary/VocabularyListItem'
+import { IconVocabulary } from '@ielts/ui'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -25,16 +28,16 @@ const STATUSES: VocabStatus[] = ['new', 'learning', 'reviewing', 'mastered']
 const DIFFICULTIES: VocabDifficulty[] = ['easy', 'medium', 'hard']
 
 const STATUS_COLORS: Record<VocabStatus, string> = {
-  new: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  learning: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  reviewing: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  mastered: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+  new: 'bg-[var(--color-primary-light)] text-[var(--color-primary)] dark:bg-[var(--color-primary)]/20 dark:text-[var(--color-primary-light)]',
+  learning: 'bg-[var(--color-skill-listening-light)] text-[var(--color-skill-listening)] dark:bg-[var(--color-skill-listening)]/20 dark:text-[var(--color-skill-listening-light)]',
+  reviewing: 'bg-[var(--color-skill-reading-light)] text-[var(--color-skill-reading)] dark:bg-[var(--color-skill-reading)]/20 dark:text-[var(--color-skill-reading-light)]',
+  mastered: 'bg-[var(--color-success-light)] text-[var(--color-success)] dark:bg-[var(--color-success)]/20 dark:text-[var(--color-success-light)]',
 }
 
 const DIFFICULTY_COLORS: Record<VocabDifficulty, string> = {
-  easy: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-  medium: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  hard: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+  easy: 'bg-[var(--color-success-light)] text-[var(--color-success)] dark:bg-[var(--color-success)]/20 dark:text-[var(--color-success-light)]',
+  medium: 'bg-[var(--color-warning-light)] text-[var(--color-warning)] dark:bg-[var(--color-warning)]/20 dark:text-[var(--color-warning-light)]',
+  hard: 'bg-[var(--color-danger-light)] text-[var(--color-danger)] dark:bg-[var(--color-danger)]/20 dark:text-[var(--color-danger-light)]',
 }
 
 export default function Vocabulary() {
@@ -56,7 +59,6 @@ export default function Vocabulary() {
   const [detailEntry, setDetailEntry] = useState<VocabularyEntry | null>(null)
   const [detailOpen, setDetailOpen] = useState(false)
   const [generatingFamily, setGeneratingFamily] = useState(false)
-  const [expandedWordId, setExpandedWordId] = useState<string | null>(null)
 
   const [tab, setTab] = useState<'browse' | 'review'>('browse')
 
@@ -237,23 +239,6 @@ export default function Vocabulary() {
     setGeneratingFamily(false)
   }, [detailEntry])
 
-  const handleGenerateFamilyFor = useCallback(async (entry: VocabularyEntry) => {
-    const result = await generateWordFamily(entry.word, entry.meaning)
-    if (result.wordFamily.length > 0) {
-      const updated: VocabularyEntry = {
-        ...entry,
-        wordFamily: [...new Set([...entry.wordFamily, ...result.wordFamily])],
-        updatedAt: new Date().toISOString(),
-      }
-      await DatabaseService.put('vocabulary', updated)
-      setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
-      if (detailEntry?.id === updated.id) {
-        setDetailEntry(updated)
-      }
-    }
-    return result
-  }, [detailEntry])
-
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -284,40 +269,37 @@ export default function Vocabulary() {
         <ReviewMode onComplete={() => setTab('browse')} />
       ) : (
         <>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-                Vocabulary Notebook
-              </h1>
-              <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-                Build your IELTS vocabulary with words, meanings, and examples
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Button onClick={() => setTab('review')} variant="secondary">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                Review
-              </Button>
-              <Button onClick={handleExport} variant="secondary">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Export
-              </Button>
-              <VocabularyImport
-                onImportComplete={handleImportComplete}
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-              />
-              <Button onClick={openCreateForm}>
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
-                Add Word
-              </Button>
-            </div>
-          </div>
+          <PageHeader
+            icon={<IconVocabulary size={22} />}
+            title="Vocabulary Notebook"
+            description="Build your IELTS vocabulary with words, meanings, and examples"
+            actions={
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => setTab('review')} variant="secondary">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Review
+                </Button>
+                <Button onClick={handleExport} variant="secondary">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Export
+                </Button>
+                <VocabularyImport
+                  onImportComplete={handleImportComplete}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+                />
+                <Button onClick={openCreateForm}>
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add Word
+                </Button>
+              </div>
+            }
+          />
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
             <Card>
@@ -329,31 +311,31 @@ export default function Vocabulary() {
             <Card>
               <CardContent className="text-center">
                 <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>New</p>
-                <p className="mt-1 text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.newCount}</p>
+                <p className="mt-1 text-2xl font-bold text-[var(--color-primary)]">{stats.newCount}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="text-center">
                 <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Learning</p>
-                <p className="mt-1 text-2xl font-bold text-amber-600 dark:text-amber-400">{stats.learning}</p>
+                <p className="mt-1 text-2xl font-bold text-[var(--color-warning)]">{stats.learning}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="text-center">
                 <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Reviewing</p>
-                <p className="mt-1 text-2xl font-bold text-purple-600 dark:text-purple-400">{stats.reviewing}</p>
+                <p className="mt-1 text-2xl font-bold text-[var(--color-skill-reading)]">{stats.reviewing}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="text-center">
                 <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Mastered</p>
-                <p className="mt-1 text-2xl font-bold text-green-600 dark:text-green-400">{stats.mastered}</p>
+                <p className="mt-1 text-2xl font-bold text-[var(--color-success)]">{stats.mastered}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="text-center">
                 <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Hard Words</p>
-                <p className="mt-1 text-2xl font-bold text-red-600 dark:text-red-400">{stats.hard}</p>
+                <p className="mt-1 text-2xl font-bold text-[var(--color-danger)]">{stats.hard}</p>
               </CardContent>
             </Card>
           </div>
@@ -485,160 +467,17 @@ export default function Vocabulary() {
               action={entries.length === 0 ? { label: 'Add Your First Word', onClick: openCreateForm } : undefined}
             />
           ) : (
-            <div className="space-y-2">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
               {filteredEntries.map(entry => (
-                <div
+                <VocabularyListItem
                   key={entry.id}
-                  className="rounded-lg border p-4 transition-colors hover:border-slate-300 dark:hover:border-slate-600"
-                  style={{
-                    borderColor: 'var(--color-border)',
-                    backgroundColor: 'var(--color-surface)',
-                  }}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <button
-                          onClick={() => openDetail(entry)}
-                          className="text-left"
-                        >
-                          <h3 className="text-lg font-semibold hover:text-blue-600 dark:hover:text-blue-400"
-                            style={{ color: 'var(--color-text)' }}>
-                            {entry.word}
-                          </h3>
-                        </button>
-                        <button
-                          onClick={() => setExpandedWordId(expandedWordId === entry.id ? null : entry.id)}
-                          className="flex items-center justify-center rounded-lg transition-colors"
-                          style={{
-                            width: '28px',
-                            height: '28px',
-                            border: '1px solid var(--color-border)',
-                            background: expandedWordId === entry.id ? 'var(--color-primary-light)' : 'var(--color-surface-alt)',
-                            color: expandedWordId === entry.id ? 'var(--color-primary)' : 'var(--color-text-secondary)',
-                            cursor: 'pointer',
-                            flexShrink: 0,
-                            fontSize: '13px',
-                            lineHeight: 1,
-                          }}
-                          title={expandedWordId === entry.id ? 'Hide word forms' : 'Show word forms'}
-                          aria-label={expandedWordId === entry.id ? 'Hide word forms' : 'Show word forms'}
-                        >
-                          <span className={`inline-block transition-transform duration-200 ${expandedWordId === entry.id ? 'rotate-90' : ''}`}>
-                            ▶
-                          </span>
-                        </button>
-                        <PronounceButton word={entry.word} />
-                        {entry.pronunciation && (
-                          <span className="text-sm" style={{ color: 'var(--color-muted)' }}>
-                            /{entry.pronunciation}/
-                          </span>
-                        )}
-                        <span className="text-xs italic" style={{ color: 'var(--color-muted)' }}>
-                          {entry.partOfSpeech}
-                        </span>
-                      </div>
-                      <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                        {entry.meaning}
-                      </p>
-                      {entry.meaningVi && (
-                        <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                          {entry.meaningVi}
-                        </p>
-                      )}
-                      <div className="mt-2 flex flex-wrap items-center gap-2">
-                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${STATUS_COLORS[entry.status]}`}>
-                          {entry.status}
-                        </span>
-                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${DIFFICULTY_COLORS[entry.difficulty]}`}>
-                          {entry.difficulty}
-                        </span>
-                        <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
-                          style={{
-                            backgroundColor: 'var(--color-surface-alt)',
-                            color: 'var(--color-text-secondary)',
-                          }}
-                        >
-                          {entry.topic}
-                        </span>
-                        {entry.tags.map(tag => (
-                          <span
-                            key={tag}
-                            className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
-                            style={{
-                              backgroundColor: 'var(--color-primary-light)',
-                              color: 'var(--color-primary)',
-                            }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="flex shrink-0 items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => toggleFavorite(entry)}
-                        aria-label={entry.tags.includes('favorite') ? 'Remove from favorites' : 'Add to favorites'}
-                        className="p-1.5"
-                        style={{
-                          color: entry.tags.includes('favorite') ? '#eab308' : 'var(--color-muted)',
-                        }}
-                        title={entry.tags.includes('favorite') ? 'Remove from favorites' : 'Add to favorites'}
-                      >
-                        <svg className="h-4 w-4" fill={entry.tags.includes('favorite') ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                        </svg>
-                      </Button>
-                      {entry.status !== 'mastered' && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleStatusChange(entry, 'mastered')}
-                          aria-label="Mark as mastered"
-                          className="p-1.5"
-                          style={{ color: 'var(--color-success)' }}
-                          title="Mark as mastered"
-                        >
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </Button>
-                      )}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => openEditForm(entry)}
-                        aria-label="Edit word"
-                        className="p-1.5"
-                      >
-                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDelete(entry.id)}
-                        aria-label="Delete word"
-                        className="p-1.5"
-                        style={{ color: 'var(--color-danger)' }}
-                      >
-                        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </Button>
-                    </div>
-                  </div>
-
-                  {expandedWordId === entry.id && (
-                    <div className="mt-4 border-t pt-4" style={{ borderColor: 'var(--color-border)' }}>
-                      <InlineWordFamily entry={entry} onGenerate={handleGenerateFamilyFor} />
-                    </div>
-                  )}
-                </div>
+                  entry={entry}
+                  onDetail={openDetail}
+                  onEdit={openEditForm}
+                  onDelete={handleDelete}
+                  onToggleFavorite={toggleFavorite}
+                  onStatusChange={handleStatusChange}
+                />
               ))}
             </div>
           )}
@@ -817,32 +656,4 @@ export default function Vocabulary() {
   )
 }
 
-function InlineWordFamily({ entry, onGenerate }: {
-  entry: VocabularyEntry
-  onGenerate: (entry: VocabularyEntry) => Promise<{ wordFamily: string[]; error: string | null }>
-}) {
-  const [generating, setGenerating] = useState(false)
-  const [hasAutoGenerated, setHasAutoGenerated] = useState(false)
 
-  useEffect(() => {
-    if (entry.wordFamily.length === 0 && !hasAutoGenerated && !generating) {
-      setHasAutoGenerated(true)
-      setGenerating(true)
-      onGenerate(entry).finally(() => setGenerating(false))
-    }
-  }, [entry.wordFamily.length, hasAutoGenerated, generating, onGenerate, entry])
-
-  const handleGenerate = useCallback(async () => {
-    setGenerating(true)
-    await onGenerate(entry)
-    setGenerating(false)
-  }, [entry, onGenerate])
-
-  return (
-    <WordFamilyDisplay
-      wordFamily={entry.wordFamily}
-      onGenerate={handleGenerate}
-      generating={generating}
-    />
-  )
-}

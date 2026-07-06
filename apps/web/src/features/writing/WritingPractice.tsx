@@ -7,6 +7,8 @@ import Modal from '../../components/ui/Modal'
 import { SAMPLE_PROMPTS } from './data/prompts'
 import { generateId } from '../../utils'
 import { checkWriting } from '../../services/ai/AIService'
+import PageHeader from '../../components/layout/PageHeader'
+import { IconWriting } from '@ielts/ui'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -337,30 +339,27 @@ export default function WritingPractice() {
     <div className="mx-auto max-w-6xl space-y-6">
       {view === 'browse' && (
         <>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-                Writing Practice
-              </h1>
-              <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-                Practice IELTS Writing Task 1 and Task 2 with prompts, an essay editor, and AI feedback
-              </p>
+          <PageHeader
+            icon={<IconWriting size={22} />}
+            title="Writing Practice"
+            description="Practice IELTS Writing Task 1 and Task 2 with prompts, an essay editor, and AI feedback"
+            actions={
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={startCustomPractice} variant="secondary">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Custom Prompt
+                </Button>
+                <Button onClick={handleViewHistory} variant="secondary">
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  History
+                </Button>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Button onClick={startCustomPractice} variant="secondary">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Custom Prompt
-              </Button>
-              <Button onClick={handleViewHistory} variant="secondary">
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                History
-              </Button>
-            </div>
-          </div>
+          }
+        />
 
           {historyStats && (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -490,8 +489,8 @@ export default function WritingPractice() {
                         <span
                           className="rounded-full px-2 py-0.5 text-[10px] font-medium"
                           style={{
-                            backgroundColor: prompt.taskType === 'task1' ? 'var(--color-primary-light)' : 'var(--color-success-light, #f0fdf4)',
-                            color: prompt.taskType === 'task1' ? 'var(--color-primary)' : 'var(--color-success, #16a34a)',
+                            backgroundColor: prompt.taskType === 'task1' ? 'var(--color-primary-light)' : 'var(--color-success-light)',
+                            color: prompt.taskType === 'task1' ? 'var(--color-primary)' : 'var(--color-success)',
                           }}
                         >
                           {prompt.taskType === 'task1' ? 'Task 1' : 'Task 2'}
@@ -510,15 +509,15 @@ export default function WritingPractice() {
                           style={{
                             backgroundColor:
                               prompt.difficulty === 'easy'
-                                ? 'var(--color-success-light, #f0fdf4)'
+                                ? 'var(--color-success-light)'
                                 : prompt.difficulty === 'hard'
-                                  ? 'var(--color-danger-light, #fef2f2)'
+                                  ? 'var(--color-danger-light)'
                                   : 'var(--color-primary-light)',
                             color:
                               prompt.difficulty === 'easy'
-                                ? 'var(--color-success, #16a34a)'
+                                ? 'var(--color-success)'
                                 : prompt.difficulty === 'hard'
-                                  ? 'var(--color-danger, #dc2626)'
+                                  ? 'var(--color-danger)'
                                   : 'var(--color-primary)',
                           }}
                         >
@@ -600,8 +599,8 @@ export default function WritingPractice() {
                     <span
                       className="rounded-full px-2 py-0.5 text-[10px] font-medium"
                       style={{
-                        backgroundColor: selectedPrompt.taskType === 'task1' ? 'var(--color-primary-light)' : 'var(--color-success-light, #f0fdf4)',
-                        color: selectedPrompt.taskType === 'task1' ? 'var(--color-primary)' : 'var(--color-success, #16a34a)',
+                        backgroundColor: selectedPrompt.taskType === 'task1' ? 'var(--color-primary-light)' : 'var(--color-success-light)',
+                        color: selectedPrompt.taskType === 'task1' ? 'var(--color-primary)' : 'var(--color-success)',
                       }}
                     >
                       {selectedPrompt.taskType === 'task1' ? 'Task 1' : 'Task 2'}
@@ -763,7 +762,7 @@ export default function WritingPractice() {
               className="rounded-lg border p-3 text-sm"
               style={{
                 borderColor: 'var(--color-danger)',
-                backgroundColor: 'var(--color-danger-light, #fef2f2)',
+                backgroundColor: 'var(--color-danger-light)',
                 color: 'var(--color-danger)',
               }}
             >
@@ -927,8 +926,8 @@ export default function WritingPractice() {
                             <span
                               className="rounded-full px-2 py-0.5 text-[10px] font-medium"
                               style={{
-                                backgroundColor: session.taskType === 'task1' ? 'var(--color-primary-light)' : 'var(--color-success-light, #f0fdf4)',
-                                color: session.taskType === 'task1' ? 'var(--color-primary)' : 'var(--color-success, #16a34a)',
+                                backgroundColor: session.taskType === 'task1' ? 'var(--color-primary-light)' : 'var(--color-success-light)',
+                                color: session.taskType === 'task1' ? 'var(--color-primary)' : 'var(--color-success)',
                               }}
                             >
                               {session.taskType === 'task1' ? 'Task 1' : 'Task 2'}
@@ -1087,8 +1086,8 @@ export default function WritingPractice() {
                 <div
                   className="mt-0.5 whitespace-pre-wrap rounded-lg border p-3 text-sm leading-relaxed"
                   style={{
-                    borderColor: 'var(--color-success, #16a34a)',
-                    backgroundColor: 'var(--color-success-light, #f0fdf4)',
+                    borderColor: 'var(--color-success)',
+                    backgroundColor: 'var(--color-success-light)',
                     color: 'var(--color-text)',
                     fontFamily: 'Georgia, serif',
                     maxHeight: '300px',

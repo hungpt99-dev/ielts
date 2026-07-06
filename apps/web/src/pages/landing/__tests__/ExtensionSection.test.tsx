@@ -5,19 +5,12 @@ import ExtensionSection from '../ExtensionSection'
 describe('ExtensionSection', () => {
   it('renders the section heading', () => {
     render(<ExtensionSection />)
-    expect(screen.getByText('Learn while you browse')).toBeInTheDocument()
+    expect(screen.getByText('Learn from the real internet.')).toBeInTheDocument()
   })
 
-  it('renders descriptive text about the extension', () => {
+  it('renders the Install Chrome Extension CTA with correct link', () => {
     render(<ExtensionSection />)
-    expect(
-      screen.getByText(/The Chrome extension works while you read/)
-    ).toBeInTheDocument()
-  })
-
-  it('renders the Install Extension CTA with correct link', () => {
-    render(<ExtensionSection />)
-    const cta = screen.getByText('Install Extension')
+    const cta = screen.getByText('Install Chrome Extension')
     expect(cta).toBeInTheDocument()
     expect(cta.closest('a')).toHaveAttribute(
       'href',
@@ -41,6 +34,6 @@ describe('ExtensionSection', () => {
 
   it('has an id attribute', () => {
     render(<ExtensionSection />)
-    expect(screen.getByText('Learn while you browse').closest('section')).toHaveAttribute('id', 'extension')
+    expect(screen.getByText('Learn from the real internet.').closest('section')).toHaveAttribute('id', 'extension')
   })
 })

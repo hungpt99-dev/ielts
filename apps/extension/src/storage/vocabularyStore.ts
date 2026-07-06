@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { openDB, STORE_NAMES } from './db'
 
 export const extensionVocabSchema = z.object({
   id: z.string(),
@@ -32,36 +33,13 @@ export const extensionVocabSchema = z.object({
 
 export type ExtensionVocabEntry = z.infer<typeof extensionVocabSchema>
 
-const DB_NAME = 'ielts-journey-extension'
-const DB_VERSION = 2
-const STORE_NAME = 'vocabulary'
-
-function openDB(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION)
-
-    request.onupgradeneeded = () => {
-      const db = request.result
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
-        store.createIndex('word', 'word', { unique: false })
-        store.createIndex('topic', 'topic', { unique: false })
-        store.createIndex('status', 'status', { unique: false })
-        store.createIndex('createdAt', 'createdAt', { unique: false })
-        store.createIndex('addedToReview', 'addedToReview', { unique: false })
-      }
-    }
-
-    request.onsuccess = () => resolve(request.result)
-    request.onerror = () => reject(request.error)
-  })
-}
+const STORE = STORE_NAMES.VOCABULARY
 
 export async function saveVocabularyEntry(entry: ExtensionVocabEntry): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.put(entry)
     tx.oncomplete = () => { db.close(); resolve() }
     tx.onerror = () => { db.close(); reject(tx.error) }
@@ -71,8 +49,8 @@ export async function saveVocabularyEntry(entry: ExtensionVocabEntry): Promise<v
 export async function getAllVocabulary(): Promise<ExtensionVocabEntry[]> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.getAll()
     request.onsuccess = () => { db.close(); resolve(request.result as ExtensionVocabEntry[]) }
     request.onerror = () => { db.close(); reject(request.error) }
@@ -82,8 +60,8 @@ export async function getAllVocabulary(): Promise<ExtensionVocabEntry[]> {
 export async function getVocabularyById(id: string): Promise<ExtensionVocabEntry | undefined> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readonly')
+    const store = tx.objectStore(STORE)
     const request = store.get(id)
     request.onsuccess = () => { db.close(); resolve(request.result as ExtensionVocabEntry | undefined) }
     request.onerror = () => { db.close(); reject(request.error) }
@@ -93,8 +71,8 @@ export async function getVocabularyById(id: string): Promise<ExtensionVocabEntry
 export async function updateVocabularyEntry(id: string, updates: Partial<ExtensionVocabEntry>): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     const getRequest = store.get(id)
     getRequest.onsuccess = () => {
       const existing = getRequest.result as ExtensionVocabEntry | undefined
@@ -110,8 +88,8 @@ export async function updateVocabularyEntry(id: string, updates: Partial<Extensi
 export async function deleteVocabularyEntry(id: string): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite')
-    const store = tx.objectStore(STORE_NAME)
+    const tx = db.transaction(STORE, 'readwrite')
+    const store = tx.objectStore(STORE)
     store.delete(id)
     tx.oncomplete = () => { db.close(); resolve() }
     tx.onerror = () => { db.close(); reject(tx.error) }

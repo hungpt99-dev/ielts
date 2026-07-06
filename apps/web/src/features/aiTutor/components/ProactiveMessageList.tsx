@@ -69,7 +69,7 @@ export default function ProactiveMessageList({
   )
 
   const filteredMessages = useMemo(() => {
-    let filtered = activeFilter === 'all' ? messages : messages.filter(m => m.category === activeFilter)
+    const filtered = activeFilter === 'all' ? messages : messages.filter(m => m.category === activeFilter)
     return sortMessages(filtered)
   }, [messages, activeFilter])
 
