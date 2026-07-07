@@ -295,6 +295,48 @@ pnpm preview         # Preview production build locally
 
 ---
 
+## New Member Onboarding
+
+Welcome! This section helps you get oriented and start contributing quickly.
+
+### Prerequisites
+
+- **Node.js** >= 18
+- **pnpm** >= 8
+- **Git** configured with SSH or HTTPS
+- A code editor (VS Code recommended)
+
+### Setup
+
+```bash
+git clone <repo-url>
+cd ielts-journey
+pnpm install
+pnpm dev          # Start development server
+```
+
+Open [http://localhost:5173](http://localhost:5173) to explore the app.
+
+### First Steps
+
+1. **Read the docs** — Start with [Product Overview](docs/product-overview.md) and [Architecture](docs/architecture.md) to understand the system
+2. **Run quality checks** — Verify your environment:
+   ```bash
+   pnpm typecheck
+   pnpm lint
+   pnpm test
+   ```
+3. **Explore the codebase** — Use `codegraph explore "<question>"` to navigate symbols and understand dependencies
+4. **Find a starting issue** — Look for `good first issue` or `help wanted` labels on GitHub
+5. **Review the [Contribution Guide](docs/contribution-guide.md)** — Read conventions, PR process, and coding standards
+
+### Communication
+
+- **GitHub Issues** — Report bugs and request features
+- **GitHub Discussions** — Ask questions and suggest ideas
+
+---
+
 ## Available Scripts
 
 | Command | Description |
@@ -312,25 +354,6 @@ pnpm preview         # Preview production build locally
 | `pnpm lint` | Lint all source code |
 | `pnpm typecheck` | TypeScript type checking |
 | `pnpm clean` | Clean all build outputs |
-
----
-
-## Data Architecture
-
-All user data is stored **client-side only** — no backend, no cloud sync, no telemetry:
-
-| Storage | Contents |
-|---------|----------|
-| **IndexedDB** | Vocabulary, study sessions, logs, grammar notes, mistakes, progress, chat history |
-| **localStorage** | Settings (theme, target band, AI API key, preferences) |
-
-Data flows through a layered architecture:
-
-```
-Component → Custom Hook → Feature Service → Repository → IndexedDB
-```
-
-See [docs/storage-design.md](docs/storage-design.md) for schema details.
 
 ---
 
@@ -386,30 +409,23 @@ See [docs/extension-architecture.md](docs/extension-architecture.md) for details
 
 ---
 
-## Testing
+## Testing & Quality
+
+Run these checks regularly — all must pass before merging:
 
 ```bash
 pnpm test          # Run all tests
 pnpm test:unit     # Run unit tests with Vitest
 pnpm test:watch    # Watch mode
+pnpm lint          # ESLint
+pnpm typecheck     # TypeScript type checking (tsc -b --noEmit)
 ```
 
-Tests use **Vitest** with:
-- `fake-indexeddb` for storage repository tests
-- React Testing Library for component tests
-- `jsdom` for browser environment simulation
-- Per-package test configs (`packages/*/vitest.config.ts`)
+**Testing**: Vitest with `fake-indexeddb` (repository tests), React Testing Library (component tests), `jsdom` (browser simulation), and per-package configs in `packages/*/vitest.config.ts`.
 
----
+**Linting**: ESLint configured for consistent code style.
 
-## Linting & Type Checking
-
-```bash
-pnpm lint        # ESLint
-pnpm typecheck   # TypeScript type checking (tsc -b --noEmit)
-```
-
-Both commands must pass before merging. Run them as part of your development workflow.
+**Type Checking**: TypeScript strict mode (`tsc -b --noEmit`).
 
 ---
 
@@ -451,7 +467,7 @@ See [docs/troubleshooting.md](docs/troubleshooting.md) for the complete guide.
 
 ## Contributing
 
-We welcome contributions! See [docs/contribution-guide.md](docs/contribution-guide.md) for detailed guidelines including:
+We welcome contributions! New to the project? Start with the [Onboarding section](#new-member-onboarding) above. For detailed guidelines see [docs/contribution-guide.md](docs/contribution-guide.md) covering:
 
 - Coding conventions and style guide
 - Pull request process

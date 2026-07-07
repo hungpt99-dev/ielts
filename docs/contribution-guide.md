@@ -4,23 +4,18 @@
 
 ---
 
-## 1. Code of Conduct
+## 1. New Member Onboarding
 
-This project is open to contributions from everyone. Please:
-- Be respectful and inclusive
-- Focus on constructive feedback
-- Help others learn
+Welcome! This section guides you through everything you need to start contributing.
 
----
-
-## 2. Getting Started
-
-### 2.1 Prerequisites
+### 1.1 Prerequisites
 
 - **Node.js** >= 18
 - **pnpm** >= 8
+- **Git** with SSH or HTTPS configured
+- A code editor (VS Code recommended)
 
-### 2.2 Setup
+### 1.2 Setup
 
 ```bash
 # Fork and clone
@@ -34,56 +29,50 @@ pnpm install
 pnpm dev
 ```
 
-### 2.3 Verify Setup
+### 1.3 First-Time Reading List
+
+Read these in order to understand the project before making changes:
+
+1. **[Product Overview](product-overview.md)** — What the project is, its philosophy, features, and tech stack
+2. **[Architecture](architecture.md)** — Clean Architecture layers, monorepo structure, and data flow
+3. **This Guide** — Conventions, workflow, and coding standards
+4. **[AI Coding Agent Guide](ai-agent.md)** — How AI agents interact with the codebase (useful for human contributors too)
+
+### 1.4 Quick Verification
 
 ```bash
-# Run type check
 pnpm typecheck
-
-# Run tests
-pnpm test
-
-# Run lint
 pnpm lint
+pnpm test
 ```
 
-All should pass before making changes.
+All must pass before you begin making changes.
+
+### 1.5 Communication Channels
+
+- **GitHub Issues** — Report bugs and request features
+- **GitHub Discussions** — Ask questions, suggest ideas, and discuss the project
+
+### 1.6 Where to Start
+
+- Look for issues labeled `good first issue` or `help wanted`
+- Start with documentation fixes or small bug fixes to learn the codebase
+- Read existing pull requests to understand review expectations
 
 ---
 
-## 3. Project Structure
+## 2. Code of Conduct
 
-```
-ielts-journey/
-├── apps/
-│   ├── web/                # React SPA (PWA)
-│   └── extension/          # Chrome extension (MV3)
-├── packages/               # Shared libraries
-│   ├── ui/                 # UI component library
-│   ├── theme/              # Design tokens
-│   ├── types/              # Domain entities & schemas
-│   ├── storage/            # IndexedDB repositories
-│   ├── ai/                 # AI adapters & prompts
-│   ├── learning-engine/    # Business logic engine
-│   ├── content/            # Built-in content
-│   ├── exercises/          # Exercise system
-│   ├── import-export/      # Data portability
-│   ├── config/             # Constants
-│   └── utils/              # Utilities
-├── features/               # Feature modules
-│   ├── ai-tutor/           # AI Tutor widget
-│   └── ...                 # (more features)
-├── src/                    # Main web app source
-└── docs/                   # Documentation
-```
-
-See [architecture.md](architecture.md) for a detailed explanation.
+This project is open to contributions from everyone. Please:
+- Be respectful and inclusive
+- Focus on constructive feedback
+- Help others learn
 
 ---
 
-## 4. Development Workflow
+## 3. Development Workflow
 
-### 4.1 Branch Strategy
+### 3.1 Branch Strategy
 
 ```
 main          ← Production-ready code
@@ -93,14 +82,14 @@ main          ← Production-ready code
   └── refactor/*   ← Code improvements
 ```
 
-### 4.2 Making Changes
+### 3.2 Making Changes
 
 1. Create a branch:
    ```bash
    git checkout -b feature/my-feature
    ```
 
-2. Make changes following the conventions in [Architecture](architecture.md)
+2. Make changes following conventions in [Architecture](architecture.md)
 
 3. Run quality checks:
    ```bash
@@ -118,7 +107,7 @@ main          ← Production-ready code
 
 5. Push and create a Pull Request
 
-### 4.3 Pull Request Guidelines
+### 3.3 Pull Request Guidelines
 
 - Title follows conventional commits
 - Description explains the change and motivation
@@ -129,9 +118,9 @@ main          ← Production-ready code
 
 ---
 
-## 5. Coding Standards
+## 4. Coding Standards
 
-### 5.1 TypeScript
+### 4.1 TypeScript
 
 - Strict mode enabled
 - Avoid `any` — use proper types or `unknown`
@@ -139,7 +128,7 @@ main          ← Production-ready code
 - Prefer interfaces over type aliases for object shapes
 - Use `const` assertions for literal types
 
-### 5.2 Naming Conventions
+### 4.2 Naming Conventions
 
 | Context | Convention | Example |
 |---------|------------|---------|
@@ -151,27 +140,24 @@ main          ← Production-ready code
 | Constants | UPPER_SNAKE | `DEFAULT_BAND_SCORE` |
 | CSS classes | kebab-case | `vocab-card-title` |
 
-### 5.3 File Organization
+### 4.3 File Organization
 
 - One primary export per file
 - Files under 300 lines
 - Barrel exports in `index.ts`
 - Tests co-located in `__tests__/` or `tests/`
 
-### 5.4 React Component Structure
+### 4.4 React Component Structure
 
 ```typescript
-// 1. Imports
 import { useState } from 'react'
 import type { VocabularyWord } from '@ielts/types'
 
-// 2. Types (if not in a separate file)
 interface VocabularyCardProps {
   word: VocabularyWord
   onSave: (id: string) => void
 }
 
-// 3. Component
 export function VocabularyCard({ word, onSave }: VocabularyCardProps) {
   const [expanded, setExpanded] = useState(false)
 
@@ -184,7 +170,7 @@ export function VocabularyCard({ word, onSave }: VocabularyCardProps) {
 }
 ```
 
-### 5.5 Clean Architecture Rules
+### 4.5 Clean Architecture Rules
 
 - **Components** never call IndexedDB or AI directly
 - **Hooks** bridge components to services
@@ -194,26 +180,16 @@ export function VocabularyCard({ word, onSave }: VocabularyCardProps) {
 
 ---
 
-## 6. Adding a New Feature
+## 5. Adding Features & Content
 
-1. Create `features/<feature-name>/` with:
-   - `components/` — React UI
-   - `hooks/` — Custom hooks
-   - `services/` — Feature services
-   - `schemas/` — Zod schemas
-   - `types/` — Feature-specific types
-   - `utils/` — Utilities
-   - `tests/` — Tests
+### 5.1 New Feature
 
+1. Create `features/<feature-name>/` with `components/`, `hooks/`, `services/`, `schemas/`, `types/`, `utils/`, `tests/`
 2. Add routes in `apps/web/src/router.tsx`
-
 3. Add navigation in sidebar/headbar
-
 4. Write tests
 
----
-
-## 7. Adding a New AI Provider
+### 5.2 New AI Provider
 
 1. Implement `IAiAdapter` interface
 2. Create adapter in `packages/ai/src/adapters/`
@@ -221,9 +197,7 @@ export function VocabularyCard({ word, onSave }: VocabularyCardProps) {
 4. Add provider option to settings schema
 5. Write adapter tests
 
----
-
-## 8. Adding a New Exercise Type
+### 5.3 New Exercise Type
 
 1. Add `QuestionType` to `packages/exercises/src/types.ts`
 2. Implement `ScoringStrategy`
@@ -231,9 +205,7 @@ export function VocabularyCard({ word, onSave }: VocabularyCardProps) {
 4. Create UI renderer in `features/exercises/components/`
 5. Write tests
 
----
-
-## 9. Adding New Built-in Content
+### 5.4 New Built-in Content
 
 1. Create file in `packages/content/src/built-in/`
 2. Add content array with proper IDs
@@ -244,7 +216,7 @@ export function VocabularyCard({ word, onSave }: VocabularyCardProps) {
 
 ---
 
-## 10. Documentation
+## 6. Documentation
 
 - Update docs when changing behavior
 - Use Mermaid for architecture diagrams
@@ -254,7 +226,7 @@ export function VocabularyCard({ word, onSave }: VocabularyCardProps) {
 
 ---
 
-## 11. Testing
+## 7. Testing
 
 ```bash
 # Run all tests
@@ -277,7 +249,7 @@ pnpm test -- --coverage
 
 ---
 
-## 12. Review Process
+## 8. Review Process
 
 1. Code is reviewed by at least one maintainer
 2. Review focuses on:
@@ -291,7 +263,7 @@ pnpm test -- --coverage
 
 ---
 
-## 13. Release Process
+## 9. Release Process
 
 1. Update version in `package.json`
 2. Update `CHANGELOG.md`
@@ -302,7 +274,38 @@ pnpm test -- --coverage
 
 ---
 
-## 14. Getting Help
+## 10. AI Coding Agent Integration
+
+This codebase is designed to be **AI coding agent-friendly**. The repository includes a **CodeGraph** index (`.codegraph/`) that provides pre-computed structural knowledge — symbol search, caller/callee analysis, and blast radius computation.
+
+### Key Conventions for AI Agents
+
+| Rule | Rationale |
+|------|-----------|
+| Never import from `packages/` directly in components | Use hooks and services as intermediaries |
+| Never call IndexedDB directly from components | Use repository pattern |
+| Never hard-code API keys | User-provided, stored in localStorage |
+| Never place shared logic in `apps/` | Belongs in `packages/` for reuse by extension |
+| Never skip Zod validation at data boundaries | Prevents data corruption |
+| Never import React into `packages/` domain code | Keeps domain logic framework-agnostic |
+
+### Before Submitting Changes
+
+- [ ] `pnpm typecheck` passes
+- [ ] `pnpm lint` passes
+- [ ] `pnpm test:unit` passes
+- [ ] No new `any` types introduced
+- [ ] Data boundaries are validated with Zod schemas
+- [ ] New features follow the feature module pattern
+- [ ] Shared logic is placed in `packages/`, not in `apps/`
+- [ ] No React imports in domain packages
+- [ ] Layer dependency rules are respected
+
+See the full [AI Coding Agent Guide](ai-agent.md) for detailed workflows, CodeGraph commands, and architecture rules.
+
+---
+
+## 11. Getting Help
 
 - Open a [GitHub Issue](https://github.com/<your-username>/ielts-journey/issues)
 - Check [Troubleshooting Guide](troubleshooting.md)
