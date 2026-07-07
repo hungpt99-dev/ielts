@@ -2,8 +2,14 @@ import { DATA_SYNC_ACTION, isDataSyncMessage, isDuplicateMessage, createMessageI
 import { DatabaseService } from './Database'
 
 const BRIDGE_SOURCE = 'ielts-page'
+let syncInProgress = 0
+
+export function isSyncInProgress(): boolean {
+  return syncInProgress > 0
+}
 
 export function pushDataSync(entityType: SyncEntityType, operation: SyncOperation, entityId: string, entity: Record<string, unknown>): void {
+  if (syncInProgress > 0) return
   const payload: DataSyncPayload = {
     entityType,
     operation,
@@ -61,9 +67,12 @@ async function saveToDatabase(payload: DataSyncPayload): Promise<void> {
 }
 
 function handleDataSync(payload: DataSyncPayload): void {
+  syncInProgress++
   saveToDatabase(payload).then(() => {
+    syncInProgress--
     notifyListeners(payload.entityType, payload.operation, payload.entityId)
   }).catch(err => {
+    syncInProgress--
     console.error('[DataSync] Save failed:', err)
   })
 }
