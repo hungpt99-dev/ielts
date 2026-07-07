@@ -580,6 +580,8 @@ function execute(action: ToolbarAction): void {
 async function saveText(text: string, category: SaveCategory): Promise<void> {
   showToast(`Saving ${category}...`)
 
+  let saveFailed = false
+
   chrome.runtime.sendMessage({
     type: 'SAVE_SELECTION_FULL',
     payload: {
@@ -589,15 +591,18 @@ async function saveText(text: string, category: SaveCategory): Promise<void> {
       pageUrl: window.location.href,
     },
   }).catch((err) => {
+    saveFailed = true
     const msg = err instanceof Error ? err.message : String(err)
     if (msg.includes('context invalidated') || msg.includes('Extension context')) {
-      showToast('Extension was updated. Please refresh this page and try again.')
+      setTimeout(() => showToast('Please refresh this page and try again.'), 300)
     } else if (!msg.includes('channel closed') && !msg.includes('response was received')) {
       console.warn('[SaveText]', msg)
     }
   })
 
-  setTimeout(() => showToast(`Saved as ${category}`), 200)
+  setTimeout(() => {
+    if (!saveFailed) showToast(`Saved as ${category}`)
+  }, 200)
 
   if (category === 'vocabulary') {
     handleVocabSaved(text)
