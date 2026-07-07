@@ -325,18 +325,6 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
       }
 
       try {
-        const raw = await new Promise<any[]>((resolve) => {
-          chrome.storage.local.get([STORAGE_KEYS.VOCABULARY], (r) => resolve(r.vocabulary || []))
-        })
-        raw.push(entry)
-        await new Promise<void>((resolve) => {
-          chrome.storage.local.set({ [STORAGE_KEYS.VOCABULARY]: raw, [STORAGE_KEYS.LAST_SYNC_TIME]: now }, resolve)
-        })
-      } catch (err) {
-        console.warn('[VocabularyCollector] chrome.storage sync failed (non-critical):', err)
-      }
-
-      try {
         await chrome.runtime.sendMessage({ type: MESSAGE_TYPES.VOCAB_SAVED, payload: entry })
       } catch {
         // Background may not be available (popup closed, etc.)
