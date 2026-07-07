@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTutorNavigation } from '../../hooks/useTutorNavigation'
 import { useDashboard } from '../../hooks/useDashboard'
+import { useDataRefresh } from '../../hooks/useDataRefresh'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
@@ -111,6 +112,7 @@ const quickPracticeSkills = [
 
 export default function Dashboard() {
   const { data, weeklyChart, loading, error, refresh } = useDashboard()
+  useDataRefresh(() => { refresh() })
   const navigate = useNavigate()
   const goToTutor = useTutorNavigation()
   const [tasks, setTasks] = useState<TaskEntry[]>([])
