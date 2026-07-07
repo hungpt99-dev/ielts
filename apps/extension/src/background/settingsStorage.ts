@@ -1,11 +1,12 @@
-import { z } from 'zod'
 import {
-  sharedSettingsSchema,
-  THEME_MODES as SHARED_THEME_MODES,
-  AI_PROVIDERS as SHARED_AI_PROVIDERS,
+  type SharedSettings,
+  type SharedSettingsPatch,
   DEFAULT_SHARED_SETTINGS,
+  THEME_MODES,
+  AI_PROVIDERS,
 } from '@ielts/settings'
-import type { SharedSettingsPatch } from '@ielts/settings'
+
+export { THEME_MODES, AI_PROVIDERS }
 
 export const SAVE_CATEGORIES = [
   'vocabulary',
@@ -18,19 +19,13 @@ export const SAVE_CATEGORIES = [
   'mistake',
 ] as const
 
-// Re-export shared constants for convenience
-export const THEME_MODES = SHARED_THEME_MODES
-export const AI_PROVIDERS = SHARED_AI_PROVIDERS
-
-export const extensionSettingsSchema = sharedSettingsSchema.extend({
-  floatingToolbar: z.boolean().default(true),
-  autoSaveSelected: z.boolean().default(false),
-  autoHighlightSavedVocabulary: z.boolean().default(true),
-  defaultCategory: z.enum(SAVE_CATEGORIES).default('vocabulary'),
-  defaultTopic: z.string().default('general'),
-})
-
-export type ExtensionSettings = z.infer<typeof extensionSettingsSchema>
+export type ExtensionSettings = SharedSettings & {
+  floatingToolbar: boolean
+  autoSaveSelected: boolean
+  autoHighlightSavedVocabulary: boolean
+  defaultCategory: typeof SAVE_CATEGORIES[number]
+  defaultTopic: string
+}
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
   ...DEFAULT_SHARED_SETTINGS,
@@ -93,14 +88,11 @@ function toSyncSettings(s: ExtensionSettings): SyncSettings {
 
 function getDefaults(): Promise<ExtensionSettings> {
   return new Promise((resolve) => {
-    chrome.storage.sync.get([SYNC_KEY], (result) => {
+    chrome.storage.local.get([SYNC_KEY], (result) => {
       const stored = result[SYNC_KEY] as Partial<ExtensionSettings> | undefined
-      if (stored) {
-        const parsed = extensionSettingsSchema.safeParse({ ...DEFAULT_SETTINGS, ...stored })
-        if (parsed.success) {
-          resolve(parsed.data)
-          return
-        }
+      if (stored && typeof stored === 'object') {
+        resolve({ ...DEFAULT_SETTINGS, ...stored })
+        return
       }
       resolve({ ...DEFAULT_SETTINGS })
     })
@@ -117,8 +109,8 @@ export async function saveSettings(settings: ExtensionSettings): Promise<void> {
   const syncData = toSyncSettings(settings)
   await Promise.all([
     new Promise<void>((resolve) => {
-      chrome.storage.sync.set({ [SYNC_KEY]: syncData }, () => {
-        chrome.storage.local.set({ [LOCAL_SETTINGS_BACKUP]: syncData }, resolve)
+      chrome.storage.local.set({ [SYNC_KEY]: syncData, [LOCAL_SETTINGS_BACKUP]: syncData }, () => {
+        resolve()
       })
     }),
     setApiKey(settings.aiApiKey || ''),
@@ -182,9 +174,7 @@ export function setApiKey(key: string): Promise<void> {
 
 export function clearAllSettings(): Promise<void> {
   return new Promise((resolve) => {
-    chrome.storage.sync.remove([SYNC_KEY], () => {
-      chrome.storage.local.remove([LOCAL_API_KEY, LOCAL_SETTINGS_BACKUP], resolve)
-    })
+    chrome.storage.local.remove([SYNC_KEY, LOCAL_API_KEY, LOCAL_SETTINGS_BACKUP], resolve)
   })
 }
 

@@ -8,7 +8,7 @@ import {
   incrementDailyProgress,
 } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
-import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
+import { saveVocabularyEntry, type ExtensionVocabEntry } from '../storage/vocabularyStore'
 import { saveArticleEntry } from '../storage/articleStore'
 import { saveVideoEntry } from '../storage/videoStore'
 import { saveMistakeEntry } from '../storage/mistakeStore'
@@ -263,30 +263,31 @@ export function initMessaging(): void {
       await saveEntry(entry)
 
       if (msg.payload.category === 'vocabulary') {
-        try {
-          const vocabEntry = extensionVocabSchema.parse({
-            id: crypto.randomUUID(),
-            word: msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
-            sourceSentence: msg.payload.text,
-            pageTitle: msg.payload.pageTitle,
-            pageUrl: msg.payload.pageUrl,
-            topic: msg.payload.topic || 'general',
-            personalNote: msg.payload.note || '',
-            tags: msg.payload.tags || [],
-            meaning: '',
-            partOfSpeech: '',
-            pronunciation: '',
-            difficulty: msg.payload.difficulty || '',
-            status: 'new',
-            addedToReview: true,
-            reviewId: '',
-            createdAt: now,
-            updatedAt: now,
-          })
-          await saveVocabularyEntry(vocabEntry)
-        } catch {
-          /* non-critical */
-        }
+        await saveVocabularyEntry({
+          id: crypto.randomUUID(),
+          word: msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+          sourceSentence: msg.payload.text,
+          pageTitle: msg.payload.pageTitle || '',
+          pageUrl: msg.payload.pageUrl || '',
+          topic: (msg.payload.topic as string) || 'general',
+          personalNote: msg.payload.note || '',
+          tags: (msg.payload.tags as string[]) || [],
+          meaning: '',
+          meaningVi: '',
+          partOfSpeech: '',
+          pronunciation: '',
+          exampleSentence: '',
+          synonyms: [],
+          antonyms: [],
+          collocations: [],
+          wordFamily: [],
+          difficulty: (msg.payload.difficulty as ExtensionVocabEntry['difficulty']) || '',
+          status: 'new',
+          addedToReview: true,
+          reviewId: '',
+          createdAt: now,
+          updatedAt: now,
+        }).catch(() => {})
       }
 
       await incrementDailyProgress('wordsAdded', msg.payload.category === 'vocabulary' ? 1 : 0)
@@ -346,7 +347,7 @@ export function initMessaging(): void {
     try {
       switch (entityType) {
         case 'vocabulary':
-          await saveVocabularyEntry(entity as Parameters<typeof saveVocabularyEntry>[0])
+          await saveVocabularyEntry(entity as unknown as ExtensionVocabEntry)
           break
         case 'article':
           await saveArticleEntry(entity as Parameters<typeof saveArticleEntry>[0])
@@ -373,6 +374,34 @@ export function initMessaging(): void {
       }
     } catch (err) {
       console.error(`[messaging] DATA_SYNC handler error for ${entityType}:`, err)
+    }
+  })
+
+  registerHandler('SYNC_ALL_TO_WEB', async () => {
+    try {
+      const { getAllVocabulary } = await import('../storage/vocabularyStore')
+      const allVocab = await getAllVocabulary()
+      const tabs = await chrome.tabs.query({})
+      let sentCount = 0
+      for (const vocab of allVocab) {
+        const payload: DataSyncPayload = {
+          entityType: 'vocabulary',
+          operation: 'created',
+          entityId: vocab.id,
+          entity: vocab as unknown as Record<string, unknown>,
+          timestamp: new Date().toISOString(),
+          messageId: `sync-all-${vocab.id}-${Date.now()}`,
+        }
+        for (const tab of tabs) {
+          if (!tab.id) continue
+          chrome.tabs.sendMessage(tab.id, { type: 'FORWARD_DATA_SYNC', payload }).catch(() => {})
+        }
+        sentCount++
+      }
+      return { ok: true, count: sentCount }
+    } catch (err) {
+      console.error('[messaging] SYNC_ALL_TO_WEB handler error:', err)
+      return { ok: false, error: String(err) }
     }
   })
 

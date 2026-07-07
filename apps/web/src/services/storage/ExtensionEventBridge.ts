@@ -1,4 +1,3 @@
-import { isValidBridgeMessage } from '@ielts/storage'
 import { emitLearningEvent } from '../../features/learningEvents/LearningEventBus'
 import type { CreateLearningEventInput, LearningEventSource } from '../../features/learningEvents/types'
 
@@ -30,10 +29,10 @@ function isExtensionLearningEvent(data: unknown): data is BridgeLearningEventDat
 
 function handleMessage(event: MessageEvent): void {
   if (event.origin !== window.location.origin) return
-  if (!isValidBridgeMessage(event.data)) return
-  if (event.data.source !== BRIDGE_SOURCE) return
-  if (event.data.action !== BRIDGE_ACTION) return
-  if (!event.data.data || typeof event.data.data !== 'object') return
+  const msg = event.data
+  if (!msg || typeof msg !== 'object') return
+  if (msg.source !== BRIDGE_SOURCE || msg.action !== BRIDGE_ACTION) return
+  if (!msg.data || typeof msg.data !== 'object') return
 
   const data = event.data.data as Record<string, unknown>
 

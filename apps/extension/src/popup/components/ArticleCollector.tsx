@@ -25,7 +25,7 @@ async function getAIProviderConfig(): Promise<{
   model: string
 }> {
   const [syncResult, localResult] = await Promise.all([
-    new Promise<any>(r => chrome.storage.sync.get(['extensionSettings'], r)),
+    new Promise<any>(r => chrome.storage.local.get(['extensionSettings'], r)),
     new Promise<any>(r => chrome.storage.local.get(['aiApiKey'], r)),
   ])
   const settings = syncResult.extensionSettings || {}

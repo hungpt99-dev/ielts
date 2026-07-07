@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
-import { extensionVocabSchema } from '../../storage/vocabularyStore'
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { findWord } from '../services/popupDataService'
 import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
-import { MESSAGE_TYPES, STORAGE_KEYS, PROGRESS_KEYS } from '../../storage/db'
+import { MESSAGE_TYPES, PROGRESS_KEYS } from '../../storage/db'
 import { IconVocabulary, IconClose, IconCheck, IconVolume } from '@ielts/ui'
 import type { LearningEntry } from '../../types'
 import { pushSync } from '../../services/syncManager'
@@ -49,7 +48,7 @@ async function getAIProviderConfig(): Promise<{
   model: string
 }> {
   const [syncResult, localResult] = await Promise.all([
-    new Promise<any>(r => chrome.storage.sync.get(['extensionSettings'], r)),
+    new Promise<any>(r => chrome.storage.local.get(['extensionSettings'], r)),
     new Promise<any>(r => chrome.storage.local.get(['aiApiKey'], r)),
   ])
   const settings = syncResult.extensionSettings || {}
@@ -252,92 +251,86 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
     setSaving(true)
     setErrors({})
 
+    const tags = tagsInput
+      .split(',')
+      .map(t => t.trim())
+      .filter(Boolean)
+
+    const now = new Date().toISOString()
+    const id = generateId()
+    const entry: ExtensionVocabEntry = {
+      id,
+      word: wordTrimmed,
+      sourceSentence: sourceSentence.trim(),
+      pageTitle: pageInfo.title,
+      pageUrl: pageInfo.url,
+      topic: topic.trim(),
+      personalNote: personalNote.trim(),
+      tags,
+
+      meaning: aiDetails?.meaning || '',
+      meaningVi: aiDetails?.meaningVi || '',
+      partOfSpeech: aiDetails?.partOfSpeech || '',
+      pronunciation: aiDetails?.pronunciation || '',
+      exampleSentence: aiDetails?.exampleSentence || '',
+      synonyms: aiDetails?.synonyms || [],
+      antonyms: aiDetails?.antonyms || [],
+      collocations: aiDetails?.collocations || [],
+      wordFamily: aiDetails?.wordFamily || [],
+
+      difficulty,
+      status: 'new',
+      addedToReview: addToReview,
+      reviewId: '',
+
+      createdAt: now,
+      updatedAt: now,
+      }
+
     try {
-      const tags = tagsInput
-        .split(',')
-        .map(t => t.trim())
-        .filter(Boolean)
-
-      const now = new Date().toISOString()
-      const id = generateId()
-      const entry: ExtensionVocabEntry = extensionVocabSchema.parse({
-        id,
-        word: wordTrimmed,
-        sourceSentence: sourceSentence.trim(),
-        pageTitle: pageInfo.title,
-        pageUrl: pageInfo.url,
-        topic: topic.trim(),
-        personalNote: personalNote.trim(),
-        tags,
-
-        meaning: aiDetails?.meaning || '',
-        meaningVi: aiDetails?.meaningVi || '',
-        partOfSpeech: aiDetails?.partOfSpeech || '',
-        pronunciation: aiDetails?.pronunciation || '',
-        exampleSentence: aiDetails?.exampleSentence || '',
-        synonyms: aiDetails?.synonyms || [],
-        antonyms: aiDetails?.antonyms || [],
-        collocations: aiDetails?.collocations || [],
-        wordFamily: aiDetails?.wordFamily || [],
-
-        difficulty,
-        status: 'new',
-        addedToReview: addToReview,
-        reviewId: '',
-
-        createdAt: now,
-        updatedAt: now,
-      })
-
-      try {
-        await saveVocabularyEntry(entry)
-      } catch (err) {
-        console.warn('[VocabularyCollector] IndexedDB save failed, falling back to chrome.storage:', err)
-      }
-      try { pushSync('vocabulary', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
-
-      const learningEntryData = {
-        id: generateId(),
-        text: wordTrimmed,
-        category: 'vocabulary',
-        topic: topic.trim() || 'general',
-        skill: 'vocabulary',
-        difficulty,
-        tags,
-        personalNote: personalNote.trim(),
-        pageTitle: pageInfo.title,
-        pageUrl: pageInfo.url,
-        status: 'new',
-        createdAt: now,
-        updatedAt: now,
-      } as LearningEntry
-      try {
-        await saveEntry(learningEntryData)
-      } catch (err) {
-        console.warn('[VocabularyCollector] learningEntries save failed (non-critical):', err)
-      }
-      try { pushSync('learningEntry', 'created', learningEntryData.id, learningEntryData as unknown as Record<string, unknown>) } catch {}
-
-      try {
-        await incrementDailyProgress(PROGRESS_KEYS.WORDS_ADDED, 1)
-      } catch (err) {
-        console.warn('[VocabularyCollector] progress increment failed (non-critical):', err)
-      }
-
-      try {
-        await chrome.runtime.sendMessage({ type: MESSAGE_TYPES.VOCAB_SAVED, payload: entry })
-      } catch {
-        // Background may not be available (popup closed, etc.)
-      }
-
-      setSaved(true)
-      setTimeout(() => onSaved(), 1200)
+      await saveVocabularyEntry(entry)
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Unknown error'
-      setErrors({ submit: `Failed to save: ${message}` })
-    } finally {
-      setSaving(false)
+      console.warn('[VocabularyCollector] IndexedDB save failed, falling back to chrome.storage:', err)
     }
+    try { pushSync('vocabulary', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
+
+    const learningEntryData = {
+      id: generateId(),
+      text: wordTrimmed,
+      category: 'vocabulary',
+      topic: topic.trim() || 'general',
+      skill: 'vocabulary',
+      difficulty,
+      tags,
+      personalNote: personalNote.trim(),
+      pageTitle: pageInfo.title,
+      pageUrl: pageInfo.url,
+      status: 'new',
+      createdAt: now,
+      updatedAt: now,
+    } as LearningEntry
+    try {
+      await saveEntry(learningEntryData)
+    } catch (err) {
+      console.warn('[VocabularyCollector] learningEntries save failed (non-critical):', err)
+    }
+    try { pushSync('learningEntry', 'created', learningEntryData.id, learningEntryData as unknown as Record<string, unknown>) } catch {}
+
+    try {
+      await incrementDailyProgress(PROGRESS_KEYS.WORDS_ADDED, 1)
+    } catch (err) {
+      console.warn('[VocabularyCollector] progress increment failed (non-critical):', err)
+    }
+
+    try {
+      await chrome.runtime.sendMessage({ type: MESSAGE_TYPES.VOCAB_SAVED, payload: entry })
+    } catch {
+      // Background may not be available (popup closed, etc.)
+    }
+
+    setSaved(true)
+    setTimeout(() => onSaved(), 1200)
+    setSaving(false)
   }
 
   if (saved) {

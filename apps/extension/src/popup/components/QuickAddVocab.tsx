@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { extensionVocabSchema } from '../../storage/vocabularyStore'
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { incrementDailyProgress } from '../../services/storage'
@@ -84,37 +83,44 @@ export default function QuickAddVocab({ onSaved, onCancel }: QuickAddVocabProps)
     setSaving(true)
     setErrors({})
 
-    try {
-      const tags = form.tags
-        .split(',')
-        .map((t) => t.trim())
-        .filter(Boolean)
+    const tags = form.tags
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean)
 
-      const now = new Date().toISOString()
-      const entry: ExtensionVocabEntry = extensionVocabSchema.parse({
-        id: crypto.randomUUID(),
-        word: form.word.trim(),
-        sourceSentence: form.sourceSentence.trim(),
-        topic: form.topic.trim(),
-        tags,
-        difficulty: '',
-        status: 'new',
-        addedToReview: true,
-        reviewId: '',
-        createdAt: now,
-        updatedAt: now,
-      })
-
-      await saveVocabularyEntry(entry)
-      await incrementDailyProgress('wordsAdded', 1)
-
-      setSaved(true)
-      setTimeout(() => onSaved(), 1200)
-    } catch {
-      setErrors({ submit: 'Failed to save. Please try again.' })
-    } finally {
-      setSaving(false)
+    const now = new Date().toISOString()
+    const entry: ExtensionVocabEntry = {
+      id: crypto.randomUUID(),
+      word: form.word.trim(),
+      sourceSentence: form.sourceSentence.trim(),
+      pageTitle: '',
+      pageUrl: '',
+      topic: form.topic.trim(),
+      personalNote: '',
+      tags,
+      meaning: '',
+      meaningVi: '',
+      partOfSpeech: '',
+      pronunciation: '',
+      exampleSentence: '',
+      synonyms: [],
+      antonyms: [],
+      collocations: [],
+      wordFamily: [],
+      difficulty: '',
+      status: 'new',
+      addedToReview: true,
+      reviewId: '',
+      createdAt: now,
+      updatedAt: now,
     }
+
+    await saveVocabularyEntry(entry)
+    await incrementDailyProgress('wordsAdded', 1)
+
+    setSaved(true)
+    setTimeout(() => onSaved(), 1200)
+    setSaving(false)
   }, [form, onSaved])
 
   if (saved) {

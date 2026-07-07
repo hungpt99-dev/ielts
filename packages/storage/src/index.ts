@@ -127,15 +127,12 @@ export {
   generateExportFilename,
   readJsonFile,
   validateExtensionExportData,
-	  createBridgeMessage,
-	  isValidBridgeMessage,
-	} from './syncService'
+  createBridgeMessage,
+} from './syncService'
 export {
   DATA_SYNC_ACTION,
   SYNC_ENTITY_TYPES,
   SYNC_OPERATIONS,
-  isDataSyncMessage,
-  isDuplicateMessage,
   createMessageId,
 } from './syncProtocol'
 export type {

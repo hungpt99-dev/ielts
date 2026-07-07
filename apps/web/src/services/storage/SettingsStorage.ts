@@ -1,6 +1,5 @@
 import type { AppSettings } from '../../models'
 import { DEFAULT_SETTINGS } from '../../models'
-import { isValidBridgeMessage } from '@ielts/storage'
 import { themeModeFromDarkMode, darkModeFromThemeMode } from '@ielts/settings'
 import type { SharedSettingsPatch } from '@ielts/settings'
 import { SETTINGS_BRIDGE_ACTIONS, BRIDGE_SOURCES } from '@ielts/settings'
@@ -128,10 +127,10 @@ function debouncedNotifyExtension(): void {
 
 function handleBridgeMessage(event: MessageEvent): void {
   if (event.origin !== window.location.origin) return
-  if (!isValidBridgeMessage(event.data)) return
-  if (event.data.source !== BRIDGE_SOURCES.EXTENSION) return
-  if (event.data.action !== SETTINGS_BRIDGE_ACTIONS.SETTINGS_SYNC) return
-  if (!event.data.data || typeof event.data.data !== 'object') return
+  const msg = event.data
+  if (!msg || typeof msg !== 'object') return
+  if (msg.source !== BRIDGE_SOURCES.EXTENSION || msg.action !== SETTINGS_BRIDGE_ACTIONS.SETTINGS_SYNC) return
+  if (!msg.data || typeof msg.data !== 'object') return
 
   _applyingRemote = true
   try {

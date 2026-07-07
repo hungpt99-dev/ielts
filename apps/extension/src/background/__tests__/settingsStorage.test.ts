@@ -4,7 +4,6 @@ import {
   SAVE_CATEGORIES,
   THEME_MODES,
   AI_PROVIDERS,
-  extensionSettingsSchema,
   loadSettings,
   saveSettings,
   patchSettings,
@@ -69,11 +68,10 @@ afterEach(() => {
 })
 
 describe('constants', () => {
-  it('DEFAULT_SETTINGS matches schema defaults', () => {
-    const parsed = extensionSettingsSchema.parse({})
-    for (const key of Object.keys(DEFAULT_SETTINGS) as (keyof ExtensionSettings)[]) {
-      expect(DEFAULT_SETTINGS[key]).toEqual(parsed[key])
-    }
+  it('DEFAULT_SETTINGS has all required fields', () => {
+    expect(DEFAULT_SETTINGS.floatingToolbar).toBe(true)
+    expect(DEFAULT_SETTINGS.autoSaveSelected).toBe(false)
+    expect(DEFAULT_SETTINGS.defaultTopic).toBe('general')
   })
 
   it('SAVE_CATEGORIES has expected values', () => {

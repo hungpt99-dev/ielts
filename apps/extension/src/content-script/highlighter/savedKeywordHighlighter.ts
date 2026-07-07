@@ -44,7 +44,7 @@ let retryCount = 0
 async function loadSettings(): Promise<boolean> {
   try {
     const result = await new Promise<any>(r =>
-      chrome.storage.sync.get([SETTINGS_KEY], r),
+      chrome.storage.local.get([SETTINGS_KEY], r),
     )
     const settings = result[SETTINGS_KEY] || {}
     return settings.autoHighlightSavedVocabulary !== false

@@ -321,6 +321,24 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
     chrome.tabs.create({ url: 'https://ieltsjourney.dev/info' })
   }, [])
 
+  const [syncing, setSyncing] = useState(false)
+  const handleSyncToWebsite = useCallback(async () => {
+    setSyncing(true)
+    try {
+      const res = await chrome.runtime.sendMessage({ type: 'SYNC_ALL_TO_WEB' })
+      if (res?.data?.ok) {
+        const count = res.data.count as number
+        showToast('success', count > 0 ? `Synced ${count} words to website` : 'No words to sync')
+      } else {
+        showToast('error', (res?.data?.error as string) || 'Sync failed')
+      }
+    } catch {
+      showToast('error', 'Sync failed')
+    } finally {
+      setSyncing(false)
+    }
+  }, [])
+
   const actions = useMemo(
     () => [
       { icon: <IconVocabulary />, label: 'Vocab', onClick: () => onNavigate('vocabularyCollector') },
@@ -747,6 +765,34 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
           >
             <IconDatabase size={12} />
             Backup
+          </button>
+          <button
+            onClick={handleSyncToWebsite}
+            disabled={syncing}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-2xs)',
+              background: 'none',
+              border: 'none',
+              color: 'var(--color-text-secondary)',
+              cursor: syncing ? 'wait' : 'pointer',
+              fontSize: 'var(--text-xs)',
+              fontWeight: 'var(--weight-medium)',
+              fontFamily: 'var(--font-sans)',
+              padding: 'var(--spacing-xs) var(--spacing-2xs)',
+              minHeight: 'var(--spacing-xl)',
+              borderRadius: 'var(--radius-lg)',
+              transition: 'all var(--transition-fast)',
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation',
+              opacity: syncing ? 0.6 : 1,
+            }}
+            onMouseEnter={(e) => { if (!syncing) { e.currentTarget.style.background = 'var(--color-surface-alt)'; e.currentTarget.style.color = 'var(--color-text)' } }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--color-text-secondary)' }}
+          >
+            <IconRefresh size={12} />
+            {syncing ? 'Syncing...' : 'Sync'}
           </button>
           <button
             onClick={handleOpenInfo}

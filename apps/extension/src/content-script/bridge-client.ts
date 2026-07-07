@@ -57,10 +57,10 @@ async function forwardVocabToPage(): Promise<void> {
       data: item,
     }))
 
-  const vocabFromDict = vocabEntries.map((item: Record<string, unknown>) => ({
+  const vocabFromDict = vocabEntries.map((item) => ({
     source: 'ielts-extension' as const,
     action: 'VOCAB_SAVED' as const,
-    data: item,
+    data: item as unknown as Record<string, unknown>,
   }))
 
   const allMessages = [...vocabFromDict, ...vocabFromSaved]

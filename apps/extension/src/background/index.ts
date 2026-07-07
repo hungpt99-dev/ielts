@@ -1,9 +1,9 @@
 import type { SaveCategory, LearningEntry } from '../types'
 import type { DataSyncPayload } from '@ielts/storage'
-import { DATA_SYNC_ACTION, createMessageId } from '@ielts/storage'
+import { createMessageId } from '@ielts/storage'
 import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
-import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
+import { saveVocabularyEntry } from '../storage/vocabularyStore'
 import { safeStorageSet } from '../utils/safe-chrome'
 import { initMessaging } from './messaging'
 import { initializeStorageBridge } from './storage-bridge'
@@ -196,31 +196,34 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
         if (pending.category === 'vocabulary') {
           vocabCount++
-          try {
-            const text = pending.text as string
-            const vocabId = crypto.randomUUID()
-            const vocabEntry = extensionVocabSchema.parse({
-              id: vocabId,
-              word: text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
-              sourceSentence: text,
-              pageTitle: (pending.pageTitle as string) || '',
-              pageUrl: (pending.pageUrl as string) || '',
-              topic: (pending.topic as string) || 'general',
-              personalNote: (pending.note as string) || '',
-              tags: (pending.tags as string[]) || [],
-              meaning: '',
-              partOfSpeech: '',
-              pronunciation: '',
-              difficulty: '',
-              status: 'new',
-              addedToReview: true,
-              reviewId: '',
-              createdAt: now,
-              updatedAt: now,
-            })
-            await saveVocabularyEntry(vocabEntry)
-            entity.vocabId = vocabId
-          } catch { /* non-critical */ }
+          const text = pending.text as string
+          const vocabId = crypto.randomUUID()
+          await saveVocabularyEntry({
+            id: vocabId,
+            word: text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+            sourceSentence: text,
+            pageTitle: (pending.pageTitle as string) || '',
+            pageUrl: (pending.pageUrl as string) || '',
+            topic: (pending.topic as string) || 'general',
+            personalNote: (pending.note as string) || '',
+            tags: (pending.tags as string[]) || [],
+            meaning: '',
+            meaningVi: '',
+            partOfSpeech: '',
+            pronunciation: '',
+            exampleSentence: '',
+            synonyms: [],
+            antonyms: [],
+            collocations: [],
+            wordFamily: [],
+            difficulty: '',
+            status: 'new',
+            addedToReview: true,
+            reviewId: '',
+            createdAt: now,
+            updatedAt: now,
+          }).catch(() => {})
+          entity.vocabId = vocabId
         }
 
         savedEntries.push({ id: entryId, category: pending.category as string, entity })

@@ -1,26 +1,18 @@
-import { DATA_SYNC_ACTION, isDataSyncMessage, isDuplicateMessage, createMessageId, type DataSyncPayload, type SyncEntityType, type SyncOperation } from '@ielts/storage'
+import { DATA_SYNC_ACTION, type DataSyncPayload, type SyncEntityType, type SyncOperation } from '@ielts/storage'
 import { DatabaseService } from './Database'
 
-const BRIDGE_SOURCE = 'ielts-page'
-let syncInProgress = 0
-
-export function isSyncInProgress(): boolean {
-  return syncInProgress > 0
-}
-
 export function pushDataSync(entityType: SyncEntityType, operation: SyncOperation, entityId: string, entity: Record<string, unknown>): void {
-  if (syncInProgress > 0) return
   const payload: DataSyncPayload = {
     entityType,
     operation,
     entityId,
     entity,
     timestamp: new Date().toISOString(),
-    messageId: createMessageId(),
+    messageId: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
   }
   try {
     window.postMessage(
-      { source: BRIDGE_SOURCE, action: DATA_SYNC_ACTION, data: payload },
+      { source: 'ielts-page', action: DATA_SYNC_ACTION, data: payload },
       window.location.origin,
     )
   } catch {
@@ -109,12 +101,9 @@ async function saveToDatabase(payload: DataSyncPayload): Promise<void> {
 }
 
 function handleDataSync(payload: DataSyncPayload): void {
-  syncInProgress++
   saveToDatabase(payload).then(() => {
-    syncInProgress--
     notifyListeners(payload.entityType, payload.operation, payload.entityId)
   }).catch(err => {
-    syncInProgress--
     console.error('[DataSync] Save failed:', err)
   })
 }
@@ -127,10 +116,11 @@ export function initDataSyncManager(): void {
 
   window.addEventListener('message', (event: MessageEvent) => {
     if (event.origin !== window.location.origin) return
-    if (!isDataSyncMessage(event.data)) return
-    if (event.data.source === 'ielts-page') return
-    if (isDuplicateMessage(event.data.data.messageId)) return
+    const msg = event.data
+    if (!msg || typeof msg !== 'object') return
+    if (msg.source === 'ielts-page' || msg.action !== DATA_SYNC_ACTION) return
+    if (!msg.data || typeof msg.data !== 'object') return
 
-    handleDataSync(event.data.data)
+    handleDataSync(msg.data as DataSyncPayload)
   })
 }

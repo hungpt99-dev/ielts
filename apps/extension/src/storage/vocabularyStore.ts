@@ -1,37 +1,30 @@
-import { z } from 'zod'
 import { openDB, STORE_NAMES } from './db'
 
-export const extensionVocabSchema = z.object({
-  id: z.string(),
-  word: z.string().min(1, 'Word is required'),
-  sourceSentence: z.string().default(''),
-  pageTitle: z.string().default(''),
-  pageUrl: z.string().default(''),
-  topic: z.string().default(''),
-  personalNote: z.string().default(''),
-  tags: z.array(z.string()).default([]),
-
-  meaning: z.string().default(''),
-  meaningVi: z.string().default(''),
-  partOfSpeech: z.string().default(''),
-  pronunciation: z.string().default(''),
-  exampleSentence: z.string().default(''),
-  synonyms: z.array(z.string()).default([]),
-  antonyms: z.array(z.string()).default([]),
-  collocations: z.array(z.string()).default([]),
-  wordFamily: z.array(z.string()).default([]),
-
-  difficulty: z.enum(['easy', 'medium', 'hard', '']).default(''),
-  status: z.enum(['new', 'learning', 'reviewing', 'mastered']).default('new'),
-
-  addedToReview: z.boolean().default(false),
-  reviewId: z.string().default(''),
-
-  createdAt: z.string(),
-  updatedAt: z.string(),
-})
-
-export type ExtensionVocabEntry = z.infer<typeof extensionVocabSchema>
+export interface ExtensionVocabEntry {
+  id: string
+  word: string
+  sourceSentence: string
+  pageTitle: string
+  pageUrl: string
+  topic: string
+  personalNote: string
+  tags: string[]
+  meaning: string
+  meaningVi: string
+  partOfSpeech: string
+  pronunciation: string
+  exampleSentence: string
+  synonyms: string[]
+  antonyms: string[]
+  collocations: string[]
+  wordFamily: string[]
+  difficulty: 'easy' | 'medium' | 'hard' | ''
+  status: 'new' | 'learning' | 'reviewing' | 'mastered'
+  addedToReview: boolean
+  reviewId: string
+  createdAt: string
+  updatedAt: string
+}
 
 const STORE = STORE_NAMES.VOCABULARY
 

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { safeStorageGet, safeStorageSet, safeSyncGet, safeSyncSet, safeSendMessage } from '../safe-chrome'
+import { safeStorageGet, safeStorageSet, safeSyncGet, safeSendMessage } from '../safe-chrome'
 
 function createMockChrome() {
   const localStore: Record<string, unknown> = {}
@@ -148,46 +148,22 @@ describe('safeStorageSet', () => {
 })
 
 describe('safeSyncGet', () => {
-  it('returns stored value from sync storage', async () => {
+  it('returns stored value from local storage', async () => {
     await new Promise<void>((resolve) => {
-      chrome.storage.sync.set({ syncKey: 'syncValue' }, resolve)
+      chrome.storage.local.set({ syncKey: 'syncValue' }, resolve)
     })
     const result = await safeSyncGet<string>('syncKey')
     expect(result.syncKey).toBe('syncValue')
   })
 
   it('returns empty object on error', async () => {
-    const getSpy = vi.spyOn(mockChrome.storage.sync, 'get')
+    const getSpy = vi.spyOn(mockChrome.storage.local, 'get')
     getSpy.mockImplementation((_keys: string | string[], cb: (r: Record<string, unknown>) => void) => {
-      Object.defineProperty(chrome.runtime, 'lastError', {
-        value: { message: 'Sync error' },
-        configurable: true,
-      })
       cb({})
     })
 
     const result = await safeSyncGet<string>('any')
     expect(result).toEqual({})
-  })
-})
-
-describe('safeSyncSet', () => {
-  it('stores data to sync storage', async () => {
-    await safeSyncSet({ syncKey: 'syncValue' })
-
-    const result = await new Promise<Record<string, unknown>>((resolve) => {
-      chrome.storage.sync.get('syncKey', resolve)
-    })
-    expect(result.syncKey).toBe('syncValue')
-  })
-
-  it('does not throw on error', async () => {
-    const setSpy = vi.spyOn(mockChrome.storage.sync, 'set')
-    setSpy.mockImplementation(() => {
-      throw new Error('Sync error')
-    })
-
-    await expect(safeSyncSet({ key: 'value' })).resolves.toBeUndefined()
   })
 })
 

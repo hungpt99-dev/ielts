@@ -52,7 +52,7 @@ export function safeStorageSet(
         chrome.storage.local.set(data, () => {
           // Read lastError to suppress 'Unchecked runtime.lastError' warnings
           // that Chrome logs when storage quota is exceeded.
-          const _ = chrome.runtime.lastError
+          chrome.runtime.lastError
           resolve()
         })
       } catch {
@@ -73,30 +73,11 @@ export function safeSyncGet<T>(
 ): Promise<Record<string, T | undefined>> {
   return new Promise((resolve) => {
     try {
-      chrome.storage.sync.get(keys, (result) => {
-        if (chrome.runtime.lastError) {
-          resolve({})
-          return
-        }
+      chrome.storage.local.get(keys, (result) => {
         resolve(result as Record<string, T | undefined>)
       })
     } catch {
       resolve({})
-    }
-  })
-}
-
-export function safeSyncSet(
-  data: Record<string, unknown>,
-): Promise<void> {
-  return new Promise((resolve) => {
-    try {
-      chrome.storage.sync.set(data, () => {
-        const _ = chrome.runtime.lastError
-        resolve()
-      })
-    } catch {
-      resolve()
     }
   })
 }

@@ -1,11 +1,9 @@
-import { DATA_SYNC_ACTION, isDataSyncMessage, isDuplicateMessage, createMessageId, type DataSyncPayload, type SyncEntityType, type SyncOperation } from '@ielts/storage'
-
-const BRIDGE_SOURCE = 'ielts-extension'
+import { DATA_SYNC_ACTION, type DataSyncPayload, type SyncEntityType, type SyncOperation } from '@ielts/storage'
 
 function postToPage(payload: DataSyncPayload): void {
   try {
     window.postMessage(
-      { source: BRIDGE_SOURCE, action: DATA_SYNC_ACTION, data: payload },
+      { source: 'ielts-extension', action: DATA_SYNC_ACTION, data: payload },
       window.location.origin,
     )
   } catch {
@@ -28,7 +26,7 @@ export function pushSync(entityType: SyncEntityType, operation: SyncOperation, e
     entityId,
     entity,
     timestamp: new Date().toISOString(),
-    messageId: createMessageId(),
+    messageId: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
   }
   postToPage(payload)
   postToBackground(payload)
@@ -58,11 +56,12 @@ export function destroySyncListener(): void {
 
 function handleMessageEvent(event: MessageEvent): void {
   if (event.origin !== window.location.origin) return
-  if (!isDataSyncMessage(event.data)) return
-  if (event.data.source === 'ielts-extension') return
-  if (isDuplicateMessage(event.data.data.messageId)) return
+  const msg = event.data
+  if (!msg || typeof msg !== 'object') return
+  if (msg.source === 'ielts-extension' || msg.action !== DATA_SYNC_ACTION) return
+  if (!msg.data || typeof msg.data !== 'object') return
 
   for (const handler of inboundHandlers) {
-    try { handler(event.data.data) } catch { /* skip bad handler */ }
+    try { handler(msg.data as DataSyncPayload) } catch { /* skip bad handler */ }
   }
 }

@@ -4,7 +4,7 @@ import type { EntryFormData } from '../../types'
 import { SAVE_CATEGORIES, CATEGORY_LABELS, CATEGORY_COLORS, CATEGORY_ICONS, SKILL_OPTIONS, SKILL_LABELS } from '../../types'
 import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
-import { saveVocabularyEntry, extensionVocabSchema } from '../../storage/vocabularyStore'
+import { saveVocabularyEntry, type ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveArticleEntry, extensionArticleSchema } from '../../storage/articleStore'
 import { pushSync } from '../../services/syncManager'
 import { IconClose, IconCheck } from '@ielts/ui'
@@ -125,31 +125,33 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
       try { pushSync('learningEntry', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
 
       if (form.category === 'vocabulary') {
-        try {
-          const vocabEntry = extensionVocabSchema.parse({
-            id: crypto.randomUUID(),
-            word: form.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
-            sourceSentence: form.text,
-            pageTitle: pageInfo.title,
-            pageUrl: pageInfo.url,
-            topic: form.topic,
-            personalNote: form.personalNote,
-            tags,
-            meaning: '',
-            partOfSpeech: '',
-            pronunciation: '',
-            difficulty: form.difficulty,
-            status: 'new',
-            addedToReview: true,
-            reviewId: '',
-            createdAt: now,
-            updatedAt: now,
-          })
-          await saveVocabularyEntry(vocabEntry)
-          try { pushSync('vocabulary', 'created', vocabEntry.id, vocabEntry as unknown as Record<string, unknown>) } catch {}
-        } catch {
-          /* non-critical: vocabulary entry saved as learning entry already */
+        const vocabEntry: ExtensionVocabEntry = {
+          id: crypto.randomUUID(),
+          word: form.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+          sourceSentence: form.text,
+          pageTitle: pageInfo.title,
+          pageUrl: pageInfo.url,
+          topic: form.topic,
+          personalNote: form.personalNote,
+          tags,
+          meaning: '',
+          meaningVi: '',
+          partOfSpeech: '',
+          pronunciation: '',
+          exampleSentence: '',
+          synonyms: [],
+          antonyms: [],
+          collocations: [],
+          wordFamily: [],
+          difficulty: form.difficulty as ExtensionVocabEntry['difficulty'],
+          status: 'new',
+          addedToReview: true,
+          reviewId: '',
+          createdAt: now,
+          updatedAt: now,
         }
+        await saveVocabularyEntry(vocabEntry).catch(() => {})
+        try { pushSync('vocabulary', 'created', vocabEntry.id, vocabEntry as unknown as Record<string, unknown>) } catch {}
       }
 
       if (form.category === 'reading' && form.text.trim().length > 50) {

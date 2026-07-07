@@ -2,7 +2,6 @@ import type { SaveCategory } from '../types'
 import {
   safeStorageGet,
   safeStorageSet,
-  safeSendMessage,
 } from '../utils/safe-chrome'
 import {
   emitExtensionSelectedTextSaved,

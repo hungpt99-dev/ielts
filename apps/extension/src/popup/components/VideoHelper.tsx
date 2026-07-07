@@ -5,7 +5,7 @@ import {
   generateListeningQuestions,
   generateShadowingScripts,
 } from '@ielts/ai'
-import { saveVocabularyEntry, extensionVocabSchema } from '../../storage/vocabularyStore'
+import { saveVocabularyEntry, type ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import {
   saveVideoEntry,
   videoEntrySchema,
@@ -35,11 +35,10 @@ interface VideoPageInfo {
 type AiTab = 'vocabulary' | 'summary' | 'questions' | 'shadowing'
 
 async function getAIProviderConfig(): Promise<{ apiKey: string; baseUrl: string; model: string }> {
-  const [syncResult, localResult] = await Promise.all([
-    new Promise<any>(r => chrome.storage.sync.get(['extensionSettings'], r)),
-    new Promise<any>(r => chrome.storage.local.get(['aiApiKey'], r)),
+  const [localResult] = await Promise.all([
+    new Promise<any>(r => chrome.storage.local.get(['extensionSettings', 'aiApiKey'], r)),
   ])
-  const settings = syncResult.extensionSettings || {}
+  const settings = localResult.extensionSettings || {}
   return {
     apiKey: localResult.aiApiKey || '',
     baseUrl: settings.aiBaseUrl || 'https://api.openai.com/v1',
@@ -311,7 +310,7 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
 
       if (vocabData && vocabData.length > 0) {
         for (const item of vocabData) {
-          const vocabEntry = extensionVocabSchema.parse({
+          const vocabEntry: ExtensionVocabEntry = {
             id: crypto.randomUUID(),
             word: item.word,
             sourceSentence: item.context || '',
@@ -335,8 +334,8 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
             reviewId: '',
             createdAt: now,
             updatedAt: now,
-          })
-          await saveVocabularyEntry(vocabEntry)
+          }
+          await saveVocabularyEntry(vocabEntry).catch(() => {})
           try { pushSync('vocabulary', 'created', vocabEntry.id, vocabEntry as unknown as Record<string, unknown>) } catch {}
         }
       }
