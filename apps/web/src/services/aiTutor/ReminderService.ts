@@ -141,7 +141,7 @@ export class ReminderService {
     try {
       const notif = new Notification(reminder.title, {
         body: reminder.message,
-        icon: '/icon.png',
+        icon: '/favicon.ico',
         tag: `ielts-reminder-${reminder.id}`,
         requireInteraction: true,
       })
@@ -317,7 +317,7 @@ export class ReminderService {
       notifications.create(`ielts-reminder-${reminder.id}`, {
         type: 'basic',
         iconUrl: (chrome.runtime as Record<string, unknown>).getURL ?
-          ((chrome.runtime as { getURL: (path: string) => string }).getURL('icons/icon-128.png')) :
+          ((chrome.runtime as { getURL: (path: string) => string }).getURL('icon-128.png')) :
           '',
         title: reminder.title,
         message: reminder.message,
