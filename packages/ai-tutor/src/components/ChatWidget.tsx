@@ -5,7 +5,6 @@ import { MessageStorage } from '../services/messageStorage'
 import { useChatWidget } from '../hooks/useChatWidget'
 import { ChatBubble } from './ChatBubble'
 import { QuickActions } from './QuickActions'
-import { ProactiveMessagePreview } from './ProactiveMessagePreview'
 import { NotificationCenter } from './NotificationCenter'
 import { TutorAvatar } from './TutorAvatar'
 import { MissingKeyBanner } from './MissingKeyBanner'
@@ -119,36 +118,6 @@ export function ChatWidget({
   const contextSuggestions = useMemo(
     () => externalSuggestions ?? (internalContextSuggestion ? [internalContextSuggestion] : []),
     [externalSuggestions, internalContextSuggestion],
-  )
-
-  const pendingProactive = useMemo(
-    () => proactive.messages.filter(m => !m.isDismissed && !m.isSnoozed).slice(0, 3),
-    [proactive.messages],
-  )
-
-  const handleDismissProactive = useCallback(
-    (msgId: string) => proactive.dismissMessage(msgId),
-    [proactive],
-  )
-
-  const handleSnoozeProactive = useCallback(
-    (msgId: string) => proactive.snoozeMessage(msgId),
-    [proactive],
-  )
-
-  const handleProactiveAction = useCallback(
-    (msgId: string) => {
-      const msg = proactive.messages.find(m => m.id === msgId)
-      if (!msg) return
-      proactive.markAsRead(msgId)
-      proactive.dismissMessage(msgId)
-      if (msg.action?.type === 'navigate' && msg.action.payload?.path) {
-        window.location.href = msg.action.payload.path as string
-      } else if (msg.action?.type === 'action' && msg.action.payload?.action) {
-        handleQuickAction(msg.action.payload.action as string)
-      }
-    },
-    [proactive, handleQuickAction],
   )
 
   const handleNotificationAction = useCallback(
@@ -284,26 +253,6 @@ export function ChatWidget({
               onSaveNote={handleSaveNote}
               onCopy={handleCopy}
             />
-
-            {hasMessages && pendingProactive.length > 0 && (
-              <div
-                className="flex shrink-0 flex-col gap-2 border-t px-4 py-3"
-                style={{ borderColor: 'var(--color-border)' }}
-              >
-                <p className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-muted)' }}>
-                  Tutor Suggestions
-                </p>
-                {pendingProactive.map(msg => (
-                  <ProactiveMessagePreview
-                    key={msg.id}
-                    message={msg}
-                    onDismiss={() => handleDismissProactive(msg.id)}
-                    onAction={() => handleProactiveAction(msg.id)}
-                    onSnooze={() => handleSnoozeProactive(msg.id)}
-                  />
-                ))}
-              </div>
-            )}
 
             {showActions && hasMessages && currentActions.length > 0 && (
               <div
