@@ -1,0 +1,625 @@
+[2026-07-07T04:46:40.103Z] [INFO] Task started: Update README.md to Introduce Product and Guide New Members
+[2026-07-07T04:46:40.105Z] [INFO] [info] [output-plan] [{"action":"modify","target":"README.md","description":"Updated README with product introduction and new member onboarding guidance","validationMethod":"file_diff"}]
+[2026-07-07T04:46:40.649Z] [INFO] [stderr] [0m
+[2026-07-07T04:46:40.649Z] [INFO] [stderr] [0m
+[2026-07-07T04:46:40.649Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-07T04:46:44.809Z] [INFO] [stderr] [0m→ [0mRead README.md
+[2026-07-07T04:46:44.896Z] [INFO] [stderr] [0m→ [0mRead docs/product-overview.md
+[2026-07-07T04:46:45.151Z] [INFO] [stderr] [0m→ [0mRead docs/contribution-guide.md
+[2026-07-07T04:46:45.430Z] [INFO] [stderr] [0m→ [0mRead docs/ai-agent.md
+[2026-07-07T04:46:45.674Z] [INFO] [stderr] [0m→ [0mRead docs/user-guide.md
+[2026-07-07T04:47:12.701Z] [INFO] [stderr] [0m→ [0mRead README.md[90m [offset=260, limit=60][0m
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] [0m
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] [0m← [0mEdit README.md
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] @@ -294,8 +294,50 @@
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-07T04:47:24.047Z] [INFO] [stderr]  
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] ===================================================================
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.047Z] [INFO] [stderr]  ---
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +## New Member Onboarding
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +Welcome! This section helps you get oriented and start contributing quickly.
+[2026-07-07T04:47:24.047Z] [INFO] [stderr]  ```
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +- **Node.js** >= 18
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +- **pnpm** >= 8
+[2026-07-07T04:47:24.047Z] [INFO] [stderr]  
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +- **Git** configured with SSH or HTTPS
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +### Setup
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +- A code editor (VS Code recommended)
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +### Prerequisites
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +git clone <repo-url>
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +pnpm install
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +pnpm dev          # Start development server
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +cd ielts-journey
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +```
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +Open [http://localhost:5173](http://localhost:5173) to explore the app.
+[2026-07-07T04:47:24.047Z] [INFO] [stderr] +```bash
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +### First Steps
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +   ```bash
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +2. **Run quality checks** — Verify your environment:
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +   pnpm typecheck
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +1. **Read the docs** — Start with [Product Overview](docs/product-overview.md) and [Architecture](docs/architecture.md) to understand the system
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +   pnpm lint
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +   pnpm test
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +   ```
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +3. **Explore the codebase** — Use `codegraph explore "<question>"` to navigate symbols and understand dependencies
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +5. **Review the [Contribution Guide](docs/contribution-guide.md)** — Read conventions, PR process, and coding standards
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +---
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +### Communication
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +- **GitHub Discussions** — Ask questions and suggest ideas
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  | Command | Description |
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  |---------|-------------|
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  ## Available Scripts
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  ---
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] @@ -314,27 +356,8 @@
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  | `pnpm clean` | Clean all build outputs |
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +- **GitHub Issues** — Report bugs and request features
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -## Data Architecture
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -| Storage | Contents |
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -All user data is stored **client-side only** — no backend, no cloud sync, no telemetry:
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -| **IndexedDB** | Vocabulary, study sessions, logs, grammar notes, mistakes, progress, chat history |
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -|---------|----------|
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -| **localStorage** | Settings (theme, target band, AI API key, preferences) |
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -```
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -Component → Custom Hook → Feature Service → Repository → IndexedDB
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -```
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -See [docs/storage-design.md](docs/storage-design.md) for schema details.
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] ----
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  The Chrome extension (Manifest V3) allows collecting learning material from any webpage:
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  ## Browser Extension
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -
+[2026-07-07T04:47:24.048Z] [INFO] [stderr]  
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] 
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] -Data flows through a layered architecture:
+[2026-07-07T04:47:24.048Z] [INFO] [stderr] +4. **Find a starting issue** — Look for `good first issue` or `help wanted` labels on GitHub
+[2026-07-07T04:47:24.049Z] [INFO] [stderr] [0m
+[2026-07-07T04:47:24.146Z] [INFO] [stdout] Now I'll make targeted edits to the README: add an onboarding section, remove redundant Data Architecture, merge Testing/Linting, and update Contributing.
+[2026-07-07T04:47:27.132Z] [INFO] [stderr] [0m→ [0mRead README.md[90m [offset=370, limit=60][0m
+[2026-07-07T04:47:29.622Z] [INFO] [stderr] [0m→ [0mRead README.md[90m [offset=428, limit=80][0m
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] [0m← [0mEdit README.md
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] ===================================================================
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] [0m
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  ---
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  | [ADR 0005](docs/adr/0005-design-token-theme-system.md) | Design token theme system |
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] +## Testing & Quality
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] @@ -408,33 +408,26 @@
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] -## Testing
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] +
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] +Run these checks regularly — all must pass before merging:
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  ```bash
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  pnpm test:unit     # Run unit tests with Vitest
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  pnpm test          # Run all tests
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] +pnpm typecheck     # TypeScript type checking (tsc -b --noEmit)
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  pnpm test:watch    # Watch mode
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] +pnpm lint          # ESLint
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  ```
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] -- `jsdom` for browser environment simulation
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] -- `fake-indexeddb` for storage repository tests
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] -Tests use **Vitest** with:
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] +**Testing**: Vitest with `fake-indexeddb` (repository tests), React Testing Library (component tests), `jsdom` (browser simulation), and per-package configs in `packages/*/vitest.config.ts`.
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] +**Linting**: ESLint configured for consistent code style.
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] +**Type Checking**: TypeScript strict mode (`tsc -b --noEmit`).
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] -- React Testing Library for component tests
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] -- Per-package test configs (`packages/*/vitest.config.ts`)
+[2026-07-07T04:47:35.127Z] [INFO] [stderr]  
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] ----
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] -## Linting & Type Checking
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] -```bash
+[2026-07-07T04:47:35.127Z] [INFO] [stderr] -pnpm lint        # ESLint
+[2026-07-07T04:47:35.128Z] [INFO] [stderr] -pnpm typecheck   # TypeScript type checking (tsc -b --noEmit)
+[2026-07-07T04:47:35.128Z] [INFO] [stderr] -```
+[2026-07-07T04:47:35.128Z] [INFO] [stderr] -Both commands must pass before merging. Run them as part of your development workflow.
+[2026-07-07T04:47:35.128Z] [INFO] [stderr]  ## Deployment
+[2026-07-07T04:47:35.128Z] [INFO] [stderr]  ---
+[2026-07-07T04:47:35.128Z] [INFO] [stderr] -
+[2026-07-07T04:47:35.128Z] [INFO] [stderr]  
+[2026-07-07T04:47:35.128Z] [INFO] [stderr]  
+[2026-07-07T04:47:35.128Z] [INFO] [stderr] 
+[2026-07-07T04:47:35.128Z] [INFO] [stderr] -
+[2026-07-07T04:47:35.128Z] [INFO] [stderr] [0m
+[2026-07-07T04:47:35.191Z] [INFO] [stdout] Now I'll merge Testing and Linting, and update Contributing to reference onboarding:
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] ===================================================================
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] @@ -466,9 +466,9 @@
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] [0m← [0mEdit README.md
+[2026-07-07T04:47:38.780Z] [INFO] [stderr]  
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+[2026-07-07T04:47:38.780Z] [INFO] [stderr]  ---
+[2026-07-07T04:47:38.780Z] [INFO] [stderr]  ## Contributing
+[2026-07-07T04:47:38.780Z] [INFO] [stderr]  
+[2026-07-07T04:47:38.780Z] [INFO] [stderr]  
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] +We welcome contributions! New to the project? Start with the [Onboarding section](#new-member-onboarding) above. For detailed guidelines see [docs/contribution-guide.md](docs/contribution-guide.md) covering:
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] -We welcome contributions! See [docs/contribution-guide.md](docs/contribution-guide.md) for detailed guidelines including:
+[2026-07-07T04:47:38.780Z] [INFO] [stderr]  - How to add new features
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] 
+[2026-07-07T04:47:38.780Z] [INFO] [stderr]  - Pull request process
+[2026-07-07T04:47:38.780Z] [INFO] [stderr]  - Coding conventions and style guide
+[2026-07-07T04:47:38.780Z] [INFO] [stderr] [0m
+[2026-07-07T04:47:41.309Z] [INFO] [stderr] [0m→ [0mRead README.md
+[2026-07-07T04:47:41.362Z] [INFO] [stdout] Let me verify the final result:
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] [0m
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] [0m$ [0mgit diff README.md
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] index 6b1baca..8fab632 100644
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] @@ -295,6 +295,48 @@ pnpm preview         # Preview production build locally
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] --- a/README.md
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +++ b/README.md
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] diff --git a/README.md b/README.md
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  ---
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +## New Member Onboarding
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +Welcome! This section helps you get oriented and start contributing quickly.
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +### Prerequisites
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +- **Node.js** >= 18
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +- **Git** configured with SSH or HTTPS
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +- **pnpm** >= 8
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +- A code editor (VS Code recommended)
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +### Setup
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +git clone <repo-url>
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +```bash
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +cd ielts-journey
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +pnpm install
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +pnpm dev          # Start development server
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +```
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +2. **Run quality checks** — Verify your environment:
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +### First Steps
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +1. **Read the docs** — Start with [Product Overview](docs/product-overview.md) and [Architecture](docs/architecture.md) to understand the system
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +   pnpm typecheck
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +Open [http://localhost:5173](http://localhost:5173) to explore the app.
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +   pnpm test
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +   ```bash
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +   pnpm lint
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +3. **Explore the codebase** — Use `codegraph explore "<question>"` to navigate symbols and understand dependencies
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +   ```
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +4. **Find a starting issue** — Look for `good first issue` or `help wanted` labels on GitHub
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +### Communication
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +- **GitHub Discussions** — Ask questions and suggest ideas
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +5. **Review the [Contribution Guide](docs/contribution-guide.md)** — Read conventions, PR process, and coding standards
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +- **GitHub Issues** — Report bugs and request features
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  ## Available Scripts
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  | Command | Description |
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] +---
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -## Data Architecture
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -| Storage | Contents |
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  ---
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] @@ -315,25 +357,6 @@ pnpm preview         # Preview production build locally
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -All user data is stored **client-side only** — no backend, no cloud sync, no telemetry:
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -|---------|----------|
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -| **IndexedDB** | Vocabulary, study sessions, logs, grammar notes, mistakes, progress, chat history |
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -Data flows through a layered architecture:
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -| **localStorage** | Settings (theme, target band, AI API key, preferences) |
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -Component → Custom Hook → Feature Service → Repository → IndexedDB
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -```
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -```
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -See [docs/storage-design.md](docs/storage-design.md) for schema details.
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] ----
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  The Chrome extension (Manifest V3) allows collecting learning material from any webpage:
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] -## Testing
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  ## Browser Extension
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.933Z] [INFO] [stderr] @@ -386,30 +409,23 @@ See [docs/extension-architecture.md](docs/extension-architecture.md) for details
+[2026-07-07T04:47:46.933Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] +Run these checks regularly — all must pass before merging:
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  ---
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] +
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  pnpm test:unit     # Run unit tests with Vitest
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  ```bash
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  pnpm test          # Run all tests
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] +## Testing & Quality
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  ```
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] +pnpm typecheck     # TypeScript type checking (tsc -b --noEmit)
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  pnpm test:watch    # Watch mode
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] +pnpm lint          # ESLint
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -- Per-package test configs (`packages/*/vitest.config.ts`)
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -Tests use **Vitest** with:
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -- React Testing Library for component tests
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -- `fake-indexeddb` for storage repository tests
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -- `jsdom` for browser environment simulation
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] ----
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] +**Testing**: Vitest with `fake-indexeddb` (repository tests), React Testing Library (component tests), `jsdom` (browser simulation), and per-package configs in `packages/*/vitest.config.ts`.
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -## Linting & Type Checking
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -pnpm lint        # ESLint
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -pnpm typecheck   # TypeScript type checking (tsc -b --noEmit)
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -```
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -```bash
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -Both commands must pass before merging. Run them as part of your development workflow.
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] +**Linting**: ESLint configured for consistent code style.
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  ---
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] @@ -451,7 +467,7 @@ See [docs/troubleshooting.md](docs/troubleshooting.md) for the complete guide.
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  ## Contributing
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] -We welcome contributions! See [docs/contribution-guide.md](docs/contribution-guide.md) for detailed guidelines including:
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  - Pull request process
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] +We welcome contributions! New to the project? Start with the [Onboarding section](#new-member-onboarding) above. For detailed guidelines see [docs/contribution-guide.md](docs/contribution-guide.md) covering:
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] +**Type Checking**: TypeScript strict mode (`tsc -b --noEmit`).
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  
+[2026-07-07T04:47:46.934Z] [INFO] [stderr]  - Coding conventions and style guide
+[2026-07-07T04:47:46.934Z] [INFO] [stderr] [0m
+[2026-07-07T04:47:53.424Z] [INFO] [stdout] 
+[2026-07-07T04:47:53.425Z] [INFO] [stdout] 2. **Removed "Data Architecture" section** — Content was redundant with the "Architecture" section's data flow diagram; details remain available in `docs/storage-design.md`.
+[2026-07-07T04:47:53.425Z] [INFO] [stdout] **Changes made to README.md:**
+[2026-07-07T04:47:53.425Z] [INFO] [stdout] 
+[2026-07-07T04:47:53.425Z] [INFO] [stdout] 4. **Updated "Contributing" section** — Added link to the new onboarding section for new members.
+[2026-07-07T04:47:53.425Z] [INFO] [stdout] 3. **Merged "Testing" and "Linting & Type Checking"** into a single "Testing & Quality" section — consolidated commands, removed duplicate introduction text.
+[2026-07-07T04:47:53.425Z] [INFO] [stdout] 1. **Added "New Member Onboarding" section** — Step-by-step guide covering prerequisites, setup, first steps (docs reading list, quality checks, codebase exploration with CodeGraph, issue finding), and communication channels.
+[2026-07-07T04:47:53.425Z] [INFO] [stdout] 
+[2026-07-07T04:47:53.425Z] [INFO] [stdout] 
+[2026-07-07T04:47:53.633Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-07T04:47:53.633Z] [INFO] Output:
+Now I'll make targeted edits to the README: add an onboarding section, remove redundant Data Architecture, merge Testing/Linting, and update Contributing.
+Now I'll merge Testing and Linting, and update Contributing to reference onboarding:
+Let me verify the final result:
+**Changes made to README.md:**
+
+1. **Added "New Member Onboarding" section** — Step-by-step guide covering prerequisites, setup, first steps (docs reading list, quality checks, codebase exploration with CodeGraph, issue finding), and communication channels.
+
+2. **Removed "Data Architecture" section** — Content was redundant with the "Architecture" section's data flow diagram; details remain available in `docs/storage-design.md`.
+
+3. **Merged "Testing" and "Linting & Type Checking"** into a single "Testing & Quality" section — consolidated commands, removed duplicate introduction text.
+
+4. **Updated "Contributing" section** — Added link to the new onboarding section for new members.
+[2026-07-07T04:47:53.633Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m→ [0mRead README.md
+[0m→ [0mRead docs/product-overview.md
+[0m→ [0mRead docs/contribution-guide.md
+[0m→ [0mRead docs/ai-agent.md
+[0m→ [0mRead docs/user-guide.md
+[0m→ [0mRead README.md[90m [offset=260, limit=60][0m
+[0m
+[0m← [0mEdit README.md
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+@@ -294,8 +294,50 @@
+ ```
+ 
+ ---
+ 
++## New Member Onboarding
++
++Welcome! This section helps you get oriented and start contributing quickly.
++
++### Prerequisites
++
++- **Node.js** >= 18
++- **pnpm** >= 8
++- **Git** configured with SSH or HTTPS
++- A code editor (VS Code recommended)
++
++### Setup
++
++```bash
++git clone <repo-url>
++cd ielts-journey
++pnpm install
++pnpm dev          # Start development server
++```
++
++Open [http://localhost:5173](http://localhost:5173) to explore the app.
++
++### First Steps
++
++1. **Read the docs** — Start with [Product Overview](docs/product-overview.md) and [Architecture](docs/architecture.md) to understand the system
++2. **Run quality checks** — Verify your environment:
++   ```bash
++   pnpm typecheck
++   pnpm lint
++   pnpm test
++   ```
++3. **Explore the codebase** — Use `codegraph explore "<question>"` to navigate symbols and understand dependencies
++4. **Find a starting issue** — Look for `good first issue` or `help wanted` labels on GitHub
++5. **Review the [Contribution Guide](docs/contribution-guide.md)** — Read conventions, PR process, and coding standards
++
++### Communication
++
++- **GitHub Issues** — Report bugs and request features
++- **GitHub Discussions** — Ask questions and suggest ideas
++
++---
++
+ ## Available Scripts
+ 
+ | Command | Description |
+ |---------|-------------|
+@@ -314,27 +356,8 @@
+ | `pnpm clean` | Clean all build outputs |
+ 
+ ---
+ 
+-## Data Architecture
+-
+-All user data is stored **client-side only** — no backend, no cloud sync, no telemetry:
+-
+-| Storage | Contents |
+-|---------|----------|
+-| **IndexedDB** | Vocabulary, study sessions, logs, grammar notes, mistakes, progress, chat history |
+-| **localStorage** | Settings (theme, target band, AI API key, preferences) |
+-
+-Data flows through a layered architecture:
+-
+-```
+-Component → Custom Hook → Feature Service → Repository → IndexedDB
+-```
+-
+-See [docs/storage-design.md](docs/storage-design.md) for schema details.
+-
+----
+-
+ ## Browser Extension
+ 
+ The Chrome extension (Manifest V3) allows collecting learning material from any webpage:
+ 
+
+[0m
+[0m→ [0mRead README.md[90m [offset=370, limit=60][0m
+[0m→ [0mRead README.md[90m [offset=428, limit=80][0m
+[0m
+[0m← [0mEdit README.md
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+@@ -408,33 +408,26 @@
+ | [ADR 0005](docs/adr/0005-design-token-theme-system.md) | Design token theme system |
+ 
+ ---
+ 
+-## Testing
++## Testing & Quality
+ 
++Run these checks regularly — all must pass before merging:
++
+ ```bash
+ pnpm test          # Run all tests
+ pnpm test:unit     # Run unit tests with Vitest
+ pnpm test:watch    # Watch mode
++pnpm lint          # ESLint
++pnpm typecheck     # TypeScript type checking (tsc -b --noEmit)
+ ```
+ 
+-Tests use **Vitest** with:
+-- `fake-indexeddb` for storage repository tests
+-- React Testing Library for component tests
+-- `jsdom` for browser environment simulation
+-- Per-package test configs (`packages/*/vitest.config.ts`)
++**Testing**: Vitest with `fake-indexeddb` (repository tests), React Testing Library (component tests), `jsdom` (browser simulation), and per-package configs in `packages/*/vitest.config.ts`.
+ 
+----
++**Linting**: ESLint configured for consistent code style.
+ 
+-## Linting & Type Checking
++**Type Checking**: TypeScript strict mode (`tsc -b --noEmit`).
+ 
+-```bash
+-pnpm lint        # ESLint
+-pnpm typecheck   # TypeScript type checking (tsc -b --noEmit)
+-```
+-
+-Both commands must pass before merging. Run them as part of your development workflow.
+-
+ ---
+ 
+ ## Deployment
+ 
+
+[0m
+[0m← [0mEdit README.md
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/README.md
+@@ -466,9 +466,9 @@
+ ---
+ 
+ ## Contributing
+ 
+-We welcome contributions! See [docs/contribution-guide.md](docs/contribution-guide.md) for detailed guidelines including:
++We welcome contributions! New to the project? Start with the [Onboarding section](#new-member-onboarding) above. For detailed guidelines see [docs/contribution-guide.md](docs/contribution-guide.md) covering:
+ 
+ - Coding conventions and style guide
+ - Pull request process
+ - How to add new features
+
+[0m
+[0m→ [0mRead README.md
+[0m
+[0m$ [0mgit diff README.md
+diff --git a/README.md b/README.md
+index 6b1baca..8fab632 100644
+--- a/README.md
++++ b/README.md
+@@ -295,6 +295,48 @@ pnpm preview         # Preview production build locally
+ 
+ ---
+ 
++## New Member Onboarding
++
++Welcome! This section helps you get oriented and start contributing quickly.
++
++### Prerequisites
++
++- **Node.js** >= 18
++- **pnpm** >= 8
++- **Git** configured with SSH or HTTPS
++- A code editor (VS Code recommended)
++
++### Setup
++
++```bash
++git clone <repo-url>
++cd ielts-journey
++pnpm install
++pnpm dev          # Start development server
++```
++
++Open [http://localhost:5173](http://localhost:5173) to explore the app.
++
++### First Steps
++
++1. **Read the docs** — Start with [Product Overview](docs/product-overview.md) and [Architecture](docs/architecture.md) to understand the system
++2. **Run quality checks** — Verify your environment:
++   ```bash
++   pnpm typecheck
++   pnpm lint
++   pnpm test
++   ```
++3. **Explore the codebase** — Use `codegraph explore "<question>"` to navigate symbols and understand dependencies
++4. **Find a starting issue** — Look for `good first issue` or `help wanted` labels on GitHub
++5. **Review the [Contribution Guide](docs/contribution-guide.md)** — Read conventions, PR process, and coding standards
++
++### Communication
++
++- **GitHub Issues** — Report bugs and request features
++- **GitHub Discussions** — Ask questions and suggest ideas
++
++---
++
+ ## Available Scripts
+ 
+ | Command | Description |
+@@ -315,25 +357,6 @@ pnpm preview         # Preview production build locally
+ 
+ ---
+ 
+-## Data Architecture
+-
+-All user data is stored **client-side only** — no backend, no cloud sync, no telemetry:
+-
+-| Storage | Contents |
+-|---------|----------|
+-| **IndexedDB** | Vocabulary, study sessions, logs, grammar notes, mistakes, progress, chat history |
+-| **localStorage** | Settings (theme, target band, AI API key, preferences) |
+-
+-Data flows through a layered architecture:
+-
+-```
+-Component → Custom Hook → Feature Service → Repository → IndexedDB
+-```
+-
+-See [docs/storage-design.md](docs/storage-design.md) for schema details.
+-
+----
+-
+ ## Browser Extension
+ 
+ The Chrome extension (Manifest V3) allows collecting learning material from any webpage:
+@@ -386,30 +409,23 @@ See [docs/extension-architecture.md](docs/extension-architecture.md) for details
+ 
+ ---
+ 
+-## Testing
++## Testing & Quality
++
++Run these checks regularly — all must pass before merging:
+ 
+ ```bash
+ pnpm test          # Run all tests
+ pnpm test:unit     # Run unit tests with Vitest
+ pnpm test:watch    # Watch mode
++pnpm lint          # ESLint
++pnpm typecheck     # TypeScript type checking (tsc -b --noEmit)
+ ```
+ 
+-Tests use **Vitest** with:
+-- `fake-indexeddb` for storage repository tests
+-- React Testing Library for component tests
+-- `jsdom` for browser environment simulation
+-- Per-package test configs (`packages/*/vitest.config.ts`)
++**Testing**: Vitest with `fake-indexeddb` (repository tests), React Testing Library (component tests), `jsdom` (browser simulation), and per-package configs in `packages/*/vitest.config.ts`.
+ 
+----
+-
+-## Linting & Type Checking
+-
+-```bash
+-pnpm lint        # ESLint
+-pnpm typecheck   # TypeScript type checking (tsc -b --noEmit)
+-```
++**Linting**: ESLint configured for consistent code style.
+ 
+-Both commands must pass before merging. Run them as part of your development workflow.
++**Type Checking**: TypeScript strict mode (`tsc -b --noEmit`).
+ 
+ ---
+ 
+@@ -451,7 +467,7 @@ See [docs/troubleshooting.md](docs/troubleshooting.md) for the complete guide.
+ 
+ ## Contributing
+ 
+-We welcome contributions! See [docs/contribution-guide.md](docs/contribution-guide.md) for detailed guidelines including:
++We welcome contributions! New to the project? Start with the [Onboarding section](#new-member-onboarding) above. For detailed guidelines see [docs/contribution-guide.md](docs/contribution-guide.md) covering:
+ 
+ - Coding conventions and style guide
+ - Pull request process
+[0m
+[2026-07-07T04:47:53.633Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-07T04:47:53.636Z] [INFO] Task completed successfully

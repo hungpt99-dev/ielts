@@ -1,0 +1,659 @@
+[2026-07-07T04:38:57.726Z] [INFO] Task started: Update docs/product-overview.md to Align with Industry Standards and Introduce AI Coding Agent
+[2026-07-07T04:38:57.729Z] [INFO] [info] [output-plan] [{"action":"modify","target":"docs/product-overview.md","description":"Updated product overview with AI coding agent introduction and improved structure","validationMethod":"file_diff"}]
+[2026-07-07T04:38:58.283Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-07T04:38:58.283Z] [INFO] [stderr] [0m
+[2026-07-07T04:38:58.283Z] [INFO] [stderr] [0m
+[2026-07-07T04:39:02.071Z] [INFO] [stderr] [0m→ [0mRead docs/product-overview.md
+[2026-07-07T04:39:06.337Z] [INFO] [stderr] [0m→ [0mRead docs
+[2026-07-07T04:39:06.561Z] [INFO] [stderr] [0m→ [0mRead README.md
+[2026-07-07T04:39:06.655Z] [INFO] [stdout] Let me explore the project structure and existing docs for context.
+[2026-07-07T04:39:14.464Z] [INFO] [stderr] [0m→ [0mRead docs/ai-agent.md
+[2026-07-07T04:39:20.696Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+[2026-07-07T04:39:20.696Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+[2026-07-07T04:39:20.697Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+[2026-07-07T04:39:20.696Z] [INFO] [stderr] [0m
+[2026-07-07T04:39:20.696Z] [INFO] [stderr] [0m← [0mEdit docs/product-overview.md
+[2026-07-07T04:39:20.697Z] [INFO] [stderr] @@ -1,13 +1,13 @@
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  # IELTS Learning Journey — Product Overview
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  
+[2026-07-07T04:39:20.697Z] [INFO] [stderr] +> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required. Built with Clean Architecture, strict TypeScript, and designed to be AI coding agent-friendly.
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  
+[2026-07-07T04:39:20.697Z] [INFO] [stderr] -IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local.
+[2026-07-07T04:39:20.697Z] [INFO] [stderr] ===================================================================
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  
+[2026-07-07T04:39:20.697Z] [INFO] [stderr] -> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required.
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  ## 1. What It Is
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  - **Local-first**: All data lives in your browser. You own it.
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  ### Core Philosophy
+[2026-07-07T04:39:20.697Z] [INFO] [stderr] [0m
+[2026-07-07T04:39:20.697Z] [INFO] [stderr] +IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local. The codebase is also designed to be AI coding agent-friendly, enabling automated code exploration and safe, predictable modifications.
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  
+[2026-07-07T04:39:20.697Z] [INFO] [stderr]  ---
+[2026-07-07T04:39:20.697Z] [INFO] [stderr] 
+[2026-07-07T04:39:20.780Z] [INFO] [stdout] Now I have the full context. I'll add an AI Coding Agent Integration section (section 10) and shift Getting Started to section 11.
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] [0m← [0mEdit docs/product-overview.md
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] @@ -172,13 +172,55 @@
+[2026-07-07T04:39:29.350Z] [INFO] [stderr]  ---
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] ===================================================================
+[2026-07-07T04:39:29.350Z] [INFO] [stderr]  See [security-privacy.md](security-privacy.md) for details.
+[2026-07-07T04:39:29.350Z] [INFO] [stderr]  
+[2026-07-07T04:39:29.350Z] [INFO] [stderr]  
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +## 10. AI Coding Agent Integration
+[2026-07-07T04:39:29.350Z] [INFO] [stderr]  
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] -```bash
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] -# Prerequisites: Node.js >= 18, pnpm >= 8
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +This codebase is designed to be **AI coding agent-friendly**. The following design decisions make the code predictable, statically analyzable, and safe to modify through automated tooling.
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] -## 10. Getting Started
+[2026-07-07T04:39:29.350Z] [INFO] [stderr]  
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +### Why AI Agents Work Well Here
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +| Property | Benefit for AI Agents |
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +| **Clean Architecture** | Strict layer separation makes it easy to identify where code belongs |
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +| **Strict TypeScript** | Full type information enables safe refactoring and accurate code generation |
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +|----------|-----------------------|
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +| **Repository Pattern** | Data access follows a predictable, consistent interface |
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +| **Pure Domain Logic** | Domain packages have zero framework dependencies, making them easy to test and modify |
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +| **Feature Modules** | New features can mirror existing patterns exactly |
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +### How AI Agents Should Approach This Codebase
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +| **Zod Validation** | Every data boundary is explicitly defined and validated |
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +| **Pre-built CodeGraph Index** | Symbol search, caller/callee analysis, and blast radius computation available out of the box |
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +2. **Use CodeGraph** — Run `codegraph explore "<question>"` for structural answers instead of grepping files
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +3. **Follow the data flow** — `Component → Hook → Service → Repository → IndexedDB`. Never call the database directly from UI
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +1. **Start with the architecture** — Read this document and [architecture.md](architecture.md) for layer separation understanding
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +5. **Validate with Zod** — Every data boundary requires a Zod schema
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +4. **Mirror existing patterns** — New features should follow the same structure as existing feature modules
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +6. **Respect layer isolation** — Domain packages must not import from Presentation or Infrastructure layers
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +### Available Agent Tools
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +- **Symbol Search** — Find any symbol by name
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +The `.codegraph/` index provides pre-computed structural knowledge:
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +- **Caller/Cal** — List every call site of a function, including callback registrations
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +- **Blast Radius** — Determine what a change would affect
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +For detailed AI agent guidelines, see [ai-agent.md](ai-agent.md).
+[2026-07-07T04:39:29.350Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +---
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +## 11. Getting Started
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +### Prerequisites
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +- **Node.js** >= 18
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +- **File Reading** — Read files with line numbers (index-served, faster than direct I/O)
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +- **pnpm** >= 8
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +### Installation & Development
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +```bash
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.351Z] [INFO] [stderr]  pnpm install
+[2026-07-07T04:39:29.351Z] [INFO] [stderr]  # Start development server
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +### New to the Project?
+[2026-07-07T04:39:29.351Z] [INFO] [stderr]  
+[2026-07-07T04:39:29.351Z] [INFO] [stderr]  
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] @@ -190,5 +232,12 @@
+[2026-07-07T04:39:29.351Z] [INFO] [stderr]  # Install dependencies
+[2026-07-07T04:39:29.351Z] [INFO] [stderr]  ```
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +3. Explore the [docs/](docs/) directory for detailed documentation on each subsystem
+[2026-07-07T04:39:29.351Z] [INFO] [stderr]  # Build for production
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +4. Run `pnpm test` and `pnpm lint` before submitting changes
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +1. Read this overview and [architecture.md](architecture.md) to understand the system
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +2. Check [contribution-guide.md](contribution-guide.md) for conventions and PR process
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] 
+[2026-07-07T04:39:29.351Z] [INFO] [stderr]  See [deployment.md](deployment.md) for build and deployment instructions.
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] [0m
+[2026-07-07T04:39:29.351Z] [INFO] [stderr] +
+[2026-07-07T04:39:29.351Z] [INFO] [stderr]  pnpm build
+[2026-07-07T04:39:31.597Z] [INFO] [stderr] [0m→ [0mRead docs/product-overview.md
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] [0m
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] --- a/docs/product-overview.md
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +++ b/docs/product-overview.md
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] index cd786d1..81b5ffd 100644
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] diff --git a/docs/product-overview.md b/docs/product-overview.md
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  # IELTS Learning Journey — Product Overview
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] @@ -1,12 +1,12 @@
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  ---
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] [0m$ [0mgit diff docs/product-overview.md
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  ## 1. What It Is
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required. Built with Clean Architecture, strict TypeScript, and designed to be AI coding agent-friendly.
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] -> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required.
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] -IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local.
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  ### Core Philosophy
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local. The codebase is also designed to be AI coding agent-friendly, enabling automated code exploration and safe, predictable modifications.
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  ---
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] -## 10. Getting Started
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +## 10. AI Coding Agent Integration
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] -```bash
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] -# Prerequisites: Node.js >= 18, pnpm >= 8
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +### Why AI Agents Work Well Here
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +| **Clean Architecture** | Strict layer separation makes it easy to identify where code belongs |
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +This codebase is designed to be **AI coding agent-friendly**. The following design decisions make the code predictable, statically analyzable, and safe to modify through automated tooling.
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +|----------|-----------------------|
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +| Property | Benefit for AI Agents |
+[2026-07-07T04:39:34.161Z] [INFO] [stderr] +| **Strict TypeScript** | Full type information enables safe refactoring and accurate code generation |
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +| **Pure Domain Logic** | Domain packages have zero framework dependencies, making them easy to test and modify |
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +| **Zod Validation** | Every data boundary is explicitly defined and validated |
+[2026-07-07T04:39:34.161Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] @@ -173,11 +173,53 @@ See [security-privacy.md](security-privacy.md) for details.
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +| **Pre-built CodeGraph Index** | Symbol search, caller/callee analysis, and blast radius computation available out of the box |
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +3. **Follow the data flow** — `Component → Hook → Service → Repository → IndexedDB`. Never call the database directly from UI
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +### How AI Agents Should Approach This Codebase
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +4. **Mirror existing patterns** — New features should follow the same structure as existing feature modules
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +| **Feature Modules** | New features can mirror existing patterns exactly |
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +6. **Respect layer isolation** — Domain packages must not import from Presentation or Infrastructure layers
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +5. **Validate with Zod** — Every data boundary requires a Zod schema
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +| **Repository Pattern** | Data access follows a predictable, consistent interface |
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +- **Caller/Cal** — List every call site of a function, including callback registrations
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +1. **Start with the architecture** — Read this document and [architecture.md](architecture.md) for layer separation understanding
+[2026-07-07T04:39:34.162Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +- **File Reading** — Read files with line numbers (index-served, faster than direct I/O)
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +### Available Agent Tools
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +The `.codegraph/` index provides pre-computed structural knowledge:
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +- **Symbol Search** — Find any symbol by name
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +For detailed AI agent guidelines, see [ai-agent.md](ai-agent.md).
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +## 11. Getting Started
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +- **Blast Radius** — Determine what a change would affect
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +2. **Use CodeGraph** — Run `codegraph explore "<question>"` for structural answers instead of grepping files
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +### Prerequisites
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +- **Node.js** >= 18
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +### Installation & Development
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +```bash
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.162Z] [INFO] [stderr]  pnpm install
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +- **pnpm** >= 8
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] @@ -191,4 +233,11 @@ open http://localhost:5173
+[2026-07-07T04:39:34.162Z] [INFO] [stderr]  # Install dependencies
+[2026-07-07T04:39:34.162Z] [INFO] [stderr]  
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +### New to the Project?
+[2026-07-07T04:39:34.162Z] [INFO] [stderr]  ```
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +2. Check [contribution-guide.md](contribution-guide.md) for conventions and PR process
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +3. Explore the [docs/](docs/) directory for detailed documentation on each subsystem
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +---
+[2026-07-07T04:39:34.162Z] [INFO] [stderr]  pnpm build
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +4. Run `pnpm test` and `pnpm lint` before submitting changes
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +1. Read this overview and [architecture.md](architecture.md) to understand the system
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] [0m
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:34.162Z] [INFO] [stderr]  See [deployment.md](deployment.md) for build and deployment instructions.
+[2026-07-07T04:39:34.162Z] [INFO] [stderr] +
+[2026-07-07T04:39:37.399Z] [INFO] [stderr] [0m← [0mEdit docs/product-overview.md
+[2026-07-07T04:39:37.399Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+[2026-07-07T04:39:37.399Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+[2026-07-07T04:39:37.399Z] [INFO] [stderr] @@ -201,9 +201,9 @@
+[2026-07-07T04:39:37.399Z] [INFO] [stderr]  ### Available Agent Tools
+[2026-07-07T04:39:37.399Z] [INFO] [stderr]  
+[2026-07-07T04:39:37.399Z] [INFO] [stderr]  - **Symbol Search** — Find any symbol by name
+[2026-07-07T04:39:37.399Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+[2026-07-07T04:39:37.399Z] [INFO] [stderr] +- **Caller/Callee** — List every call site of a function, including callback registrations
+[2026-07-07T04:39:37.399Z] [INFO] [stderr]  - **Blast Radius** — Determine what a change would affect
+[2026-07-07T04:39:37.400Z] [INFO] [stderr]  
+[2026-07-07T04:39:37.400Z] [INFO] [stderr] [0m
+[2026-07-07T04:39:37.399Z] [INFO] [stderr] ===================================================================
+[2026-07-07T04:39:37.399Z] [INFO] [stderr]  The `.codegraph/` index provides pre-computed structural knowledge:
+[2026-07-07T04:39:37.400Z] [INFO] [stderr] -- **Caller/Cal** — List every call site of a function, including callback registrations
+[2026-07-07T04:39:37.400Z] [INFO] [stderr]  - **File Reading** — Read files with line numbers (index-served, faster than direct I/O)
+[2026-07-07T04:39:37.400Z] [INFO] [stderr] 
+[2026-07-07T04:39:37.400Z] [INFO] [stderr]  For detailed AI agent guidelines, see [ai-agent.md](ai-agent.md).
+[2026-07-07T04:39:37.434Z] [INFO] [stdout] I see a typo — "Caller/Cal" should be "Caller/Callee". Let me fix it.
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] index cd786d1..15f1ba2 100644
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +++ b/docs/product-overview.md
+[2026-07-07T04:39:39.859Z] [INFO] [stderr] diff --git a/docs/product-overview.md b/docs/product-overview.md
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  # IELTS Learning Journey — Product Overview
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] -> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required.
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] @@ -1,12 +1,12 @@
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] --- a/docs/product-overview.md
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required. Built with Clean Architecture, strict TypeScript, and designed to be AI coding agent-friendly.
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  ---
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] [0m$ [0mgit diff docs/product-overview.md
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] -IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local.
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  ## 1. What It Is
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  ### Core Philosophy
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local. The codebase is also designed to be AI coding agent-friendly, enabling automated code exploration and safe, predictable modifications.
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  ---
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +## 10. AI Coding Agent Integration
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] -## 10. Getting Started
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +This codebase is designed to be **AI coding agent-friendly**. The following design decisions make the code predictable, statically analyzable, and safe to modify through automated tooling.
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] -# Prerequisites: Node.js >= 18, pnpm >= 8
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] -```bash
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] @@ -173,11 +173,53 @@ See [security-privacy.md](security-privacy.md) for details.
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +### Why AI Agents Work Well Here
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +| Property | Benefit for AI Agents |
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +| **Zod Validation** | Every data boundary is explicitly defined and validated |
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +|----------|-----------------------|
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +| **Strict TypeScript** | Full type information enables safe refactoring and accurate code generation |
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +| **Repository Pattern** | Data access follows a predictable, consistent interface |
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +| **Feature Modules** | New features can mirror existing patterns exactly |
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +| **Pure Domain Logic** | Domain packages have zero framework dependencies, making them easy to test and modify |
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +### How AI Agents Should Approach This Codebase
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +2. **Use CodeGraph** — Run `codegraph explore "<question>"` for structural answers instead of grepping files
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +| **Pre-built CodeGraph Index** | Symbol search, caller/callee analysis, and blast radius computation available out of the box |
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +3. **Follow the data flow** — `Component → Hook → Service → Repository → IndexedDB`. Never call the database directly from UI
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +1. **Start with the architecture** — Read this document and [architecture.md](architecture.md) for layer separation understanding
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +4. **Mirror existing patterns** — New features should follow the same structure as existing feature modules
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +6. **Respect layer isolation** — Domain packages must not import from Presentation or Infrastructure layers
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +5. **Validate with Zod** — Every data boundary requires a Zod schema
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +The `.codegraph/` index provides pre-computed structural knowledge:
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.860Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +### Available Agent Tools
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +- **File Reading** — Read files with line numbers (index-served, faster than direct I/O)
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +- **Blast Radius** — Determine what a change would affect
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +- **Symbol Search** — Find any symbol by name
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +- **Caller/Callee** — List every call site of a function, including callback registrations
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +---
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +## 11. Getting Started
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.860Z] [INFO] [stderr] +For detailed AI agent guidelines, see [ai-agent.md](ai-agent.md).
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +### Prerequisites
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +- **Node.js** >= 18
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +| **Clean Architecture** | Strict layer separation makes it easy to identify where code belongs |
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +### Installation & Development
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +- **pnpm** >= 8
+[2026-07-07T04:39:39.861Z] [INFO] [stderr]  # Install dependencies
+[2026-07-07T04:39:39.861Z] [INFO] [stderr]  pnpm install
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +```bash
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] @@ -191,4 +233,11 @@ open http://localhost:5173
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.861Z] [INFO] [stderr]  ```
+[2026-07-07T04:39:39.861Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.861Z] [INFO] [stderr]  pnpm build
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +2. Check [contribution-guide.md](contribution-guide.md) for conventions and PR process
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +### New to the Project?
+[2026-07-07T04:39:39.861Z] [INFO] [stderr]  
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +1. Read this overview and [architecture.md](architecture.md) to understand the system
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +4. Run `pnpm test` and `pnpm lint` before submitting changes
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +
+[2026-07-07T04:39:39.861Z] [INFO] [stderr]  See [deployment.md](deployment.md) for build and deployment instructions.
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] +3. Explore the [docs/](docs/) directory for detailed documentation on each subsystem
+[2026-07-07T04:39:39.861Z] [INFO] [stderr] [0m
+[2026-07-07T04:39:43.486Z] [INFO] [stderr] [✓] Update docs/product-overview.md with AI coding agent integration and improved structure
+[2026-07-07T04:39:43.486Z] [INFO] [stderr] [✓] Review and Analyze Existing Documentation and README
+[2026-07-07T04:39:43.486Z] [INFO] [stderr] [0m
+[2026-07-07T04:39:43.486Z] [INFO] [stderr] [0m# [0mTodos
+[2026-07-07T04:39:47.307Z] [INFO] [stdout] **Completion summary:**
+[2026-07-07T04:39:47.307Z] [INFO] [stdout] 
+[2026-07-07T04:39:47.307Z] [INFO] [stdout] 
+[2026-07-07T04:39:47.308Z] [INFO] [stdout] 3. **Section 11 (renumbered from 10): Getting Started** — Added prerequisites, a "New to the Project?" onboarding checklist pointing new contributors to architecture docs, contribution guide, and required validation commands.
+[2026-07-07T04:39:47.307Z] [INFO] [stdout] 2. **Intro and description** — Updated tagline and section 1 to mention AI coding agent compatibility alongside the product description.
+[2026-07-07T04:39:47.307Z] [INFO] [stdout] 
+[2026-07-07T04:39:47.308Z] [INFO] [stdout] 
+[2026-07-07T04:39:47.307Z] [INFO] [stdout] 1. **Section 10 (new): AI Coding Agent Integration** — Explains why the codebase is AI-agent-friendly (Clean Architecture, strict TypeScript, Zod, CodeGraph), provides a 6-step approach for agents to follow, and lists available CodeGraph tools. Links to `docs/ai-agent.md` for detailed guidelines.
+[2026-07-07T04:39:47.308Z] [INFO] [stdout] Updated `docs/product-overview.md` with three changes:
+[2026-07-07T04:39:47.516Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-07T04:39:47.516Z] [INFO] Output:
+Let me explore the project structure and existing docs for context.
+Now I have the full context. I'll add an AI Coding Agent Integration section (section 10) and shift Getting Started to section 11.
+I see a typo — "Caller/Cal" should be "Caller/Callee". Let me fix it.
+**Completion summary:**
+
+Updated `docs/product-overview.md` with three changes:
+
+1. **Section 10 (new): AI Coding Agent Integration** — Explains why the codebase is AI-agent-friendly (Clean Architecture, strict TypeScript, Zod, CodeGraph), provides a 6-step approach for agents to follow, and lists available CodeGraph tools. Links to `docs/ai-agent.md` for detailed guidelines.
+
+2. **Intro and description** — Updated tagline and section 1 to mention AI coding agent compatibility alongside the product description.
+
+3. **Section 11 (renumbered from 10): Getting Started** — Added prerequisites, a "New to the Project?" onboarding checklist pointing new contributors to architecture docs, contribution guide, and required validation commands.
+[2026-07-07T04:39:47.516Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m→ [0mRead docs/product-overview.md
+[0m→ [0mRead docs
+[0m→ [0mRead README.md
+[0m→ [0mRead docs/ai-agent.md
+[0m
+[0m← [0mEdit docs/product-overview.md
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+@@ -1,13 +1,13 @@
+ # IELTS Learning Journey — Product Overview
+ 
+-> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required.
++> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required. Built with Clean Architecture, strict TypeScript, and designed to be AI coding agent-friendly.
+ 
+ ---
+ 
+ ## 1. What It Is
+ 
+-IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local.
++IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local. The codebase is also designed to be AI coding agent-friendly, enabling automated code exploration and safe, predictable modifications.
+ 
+ ### Core Philosophy
+ 
+ - **Local-first**: All data lives in your browser. You own it.
+
+[0m
+[0m← [0mEdit docs/product-overview.md
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+@@ -172,13 +172,55 @@
+ See [security-privacy.md](security-privacy.md) for details.
+ 
+ ---
+ 
+-## 10. Getting Started
++## 10. AI Coding Agent Integration
+ 
+-```bash
+-# Prerequisites: Node.js >= 18, pnpm >= 8
++This codebase is designed to be **AI coding agent-friendly**. The following design decisions make the code predictable, statically analyzable, and safe to modify through automated tooling.
+ 
++### Why AI Agents Work Well Here
++
++| Property | Benefit for AI Agents |
++|----------|-----------------------|
++| **Clean Architecture** | Strict layer separation makes it easy to identify where code belongs |
++| **Strict TypeScript** | Full type information enables safe refactoring and accurate code generation |
++| **Zod Validation** | Every data boundary is explicitly defined and validated |
++| **Repository Pattern** | Data access follows a predictable, consistent interface |
++| **Feature Modules** | New features can mirror existing patterns exactly |
++| **Pure Domain Logic** | Domain packages have zero framework dependencies, making them easy to test and modify |
++| **Pre-built CodeGraph Index** | Symbol search, caller/callee analysis, and blast radius computation available out of the box |
++
++### How AI Agents Should Approach This Codebase
++
++1. **Start with the architecture** — Read this document and [architecture.md](architecture.md) for layer separation understanding
++2. **Use CodeGraph** — Run `codegraph explore "<question>"` for structural answers instead of grepping files
++3. **Follow the data flow** — `Component → Hook → Service → Repository → IndexedDB`. Never call the database directly from UI
++4. **Mirror existing patterns** — New features should follow the same structure as existing feature modules
++5. **Validate with Zod** — Every data boundary requires a Zod schema
++6. **Respect layer isolation** — Domain packages must not import from Presentation or Infrastructure layers
++
++### Available Agent Tools
++
++The `.codegraph/` index provides pre-computed structural knowledge:
++- **Symbol Search** — Find any symbol by name
++- **Caller/Cal** — List every call site of a function, including callback registrations
++- **Blast Radius** — Determine what a change would affect
++- **File Reading** — Read files with line numbers (index-served, faster than direct I/O)
++
++For detailed AI agent guidelines, see [ai-agent.md](ai-agent.md).
++
++---
++
++## 11. Getting Started
++
++### Prerequisites
++
++- **Node.js** >= 18
++- **pnpm** >= 8
++
++### Installation & Development
++
++```bash
+ # Install dependencies
+ pnpm install
+ 
+ # Start development server
+@@ -190,5 +232,12 @@
+ # Build for production
+ pnpm build
+ ```
+ 
++### New to the Project?
++
++1. Read this overview and [architecture.md](architecture.md) to understand the system
++2. Check [contribution-guide.md](contribution-guide.md) for conventions and PR process
++3. Explore the [docs/](docs/) directory for detailed documentation on each subsystem
++4. Run `pnpm test` and `pnpm lint` before submitting changes
++
+ See [deployment.md](deployment.md) for build and deployment instructions.
+
+[0m
+[0m→ [0mRead docs/product-overview.md
+[0m
+[0m$ [0mgit diff docs/product-overview.md
+diff --git a/docs/product-overview.md b/docs/product-overview.md
+index cd786d1..81b5ffd 100644
+--- a/docs/product-overview.md
++++ b/docs/product-overview.md
+@@ -1,12 +1,12 @@
+ # IELTS Learning Journey — Product Overview
+ 
+-> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required.
++> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required. Built with Clean Architecture, strict TypeScript, and designed to be AI coding agent-friendly.
+ 
+ ---
+ 
+ ## 1. What It Is
+ 
+-IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local.
++IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local. The codebase is also designed to be AI coding agent-friendly, enabling automated code exploration and safe, predictable modifications.
+ 
+ ### Core Philosophy
+ 
+@@ -173,11 +173,53 @@ See [security-privacy.md](security-privacy.md) for details.
+ 
+ ---
+ 
+-## 10. Getting Started
++## 10. AI Coding Agent Integration
+ 
+-```bash
+-# Prerequisites: Node.js >= 18, pnpm >= 8
++This codebase is designed to be **AI coding agent-friendly**. The following design decisions make the code predictable, statically analyzable, and safe to modify through automated tooling.
++
++### Why AI Agents Work Well Here
++
++| Property | Benefit for AI Agents |
++|----------|-----------------------|
++| **Clean Architecture** | Strict layer separation makes it easy to identify where code belongs |
++| **Strict TypeScript** | Full type information enables safe refactoring and accurate code generation |
++| **Zod Validation** | Every data boundary is explicitly defined and validated |
++| **Repository Pattern** | Data access follows a predictable, consistent interface |
++| **Feature Modules** | New features can mirror existing patterns exactly |
++| **Pure Domain Logic** | Domain packages have zero framework dependencies, making them easy to test and modify |
++| **Pre-built CodeGraph Index** | Symbol search, caller/callee analysis, and blast radius computation available out of the box |
++
++### How AI Agents Should Approach This Codebase
++
++1. **Start with the architecture** — Read this document and [architecture.md](architecture.md) for layer separation understanding
++2. **Use CodeGraph** — Run `codegraph explore "<question>"` for structural answers instead of grepping files
++3. **Follow the data flow** — `Component → Hook → Service → Repository → IndexedDB`. Never call the database directly from UI
++4. **Mirror existing patterns** — New features should follow the same structure as existing feature modules
++5. **Validate with Zod** — Every data boundary requires a Zod schema
++6. **Respect layer isolation** — Domain packages must not import from Presentation or Infrastructure layers
+ 
++### Available Agent Tools
++
++The `.codegraph/` index provides pre-computed structural knowledge:
++- **Symbol Search** — Find any symbol by name
++- **Caller/Cal** — List every call site of a function, including callback registrations
++- **Blast Radius** — Determine what a change would affect
++- **File Reading** — Read files with line numbers (index-served, faster than direct I/O)
++
++For detailed AI agent guidelines, see [ai-agent.md](ai-agent.md).
++
++---
++
++## 11. Getting Started
++
++### Prerequisites
++
++- **Node.js** >= 18
++- **pnpm** >= 8
++
++### Installation & Development
++
++```bash
+ # Install dependencies
+ pnpm install
+ 
+@@ -191,4 +233,11 @@ open http://localhost:5173
+ pnpm build
+ ```
+ 
++### New to the Project?
++
++1. Read this overview and [architecture.md](architecture.md) to understand the system
++2. Check [contribution-guide.md](contribution-guide.md) for conventions and PR process
++3. Explore the [docs/](docs/) directory for detailed documentation on each subsystem
++4. Run `pnpm test` and `pnpm lint` before submitting changes
++
+ See [deployment.md](deployment.md) for build and deployment instructions.
+[0m
+[0m← [0mEdit docs/product-overview.md
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/docs/product-overview.md
+@@ -201,9 +201,9 @@
+ ### Available Agent Tools
+ 
+ The `.codegraph/` index provides pre-computed structural knowledge:
+ - **Symbol Search** — Find any symbol by name
+-- **Caller/Cal** — List every call site of a function, including callback registrations
++- **Caller/Callee** — List every call site of a function, including callback registrations
+ - **Blast Radius** — Determine what a change would affect
+ - **File Reading** — Read files with line numbers (index-served, faster than direct I/O)
+ 
+ For detailed AI agent guidelines, see [ai-agent.md](ai-agent.md).
+
+[0m
+[0m$ [0mgit diff docs/product-overview.md
+diff --git a/docs/product-overview.md b/docs/product-overview.md
+index cd786d1..15f1ba2 100644
+--- a/docs/product-overview.md
++++ b/docs/product-overview.md
+@@ -1,12 +1,12 @@
+ # IELTS Learning Journey — Product Overview
+ 
+-> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required.
++> A local-first, offline-capable IELTS preparation system that runs entirely in the browser with no backend required. Built with Clean Architecture, strict TypeScript, and designed to be AI coding agent-friendly.
+ 
+ ---
+ 
+ ## 1. What It Is
+ 
+-IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local.
++IELTS Learning Journey is a comprehensive study tool for IELTS exam preparation. It helps learners manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for feedback — all while keeping data private and local. The codebase is also designed to be AI coding agent-friendly, enabling automated code exploration and safe, predictable modifications.
+ 
+ ### Core Philosophy
+ 
+@@ -173,11 +173,53 @@ See [security-privacy.md](security-privacy.md) for details.
+ 
+ ---
+ 
+-## 10. Getting Started
++## 10. AI Coding Agent Integration
+ 
+-```bash
+-# Prerequisites: Node.js >= 18, pnpm >= 8
++This codebase is designed to be **AI coding agent-friendly**. The following design decisions make the code predictable, statically analyzable, and safe to modify through automated tooling.
++
++### Why AI Agents Work Well Here
++
++| Property | Benefit for AI Agents |
++|----------|-----------------------|
++| **Clean Architecture** | Strict layer separation makes it easy to identify where code belongs |
++| **Strict TypeScript** | Full type information enables safe refactoring and accurate code generation |
++| **Zod Validation** | Every data boundary is explicitly defined and validated |
++| **Repository Pattern** | Data access follows a predictable, consistent interface |
++| **Feature Modules** | New features can mirror existing patterns exactly |
++| **Pure Domain Logic** | Domain packages have zero framework dependencies, making them easy to test and modify |
++| **Pre-built CodeGraph Index** | Symbol search, caller/callee analysis, and blast radius computation available out of the box |
++
++### How AI Agents Should Approach This Codebase
++
++1. **Start with the architecture** — Read this document and [architecture.md](architecture.md) for layer separation understanding
++2. **Use CodeGraph** — Run `codegraph explore "<question>"` for structural answers instead of grepping files
++3. **Follow the data flow** — `Component → Hook → Service → Repository → IndexedDB`. Never call the database directly from UI
++4. **Mirror existing patterns** — New features should follow the same structure as existing feature modules
++5. **Validate with Zod** — Every data boundary requires a Zod schema
++6. **Respect layer isolation** — Domain packages must not import from Presentation or Infrastructure layers
+ 
++### Available Agent Tools
++
++The `.codegraph/` index provides pre-computed structural knowledge:
++- **Symbol Search** — Find any symbol by name
++- **Caller/Callee** — List every call site of a function, including callback registrations
++- **Blast Radius** — Determine what a change would affect
++- **File Reading** — Read files with line numbers (index-served, faster than direct I/O)
++
++For detailed AI agent guidelines, see [ai-agent.md](ai-agent.md).
++
++---
++
++## 11. Getting Started
++
++### Prerequisites
++
++- **Node.js** >= 18
++- **pnpm** >= 8
++
++### Installation & Development
++
++```bash
+ # Install dependencies
+ pnpm install
+ 
+@@ -191,4 +233,11 @@ open http://localhost:5173
+ pnpm build
+ ```
+ 
++### New to the Project?
++
++1. Read this overview and [architecture.md](architecture.md) to understand the system
++2. Check [contribution-guide.md](contribution-guide.md) for conventions and PR process
++3. Explore the [docs/](docs/) directory for detailed documentation on each subsystem
++4. Run `pnpm test` and `pnpm lint` before submitting changes
++
+ See [deployment.md](deployment.md) for build and deployment instructions.
+[0m
+[0m# [0mTodos
+[✓] Review and Analyze Existing Documentation and README
+[✓] Update docs/product-overview.md with AI coding agent integration and improved structure
+[0m
+[2026-07-07T04:39:47.516Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-07T04:39:47.520Z] [INFO] Task completed successfully

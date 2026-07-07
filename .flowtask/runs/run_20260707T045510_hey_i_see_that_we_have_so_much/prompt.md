@@ -1,0 +1,1 @@
+hey, i see that we have so much doc, i think we need delete or remove or merge these of doc, please check all doc to decision what doc should remove merge or delete
