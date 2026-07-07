@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import AITutorChat from '../../features/ai-tutor/AITutorChat'
+import AITutorPopup from '../../features/ai-tutor/components/AITutorPopup'
 
 interface ChatIconState {
   isOpen: boolean
@@ -65,7 +65,7 @@ export default function ChatIcon({ onToggle }: ChatIconProps) {
 
   return (
     <>
-      <AITutorChat isOpen={isOpen} onClose={handleToggle} />
+      <AITutorPopup isOpen={isOpen} onClose={handleToggle} />
 
       <button
         onClick={handleToggle}
