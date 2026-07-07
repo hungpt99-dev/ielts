@@ -58,7 +58,7 @@ export const storageGet: StorageGet<unknown> = (key: string) =>
 
 export const storageSet: StorageSet = (key: string, value: unknown) =>
   new Promise((resolve) => {
-    chrome.storage.local.set({ [key]: value }, resolve)
+    chrome.storage.local.set({ [key]: value }, () => resolve())
   })
 
 export async function getDailyProgress(): Promise<DailyProgress> {
@@ -68,7 +68,7 @@ export async function getDailyProgress(): Promise<DailyProgress> {
 
 const pendingProgress: Partial<DailyProgress> = {}
 let writeTimer: ReturnType<typeof setTimeout> | null = null
-const FLUSH_DELAY_MS = 2000
+const FLUSH_DELAY_MS = 5000
 
 async function flushProgress(): Promise<void> {
   writeTimer = null
