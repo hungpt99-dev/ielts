@@ -23,7 +23,7 @@ export default function LandingPage() {
         ogTitle="IELTS Journey - Your AI Tutor for IELTS"
         ogDescription="Your personal AI tutor that guides you through IELTS preparation. Chat, practice, and improve — anytime."
         keywords="IELTS study plan, IELTS roadmap, IELTS daily learning, IELTS self-study, IELTS learning app, AI tutor IELTS, personalized IELTS study"
-        canonical="https://ielts-journey.app"
+        canonical="https://ieltsjourney.dev"
       />
 
       <a

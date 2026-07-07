@@ -14,7 +14,7 @@ function buildTooltipContent(word: HighlightWord): string {
   const meaning = escapeHtml(word.meaning)
   const example = escapeHtml(word.exampleSentence)
   const note = escapeHtml(word.personalNote)
-  const reviewUrl = `https://ielts-journey.app/review/${encodeURIComponent(word.text)}`
+  const reviewUrl = `https://ieltsjourney.dev/review/${encodeURIComponent(word.text)}`
 
   let html = `
     <div style="font-weight:600;font-size:14px;margin-bottom:${meaning ? '6px' : '0'};color:#fbbf24;">

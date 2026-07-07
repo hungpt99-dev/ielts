@@ -304,7 +304,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
   }, [onNavigate])
 
   const handleOpenDashboard = useCallback(() => {
-    chrome.tabs.create({ url: 'https://ielts-journey.app/dashboard' })
+    chrome.tabs.create({ url: 'https://ieltsjourney.dev/dashboard' })
   }, [])
 
   const handleQuickAddNote = useCallback(() => {
@@ -320,7 +320,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
   }, [onNavigate])
 
   const handleOpenInfo = useCallback(() => {
-    chrome.tabs.create({ url: 'https://ielts-journey.app/info' })
+    chrome.tabs.create({ url: 'https://ieltsjourney.dev/info' })
   }, [])
 
   const actions = useMemo(

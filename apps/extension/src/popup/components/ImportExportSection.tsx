@@ -534,7 +534,7 @@ background: 'var(--color-danger-light)',
               website. All data syncs between the extension and website when you're logged in.
             </p>
             <button
-              onClick={() => chrome.tabs.create({ url: 'https://ielts-journey.app/public-api' })}
+              onClick={() => chrome.tabs.create({ url: 'https://ieltsjourney.dev/public-api' })}
               style={{
                 width: '100%',
                 padding: 'var(--spacing-sm) var(--spacing-md)',
@@ -583,7 +583,7 @@ background: 'var(--color-danger-light)',
               backup. Use this to transfer data between devices or to the website.
             </p>
             <button
-              onClick={() => chrome.tabs.create({ url: 'https://ielts-journey.app/import-export' })}
+              onClick={() => chrome.tabs.create({ url: 'https://ieltsjourney.dev/import-export' })}
               style={{
                 width: '100%',
                 padding: 'var(--spacing-sm) var(--spacing-md)',

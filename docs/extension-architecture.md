@@ -892,7 +892,7 @@ export async function getExtensionDb(): Promise<IDBPDatabase<ExtensionSchema>> {
   "web_accessible_resources": [
     {
       "resources": ["content/bridge-client.js"],
-      "matches": ["http://localhost:*/*", "https://ielts-journey.app/*"]
+      "matches": ["http://localhost:*/*", "https://ieltsjourney.dev/*"]
     }
   ],
   "keyboard_shortcuts": {
