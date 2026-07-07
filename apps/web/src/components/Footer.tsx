@@ -217,8 +217,9 @@ export default function Footer() {
           }}
         >
           <p>&copy; {currentYear} IELTS Journey. All rights reserved.</p>
-          <p className="mt-2 sm:mt-0">
-            Built for IELTS learners who want a clear daily study path.
+          <p className="mt-2 sm:mt-0 flex items-center gap-4">
+            <a href="/privacy" className="hover:underline" style={{ color: 'var(--color-text-secondary)' }}>Privacy Policy</a>
+            <span>Built for IELTS learners who want a clear daily study path.</span>
           </p>
         </div>
       </div>
