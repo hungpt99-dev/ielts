@@ -4,6 +4,7 @@ import { DATA_SYNC_ACTION, createMessageId } from '@ielts/storage'
 import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
+import { safeStorageSet } from '../utils/safe-chrome'
 import { initMessaging } from './messaging'
 import { initializeStorageBridge } from './storage-bridge'
 import { initAiService } from './ai-service'
@@ -160,7 +161,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
   const items = changes['_pendingSaves']?.newValue as Array<Record<string, unknown>> | undefined
   if (!items || !Array.isArray(items) || items.length === 0) return
 
-  chrome.storage.local.remove('_pendingSaves', async () => {
+  safeStorageSet({ _pendingSaves: [] }).then(async () => {
     const savedEntries: Array<{ id: string; category: string; entity: Record<string, unknown> }> = []
     let vocabCount = 0
 

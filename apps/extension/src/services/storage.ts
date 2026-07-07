@@ -56,9 +56,19 @@ export type StorageSet = (key: string, value: unknown) => Promise<void>
 export const storageGet: StorageGet<unknown> = (key: string) =>
   promisifyChromeStorage(key)
 
+let lastStorageSet = 0
+const MIN_SET_INTERVAL = 1500
+
 export const storageSet: StorageSet = (key: string, value: unknown) =>
   new Promise((resolve) => {
-    chrome.storage.local.set({ [key]: value }, () => resolve())
+    const now = Date.now()
+    const delay = Math.max(0, MIN_SET_INTERVAL - (now - lastStorageSet))
+    const doWrite = () => {
+      lastStorageSet = Date.now()
+      chrome.storage.local.set({ [key]: value }, () => resolve())
+    }
+    if (delay > 0) setTimeout(doWrite, delay)
+    else doWrite()
   })
 
 export async function getDailyProgress(): Promise<DailyProgress> {

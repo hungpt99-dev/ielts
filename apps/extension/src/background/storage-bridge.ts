@@ -58,9 +58,19 @@ function chromeStorageGet<T>(key: string): Promise<T | null> {
   })
 }
 
+let lastBridgeWrite = 0
+const BRIDGE_WRITE_INTERVAL = 1500
+
 function chromeStorageSet(key: string, value: unknown): Promise<void> {
   return new Promise((resolve) => {
-    chrome.storage.local.set({ [key]: value }, resolve)
+    const now = Date.now()
+    const delay = Math.max(0, BRIDGE_WRITE_INTERVAL - (now - lastBridgeWrite))
+    const doWrite = () => {
+      lastBridgeWrite = Date.now()
+      chrome.storage.local.set({ [key]: value }, () => resolve())
+    }
+    if (delay > 0) setTimeout(doWrite, delay)
+    else doWrite()
   })
 }
 

@@ -285,10 +285,8 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
       items.unshift(entry)
 
       await Promise.all([
-        chrome.storage.local.set({
-          dailyProgress: { ...current, articlesSaved: current.articlesSaved + 1 },
-        }),
-        chrome.storage.local.set({ savedItems: items }),
+        safeStorageSet({ dailyProgress: { ...current, articlesSaved: current.articlesSaved + 1 } }),
+        safeStorageSet({ savedItems: items }),
       ])
 
       showToast('success', 'Page saved to reading list')

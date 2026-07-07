@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { IconRefresh, IconWifi, IconWifiOff, IconAlertCircle } from '@ielts/ui'
+import { safeStorageSet } from '../../utils/safe-chrome'
 
 type SyncStatusType = 'synced' | 'syncing' | 'error' | 'disconnected'
 
@@ -97,7 +98,7 @@ export function SyncStatusBadge({ showTime = false, onRetry, compact = false }: 
   const handleRetry = useCallback(async () => {
     setStatus('syncing')
     try {
-      await chrome.storage.local.set({ lastSyncTime: new Date().toISOString() })
+      await safeStorageSet({ lastSyncTime: new Date().toISOString() })
       setStatus('synced')
       setLastSyncTime(new Date())
       onRetry?.()
