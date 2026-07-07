@@ -78,12 +78,16 @@ function computeTotalStudyHours(
   listening: ListeningSession[],
   writing: WritingSession[],
   speaking: SpeakingSession[],
+  tasks?: TaskEntry[],
 ): number {
   const readingHours = reading.reduce((s, r) => s + (r.timeSpentMinutes || 0), 0)
   const listeningHours = listening.reduce((s, l) => s + (l.durationMinutes || 0), 0)
   const writingHours = writing.reduce((s, w) => s + (w.timeSpentMinutes || 0), 0)
   const speakingHours = speaking.reduce((s, sp) => s + (sp.durationSeconds || 0) / 60, 0)
-  return Math.round((readingHours + listeningHours + writingHours + speakingHours) / 60 * 10) / 10
+  const taskMinutes = tasks
+    ? tasks.filter(t => t.isDone).reduce((s, t) => s + (t.timeMinutes || 0), 0)
+    : 0
+  return Math.round((readingHours + listeningHours + writingHours + speakingHours + taskMinutes) / 60 * 10) / 10
 }
 
 function countDueReviews(reviews: VocabReviewEntry[]): number {
@@ -186,7 +190,7 @@ export async function loadDashboardData(): Promise<{
   const todayTasks = await DatabaseService.getTasksForDate(getToday())
   const streak = computeStreak(tasks)
   const weeklyProgress = computeWeeklyProgress(tasks)
-  const totalStudyHours = computeTotalStudyHours(reading, listening, writing, speaking)
+  const totalStudyHours = computeTotalStudyHours(reading, listening, writing, speaking, tasks)
   const dueReviews = countDueReviews(reviews)
   const todayFocus = getTodayFocus(todayTasks)
   const recentSessions = countRecentSessions(reading, listening, writing, speaking)
