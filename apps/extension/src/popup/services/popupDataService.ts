@@ -1,4 +1,3 @@
-import { safeStorageGet } from '../../utils/safe-chrome'
 import { getAllVocabulary } from '../../storage/vocabularyStore'
 
 export interface PopupVocabEntry {
@@ -24,28 +23,12 @@ export async function loadVocabulary(): Promise<{
   entries: PopupVocabEntry[]
   stats: PopupVocabStats
 }> {
-  const [storageResult, idbEntries] = await Promise.all([
-    safeStorageGet<any[]>('vocabulary'),
-    getAllVocabulary().catch(() => [] as PopupVocabEntry[]),
-  ])
+  const idbEntries = await getAllVocabulary().catch((err) => {
+    console.error('[loadVocabulary] IndexedDB read failed:', err)
+    return [] as PopupVocabEntry[]
+  })
 
-  const storageEntries: PopupVocabEntry[] = (Array.isArray(storageResult) ? storageResult : [])
-    .filter((item: Record<string, unknown>) => item.word)
-    .map(normalizeEntry)
-
-  const allMap = new Map<string, PopupVocabEntry>()
-
-  for (const entry of idbEntries) {
-    const key = entry.word.toLowerCase()
-    if (!allMap.has(key)) allMap.set(key, entry)
-  }
-
-  for (const entry of storageEntries) {
-    const key = entry.word.toLowerCase()
-    allMap.set(key, entry)
-  }
-
-  const entries = Array.from(allMap.values())
+  const entries = idbEntries
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 
   const stats: PopupVocabStats = {
@@ -61,18 +44,4 @@ export async function loadVocabulary(): Promise<{
 export async function findWord(word: string): Promise<PopupVocabEntry | undefined> {
   const { entries } = await loadVocabulary()
   return entries.find(e => e.word.toLowerCase() === word.toLowerCase())
-}
-
-function normalizeEntry(raw: Record<string, unknown>): PopupVocabEntry {
-  return {
-    id: (raw.id as string) || '',
-    word: (raw.word as string) || (raw.text as string)?.split(/\s+/)[0] || '',
-    meaning: (raw.meaning as string) || (raw.text as string) || '',
-    pronunciation: (raw.pronunciation as string) || '',
-    partOfSpeech: (raw.partOfSpeech as string) || '',
-    topic: (raw.topic as string) || '',
-    difficulty: (raw.difficulty as string) || '',
-    status: (raw.status as string) || 'new',
-    createdAt: (raw.createdAt as string) || (raw.savedAt as string) || new Date().toISOString(),
-  }
 }

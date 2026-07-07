@@ -230,7 +230,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
 
   useEffect(() => {
     setVocabCountLoading(true)
-    Promise.all([loadVocabulary(), getDueCount()])
+    Promise.all([loadVocabulary(), getDueCount().catch(() => 0)])
       .then(([vocabResult, dueResult]) => {
         setVocabCount(vocabResult.stats.total)
         setDueCount(dueResult)

@@ -578,17 +578,31 @@ function execute(action: ToolbarAction): void {
 }
 
 async function saveText(text: string, category: SaveCategory): Promise<void> {
-  showToast(`Saved as ${category}`)
+  showToast(`Saving ${category}...`)
 
-  safeSendMessage({
-    type: 'SAVE_SELECTION_FULL',
-    payload: {
-      text,
-      category,
-      pageTitle: document.title,
-      pageUrl: window.location.href,
-    },
-  })
+  try {
+    const response = await chrome.runtime.sendMessage({
+      type: 'SAVE_SELECTION_FULL',
+      payload: {
+        text,
+        category,
+        pageTitle: document.title,
+        pageUrl: window.location.href,
+      },
+    }) as { success: boolean; message?: string } | undefined
+
+    if (!response || !response.success) {
+      console.error('[SaveText] Background save rejected:', response?.message || 'no response')
+      showToast('Save failed')
+      return
+    }
+
+    showToast(`Saved as ${category}`)
+  } catch (err) {
+    console.error('[SaveText] Background save error:', err)
+    showToast('Save failed: connection error')
+    return
+  }
 
   if (category === 'vocabulary') {
     handleVocabSaved(text)
