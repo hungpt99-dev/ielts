@@ -8,6 +8,7 @@ import { incrementDailyProgress } from '../../services/storage'
 import { MESSAGE_TYPES, STORAGE_KEYS, PROGRESS_KEYS } from '../../storage/db'
 import { IconVocabulary, IconClose, IconCheck, IconVolume } from '@ielts/ui'
 import type { LearningEntry } from '../../types'
+import { pushSync } from '../../services/syncManager'
 
 function speakWord(word: string) {
   if ('speechSynthesis' in window) {
@@ -293,26 +294,29 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
       } catch (err) {
         console.warn('[VocabularyCollector] IndexedDB save failed, falling back to chrome.storage:', err)
       }
+      try { pushSync('vocabulary', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
 
+      const learningEntryData = {
+        id: generateId(),
+        text: wordTrimmed,
+        category: 'vocabulary',
+        topic: topic.trim() || 'general',
+        skill: 'vocabulary',
+        difficulty,
+        tags,
+        personalNote: personalNote.trim(),
+        pageTitle: pageInfo.title,
+        pageUrl: pageInfo.url,
+        status: 'new',
+        createdAt: now,
+        updatedAt: now,
+      } as LearningEntry
       try {
-        await saveEntry({
-          id: generateId(),
-          text: wordTrimmed,
-          category: 'vocabulary',
-          topic: topic.trim() || 'general',
-          skill: 'vocabulary',
-          difficulty,
-          tags,
-          personalNote: personalNote.trim(),
-          pageTitle: pageInfo.title,
-          pageUrl: pageInfo.url,
-          status: 'new',
-          createdAt: now,
-          updatedAt: now,
-        } as LearningEntry)
+        await saveEntry(learningEntryData)
       } catch (err) {
         console.warn('[VocabularyCollector] learningEntries save failed (non-critical):', err)
       }
+      try { pushSync('learningEntry', 'created', learningEntryData.id, learningEntryData as unknown as Record<string, unknown>) } catch {}
 
       try {
         await incrementDailyProgress(PROGRESS_KEYS.WORDS_ADDED, 1)

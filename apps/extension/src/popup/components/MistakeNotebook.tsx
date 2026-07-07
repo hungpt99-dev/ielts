@@ -10,6 +10,7 @@ import {
   updateMistakeEntry,
   deleteMistakeEntry,
 } from '../../storage/mistakeStore'
+import { pushSync } from '../../services/syncManager'
 
 interface MistakeNotebookProps {
   onBack: () => void
@@ -213,6 +214,7 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
       const updated = { ...entry, repetitionCount: entry.repetitionCount + 1, updatedAt: new Date().toISOString() }
       const parsed = extensionMistakeSchema.parse(updated)
       await saveMistakeEntry(parsed)
+      try { pushSync('mistake', 'created', parsed.id, parsed as unknown as Record<string, unknown>) } catch {}
       setEntries(prev => prev.map(e => e.id === parsed.id ? parsed : e))
     } catch {
       showToast('Failed to update', 'error')
@@ -254,6 +256,7 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
         }
         const parsed = extensionMistakeSchema.parse(updated)
         await saveMistakeEntry(parsed)
+        try { pushSync('mistake', 'updated', parsed.id, parsed as unknown as Record<string, unknown>) } catch {}
         setEntries(prev => prev.map(e => e.id === parsed.id ? parsed : e))
         showToast('Mistake updated')
       } else {
@@ -273,6 +276,7 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
         }
         const parsed = extensionMistakeSchema.parse(entry)
         await saveMistakeEntry(parsed)
+        try { pushSync('mistake', 'created', parsed.id, parsed as unknown as Record<string, unknown>) } catch {}
         setEntries(prev => [...prev, parsed])
         showToast('Mistake saved')
       }

@@ -6,6 +6,7 @@ import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
 import { saveVocabularyEntry, extensionVocabSchema } from '../../storage/vocabularyStore'
 import { saveArticleEntry, extensionArticleSchema } from '../../storage/articleStore'
+import { pushSync } from '../../services/syncManager'
 import { IconClose, IconCheck } from '@ielts/ui'
 
 interface SaveTextFormProps {
@@ -121,6 +122,7 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
       })
 
       await saveEntry(entry)
+      try { pushSync('learningEntry', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
 
       if (form.category === 'vocabulary') {
         try {
@@ -144,6 +146,7 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
             updatedAt: now,
           })
           await saveVocabularyEntry(vocabEntry)
+          try { pushSync('vocabulary', 'created', vocabEntry.id, vocabEntry as unknown as Record<string, unknown>) } catch {}
         } catch {
           /* non-critical: vocabulary entry saved as learning entry already */
         }
@@ -167,6 +170,7 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
             updatedAt: now,
           })
           await saveArticleEntry(articleEntry)
+          try { pushSync('article', 'created', articleEntry.id, articleEntry as unknown as Record<string, unknown>) } catch {}
         } catch {
           /* non-critical: article entry saved as learning entry already */
         }

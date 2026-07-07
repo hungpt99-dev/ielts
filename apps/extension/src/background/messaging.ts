@@ -8,6 +8,7 @@ import {
 } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
+import { pushSync } from '../services/syncManager'
 import { emitFromBackground } from './eventEmitters'
 
 export interface SaveItemPayload {
@@ -203,6 +204,7 @@ export function initMessaging(): void {
         updatedAt: now,
       }
       await saveEntry(learningEntry)
+      try { pushSync('learningEntry', 'created', learningEntry.id, learningEntry as unknown as Record<string, unknown>) } catch {}
       await incrementDailyProgress('wordsAdded', 1)
 
       const sourceUrl = msg.payload.pageUrl || ''
@@ -257,6 +259,7 @@ export function initMessaging(): void {
         updatedAt: now,
       }
       await saveEntry(entry)
+      try { pushSync('learningEntry', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
 
       if (msg.payload.category === 'vocabulary') {
         try {
@@ -280,6 +283,7 @@ export function initMessaging(): void {
             updatedAt: now,
           })
           await saveVocabularyEntry(vocabEntry)
+          try { pushSync('vocabulary', 'created', vocabEntry.id, vocabEntry as unknown as Record<string, unknown>) } catch {}
         } catch {
           /* non-critical */
         }
