@@ -129,11 +129,13 @@ export {
   validateExtensionExportData,
 	  createBridgeMessage,
 	  isValidBridgeMessage,
-	  DATA_SYNC_ACTION,
-	  SYNC_ENTITY_TYPES,
-	  SYNC_OPERATIONS,
-	  isDataSyncMessage,
 	} from './syncService'
+export {
+  DATA_SYNC_ACTION,
+  SYNC_ENTITY_TYPES,
+  SYNC_OPERATIONS,
+  isDataSyncMessage,
+} from './syncProtocol'
 export type {
   ExtensionExportData,
   ImportMode as SyncImportMode,
@@ -142,11 +144,13 @@ export type {
   StorageGet,
   StorageSet,
   StorageHandlers,
-	  BridgeMessage,
-	  BridgeResponse,
-	  SyncEntityType,
-	  SyncOperation,
-	  DataSyncPayload,
-	} from './syncService'
+  BridgeMessage,
+  BridgeResponse,
+} from './syncService'
+export type {
+  SyncEntityType,
+  SyncOperation,
+  DataSyncPayload,
+} from './syncProtocol'
 
 export * from './schema'
