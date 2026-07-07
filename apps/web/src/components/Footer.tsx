@@ -40,12 +40,15 @@ export default function Footer() {
       <div className="mx-auto max-w-5xl">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <span
-              className="text-xl font-bold tracking-tight"
-              style={{ color: 'var(--color-text)' }}
-            >
-              IELTS Journey
-            </span>
+            <div className="flex items-center gap-2">
+              <img src="/icon.png" alt="" className="h-7 w-7 rounded-lg" />
+              <span
+                className="text-xl font-bold tracking-tight"
+                style={{ color: 'var(--color-text)' }}
+              >
+                IELTS Journey
+              </span>
+            </div>
             <p
               className="mt-3 max-w-sm text-sm leading-relaxed"
               style={{ color: 'var(--color-text-secondary)' }}

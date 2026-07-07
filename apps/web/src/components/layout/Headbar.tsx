@@ -44,6 +44,11 @@ export default function Headbar({ onMenuToggle }: HeadbarProps) {
         <IconMenu size={20} />
       </button>
 
+      <div className="flex items-center gap-2">
+        <img src="/icon.png" alt="" className="h-6 w-6 rounded-md" />
+        <span className="hidden text-sm font-bold sm:inline" style={{ color: 'var(--color-text)' }}>IELTS Journey</span>
+      </div>
+
       <div style={{ flex: 1 }} />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2xs)' }}>

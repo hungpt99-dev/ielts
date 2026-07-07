@@ -408,24 +408,15 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
-          <div
+          <img
+            src="icons/icon-48.png"
+            alt=""
+            className="h-10 w-10 rounded-lg"
             style={{
-              width: 'var(--spacing-xl)',
-              height: 'var(--spacing-xl)',
-              borderRadius: 'var(--radius-lg)',
-              background: 'linear-gradient(135deg, var(--color-primary), var(--color-skill-reading))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--color-text-inverse)',
-              fontSize: 'var(--text-sm)',
-              fontWeight: 'var(--weight-bold)',
               flexShrink: 0,
               boxShadow: '0 2px 8px color-mix(in srgb, var(--color-primary) 30%, transparent)',
             }}
-          >
-            I
-          </div>
+          />
           <div>
             <h1
               style={{
