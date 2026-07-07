@@ -1,5 +1,6 @@
 import type { SaveCategory, LearningEntry } from '../types'
 import type { SharedSettingsPatch } from '@ielts/settings'
+import type { DataSyncPayload } from '@ielts/storage'
 import {
   updateDailyProgress,
   setVideoPageInfo,
@@ -8,6 +9,9 @@ import {
 } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
+import { saveArticleEntry } from '../storage/articleStore'
+import { saveVideoEntry } from '../storage/videoStore'
+import { saveMistakeEntry } from '../storage/mistakeStore'
 import { pushSync } from '../services/syncManager'
 import { emitFromBackground } from './eventEmitters'
 
@@ -336,6 +340,35 @@ export function initMessaging(): void {
           payload: msg.payload,
         })
         .catch(() => {})
+    }
+  })
+
+  registerHandler('DATA_SYNC', async (_msg) => {
+    const msg = _msg as unknown as { type: 'DATA_SYNC'; payload: DataSyncPayload }
+    const { entityType, entity } = msg.payload
+    try {
+      switch (entityType) {
+        case 'vocabulary':
+          await saveVocabularyEntry(entity as Parameters<typeof saveVocabularyEntry>[0])
+          break
+        case 'article':
+          await saveArticleEntry(entity as Parameters<typeof saveArticleEntry>[0])
+          break
+        case 'video':
+          await saveVideoEntry(entity as Parameters<typeof saveVideoEntry>[0])
+          break
+        case 'mistake':
+          await saveMistakeEntry(entity as Parameters<typeof saveMistakeEntry>[0])
+          break
+        case 'learningEntry':
+          await saveEntry(entity as Parameters<typeof saveEntry>[0])
+          break
+        case 'dailyProgress':
+          // computed, not synced directly
+          break
+      }
+    } catch (err) {
+      console.error(`[messaging] DATA_SYNC handler error for ${entityType}:`, err)
     }
   })
 
