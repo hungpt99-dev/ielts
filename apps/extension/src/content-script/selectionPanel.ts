@@ -577,6 +577,7 @@ function execute(action: ToolbarAction): void {
   }
 }
 
+const PENDING_QUEUE_KEY = '_ieltsPending'
 const pendingSaves: Array<{
   text: string
   category: SaveCategory
@@ -585,29 +586,69 @@ const pendingSaves: Array<{
   timestamp: number
 }> = []
 let flushTimer: ReturnType<typeof setTimeout> | null = null
+let flushRetryCount = 0
 const SAVE_FLUSH_MS = 2000
+const MAX_RETRIES = 3
+
+function storeToChromeStorage(batch: typeof pendingSaves): Promise<void> {
+  return new Promise((resolve) => {
+    chrome.storage.local.get('_pendingSaves', (result) => {
+      const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
+      chrome.storage.local.set({ _pendingSaves: existing.concat(batch) }, () => resolve())
+    })
+  })
+}
+
+function storeToPageStorage(batch: typeof pendingSaves): void {
+  try {
+    const raw = window.localStorage.getItem(PENDING_QUEUE_KEY)
+    const existing: Record<string, unknown>[] = raw ? JSON.parse(raw) : []
+    existing.push(...batch.map(s => ({ ...s })))
+    window.localStorage.setItem(PENDING_QUEUE_KEY, JSON.stringify(existing))
+  } catch {
+    // localStorage full or unavailable — silently drop
+  }
+}
 
 function flushPendingSaves(): void {
   flushTimer = null
   const batch = pendingSaves.splice(0)
   if (batch.length === 0) return
 
-  try {
-    // Merge with any existing pending saves (e.g., from context menu handler)
-    chrome.storage.local.get('_pendingSaves', (result) => {
-      const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
-      const merged = existing.concat(batch)
-      chrome.storage.local.set({ _pendingSaves: merged }, () => {})
-    })
-  } catch {
-    pendingSaves.unshift(...batch)
-  }
+  storeToChromeStorage(batch).catch(() => {
+    // chrome.storage failed (context invalidated) → fall back to page localStorage
+    storeToPageStorage(batch)
+  })
 }
 
 function queueSave(text: string, category: SaveCategory, pageTitle: string, pageUrl: string): void {
+  // On init, flush any data left from a previous page load into chrome.storage
+  if (flushRetryCount === 0) {
+    flushRetryCount++
+    recoverFromPageStorage()
+  }
+
   pendingSaves.push({ text, category, pageTitle, pageUrl, timestamp: Date.now() })
   if (!flushTimer) {
     flushTimer = setTimeout(flushPendingSaves, SAVE_FLUSH_MS)
+  }
+}
+
+function recoverFromPageStorage(): void {
+  try {
+    const raw = window.localStorage.getItem(PENDING_QUEUE_KEY)
+    if (!raw) return
+    window.localStorage.removeItem(PENDING_QUEUE_KEY)
+    const items: Record<string, unknown>[] = JSON.parse(raw)
+    if (!Array.isArray(items) || items.length === 0) return
+
+    // Forward saved items into chrome.storage now that the new context is valid
+    chrome.storage.local.get('_pendingSaves', (result) => {
+      const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
+      chrome.storage.local.set({ _pendingSaves: existing.concat(items) }, () => {})
+    })
+  } catch {
+    // nothing to recover
   }
 }
 
