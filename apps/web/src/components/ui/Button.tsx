@@ -64,7 +64,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           </svg>
         )}
         {!loading && icon && iconPosition === 'left' && <span className="flex shrink-0">{icon}</span>}
-        {children && <span>{children}</span>}
+        {children && <span className="flex items-center gap-1.5 whitespace-nowrap">{children}</span>}
         {!loading && icon && iconPosition === 'right' && <span className="flex shrink-0">{icon}</span>}
       </button>
     )
