@@ -20,8 +20,8 @@ export default function LandingPage() {
       <SEOHead
         title="IELTS Journey - Your Personal IELTS Tutor Powered by AI"
         description="IELTS Journey creates a personalized daily study plan from today to your exam day. Open the app, see what to study, and learn with real content. No more guessing."
-        ogTitle="IELTS Journey - Your Daily Study Plan, Built by AI"
-        ogDescription="A personal AI tutor that plans your IELTS study, every single day. Set your goal, follow daily tasks, and track progress."
+        ogTitle="IELTS Journey - Your AI Tutor for IELTS"
+        ogDescription="Your personal AI tutor that guides you through IELTS preparation. Chat, practice, and improve — anytime."
         keywords="IELTS study plan, IELTS roadmap, IELTS daily learning, IELTS self-study, IELTS learning app, AI tutor IELTS, personalized IELTS study"
         canonical="https://ielts-journey.app"
       />
