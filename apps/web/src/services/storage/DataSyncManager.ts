@@ -47,15 +47,53 @@ async function saveToDatabase(payload: DataSyncPayload): Promise<void> {
   const { entityType, entity } = payload
 
   switch (entityType) {
-    case 'vocabulary':
-      await DatabaseService.addVocabulary(entity as any)
+    case 'vocabulary': {
+      const ext = entity as Record<string, unknown>
+      const mapped = {
+        id: ext.id as string,
+        word: ext.word as string,
+        meaning: (ext.meaning as string) || (ext.word as string) || '',
+        meaningVi: (ext.meaningVi as string) || '',
+        pronunciation: (ext.pronunciation as string) || '',
+        partOfSpeech: (ext.partOfSpeech as string) || '',
+        topic: (ext.topic as string) || 'general',
+        exampleSentence: (ext.exampleSentence as string) || (ext.sourceSentence as string) || '',
+        collocations: Array.isArray(ext.collocations) ? ext.collocations : [],
+        synonyms: Array.isArray(ext.synonyms) ? ext.synonyms : [],
+        antonyms: Array.isArray(ext.antonyms) ? ext.antonyms : [],
+        wordFamily: Array.isArray(ext.wordFamily) ? ext.wordFamily : [],
+        personalNote: (ext.personalNote as string) || '',
+        difficulty: (ext.difficulty as string) || 'medium',
+        status: (ext.status as string) || 'new',
+        tags: Array.isArray(ext.tags) ? ext.tags : [],
+        createdAt: (ext.createdAt as string) || new Date().toISOString(),
+        updatedAt: (ext.updatedAt as string) || new Date().toISOString(),
+      }
+      await DatabaseService.addVocabulary(mapped as any)
       break
+    }
     case 'article':
       await DatabaseService.add('readingPassages', entity)
       break
-    case 'mistake':
-      await DatabaseService.addMistake(entity as any)
+    case 'mistake': {
+      const ext = entity as Record<string, unknown>
+      const mapped = {
+        id: ext.id as string,
+        mistake: ext.mistake as string,
+        correction: ext.correction as string,
+        explanation: (ext.explanation as string) || '',
+        source: (ext.source as string) || '',
+        topic: (ext.topic as string) || 'general',
+        date: (ext.date as string) || new Date().toISOString(),
+        skill: (ext.skill as string) || 'grammar',
+        status: (ext.status as string) || 'new',
+        repetitionCount: typeof ext.repetitionCount === 'number' ? ext.repetitionCount : 0,
+        createdAt: (ext.createdAt as string) || new Date().toISOString(),
+        updatedAt: (ext.updatedAt as string) || new Date().toISOString(),
+      }
+      await DatabaseService.addMistake(mapped as any)
       break
+    }
     case 'video':
       await DatabaseService.add('listeningTranscripts', entity)
       break
