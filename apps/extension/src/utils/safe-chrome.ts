@@ -37,7 +37,7 @@ export function safeStorageGet<T>(
 }
 
 let lastWriteTime = 0
-const MIN_WRITE_INTERVAL = 1500 // 1500ms = max 40 writes/minute, well under 120
+const MIN_WRITE_INTERVAL = 3000 // 3000ms = max 20 writes/minute, 1200/hour (under 120/min & 1800/hour)
 
 export function safeStorageSet(
   data: Record<string, unknown>,
