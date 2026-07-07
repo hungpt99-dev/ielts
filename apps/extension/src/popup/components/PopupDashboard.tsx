@@ -411,8 +411,10 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
           <img
             src="icons/icon-48.png"
             alt=""
-            className="h-10 w-10 rounded-lg"
             style={{
+              width: 'var(--spacing-2xl)',
+              height: 'var(--spacing-2xl)',
+              borderRadius: 'var(--radius-xl)',
               flexShrink: 0,
               boxShadow: '0 2px 8px color-mix(in srgb, var(--color-primary) 30%, transparent)',
             }}
