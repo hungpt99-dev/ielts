@@ -11,6 +11,7 @@ import { handleVocabSaved } from './vocabularySaveHandler'
 import {
   safeSyncGet,
   safeSendMessage,
+  safeStorageSet,
   safeFetchProviderConfig,
 } from '../utils/safe-chrome'
 import {
@@ -602,9 +603,9 @@ function storeToChromeStorage(batch: typeof pendingSaves): Promise<void> {
 
     try {
       chrome.storage.local.get('_pendingSaves', (result) => {
-        if (storageTimedOut) return // timeout already fired — ignore stale callback
+        if (storageTimedOut) return
         const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
-        chrome.storage.local.set({ _pendingSaves: existing.concat(batch) }, () => {
+        safeStorageSet({ _pendingSaves: existing.concat(batch) }).then(() => {
           clearTimeout(timer)
           if (!storageTimedOut) resolve()
         })
@@ -670,7 +671,7 @@ function recoverFromPageStorage(): void {
     // Forward saved items into chrome.storage now that the new context is valid
     chrome.storage.local.get('_pendingSaves', (result) => {
       const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
-      chrome.storage.local.set({ _pendingSaves: existing.concat(items) }, () => {})
+      safeStorageSet({ _pendingSaves: existing.concat(items) })
     })
   } catch {
     // nothing to recover
