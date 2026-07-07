@@ -599,8 +599,13 @@ async function saveText(text: string, category: SaveCategory): Promise<void> {
 
     showToast(`Saved as ${category}`)
   } catch (err) {
-    console.error('[SaveText] Background save error:', err)
-    showToast('Save failed: connection error')
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('[SaveText] Background save error:', msg)
+    if (msg.includes('context invalidated') || msg.includes('Extension context')) {
+      showToast('Extension was updated. Please refresh this page and try again.')
+    } else {
+      showToast('Save failed: connection error')
+    }
     return
   }
 
