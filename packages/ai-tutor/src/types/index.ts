@@ -11,6 +11,19 @@ export type ProactiveMessageTriggerType =
   | 'daily_plan_ready'
   | 'mistake_pattern_detected'
   | 'topic_practice_suggestion'
+  | 'lesson_completed'
+  | 'weekly_review'
+  | 'monthly_review'
+  | 'study_session_suggestion'
+  | 'progress_reminder'
+  | 'inactive_days'
+  | 'progress_celebration'
+  | 'daily_tip'
+  | 'exam_date_reminder'
+  | 'mock_test_ready'
+  | 'saved_word_exercise'
+  | 'unfinished_lesson'
+  | 'streak'
 
 export type ProactiveMessageCategory =
   | 'vocabulary-review'
@@ -18,9 +31,14 @@ export type ProactiveMessageCategory =
   | 'study-plan'
   | 'speaking-practice'
   | 'writing-practice'
+  | 'reading-practice'
+  | 'listening-practice'
   | 'exam-countdown'
   | 'motivation'
   | 'saved-content'
+  | 'daily-tip'
+  | 'progress-report'
+  | 'suggestion'
 
 export interface ProactiveMessageAction {
   type: string

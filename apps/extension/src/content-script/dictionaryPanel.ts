@@ -179,7 +179,7 @@ function showPanel(rect: DOMRect): void {
     </div>
     <div id="${PANEL_ID}-body" style="padding:4px 12px 8px;min-height:32px;color:var(--ielts-text);"></div>
     <div id="${PANEL_ID}-footer" style="display:none;padding:0 12px 8px;gap:6px;align-items:center;">
-      <button id="${PANEL_ID}-save" style="display:flex;align-items:center;gap:4px;padding:5px 12px;border:none;border-radius:6px;background:var(--ielts-primary);color:#fff;font-size:12px;cursor:pointer;font-weight:500;line-height:1;">📥 Save Word</button>
+      <button id="${PANEL_ID}-save" style="display:flex;align-items:center;gap:4px;padding:5px 12px;border:none;border-radius:6px;background:var(--ielts-primary);color:var(--ielts-on-primary, #fff);font-size:12px;cursor:pointer;font-weight:500;line-height:1;">📥 Save Word</button>
       <button id="${PANEL_ID}-close" aria-label="Close" style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:none;border-radius:6px;background:transparent;color:var(--ielts-muted);font-size:13px;cursor:pointer;line-height:1;">✕</button>
     </div>
   `

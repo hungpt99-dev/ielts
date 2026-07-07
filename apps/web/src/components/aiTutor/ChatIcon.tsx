@@ -49,11 +49,18 @@ export default function ChatIcon({ onToggle }: ChatIconProps) {
   }, [isOpen, onToggle])
 
   useEffect(() => {
-    const handler = () => {
+    const toggleHandler = () => {
       setState(prev => ({ ...prev, isOpen: !prev.isOpen, unreadCount: prev.isOpen ? prev.unreadCount : 0 }))
     }
-    window.addEventListener('toggle-ai-tutor-chat', handler)
-    return () => window.removeEventListener('toggle-ai-tutor-chat', handler)
+    const openHandler = () => {
+      setState(prev => prev.isOpen ? prev : { ...prev, isOpen: true })
+    }
+    window.addEventListener('toggle-ai-tutor-chat', toggleHandler)
+    window.addEventListener('open-ai-tutor-chat', openHandler)
+    return () => {
+      window.removeEventListener('toggle-ai-tutor-chat', toggleHandler)
+      window.removeEventListener('open-ai-tutor-chat', openHandler)
+    }
   }, [])
 
   return (
@@ -65,7 +72,7 @@ export default function ChatIcon({ onToggle }: ChatIconProps) {
         className="fixed bottom-20 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95 lg:bottom-6"
         style={{
           backgroundColor: 'var(--color-primary)',
-          color: 'var(--color-on-primary, #ffffff)',
+          color: 'var(--color-on-primary)',
           opacity: isOpen ? 0 : 1,
           pointerEvents: isOpen ? 'none' : 'auto',
         }}
@@ -90,7 +97,7 @@ export default function ChatIcon({ onToggle }: ChatIconProps) {
             className="absolute -right-1 -top-1 flex min-w-[22px] items-center justify-center rounded-full px-1.5 text-xs font-bold leading-tight"
             style={{
               backgroundColor: 'var(--color-danger)',
-              color: 'var(--color-on-danger, #ffffff)',
+              color: 'var(--color-on-danger)',
             }}
             aria-label={`${unreadCount} unread message${unreadCount !== 1 ? 's' : ''}`}
           >

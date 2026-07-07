@@ -7,9 +7,6 @@ import type {
   TutorTone,
   ProactiveMessageSettings,
 } from '../types/proactiveMessage'
-import {
-  proactiveMessageCategorySchema,
-} from '../types/proactiveMessage'
 import { generateId } from '../utils/id'
 
 // ─── Action presets ──────────────────────────────────────────────────────────
@@ -575,7 +572,7 @@ function generateSavedWordExercise(input: ProactiveEngineInput): ProactiveMessag
   )
 }
 
-function generateDailyTip(input: ProactiveEngineInput): ProactiveMessage | null {
+function generateDailyTip(_input: ProactiveEngineInput): ProactiveMessage | null {
   const tips = [
     'Try reading an IELTS passage without a dictionary — focus on understanding the main idea first.',
     'For Task 2 essays, spend 5 minutes planning before you start writing.',

@@ -73,7 +73,7 @@ export default function AITutorCard({
             width: '44px',
             height: '44px',
             borderRadius: 'var(--radius-xl)',
-            background: 'linear-gradient(135deg, var(--color-tutor-accent), var(--color-tutor-accent-dark, #0284c7))',
+            background: 'linear-gradient(135deg, var(--color-tutor-accent), var(--color-tutor-accent-dark))',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

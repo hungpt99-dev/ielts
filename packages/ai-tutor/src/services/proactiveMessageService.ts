@@ -19,9 +19,14 @@ const DEFAULT_SETTINGS: ProactiveMessageSettings = {
     'study-plan': true,
     'speaking-practice': true,
     'writing-practice': true,
+    'reading-practice': true,
+    'listening-practice': true,
     'exam-countdown': true,
     'motivation': true,
     'saved-content': true,
+    'daily-tip': true,
+    'progress-report': true,
+    'suggestion': true,
   },
 }
 

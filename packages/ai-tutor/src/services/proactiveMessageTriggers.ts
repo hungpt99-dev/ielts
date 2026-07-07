@@ -94,7 +94,6 @@ function buildInput(overrides: Partial<ProactiveEngineInput> = {}): ProactiveEng
     : storedProfile
 
   return {
-    learnerProfile: mergedProfile,
     dueVocabularyCount: countDueVocabulary(),
     dueMistakeCount: countDueMistakes(),
     lowActivityDays: getLowActivityDays(),
@@ -168,7 +167,7 @@ export function onLessonCompleted(lessonTitle: string): TriggerResult {
   return trigger(buildInput({ lessonCompleted: lessonTitle }))
 }
 
-export function onRepeatedMistakes(count: number, pattern?: string): TriggerResult {
+export function onRepeatedMistakes(count: number, _pattern?: string): TriggerResult {
   if (!canTrigger('onRepeatedMistakes')) return { generated: 0, throttled: 0, messages: [] }
   return trigger(buildInput({ recentMistakeCount: count }))
 }

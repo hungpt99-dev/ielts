@@ -58,7 +58,7 @@ export default function VoiceButton({ onTranscript, disabled, size = 20, buttonH
           : isSpeaking
             ? 'var(--color-tutor-accent)'
             : 'var(--color-surface-alt)',
-        color: isActive || isSpeaking ? '#ffffff' : 'var(--color-muted)',
+        color: isActive || isSpeaking ? 'var(--color-on-primary)' : 'var(--color-muted)',
         transition: 'all 0.2s ease',
         flexShrink: 0,
         position: 'relative',

@@ -293,7 +293,7 @@ function renderMissingKey(bodyEl: HTMLDivElement): void {
         Add your AI API key in the extension Settings to use AI features like explanations, translations, and vocabulary analysis.
       </div>
       <div style="display:flex;gap:8px;margin-top:4px;">
-        <button id="${PANEL_ID}-open-settings" style="padding:8px 16px;border-radius:8px;border:none;background:var(--ielts-primary);color:#fff;font-size:13px;cursor:pointer;font-weight:500;">Open Settings</button>
+        <button id="${PANEL_ID}-open-settings" style="padding:8px 16px;border-radius:8px;border:none;background:var(--ielts-primary);color:var(--ielts-on-primary, #fff);font-size:13px;cursor:pointer;font-weight:500;">Open Settings</button>
         <button id="${PANEL_ID}-dismiss" style="padding:8px 16px;border-radius:8px;border:none;background:var(--ielts-surface-alt);color:var(--ielts-muted);font-size:13px;cursor:pointer;">Close</button>
       </div>
     </div>
@@ -476,7 +476,7 @@ function renderQuizResult(data: QuizResult): string {
             </div>
           `).join('')}
         </div>
-        <div style="margin-top:8px;padding:8px 10px;background:var(--ielts-success);border-radius:6px;font-size:12px;color:#fff;line-height:1.5;">
+        <div style="margin-top:8px;padding:8px 10px;background:var(--ielts-success);border-radius:6px;font-size:12px;color:var(--ielts-on-primary, #fff);line-height:1.5;">
           💡 ${escapeHtml(q.explanation)}
         </div>
       </div>

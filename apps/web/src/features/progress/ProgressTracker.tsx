@@ -163,7 +163,7 @@ function SkillBreakdownCard({
             padding: '2px 8px',
             borderRadius: 'var(--radius-full)',
             background: statusColor,
-            color: '#fff',
+            color: 'var(--color-on-primary)',
           }}
         >
           {statusLabel}

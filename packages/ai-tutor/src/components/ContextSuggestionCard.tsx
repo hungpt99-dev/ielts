@@ -50,7 +50,7 @@ export function ContextSuggestionCard({
         onClick={onAction}
         className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
         style={{
-          backgroundColor: 'var(--color-tutor-accent)',
+          backgroundColor: 'var(--color-primary)',
           color: 'var(--color-on-primary)',
         }}
         type="button"

@@ -27,7 +27,7 @@ export function TutorAvatar({
       style={{
         width: size,
         height: size,
-        background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark, #1d4ed8))',
+        background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark))',
         boxShadow: pulse || typing
           ? `0 0 ${glowSize}px color-mix(in srgb, var(--color-primary) 40%, transparent)`
           : 'none',

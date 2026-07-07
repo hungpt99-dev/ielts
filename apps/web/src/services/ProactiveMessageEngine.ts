@@ -51,9 +51,14 @@ export type ProactiveMessageCategory =
   | 'study-plan'
   | 'speaking-practice'
   | 'writing-practice'
+  | 'reading-practice'
+  | 'listening-practice'
   | 'exam-countdown'
   | 'motivation'
   | 'saved-content'
+  | 'daily-tip'
+  | 'progress-report'
+  | 'suggestion'
 
 
 export interface ProactiveMessageAction {
@@ -104,9 +109,14 @@ export const DEFAULT_PROACTIVE_MESSAGE_SETTINGS: ProactiveMessageSettings = {
     'study-plan': true,
     'speaking-practice': true,
     'writing-practice': true,
+    'reading-practice': true,
+    'listening-practice': true,
     'exam-countdown': true,
     'motivation': true,
     'saved-content': true,
+    'daily-tip': true,
+    'progress-report': true,
+    'suggestion': true,
   },
 }
 

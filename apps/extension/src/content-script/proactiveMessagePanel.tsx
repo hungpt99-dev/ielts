@@ -236,7 +236,7 @@ const primaryBtnStyle = [
   'border-radius:6px',
   'border:none',
   'background:var(--ielts-primary, #2563eb)',
-  'color:#fff',
+  'color:var(--ielts-on-primary, #ffffff)',
   'font-size:11px',
   'cursor:pointer',
   'font-weight:600',

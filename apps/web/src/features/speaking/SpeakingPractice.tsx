@@ -986,7 +986,7 @@ export default function SpeakingPractice() {
                             border: 'none',
                             cursor: 'pointer',
                             background: recording ? 'var(--color-danger)' : 'var(--color-surface-alt)',
-                            color: recording ? '#ffffff' : 'var(--color-muted)',
+                            color: recording ? 'var(--color-on-danger)' : 'var(--color-muted)',
                             transition: 'all 0.2s ease',
                             flexShrink: 0,
                             outline: 'none',

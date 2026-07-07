@@ -19,7 +19,7 @@ export default function TtsToggle({ buttonHeight = 40 }: { buttonHeight?: number
         border: 'none',
         cursor: 'pointer',
         background: ttsEnabled ? 'var(--color-tutor-accent)' : 'var(--color-surface-alt)',
-        color: ttsEnabled ? '#ffffff' : 'var(--color-muted)',
+        color: ttsEnabled ? 'var(--color-on-primary)' : 'var(--color-muted)',
         transition: 'all 0.2s ease',
         flexShrink: 0,
         outline: 'none',

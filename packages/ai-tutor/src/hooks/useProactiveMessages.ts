@@ -208,9 +208,14 @@ export const PROACTIVE_CATEGORY_LABELS: Record<ProactiveMessageCategory | 'all',
   'study-plan': 'Study Plan',
   'speaking-practice': 'Speaking',
   'writing-practice': 'Writing',
+  'reading-practice': 'Reading',
+  'listening-practice': 'Listening',
   'exam-countdown': 'Exam',
   'motivation': 'Motivation',
   'saved-content': 'Content',
+  'daily-tip': 'Daily Tip',
+  'progress-report': 'Progress',
+  'suggestion': 'Suggestion',
 }
 
 export const PROACTIVE_PRIORITY_LABELS: Record<string, string> = {

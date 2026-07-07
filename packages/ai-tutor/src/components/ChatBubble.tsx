@@ -44,7 +44,7 @@ export function ChatBubble({
             isUser
               ? {
                   backgroundColor: 'var(--color-primary)',
-                  color: '#ffffff',
+                  color: 'var(--color-on-primary)',
                   borderRadius: '18px 18px 4px 18px',
                   overflowWrap: 'break-word',
                   wordBreak: 'break-word',

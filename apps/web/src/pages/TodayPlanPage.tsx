@@ -394,7 +394,7 @@ export default function TodayPlanPage() {
                   className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold"
                   style={{
                     backgroundColor: PRIORITY_CONFIG[planDay.priority]?.color || 'var(--color-surface-alt)',
-                    color: '#fff',
+                    color: 'var(--color-on-primary)',
                   }}
                 >
                   {PRIORITY_CONFIG[planDay.priority]?.label || planDay.priority}
@@ -405,7 +405,7 @@ export default function TodayPlanPage() {
                   className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold"
                   style={{
                     backgroundColor: DIFFICULTY_CONFIG[planDay.difficulty]?.color || 'var(--color-surface-alt)',
-                    color: '#fff',
+                    color: 'var(--color-on-primary)',
                   }}
                 >
                   {DIFFICULTY_CONFIG[planDay.difficulty]?.label || planDay.difficulty}
@@ -640,7 +640,7 @@ export default function TodayPlanPage() {
                       <div className="flex items-center gap-2 mb-1">
                         <span
                           className="inline-flex items-center justify-center rounded-lg px-2 py-0.5 text-[10px] font-semibold"
-                          style={{ backgroundColor: skillColor, color: '#fff', opacity: 0.9 }}
+                          style={{ backgroundColor: skillColor, color: 'var(--color-on-primary)', opacity: 0.9 }}
                         >
                           {icon} {label}
                         </span>
@@ -746,7 +746,7 @@ export default function TodayPlanPage() {
                   <div className="min-w-0 flex-1">
                     <span
                       className="inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-medium"
-                      style={{ backgroundColor: badgeColor, color: '#fff', opacity: 0.9 }}
+                      style={{ backgroundColor: badgeColor, color: 'var(--color-on-primary)', opacity: 0.9 }}
                     >
                       {task.category}
                     </span>
@@ -819,10 +819,8 @@ export default function TodayPlanPage() {
                     aria-label={isToday ? 'Today' : DAY_LABELS[dayNum]}
                   >
                     <span
-                      className={`text-[10px] sm:text-[11px] font-semibold ${
-                        isToday ? 'text-white' : ''
-                      }`}
-                      style={{ color: isToday ? '#fff' : 'var(--color-muted)' }}
+                      className="text-[10px] sm:text-[11px] font-semibold"
+                      style={{ color: isToday ? 'var(--color-on-primary)' : 'var(--color-muted)' }}
                     >
                       {new Date(date + 'T00:00:00').getDate()}
                     </span>

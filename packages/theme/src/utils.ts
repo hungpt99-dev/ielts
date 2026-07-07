@@ -21,11 +21,13 @@ export function applyAccentColor(color: string): void {
   if (color === DEFAULT_ACCENT_COLOR) {
     root.style.removeProperty('--color-primary')
     root.style.removeProperty('--color-primary-hover')
+    root.style.removeProperty('--color-primary-dark')
     root.style.removeProperty('--color-primary-light')
   } else {
     root.style.setProperty('--color-primary', color)
     root.style.setProperty('--color-primary-hover', adjustColor(color, -20))
-    root.style.setProperty('--color-primary-light', adjustColorLightness(color, 90))
+    root.style.setProperty('--color-primary-dark', adjustColor(color, -40))
+    root.style.setProperty('--color-primary-light', mixWithWhite(color, 0.85))
   }
 }
 
@@ -81,9 +83,8 @@ function adjustColor(hex: string, amount: number): string {
   return rgbToHex(r + amount, g + amount, b + amount)
 }
 
-function adjustColorLightness(hex: string, targetLightness: number): string {
+function mixWithWhite(hex: string, amount: number): string {
   const [r, g, b] = hexToRgb(hex)
-  const max = Math.max(r, g, b)
-  const scale = max === 0 ? 1 : (targetLightness / 255) * (255 / max)
-  return rgbToHex(r * scale, g * scale, b * scale)
+  const mix = (c: number) => Math.round(c + (255 - c) * amount)
+  return rgbToHex(mix(r), mix(g), mix(b))
 }

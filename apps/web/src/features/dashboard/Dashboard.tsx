@@ -197,10 +197,13 @@ export default function Dashboard() {
     ? Math.round((weeklyProgress.done / weeklyProgress.total) * 100)
     : 0
   const bandGap = targetBand - currentBand
-  const chartData = weeklyChart.map((d: WeeklyStudyDay, i: number) => ({
-    name: DAY_LABELS[i] || '',
-    value: d.minutes,
-  }))
+  const hasWeeklyData = weeklyChart.some(d => d.minutes > 0)
+  const chartData = hasWeeklyData
+    ? weeklyChart.map((d: WeeklyStudyDay, i: number) => ({
+        name: DAY_LABELS[i] || '',
+        value: d.minutes,
+      }))
+    : []
   const skillProgress = computeSkillProgress(data)
   const hasExamDate = examDate && examCountdown > 0
   const missionProgress = tasks.length > 0 ? Math.round((todayDone.length / tasks.length) * 100) : 0

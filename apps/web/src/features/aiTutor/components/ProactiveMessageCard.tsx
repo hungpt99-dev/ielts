@@ -23,9 +23,9 @@ const PRIORITY_COLORS: Record<string, string> = {
 const CATEGORY_COLORS: Record<string, { bg: string; fg: string }> = {
   'vocabulary-review': { bg: 'var(--color-primary-light)', fg: 'var(--color-primary)' },
   'mistake-review': { bg: 'var(--color-danger-light)', fg: 'var(--color-danger)' },
-  'study-plan': { bg: '#dbeafe', fg: '#2563eb' },
-  'exam-countdown': { bg: '#fef3c7', fg: '#d97706' },
-  motivation: { bg: '#d1fae5', fg: '#059669' },
+  'study-plan': { bg: 'var(--color-primary-light)', fg: 'var(--color-primary)' },
+  'exam-countdown': { bg: 'var(--color-warning-light)', fg: 'var(--color-warning-dark)' },
+  motivation: { bg: 'var(--color-success-light)', fg: 'var(--color-success-dark)' },
 }
 
 function formatTime(dateStr: string): string {

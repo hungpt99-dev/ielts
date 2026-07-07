@@ -327,8 +327,8 @@ export function ChatWidget({
                     onClick={() => handlePromptClick(prompt.action)}
                     className="shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all hover:opacity-80"
                     style={{
-                      backgroundColor: 'var(--color-tutor-accent)',
-                      color: '#ffffff',
+                      backgroundColor: 'var(--color-primary)',
+                      color: 'var(--color-on-primary)',
                       border: 'none',
                     }}
                     type="button"
