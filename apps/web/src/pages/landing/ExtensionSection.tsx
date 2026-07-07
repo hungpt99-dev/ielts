@@ -6,7 +6,7 @@ export default function ExtensionSection() {
     <section className="px-4 py-16 sm:py-20 lg:py-24" id="extension"
       style={{ background: 'var(--color-surface)' }}
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div>
             <Badge variant="primary" size="md" style={{ marginBottom: 'var(--spacing-md)' }}>

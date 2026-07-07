@@ -29,7 +29,7 @@ export default function HeroSection() {
         }} />
       </div>
 
-      <div className="mx-auto max-w-5xl text-center relative">
+      <div className="mx-auto max-w-6xl text-center relative">
         <Badge variant="primary" size="md" style={{ marginBottom: 'var(--spacing-lg)' }}>
           Your Personal IELTS Tutor
         </Badge>

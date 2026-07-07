@@ -5,7 +5,7 @@ export default function MobileSection() {
     <section className="px-4 py-16 sm:py-20 lg:py-24" id="mobile"
       style={{ background: 'var(--color-background)' }}
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div className="order-2 lg:order-1">
             <Badge variant="primary" size="md" style={{ marginBottom: 'var(--spacing-md)' }}>

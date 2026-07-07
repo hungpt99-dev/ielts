@@ -44,7 +44,7 @@ export default function ProblemSection() {
     <section className="px-4 py-16 sm:py-20 lg:py-24" id="problems"
       style={{ background: 'var(--color-background)' }}
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl"
           style={{ color: 'var(--color-text)' }}>
           Studying for IELTS alone is hard.

@@ -35,7 +35,7 @@ export default function SolutionSection() {
     <section className="px-4 py-16 sm:py-20 lg:py-24" id="solution"
       style={{ background: 'var(--color-surface)' }}
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl"
           style={{ color: 'var(--color-text)' }}>
           IELTS Journey gives you what&apos;s missing.

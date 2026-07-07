@@ -5,7 +5,7 @@ export default function TestimonialsSection() {
     <section className="px-4 py-16 sm:py-20 lg:py-24" id="testimonials"
       style={{ background: 'var(--color-surface)' }}
     >
-      <div className="mx-auto max-w-5xl text-center">
+      <div className="mx-auto max-w-6xl text-center">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl"
           style={{ color: 'var(--color-text)' }}>
           Join IELTS learners worldwide.

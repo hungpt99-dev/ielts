@@ -47,7 +47,7 @@ export default function AITutorSection() {
         background: 'linear-gradient(180deg, var(--color-tutor-accent-light) 0%, var(--color-background) 100%)',
       }}
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         <div className="text-center">
           <Badge variant="info" size="md" style={{ marginBottom: 'var(--spacing-md)' }}>
             AI Tutor

@@ -48,7 +48,7 @@ export default function HowItWorksSection() {
     <section className="px-4 py-16 sm:py-20 lg:py-24" id="how-it-works"
       style={{ background: 'var(--color-background)' }}
     >
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-6xl">
         <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl"
           style={{ color: 'var(--color-text)' }}>
           Start learning in 4 simple steps.
