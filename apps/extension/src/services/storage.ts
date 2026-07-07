@@ -67,13 +67,36 @@ export async function getDailyProgress(): Promise<DailyProgress> {
 }
 
 export async function updateDailyProgress(patch: Partial<DailyProgress>): Promise<DailyProgress> {
+  const now = Date.now()
+  const last = lastWriteTime[patch as unknown as keyof DailyProgress]
+  if (last && now - last < WRITE_THROTTLE_MS) {
+    const current = await getDailyProgress()
+    return current
+  }
+  if (typeof patch === 'object' && patch !== null) {
+    for (const key of Object.keys(patch) as (keyof DailyProgress)[]) {
+      lastWriteTime[key] = now
+    }
+  }
+
   const current = await getDailyProgress()
   const updated = { ...current, ...patch }
   await storageSet(STORAGE_KEYS.DAILY_PROGRESS, updated)
   return updated
 }
 
+const lastWriteTime: Partial<Record<keyof DailyProgress, number>> = {}
+const WRITE_THROTTLE_MS = 1000
+
 export async function incrementDailyProgress(field: keyof DailyProgress, amount = 1): Promise<DailyProgress> {
+  const now = Date.now()
+  const last = lastWriteTime[field]
+  if (last && now - last < WRITE_THROTTLE_MS) {
+    const current = await getDailyProgress()
+    return current
+  }
+  lastWriteTime[field] = now
+
   const current = await getDailyProgress()
   const updated = { ...current, [field]: current[field] + amount }
   await storageSet(STORAGE_KEYS.DAILY_PROGRESS, updated)
