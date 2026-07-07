@@ -577,32 +577,28 @@ function execute(action: ToolbarAction): void {
   }
 }
 
+const PENDING_SAVE_KEY = '_pendingSave'
+
 async function saveText(text: string, category: SaveCategory): Promise<void> {
   showToast(`Saving ${category}...`)
 
-  let saveFailed = false
-
-  chrome.runtime.sendMessage({
-    type: 'SAVE_SELECTION_FULL',
-    payload: {
-      text,
-      category,
-      pageTitle: document.title,
-      pageUrl: window.location.href,
-    },
-  }).catch((err) => {
-    saveFailed = true
-    const msg = err instanceof Error ? err.message : String(err)
-    if (msg.includes('context invalidated') || msg.includes('Extension context')) {
-      setTimeout(() => showToast('Please refresh this page and try again.'), 300)
-    } else if (!msg.includes('channel closed') && !msg.includes('response was received')) {
-      console.warn('[SaveText]', msg)
-    }
-  })
-
-  setTimeout(() => {
-    if (!saveFailed) showToast(`Saved as ${category}`)
-  }, 200)
+  try {
+    await new Promise<void>((resolve) => {
+      chrome.storage.local.set({
+        [PENDING_SAVE_KEY]: {
+          text,
+          category,
+          pageTitle: document.title,
+          pageUrl: window.location.href,
+          timestamp: Date.now(),
+        },
+      }, resolve)
+    })
+    showToast(`Saved as ${category}`)
+  } catch {
+    showToast('Save failed. Please try again.')
+    return
+  }
 
   if (category === 'vocabulary') {
     handleVocabSaved(text)

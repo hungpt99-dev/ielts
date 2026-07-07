@@ -1,5 +1,7 @@
-import type { SaveCategory } from '../types'
-import { updateDailyProgress } from '../services/storage'
+import type { SaveCategory, LearningEntry } from '../types'
+import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
+import { saveEntry } from '../storage/indexedDB'
+import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
 import { initMessaging } from './messaging'
 import { initializeStorageBridge } from './storage-bridge'
 import { initAiService } from './ai-service'
@@ -148,5 +150,64 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 initMessaging()
 initAiService()
 initializeStorageBridge()
+
+// Process saves queued by content scripts via chrome.storage.local.
+// This avoids Extension context invalidated errors from chrome.runtime.sendMessage.
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area !== 'local') return
+  const pending = changes['_pendingSave']?.newValue
+  if (!pending || !pending.text || !pending.category) return
+
+  chrome.storage.local.remove('_pendingSave', async () => {
+    try {
+      const now = new Date().toISOString()
+      const entry: LearningEntry = {
+        id: crypto.randomUUID(),
+        text: pending.text,
+        category: pending.category,
+        topic: pending.topic || 'general',
+        skill: (pending.skill || 'general') as LearningEntry['skill'],
+        difficulty: (pending.difficulty || '') as LearningEntry['difficulty'],
+        tags: pending.tags || [],
+        personalNote: pending.note || '',
+        pageTitle: pending.pageTitle || '',
+        pageUrl: pending.pageUrl || '',
+        status: 'new',
+        createdAt: now,
+        updatedAt: now,
+      }
+      await saveEntry(entry)
+
+      if (pending.category === 'vocabulary') {
+        try {
+          const vocabEntry = extensionVocabSchema.parse({
+            id: crypto.randomUUID(),
+            word: pending.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+            sourceSentence: pending.text,
+            pageTitle: pending.pageTitle || '',
+            pageUrl: pending.pageUrl || '',
+            topic: pending.topic || 'general',
+            personalNote: pending.note || '',
+            tags: pending.tags || [],
+            meaning: '',
+            partOfSpeech: '',
+            pronunciation: '',
+            difficulty: pending.difficulty || '',
+            status: 'new',
+            addedToReview: true,
+            reviewId: '',
+            createdAt: now,
+            updatedAt: now,
+          })
+          await saveVocabularyEntry(vocabEntry)
+        } catch { /* non-critical */ }
+      }
+
+      await incrementDailyProgress('wordsAdded', pending.category === 'vocabulary' ? 1 : 0)
+    } catch (err) {
+      console.error('[PendingSave] Save failed:', err)
+    }
+  })
+})
 
 export {}

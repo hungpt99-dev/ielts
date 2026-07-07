@@ -107,9 +107,10 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     showToast(`Saved as ${payload.category}`)
 
-    safeSendMessage({
-      type: 'SAVE_SELECTION_FULL',
-      payload: {
+    // Write to _pendingSave instead of forwarding via safeSendMessage
+    // to avoid Extension context invalidated errors.
+    chrome.storage.local.set({
+      _pendingSave: {
         text: payload.text,
         category: payload.category,
         pageTitle: payload.pageTitle,
@@ -118,8 +119,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         difficulty: payload.difficulty,
         note: payload.note,
         tags: payload.tags,
+        timestamp: Date.now(),
       },
-    })
+    }, () => {})
 
     if (payload.category === 'vocabulary') {
       emitExtensionVocabularySaved(
