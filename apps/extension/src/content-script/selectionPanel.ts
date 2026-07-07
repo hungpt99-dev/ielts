@@ -590,18 +590,23 @@ let flushRetryCount = 0
 const SAVE_FLUSH_MS = 2000
 const MAX_RETRIES = 3
 
+let storageTimedOut = false
+
 function storeToChromeStorage(batch: typeof pendingSaves): Promise<void> {
   return new Promise((resolve, reject) => {
+    storageTimedOut = false
     const timer = setTimeout(() => {
+      storageTimedOut = true
       reject(new Error('chrome.storage timeout'))
     }, 3000)
 
     try {
       chrome.storage.local.get('_pendingSaves', (result) => {
+        if (storageTimedOut) return // timeout already fired — ignore stale callback
         const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
         chrome.storage.local.set({ _pendingSaves: existing.concat(batch) }, () => {
           clearTimeout(timer)
-          resolve()
+          if (!storageTimedOut) resolve()
         })
       })
     } catch (e) {

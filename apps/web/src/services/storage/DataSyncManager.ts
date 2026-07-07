@@ -49,20 +49,24 @@ async function saveToDatabase(payload: DataSyncPayload): Promise<void> {
   switch (entityType) {
     case 'vocabulary': {
       const ext = entity as Record<string, unknown>
+      const word = (ext.word as string) || (ext.text as string) || (ext.name as string) || ''
+      const meaning = (ext.meaning as string) || word || ''
+      const topic = (ext.topic as string) || 'general'
+      const example = (ext.exampleSentence as string) || (ext.sourceSentence as string) || (ext.text as string) || ''
       const mapped = {
-        id: ext.id as string,
-        word: ext.word as string,
-        meaning: (ext.meaning as string) || (ext.word as string) || '',
+        id: (ext.id as string) || crypto.randomUUID(),
+        word,
+        meaning,
         meaningVi: (ext.meaningVi as string) || '',
         pronunciation: (ext.pronunciation as string) || '',
         partOfSpeech: (ext.partOfSpeech as string) || '',
-        topic: (ext.topic as string) || 'general',
-        exampleSentence: (ext.exampleSentence as string) || (ext.sourceSentence as string) || '',
+        topic,
+        exampleSentence: example,
         collocations: Array.isArray(ext.collocations) ? ext.collocations : [],
         synonyms: Array.isArray(ext.synonyms) ? ext.synonyms : [],
         antonyms: Array.isArray(ext.antonyms) ? ext.antonyms : [],
         wordFamily: Array.isArray(ext.wordFamily) ? ext.wordFamily : [],
-        personalNote: (ext.personalNote as string) || '',
+        personalNote: (ext.personalNote as string) || (ext.note as string) || '',
         difficulty: (ext.difficulty as string) || 'medium',
         status: (ext.status as string) || 'new',
         tags: Array.isArray(ext.tags) ? ext.tags : [],
