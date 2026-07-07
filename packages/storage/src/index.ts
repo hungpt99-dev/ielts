@@ -127,9 +127,13 @@ export {
   generateExportFilename,
   readJsonFile,
   validateExtensionExportData,
-  createBridgeMessage,
-  isValidBridgeMessage,
-} from './syncService'
+	  createBridgeMessage,
+	  isValidBridgeMessage,
+	  DATA_SYNC_ACTION,
+	  SYNC_ENTITY_TYPES,
+	  SYNC_OPERATIONS,
+	  isDataSyncMessage,
+	} from './syncService'
 export type {
   ExtensionExportData,
   ImportMode as SyncImportMode,
@@ -138,8 +142,11 @@ export type {
   StorageGet,
   StorageSet,
   StorageHandlers,
-  BridgeMessage,
-  BridgeResponse,
-} from './syncService'
+	  BridgeMessage,
+	  BridgeResponse,
+	  SyncEntityType,
+	  SyncOperation,
+	  DataSyncPayload,
+	} from './syncService'
 
 export * from './schema'
