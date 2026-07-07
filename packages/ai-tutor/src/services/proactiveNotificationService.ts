@@ -2,7 +2,7 @@ import { ProactiveEventBus } from './proactiveEventBus'
 import { ProactiveMessageService } from './proactiveMessageService'
 import type { ProactiveMessage, ProactiveMessageSettings } from '../types'
 
-const NOTIFICATION_ICON = '/favicon.ico'
+const NOTIFICATION_ICON = '/icon.png'
 
 function isInQuietHours(settings: ProactiveMessageSettings): boolean {
   const now = new Date()

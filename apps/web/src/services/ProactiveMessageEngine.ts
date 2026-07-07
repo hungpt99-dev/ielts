@@ -301,7 +301,7 @@ export class ProactiveMessageEngine {
     try {
       const notif = new Notification('AI Tutor', {
         body: message.title + '\n' + message.message,
-        icon: '/favicon.ico',
+        icon: '/icon.png',
         tag: `ielts-proactive-${message.id}`,
         requireInteraction: true,
       })
