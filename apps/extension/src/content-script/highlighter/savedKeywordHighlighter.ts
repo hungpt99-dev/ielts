@@ -9,6 +9,10 @@ import {
 } from './highlightEngine'
 import { destroyTooltip } from './highlightTooltip'
 import { type HighlightWord } from './highlightMatcher'
+import {
+  emitExtensionAutoHighlightEnabled,
+  emitExtensionAutoHighlightDisabled,
+} from '../../background/eventEmitters'
 
 const SETTINGS_KEY = 'extensionSettings'
 const VOCAB_STORAGE_KEY = 'vocabulary'
@@ -203,6 +207,7 @@ function onStorageChanged(
       setActive(enabled)
       if (enabled) {
         refreshHighlights()
+        emitExtensionAutoHighlightEnabled()
       } else {
         removeAllHighlights()
         destroyTooltip()
@@ -210,6 +215,7 @@ function onStorageChanged(
           observer.disconnect()
           observer = null
         }
+        emitExtensionAutoHighlightDisabled()
       }
       console.debug(`[IELTS Journey] Auto-highlight ${enabled ? 'enabled' : 'disabled'}`)
     }

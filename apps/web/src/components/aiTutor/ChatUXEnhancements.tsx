@@ -191,7 +191,7 @@ export function WelcomeState({ greeting, suggestion }: WelcomeStateProps) {
         Hi, I'm your AI Tutor!
       </p>
       <p
-        className="max-w-xs text-xs leading-relaxed"
+        className="text-xs leading-relaxed"
         style={{ color: 'var(--color-text-secondary)' }}
       >
         {greeting}

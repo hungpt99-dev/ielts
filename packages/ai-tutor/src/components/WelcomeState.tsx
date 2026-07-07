@@ -26,10 +26,10 @@ export function WelcomeState({ greeting, suggestion, compact, userName, suggeste
         style={{ animation: 'chat-fade-in 0.4s ease-out' }}
       >
         <TutorAvatar size={56} pulse />
-        <p className="mt-3 text-sm font-medium" style={{ color: 'var(--color-tutor-text)' }}>
+        <p className="mt-3 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
           {userName ? `${timeGreeting}, ${userName}!` : 'Hi, I\'m your IELTS Tutor!'}
         </p>
-        <p className="mt-1 max-w-xs text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+        <p className="mt-1 text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
           {greeting}
         </p>
         {suggestion && <div className="mt-3">{suggestion}</div>}
@@ -41,9 +41,9 @@ export function WelcomeState({ greeting, suggestion, compact, userName, suggeste
                 onClick={prompt.onClick}
                 className="rounded-full px-3 py-1.5 text-xs font-medium transition-all hover:opacity-80"
                 style={{
-                  backgroundColor: 'var(--color-tutor-accent-light)',
-                  color: 'var(--color-tutor-accent)',
-                  border: '1px solid var(--color-tutor-border)',
+                  backgroundColor: 'var(--color-primary-light)',
+                  color: 'var(--color-primary)',
+                  border: '1px solid var(--color-border)',
                 }}
                 type="button"
               >
@@ -64,15 +64,15 @@ export function WelcomeState({ greeting, suggestion, compact, userName, suggeste
       <TutorAvatar size={80} pulse />
 
       <div>
-        <p className="text-lg font-semibold" style={{ color: 'var(--color-tutor-text)' }}>
+        <p className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
           {userName ? `${timeGreeting}, ${userName}!` : 'Hi, I\'m your IELTS Tutor!'}
         </p>
-        <p className="mt-1 text-sm" style={{ color: 'var(--color-tutor-text)' }}>
+        <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
           I can help you with reading, writing, listening, speaking, grammar, vocabulary, study plans, and more.
         </p>
       </div>
 
-      <p className="max-w-sm text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+      <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
         {greeting}
       </p>
 
@@ -86,9 +86,9 @@ export function WelcomeState({ greeting, suggestion, compact, userName, suggeste
               onClick={prompt.onClick}
               className="rounded-full px-4 py-2 text-sm font-medium transition-all hover:opacity-80"
               style={{
-                backgroundColor: 'var(--color-tutor-accent-light)',
-                color: 'var(--color-tutor-accent)',
-                border: '1px solid var(--color-tutor-border)',
+                backgroundColor: 'var(--color-primary-light)',
+                color: 'var(--color-primary)',
+                border: '1px solid var(--color-border)',
               }}
               type="button"
             >

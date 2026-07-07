@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useId } from 'react'
+import { emitAITutorOpened } from '../features/websiteActions/eventEmitters'
 import { VoiceProvider } from '../voice/VoiceProvider'
 import { useVoice } from '../voice/useVoice'
 import VoiceButton from '../voice/components/VoiceButton'
@@ -765,6 +766,10 @@ export default function AITutorChat() {
   const skipAutoSpeak = useRef(false)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [session, setSession] = useState<ChatSession | null>(null)
+
+  useEffect(() => {
+    emitAITutorOpened(messages.length)
+  }, [])
   const [input, setInput] = useState('')
   const [mode, setMode] = useState<AssistantMode>('ielts-tutor')
   const [language, setLanguage] = useState<Language>('both')

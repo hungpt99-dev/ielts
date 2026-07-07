@@ -8,6 +8,7 @@ import {
 } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
+import { emitFromBackground } from './eventEmitters'
 
 export interface SaveItemPayload {
   category: SaveCategory
@@ -68,6 +69,7 @@ interface MessageMap {
   MINI_TUTOR_TRIGGER: MiniTutorOpenPayload
   SETTINGS_SYNC: SharedSettingsPatch
   VOCAB_SAVED: Record<string, unknown>
+  EXTENSION_LEARNING_EVENT: Record<string, unknown>
 }
 
 export type ExtensionMessage<K extends keyof MessageMap = keyof MessageMap> = {
@@ -202,6 +204,34 @@ export function initMessaging(): void {
       }
       await saveEntry(learningEntry)
       await incrementDailyProgress('wordsAdded', 1)
+
+      const sourceUrl = msg.payload.pageUrl || ''
+      if (msg.payload.category === 'vocabulary') {
+        emitFromBackground({
+          eventType: 'extension_vocabulary_saved',
+          source: 'extension_popup',
+          payload: {
+            eventType: 'extension_vocabulary_saved',
+            word: msg.payload.text.split(/\s+/)[0] || msg.payload.text,
+            contextSnippet: msg.payload.text,
+            sourceUrl,
+          },
+          entityType: 'vocabulary',
+          page: sourceUrl,
+        })
+      } else {
+        emitFromBackground({
+          eventType: 'extension_selected_text_saved',
+          source: 'extension_popup',
+          payload: {
+            eventType: 'extension_selected_text_saved',
+            textSnippet: msg.payload.text,
+            sourceUrl,
+          },
+          entityType: 'selected_text',
+          page: sourceUrl,
+        })
+      }
     } catch {
       /* non-critical */
     }
@@ -289,6 +319,20 @@ export function initMessaging(): void {
     const msg = _msg as ExtensionMessage<'SETTINGS_SYNC'>
     const { syncFromWebsite } = await import('./settingsStorage')
     await syncFromWebsite(msg.payload)
+  })
+
+  registerHandler('EXTENSION_LEARNING_EVENT', async (_msg) => {
+    const msg = _msg as ExtensionMessage<'EXTENSION_LEARNING_EVENT'>
+    const tabs = await chrome.tabs.query({})
+    for (const tab of tabs) {
+      if (!tab.id) continue
+      chrome.tabs
+        .sendMessage(tab.id, {
+          type: 'EXTENSION_LEARNING_EVENT',
+          payload: msg.payload,
+        })
+        .catch(() => {})
+    }
   })
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

@@ -14,6 +14,10 @@ import {
 } from '@ielts/ai'
 import { injectContentStyles } from './sharedStyles'
 import { safeSendMessage, safeFetchProviderConfig } from '../utils/safe-chrome'
+import {
+  emitExtensionSelectedTextExplained,
+  emitExtensionSelectedTextSimplified,
+} from '../background/eventEmitters'
 
 const PANEL_ID = 'ielts-ai-explain-panel'
 const OVERLAY_ID = 'ielts-ai-explain-overlay'
@@ -55,6 +59,14 @@ export function showExplainPanel(text: string, initialAction?: AiExplainType): v
   currentText = text
   entries = createEntries()
   activeTab = initialAction || 'simple'
+
+  const sourceUrl = window.location.href
+  if (activeTab === 'simple') {
+    emitExtensionSelectedTextExplained(text, sourceUrl)
+  }
+  if (activeTab === 'rewrite') {
+    emitExtensionSelectedTextSimplified(text, sourceUrl)
+  }
 
   injectContentStyles()
   injectStyles()

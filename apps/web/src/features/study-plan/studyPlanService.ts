@@ -4,6 +4,7 @@ import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import type { AppSettings, TaskEntry, TaskCategory, VocabularyEntry, VocabReviewEntry } from '../../models'
 import { loadAppSettings } from '../../services/storage/SettingsStorage'
 import { DatabaseService } from '../../services/storage/Database'
+import { emitStudyPlanGenerated } from '../websiteActions/eventEmitters'
 import {
   buildStudyPlanSystemPrompt,
   buildStudyPlanUserPrompt,
@@ -423,6 +424,10 @@ export async function generateStudyPlan(
     await savePlan(planData)
 
     const tasks = await createTasksFromPlan(planData)
+
+    const totalTasks = tasks.length
+    const totalMinutes = tasks.reduce((s, t) => s + (t.timeMinutes || 0), 0)
+    emitStudyPlanGenerated(planData.generatedAt, totalTasks, totalMinutes)
 
     return {
       phases: planData.phases,

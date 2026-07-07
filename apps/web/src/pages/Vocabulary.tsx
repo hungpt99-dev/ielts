@@ -1,8 +1,12 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../models'
 import { generateId } from '../utils'
 import { DatabaseService } from '../services/storage/Database'
 import { useToast } from '../components/ui/Toast'
+import {
+  emitVocabularySaved,
+  emitVocabularyMastered,
+} from '../features/websiteActions/eventEmitters'
 import Card, { CardContent } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
@@ -125,6 +129,8 @@ export default function Vocabulary() {
   useEffect(() => {
     loadEntries()
   }, [loadEntries])
+
+  const sessionWordCount = useRef(0)
 
   const allTags = useMemo(() => {
     const tags = new Set<string>()
@@ -276,6 +282,8 @@ export default function Vocabulary() {
       } else {
         await DatabaseService.add('vocabulary', entry)
         setEntries(prev => [...prev, entry])
+        sessionWordCount.current += 1
+        emitVocabularySaved(entry.id, entry.word, entry.topic, sessionWordCount.current)
         showToast('success', `"${label}" added`)
       }
 
@@ -306,6 +314,11 @@ export default function Vocabulary() {
     await DatabaseService.put('vocabulary', updated)
     setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
     showToast('success', `"${entry.word}" marked as ${status}`)
+
+    if (status === 'mastered') {
+      const totalMastered = entries.filter(e => e.status === 'mastered' || (e.id === entry.id && status === 'mastered')).length
+      emitVocabularyMastered(entry.id, entry.word, totalMastered + 1)
+    }
   }
 
   async function toggleFavorite(entry: VocabularyEntry) {

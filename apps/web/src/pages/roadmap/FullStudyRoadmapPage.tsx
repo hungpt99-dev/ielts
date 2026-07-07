@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { emitStudyRoadmapViewed } from '../../features/websiteActions/eventEmitters'
 import {
   ensureRoadmap,
   toggleTask,
@@ -79,8 +80,13 @@ export default function FullStudyRoadmapPage() {
     loadData()
   }, [loadData])
 
+  const roadmapEmitted = useRef(false)
+
   useEffect(() => {
-    if (!loading && roadmap) {
+    if (!loading && roadmap && !roadmapEmitted.current) {
+      roadmapEmitted.current = true
+      const weekCount = roadmap.phases.reduce((sum, p) => sum + p.weeks.length, 0)
+      emitStudyRoadmapViewed(roadmap.userProfile?.id || 'roadmap', weekCount)
       setTimeout(() => {
         todayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       }, 300)

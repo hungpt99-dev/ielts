@@ -12,6 +12,7 @@ import AITutorEntry from './components/AITutorEntry'
 import SavedWordsView from './components/SavedWordsView'
 import PendingReviews from './components/PendingReviews'
 import ReviewSession from './components/ReviewSession'
+import { emitExtensionPopupOpened } from '../background/eventEmitters'
 
 type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'reviewSession'
 
@@ -25,6 +26,10 @@ function App() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
   }, [view])
+
+  useEffect(() => {
+    emitExtensionPopupOpened()
+  }, [])
 
   const handleSaved = () => {
     setView('dashboard')

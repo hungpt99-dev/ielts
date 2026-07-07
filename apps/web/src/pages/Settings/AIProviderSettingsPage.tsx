@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../../context/SettingsContext'
 import { testConnection } from '../../services/ai/AIService'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
+import { emitAIProviderConfigured, emitSettingsChanged } from '../../features/websiteActions/eventEmitters'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Input from '../../components/ui/Input'
@@ -66,6 +67,8 @@ export default function AIProviderSettingsPage() {
         aiEnabled: enabled,
       })
       setDirty(false)
+      emitSettingsChanged(['aiApiKey', 'aiProvider', 'aiBaseUrl', 'aiModel', 'aiEnabled'])
+      emitAIProviderConfigured(provider, model)
       showFeedback('success', 'AI settings saved successfully.')
     } catch {
       showFeedback('error', 'Failed to save AI settings.')

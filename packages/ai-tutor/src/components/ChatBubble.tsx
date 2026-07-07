@@ -43,15 +43,15 @@ export function ChatBubble({
           style={
             isUser
               ? {
-                  backgroundColor: 'var(--color-tutor-userBubble)',
-                  color: 'var(--color-tutor-userText)',
+                  backgroundColor: 'var(--color-primary)',
+                  color: '#ffffff',
                   borderRadius: '18px 18px 4px 18px',
                   overflowWrap: 'break-word',
                   wordBreak: 'break-word',
                 }
               : {
-                  backgroundColor: 'var(--color-tutor-background)',
-                  color: 'var(--color-tutor-text)',
+                  backgroundColor: 'var(--color-surface-alt)',
+                  color: 'var(--color-text)',
                   borderRadius: '18px 18px 18px 4px',
                   overflowWrap: 'break-word',
                   wordBreak: 'break-word',
@@ -123,10 +123,10 @@ export function ChatBubble({
       {isUser && (
         <div
           className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm"
-          style={{ backgroundColor: 'var(--color-tutor-accent-light)' }}
+          style={{ backgroundColor: 'var(--color-primary-light)' }}
           aria-hidden="true"
         >
-          <IconUser size={16} color="var(--color-tutor-accent)" strokeWidth={1.5} />
+          <IconUser size={16} color="var(--color-primary)" strokeWidth={1.5} />
         </div>
       )}
     </div>

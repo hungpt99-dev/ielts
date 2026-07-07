@@ -14,7 +14,7 @@ export function TypingIndicator() {
       <div
         className="flex items-center gap-1.5 rounded-2xl px-4 py-3"
         style={{
-          backgroundColor: 'var(--color-tutor-background)',
+          backgroundColor: 'var(--color-surface-alt)',
           borderRadius: '18px 18px 18px 4px',
         }}
         aria-label="AI Tutor is typing"
@@ -23,7 +23,7 @@ export function TypingIndicator() {
         <span
           className="h-2 w-2 rounded-full"
           style={{
-            backgroundColor: 'var(--color-tutor-accent)',
+            backgroundColor: 'var(--color-primary)',
             animation: 'typing-bounce 1.4s ease-in-out infinite',
             animationDelay: '0ms',
           }}
@@ -31,7 +31,7 @@ export function TypingIndicator() {
         <span
           className="h-2 w-2 rounded-full"
           style={{
-            backgroundColor: 'var(--color-tutor-accent)',
+            backgroundColor: 'var(--color-primary)',
             animation: 'typing-bounce 1.4s ease-in-out infinite',
             animationDelay: '160ms',
           }}
@@ -39,7 +39,7 @@ export function TypingIndicator() {
         <span
           className="h-2 w-2 rounded-full"
           style={{
-            backgroundColor: 'var(--color-tutor-accent)',
+            backgroundColor: 'var(--color-primary)',
             animation: 'typing-bounce 1.4s ease-in-out infinite',
             animationDelay: '320ms',
           }}

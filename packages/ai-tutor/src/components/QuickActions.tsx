@@ -20,16 +20,16 @@ export function QuickActions({ actions, onAction }: QuickActionsProps) {
   if (actions.length === 0) return null
 
   return (
-    <div className="flex shrink-0 flex-wrap gap-1.5">
+    <div className="flex shrink-0 flex-nowrap gap-1.5">
       {actions.map((action) => (
         <button
           key={action.type}
           onClick={() => onAction(action.type)}
-          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
+          className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
           style={{
-            backgroundColor: 'var(--color-tutor-accent-light)',
-            color: 'var(--color-tutor-accent)',
-            border: '1px solid var(--color-tutor-border)',
+            backgroundColor: 'var(--color-primary-light)',
+            color: 'var(--color-primary)',
+            border: '1px solid var(--color-border)',
           }}
           type="button"
         >

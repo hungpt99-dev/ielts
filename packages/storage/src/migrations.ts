@@ -13,7 +13,7 @@ export interface AppDatabaseSchema {
   versions: StorageVersion[]
 }
 
-export const CURRENT_DB_VERSION = 6
+export const CURRENT_DB_VERSION = 7
 
 export const APP_SCHEMA: AppDatabaseSchema = {
   currentVersion: CURRENT_DB_VERSION,
@@ -204,6 +204,45 @@ export const APP_SCHEMA: AppDatabaseSchema = {
         readingExercises: 'id, topic, skill, difficulty, sourceId, *tags, isFavorite, createdAt',
         listeningExercises: 'id, topic, skill, difficulty, sourceId, *tags, isFavorite, createdAt',
         artifacts: 'id, url, category, *tags, isFavorite, createdAt',
+      },
+    },
+    {
+      number: 7,
+      stores: {
+        vocabulary: 'id, topic, status, difficulty, createdAt',
+        vocabularyReviews: 'id, vocabularyId, nextReviewDate, lastReviewDate',
+        tasks: 'id, date, category, isDone, createdAt',
+        readingSessions: 'id, topic, createdAt',
+        readingPracticeSessions: 'id, passageId, topic, createdAt',
+        listeningSessions: 'id, topic, createdAt',
+        listeningPracticeSessions: 'id, exerciseId, topic, createdAt',
+        writingSessions: 'id, taskType, topic, createdAt',
+        speakingSessions: 'id, part, topic, createdAt',
+        grammarNotes: 'id, topic, status, relatedSkill, createdAt',
+        mistakes: 'id, skill, status, source, date, createdAt',
+        mockTests: 'id, date, createdAt',
+        topicsProgress: 'id, topic, updatedAt',
+        passages: 'id, createdAt',
+        ieltsTopics: 'id, name, skill, *tags, createdAt',
+        exampleSentences: 'id, vocabularyId, topic, *tags, isFavorite, createdAt',
+        readingPassages: 'id, topic, difficulty, *tags, isFavorite, createdAt',
+        listeningTranscripts: 'id, topic, difficulty, *tags, isFavorite, createdAt',
+        writingPrompts: 'id, taskType, topic, difficulty, *tags, isFavorite, createdAt',
+        speakingQuestions: 'id, part, topic, difficulty, *tags, isFavorite, createdAt',
+        studyNotes: 'id, topic, skill, *tags, isFavorite, createdAt',
+        customStudyPlans: 'id, isActive, createdAt',
+        usefulPhrases: 'id, topic, skill, difficulty, *tags, isFavorite, createdAt',
+        aiContents: 'id, type, topic, *tags, isFavorite, createdAt',
+        progressRecords: 'id, date, skill, createdAt',
+        publicApiContent: 'id, sourceName, contentType, topic, skill, difficulty, *tags, importedAt',
+        contentMeta: 'id, packId, packVersion, seededAt',
+        userContentEdits: 'id, originalId, userItemId, contentType, tableName, editedAt',
+        speakingExercises: 'id, topic, skill, difficulty, sourceId, *tags, isFavorite, createdAt',
+        writingExercises: 'id, topic, skill, difficulty, sourceId, *tags, isFavorite, createdAt',
+        readingExercises: 'id, topic, skill, difficulty, sourceId, *tags, isFavorite, createdAt',
+        listeningExercises: 'id, topic, skill, difficulty, sourceId, *tags, isFavorite, createdAt',
+        artifacts: 'id, url, category, *tags, isFavorite, createdAt',
+        learningEvents: 'id, eventType, source, timestamp, sessionId, syncStatus, createdAt',
       },
     },
   ],

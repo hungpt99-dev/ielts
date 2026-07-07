@@ -38,6 +38,7 @@ export interface IDatabase {
   readingExercises: Table<Record<string, unknown>, string>
   listeningExercises: Table<Record<string, unknown>, string>
   artifacts: Table<Record<string, unknown>, string>
+  learningEvents: Table<Record<string, unknown>, string>
 }
 
 export class AppDatabase extends Dexie implements IDatabase {
@@ -74,6 +75,7 @@ export class AppDatabase extends Dexie implements IDatabase {
   readingExercises!: Table<Record<string, unknown>, string>
   listeningExercises!: Table<Record<string, unknown>, string>
   artifacts!: Table<Record<string, unknown>, string>
+  learningEvents!: Table<Record<string, unknown>, string>
 
   constructor(schema: AppDatabaseSchema, options?: DexieOptions) {
     super(DB_NAME, options)
@@ -168,4 +170,5 @@ export const TABLE_NAMES: (keyof IDatabase)[] = [
   'readingExercises',
   'listeningExercises',
   'artifacts',
+  'learningEvents',
 ]

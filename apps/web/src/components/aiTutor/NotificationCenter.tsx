@@ -206,7 +206,7 @@ export default function NotificationCenter({ isOpen, onClose, unreadCount, onUnr
             <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
               {activeFilter === 'all' ? 'No notifications yet' : 'No notifications in this category'}
             </p>
-            <p className="max-w-xs text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
               {activeFilter === 'all'
                 ? 'Proactive tutor messages will appear here when the AI Tutor has suggestions for you.'
                 : 'Try a different category or check back later.'}

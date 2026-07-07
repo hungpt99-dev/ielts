@@ -13,6 +13,12 @@ import {
   safeSendMessage,
   safeFetchProviderConfig,
 } from '../utils/safe-chrome'
+import {
+  emitExtensionSelectedTextDetected,
+  emitExtensionSelectedTextSaved,
+  emitExtensionSelectedTextExplained,
+  emitExtensionSelectedTextSimplified,
+} from '../background/eventEmitters'
 
 const SHADOW_HOST_ID = 'ielts-sp-shadow'
 const TOAST_ID = 'ielts-sp-toast'
@@ -467,6 +473,8 @@ function show(rect: DOMRect): void {
   const isWord = isWordOnly(selectedText)
   createShadowPanel(rect)
   renderPanel(isWord)
+
+  emitExtensionSelectedTextDetected(selectedText, window.location.href)
 }
 
 function bindEvents(): void {
@@ -514,6 +522,8 @@ async function saveText(text: string, category: SaveCategory): Promise<void> {
 
   if (category === 'vocabulary') {
     handleVocabSaved(text)
+  } else {
+    emitExtensionSelectedTextSaved(text, window.location.href)
   }
 }
 
@@ -521,6 +531,11 @@ function triggerAI(action: ToolbarAction, text: string): void {
   const aiType = ACTION_TO_AI_TYPE[action.id]
   if (aiType) {
     showExplainPanel(text, aiType)
+    if (action.id === 'explain') {
+      emitExtensionSelectedTextExplained(text, window.location.href)
+    } else if (action.id === 'simplify') {
+      emitExtensionSelectedTextSimplified(text, window.location.href)
+    }
   } else {
     showToast(`AI action not available: ${action.label}`)
   }

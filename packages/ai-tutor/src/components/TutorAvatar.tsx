@@ -27,9 +27,9 @@ export function TutorAvatar({
       style={{
         width: size,
         height: size,
-        background: 'linear-gradient(135deg, var(--color-tutor-accent), var(--color-tutor-accent-dark))',
+        background: 'linear-gradient(135deg, var(--color-primary), var(--color-primary-dark, #1d4ed8))',
         boxShadow: pulse || typing
-          ? `0 0 ${glowSize}px color-mix(in srgb, var(--color-tutor-accent) 40%, transparent)`
+          ? `0 0 ${glowSize}px color-mix(in srgb, var(--color-primary) 40%, transparent)`
           : 'none',
         transition: 'box-shadow 0.3s ease',
       }}
@@ -62,7 +62,7 @@ export function TutorAvatar({
           className="absolute inset-0 rounded-full"
           style={{
             animation: typing ? 'tutor-avatar-typing 1.2s ease-in-out infinite' : 'tutor-avatar-pulse 2s ease-in-out infinite',
-            border: '2px solid var(--color-tutor-accent)',
+            border: '2px solid var(--color-primary)',
             opacity: 0.4,
           }}
         />
@@ -79,7 +79,7 @@ export function TutorAvatar({
             minWidth: '8px',
             minHeight: '8px',
             backgroundColor: isOnline ? 'var(--color-success)' : 'var(--color-muted)',
-            borderColor: 'var(--color-tutor-background)',
+            borderColor: 'var(--color-surface)',
             transition: 'background-color 0.3s ease',
           }}
           aria-label={isOnline ? 'Online' : 'Away'}

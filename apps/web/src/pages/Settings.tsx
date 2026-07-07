@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../context/SettingsContext'
 import { useTheme } from '../context/ThemeContext'
 import { DatabaseService } from '../services/storage/Database'
+import { emitSettingsChanged } from '../features/websiteActions/eventEmitters'
 import {
   loadNotificationPrefs,
   saveNotificationPrefs,
@@ -20,6 +21,7 @@ import ConfirmDialog from '../components/ui/ConfirmDialog'
 import { LoadingSkeleton } from '../components/ui/LoadingSkeleton'
 import { ErrorState } from '../components/ui/EmptyState'
 import PageHeader from '../components/layout/PageHeader'
+import ProactiveTutorSettings from '../features/settings/ProactiveTutorSettings'
 import {
   IconTarget,
   IconAITutor,
@@ -85,6 +87,7 @@ function getSectionIcon(id: string): React.ReactNode {
     case 'appearance': return <IconPalette size={size} />
     case 'notifications': return <IconBell size={size} />
     case 'advanced': return <IconSliders size={size} />
+    case 'proactive-tutor': return <IconBell size={size} />
     case 'data': return <IconDatabase size={size} />
     default: return null
   }
@@ -95,6 +98,7 @@ const SETTINGS_SECTIONS: SettingsSection[] = [
   { id: 'ai-tutor', label: 'AI Tutor', icon: getSectionIcon('ai-tutor')!, description: 'AI provider, API key & model' },
   { id: 'study-plan', label: 'Study Plan', icon: getSectionIcon('study-plan')!, description: 'Weak skills, topics & schedule' },
   { id: 'appearance', label: 'Appearance', icon: getSectionIcon('appearance')!, description: 'Theme mode & accent color' },
+  { id: 'proactive-tutor', label: 'AI Tutor Proactive', icon: getSectionIcon('proactive-tutor')!, description: 'Proactive tutor messages & reminders' },
   { id: 'notifications', label: 'Notifications', icon: getSectionIcon('notifications')!, description: 'Study reminders & alerts' },
   { id: 'advanced', label: 'Advanced', icon: getSectionIcon('advanced')!, description: 'Deep config & CORS proxy' },
   { id: 'data', label: 'Data', icon: getSectionIcon('data')!, description: 'Export, import & manage data' },
@@ -223,6 +227,11 @@ export default function Settings() {
         Notification.requestPermission()
       }
       setDirty(false)
+      const changedKeys = Object.entries(form).filter(([key, val]) => {
+        const old = settings[key as keyof typeof settings]
+        return old !== undefined && old !== val
+      }).map(([key]) => key)
+      emitSettingsChanged(changedKeys)
       showFeedback('success', 'Settings saved successfully.')
     } catch {
       showFeedback('error', 'Failed to save settings.')
@@ -1023,6 +1032,10 @@ export default function Settings() {
                       </div>
                     </div>
                   </div>
+                )}
+
+                {activeSection === 'proactive-tutor' && (
+                  <ProactiveTutorSettings />
                 )}
 
                 {activeSection === 'notifications' && (

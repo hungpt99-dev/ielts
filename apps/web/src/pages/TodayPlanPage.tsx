@@ -5,6 +5,11 @@ import { today, formatDateLabel } from '../utils'
 import { DatabaseService } from '../services/storage/Database'
 import { StudyPlanStore } from '../features/studyPlan/storage/studyPlanStore'
 import type { TaskEntry } from '../models'
+import {
+  emitTodayPlanOpened,
+  emitStudyTaskCompleted,
+  emitStudyDayCompleted,
+} from '../features/websiteActions/eventEmitters'
 import { IconListening, IconReading, IconWriting, IconSpeaking, IconVocabulary, IconGrammar, IconVocabularyReview, IconAITutor, IconCheckCircle, IconCheck, IconChevronLeft, IconChevronRight, IconClock, IconMenu, IconTodayPlan } from '@ielts/ui'
 import PageContainer from '../components/layout/PageContainer'
 import type {
@@ -125,18 +130,25 @@ export default function TodayPlanPage() {
   const adjustedDayOfWeek = todayDayOfWeek === 0 ? 6 : todayDayOfWeek - 1
 
   async function handleToggleTaskDone(task: TaskEntry) {
+    const wasDone = task.isDone
     const updated: TaskEntry = {
       ...task,
-      isDone: !task.isDone,
-      completedAt: !task.isDone ? new Date().toISOString() : null,
+      isDone: !wasDone,
+      completedAt: !wasDone ? new Date().toISOString() : null,
       updatedAt: new Date().toISOString(),
     }
     await DatabaseService.put('tasks', updated)
     setTasks(prev => prev.map(t => t.id === updated.id ? updated : t))
+
+    const category = task.category || 'general'
+    if (!wasDone) {
+      emitStudyTaskCompleted(task.id, task.title, category, task.timeMinutes || 0)
+    }
   }
 
   async function handleToggleDayTask(taskKey: string, task: DailyStudyTask, day: DailyPlanItem) {
-    const updated = { ...task, isCompleted: !task.isCompleted }
+    const wasCompleted = task.isCompleted
+    const updated = { ...task, isCompleted: !wasCompleted }
     const keyMap: Record<string, keyof DailyPlanItem> = {
       listeningTask: 'listeningTask',
       readingTask: 'readingTask',
@@ -157,6 +169,10 @@ export default function TodayPlanPage() {
     try {
       await StudyPlanStore.updateDailyPlan(planId, day.date, changes)
       setPlanDay(prev => prev ? { ...prev, ...changes } : prev)
+
+      if (!wasCompleted) {
+        emitStudyTaskCompleted(task.id, task.title, taskKey.replace('Task', ''), task.estimatedMinutes || 0)
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update task')
     }
@@ -167,6 +183,12 @@ export default function TodayPlanPage() {
     try {
       await StudyPlanStore.updateDailyPlanStatus(planId, day.date, status)
       setPlanDay(prev => prev ? { ...prev, status } : prev)
+
+      if (status === 'completed') {
+        const totalMinutes = day.estimatedTotalMinutes || 0
+        const completedCount = [day.listeningTask, day.readingTask, day.writingTask, day.speakingTask, day.vocabularyTask, day.grammarTask, day.reviewTask].filter(t => t?.isCompleted).length
+        emitStudyDayCompleted(day.date, totalMinutes, completedCount)
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update day status')
     }
@@ -216,6 +238,11 @@ export default function TodayPlanPage() {
   const completedTasks = Math.max(completedPlanTasks, completedLegacyTasks)
   const completedChecklist = checklistItems.filter(i => i.checked).length
   const allDone = totalTasks > 0 && completedTasks >= totalTasks
+
+  useEffect(() => {
+    emitTodayPlanOpened(totalPlanTasks - completedPlanTasks, completedPlanTasks)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const weekDates = useMemo(() => getWeekDates(todayStr), [todayStr])
 

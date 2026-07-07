@@ -3,6 +3,7 @@ import ProgressTracker from '../features/progress/ProgressTracker'
 import PageContainer from '../components/layout/PageContainer'
 import PageHeader from '../components/layout/PageHeader'
 import { IconProgress } from '@ielts/ui'
+import { emitProgressViewed } from '../features/websiteActions/eventEmitters'
 import { computeProgressSnapshot, loadProgressSnapshot, saveProgressSnapshot } from '../features/progress/progressService'
 import type { ProgressSnapshot } from '../features/progress/progressService'
 
@@ -43,6 +44,12 @@ export default function Progress() {
   useEffect(() => {
     load().then(() => {}).catch(() => {})
   }, [load])
+
+  useEffect(() => {
+    if (!loading) {
+      emitProgressViewed('all')
+    }
+  }, [loading])
 
   const handleRetry = useCallback(() => {
     load()

@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { MistakeEntry, MistakeSkill, MistakeStatus } from '../models'
 import { DatabaseService } from '../services/storage/Database'
+import { emitMistakeSaved } from '../features/websiteActions/eventEmitters'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Badge from '../components/ui/Badge'
@@ -226,6 +227,8 @@ export default function Mistakes() {
     setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
   }
 
+  const sessionMistakeCount = useRef(0)
+
   async function handleSave() {
     if (!form.mistake.trim() || !form.correction.trim()) return
     setSaving(true)
@@ -263,6 +266,8 @@ export default function Mistakes() {
         }
         await DatabaseService.add('mistakes', entry)
         setEntries(prev => [...prev, entry])
+        sessionMistakeCount.current += 1
+        emitMistakeSaved(entry.id, entry.mistake, entry.skill, sessionMistakeCount.current)
       }
       setModalOpen(false)
       setEditingEntry(null)

@@ -1,0 +1,245 @@
+[2026-07-06T19:09:42.538Z] [INFO] Task started: Implement cooldown and anti-spam logic for proactive tutor messages
+[2026-07-06T19:09:42.540Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/features/proactiveTutor/CooldownManager.ts","description":"Cooldown and anti-spam logic for proactive tutor messages","validationMethod":"file_exists"}]
+[2026-07-06T19:09:43.091Z] [INFO] [stderr] [0m
+[2026-07-06T19:09:43.091Z] [INFO] [stderr] [0m
+[2026-07-06T19:09:43.091Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-06T19:09:48.162Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"ProactiveTutorRuleEngine proactiveTutor CooldownManager LearningEventBus proactiveTutorSettings","maxFiles":20}
+[2026-07-06T19:09:48.259Z] [INFO] [stderr] [0m✱ [0mGlob "src/features/proactiveTutor/**/*"[90m 0 matches[0m
+[2026-07-06T19:09:51.078Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/proactiveTutor/ProactiveTutorRuleEngine.ts"}
+[2026-07-06T19:09:52.273Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"CooldownState ISOString ProactiveDecision DecisionAction MessagePriority AGGREGATION_THRESHOLDS COOLDOWN_MS EVENT_TYPE_TO_MESSAGE_TYPE PRIORITY_BY_EVENT_TYPE EVENT_TYPE_TO_CATEGORY DismissedMessage ProactiveMessageRecord RuleEngineInput ProactiveTutorContext LearningEvent LearningEventType","maxFiles":15}
+[2026-07-06T19:09:52.362Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/proactiveTutor/**/*"[90m 3 matches[0m
+[2026-07-06T19:09:55.927Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts
+[2026-07-06T19:09:56.212Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/learningEvents/types.ts
+[2026-07-06T19:09:56.322Z] [INFO] [stdout] Let me look at the existing test file and the types to understand the full codebase context.
+[2026-07-06T19:10:32.592Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"ISOString type definition in @/types","maxFiles":5}
+[2026-07-06T19:10:32.624Z] [INFO] [stdout] Let me check the types import path:
+[2026-07-06T19:10:45.272Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:10:45.272Z] [INFO] [stderr] [0m
+[2026-07-06T19:10:45.272Z] [INFO] [stderr] [0m
+[2026-07-06T19:10:45.272Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-06T19:10:45.341Z] [INFO] [stdout] Now I have full context. Let me create the `CooldownManager.ts` file:
+[2026-07-06T19:10:48.384Z] [INFO] [stderr] [0m
+[2026-07-06T19:10:48.384Z] [INFO] [stderr] [0m$ [0mls -la apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:10:48.384Z] [INFO] [stderr] -rw-r--r--@ 1 phamthanhhung  staff  4886 Jul  7 02:10 apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:10:49.039Z] [INFO] [stdout] Now let me verify the file was created correctly and run typecheck:
+[2026-07-06T19:10:49.129Z] [INFO] [stderr] (no output)
+[2026-07-06T19:10:49.129Z] [INFO] [stderr] [0m$ [0mnpx tsc --noEmit --pretty 2>&1 | head -30
+[2026-07-06T19:10:49.129Z] [INFO] [stderr] [0m
+[2026-07-06T19:10:53.171Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:10:53.389Z] [INFO] [stdout] Typecheck passes with no errors. Let me verify the file content looks right:
+[2026-07-06T19:11:01.281Z] [INFO] [stderr] [0m
+[2026-07-06T19:11:01.281Z] [INFO] [stderr] [0m
+[2026-07-06T19:11:01.281Z] [INFO] [stderr] (no output)
+[2026-07-06T19:11:01.281Z] [INFO] [stderr] [0m$ [0mnpx tsc --noEmit --pretty 2>&1
+[2026-07-06T19:11:01.330Z] [INFO] [stderr] [0m✱ [0mGlob "apps/web/src/features/proactiveTutor/__tests__/*"[90m 1 match[0m
+[2026-07-06T19:11:01.496Z] [INFO] [stdout] Let me run the typecheck and check if there's a test file or if I should create one:
+[2026-07-06T19:11:05.528Z] [INFO] [stdout] Let me check the test runner config and run the test command:
+[2026-07-06T19:11:05.631Z] [INFO] [stderr] [0m
+[2026-07-06T19:11:05.630Z] [INFO] [stderr] [0m$ [0mpnpm test --filter CooldownManager 2>&1 | tail -20
+[2026-07-06T19:11:05.631Z] [INFO] [stderr] test: --filter: unexpected operator
+[2026-07-06T19:11:05.631Z] [INFO] [stderr] [0m
+[2026-07-06T19:11:09.017Z] [INFO] [stderr]     "clean": "rm -rf dist node_modules/.tmp"
+[2026-07-06T19:11:09.017Z] [INFO] [stderr] [0m$ [0mcat apps/web/package.json | grep -A 5 '"test"' | head -10
+[2026-07-06T19:11:09.017Z] [INFO] [stderr]   },
+[2026-07-06T19:11:09.017Z] [INFO] [stderr]   "dependencies": {
+[2026-07-06T19:11:09.017Z] [INFO] [stderr] [0m
+[2026-07-06T19:11:09.017Z] [INFO] [stderr]     "test:watch": "vitest --config vitest.config.ts --watch",
+[2026-07-06T19:11:09.017Z] [INFO] [stderr] "test": "vitest run --config vitest.config.ts",
+[2026-07-06T19:11:09.017Z] [INFO] [stderr]     "ai": "VITEST_MAX_WORKERS=2 vitest run --config vitest.config.ts --passWithNoTests --reporter verbose",
+[2026-07-06T19:13:12.576Z] [INFO] [stderr] (no output)
+[2026-07-06T19:13:12.576Z] [INFO] [stderr] 
+[2026-07-06T19:13:12.576Z] [INFO] [stderr] <shell_metadata>
+[2026-07-06T19:13:12.576Z] [INFO] [stderr] </shell_metadata>
+[2026-07-06T19:13:12.576Z] [INFO] [stderr] [0m$ [0mpnpm test -- --reporter verbose 2>&1 | tail -30
+[2026-07-06T19:13:12.576Z] [INFO] [stderr] [0m
+[2026-07-06T19:13:12.576Z] [INFO] [stderr] shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+[2026-07-06T19:13:16.714Z] [INFO] [stderr] 
+[2026-07-06T19:13:16.714Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-06T19:13:16.714Z] [INFO] [stderr] 
+[2026-07-06T19:13:16.714Z] [INFO] [stderr] [0m$ [0mpnpm exec vitest run --config vitest.config.ts ProactiveTutorRuleEngine.test.ts 2>&1 | tail -30
+[2026-07-06T19:13:16.714Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts (72 tests) 6ms
+[2026-07-06T19:13:16.714Z] [INFO] [stderr] [0m
+[2026-07-06T19:13:16.714Z] [INFO] [stderr]    Start at  02:13:16
+[2026-07-06T19:13:16.714Z] [INFO] [stderr]  Test Files  1 passed (1)
+[2026-07-06T19:13:16.714Z] [INFO] [stderr]       Tests  72 passed (72)
+[2026-07-06T19:13:16.714Z] [INFO] [stderr]    Duration  379ms (transform 31ms, setup 37ms, collect 28ms, tests 6ms, environment 203ms, prepare 31ms)
+[2026-07-06T19:13:20.056Z] [INFO] [stdout] Good - all existing tests pass. Let me also run the linter to make sure the new file has no issues:
+[2026-07-06T19:13:20.816Z] [INFO] [stderr] [0m$ [0mnpx eslint src/features/proactiveTutor/CooldownManager.ts 2>&1
+[2026-07-06T19:13:20.816Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:13:20.816Z] [INFO] [stderr] [0m
+[2026-07-06T19:13:20.816Z] [INFO] [stderr] 
+[2026-07-06T19:13:20.816Z] [INFO] [stderr] ✖ 1 problem (0 errors, 1 warning)
+[2026-07-06T19:13:20.816Z] [INFO] [stderr]   2:30  warning  'CooldownEntry' is defined but never used  @typescript-eslint/no-unused-vars
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:13:24.573Z] [INFO] [stderr]  import type { ISOString } from '@/types'
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] ===================================================================
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] @@ -1,6 +1,6 @@
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:13:24.573Z] [INFO] [stderr]  import { proactiveTutorSettingsRepository } from './ProactiveTutorSettingsRepository'
+[2026-07-06T19:13:24.573Z] [INFO] [stderr]  
+[2026-07-06T19:13:24.573Z] [INFO] [stderr]  const COOLDOWN_STORAGE_KEY = 'ielts-proactive-tutor-cooldown-v1'
+[2026-07-06T19:13:24.573Z] [INFO] [stderr]  
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] 
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] [0m
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] -import type { CooldownState, CooldownEntry } from './ProactiveTutorRuleEngine'
+[2026-07-06T19:13:24.573Z] [INFO] [stderr] +import type { CooldownState } from './ProactiveTutorRuleEngine'
+[2026-07-06T19:13:24.667Z] [INFO] [stdout] Let me fix the unused import warning:
+[2026-07-06T19:13:27.730Z] [INFO] [stderr] [0m
+[2026-07-06T19:13:27.730Z] [INFO] [stderr] [0m$ [0mnpx eslint src/features/proactiveTutor/CooldownManager.ts 2>&1
+[2026-07-06T19:13:27.730Z] [INFO] [stderr] (no output)
+[2026-07-06T19:13:27.872Z] [INFO] [stderr] [0m$ [0mnpx tsc --noEmit --pretty 2>&1
+[2026-07-06T19:13:27.872Z] [INFO] [stderr] [0m
+[2026-07-06T19:13:27.872Z] [INFO] [stderr] (no output)
+[2026-07-06T19:13:30.496Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:13:30.577Z] [INFO] [stdout] Both lint and typecheck pass cleanly. Let me verify the final file:
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] 
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] The `CooldownManager` class provides the cooldown and anti-spam layer for proactive tutor messages:
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] **File created:** `src/features/proactiveTutor/CooldownManager.ts`
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] ## Summary
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] **Task complete.** Created `apps/web/src/features/proactiveTutor/CooldownManager.ts` (165 lines).
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] **State management**
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - `getState()` returns a clone compatible with `ProactiveTutorRuleEngine.evaluate()` input
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] 
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] 
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] 
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - Persists `CooldownState` (global + per-type timestamps) in LocalStorage under key `ielts-proactive-tutor-cooldown-v1`
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - `recordMessageShown(cooldownKey)` updates global + type cooldown timestamps and increments daily count
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] 
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - `isGlobalCooldownActive()` — 20 min between messages
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - `getGlobalRemainingCooldownMs()` / `getTypeRemainingCooldownMs(key)` — how long until cooldown expires
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - `isInQuietHours()` — delegates to settings repository quiet hours check
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - `isDailyLimitReached()` — delegates to settings repository max per day
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - `resetCooldowns()` / `resetGlobalCooldown()` / `resetTypeCooldown(key)` — full or targeted resets
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] **Cooldown enforcement**
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] **Remaining time & cleanup**
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - `isTypeCooldownActive(key)` — type-specific cooldowns (vocab: 4h, mistakes: 4h, missed study: 24h, etc.)
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] - `clearExpiredEntries()` — garbage-collects stale entries from LocalStorage
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] 
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] **Validation:** eslint 0 errors, TypeScript compiles cleanly, existing rule engine tests (72/72) still pass.
+[2026-07-06T19:13:38.396Z] [INFO] [stdout] 
+[2026-07-06T19:13:38.646Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-06T19:13:38.646Z] [INFO] Output:
+Let me look at the existing test file and the types to understand the full codebase context.
+Let me check the types import path:
+Now I have full context. Let me create the `CooldownManager.ts` file:
+Now let me verify the file was created correctly and run typecheck:
+Typecheck passes with no errors. Let me verify the file content looks right:
+Let me run the typecheck and check if there's a test file or if I should create one:
+Let me check the test runner config and run the test command:
+Good - all existing tests pass. Let me also run the linter to make sure the new file has no issues:
+Let me fix the unused import warning:
+Both lint and typecheck pass cleanly. Let me verify the final file:
+**Task complete.** Created `apps/web/src/features/proactiveTutor/CooldownManager.ts` (165 lines).
+
+## Summary
+
+**File created:** `src/features/proactiveTutor/CooldownManager.ts`
+
+The `CooldownManager` class provides the cooldown and anti-spam layer for proactive tutor messages:
+
+**State management**
+- Persists `CooldownState` (global + per-type timestamps) in LocalStorage under key `ielts-proactive-tutor-cooldown-v1`
+- `getState()` returns a clone compatible with `ProactiveTutorRuleEngine.evaluate()` input
+- `recordMessageShown(cooldownKey)` updates global + type cooldown timestamps and increments daily count
+
+**Cooldown enforcement**
+- `isGlobalCooldownActive()` — 20 min between messages
+- `isTypeCooldownActive(key)` — type-specific cooldowns (vocab: 4h, mistakes: 4h, missed study: 24h, etc.)
+- `isDailyLimitReached()` — delegates to settings repository max per day
+- `isInQuietHours()` — delegates to settings repository quiet hours check
+
+**Remaining time & cleanup**
+- `getGlobalRemainingCooldownMs()` / `getTypeRemainingCooldownMs(key)` — how long until cooldown expires
+- `clearExpiredEntries()` — garbage-collects stale entries from LocalStorage
+- `resetCooldowns()` / `resetGlobalCooldown()` / `resetTypeCooldown(key)` — full or targeted resets
+
+**Validation:** eslint 0 errors, TypeS
+[2026-07-06T19:13:38.646Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"ProactiveTutorRuleEngine proactiveTutor CooldownManager LearningEventBus proactiveTutorSettings","maxFiles":20}
+[0m✱ [0mGlob "src/features/proactiveTutor/**/*"[90m 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/proactiveTutor/ProactiveTutorRuleEngine.ts"}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"CooldownState ISOString ProactiveDecision DecisionAction MessagePriority AGGREGATION_THRESHOLDS COOLDOWN_MS EVENT_TYPE_TO_MESSAGE_TYPE PRIORITY_BY_EVENT_TYPE EVENT_TYPE_TO_CATEGORY DismissedMessage ProactiveMessageRecord RuleEngineInput ProactiveTutorContext LearningEvent LearningEventType","maxFiles":15}
+[0m✱ [0mGlob "apps/web/src/features/proactiveTutor/**/*"[90m 3 matches[0m
+[0m→ [0mRead apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts
+[0m→ [0mRead apps/web/src/features/learningEvents/types.ts
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"ISOString type definition in @/types","maxFiles":5}
+[0m
+[0m← [0mWrite apps/web/src/features/proactiveTutor/CooldownManager.ts
+Wrote file successfully.
+[0m
+[0m$ [0mls -la apps/web/src/features/proactiveTutor/CooldownManager.ts
+-rw-r--r--@ 1 phamthanhhung  staff  4886 Jul  7 02:10 apps/web/src/features/proactiveTutor/CooldownManager.ts
+[0m
+[0m$ [0mnpx tsc --noEmit --pretty 2>&1 | head -30
+(no output)
+[0m
+[0m→ [0mRead apps/web/src/features/proactiveTutor/CooldownManager.ts
+[0m
+[0m$ [0mnpx tsc --noEmit --pretty 2>&1
+(no output)
+[0m
+[0m✱ [0mGlob "apps/web/src/features/proactiveTutor/__tests__/*"[90m 1 match[0m
+[0m
+[0m$ [0mpnpm test --filter CooldownManager 2>&1 | tail -20
+test: --filter: unexpected operator
+[0m
+[0m$ [0mcat apps/web/package.json | grep -A 5 '"test"' | head -10
+"test": "vitest run --config vitest.config.ts",
+    "test:watch": "vitest --config vitest.config.ts --watch",
+    "ai": "VITEST_MAX_WORKERS=2 vitest run --config vitest.config.ts --passWithNoTests --reporter verbose",
+    "clean": "rm -rf dist node_modules/.tmp"
+  },
+  "dependencies": {
+[0m
+[0m$ [0mpnpm test -- --reporter verbose 2>&1 | tail -30
+(no output)
+
+<shell_metadata>
+shell tool terminated command after exceeding timeout 120000 ms. If this command is expected to take longer and is not waiting for interactive input, retry with a larger timeout value in milliseconds.
+</shell_metadata>
+[0m
+[0m$ [0mpnpm exec vitest run --config vitest.config.ts ProactiveTutorRuleEngine.test.ts 2>&1 | tail -30
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts (72 tests) 6ms
+
+ Test Files  1 passed (1)
+      Tests  72 passed (72)
+   Start at  02:13:16
+   Duration  379ms (transform 31ms, setup 37ms, collect 28ms, tests 6ms, environment 203ms, prepare 31ms)
+[0m
+[0m$ [0mnpx eslint src/features/proactiveTutor/CooldownManager.ts 2>&1
+/Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/CooldownManager.ts
+  2:30  warning  'CooldownEntry' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 1 problem (0 errors, 1 warning)
+[0m
+[0m← [0mEdit apps/web/src/features/proactiveTutor/CooldownManager.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/CooldownManager.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/CooldownManager.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/CooldownManager.ts
+@@ -1,6 +1,6 @@
+ import type { ISOString } from '@/types'
+-import type { CooldownState, CooldownEntry } from './ProactiveTutorRuleEngine'
++import type { CooldownState } from './ProactiveTutorRuleEngine'
+ import { proactiveTutorSettingsRepository } from './ProactiveTutorSettingsRepository'
+ 
+ const COOLDOWN_STORAGE_KEY = 'ielts-proactive-tutor-cooldown-v1'
+ 
+
+[0m
+[0m$ [0mnpx eslint src/features/proactiveTutor/CooldownManager.ts 2>&1
+(no output)
+[0m
+[0m$ [0mnpx tsc --noEmit --pretty 2>&1
+(no output)
+[0m
+[0m→ [0mRead apps/web/src/features/proactiveTutor/CooldownManager.ts
+[2026-07-06T19:13:38.647Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-06T19:13:38.651Z] [INFO] Task completed successfully

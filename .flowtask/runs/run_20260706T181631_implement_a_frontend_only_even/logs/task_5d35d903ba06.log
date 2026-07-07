@@ -1,0 +1,861 @@
+[2026-07-06T19:13:38.654Z] [INFO] Task started: Implement ProactiveTutorContextBuilder to aggregate learning context for decision making
+[2026-07-06T19:13:38.656Z] [INFO] [info] [output-plan] [{"action":"create","target":"src/features/proactiveTutor/ProactiveTutorContextBuilder.ts","description":"Aggregates learning context for proactive tutor rule engine","validationMethod":"file_exists"}]
+[2026-07-06T19:13:39.217Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-06T19:13:39.217Z] [INFO] [stderr] [0m
+[2026-07-06T19:13:39.217Z] [INFO] [stderr] [0m
+[2026-07-06T19:15:20.651Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"ProactiveTutorRuleEngine EngineInput proactiveTutor rules cooldown context builder repositories settings","maxFiles":20}
+[2026-07-06T19:15:24.393Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"LearningEventRepository learningEventRepository LearningEvent eventTypes vocabulary repository study progress plan storage","maxFiles":20}
+[2026-07-06T19:15:27.123Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"learningEventTypes LearningEventBus LearningEventRepository LearningEvent eventTypes emitLearningEvent useLearningEvent","maxFiles":20}
+[2026-07-06T19:15:30.622Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"LearningEvent type definitions learningEventRepository types.ts ProactiveTutorMessageRepository TutorNotificationService TutorLocalSchedulerService","maxFiles":20}
+[2026-07-06T19:15:34.034Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"ProactiveTutorMessageRepository messageRepository cooldownManager proactiveTutor hooks useProactiveTutor useProactiveTutorSettings","maxFiles":15}
+[2026-07-06T19:15:37.088Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts"}
+[2026-07-06T19:15:41.697Z] [INFO] [stderr] [0m✱ [0mGrep "targetBand|examDate|lastActive|appSettings|userSettings|app-settings"[90m in apps/web/src · 100 matches[0m
+[2026-07-06T19:15:44.925Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"appSettings loadAppSettings settingsRepository ielts-settings getAppSettings useAppSettings","maxFiles":15}
+[2026-07-06T19:15:49.131Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/services/storage/SettingsStorage.ts","offset":1,"limit":100}
+[2026-07-06T19:15:52.268Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","offset":55,"limit":40}
+[2026-07-06T19:15:55.913Z] [INFO] [stderr] [0m✱ [0mGrep "learningStreak|lastStudyDate|lastActive"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:15:59.198Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_explore {"query":"ProactiveTutorMessageRepository messageRepository message inbox dismissed proactive message","maxFiles":15}
+[2026-07-06T19:16:02.698Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/proactiveTutor"}
+[2026-07-06T19:16:10.628Z] [INFO] [stderr] [0m✱ [0mGlob "**/proactiveTutor/**Message*"[90m in apps/web · 0 matches[0m
+[2026-07-06T19:16:14.915Z] [INFO] [stderr] [0m✱ [0mGrep "useProactiveTutor|isUserChattingWithTutor"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:16:18.426Z] [INFO] [stderr] [0m✱ [0mGrep "sessionId|sessionCount|currentSession"[90m in apps/web/src/features/learningEvents · 0 matches[0m
+[2026-07-06T19:16:22.083Z] [INFO] [stderr] [0m✱ [0mGrep "countInWindow|aggregation|aggregate"[90m in apps/web/src/features/learningEvents · 6 matches[0m
+[2026-07-06T19:16:31.217Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/proactiveTutor/ProactiveTutorRuleEngine.ts","offset":1,"limit":50}
+[2026-07-06T19:16:31.326Z] [INFO] [stdout] Now I have a thorough understanding of all the data sources. Let me read the existing ProactiveTutorRuleEngine to check the exact context shape I need to build.
+[2026-07-06T19:16:35.280Z] [INFO] [stderr] [0m✱ [0mGrep "from '@ielts/storage'|from '@ielts/storage/src|VocabReviewRepository|CustomStudyPlanRepository"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:16:35.314Z] [INFO] [stdout] Let me check how the storage repositories are imported in the web app.
+[2026-07-06T19:16:45.887Z] [INFO] [stderr] [0m✱ [0mGrep "from '@ielts/storage'"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:16:49.049Z] [INFO] [stderr] [0m✱ [0mGrep "@ielts/storage"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:16:52.102Z] [INFO] [stderr] [0m✱ [0mGrep "VocabReviewRepository|vocabReviewRepo|VocabularyRepository|CustomStudyPlanRepository"[90m in apps/web/src · 6 matches[0m
+[2026-07-06T19:16:55.268Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/services/storage/Database.ts","limit":80}
+[2026-07-06T19:16:58.348Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/services/storage/Database.ts","offset":85,"limit":120}
+[2026-07-06T19:17:01.573Z] [INFO] [stderr] [0m✱ [0mGrep "repo\.vocabulary|repo\.vocabularyReviews|repo\.customStudyPlans"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:17:04.931Z] [INFO] [stderr] [0m✱ [0mGrep "vocabularyService|DatabaseService\.getAll|proactiveMessageEngine.*loadAppSettings"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:17:08.323Z] [INFO] [stderr] [0m✱ [0mGrep "new VocabReviewRepository|new VocabularyRepository|new CustomStudyPlanRepository"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:17:12.410Z] [INFO] [stderr] [0m✱ [0mGrep "vocabularyService|progressRecordService|getVocabStats|getDueCount"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:17:15.456Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/dashboard/dashboardService.ts","limit":80}
+[2026-07-06T19:17:18.759Z] [INFO] [stderr] [0m✱ [0mGrep "DatabaseService"[90m in apps/web/src/services/storage/Database.ts · 0 matches[0m
+[2026-07-06T19:17:21.920Z] [INFO] [stderr] [0m✱ [0mGrep "export class DatabaseService|export const DatabaseService"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:17:25.082Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage/Database.ts[90m [offset=850][0m
+[2026-07-06T19:17:28.531Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage/Database.ts[90m [offset=240, limit=100][0m
+[2026-07-06T19:17:33.783Z] [INFO] [stderr] [0m✱ [0mGrep "VocabReviewRepository|VocabularyRepository|CustomStudyPlanRepository"[90m in packages/storage/src · 8 matches[0m
+[2026-07-06T19:17:43.183Z] [INFO] [stderr] [0m✱ [0mGrep "lastActive|LAST_ACTIVE"[90m in apps/web/src · 0 matches[0m
+[2026-07-06T19:17:46.626Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_search {"query":"CustomStudyPlan customStudyPlanSchema","kind":"type"}
+[2026-07-06T19:17:49.895Z] [INFO] [stderr] [0m✱ [0mGrep "customStudyPlanSchema"[90m in packages/storage/src · 6 matches[0m
+[2026-07-06T19:17:53.000Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/schema.ts[90m [offset=343, limit=30][0m
+[2026-07-06T19:17:56.678Z] [INFO] [stderr] [0m✱ [0mGrep "vocabularyEntrySchema"[90m in packages/storage/src · 6 matches[0m
+[2026-07-06T19:17:59.710Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/schema.ts[90m [offset=51, limit=30][0m
+[2026-07-06T19:18:19.458Z] [INFO] [stderr] [0m
+[2026-07-06T19:18:19.458Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:19.458Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-06T19:18:19.458Z] [INFO] [stderr] [0m
+[2026-07-06T19:18:19.518Z] [INFO] [stdout] Now I have enough understanding of the codebase. Let me implement the `ProactiveTutorContextBuilder`.
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] -import type { LearningEvent } from '../learningEvents/types'
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] @@ -1,8 +1,9 @@
+[2026-07-06T19:18:29.282Z] [INFO] [stderr]  import { learningEventRepository } from '../learningEvents/learningEventRepository'
+[2026-07-06T19:18:29.282Z] [INFO] [stderr]  import { cooldownManager } from './CooldownManager'
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] +import type { LearningEvent, AggregationWindow } from '../learningEvents/types'
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] ===================================================================
+[2026-07-06T19:18:29.282Z] [INFO] [stderr]    ProactiveTutorContext,
+[2026-07-06T19:18:29.282Z] [INFO] [stderr]  import { loadAppSettings } from '../../services/storage/SettingsStorage'
+[2026-07-06T19:18:29.282Z] [INFO] [stderr]    CooldownState,
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] +import { VocabReviewRepository, CustomStudyPlanRepository } from '@ielts/storage'
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] [0m
+[2026-07-06T19:18:29.282Z] [INFO] [stderr]    ProactiveMessageRecord,
+[2026-07-06T19:18:29.282Z] [INFO] [stderr]  import type {
+[2026-07-06T19:18:29.282Z] [INFO] [stderr] 
+[2026-07-06T19:18:35.007Z] [INFO] [stderr] ===================================================================
+[2026-07-06T19:18:35.007Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:35.007Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:35.007Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] @@ -141,33 +141,28 @@
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]  }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]    }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] +const customStudyPlanRepo = new CustomStudyPlanRepository()
+[2026-07-06T19:18:35.007Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]      return null
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]  async function getDueVocabularyCount(): Promise<number> {
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    const { VocabReviewRepository } = await import('@ielts/storage')
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    return repo.getDueCount()
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]    try {
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    const repo = new VocabReviewRepository()
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] +    return await vocabReviewRepo.getDueCount()
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] +
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]  
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]      return 0
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]    } catch {
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]    try {
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]  }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    const repo = new CustomStudyPlanRepository()
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]  async function getTodayPlanStatus(): Promise<{ complete: boolean; pending: number }> {
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] +    const activePlan = await customStudyPlanRepo.findActive()
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]  
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] +const vocabReviewRepo = new VocabReviewRepository()
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    if (!activePlan) return { complete: false, pending: 0 }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    const activePlan = await repo.findActive()
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] +    if (!activePlan || !activePlan.isActive) return { complete: false, pending: 0 }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    const todayTasks = activePlan.tasks.filter(t => t.id && t.id.startsWith(todayStr) || t.date?.slice(0, 10) === todayStr)
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]    }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] +    const total = activePlan.tasks.length
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    const todayStr = new Date().toISOString().slice(0, 10)
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] +    const pending = activePlan.tasks.filter(t => !t.isDone).length
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]  
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]  
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    const { CustomStudyPlanRepository } = await import('@ielts/storage')
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]    } catch {
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    if (todayTasks.length === 0) {
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -      return { complete: false, pending: 0 }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]      return { complete: false, pending: 0 }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -    const pending = todayTasks.filter(t => !t.isDone).length
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] -
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] 
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] [0m
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]      return { complete: pending === 0, pending }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr]    }
+[2026-07-06T19:18:35.008Z] [INFO] [stderr] +    if (total === 0) return { complete: false, pending: 0 }
+[2026-07-06T19:18:39.223Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/repositories/index.ts[90m [offset=40, limit=20][0m
+[2026-07-06T19:18:42.580Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/repositories/index.ts[90m [offset=1, limit=15][0m
+[2026-07-06T19:18:45.600Z] [INFO] [stderr] [0m⚙ [0mcodegraph_codegraph_node {"symbol":"getDueCount","file":"VocabReviewRepository"}
+[2026-07-06T19:18:49.554Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:18:57.588Z] [INFO] [stderr] [0m→ [0mRead packages/storage/src/index.ts[90m [offset=20, limit=30][0m
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] ===================================================================
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] @@ -1,6 +1,6 @@
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] -import type { LearningEvent, AggregationWindow } from '../learningEvents/types'
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] +import type { LearningEvent } from '../learningEvents/types'
+[2026-07-06T19:19:01.144Z] [INFO] [stderr]  import { cooldownManager } from './CooldownManager'
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] [0m
+[2026-07-06T19:19:01.144Z] [INFO] [stderr]  import { VocabReviewRepository, CustomStudyPlanRepository } from '@ielts/storage'
+[2026-07-06T19:19:01.144Z] [INFO] [stderr]  import { loadAppSettings } from '../../services/storage/SettingsStorage'
+[2026-07-06T19:19:01.144Z] [INFO] [stderr]  import { learningEventRepository } from '../learningEvents/learningEventRepository'
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] 
+[2026-07-06T19:19:01.144Z] [INFO] [stderr] [0m
+[2026-07-06T19:19:01.144Z] [INFO] [stderr]  import type {
+[2026-07-06T19:19:04.994Z] [INFO] [stderr] --- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:19:04.994Z] [INFO] [stderr] @@ -4,9 +4,8 @@
+[2026-07-06T19:19:04.994Z] [INFO] [stderr] Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:19:04.994Z] [INFO] [stderr] +++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:19:04.994Z] [INFO] [stderr] [0m← [0mEdit apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:19:04.994Z] [INFO] [stderr]  import { VocabReviewRepository, CustomStudyPlanRepository } from '@ielts/storage'
+[2026-07-06T19:19:04.994Z] [INFO] [stderr] ===================================================================
+[2026-07-06T19:19:04.994Z] [INFO] [stderr]  import { loadAppSettings } from '../../services/storage/SettingsStorage'
+[2026-07-06T19:19:04.994Z] [INFO] [stderr]    ProactiveTutorContext,
+[2026-07-06T19:19:04.994Z] [INFO] [stderr] -  CooldownState,
+[2026-07-06T19:19:04.994Z] [INFO] [stderr]    ProactiveMessageRecord,
+[2026-07-06T19:19:04.994Z] [INFO] [stderr]    RuleEngineInput,
+[2026-07-06T19:19:04.994Z] [INFO] [stderr] [0m
+[2026-07-06T19:19:04.994Z] [INFO] [stderr] 
+[2026-07-06T19:19:04.994Z] [INFO] [stderr]    DismissedMessage,
+[2026-07-06T19:19:04.994Z] [INFO] [stderr]  import type {
+[2026-07-06T19:19:04.994Z] [INFO] [stderr]  } from './ProactiveTutorRuleEngine'
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS && pnpm typecheck --filter web 2>&1 | head -60
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] Scope: 12 of 13 workspace projects
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/ai-tutor typecheck$ tsc --noEmit --filter web
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/settings typecheck$ tsc --noEmit --filter web
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] $ pnpm -r typecheck --filter web
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/exercises typecheck$ tsc --noEmit --filter web
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/ai-tutor@0.1.0 typecheck: `tsc --noEmit --filter web`
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/ai-tutor typecheck: error TS5023: Unknown compiler option '--filter'.
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/ai typecheck: error TS5023: Unknown compiler option '--filter'.
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/ai-tutor typecheck: Failed
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/exercises typecheck: Failed
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/ai typecheck$ tsc --noEmit --filter web
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/settings typecheck: error TS5023: Unknown compiler option '--filter'.
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/exercises typecheck: error TS5023: Unknown compiler option '--filter'.
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/theme typecheck$ tsc --noEmit --filter web
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] [ELIFECYCLE] Command failed with exit code 1.
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] /Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor:
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/settings typecheck: Failed
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/ai typecheck: Failed
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] Exit status 1
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] [0m
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/utils typecheck$ tsc --noEmit --filter web
+[2026-07-06T19:19:08.720Z] [INFO] [stderr] packages/storage typecheck$ tsc --noEmit --filter web
+[2026-07-06T19:19:12.186Z] [INFO] [stderr] [0m
+[2026-07-06T19:19:12.186Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx tsc --noEmit 2>&1 | head -60
+[2026-07-06T19:19:12.186Z] [INFO] [stderr] (no output)
+[2026-07-06T19:19:15.477Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx tsc --noEmit 2>&1
+[2026-07-06T19:19:15.477Z] [INFO] [stderr] [0m
+[2026-07-06T19:19:15.477Z] [INFO] [stderr] (no output)
+[2026-07-06T19:19:18.869Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[2026-07-06T19:19:18.957Z] [INFO] [stdout] Both typecheck and compilation pass with zero errors. Let me verify the final file:
+[2026-07-06T19:19:23.808Z] [INFO] [stderr] [0m
+[2026-07-06T19:19:23.808Z] [INFO] [stderr] [0m
+[2026-07-06T19:19:23.808Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx tsc --noEmit 2>&1
+[2026-07-06T19:19:23.808Z] [INFO] [stderr] (no output)
+[2026-07-06T19:19:39.584Z] [INFO] [stderr] [0m
+[2026-07-06T19:19:39.584Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts
+[2026-07-06T19:19:39.584Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-06T19:19:39.695Z] [INFO] [stdout] TypeScript compilation passes with zero errors. Let me create the test file for the context builder:
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --reporter=verbose src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts 2>&1
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] 
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > reads counts from learningEventRepository 0ms
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]  × src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns a ProactiveTutorContext with default values when no event and no data 5ms
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > extracts repeatedMistakeCount from event payload 0ms
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > loads app settings for targetBand, examDate, weakSkills 0ms
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] 
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]    → expected { sessionVocabularyCount: +0, …(20) } to match object { sessionVocabularyCount: +0, …(15) }
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > handles null examDate 0ms
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] 
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildEngineInput > defaults currentPage to window.location.pathname if not provided 0ms
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildEngineInput > returns a RuleEngineInput with context, cooldown state, and page info 0ms
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]  FAIL  src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns a ProactiveTutorContext with default values when no event and no data
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] (5 matching properties omitted from actual)
+[2026-07-06T19:19:43.439Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns 0 repeatedMistakeCount for non-mistake events 0ms
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] 
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [31m+ Received[39m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] 
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [32m- Expected[39m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] AssertionError: expected { sessionVocabularyCount: +0, …(20) } to match object { sessionVocabularyCount: +0, …(15) }
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [33m@@ -1,13 +1,13 @@[39m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [2m    "consecutiveMissedDays": 0,[22m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [2m    "currentStreak": 0,[22m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [32m-   "dailyTasksCompleted": 0,[39m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [32m-   "dueVocabularyCount": 0,[39m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [2m  {[22m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [31m+   "dailyMistakeSaved": undefined,[39m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] (5 matching properties omitted from actual)
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [31m+   "dailyTasksSkipped": undefined,[39m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [31m+   "dueVocabularyCount": undefined,[39m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [32m-   "dailyMistakeSaved": 0,[39m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [31m+   "dailyVocabularySaved": undefined,[39m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [32m-   "dailyVocabularySaved": 0,[39m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [31m+   "dailyTasksCompleted": undefined,[39m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m    "repeatedMistakeCount": 0,[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m    "sessionVocabularyCount": 0,[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m    "targetBand": 7,[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m    "weakSkills": [[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m      "writing",[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m    "pendingTasksCount": 0,[22m
+[2026-07-06T19:19:43.439Z] [INFO] [stderr] [32m-   "dailyTasksSkipped": 0,[39m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m    ],[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [33m@@ -15,7 +15,7 @@[39m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [31m+   "weeklyVocabularySaved": undefined,[39m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m      "speaking",[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [32m-   "weeklyVocabularySaved": 0,[39m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m  }[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m    "totalStreak": 0,[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [2m    "sessionMistakeCount": 0,[22m
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]      95|       const context = await builder.buildContext()
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]  ❯ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts:97:23
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] 
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]      98|         sessionVocabularyCount: 0,
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]      97|       expect(context).toMatchObject({
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]        |                       ^
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] 
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]      99|         dailyVocabularySaved: 0,
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] 
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]    Start at  02:19:42
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] 
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]  Test Files  1 failed (1)
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]    Duration  374ms (transform 24ms, setup 38ms, collect 20ms, tests 7ms, environment 204ms, prepare 31ms)
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]      96| 
+[2026-07-06T19:19:43.440Z] [INFO] [stderr]       Tests  1 failed | 7 passed (8)
+[2026-07-06T19:19:43.440Z] [INFO] [stderr] [0m
+[2026-07-06T19:20:23.429Z] [INFO] [stderr] [0m
+[2026-07-06T19:20:23.429Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts
+[2026-07-06T19:20:23.429Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --reporter=verbose src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts 2>&1
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]  FAIL  src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts [ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts ]
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] 
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] 
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]        | ^
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] Error: [vitest] There was an error when mocking a module. If you are using "vi.mock" factory, make sure there are no top level variables inside, since this call is hoisted to top of the file. Read more: https://vitest.dev/api/vi.html#vi-mock
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]  ❯ src/features/proactiveTutor/ProactiveTutorContextBuilder.ts:1:1
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]       1| import { learningEventRepository } from '../learningEvents/learningEve…
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]       2| import type { LearningEvent } from '../learningEvents/types'
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] 
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]  ❯ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts:43:20
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]       3| import { cooldownManager } from './CooldownManager'
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] Caused by: ReferenceError: Cannot access 'mockCountInWindow' before initialization
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] 
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] 
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]  ❯ src/features/proactiveTutor/ProactiveTutorContextBuilder.ts:1:1
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] 
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] ⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]  Test Files  1 failed (1)
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] [0m
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]       Tests  no tests
+[2026-07-06T19:20:28.126Z] [INFO] [stderr] 
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]    Duration  369ms (transform 26ms, setup 38ms, collect 0ms, tests 0ms, environment 202ms, prepare 33ms)
+[2026-07-06T19:20:28.126Z] [INFO] [stderr]    Start at  02:20:27
+[2026-07-06T19:20:45.194Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-06T19:20:45.194Z] [INFO] [stderr] [0m
+[2026-07-06T19:20:45.194Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts
+[2026-07-06T19:20:59.810Z] [INFO] [stderr] [0m← [0mWrite apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts
+[2026-07-06T19:20:59.810Z] [INFO] [stderr] [0m
+[2026-07-06T19:20:59.810Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-06T19:21:05.188Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --reporter=verbose src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts 2>&1
+[2026-07-06T19:21:05.188Z] [INFO] [stderr] 
+[2026-07-06T19:21:05.188Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns a ProactiveTutorContext with all required fields 1ms
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns 0 repeatedMistakeCount for non-mistake events 0ms
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > handles empty examDate in settings 0ms
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > calls vocab review repository to get due count 0ms
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > reads streak values from localStorage 0ms
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > extracts repeatedMistakeCount from event payload 0ms
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildEngineInput > returns a RuleEngineInput with context, cooldown state, and page info 0ms
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  Test Files  1 passed (1)
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]       Tests  9 passed (9)
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > calculates inactiveMinutes from lastActiveAt 0ms
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]    Duration  312ms (transform 24ms, setup 37ms, collect 20ms, tests 3ms, environment 154ms, prepare 27ms)
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > loads app settings for targetBand, examDate, weakSkills 0ms
+[2026-07-06T19:21:05.188Z] [INFO] [stderr] 
+[2026-07-06T19:21:05.188Z] [INFO] [stderr]    Start at  02:21:04
+[2026-07-06T19:21:05.188Z] [INFO] [stderr] [0m
+[2026-07-06T19:21:09.030Z] [INFO] [stdout] All 9 tests pass. Let me run the full test suite for the proactive tutor and verify typecheck:
+[2026-07-06T19:21:09.588Z] [INFO] [stderr] [0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --reporter=verbose src/features/proactiveTutor/__tests__/ 2>&1
+[2026-07-06T19:21:09.588Z] [INFO] [stderr] 
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > enabled / disabled > returns show_message when enabled and all rules pass 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > enabled / disabled > returns ignore_event when proactive tutor is disabled 1ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > quiet hours > does not delay outside quiet hours 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > category toggles > returns show_message for study event when motivational category is enabled 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > daily message limit > returns store_silent when daily max is reached 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr] RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > global cooldown > returns store_silent when global cooldown is active 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > quiet hours > returns delay_message during quiet hours 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > global cooldown > shows message when no previous message exists 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > global cooldown > shows message when global cooldown has expired 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > daily message limit > shows message when daily count is within limit 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > category toggles > returns ignore_event when vocabulary category is disabled 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > type-specific cooldown > shows message when type-specific cooldown has expired 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > category toggles > allows unmapped event types to pass category check 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > user chatting with tutor > returns store_silent when user is chatting with tutor 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > recently dismissed messages > returns ignore_event when similar message was recently dismissed 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > returns store_silent when below vocabulary aggregation threshold 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > type-specific cooldown > returns store_silent when type-specific cooldown is active 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > returns store_silent when below mistake aggregation threshold 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > recently dismissed messages > shows message when dismissed message is old 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > shows message when above vocabulary aggregation threshold 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > category toggles > returns ignore_event for study event when motivational category is disabled 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > user chatting with tutor > shows message when user is not chatting with tutor 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > shows message when above mistake aggregation threshold 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > pending message merge > returns merge_with_existing when similar message is pending 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns low priority for vocabulary_saved 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > returns store_silent when below skipped task threshold 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns high for exam_date_is_close with <7 days but few incomplete tasks 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for exam_date_is_close with 30 days (static mapping) 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > shows message when above skipped task threshold 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > pending message merge > shows message when pending message is of different type 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for exam_date_is_close with <7 days and >5 incomplete tasks 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns high for missed study 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for missed study with 3+ consecutive days 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns high for repeated_mistake_detected by default 0ms
+[2026-07-06T19:21:09.588Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for 5+ repeated mistakes 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns high for 7+ day streak 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_vocabulary for vocabulary_review_is_due 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns adjust_plan for study_task_skipped 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_vocabulary for vocabulary_saved 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_vocabulary for vocabulary_reviewed 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_mistakes for mistake_saved 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for 30+ day streak 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_plan for study_plan_generated 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns adjust_plan for study_day_missed 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_mistakes for repeated_mistake_detected 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_writing for writing_submitted 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_reading for reading_practice_completed 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_speaking for speaking_practiced 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_exam_prep for exam_date_is_close 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_streak for streak_milestone_reached 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > cooldown key > includes entityId in cooldown key when present 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns resume_study for user_returned_after_inactivity 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > cooldown key > uses messageType as cooldown key when no entityId 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns null for app_opened 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_progress for weekly_progress_review_is_due 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > getMessageType > returns mapped message type for known event types 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_listening for listening_practice_completed 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > evaluateEventType convenience method > evaluates by event type without a full event object 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > isCategoryEnabledForEvent > returns true when category is enabled 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > isCategoryEnabledForEvent > returns false when proactive tutor is disabled 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > getCooldownMs > returns undefined for unknown message types 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_progress for ai_progress_review_generated 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > getCooldownMs > returns cooldown for known message types 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > evaluateEventType convenience method > respects disabled category via evaluateEventType 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > isCategoryEnabledForEvent > returns false for unmapped event types 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > extension events > hides message for extension events when extension category is disabled 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > isCategoryEnabledForEvent > returns false when category is disabled 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > getMessageType > returns event type as message type for unmapped events 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > returned after inactivity > returns high priority when 3+ days missed 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > extracts repeatedMistakeCount from event payload 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns 0 repeatedMistakeCount for non-mistake events 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > extension events > shows message for extension events when extension category is enabled 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > loads app settings for targetBand, examDate, weakSkills 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns a ProactiveTutorContext with all required fields 1ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > returned after inactivity > returns normal priority when less than 3 days missed 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > calls vocab review repository to get due count 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > calculates inactiveMinutes from lastActiveAt 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > handles empty examDate in settings 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > reads streak values from localStorage 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildEngineInput > returns a RuleEngineInput with context, cooldown state, and page info 0ms
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  Test Files  2 passed (2)
+[2026-07-06T19:21:09.589Z] [INFO] [stderr] 
+[2026-07-06T19:21:09.589Z] [INFO] [stderr] [0m
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]       Tests  81 passed (81)
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]    Duration  320ms (transform 42ms, setup 24ms, collect 43ms, tests 8ms, environment 140ms, prepare 26ms)
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]    Start at  02:21:09
+[2026-07-06T19:21:09.589Z] [INFO] [stderr]  ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > singleton > exposes a default singleton 0ms
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] All 81 tests pass (9 new + 72 existing). TypeScript compilation is clean. Here's a summary of what was created:
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] **Created files:**
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] 
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] - `apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts` (304 lines)
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] 
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] **`ProactiveTutorContextBuilder`** aggregates local learning context for the rule engine:
+[2026-07-06T19:21:15.797Z] [INFO] [stdout]   - `learningEventRepository.countInWindow()` for daily/weekly event counts (vocabulary saved, mistakes, tasks completed/skipped)
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] - **`buildContext(event?)`** — Builds a full `ProactiveTutorContext` by gathering data from:
+[2026-07-06T19:21:15.797Z] [INFO] [stdout]   - `loadAppSettings()` for target band, exam date, weak skills
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] - `apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts` (9 tests)
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] 
+[2026-07-06T19:21:15.797Z] [INFO] [stdout]   - `VocabReviewRepository.getDueCount()` for due vocabulary count
+[2026-07-06T19:21:15.797Z] [INFO] [stdout]   - `localStorage` for session start time, last active time, streak, and consecutive missed days
+[2026-07-06T19:21:15.797Z] [INFO] [stdout]   - `CustomStudyPlanRepository.findActive()` for today's plan completion status & pending tasks
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] 
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] 
+[2026-07-06T19:21:15.797Z] [INFO] [stdout]   - Practice events from `findByDateRange()` for recent accuracy calculation
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] - **`buildEngineInput(event, options?)`** — Builds a complete `RuleEngineInput` including context, cooldown state from `CooldownManager`, recent/dismissed messages from localStorage, current page, and user-chatting status
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] - Data loading runs via `Promise.all` for parallel efficiency
+[2026-07-06T19:21:15.797Z] [INFO] [stdout] - All storage access is wrapped in try/catch — failures fall back to safe defaults without breaking
+[2026-07-06T19:21:16.038Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-06T19:21:16.038Z] [INFO] Output:
+Now I have a thorough understanding of all the data sources. Let me read the existing ProactiveTutorRuleEngine to check the exact context shape I need to build.
+Let me check how the storage repositories are imported in the web app.
+Now I have enough understanding of the codebase. Let me implement the `ProactiveTutorContextBuilder`.
+Both typecheck and compilation pass with zero errors. Let me verify the final file:
+TypeScript compilation passes with zero errors. Let me create the test file for the context builder:
+All 9 tests pass. Let me run the full test suite for the proactive tutor and verify typecheck:
+All 81 tests pass (9 new + 72 existing). TypeScript compilation is clean. Here's a summary of what was created:
+
+**Created files:**
+- `apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts` (304 lines)
+- `apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts` (9 tests)
+
+**`ProactiveTutorContextBuilder`** aggregates local learning context for the rule engine:
+
+- **`buildContext(event?)`** — Builds a full `ProactiveTutorContext` by gathering data from:
+  - `learningEventRepository.countInWindow()` for daily/weekly event counts (vocabulary saved, mistakes, tasks completed/skipped)
+  - `VocabReviewRepository.getDueCount()` for due vocabulary count
+  - `CustomStudyPlanRepository.findActive()` for today's plan completion status & pending tasks
+  - `loadAppSettings()` for target band, exam date, weak skills
+  - `localStorage` for session start time, last active time, streak, and consecutive missed days
+  - Practice events from `findByDateRange()` for recent accuracy calculation
+
+- **`buildEngineInput(event, options?)`** — Builds a complete `RuleEngineInput` including context, cooldown state from `CooldownManager`, recent/dismissed messages from localStorage, current page, and user-chatting status
+
+- All storage access is wrapped in try/catch — failures fall back to safe defaults without breaking
+- Data loading runs via `Promis
+[2026-07-06T19:21:16.038Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"ProactiveTutorRuleEngine EngineInput proactiveTutor rules cooldown context builder repositories settings","maxFiles":20}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"LearningEventRepository learningEventRepository LearningEvent eventTypes vocabulary repository study progress plan storage","maxFiles":20}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"learningEventTypes LearningEventBus LearningEventRepository LearningEvent eventTypes emitLearningEvent useLearningEvent","maxFiles":20}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"LearningEvent type definitions learningEventRepository types.ts ProactiveTutorMessageRepository TutorNotificationService TutorLocalSchedulerService","maxFiles":20}
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"ProactiveTutorMessageRepository messageRepository cooldownManager proactiveTutor hooks useProactiveTutor useProactiveTutorSettings","maxFiles":15}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts"}
+[0m✱ [0mGrep "targetBand|examDate|lastActive|appSettings|userSettings|app-settings"[90m in apps/web/src · 100 matches[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"appSettings loadAppSettings settingsRepository ielts-settings getAppSettings useAppSettings","maxFiles":15}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/services/storage/SettingsStorage.ts","offset":1,"limit":100}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/models/index.ts","offset":55,"limit":40}
+[0m✱ [0mGrep "learningStreak|lastStudyDate|lastActive"[90m in apps/web/src · 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_explore {"query":"ProactiveTutorMessageRepository messageRepository message inbox dismissed proactive message","maxFiles":15}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/proactiveTutor"}
+[0m✱ [0mGlob "**/proactiveTutor/**Message*"[90m in apps/web · 0 matches[0m
+[0m✱ [0mGrep "useProactiveTutor|isUserChattingWithTutor"[90m in apps/web/src · 0 matches[0m
+[0m✱ [0mGrep "sessionId|sessionCount|currentSession"[90m in apps/web/src/features/learningEvents · 0 matches[0m
+[0m✱ [0mGrep "countInWindow|aggregation|aggregate"[90m in apps/web/src/features/learningEvents · 6 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/proactiveTutor/ProactiveTutorRuleEngine.ts","offset":1,"limit":50}
+[0m✱ [0mGrep "from '@ielts/storage'|from '@ielts/storage/src|VocabReviewRepository|CustomStudyPlanRepository"[90m in apps/web/src · 0 matches[0m
+[0m✱ [0mGrep "from '@ielts/storage'"[90m in apps/web/src · 0 matches[0m
+[0m✱ [0mGrep "@ielts/storage"[90m in apps/web/src · 0 matches[0m
+[0m✱ [0mGrep "VocabReviewRepository|vocabReviewRepo|VocabularyRepository|CustomStudyPlanRepository"[90m in apps/web/src · 6 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/services/storage/Database.ts","limit":80}
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/services/storage/Database.ts","offset":85,"limit":120}
+[0m✱ [0mGrep "repo\.vocabulary|repo\.vocabularyReviews|repo\.customStudyPlans"[90m in apps/web/src · 0 matches[0m
+[0m✱ [0mGrep "vocabularyService|DatabaseService\.getAll|proactiveMessageEngine.*loadAppSettings"[90m in apps/web/src · 0 matches[0m
+[0m✱ [0mGrep "new VocabReviewRepository|new VocabularyRepository|new CustomStudyPlanRepository"[90m in apps/web/src · 0 matches[0m
+[0m✱ [0mGrep "vocabularyService|progressRecordService|getVocabStats|getDueCount"[90m in apps/web/src · 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_node {"file":"apps/web/src/features/dashboard/dashboardService.ts","limit":80}
+[0m✱ [0mGrep "DatabaseService"[90m in apps/web/src/services/storage/Database.ts · 0 matches[0m
+[0m✱ [0mGrep "export class DatabaseService|export const DatabaseService"[90m in apps/web/src · 0 matches[0m
+[0m→ [0mRead apps/web/src/services/storage/Database.ts[90m [offset=850][0m
+[0m→ [0mRead apps/web/src/services/storage/Database.ts[90m [offset=240, limit=100][0m
+[0m✱ [0mGrep "VocabReviewRepository|VocabularyRepository|CustomStudyPlanRepository"[90m in packages/storage/src · 8 matches[0m
+[0m✱ [0mGrep "lastActive|LAST_ACTIVE"[90m in apps/web/src · 0 matches[0m
+[0m⚙ [0mcodegraph_codegraph_search {"query":"CustomStudyPlan customStudyPlanSchema","kind":"type"}
+[0m✱ [0mGrep "customStudyPlanSchema"[90m in packages/storage/src · 6 matches[0m
+[0m→ [0mRead packages/storage/src/schema.ts[90m [offset=343, limit=30][0m
+[0m✱ [0mGrep "vocabularyEntrySchema"[90m in packages/storage/src · 6 matches[0m
+[0m→ [0mRead packages/storage/src/schema.ts[90m [offset=51, limit=30][0m
+[0m
+[0m← [0mWrite apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+Wrote file successfully.
+[0m
+[0m← [0mEdit apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+@@ -1,8 +1,9 @@
+ import { learningEventRepository } from '../learningEvents/learningEventRepository'
+-import type { LearningEvent } from '../learningEvents/types'
++import type { LearningEvent, AggregationWindow } from '../learningEvents/types'
+ import { cooldownManager } from './CooldownManager'
+ import { loadAppSettings } from '../../services/storage/SettingsStorage'
++import { VocabReviewRepository, CustomStudyPlanRepository } from '@ielts/storage'
+ import type {
+   ProactiveTutorContext,
+   CooldownState,
+   ProactiveMessageRecord,
+
+[0m
+[0m← [0mEdit apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+@@ -141,33 +141,28 @@
+     return null
+   }
+ }
+ 
++const vocabReviewRepo = new VocabReviewRepository()
++const customStudyPlanRepo = new CustomStudyPlanRepository()
++
+ async function getDueVocabularyCount(): Promise<number> {
+   try {
+-    const { VocabReviewRepository } = await import('@ielts/storage')
+-    const repo = new VocabReviewRepository()
+-    return repo.getDueCount()
++    return await vocabReviewRepo.getDueCount()
+   } catch {
+     return 0
+   }
+ }
+ 
+ async function getTodayPlanStatus(): Promise<{ complete: boolean; pending: number }> {
+   try {
+-    const { CustomStudyPlanRepository } = await import('@ielts/storage')
+-    const repo = new CustomStudyPlanRepository()
+-    const activePlan = await repo.findActive()
+-    if (!activePlan) return { complete: false, pending: 0 }
++    const activePlan = await customStudyPlanRepo.findActive()
++    if (!activePlan || !activePlan.isActive) return { complete: false, pending: 0 }
+ 
+-    const todayStr = new Date().toISOString().slice(0, 10)
+-    const todayTasks = activePlan.tasks.filter(t => t.id && t.id.startsWith(todayStr) || t.date?.slice(0, 10) === todayStr)
++    const pending = activePlan.tasks.filter(t => !t.isDone).length
++    const total = activePlan.tasks.length
++    if (total === 0) return { complete: false, pending: 0 }
+ 
+-    if (todayTasks.length === 0) {
+-      return { complete: false, pending: 0 }
+-    }
+-
+-    const pending = todayTasks.filter(t => !t.isDone).length
+     return { complete: pending === 0, pending }
+   } catch {
+     return { complete: false, pending: 0 }
+   }
+
+[0m
+[0m→ [0mRead packages/storage/src/repositories/index.ts[90m [offset=40, limit=20][0m
+[0m→ [0mRead packages/storage/src/repositories/index.ts[90m [offset=1, limit=15][0m
+[0m⚙ [0mcodegraph_codegraph_node {"symbol":"getDueCount","file":"VocabReviewRepository"}
+[0m→ [0mRead apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[0m→ [0mRead packages/storage/src/index.ts[90m [offset=20, limit=30][0m
+[0m
+[0m← [0mEdit apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+@@ -1,6 +1,6 @@
+ import { learningEventRepository } from '../learningEvents/learningEventRepository'
+-import type { LearningEvent, AggregationWindow } from '../learningEvents/types'
++import type { LearningEvent } from '../learningEvents/types'
+ import { cooldownManager } from './CooldownManager'
+ import { loadAppSettings } from '../../services/storage/SettingsStorage'
+ import { VocabReviewRepository, CustomStudyPlanRepository } from '@ielts/storage'
+ import type {
+
+[0m
+[0m← [0mEdit apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+Index: /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+===================================================================
+--- /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
++++ /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+@@ -4,9 +4,8 @@
+ import { loadAppSettings } from '../../services/storage/SettingsStorage'
+ import { VocabReviewRepository, CustomStudyPlanRepository } from '@ielts/storage'
+ import type {
+   ProactiveTutorContext,
+-  CooldownState,
+   ProactiveMessageRecord,
+   DismissedMessage,
+   RuleEngineInput,
+ } from './ProactiveTutorRuleEngine'
+
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS && pnpm typecheck --filter web 2>&1 | head -60
+$ pnpm -r typecheck --filter web
+Scope: 12 of 13 workspace projects
+packages/ai typecheck$ tsc --noEmit --filter web
+packages/ai-tutor typecheck$ tsc --noEmit --filter web
+packages/exercises typecheck$ tsc --noEmit --filter web
+packages/settings typecheck$ tsc --noEmit --filter web
+packages/ai-tutor typecheck: error TS5023: Unknown compiler option '--filter'.
+packages/exercises typecheck: error TS5023: Unknown compiler option '--filter'.
+packages/settings typecheck: error TS5023: Unknown compiler option '--filter'.
+packages/ai-tutor typecheck: Failed
+/Users/phamthanhhung/Desktop/MyProject/IELTS/packages/ai-tutor:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] @ielts/ai-tutor@0.1.0 typecheck: `tsc --noEmit --filter web`
+Exit status 1
+packages/exercises typecheck: Failed
+packages/storage typecheck$ tsc --noEmit --filter web
+packages/ai typecheck: error TS5023: Unknown compiler option '--filter'.
+packages/settings typecheck: Failed
+packages/theme typecheck$ tsc --noEmit --filter web
+packages/utils typecheck$ tsc --noEmit --filter web
+packages/ai typecheck: Failed
+[ELIFECYCLE] Command failed with exit code 1.
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx tsc --noEmit 2>&1 | head -60
+(no output)
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx tsc --noEmit 2>&1
+(no output)
+[0m
+[0m→ [0mRead apps/web/src/features/proactiveTutor/ProactiveTutorContextBuilder.ts
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx tsc --noEmit 2>&1
+(no output)
+[0m
+[0m← [0mWrite apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts
+Wrote file successfully.
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --reporter=verbose src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ × src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns a ProactiveTutorContext with default values when no event and no data 5ms
+   → expected { sessionVocabularyCount: +0, …(20) } to match object { sessionVocabularyCount: +0, …(15) }
+(5 matching properties omitted from actual)
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > reads counts from learningEventRepository 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > extracts repeatedMistakeCount from event payload 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns 0 repeatedMistakeCount for non-mistake events 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > loads app settings for targetBand, examDate, weakSkills 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > handles null examDate 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildEngineInput > returns a RuleEngineInput with context, cooldown state, and page info 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildEngineInput > defaults currentPage to window.location.pathname if not provided 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns a ProactiveTutorContext with default values when no event and no data
+AssertionError: expected { sessionVocabularyCount: +0, …(20) } to match object { sessionVocabularyCount: +0, …(15) }
+(5 matching properties omitted from actual)
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -1,13 +1,13 @@[39m
+[2m  {[22m
+[2m    "consecutiveMissedDays": 0,[22m
+[2m    "currentStreak": 0,[22m
+[32m-   "dailyMistakeSaved": 0,[39m
+[32m-   "dailyTasksCompleted": 0,[39m
+[32m-   "dailyTasksSkipped": 0,[39m
+[32m-   "dailyVocabularySaved": 0,[39m
+[32m-   "dueVocabularyCount": 0,[39m
+[31m+   "dailyMistakeSaved": undefined,[39m
+[31m+   "dailyTasksCompleted": undefined,[39m
+[31m+   "dailyTasksSkipped": undefined,[39m
+[31m+   "dailyVocabularySaved": undefined,[39m
+[31m+   "dueVocabularyCount": undefined,[39m
+[2m    "pendingTasksCount": 0,[22m
+[2m    "repeatedMistakeCount": 0,[22m
+[2m    "sessionMistakeCount": 0,[22m
+[2m    "sessionVocabularyCount": 0,[22m
+[2m    "targetBand": 7,[22m
+[33m@@ -15,7 +15,7 @@[39m
+[2m    "totalStreak": 0,[22m
+[2m    "weakSkills": [[22m
+[2m      "writing",[22m
+[2m      "speaking",[22m
+[2m    ],[22m
+[32m-   "weeklyVocabularySaved": 0,[39m
+[31m+   "weeklyVocabularySaved": undefined,[39m
+[2m  }[22m
+
+ ❯ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts:97:23
+     95|       const context = await builder.buildContext()
+     96| 
+     97|       expect(context).toMatchObject({
+       |                       ^
+     98|         sessionVocabularyCount: 0,
+     99|         dailyVocabularySaved: 0,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  02:19:42
+   Duration  374ms (transform 24ms, setup 38ms, collect 20ms, tests 7ms, environment 204ms, prepare 31ms)
+[0m
+[0m← [0mWrite apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts
+Wrote file successfully.
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --reporter=verbose src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts [ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts ]
+Error: [vitest] There was an error when mocking a module. If you are using "vi.mock" factory, make sure there are no top level variables inside, since this call is hoisted to top of the file. Read more: https://vitest.dev/api/vi.html#vi-mock
+ ❯ src/features/proactiveTutor/ProactiveTutorContextBuilder.ts:1:1
+      1| import { learningEventRepository } from '../learningEvents/learningEve…
+       | ^
+      2| import type { LearningEvent } from '../learningEvents/types'
+      3| import { cooldownManager } from './CooldownManager'
+
+Caused by: ReferenceError: Cannot access 'mockCountInWindow' before initialization
+ ❯ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts:43:20
+ ❯ src/features/proactiveTutor/ProactiveTutorContextBuilder.ts:1:1
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  02:20:27
+   Duration  369ms (transform 26ms, setup 38ms, collect 0ms, tests 0ms, environment 202ms, prepare 33ms)
+[0m
+[0m← [0mWrite apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts
+Wrote file successfully.
+[0m
+[0m← [0mWrite apps/web/src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts
+Wrote file successfully.
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --reporter=verbose src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns a ProactiveTutorContext with all required fields 1ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > extracts repeatedMistakeCount from event payload 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns 0 repeatedMistakeCount for non-mistake events 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > loads app settings for targetBand, examDate, weakSkills 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > handles empty examDate in settings 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > calls vocab review repository to get due count 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > reads streak values from localStorage 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > calculates inactiveMinutes from lastActiveAt 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildEngineInput > returns a RuleEngineInput with context, cooldown state, and page info 0ms
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Start at  02:21:04
+   Duration  312ms (transform 24ms, setup 37ms, collect 20ms, tests 3ms, environment 154ms, prepare 27ms)
+[0m
+[0m$ [0mcd /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web && npx vitest run --reporter=verbose src/features/proactiveTutor/__tests__/ 2>&1
+RUN  v3.2.6 /Users/phamthanhhung/Desktop/MyProject/IELTS/apps/web
+
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > enabled / disabled > returns ignore_event when proactive tutor is disabled 1ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > enabled / disabled > returns show_message when enabled and all rules pass 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > category toggles > returns ignore_event when vocabulary category is disabled 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > category toggles > returns show_message for study event when motivational category is enabled 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > category toggles > returns ignore_event for study event when motivational category is disabled 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > category toggles > allows unmapped event types to pass category check 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > quiet hours > returns delay_message during quiet hours 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > quiet hours > does not delay outside quiet hours 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > daily message limit > returns store_silent when daily max is reached 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > daily message limit > shows message when daily count is within limit 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > global cooldown > returns store_silent when global cooldown is active 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > global cooldown > shows message when global cooldown has expired 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > global cooldown > shows message when no previous message exists 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > type-specific cooldown > returns store_silent when type-specific cooldown is active 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > type-specific cooldown > shows message when type-specific cooldown has expired 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > user chatting with tutor > returns store_silent when user is chatting with tutor 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > user chatting with tutor > shows message when user is not chatting with tutor 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > recently dismissed messages > returns ignore_event when similar message was recently dismissed 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > recently dismissed messages > shows message when dismissed message is old 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > returns store_silent when below vocabulary aggregation threshold 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > shows message when above vocabulary aggregation threshold 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > returns store_silent when below mistake aggregation threshold 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > shows message when above mistake aggregation threshold 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > returns store_silent when below skipped task threshold 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > aggregation thresholds > shows message when above skipped task threshold 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > pending message merge > returns merge_with_existing when similar message is pending 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > pending message merge > shows message when pending message is of different type 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns low priority for vocabulary_saved 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for exam_date_is_close with <7 days and >5 incomplete tasks 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns high for exam_date_is_close with <7 days but few incomplete tasks 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for exam_date_is_close with 30 days (static mapping) 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for missed study with 3+ consecutive days 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns high for missed study 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for 30+ day streak 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns high for 7+ day streak 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns urgent for 5+ repeated mistakes 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > priority calculation > returns high for repeated_mistake_detected by default 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_vocabulary for vocabulary_saved 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_vocabulary for vocabulary_review_is_due 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_vocabulary for vocabulary_reviewed 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_mistakes for mistake_saved 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_mistakes for repeated_mistake_detected 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns adjust_plan for study_task_skipped 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns adjust_plan for study_day_missed 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_plan for study_plan_generated 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_reading for reading_practice_completed 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_listening for listening_practice_completed 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_writing for writing_submitted 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns review_speaking for speaking_practiced 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_exam_prep for exam_date_is_close 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_progress for weekly_progress_review_is_due 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_progress for ai_progress_review_generated 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns view_streak for streak_milestone_reached 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns resume_study for user_returned_after_inactivity 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > suggested action > returns null for app_opened 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > cooldown key > includes entityId in cooldown key when present 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > cooldown key > uses messageType as cooldown key when no entityId 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > evaluateEventType convenience method > evaluates by event type without a full event object 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > evaluateEventType convenience method > respects disabled category via evaluateEventType 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > isCategoryEnabledForEvent > returns true when category is enabled 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > isCategoryEnabledForEvent > returns false when category is disabled 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > isCategoryEnabledForEvent > returns false when proactive tutor is disabled 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > isCategoryEnabledForEvent > returns false for unmapped event types 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > getMessageType > returns mapped message type for known event types 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > getMessageType > returns event type as message type for unmapped events 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > getCooldownMs > returns cooldown for known message types 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > getCooldownMs > returns undefined for unknown message types 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > extension events > shows message for extension events when extension category is enabled 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > extension events > hides message for extension events when extension category is disabled 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > returned after inactivity > returns high priority when 3+ days missed 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > returned after inactivity > returns normal priority when less than 3 days missed 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorRuleEngine.test.ts > ProactiveTutorRuleEngine > singleton > exposes a default singleton 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns a ProactiveTutorContext with all required fields 1ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > extracts repeatedMistakeCount from event payload 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > returns 0 repeatedMistakeCount for non-mistake events 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > loads app settings for targetBand, examDate, weakSkills 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > handles empty examDate in settings 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > calls vocab review repository to get due count 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > reads streak values from localStorage 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildContext > calculates inactiveMinutes from lastActiveAt 0ms
+ ✓ src/features/proactiveTutor/__tests__/ProactiveTutorContextBuilder.test.ts > ProactiveTutorContextBuilder > buildEngineInput > returns a RuleEngineInput with context, cooldown state, and page info 0ms
+
+ Test Files  2 passed (2)
+      Tests  81 passed (81)
+   Start at  02:21:09
+   Duration  320ms (transform 42ms, setup 24ms, collect 43ms, tests 8ms, environment 140ms, prepare 26ms)
+[0m
+[2026-07-06T19:21:16.039Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-06T19:21:16.043Z] [INFO] Task completed successfully

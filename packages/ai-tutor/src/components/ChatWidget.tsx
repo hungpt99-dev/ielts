@@ -218,12 +218,13 @@ export function ChatWidget({
           display: 'flex',
           flexDirection: 'column',
           borderRadius: isMobileFullscreen ? '0' : '16px',
-          border: isMobileFullscreen ? 'none' : '1px solid',
+          borderWidth: isMobileFullscreen ? '0' : '1px',
+          borderStyle: isMobileFullscreen ? 'none' : 'solid',
+          borderColor: 'var(--color-border)',
           zIndex: 9999,
           position: 'fixed',
           overflow: 'hidden',
           backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-border)',
           boxShadow: 'var(--shadow-lg)',
           ...(isMobileFullscreen
             ? {
@@ -235,8 +236,8 @@ export function ChatWidget({
             : {
                 width: '380px',
                 height: '560px',
-                maxHeight: 'calc(100vh - 120px)',
-                bottom: 'calc(24px + 56px + 16px)',
+                maxHeight: 'calc(100dvh - 96px)',
+                bottom: isMobileFullscreen ? '80px' : '24px',
                 right: '24px',
               }),
           ...animationStyle,
@@ -306,23 +307,25 @@ export function ChatWidget({
 
             {showActions && hasMessages && currentActions.length > 0 && (
               <div
-                className="flex shrink-0 flex-wrap gap-1.5 border-t px-4 py-3"
+                className="flex shrink-0 flex-nowrap gap-1.5 overflow-x-auto border-t px-4 py-3"
                 style={{ borderColor: 'var(--color-border)' }}
               >
-                <QuickActions actions={currentActions} onAction={handleQuickAction} />
+                <div className="flex shrink-0 flex-nowrap gap-1.5">
+                  <QuickActions actions={currentActions} onAction={handleQuickAction} />
+                </div>
               </div>
             )}
 
             {showWelcome && (
               <div
-                className="flex shrink-0 flex-wrap justify-center gap-1.5 border-t px-4 py-3"
+                className="flex shrink-0 flex-nowrap items-center gap-1.5 overflow-x-auto border-t px-4 py-3"
                 style={{ borderColor: 'var(--color-border)' }}
               >
                 {quickPrompts.slice(0, 4).map((prompt) => (
                   <button
                     key={prompt.action}
                     onClick={() => handlePromptClick(prompt.action)}
-                    className="rounded-full px-3 py-1.5 text-xs font-medium transition-all hover:opacity-80"
+                    className="shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all hover:opacity-80"
                     style={{
                       backgroundColor: 'var(--color-tutor-accent)',
                       color: '#ffffff',
@@ -378,13 +381,13 @@ function Header({
       className="flex shrink-0 items-center gap-3 border-b px-4 py-3"
       style={{
         borderColor: 'var(--color-border)',
-        background: 'linear-gradient(135deg, var(--color-tutor-background), var(--color-surface))',
+        background: 'var(--color-surface)',
       }}
     >
       <TutorAvatar size={36} showStatus isOnline />
 
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold" style={{ color: 'var(--color-tutor-text)' }}>
+        <p className="truncate text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
           {title}
         </p>
         <p className="flex items-center gap-1 text-[11px]" style={{ color: 'var(--color-text-secondary)' }}>
@@ -476,7 +479,7 @@ function MessagesArea({
       className="flex-1 overflow-y-auto"
       style={{
         scrollBehavior: 'smooth',
-        backgroundColor: 'color-mix(in srgb, var(--color-background) 60%, var(--color-tutor-background) 40%)',
+        backgroundColor: 'var(--color-surface)',
       }}
     >
       {showWelcome && (
@@ -488,8 +491,8 @@ function MessagesArea({
         </div>
       )}
 
-      {!showWelcome && contextSuggestions.length > 0 && (
-        <div className="flex h-full flex-col items-center justify-center gap-2 px-4 py-4">
+      {messages.length === 0 && contextSuggestions.length > 0 && (
+        <div className="flex flex-col items-center justify-center gap-2 px-4 py-4">
           {!hasAiKey && onOpenSettings && (
             <MissingKeyBanner onOpenSettings={onOpenSettings} />
           )}

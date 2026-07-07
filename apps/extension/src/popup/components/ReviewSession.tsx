@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { buildReviewQueue, handleRating, type ReviewItem, type ReviewRating } from '../services/reviewService'
 import { IconCheckCircle, IconBack, IconAlertCircle } from '@ielts/ui'
+import { emitExtensionVocabularyReviewStarted } from '../../background/eventEmitters'
 
 interface ReviewSessionProps {
   onComplete: () => void
@@ -39,6 +40,7 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
       setRatings({ again: 0, hard: 0, good: 0, easy: 0 })
       setRevealed(false)
       startTimeRef.current = Date.now()
+      emitExtensionVocabularyReviewStarted(q.length)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load review queue')
     } finally {

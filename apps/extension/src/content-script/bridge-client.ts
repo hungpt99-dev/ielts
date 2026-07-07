@@ -114,6 +114,9 @@ function handlePageMessage(event: MessageEvent): void {
   }
 }
 
+const LEARNING_EVENT_SOURCE = 'ielts-extension'
+const LEARNING_EVENT_ACTION = 'LEARNING_EVENT'
+
 function handleBackgroundMessage(message: unknown): void {
   if (!message || typeof message !== 'object') return
   const msg = message as Record<string, unknown>
@@ -124,6 +127,14 @@ function handleBackgroundMessage(message: unknown): void {
     try {
       window.postMessage(
         { source: 'ielts-extension', action: 'VOCAB_SAVED', data: msg.payload },
+        window.location.origin,
+      )
+    } catch { /* ignore */ }
+  }
+  if (msg.type === 'EXTENSION_LEARNING_EVENT' && msg.payload) {
+    try {
+      window.postMessage(
+        { source: LEARNING_EVENT_SOURCE, action: LEARNING_EVENT_ACTION, data: msg.payload },
         window.location.origin,
       )
     } catch { /* ignore */ }

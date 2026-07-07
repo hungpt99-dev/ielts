@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { IconAITutor, IconBack, IconAlertCircle, IconLoading } from '@ielts/ui'
 import MiniTutor from './MiniTutor'
+import { emitExtensionAITutorOpened } from '../../background/eventEmitters'
 
 interface AITutorEntryProps {
   onBack: () => void
@@ -17,6 +18,10 @@ export default function AITutorEntry({ onBack }: AITutorEntryProps) {
   const [context, setContext] = useState<PageContext | null>(null)
   const [fetchError, setFetchError] = useState<string | null>(null)
   const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    emitExtensionAITutorOpened()
+  }, [])
 
   useEffect(() => {
     let cancelled = false

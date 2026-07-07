@@ -1,5 +1,6 @@
 import type { SaveCategory } from '../types'
 import { showProactiveMessage } from './proactiveMessagePanel'
+import { emitExtensionVocabularySaved } from '../background/eventEmitters'
 
 interface SavePayload {
   text: string
@@ -71,6 +72,7 @@ export function handleVocabSaved(text: string): void {
   if (isDuplicateVocab(text)) return
 
   showVocabSavedMessage(text)
+  emitExtensionVocabularySaved(text, text, window.location.href)
 }
 
 function isVocabCategory(category: string): boolean {

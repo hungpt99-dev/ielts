@@ -4,6 +4,11 @@ import {
   safeStorageSet,
   safeSendMessage,
 } from '../utils/safe-chrome'
+import {
+  emitExtensionSelectedTextSaved,
+  emitExtensionVocabularySaved,
+  emitExtensionArticleSaved,
+} from '../background/eventEmitters'
 
 interface SaveSelectionPayload {
   text: string
@@ -88,6 +93,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         updatedAt: new Date().toISOString(),
       })
       safeStorageSet({ artifacts: items })
+      const title = (payload.title as string) || document.title
+      const url = (payload.url as string) || window.location.href
+      emitExtensionArticleSaved(title, url)
     })
     showToast('Page saved as Artifact')
     try { sendResponse({ success: true }) } catch { /* ignore */ }
@@ -112,6 +120,19 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         tags: payload.tags,
       },
     })
+
+    if (payload.category === 'vocabulary') {
+      emitExtensionVocabularySaved(
+        payload.text.split(/\s+/)[0] || payload.text,
+        payload.text,
+        payload.pageUrl || window.location.href,
+      )
+    } else {
+      emitExtensionSelectedTextSaved(
+        payload.text,
+        payload.pageUrl || window.location.href,
+      )
+    }
 
     try { sendResponse({ success: true }) } catch { /* ignore */ }
     return false
