@@ -58,7 +58,7 @@ export function WelcomeState({ greeting, suggestion, compact, userName, suggeste
 
   return (
     <div
-      className="flex h-full flex-col items-center justify-center gap-4 py-10 text-center"
+      className="flex min-h-full flex-col items-center justify-center gap-4 py-10 text-center"
       style={{ animation: 'chat-fade-in 0.4s ease-out' }}
     >
       <TutorAvatar size={80} pulse />
