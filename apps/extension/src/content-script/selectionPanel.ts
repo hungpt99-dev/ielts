@@ -591,11 +591,23 @@ const SAVE_FLUSH_MS = 2000
 const MAX_RETRIES = 3
 
 function storeToChromeStorage(batch: typeof pendingSaves): Promise<void> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get('_pendingSaves', (result) => {
-      const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
-      chrome.storage.local.set({ _pendingSaves: existing.concat(batch) }, () => resolve())
-    })
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error('chrome.storage timeout'))
+    }, 3000)
+
+    try {
+      chrome.storage.local.get('_pendingSaves', (result) => {
+        const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
+        chrome.storage.local.set({ _pendingSaves: existing.concat(batch) }, () => {
+          clearTimeout(timer)
+          resolve()
+        })
+      })
+    } catch (e) {
+      clearTimeout(timer)
+      reject(e)
+    }
   })
 }
 
@@ -612,11 +624,19 @@ function storeToPageStorage(batch: typeof pendingSaves): void {
 
 function flushPendingSaves(): void {
   flushTimer = null
+
+  // Drain shared window queue (used by saveSelectedText.ts context menu handler)
+  const shared = (window as unknown as Record<string, unknown>).__ieltsSaveQueue as Array<Record<string, unknown>> | undefined
+  if (shared && shared.length > 0) {
+    for (const item of shared.splice(0)) {
+      pendingSaves.push(item as unknown as typeof pendingSaves[number])
+    }
+  }
+
   const batch = pendingSaves.splice(0)
   if (batch.length === 0) return
 
   storeToChromeStorage(batch).catch(() => {
-    // chrome.storage failed (context invalidated) → fall back to page localStorage
     storeToPageStorage(batch)
   })
 }

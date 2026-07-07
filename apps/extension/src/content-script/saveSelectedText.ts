@@ -107,8 +107,10 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     showToast(`Saved as ${payload.category}`)
 
-    // Append to the shared pending queue (selectionPanel.ts flushes every 2s)
-    const item = {
+    // Share the same in-memory queue as selectionPanel.ts via window
+    const queue = (window as unknown as Record<string, unknown>).__ieltsSaveQueue ||
+      ((window as unknown as Record<string, unknown>).__ieltsSaveQueue = [])
+    ;(queue as Array<Record<string, unknown>>).push({
       text: payload.text,
       category: payload.category,
       pageTitle: payload.pageTitle || document.title,
@@ -118,23 +120,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       note: payload.note,
       tags: payload.tags,
       timestamp: Date.now(),
-    }
-
-    try {
-      chrome.storage.local.get('_pendingSaves', (result) => {
-        const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
-        existing.push(item)
-        chrome.storage.local.set({ _pendingSaves: existing }, () => {})
-      })
-    } catch {
-      // chrome.storage unavailable → fall back to page localStorage
-      try {
-        const raw = window.localStorage.getItem('_ieltsPending')
-        const existing: Record<string, unknown>[] = raw ? JSON.parse(raw) : []
-        existing.push(item)
-        window.localStorage.setItem('_ieltsPending', JSON.stringify(existing))
-      } catch { /* ignore */ }
-    }
+    })
 
     if (payload.category === 'vocabulary') {
       emitExtensionVocabularySaved(
