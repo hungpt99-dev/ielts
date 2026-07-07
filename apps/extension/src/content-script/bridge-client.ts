@@ -1,3 +1,4 @@
+import { DATA_SYNC_ACTION } from '@ielts/storage'
 import { safeSendMessage, safeStorageGet, safeStorageSet } from '../utils/safe-chrome'
 import { getAllVocabulary } from '../storage/vocabularyStore'
 
@@ -130,6 +131,12 @@ function handleBackgroundMessage(message: unknown): void {
         window.location.origin,
       )
     } catch { /* ignore */ }
+  }
+  if (msg.type === 'FORWARD_DATA_SYNC') {
+    window.postMessage(
+      { source: 'ielts-extension', action: DATA_SYNC_ACTION, data: msg.payload },
+      window.location.origin,
+    )
   }
   if (msg.type === 'EXTENSION_LEARNING_EVENT' && msg.payload) {
     try {

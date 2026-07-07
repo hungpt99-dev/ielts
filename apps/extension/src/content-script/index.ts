@@ -6,7 +6,9 @@ import './miniTutor'
 import './highlighter/savedKeywordHighlighter'
 import './vocabularySaveHandler'
 import { initBridgeClient } from './bridge-client'
+import { initSyncListener } from '../services/syncManager'
 
 initBridgeClient()
+initSyncListener()
 
 export {}

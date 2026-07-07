@@ -345,7 +345,8 @@ export function initMessaging(): void {
 
   registerHandler('DATA_SYNC', async (_msg) => {
     const msg = _msg as unknown as { type: 'DATA_SYNC'; payload: DataSyncPayload }
-    const { entityType, entity } = msg.payload
+    const { payload } = msg
+    const { entityType, entity } = payload
     try {
       switch (entityType) {
         case 'vocabulary':
@@ -366,6 +367,13 @@ export function initMessaging(): void {
         case 'dailyProgress':
           // computed, not synced directly
           break
+      }
+
+      // Forward to all tabs so the web app can receive it
+      const tabs = await chrome.tabs.query({})
+      for (const tab of tabs) {
+        if (!tab.id) continue
+        chrome.tabs.sendMessage(tab.id, { type: 'FORWARD_DATA_SYNC', payload }).catch(() => {})
       }
     } catch (err) {
       console.error(`[messaging] DATA_SYNC handler error for ${entityType}:`, err)
