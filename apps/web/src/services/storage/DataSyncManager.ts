@@ -1,5 +1,25 @@
-import { DATA_SYNC_ACTION, isDataSyncMessage, type DataSyncPayload, type SyncEntityType } from '@ielts/storage'
+import { DATA_SYNC_ACTION, isDataSyncMessage, type DataSyncPayload, type SyncEntityType, type SyncOperation } from '@ielts/storage'
 import { DatabaseService } from './Database'
+
+const BRIDGE_SOURCE = 'ielts-page'
+
+export function pushDataSync(entityType: SyncEntityType, operation: SyncOperation, entityId: string, entity: Record<string, unknown>): void {
+  const payload: DataSyncPayload = {
+    entityType,
+    operation,
+    entityId,
+    entity,
+    timestamp: new Date().toISOString(),
+  }
+  try {
+    window.postMessage(
+      { source: BRIDGE_SOURCE, action: DATA_SYNC_ACTION, data: payload },
+      window.location.origin,
+    )
+  } catch {
+    // extension may not be present
+  }
+}
 
 type DataChangeCallback = (entityType: SyncEntityType, operation: string, entityId: string) => void
 

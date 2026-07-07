@@ -29,6 +29,7 @@ import type {
   AppExportData,
 } from '../../models'
 import { saveAppSettings, removeAppSettings, clearAllLocalStorage } from './SettingsStorage'
+import { pushDataSync } from './DataSyncManager'
 
 import { ValidationError } from '@ielts/storage'
 export { ValidationError } from '@ielts/storage'
@@ -288,9 +289,11 @@ export const DatabaseService = {
   },
 
   async addVocabulary(item: Omit<VocabularyEntry, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<VocabularyEntry> {
-    return safeDbLocal(async () => {
+    const result = await safeDbLocal(async () => {
       return (await repo.vocabulary.create(item as never)) as unknown as VocabularyEntry
     })
+    try { pushDataSync('vocabulary', 'created', result.id, result as unknown as Record<string, unknown>) } catch {}
+    return result
   },
 
   async updateVocabulary(id: string, changes: Partial<VocabularyEntry>): Promise<void> {
@@ -444,9 +447,11 @@ export const DatabaseService = {
   },
 
   async addMistake(item: Omit<MistakeEntry, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): Promise<MistakeEntry> {
-    return safeDbLocal(async () => {
+    const result = await safeDbLocal(async () => {
       return (await repo.mistakes.create(item as never)) as unknown as MistakeEntry
     })
+    try { pushDataSync('mistake', 'created', result.id, result as unknown as Record<string, unknown>) } catch {}
+    return result
   },
 
   async updateMistake(id: string, changes: Partial<MistakeEntry>): Promise<void> {
