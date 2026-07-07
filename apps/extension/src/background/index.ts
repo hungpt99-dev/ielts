@@ -1,4 +1,6 @@
 import type { SaveCategory, LearningEntry } from '../types'
+import type { DataSyncPayload } from '@ielts/storage'
+import { DATA_SYNC_ACTION, createMessageId } from '@ielts/storage'
 import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry, extensionVocabSchema } from '../storage/vocabularyStore'
@@ -159,13 +161,23 @@ chrome.storage.onChanged.addListener((changes, area) => {
   if (!items || !Array.isArray(items) || items.length === 0) return
 
   chrome.storage.local.remove('_pendingSaves', async () => {
+    const savedEntries: Array<{ id: string; category: string; entity: Record<string, unknown> }> = []
     let vocabCount = 0
+
     for (const pending of items) {
       if (!pending.text || !pending.category) continue
       try {
         const now = new Date().toISOString()
-        const entry: LearningEntry = {
-          id: crypto.randomUUID(),
+        const entryId = crypto.randomUUID()
+        const entity: Record<string, unknown> = {
+          ...pending,
+          id: entryId,
+          createdAt: now,
+          updatedAt: now,
+        } as Record<string, unknown>
+
+        const learningEntry: LearningEntry = {
+          id: entryId,
           text: pending.text as string,
           category: pending.category as LearningEntry['category'],
           topic: (pending.topic as string) || 'general',
@@ -179,14 +191,15 @@ chrome.storage.onChanged.addListener((changes, area) => {
           createdAt: now,
           updatedAt: now,
         }
-        await saveEntry(entry)
+        await saveEntry(learningEntry)
 
         if (pending.category === 'vocabulary') {
           vocabCount++
           try {
             const text = pending.text as string
+            const vocabId = crypto.randomUUID()
             const vocabEntry = extensionVocabSchema.parse({
-              id: crypto.randomUUID(),
+              id: vocabId,
               word: text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
               sourceSentence: text,
               pageTitle: (pending.pageTitle as string) || '',
@@ -205,14 +218,35 @@ chrome.storage.onChanged.addListener((changes, area) => {
               updatedAt: now,
             })
             await saveVocabularyEntry(vocabEntry)
+            entity.vocabId = vocabId
           } catch { /* non-critical */ }
         }
+
+        savedEntries.push({ id: entryId, category: pending.category as string, entity })
       } catch (err) {
         console.error('[PendingSave] Item failed:', err)
       }
     }
+
     if (vocabCount > 0) {
       await incrementDailyProgress('wordsAdded', vocabCount)
+    }
+
+    // Forward to all tabs so the web app receives the data
+    const tabs = await chrome.tabs.query({}).catch(() => [] as chrome.tabs.Tab[])
+    for (const { id, category, entity } of savedEntries) {
+      const payload: DataSyncPayload = {
+        entityType: category === 'vocabulary' ? 'vocabulary' : 'learningEntry',
+        operation: 'created',
+        entityId: id,
+        entity,
+        timestamp: new Date().toISOString(),
+        messageId: createMessageId(),
+      }
+      for (const tab of tabs) {
+        if (!tab.id) continue
+        chrome.tabs.sendMessage(tab.id, { type: 'FORWARD_DATA_SYNC', payload }).catch(() => {})
+      }
     }
   })
 })
