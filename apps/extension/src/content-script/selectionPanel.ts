@@ -577,28 +577,46 @@ function execute(action: ToolbarAction): void {
   }
 }
 
-const PENDING_SAVE_KEY = '_pendingSave'
+const pendingSaves: Array<{
+  text: string
+  category: SaveCategory
+  pageTitle: string
+  pageUrl: string
+  timestamp: number
+}> = []
+let flushTimer: ReturnType<typeof setTimeout> | null = null
+const SAVE_FLUSH_MS = 2000
+
+function flushPendingSaves(): void {
+  flushTimer = null
+  const batch = pendingSaves.splice(0)
+  if (batch.length === 0) return
+
+  try {
+    // Merge with any existing pending saves (e.g., from context menu handler)
+    chrome.storage.local.get('_pendingSaves', (result) => {
+      const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
+      const merged = existing.concat(batch)
+      chrome.storage.local.set({ _pendingSaves: merged }, () => {})
+    })
+  } catch {
+    pendingSaves.unshift(...batch)
+  }
+}
+
+function queueSave(text: string, category: SaveCategory, pageTitle: string, pageUrl: string): void {
+  pendingSaves.push({ text, category, pageTitle, pageUrl, timestamp: Date.now() })
+  if (!flushTimer) {
+    flushTimer = setTimeout(flushPendingSaves, SAVE_FLUSH_MS)
+  }
+}
 
 async function saveText(text: string, category: SaveCategory): Promise<void> {
   showToast(`Saving ${category}...`)
 
-  try {
-    await new Promise<void>((resolve) => {
-      chrome.storage.local.set({
-        [PENDING_SAVE_KEY]: {
-          text,
-          category,
-          pageTitle: document.title,
-          pageUrl: window.location.href,
-          timestamp: Date.now(),
-        },
-      }, resolve)
-    })
-    showToast(`Saved as ${category}`)
-  } catch {
-    showToast('Save failed. Please try again.')
-    return
-  }
+  queueSave(text, category, document.title, window.location.href)
+
+  setTimeout(() => showToast(`Saved as ${category}`), 300)
 
   if (category === 'vocabulary') {
     handleVocabSaved(text)

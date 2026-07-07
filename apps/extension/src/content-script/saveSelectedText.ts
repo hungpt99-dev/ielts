@@ -107,21 +107,22 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     showToast(`Saved as ${payload.category}`)
 
-    // Write to _pendingSave instead of forwarding via safeSendMessage
-    // to avoid Extension context invalidated errors.
-    chrome.storage.local.set({
-      _pendingSave: {
+    // Append to the shared pending queue (selectionPanel.ts flushes this every 2s)
+    chrome.storage.local.get('_pendingSaves', (result) => {
+      const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
+      existing.push({
         text: payload.text,
         category: payload.category,
-        pageTitle: payload.pageTitle,
-        pageUrl: payload.pageUrl,
+        pageTitle: payload.pageTitle || document.title,
+        pageUrl: payload.pageUrl || window.location.href,
         topic: payload.topic,
         difficulty: payload.difficulty,
         note: payload.note,
         tags: payload.tags,
         timestamp: Date.now(),
-      },
-    }, () => {})
+      })
+      chrome.storage.local.set({ _pendingSaves: existing }, () => {})
+    })
 
     if (payload.category === 'vocabulary') {
       emitExtensionVocabularySaved(

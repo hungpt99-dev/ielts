@@ -151,61 +151,68 @@ initMessaging()
 initAiService()
 initializeStorageBridge()
 
-// Process saves queued by content scripts via chrome.storage.local.
-// This avoids Extension context invalidated errors from chrome.runtime.sendMessage.
+// Process batched saves queued by content scripts via chrome.storage.local.
+// Content scripts write to _pendingSaves (array) at most once per 2 seconds.
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== 'local') return
-  const pending = changes['_pendingSave']?.newValue
-  if (!pending || !pending.text || !pending.category) return
+  const items = changes['_pendingSaves']?.newValue as Array<Record<string, unknown>> | undefined
+  if (!items || !Array.isArray(items) || items.length === 0) return
 
-  chrome.storage.local.remove('_pendingSave', async () => {
-    try {
-      const now = new Date().toISOString()
-      const entry: LearningEntry = {
-        id: crypto.randomUUID(),
-        text: pending.text,
-        category: pending.category,
-        topic: pending.topic || 'general',
-        skill: (pending.skill || 'general') as LearningEntry['skill'],
-        difficulty: (pending.difficulty || '') as LearningEntry['difficulty'],
-        tags: pending.tags || [],
-        personalNote: pending.note || '',
-        pageTitle: pending.pageTitle || '',
-        pageUrl: pending.pageUrl || '',
-        status: 'new',
-        createdAt: now,
-        updatedAt: now,
+  chrome.storage.local.remove('_pendingSaves', async () => {
+    let vocabCount = 0
+    for (const pending of items) {
+      if (!pending.text || !pending.category) continue
+      try {
+        const now = new Date().toISOString()
+        const entry: LearningEntry = {
+          id: crypto.randomUUID(),
+          text: pending.text as string,
+          category: pending.category as LearningEntry['category'],
+          topic: (pending.topic as string) || 'general',
+          skill: ((pending.skill as string) || 'general') as LearningEntry['skill'],
+          difficulty: ((pending.difficulty as string) || '') as LearningEntry['difficulty'],
+          tags: (pending.tags as string[]) || [],
+          personalNote: (pending.note as string) || '',
+          pageTitle: (pending.pageTitle as string) || '',
+          pageUrl: (pending.pageUrl as string) || '',
+          status: 'new',
+          createdAt: now,
+          updatedAt: now,
+        }
+        await saveEntry(entry)
+
+        if (pending.category === 'vocabulary') {
+          vocabCount++
+          try {
+            const text = pending.text as string
+            const vocabEntry = extensionVocabSchema.parse({
+              id: crypto.randomUUID(),
+              word: text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+              sourceSentence: text,
+              pageTitle: (pending.pageTitle as string) || '',
+              pageUrl: (pending.pageUrl as string) || '',
+              topic: (pending.topic as string) || 'general',
+              personalNote: (pending.note as string) || '',
+              tags: (pending.tags as string[]) || [],
+              meaning: '',
+              partOfSpeech: '',
+              pronunciation: '',
+              difficulty: '',
+              status: 'new',
+              addedToReview: true,
+              reviewId: '',
+              createdAt: now,
+              updatedAt: now,
+            })
+            await saveVocabularyEntry(vocabEntry)
+          } catch { /* non-critical */ }
+        }
+      } catch (err) {
+        console.error('[PendingSave] Item failed:', err)
       }
-      await saveEntry(entry)
-
-      if (pending.category === 'vocabulary') {
-        try {
-          const vocabEntry = extensionVocabSchema.parse({
-            id: crypto.randomUUID(),
-            word: pending.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
-            sourceSentence: pending.text,
-            pageTitle: pending.pageTitle || '',
-            pageUrl: pending.pageUrl || '',
-            topic: pending.topic || 'general',
-            personalNote: pending.note || '',
-            tags: pending.tags || [],
-            meaning: '',
-            partOfSpeech: '',
-            pronunciation: '',
-            difficulty: pending.difficulty || '',
-            status: 'new',
-            addedToReview: true,
-            reviewId: '',
-            createdAt: now,
-            updatedAt: now,
-          })
-          await saveVocabularyEntry(vocabEntry)
-        } catch { /* non-critical */ }
-      }
-
-      await incrementDailyProgress('wordsAdded', pending.category === 'vocabulary' ? 1 : 0)
-    } catch (err) {
-      console.error('[PendingSave] Save failed:', err)
+    }
+    if (vocabCount > 0) {
+      await incrementDailyProgress('wordsAdded', vocabCount)
     }
   })
 })
