@@ -111,11 +111,15 @@ export function safeSendMessageCb(
   }
 }
 
+let cachedConfig: { apiKey: string; baseUrl: string; model: string } | null = null
+
 export function safeFetchProviderConfig(): Promise<{
   apiKey: string
   baseUrl: string
   model: string
 }> {
+  if (cachedConfig) return Promise.resolve(cachedConfig)
+
   return (async () => {
     try {
       const [syncResult, localResult] = await Promise.all([
@@ -128,7 +132,8 @@ export function safeFetchProviderConfig(): Promise<{
       const baseUrl = localResult.aiBaseUrl || syncSettings.aiBaseUrl || OPENAI_BASE_URL
       const model = localResult.aiModel || syncSettings.aiModel || DEFAULT_MODEL
 
-      return { apiKey, baseUrl, model }
+      cachedConfig = { apiKey, baseUrl, model }
+      return cachedConfig
     } catch {
       return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_MODEL }
     }
