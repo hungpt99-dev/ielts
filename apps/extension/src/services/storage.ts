@@ -66,41 +66,52 @@ export async function getDailyProgress(): Promise<DailyProgress> {
   return progress ?? { ...DEFAULT_PROGRESS }
 }
 
-export async function updateDailyProgress(patch: Partial<DailyProgress>): Promise<DailyProgress> {
-  const now = Date.now()
-  const last = lastWriteTime[patch as unknown as keyof DailyProgress]
-  if (last && now - last < WRITE_THROTTLE_MS) {
-    const current = await getDailyProgress()
-    return current
+const pendingProgress: Partial<DailyProgress> = {}
+let writeTimer: ReturnType<typeof setTimeout> | null = null
+const FLUSH_DELAY_MS = 2000
+
+async function flushProgress(): Promise<void> {
+  writeTimer = null
+  const patch = { ...pendingProgress }
+  for (const key of Object.keys(patch) as (keyof DailyProgress)[]) {
+    delete pendingProgress[key]
   }
-  if (typeof patch === 'object' && patch !== null) {
-    for (const key of Object.keys(patch) as (keyof DailyProgress)[]) {
-      lastWriteTime[key] = now
+  if (Object.keys(patch).length === 0) return
+
+  try {
+    const current = await getDailyProgress()
+    const updated = { ...current }
+    for (const [key, value] of Object.entries(patch) as [keyof DailyProgress, number][]) {
+      updated[key] = (updated[key] || 0) + value
+    }
+    await storageSet(STORAGE_KEYS.DAILY_PROGRESS, updated)
+  } catch {
+    // write failed — re-queue
+    for (const [key, value] of Object.entries(patch) as [keyof DailyProgress, number][]) {
+      pendingProgress[key] = (pendingProgress[key] || 0) + value
     }
   }
-
-  const current = await getDailyProgress()
-  const updated = { ...current, ...patch }
-  await storageSet(STORAGE_KEYS.DAILY_PROGRESS, updated)
-  return updated
 }
 
-const lastWriteTime: Partial<Record<keyof DailyProgress, number>> = {}
-const WRITE_THROTTLE_MS = 1000
+function scheduleFlush(): void {
+  if (writeTimer) return
+  writeTimer = setTimeout(flushProgress, FLUSH_DELAY_MS)
+}
+
+export async function updateDailyProgress(patch: Partial<DailyProgress>): Promise<DailyProgress> {
+  for (const [key, value] of Object.entries(patch) as [keyof DailyProgress, number | undefined][]) {
+    if (value !== undefined) {
+      pendingProgress[key] = (pendingProgress[key] || 0) + value
+    }
+  }
+  scheduleFlush()
+  return getDailyProgress()
+}
 
 export async function incrementDailyProgress(field: keyof DailyProgress, amount = 1): Promise<DailyProgress> {
-  const now = Date.now()
-  const last = lastWriteTime[field]
-  if (last && now - last < WRITE_THROTTLE_MS) {
-    const current = await getDailyProgress()
-    return current
-  }
-  lastWriteTime[field] = now
-
-  const current = await getDailyProgress()
-  const updated = { ...current, [field]: current[field] + amount }
-  await storageSet(STORAGE_KEYS.DAILY_PROGRESS, updated)
-  return updated
+  pendingProgress[field] = (pendingProgress[field] || 0) + amount
+  scheduleFlush()
+  return getDailyProgress()
 }
 
 export async function getSavedItems<T>(): Promise<T[]> {
