@@ -5,10 +5,12 @@ import { SettingsProvider } from './context/SettingsContext'
 import AppLayout from './components/Layout'
 import LandingPage from './pages/LandingPage'
 import { initProactiveTutor } from './services/proactiveTutorInit'
+import { initDataSyncManager } from './services/storage/DataSyncManager'
 
 export default function App() {
   useEffect(() => {
     initProactiveTutor()
+    initDataSyncManager()
   }, [])
 
   return (
