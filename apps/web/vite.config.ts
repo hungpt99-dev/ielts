@@ -52,6 +52,20 @@ export default defineConfig({
     strictPort: true,
     open: false,
   },
+  build: {
+    sourcemap: false,
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-charts': ['recharts'],
+          'vendor-ui': ['lucide-react', 'react-hook-form', '@hookform/resolvers'],
+          'vendor-ai': ['@ielts/ai', '@ielts/ai-tutor'],
+        },
+      },
+    },
+  },
   optimizeDeps: {
     include: ['@hookform/resolvers/zod'],
   },

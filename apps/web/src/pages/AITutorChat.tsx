@@ -521,7 +521,7 @@ function SocraticQuestionCard({ question, round, maxRounds, onSubmit, disabled }
         {question.hint && (
           <button
             onClick={() => setShowHint(!showHint)}
-            className="rounded-full border px-2 py-0.5 text-[10px] font-medium transition-colors hover:bg-[var(--color-tutor-accent-light)]" style={{ borderColor: 'var(--color-tutor-border)' }}
+            className="rounded-full border px-2 py-0.5 text-[10px] font-medium transition-colors hover:bg-[var(--color-tutor-accent-light)]"
             style={{ borderColor: 'var(--color-border)', color: 'var(--color-primary)' }}
             type="button"
           >

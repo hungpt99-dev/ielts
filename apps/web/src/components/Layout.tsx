@@ -32,6 +32,7 @@ import { MobileBottomNavigation } from '@ielts/ui'
 import type { MobileNavItem } from '@ielts/ui'
 import TodayPlanPage from '../pages/TodayPlanPage'
 import AITutorPage from '../pages/AITutorChat'
+import NotFoundPage from '../pages/NotFoundPage'
 import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconProgress, IconBack, IconMinimize, IconClose, IconSettings, IconChevronDown, IconFlame, IconSaved, IconInfo } from '@ielts/ui'
 import PageContainer from './layout/PageContainer'
 
@@ -449,11 +450,7 @@ export default function AppLayout() {
                   <Route path="/recruit" element={<RedirectWithHash to="/info" hash="recruit" />} />
                   <Route path="/donate" element={<RedirectWithHash to="/info" hash="donate" />} />
                   <Route path="/feedback" element={<RedirectWithHash to="/info" hash="feedback" />} />
-                  <Route path="*" element={
-                    isOnboardingComplete()
-                      ? <Navigate to="/dashboard" replace />
-                      : <Navigate to="/onboarding" replace />
-                  } />
+                  <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </PageContainer>
             } />
