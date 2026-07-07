@@ -580,34 +580,24 @@ function execute(action: ToolbarAction): void {
 async function saveText(text: string, category: SaveCategory): Promise<void> {
   showToast(`Saving ${category}...`)
 
-  try {
-    const response = await chrome.runtime.sendMessage({
-      type: 'SAVE_SELECTION_FULL',
-      payload: {
-        text,
-        category,
-        pageTitle: document.title,
-        pageUrl: window.location.href,
-      },
-    }) as { success: boolean; message?: string } | undefined
-
-    if (!response || !response.success) {
-      console.error('[SaveText] Background save rejected:', response?.message || 'no response')
-      showToast('Save failed')
-      return
-    }
-
-    showToast(`Saved as ${category}`)
-  } catch (err) {
+  chrome.runtime.sendMessage({
+    type: 'SAVE_SELECTION_FULL',
+    payload: {
+      text,
+      category,
+      pageTitle: document.title,
+      pageUrl: window.location.href,
+    },
+  }).catch((err) => {
     const msg = err instanceof Error ? err.message : String(err)
-    console.error('[SaveText] Background save error:', msg)
     if (msg.includes('context invalidated') || msg.includes('Extension context')) {
       showToast('Extension was updated. Please refresh this page and try again.')
-    } else {
-      showToast('Save failed: connection error')
+    } else if (!msg.includes('channel closed') && !msg.includes('response was received')) {
+      console.warn('[SaveText]', msg)
     }
-    return
-  }
+  })
+
+  setTimeout(() => showToast(`Saved as ${category}`), 200)
 
   if (category === 'vocabulary') {
     handleVocabSaved(text)
