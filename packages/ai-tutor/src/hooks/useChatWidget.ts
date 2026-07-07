@@ -74,6 +74,21 @@ export function useChatWidget(options: UseChatWidgetOptions): UseChatWidgetRetur
     MessageStorage.setMessages(messages)
   }, [messages])
 
+  const autoSentRef = useRef(new Set<string>())
+
+  useEffect(() => {
+    const newMessages = proactive.messages.filter(
+      m => !m.isDismissed && !m.isRead && !autoSentRef.current.has(m.id)
+    )
+    for (const msg of newMessages) {
+      autoSentRef.current.add(msg.id)
+      const text = msg.title ? `${msg.title}\n\n${msg.message}` : msg.message
+      addMessage('assistant', text)
+      proactive.markAsRead(msg.id)
+      proactive.dismissMessage(msg.id)
+    }
+  }, [proactive.messages, addMessage, proactive])
+
   const addMessage = useCallback((role: 'user' | 'assistant', content: string) => {
     const msg: ChatMessage = {
       id: generateId(),
