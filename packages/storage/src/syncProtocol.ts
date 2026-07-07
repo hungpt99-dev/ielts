@@ -17,6 +17,7 @@ export interface DataSyncPayload {
   entityId: string
   entity: Record<string, unknown>
   timestamp: string
+  messageId: string
 }
 
 export const DATA_SYNC_ACTION = 'DATA_CHANGED'
@@ -35,6 +36,24 @@ export function isDataSyncMessage(data: unknown): data is { source: 'ielts-exten
     SYNC_OPERATIONS.includes(payload.operation as SyncOperation) &&
     typeof payload.entityId === 'string' &&
     payload.entity !== null && typeof payload.entity === 'object' &&
-    typeof payload.timestamp === 'string'
+    typeof payload.timestamp === 'string' &&
+    typeof payload.messageId === 'string'
   )
+}
+
+export function createMessageId(): string {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+}
+
+const DEDUP_SET = new Set<string>()
+const DEDUP_MAX = 200
+
+export function isDuplicateMessage(messageId: string): boolean {
+  if (DEDUP_SET.has(messageId)) return true
+  if (DEDUP_SET.size >= DEDUP_MAX) {
+    const first = DEDUP_SET.values().next().value
+    if (first !== undefined) DEDUP_SET.delete(first)
+  }
+  DEDUP_SET.add(messageId)
+  return false
 }

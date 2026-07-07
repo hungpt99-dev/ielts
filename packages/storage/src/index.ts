@@ -135,6 +135,8 @@ export {
   SYNC_ENTITY_TYPES,
   SYNC_OPERATIONS,
   isDataSyncMessage,
+  isDuplicateMessage,
+  createMessageId,
 } from './syncProtocol'
 export type {
   ExtensionExportData,

@@ -1,4 +1,4 @@
-import { DATA_SYNC_ACTION, isDataSyncMessage, type DataSyncPayload, type SyncEntityType, type SyncOperation } from '@ielts/storage'
+import { DATA_SYNC_ACTION, isDataSyncMessage, isDuplicateMessage, createMessageId, type DataSyncPayload, type SyncEntityType, type SyncOperation } from '@ielts/storage'
 
 const BRIDGE_SOURCE = 'ielts-extension'
 
@@ -28,6 +28,7 @@ export function pushSync(entityType: SyncEntityType, operation: SyncOperation, e
     entityId,
     entity,
     timestamp: new Date().toISOString(),
+    messageId: createMessageId(),
   }
   postToPage(payload)
   postToBackground(payload)
@@ -59,6 +60,7 @@ function handleMessageEvent(event: MessageEvent): void {
   if (event.origin !== window.location.origin) return
   if (!isDataSyncMessage(event.data)) return
   if (event.data.source === 'ielts-extension') return
+  if (isDuplicateMessage(event.data.data.messageId)) return
 
   for (const handler of inboundHandlers) {
     try { handler(event.data.data) } catch { /* skip bad handler */ }
