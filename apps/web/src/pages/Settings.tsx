@@ -162,14 +162,7 @@ export default function Settings() {
     return () => clearTimeout(timer)
   }, [])
 
-  useEffect(() => {
-    setForm({ ...settings })
-    setAiApiKeyInput(settings.aiApiKey)
-    setAiProviderInput(settings.aiProvider)
-    setAiBaseUrlInput(settings.aiBaseUrl || settings.aiEndpoint || '')
-    setAiModelInput(settings.aiModel)
-    setAiEnabledInput(settings.aiEnabled)
-  }, [settings])
+
 
   useEffect(() => {
     saveNotificationPrefs(notifications)

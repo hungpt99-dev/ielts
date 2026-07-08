@@ -42,13 +42,7 @@ export default function AIProviderSettingsPage() {
     return () => clearTimeout(timer)
   }, [])
 
-  useEffect(() => {
-    setEnabled(settings.aiEnabled)
-    setProvider(settings.aiProvider)
-    setApiKey(settings.aiApiKey)
-    setBaseUrl(settings.aiBaseUrl || settings.aiEndpoint || '')
-    setModel(settings.aiModel)
-  }, [settings])
+
 
   function showFeedback(type: 'success' | 'error', message: string) {
     setFeedback({ type, message })
