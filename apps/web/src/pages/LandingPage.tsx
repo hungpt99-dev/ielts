@@ -18,11 +18,11 @@ export default function LandingPage() {
   return (
     <>
       <SEOHead
-        title="IELTS Journey - Your Personal IELTS Tutor Powered by AI"
-        description="IELTS Journey creates a personalized daily study plan from today to your exam day. Open the app, see what to study, and learn with real content. No more guessing."
-        ogTitle="IELTS Journey - Your AI Tutor for IELTS"
-        ogDescription="Your personal AI tutor that guides you through IELTS preparation. Chat, practice, and improve — anytime."
-        keywords="IELTS study plan, IELTS roadmap, IELTS daily learning, IELTS self-study, IELTS learning app, AI tutor IELTS, personalized IELTS study"
+        title="IELTS Journey - Learn IELTS with AI Tutor"
+        description="Learn IELTS with AI Tutor — your personal AI tutor that guides you through IELTS preparation. Chat, practice, and improve anytime."
+        ogTitle="IELTS Journey - Learn IELTS with AI Tutor"
+        ogDescription="Learn IELTS with AI Tutor — your personal AI tutor that guides you through IELTS preparation. Chat, practice, and improve anytime."
+        keywords="IELTS, AI tutor, learn IELTS, IELTS preparation, IELTS practice, IELTS speaking, IELTS writing, IELTS reading, IELTS listening"
         canonical="https://ieltsjourney.dev"
       />
 
