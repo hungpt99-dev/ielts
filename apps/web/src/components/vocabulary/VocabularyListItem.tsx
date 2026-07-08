@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from 'react'
+import { useCallback, useState, memo, type ReactNode } from 'react'
 import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../../models'
 import PronounceButton from '../ui/PronounceButton'
 import WordFamilyDisplay from '../../features/vocabulary/components/WordFamilyDisplay'
@@ -30,7 +30,7 @@ export interface VocabularyListItemProps {
   bottomContent?: ReactNode
 }
 
-export default function VocabularyListItem({
+function VocabularyListItem({
   entry,
   onDetail,
   onEdit,
@@ -97,7 +97,7 @@ export default function VocabularyListItem({
         }}
       />
 
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--spacing-sm)' }}>
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div style={{ minWidth: 0, flex: 1 }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
             <button
@@ -218,15 +218,15 @@ export default function VocabularyListItem({
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 'var(--spacing-2xs)', flexShrink: 0 }}>
+        <div className="flex flex-row flex-wrap items-center gap-2 self-start sm:self-auto sm:flex-shrink-0">
           <button
             onClick={() => onToggleFavorite(entry)}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '36px',
-              height: '36px',
+              width: '44px',
+              height: '44px',
               padding: 0,
               background: 'none',
               border: '1px solid var(--color-border-light)',
@@ -238,7 +238,7 @@ export default function VocabularyListItem({
             aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
             title={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
           >
-            <IconStar size={16} fill={isFavorited ? 'currentColor' : 'none'} />
+            <IconStar size={18} fill={isFavorited ? 'currentColor' : 'none'} />
           </button>
 
           {entry.status !== 'mastered' && (
@@ -248,8 +248,8 @@ export default function VocabularyListItem({
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '36px',
-                height: '36px',
+                width: '44px',
+                height: '44px',
                 padding: 0,
                 background: 'none',
                 border: '1px solid var(--color-border-light)',
@@ -261,7 +261,7 @@ export default function VocabularyListItem({
               aria-label="Mark as mastered"
               title="Mark as mastered"
             >
-              <IconCheckCircle size={16} />
+              <IconCheckCircle size={18} />
             </button>
           )}
 
@@ -271,8 +271,8 @@ export default function VocabularyListItem({
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '36px',
-              height: '36px',
+              width: '44px',
+              height: '44px',
               padding: 0,
               background: 'none',
               border: '1px solid var(--color-border-light)',
@@ -284,7 +284,7 @@ export default function VocabularyListItem({
             aria-label={`Edit ${entry.word}`}
             title="Edit word"
           >
-            <IconEdit size={16} />
+            <IconEdit size={18} />
           </button>
 
           <button
@@ -293,8 +293,8 @@ export default function VocabularyListItem({
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: '36px',
-              height: '36px',
+              width: '44px',
+              height: '44px',
               padding: 0,
               background: 'none',
               border: '1px solid var(--color-border-light)',
@@ -306,7 +306,7 @@ export default function VocabularyListItem({
             aria-label={`Delete ${entry.word}`}
             title="Delete word"
           >
-            <IconDelete size={16} />
+            <IconDelete size={18} />
           </button>
         </div>
       </div>
@@ -403,7 +403,7 @@ export default function VocabularyListItem({
           </div>
         </div>
         {showWordFamily && (
-          <div style={{ marginTop: 'var(--spacing-sm)' }}>
+          <div style={{ marginTop: 'var(--spacing-sm)', minWidth: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
             <WordFamilyDisplay
               wordFamily={displayWordFamily}
               onGenerate={handleGenerateFamily}
@@ -415,3 +415,5 @@ export default function VocabularyListItem({
     </div>
   )
 }
+
+export default memo(VocabularyListItem)

@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { TutorAvatar } from '@ielts/ai-tutor'
 import { IconUser, IconEdit, IconCopy, IconThumbsUp, IconThumbsDown } from '@ielts/ui'
 
@@ -23,7 +24,7 @@ function formatTime(ts?: string): string {
   }
 }
 
-export default function AITutorChatEntry({
+function AITutorChatEntry({
   role,
   content,
   timestamp,
@@ -243,3 +244,5 @@ export default function AITutorChatEntry({
     </div>
   )
 }
+
+export default memo(AITutorChatEntry)

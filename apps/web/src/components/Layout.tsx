@@ -1,40 +1,43 @@
-import { useState, useEffect, type ReactNode } from 'react'
+import { useState, useEffect, type ReactNode, lazy, Suspense } from 'react'
 import { Link, NavLink, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Headbar from './layout/Headbar'
-import Dashboard from '../features/dashboard/Dashboard'
 import { isOnboardingComplete } from '../features/onboarding/onboardingService'
-import StudyPlan from '../features/study-plan/StudyPlan'
-import NotebookPage from '../pages/vocabulary/NotebookPage'
-import VocabularyReview from '../pages/VocabularyReview'
-import ReviewCenter from '../pages/ReviewCenter'
-import ReadingPracticePage from '../pages/practice/ReadingPracticePage'
-import ListeningPracticePage from '../pages/practice/ListeningPracticePage'
-import WritingPracticePage from '../pages/practice/WritingPracticePage'
-import SpeakingPracticePage from '../pages/practice/SpeakingPracticePage'
-import GrammarExercisePage from '../pages/practice/GrammarExercisePage'
-import MistakeNotebook from '../features/mistakes/MistakeNotebook'
-import MockTests from '../pages/MockTests'
-import Progress from '../pages/Progress'
-import Settings from '../pages/Settings'
-import DataManagement from '../pages/Settings/DataManagement'
-import AIProviderSettingsPage from '../pages/Settings/AIProviderSettingsPage'
-import ExtensionConnectionPage from '../pages/Settings/ExtensionConnectionPage'
-import SearchPage from '../pages/Search'
-import ImportExport from '../pages/ImportExport'
-import TopicsProgress from '../pages/TopicsProgress'
-import PublicApiImportPage from '../pages/PublicApiImportPage'
-import PublicTabPage from '../components/PublicTabPage'
-import FullStudyRoadmapPage from '../pages/roadmap/FullStudyRoadmapPage'
-import ArtifactsPage from '../features/artifacts/ArtifactsPage'
 import ChatIcon from './aiTutor/ChatIcon'
 import { MobileBottomNavigation } from '@ielts/ui'
 import type { MobileNavItem } from '@ielts/ui'
-import TodayPlanPage from '../pages/TodayPlanPage'
-import AITutorPage from '../pages/AITutorChat'
+import PageContainer from './layout/PageContainer'
+import SafeAreaContainer from './layout/SafeAreaContainer'
+import LoadingSpinner from './ui/LoadingSpinner'
 import NotFoundPage from '../pages/NotFoundPage'
 import PrivacyPage from '../pages/PrivacyPage'
+
+const Dashboard = lazy(() => import('../features/dashboard/Dashboard'))
+const StudyPlan = lazy(() => import('../features/study-plan/StudyPlan'))
+const NotebookPage = lazy(() => import('../pages/vocabulary/NotebookPage'))
+const VocabularyReview = lazy(() => import('../pages/VocabularyReview'))
+const ReviewCenter = lazy(() => import('../pages/ReviewCenter'))
+const ReadingPracticePage = lazy(() => import('../pages/practice/ReadingPracticePage'))
+const ListeningPracticePage = lazy(() => import('../pages/practice/ListeningPracticePage'))
+const WritingPracticePage = lazy(() => import('../pages/practice/WritingPracticePage'))
+const SpeakingPracticePage = lazy(() => import('../pages/practice/SpeakingPracticePage'))
+const GrammarExercisePage = lazy(() => import('../pages/practice/GrammarExercisePage'))
+const MistakeNotebook = lazy(() => import('../features/mistakes/MistakeNotebook'))
+const MockTests = lazy(() => import('../pages/MockTests'))
+const Progress = lazy(() => import('../pages/Progress'))
+const Settings = lazy(() => import('../pages/Settings'))
+const DataManagement = lazy(() => import('../pages/Settings/DataManagement'))
+const AIProviderSettingsPage = lazy(() => import('../pages/Settings/AIProviderSettingsPage'))
+const ExtensionConnectionPage = lazy(() => import('../pages/Settings/ExtensionConnectionPage'))
+const SearchPage = lazy(() => import('../pages/Search'))
+const ImportExport = lazy(() => import('../pages/ImportExport'))
+const TopicsProgress = lazy(() => import('../pages/TopicsProgress'))
+const PublicApiImportPage = lazy(() => import('../pages/PublicApiImportPage'))
+const FullStudyRoadmapPage = lazy(() => import('../pages/roadmap/FullStudyRoadmapPage'))
+const ArtifactsPage = lazy(() => import('../features/artifacts/ArtifactsPage'))
+const PublicTabPage = lazy(() => import('../components/PublicTabPage'))
+const TodayPlanPage = lazy(() => import('../pages/TodayPlanPage'))
+const AITutorPage = lazy(() => import('../pages/AITutorChat'))
 import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconProgress, IconBack, IconMinimize, IconClose, IconSettings, IconChevronDown, IconFlame, IconSaved, IconInfo } from '@ielts/ui'
-import PageContainer from './layout/PageContainer'
 
 function RedirectWithHash({ to, hash }: { to: string; hash: string }) {
   return <Navigate to={`${to}#${hash}`} replace />
@@ -176,6 +179,7 @@ export default function AppLayout() {
   const [practiceExpanded, setPracticeExpanded] = useState(false)
   const [progressExpanded, setProgressExpanded] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const practicePaths = ['/reading', '/listening', '/writing', '/speaking', '/grammar', '/mistakes']
@@ -194,35 +198,35 @@ export default function AppLayout() {
       label: 'Home',
       icon: <IconHome size={22} />,
       active: location.pathname === '/dashboard',
-      onClick: () => { window.location.href = '/dashboard' },
+      onClick: () => navigate('/dashboard'),
     },
     {
       id: 'plan',
       label: 'Plan',
       icon: <IconTodayPlan size={22} />,
       active: location.pathname.startsWith('/today-plan') || location.pathname.startsWith('/plan') || location.pathname.startsWith('/roadmap'),
-      onClick: () => { window.location.href = '/today-plan' },
+      onClick: () => navigate('/today-plan'),
     },
     {
       id: 'tutor',
       label: 'AI',
       icon: <IconAITutor size={22} />,
       active: location.pathname.startsWith('/tutor'),
-      onClick: () => { window.location.href = '/tutor' },
+      onClick: () => navigate('/tutor'),
     },
     {
       id: 'vocab',
       label: 'Vocab',
       icon: <IconVocabulary size={22} />,
       active: location.pathname.startsWith('/vocabulary') || location.pathname.startsWith('/review'),
-      onClick: () => { window.location.href = '/vocabulary' },
+      onClick: () => navigate('/vocabulary'),
     },
     {
       id: 'progress',
       label: 'Progress',
       icon: <IconProgress size={22} />,
       active: location.pathname.startsWith('/progress') || location.pathname.startsWith('/mock-tests') || location.pathname.startsWith('/topics'),
-      onClick: () => { window.location.href = '/progress' },
+      onClick: () => navigate('/progress'),
     },
   ]
 
@@ -256,7 +260,7 @@ export default function AppLayout() {
           style={{ borderColor: 'var(--color-border)' }}
         >
           <Link to="/landing" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
-            <img src="/icon.png" alt="" className="h-7 w-7 rounded-lg" />
+            <img src="/icon.png" alt="" className="h-7 w-7 rounded-lg" loading="lazy" decoding="async" />
             <span style={{ color: 'var(--color-text)', fontWeight: 700, fontSize: '1.125rem', fontFamily: 'var(--font-sans)' }}>
               IELTS Journey
             </span>
@@ -409,59 +413,66 @@ export default function AppLayout() {
         </div>
       </aside>
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col">
         <Headbar onMenuToggle={() => setSidebarOpen(true)} />
 
-        <main className="flex-1 min-w-0 w-full overflow-y-auto pb-20 lg:pb-0">
-          <Routes>
-            <Route path="/tutor" element={<AITutorPage />} />
-            <Route path="*" element={
-              <PageContainer width="wide">
-                <Routes>
+        <SafeAreaContainer left right className="flex flex-1 flex-col min-w-0 overflow-hidden">
+          <main className="flex-1 min-w-0 w-full overflow-y-auto pb-[calc(72px+env(safe-area-inset-bottom,0px))] lg:pb-0" style={{ WebkitOverflowScrolling: 'touch' }}>
+            <Routes>
+              <Route path="/tutor" element={
+                <Suspense fallback={<LoadingSpinner fullPage message="Loading AI Tutor..." />}>
+                  <AITutorPage />
+                </Suspense>
+              } />
+              <Route path="*" element={
+                <PageContainer width="wide">
+                  <Suspense fallback={<LoadingSpinner fullPage />}>
+                    <Routes>
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/plan" element={<StudyPlan />} />
+                      <Route path="/today-plan" element={<TodayPlanPage />} />
+                      <Route path="/roadmap" element={<FullStudyRoadmapPage />} />
+                      <Route path="/vocabulary" element={<NotebookPage />} />
+                      <Route path="/review" element={<VocabularyReview />} />
+                      <Route path="/review-center" element={<ReviewCenter />} />
+                      <Route path="/reading" element={<ReadingPracticePage />} />
+                      <Route path="/listening" element={<ListeningPracticePage />} />
+                      <Route path="/writing" element={<WritingPracticePage />} />
+                      <Route path="/speaking" element={<SpeakingPracticePage />} />
+                      <Route path="/grammar" element={<GrammarExercisePage />} />
+                      <Route path="/mistakes" element={<MistakeNotebook />} />
+                      <Route path="/mock-tests" element={<MockTests />} />
+                      <Route path="/topics" element={<TopicsProgress />} />
+                      <Route path="/progress" element={<Progress />} />
+                      <Route path="/progress-review" element={<Navigate to="/progress" replace />} />
+                      <Route path="/artifacts" element={<ArtifactsPage />} />
+                      <Route path="/search" element={<SearchPage />} />
+                      <Route path="/public-api" element={<PublicApiImportPage />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/settings/ai" element={<AIProviderSettingsPage />} />
+                      <Route path="/settings/data" element={<DataManagement />} />
+                      <Route path="/settings/extension" element={<ExtensionConnectionPage />} />
+                      <Route path="/import-export" element={<ImportExport />} />
+                      <Route path="/info" element={<PublicTabPage />} />
+                      <Route path="/website-info" element={<RedirectWithHash to="/info" hash="about-website" />} />
+                      <Route path="/about-me" element={<RedirectWithHash to="/info" hash="about-me" />} />
+                      <Route path="/recruit" element={<RedirectWithHash to="/info" hash="recruit" />} />
+                      <Route path="/donate" element={<RedirectWithHash to="/info" hash="donate" />} />
+                      <Route path="/feedback" element={<RedirectWithHash to="/info" hash="feedback" />} />
+                      <Route path="/privacy" element={<PrivacyPage />} />
+                      <Route path="*" element={<NotFoundPage />} />
+                    </Routes>
+                  </Suspense>
+                </PageContainer>
+              } />
+            </Routes>
+            {location.pathname !== '/tutor' && (
+              <ChatIcon />
+            )}
+          </main>
+        </SafeAreaContainer>
 
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/plan" element={<StudyPlan />} />
-                  <Route path="/today-plan" element={<TodayPlanPage />} />
-                  <Route path="/roadmap" element={<FullStudyRoadmapPage />} />
-                  <Route path="/vocabulary" element={<NotebookPage />} />
-                  <Route path="/review" element={<VocabularyReview />} />
-                  <Route path="/review-center" element={<ReviewCenter />} />
-                  <Route path="/reading" element={<ReadingPracticePage />} />
-                  <Route path="/listening" element={<ListeningPracticePage />} />
-                  <Route path="/writing" element={<WritingPracticePage />} />
-                  <Route path="/speaking" element={<SpeakingPracticePage />} />
-                  <Route path="/grammar" element={<GrammarExercisePage />} />
-                  <Route path="/mistakes" element={<MistakeNotebook />} />
-                  <Route path="/mock-tests" element={<MockTests />} />
-                  <Route path="/topics" element={<TopicsProgress />} />
-                  <Route path="/progress" element={<Progress />} />
-                  <Route path="/progress-review" element={<Navigate to="/progress" replace />} />
-                  <Route path="/artifacts" element={<ArtifactsPage />} />
-                  <Route path="/search" element={<SearchPage />} />
-                  <Route path="/public-api" element={<PublicApiImportPage />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/settings/ai" element={<AIProviderSettingsPage />} />
-                  <Route path="/settings/data" element={<DataManagement />} />
-                  <Route path="/settings/extension" element={<ExtensionConnectionPage />} />
-                  <Route path="/import-export" element={<ImportExport />} />
-                  <Route path="/info" element={<PublicTabPage />} />
-                  <Route path="/website-info" element={<RedirectWithHash to="/info" hash="about-website" />} />
-                  <Route path="/about-me" element={<RedirectWithHash to="/info" hash="about-me" />} />
-                  <Route path="/recruit" element={<RedirectWithHash to="/info" hash="recruit" />} />
-                  <Route path="/donate" element={<RedirectWithHash to="/info" hash="donate" />} />
-                  <Route path="/feedback" element={<RedirectWithHash to="/info" hash="feedback" />} />
-                  <Route path="/privacy" element={<PrivacyPage />} />
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </PageContainer>
-            } />
-          </Routes>
-          {location.pathname !== '/tutor' && (
-            <ChatIcon />
-          )}
-        </main>
-
-        <div className="lg:hidden">
+        <div className={`lg:hidden ${sidebarOpen ? 'hidden' : ''}`}>
           <MobileBottomNavigation items={mobileNavItems} />
         </div>
       </div>

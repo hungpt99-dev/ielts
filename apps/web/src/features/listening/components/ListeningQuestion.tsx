@@ -49,7 +49,7 @@ export default function ListeningQuestion({
               key={i}
               onClick={() => onAnswer(question.id, i)}
               disabled={showResult}
-              className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-sm transition-colors ${
+              className={`flex min-h-[44px] w-full items-center gap-3 rounded-lg border px-4 text-left text-sm transition-colors ${
                 isOptionCorrect
                   ? 'border-green-500 bg-green-50 dark:border-green-600 dark:bg-green-900/20'
                   : isOptionWrong
@@ -75,8 +75,7 @@ export default function ListeningQuestion({
                       : isSelected
                         ? 'bg-blue-500 text-white'
                         : 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
-                }`}
-              >
+                }`}>
                 {letter}
               </span>
               <span>{option}</span>
@@ -159,7 +158,7 @@ export default function ListeningQuestion({
               key={i}
               onClick={() => onAnswer(question.id, i)}
               disabled={showResult}
-              className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+              className={`min-h-[44px] rounded-lg border px-4 text-sm font-medium transition-colors ${
                 isOptionCorrect
                   ? 'border-green-500 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-900/20 dark:text-green-400'
                   : isOptionWrong
@@ -241,7 +240,7 @@ export default function ListeningQuestion({
                 onAnswer(question.id, next)
               }}
               disabled={showResult}
-              className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-sm transition-colors ${
+              className={`flex min-h-[44px] w-full items-center gap-3 rounded-lg border px-4 text-left text-sm transition-colors ${
                 isOptionCorrect
                   ? 'border-green-500 bg-green-50 dark:border-green-600 dark:bg-green-900/20'
                   : isOptionWrong
@@ -392,8 +391,8 @@ export default function ListeningQuestion({
             }
       }
     >
-      <div className="mb-3 flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2">
+      <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span
             className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
             style={{ backgroundColor: 'var(--color-primary)' }}

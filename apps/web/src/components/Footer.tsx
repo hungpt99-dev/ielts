@@ -41,7 +41,7 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <div className="flex items-center gap-2">
-              <img src="/icon.png" alt="" className="h-7 w-7 rounded-lg" />
+              <img src="/icon.png" alt="" className="h-7 w-7 rounded-lg" loading="lazy" decoding="async" />
               <span
                 className="text-xl font-bold tracking-tight"
                 style={{ color: 'var(--color-text)' }}
@@ -71,7 +71,7 @@ export default function Footer() {
                       ? 'noopener noreferrer'
                       : undefined
                   }
-                  className="flex h-9 w-9 items-center justify-center rounded-lg transition-all hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"
+                  className="flex h-11 w-11 items-center justify-center rounded-lg transition-all hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2"
                   style={{
                     backgroundColor: 'var(--color-surface-alt)',
                     color: 'var(--color-text-secondary)',

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import PageContent from './layout/PageContent'
 import Button from './ui/Button'
 
 interface FeedbackForm {
@@ -428,7 +429,7 @@ function FeedbackSection() {
 
   if (submitted) {
     return (
-      <div className="py-8 text-center">
+      <PageContent className="py-8 text-center">
         <div
           className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
           style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}
@@ -448,9 +449,9 @@ function FeedbackSection() {
             Send Another Message
           </Button>
         </div>
-      </div>
-    )
-  }
+    </PageContent>
+  )
+}
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -510,7 +511,7 @@ function FeedbackSection() {
 
 export default function PublicTabPage() {
   return (
-    <div className="w-full space-y-8 py-6 sm:space-y-10 sm:py-10">
+    <PageContent className="space-y-8 sm:space-y-10">
       <div className="space-y-5 text-center">
         <div
           className="mx-auto h-12 w-12 rounded-xl bg-gradient-to-br p-0.5"
@@ -545,6 +546,6 @@ export default function PublicTabPage() {
           {section.content}
         </SectionCard>
       ))}
-    </div>
+    </PageContent>
   )
 }

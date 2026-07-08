@@ -60,7 +60,7 @@ export default function PhaseSection({
     >
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors hover:brightness-95"
+        className="flex w-full items-center gap-4 px-4 sm:px-5 py-4 text-left transition-colors hover:brightness-95"
         aria-expanded={expanded}
         aria-controls={`phase-${phase.id}-content`}
       >
@@ -89,13 +89,9 @@ export default function PhaseSection({
           <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             {phase.description}
           </p>
-          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs" style={{ color: 'var(--color-muted)' }}>
-            <span>{phase.completedTasks}/{phase.totalTasks} tasks</span>
-            <span>·</span>
-            <span>{phase.targetRange}</span>
-            <span>·</span>
-            <span>{getPhaseDateRange(phase)}</span>
-          </div>
+          <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
+            {phase.completedTasks}/{phase.totalTasks} tasks · {phase.targetRange} · {getPhaseDateRange(phase)}
+          </p>
         </div>
 
         <div className="flex items-center gap-3 shrink-0">
@@ -127,7 +123,7 @@ export default function PhaseSection({
       </button>
 
       {!expanded && !isUpcoming && (
-        <div className="border-t px-5 py-3" style={{ borderColor: 'var(--color-border)' }}>
+        <div           className="border-t px-4 sm:px-5 py-3" style={{ borderColor: 'var(--color-border)' }}>
           <div className="flex flex-wrap gap-2">
             {phase.weeks.map((week) => {
               const wp = week.totalTasks > 0 ? Math.round((week.completedTasks / week.totalTasks) * 100) : 0
@@ -161,7 +157,7 @@ export default function PhaseSection({
       {expanded && (
         <div
           id={`phase-${phase.id}-content`}
-          className="border-t px-5 py-4 space-y-4"
+          className="border-t px-4 sm:px-5 py-4 space-y-4"
           style={{ borderColor: 'var(--color-border)' }}
         >
           {phase.description && (

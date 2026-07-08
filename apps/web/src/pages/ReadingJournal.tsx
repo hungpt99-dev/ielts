@@ -6,6 +6,7 @@ import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconReading } from '@ielts/ui'
 
 const TOPICS = [
@@ -278,7 +279,7 @@ export default function ReadingJournal() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconReading size={20} />}
         title="Reading Journal"
@@ -847,6 +848,6 @@ export default function ReadingJournal() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageContent>
   )
 }

@@ -1,9 +1,10 @@
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconInfo } from '@ielts/ui'
 
 export default function PrivacyPage() {
   return (
-    <div className="mx-auto max-w-3xl space-y-8 py-6">
+    <PageContent className="space-y-8">
       <PageHeader icon={<IconInfo size={22} />} title="Privacy Policy" />
 
       <section className="space-y-4 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
@@ -38,6 +39,6 @@ export default function PrivacyPage() {
       </section>
 
       <p className="pt-4 text-xs" style={{ color: 'var(--color-muted)' }}>Last updated: July 2026</p>
-    </div>
+    </PageContent>
   )
 }

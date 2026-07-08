@@ -108,7 +108,7 @@ function TtsPlayer({ transcript }: { transcript: string }) {
           <select
             value={selectedVoice}
             onChange={(e) => setSelectedVoice(e.target.value)}
-            className="max-w-[200px] rounded-lg border px-2 py-1 text-xs"
+            className="max-w-[160px] truncate rounded-lg border px-2 py-1 text-xs sm:max-w-[200px]"
             style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
             aria-label="Select voice"
           >

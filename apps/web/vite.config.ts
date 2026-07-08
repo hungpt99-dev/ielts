@@ -11,14 +11,18 @@ const pwaConfig = {
   registerType: 'autoUpdate' as const,
   includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
   manifest: {
-    name: 'IELTS Learning Journey',
-    short_name: 'IELTS',
+    id: '/',
+    name: 'IELTS Journey',
+    short_name: 'IELTS Journey',
     description: 'Learn IELTS with AI Tutor',
-    theme_color: '#1e293b',
-    background_color: '#0f172a',
+    theme_color: '#2563eb',
+    background_color: '#f8fafc',
     display: 'standalone' as const,
     orientation: 'portrait-primary' as const,
     start_url: '/',
+    scope: '/',
+    categories: ['education', 'productivity'],
+    prefer_related_applications: false,
     icons: [
       {
         src: 'icons/icon-192x192.png',
@@ -41,6 +45,8 @@ const pwaConfig = {
   workbox: {
     globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
     maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+    navigateFallback: '/',
+    navigateFallbackDenylist: [/^\/api\//],
     runtimeCaching: [],
   },
 }

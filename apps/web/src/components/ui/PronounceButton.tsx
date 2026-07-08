@@ -20,8 +20,8 @@ export default function PronounceButton({ word, className, size = 'sm' }: Pronou
   }, [word])
 
   const sizeStyles = size === 'sm'
-    ? { width: 'var(--spacing-xl)', height: 'var(--spacing-xl)', fontSize: 'var(--text-sm)' }
-    : { width: 'var(--spacing-2xl)', height: 'var(--spacing-2xl)', fontSize: 'var(--text-base)' }
+    ? { width: '44px', height: '44px', fontSize: 'var(--text-sm)' }
+    : { width: '48px', height: '48px', fontSize: 'var(--text-base)' }
 
   return (
     <button

@@ -141,8 +141,8 @@ export default function Modal({
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: 'var(--spacing-xl)',
-                  height: 'var(--spacing-xl)',
+                  width: '44px',
+                  height: '44px',
                   borderRadius: 'var(--radius-full)',
                   border: 'none',
                   background: 'transparent',
@@ -150,6 +150,7 @@ export default function Modal({
                   cursor: 'pointer',
                   transition: 'all var(--transition-fast)',
                   marginLeft: 'auto',
+                  WebkitTapHighlightColor: 'transparent',
                 }}
               >
                 <IconClose size={18} />

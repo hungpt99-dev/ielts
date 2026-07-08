@@ -21,6 +21,7 @@ import ConfirmDialog from '../components/ui/ConfirmDialog'
 import { LoadingSkeleton } from '../components/ui/LoadingSkeleton'
 import { ErrorState } from '../components/ui/EmptyState'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import ProactiveTutorSettings from '../features/settings/ProactiveTutorSettings'
 import {
   IconTarget,
@@ -416,12 +417,11 @@ export default function Settings() {
           </div>
         </div>
         <div
+          className="max-lg:hidden grid"
           style={{
-            display: 'grid',
             gridTemplateColumns: '200px 1fr',
             gap: 'var(--spacing-lg)',
           }}
-          className="max-lg:hidden"
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
             <LoadingSkeleton variant="rect" count={7} height="40px" />
@@ -436,7 +436,7 @@ export default function Settings() {
   }
 
   return (
-    <div style={{ maxWidth: '1280px', margin: '0 auto', paddingTop: 'var(--spacing-md)' }}>
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconSettings size={22} />}
         title="Settings"
@@ -465,22 +465,13 @@ export default function Settings() {
         </div>
       )}
 
-      <div
-        style={{
-          display: 'flex',
-          gap: 'var(--spacing-lg)',
-          alignItems: 'flex-start',
-        }}
-      >
+      <div className="flex flex-col lg:flex-row lg:items-start" style={{ gap: 'var(--spacing-lg)' }}>
         <aside
-          className="max-lg:hidden"
+          className="max-lg:hidden flex flex-col sticky"
           style={{
             width: '220px',
             flexShrink: 0,
-            display: 'flex',
-            flexDirection: 'column',
             gap: '2px',
-            position: 'sticky',
             top: 'var(--spacing-md)',
           }}
         >
@@ -528,7 +519,7 @@ export default function Settings() {
           ))}
         </aside>
 
-        <div className="lg:hidden settings-mobile-tabs" style={{ marginBottom: 'var(--spacing-md)', width: '100%', overflowX: 'auto', position: 'relative', scrollbarWidth: 'thin' }}>
+        <div className="lg:hidden" style={{ marginBottom: 'var(--spacing-md)', width: '100%', overflowX: 'auto', position: 'relative', scrollbarWidth: 'thin' }}>
           <div
             role="tablist"
             style={{
@@ -1241,7 +1232,7 @@ export default function Settings() {
           await confirmAction?.action()
         }}
       />
-    </div>
+    </PageContent>
   )
 }
 

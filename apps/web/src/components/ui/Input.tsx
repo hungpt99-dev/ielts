@@ -34,6 +34,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       ? iconPosition === 'left' ? iconPaddingLeft[inputSize] : iconPaddingRight[inputSize]
       : ''
 
+    const errorId = inputId ? `${inputId}-error` : undefined
+    const helperId = inputId ? `${inputId}-helper` : undefined
+
     return (
       <div>
         {label && (
@@ -50,6 +53,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <span
               className={`absolute top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none ${iconPosition === 'left' ? iconLeftOffset[inputSize] : iconRightOffset[inputSize]}`}
               style={{ color: 'var(--color-muted)' }}
+              aria-hidden="true"
             >
               {icon}
             </span>
@@ -64,6 +68,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               color: 'var(--color-text)',
               fontFamily: 'var(--font-sans)',
             }}
+            aria-invalid={error ? 'true' : undefined}
+            aria-describedby={error ? errorId : helperText ? helperId : undefined}
             onFocus={(e) => {
               e.currentTarget.style.borderColor = error ? 'var(--color-danger)' : 'var(--color-primary)'
               e.currentTarget.style.boxShadow = error
@@ -80,12 +86,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           />
         </div>
         {error && (
-          <p className="mt-1.5 text-xs" style={{ color: 'var(--color-danger)' }}>
+          <p id={errorId} className="mt-1.5 text-xs" style={{ color: 'var(--color-danger-dark)' }} role="alert">
             {error}
           </p>
         )}
         {helperText && !error && (
-          <p className="mt-1.5 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+          <p id={helperId} className="mt-1.5 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
             {helperText}
           </p>
         )}

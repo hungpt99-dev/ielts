@@ -1,0 +1,36 @@
+[2026-07-08T07:45:26.384Z] [INFO] Task started: Run typecheck, lint, tests, and build to verify code quality and readiness
+[2026-07-08T07:45:29.077Z] [INFO] Executor finished with status: failed, exit code: 2
+[2026-07-08T07:45:29.077Z] [INFO] Output:
+Scope: 12 of 13 workspace projects
+packages/ai typecheck$ tsc --noEmit
+packages/ai-tutor typecheck$ tsc --noEmit
+packages/exercises typecheck$ tsc --noEmit
+packages/settings typecheck$ tsc --noEmit
+packages/settings typecheck: Done
+packages/storage typecheck$ tsc --noEmit
+packages/exercises typecheck: Done
+packages/theme typecheck$ tsc --noEmit
+packages/ai typecheck: Done
+packages/utils typecheck$ tsc --noEmit
+packages/utils typecheck: Done
+packages/theme typecheck: Done
+packages/storage typecheck: Done
+packages/ai-tutor typecheck: Done
+packages/content typecheck$ tsc --noEmit
+packages/learning-engine typecheck$ tsc --noEmit
+packages/ui typecheck$ tsc --noEmit
+packages/ui typecheck: Done
+packages/content typecheck: Done
+packages/learning-engine typecheck: src/progress/AIProgressReviewService.ts(2,3): error TS6196: 'TaskEntry' is declared but never used.
+packages/learning-engine typecheck: src/progress/AIProgressReviewService.ts(5,3): error TS6196: 'MistakeEntry' is declared but never used.
+packages/learning-engine typecheck: src/progress/AIProgressReviewService.ts(6,3): error TS6196: 'ReadingPracticeSession' is declared but never used.
+packages/learning-engine typecheck: src/progress/AIProgressReviewService.ts(7,3): error TS6196: 'ListeningPracticeSession' is declared but never used.
+packages/learning-engine typecheck: src/progress/AIProgressReviewService.ts(8,3): error TS6196: 'WritingSession' is declared but never used.
+packages/learning-engine typecheck: src/progress/AIProgressReviewService.ts(9,3): error TS6196: 'SpeakingSession' is declared but never used.
+packages/learning-engine typecheck: src/progress/AIProgressReviewService.ts(10,3): error TS6196: 'MockTestEntry' is declared but never used.
+packages/learning-engine typecheck: src/progress/AIProgressReviewService.ts(17,3): error TS6196: 'StudyConsistency' is declared but never used.
+packages/learning-engine typecheck: src/progress/AIProgressReviewService.ts(21,3): error TS6196: 'StudySkill' is declared but n
+[2026-07-08T07:45:29.077Z] [INFO] Error:
+$ pnpm -r typecheck
+[2026-07-08T07:45:29.077Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-08T07:45:29.080Z] [INFO] Task completed successfully

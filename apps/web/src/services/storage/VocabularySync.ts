@@ -141,9 +141,9 @@ export function initVocabSync(): void {
   window.addEventListener('message', handleVocabMessage)
   window.addEventListener(VOCAB_CHANGED_EVENT, handleVocabChanged)
 
-  // Send latest vocabulary to the extension (extension will update its
-  // chrome.storage.local via VOCAB_LIST_SYNC handler in bridge-client).
-  handleVocabChanged()
+  try {
+    handleVocabChanged()
+  } catch { /* DB may not be ready yet */ }
 
   // Request vocabulary saved in the extension's chrome.storage.local
   // while the web app was not open (bootstrap sync).

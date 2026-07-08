@@ -1,6 +1,6 @@
 import { useVoice } from '../useVoice'
 
-export default function TtsToggle({ buttonHeight = 40 }: { buttonHeight?: number }) {
+export default function TtsToggle({ buttonHeight = 44 }: { buttonHeight?: number }) {
   const { ttsEnabled, setTtsEnabled, isSpeechSupported } = useVoice()
 
   if (!isSpeechSupported) return null
@@ -22,13 +22,19 @@ export default function TtsToggle({ buttonHeight = 40 }: { buttonHeight?: number
         color: ttsEnabled ? 'var(--color-on-primary)' : 'var(--color-muted)',
         transition: 'all 0.2s ease',
         flexShrink: 0,
-        outline: 'none',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.background = ttsEnabled ? 'var(--color-tutor-accent)' : 'var(--color-border)'
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.background = ttsEnabled ? 'var(--color-tutor-accent)' : 'var(--color-surface-alt)'
+      }}
+      onFocus={(e) => {
+        e.currentTarget.style.outline = '2px solid var(--color-primary)'
+        e.currentTarget.style.outlineOffset = '2px'
+      }}
+      onBlur={(e) => {
+        e.currentTarget.style.outline = 'none'
       }}
       aria-label={ttsEnabled ? 'Disable AI voice' : 'Enable AI voice'}
     >

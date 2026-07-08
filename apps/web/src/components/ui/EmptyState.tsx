@@ -232,7 +232,7 @@ export function EmptyStateIllustrated({
           {description}
         </p>
       )}
-      <div className="mt-5 flex w-full flex-wrap items-center justify-center gap-3">
+      <div className="mt-5 flex w-full min-w-0 flex-wrap items-center justify-center gap-3">
         {action && (
           <Button size="sm" onClick={action.onClick}>
             {action.label}
@@ -278,17 +278,17 @@ export function ErrorState({
         className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm"
         style={{
           backgroundColor: 'var(--color-danger-light)',
-          color: 'var(--color-danger)',
+          color: 'var(--color-danger-dark)',
         }}
         role="alert"
       >
-        <IconAlertCircle size={16} />
+        <IconAlertCircle size={16} aria-hidden="true" />
         <span className="flex-1 text-xs">{errorMessage}</span>
         {onRetry && (
           <button
             onClick={onRetry}
             className="shrink-0 text-xs font-medium underline"
-            style={{ color: 'var(--color-danger)' }}
+            style={{ color: 'var(--color-danger-dark)' }}
           >
             {retryLabel}
           </button>

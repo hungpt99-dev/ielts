@@ -101,7 +101,7 @@ export default function BasicSettingsForm() {
         <label className="mb-2 block text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
           AI Tutor Personality
         </label>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {TUTOR_MODE_OPTIONS.map(mode => (
             <button
               key={mode.value}
@@ -142,13 +142,14 @@ export default function BasicSettingsForm() {
         helperText="Recommended: 30–120 minutes"
       />
 
-      <div className="flex justify-end gap-3 pt-2">
+      <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
         <Button
           variant="ghost"
           onClick={() => {
             setForm(config.basic)
             setErrors({})
           }}
+          className="w-full sm:w-auto"
         >
           Discard Changes
         </Button>
@@ -160,6 +161,7 @@ export default function BasicSettingsForm() {
               actions.updateBasic(form)
             }
           }}
+          className="w-full sm:w-auto"
         >
           Save Settings
         </Button>

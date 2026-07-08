@@ -13,6 +13,7 @@ import type {
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconMistakeReview } from '@ielts/ui'
 
 interface ReviewGroup {
@@ -238,7 +239,7 @@ export default function ReviewCenter() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconMistakeReview size={20} />}
         title="Review Center"
@@ -316,6 +317,6 @@ export default function ReviewCenter() {
             </Card>
           ))}
       </div>
-    </div>
+    </PageContent>
   )
 }

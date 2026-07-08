@@ -39,7 +39,7 @@ export default function WeekSection({ week, weekIndex, isCurrentWeek, phaseIndex
     >
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:brightness-95"
+        className="flex w-full items-center gap-3 px-3 sm:px-4 py-3 text-left transition-colors hover:brightness-95"
         aria-expanded={expanded}
         aria-controls={`week-${week.id}-content`}
       >
@@ -53,8 +53,8 @@ export default function WeekSection({ week, weekIndex, isCurrentWeek, phaseIndex
         </div>
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="text-sm font-semibold break-words min-w-0" style={{ color: 'var(--color-text)' }}>
               {week.label}: {week.focus}
             </span>
             {week.isComplete ? (
@@ -101,7 +101,7 @@ export default function WeekSection({ week, weekIndex, isCurrentWeek, phaseIndex
       {expanded && (
         <div
           id={`week-${week.id}-content`}
-          className="border-t px-4 py-3 space-y-2"
+          className="border-t px-3 sm:px-4 py-3 space-y-2"
           style={{ borderColor: 'var(--color-border)' }}
         >
           {week.days.map((day, dIdx) => (

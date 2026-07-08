@@ -43,7 +43,6 @@ const LOCAL_STORAGE_REGISTRY: LocalStorageSchemaEntry[] = [
   { key: 'ielts-accent-color', version: 1 },
   { key: 'ielts-dark-mode', version: 1 },
   { key: 'ielts-notification-prefs', version: 1 },
-  { key: 'ai-tutor-chat-memory', version: 1 },
 ]
 
 const STORAGE_RETRY_COUNT = 1
@@ -163,6 +162,66 @@ export const StorageService = {
 
   removeLocalItem(key: string): void {
     safeLocalRemove(key)
+  },
+
+  checkStorageQuota(): { used: number; remaining: number | null; percentUsed: number } {
+    let used = 0
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key) {
+        const value = localStorage.getItem(key)
+        if (value) {
+          used += key.length + value.length
+        }
+      }
+    }
+    const remaining = (() => {
+      try {
+        const testKey = '__quota_test__'
+        const testData = 'a'.repeat(1024 * 1024)
+        localStorage.setItem(testKey, testData)
+        localStorage.removeItem(testKey)
+        return null
+      } catch {
+        const approxUsed = used
+        return Math.max(0, 5 * 1024 * 1024 - approxUsed)
+      }
+    })()
+    return {
+      used,
+      remaining,
+      percentUsed: remaining !== null ? Math.round((used / (used + remaining)) * 100) : 0,
+    }
+  },
+
+  isQuotaSafe(): boolean {
+    try {
+      const { remaining, percentUsed } = this.checkStorageQuota()
+      if (remaining !== null && remaining < 10 * 1024) return false
+      if (percentUsed > 95) return false
+      return true
+    } catch {
+      return true
+    }
+  },
+
+  async ensureStorageAvailable(): Promise<boolean> {
+    try {
+      const db = getDb()
+      if (!db.isOpen()) {
+        await db.open()
+      }
+      return true
+    } catch {
+      try {
+        initDb(APP_SCHEMA)
+        const db = getDb()
+        await db.open()
+        return true
+      } catch {
+        return false
+      }
+    }
   },
 
   async getAppSettings(): Promise<AppSettings> {

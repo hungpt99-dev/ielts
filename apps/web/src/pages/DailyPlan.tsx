@@ -6,6 +6,7 @@ import Card, { CardContent } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconTodayPlan } from '@ielts/ui'
 
 const CATEGORIES: TaskCategory[] = [
@@ -273,7 +274,7 @@ export default function DailyPlan() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconTodayPlan size={20} />}
         title="Daily Study Plan"
@@ -769,6 +770,6 @@ export default function DailyPlan() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageContent>
   )
 }

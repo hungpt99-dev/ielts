@@ -10,20 +10,23 @@ interface FormFieldProps {
 }
 
 export default function FormField({ label, error, required, children, helperText }: FormFieldProps) {
+  const fieldId = label?.toLowerCase().replace(/\s+/g, '-')
+  const errorId = fieldId ? `${fieldId}-error` : undefined
+
   return (
-    <div>
-      <label className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+    <div role="group" aria-labelledby={fieldId ? `${fieldId}-label` : undefined}>
+      <label id={fieldId ? `${fieldId}-label` : undefined} className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>
         {label}
-        {required && <span style={{ color: 'var(--color-danger)' }}> *</span>}
+        {required && <span style={{ color: 'var(--color-danger)' }} aria-hidden="true"> *</span>}
       </label>
       {children}
       {error && (
-        <p className="mt-1 text-xs" style={{ color: 'var(--color-danger)' }}>
+        <p id={errorId} className="mt-1 text-xs" style={{ color: 'var(--color-danger-dark)' }} role="alert">
           {error.message}
         </p>
       )}
       {helperText && !error && (
-        <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
+        <p className="mt-1 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
           {helperText}
         </p>
       )}

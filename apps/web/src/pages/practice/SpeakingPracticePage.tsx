@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton'
 import ErrorBoundary from '../../components/ui/ErrorBoundary'
 import SpeakingPractice from '../../features/speaking/SpeakingPractice'
+import MobilePageContainer from '../../components/layout/MobilePageContainer'
 
 export default function SpeakingPracticePage() {
   const [ready, setReady] = useState(false)
@@ -12,14 +13,7 @@ export default function SpeakingPracticePage() {
   }, [])
 
   return (
-    <div
-      style={{
-        maxWidth: '1280px',
-        margin: '0 auto',
-        width: '100%',
-        paddingTop: 'var(--spacing-md)',
-      }}
-    >
+    <MobilePageContainer className="pt-4">
       {!ready ? (
         <div style={{ padding: '0 var(--spacing-sm)' }}>
           <LoadingSkeleton variant="card" count={3} gap="var(--spacing-md)" />
@@ -29,6 +23,6 @@ export default function SpeakingPracticePage() {
           <SpeakingPractice />
         </ErrorBoundary>
       )}
-    </div>
+    </MobilePageContainer>
   )
 }

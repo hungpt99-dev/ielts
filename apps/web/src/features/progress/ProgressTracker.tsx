@@ -248,7 +248,7 @@ export function SummaryCards({ snapshot }: { snapshot: ProgressSnapshot }) {
     <div style={{
       display: 'grid',
       gap: 'var(--spacing-sm)',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
     }}>
       <StatCard label="Study Hours" value={`${totalHours.toFixed(1)}h`} icon={<IconClock size={18} />} color="var(--color-primary)" />
       <StatCard
@@ -335,7 +335,7 @@ export function SkillProgressGrid({ skillProgress }: { skillProgress: SkillProgr
     <div style={{
       display: 'grid',
       gap: 'var(--spacing-sm)',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
     }}>
       {skillProgress.map((skill) => (
         <SkillBreakdownCard key={skill.skill} {...skill} />
@@ -694,7 +694,7 @@ export default function ProgressTracker({ snapshot, loading, error, onRetry, onN
               aria-checked={period === opt.value}
               onClick={() => handlePeriodChange(opt.value)}
               style={{
-                padding: '6px 14px',
+                  padding: '10px 16px',
                 borderRadius: 'var(--radius-lg)',
                 border: `1px solid ${period === opt.value ? 'var(--color-primary)' : 'var(--color-border)'}`,
                 background: period === opt.value ? 'var(--color-primary-light)' : 'var(--color-surface)',
@@ -717,7 +717,7 @@ export default function ProgressTracker({ snapshot, loading, error, onRetry, onN
       <SummaryCards snapshot={snapshot} />
 
       {/* Zone 2: Band & Skill Progression + Skill Breakdown */}
-      <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+      <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         <div>
           <SectionHeader title="Band & Skill Progression" aiAction={{ label: 'Ask AI', onClick: () => navigate('/tutor') }} />
           <div style={{ marginTop: 'var(--spacing-sm)' }}>
@@ -752,7 +752,7 @@ export default function ProgressTracker({ snapshot, loading, error, onRetry, onN
       </div>
 
       {/* Zone 4: Vocabulary + Mistakes */}
-      <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+      <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         <div>
           <SectionHeader title="Vocabulary" action={{ label: 'View all words', onClick: () => navigate('/vocabulary') }} />
           <div style={{ marginTop: 'var(--spacing-sm)' }}>
@@ -809,7 +809,7 @@ export default function ProgressTracker({ snapshot, loading, error, onRetry, onN
       </div>
 
       {/* Zone 5: Plan Adherence + Recent Activity */}
-      <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+      <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         <div>
           <SectionHeader title="Study Plan" action={{ label: 'Adjust plan', onClick: () => navigate('/roadmap') }} />
           <div style={{ marginTop: 'var(--spacing-sm)' }}>

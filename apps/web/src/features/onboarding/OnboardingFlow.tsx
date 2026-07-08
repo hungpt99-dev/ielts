@@ -158,11 +158,11 @@ export default function OnboardingFlow() {
             </div>
           </div>
         ) : (
-          <div style={{ display: 'flex', gap: 'var(--spacing-xs)' }}>
-            <Button variant="ghost" onClick={handleBack} fullWidth>
+          <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
+            <Button variant="ghost" onClick={handleBack} fullWidth size="md">
               Back
             </Button>
-            <Button variant="primary" onClick={handleNext} fullWidth disabled={isSaving}>
+            <Button variant="primary" onClick={handleNext} fullWidth size="md" disabled={isSaving}>
               {isLastStep ? 'Finish Setup' : 'Continue'}
             </Button>
           </div>

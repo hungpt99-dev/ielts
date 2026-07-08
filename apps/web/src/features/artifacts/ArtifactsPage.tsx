@@ -10,6 +10,7 @@ import Modal from '../../components/ui/Modal'
 import { EmptyState, EmptyStateIllustrated, ErrorState } from '../../components/ui/EmptyState'
 import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton'
 import PageHeader from '../../components/layout/PageHeader'
+import PageContent from '../../components/layout/PageContent'
 import { IconSavedContent, IconAITutor } from '@ielts/ui'
 
 const CATEGORIES: ArtifactCategory[] = ['article', 'video', 'reference', 'tool', 'other']
@@ -370,12 +371,12 @@ export default function ArtifactsPage() {
 
   if (loading) {
     return (
-      <div className="w-full space-y-6 p-6">
+      <PageContent className="space-y-4 sm:space-y-6">
         <div className="space-y-2">
           <LoadingSkeleton variant="text" width="40%" />
           <LoadingSkeleton variant="text" width="25%" />
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 overflow-x-auto">
           <LoadingSkeleton variant="rect" width="120px" height="80px" />
           <LoadingSkeleton variant="rect" width="120px" height="80px" />
           <LoadingSkeleton variant="rect" width="120px" height="80px" />
@@ -383,7 +384,8 @@ export default function ArtifactsPage() {
           <LoadingSkeleton variant="rect" width="120px" height="80px" />
         </div>
         <LoadingSkeleton variant="rect" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+          <LoadingSkeleton variant="card" />
           <LoadingSkeleton variant="card" />
           <LoadingSkeleton variant="card" />
           <LoadingSkeleton variant="card" />
@@ -391,20 +393,20 @@ export default function ArtifactsPage() {
           <LoadingSkeleton variant="card" />
           <LoadingSkeleton variant="card" />
         </div>
-      </div>
+      </PageContent>
     )
   }
 
   if (error) {
     return (
-      <div className="w-full p-6">
+      <PageContent>
         <ErrorState message={error} onRetry={loadArtifacts} title="Could not load your saved content" />
-      </div>
+      </PageContent>
     )
   }
 
   return (
-    <div className="w-full space-y-6">
+    <PageContent className="space-y-4 sm:space-y-6">
       {/* Toast */}
       {toast && (
         <div className={`fixed right-4 top-4 z-50 rounded-lg px-4 py-3 text-sm font-medium shadow-lg transition-all ${
@@ -420,8 +422,9 @@ export default function ArtifactsPage() {
         icon={<IconSavedContent size={22} />}
         title="Saved Content"
         description={`Your IELTS learning library from the web · ${stats.total} item${stats.total !== 1 ? 's' : ''}`}
+        className="!mb-4 sm:!mb-6"
         actions={
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button variant="ghost" size="sm" onClick={() => navigate('/settings/extension')}>
               Extension Guide
             </Button>
@@ -436,7 +439,7 @@ export default function ArtifactsPage() {
       />
 
       {/* Stats bar */}
-      <div className="flex gap-3 overflow-x-auto pb-2">
+      <div className="flex gap-2 overflow-x-auto pb-2 sm:gap-3">
         {[
           { label: 'Articles', count: stats.articles, color: 'var(--color-primary)' },
           { label: 'Text', count: stats.text, color: 'var(--color-success)' },
@@ -446,7 +449,7 @@ export default function ArtifactsPage() {
         ].map(stat => (
           <button
             key={stat.label}
-            className="flex shrink-0 items-center gap-2 rounded-xl border px-4 py-3 transition-all hover:shadow-sm"
+            className="flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-2.5 transition-all hover:shadow-sm sm:gap-2 sm:px-4 sm:py-3"
             style={{
               borderColor: 'var(--color-border)',
               backgroundColor: 'var(--color-surface)',
@@ -464,10 +467,10 @@ export default function ArtifactsPage() {
       </div>
 
       {/* Filter Bar */}
-      <Card>
+      <Card padding="sm">
         <CardContent>
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="min-w-[200px] flex-1">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <div className="w-full sm:w-auto sm:min-w-[200px] sm:flex-1">
               <div className="relative">
                 <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} style={{ color: 'var(--color-muted)' }}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -487,93 +490,95 @@ export default function ArtifactsPage() {
                 />
               </div>
             </div>
-            <select
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="rounded-lg border px-3 py-2 text-xs focus:outline-none focus:ring-1"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              aria-label="Filter by type"
-            >
-              <option value="">All Types</option>
-              {CONTENT_TYPES.map(t => (
-                <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
-              ))}
-            </select>
-            <select
-              value={topicFilter}
-              onChange={(e) => setTopicFilter(e.target.value)}
-              className="rounded-lg border px-3 py-2 text-xs focus:outline-none focus:ring-1"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              aria-label="Filter by topic"
-            >
-              <option value="">All Topics</option>
-              {IELTS_TOPICS.map(t => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
-            <select
-              value={skillFilter}
-              onChange={(e) => setSkillFilter(e.target.value)}
-              className="rounded-lg border px-3 py-2 text-xs focus:outline-none focus:ring-1"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              aria-label="Filter by skill"
-            >
-              <option value="">All Skills</option>
-              {IELTS_SKILLS.map(s => (
-                <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
-              ))}
-            </select>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-lg border px-3 py-2 text-xs focus:outline-none focus:ring-1"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              aria-label="Filter by status"
-            >
-              <option value="">All Status</option>
-              {READING_STATUSES.map(s => (
-                <option key={s} value={s}>{getStatusLabel(s)}</option>
-              ))}
-            </select>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-              className="rounded-lg border px-3 py-2 text-xs focus:outline-none focus:ring-1"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              aria-label="Sort by"
-            >
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="title">Title A-Z</option>
-              <option value="lastOpened">Last Opened</option>
-            </select>
-            <div className="flex gap-1 rounded-lg border p-0.5" style={{ borderColor: 'var(--color-border)' }}>
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`rounded-md p-1.5 transition-colors ${viewMode === 'grid' ? 'bg-[var(--color-primary-light)] text-[var(--color-primary)]' : ''}`}
-                style={{ color: viewMode === 'grid' ? 'var(--color-primary)' : 'var(--color-muted)' }}
-                aria-label="Grid view"
+            <div className="flex items-center gap-2 overflow-x-auto pb-0.5 sm:flex-wrap sm:overflow-visible sm:pb-0 [-webkit-overflow-scrolling:touch]">
+              <select
+                value={typeFilter}
+                onChange={(e) => setTypeFilter(e.target.value)}
+                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
+                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                aria-label="Filter by type"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`rounded-md p-1.5 transition-colors ${viewMode === 'list' ? 'bg-[var(--color-primary-light)] text-[var(--color-primary)]' : ''}`}
-                style={{ color: viewMode === 'list' ? 'var(--color-primary)' : 'var(--color-muted)' }}
-                aria-label="List view"
+                <option value="">All Types</option>
+                {CONTENT_TYPES.map(t => (
+                  <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
+                ))}
+              </select>
+              <select
+                value={topicFilter}
+                onChange={(e) => setTopicFilter(e.target.value)}
+                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
+                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                aria-label="Filter by topic"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
+                <option value="">All Topics</option>
+                {IELTS_TOPICS.map(t => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+              <select
+                value={skillFilter}
+                onChange={(e) => setSkillFilter(e.target.value)}
+                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
+                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                aria-label="Filter by skill"
+              >
+                <option value="">All Skills</option>
+                {IELTS_SKILLS.map(s => (
+                  <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+                ))}
+              </select>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
+                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                aria-label="Filter by status"
+              >
+                <option value="">All Status</option>
+                {READING_STATUSES.map(s => (
+                  <option key={s} value={s}>{getStatusLabel(s)}</option>
+                ))}
+              </select>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
+                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                aria-label="Sort by"
+              >
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="title">Title A-Z</option>
+                <option value="lastOpened">Last Opened</option>
+              </select>
+              <div className="flex shrink-0 gap-1 rounded-lg border p-0.5" style={{ borderColor: 'var(--color-border)' }}>
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`rounded-md p-1.5 transition-colors ${viewMode === 'grid' ? 'bg-[var(--color-primary-light)] text-[var(--color-primary)]' : ''}`}
+                  style={{ color: viewMode === 'grid' ? 'var(--color-primary)' : 'var(--color-muted)' }}
+                  aria-label="Grid view"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`rounded-md p-1.5 transition-colors ${viewMode === 'list' ? 'bg-[var(--color-primary-light)] text-[var(--color-primary)]' : ''}`}
+                  style={{ color: viewMode === 'list' ? 'var(--color-primary)' : 'var(--color-muted)' }}
+                  aria-label="List view"
+                >
+                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+              </div>
+              {hasActiveFilters && (
+                <Button variant="ghost" size="xs" onClick={clearFilters}>
+                  Clear
+                </Button>
+              )}
             </div>
-            {hasActiveFilters && (
-              <Button variant="ghost" size="xs" onClick={clearFilters}>
-                Clear
-              </Button>
-            )}
           </div>
         </CardContent>
       </Card>
@@ -593,11 +598,11 @@ export default function ArtifactsPage() {
             title="Your content library is empty"
             description="Save articles, text passages, and web content to build your personal IELTS learning library. Use the browser extension to save content while browsing, or add URLs manually."
             action={{ label: 'Add Your First Content', onClick: openCreate }}
-            secondaryAction={{ label: 'Learn how to use the browser extension →', onClick: () => {} }}
+            secondaryAction={{ label: 'Browser extension guide', onClick: () => {} }}
           />
         )
       ) : viewMode === 'grid' ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {filtered.map(artifact => {
             const ext = artifact as Artifact & { contentType?: string; readingStatus?: string; ieltsTopic?: string; skill?: string; wordCount?: number }
             const typeColor = getTypeColor(ext.contentType || artifact.category)
@@ -613,12 +618,12 @@ export default function ArtifactsPage() {
                 {/* Top accent bar */}
                 <div style={{ height: '3px', backgroundColor: typeColor }} />
 
-                <div className="p-4">
+                <div className="p-3 sm:p-4">
                   {/* Top row: favicon + badges + actions */}
                   <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex min-w-0 items-center gap-2">
                       {artifact.favicon ? (
-                        <img src={artifact.favicon} alt="" className="h-5 w-5 shrink-0 rounded" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                        <img src={artifact.favicon} alt="" className="h-5 w-5 shrink-0 rounded" loading="lazy" decoding="async" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
                       ) : (
                         <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded" style={{ backgroundColor: `${typeColor}20`, color: typeColor }}>
                           <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -688,9 +693,9 @@ export default function ArtifactsPage() {
                   {/* Title */}
                   <button
                     onClick={() => setDetailItem(artifact)}
-                    className="mt-3 text-left"
+                    className="mt-2 w-full text-left sm:mt-3"
                   >
-                    <p className="text-sm font-semibold leading-snug transition-colors hover:text-[var(--color-primary)]" style={{ color: 'var(--color-text)' }}>
+                    <p className="break-words text-sm font-semibold leading-snug transition-colors hover:text-[var(--color-primary)]" style={{ color: 'var(--color-text)' }}>
                       {artifact.title}
                     </p>
                   </button>
@@ -703,7 +708,7 @@ export default function ArtifactsPage() {
                   )}
 
                   {/* Topic/Skill/Tags */}
-                  <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                  <div className="mt-2 flex flex-wrap items-center gap-1.5 sm:mt-3">
                     {ext.ieltsTopic && (
                       <span className="rounded-md px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
                         {ext.ieltsTopic}
@@ -727,7 +732,7 @@ export default function ArtifactsPage() {
                   </div>
 
                   {/* Source + Date */}
-                  <div className="mt-3 flex items-center gap-2 text-[10px]" style={{ color: 'var(--color-muted)' }}>
+                  <div className="mt-2 flex items-center gap-2 text-[10px] sm:mt-3" style={{ color: 'var(--color-muted)' }}>
                     <span>Via {artifact.source === 'manual' ? 'Manual' : artifact.source || 'Extension'}</span>
                     <span>·</span>
                     <span>{formatDate(artifact.createdAt)}</span>
@@ -740,7 +745,7 @@ export default function ArtifactsPage() {
                   </div>
 
                   {/* Quick actions */}
-                  <div className="mt-3 flex flex-wrap gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+                  <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
                     <Button variant="ghost" size="xs" onClick={() => {
                       showToast('Generate exercise from this content - coming soon')
                     }}>
@@ -772,7 +777,7 @@ export default function ArtifactsPage() {
             return (
               <div
                 key={artifact.id}
-                className="flex items-center gap-4 rounded-xl border p-3 transition-all hover:shadow-sm"
+                className="flex items-center gap-3 rounded-xl border p-3 transition-all hover:shadow-sm sm:gap-4"
                 style={{
                   borderColor: 'var(--color-border)',
                   backgroundColor: 'var(--color-surface)',
@@ -789,8 +794,8 @@ export default function ArtifactsPage() {
                   </svg>
                 </button>
                 <div className="min-w-0 flex-1">
-                  <button onClick={() => setDetailItem(artifact)} className="text-left">
-                    <p className="text-sm font-medium hover:text-[var(--color-primary)]" style={{ color: 'var(--color-text)' }}>
+                  <button onClick={() => setDetailItem(artifact)} className="w-full text-left">
+                    <p className="break-words text-sm font-medium hover:text-[var(--color-primary)]" style={{ color: 'var(--color-text)' }}>
                       {artifact.title}
                     </p>
                   </button>
@@ -1173,6 +1178,6 @@ export default function ArtifactsPage() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageContent>
   )
 }

@@ -11,6 +11,7 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner'
 import CalendarView from '../planner/components/CalendarView'
 import { generateStudyPlan, loadPlan, type StudyPlanData } from './studyPlanService'
 import PageHeader from '../../components/layout/PageHeader'
+import PageContent from '../../components/layout/PageContent'
 import {
   IconStudyPlan,
   IconCheck,
@@ -249,7 +250,7 @@ export default function StudyPlan() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl pb-20 lg:pb-6" style={{ maxWidth: '1280px' }}>
+    <PageContent style={{ paddingBottom: 'var(--spacing-3xl)' }}>
       <PageHeader
         icon={<IconStudyPlan size={22} />}
         title="Study Plan"
@@ -809,6 +810,6 @@ export default function StudyPlan() {
           )}
         </div>
       </Modal>
-    </div>
+    </PageContent>
   )
 }

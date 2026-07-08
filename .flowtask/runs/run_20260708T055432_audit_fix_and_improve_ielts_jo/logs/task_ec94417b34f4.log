@@ -1,0 +1,615 @@
+[2026-07-08T07:45:29.083Z] [INFO] Task started: Generate final report summarizing mobile issues found, fixes applied, tests performed, and PWA readiness
+[2026-07-08T07:45:29.085Z] [INFO] [info] [output-plan] [{"action":"create","target":"docs/mobile-pwa-final-report.md","description":"Final report summarizing audit, fixes, tests, and readiness","validationMethod":"file_exists"}]
+[2026-07-08T07:45:29.652Z] [INFO] [stderr] > build · deepseek-v4-flash
+[2026-07-08T07:45:29.652Z] [INFO] [stderr] [0m
+[2026-07-08T07:45:29.652Z] [INFO] [stderr] [0m
+[2026-07-08T07:45:34.372Z] [INFO] [stderr] [0m$ [0mgit log --oneline -30
+[2026-07-08T07:45:34.372Z] [INFO] [stderr] 9c70787 fix: extension double save, React hooks violation causing error #300, WordDetails undefined array crash
+[2026-07-08T07:45:34.372Z] [INFO] [stderr] 51a2151 refactor: replace emoji icons with SVG icons in AI explain panel
+[2026-07-08T07:45:34.372Z] [INFO] [stderr] d42cc6e fix: update icon imports and minor fixes across extension and web
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] deeb839 feat: redesign onboarding with modular step-by-step flow, repository pattern, resume support
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 91b0361 fix: remove re-sync useEffect in settings pages that reset unsaved local state
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] a7b876f feat: add /landing route, make sidebar logo link to landing page
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] cfdd6f6 chore: update site description to 'Learn IELTS with AI Tutor'
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] e5db163 fix: add og:description and twitter:description for link previews
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 0cab5a3 fix: update og:title, twitter:card, and landing page SEO to match new description
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 8d89f3f refactor: remove all validation layers, replace chrome.storage.sync with local, clean dead code
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] cdf6035 fix: route _pendingSaves writes through safeStorageSet rate limiter
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 9c60300 fix: globally rate-limit ALL chrome.storage.local writes to 1.5s intervals
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 0192e23 fix: restructure 404 page layout to use table-based centering, fix flex overflow bug in Safari
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] f1b0f6a fix: landing page child width, Get Started button color, hamburger visibility
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] c3098a6 fix: forward FORWARD_DATA_SYNC to tabs after processing _pendingSaves
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 0aa6d4a fix: suppress Unchecked runtime.lastError warning by reading lastError in all callbacks
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 0c91e46 fix: map _pendingSaves 'text' field to 'word', prevent stale callback double-writes
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 936c3d9 feat: add configurable host exclusion for auto-highlight feature
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] f0a9c70 fix: cache API key config to avoid intermittent chrome.storage failures
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 470267e fix: add timeout to chrome.storage Promise, unify save queue via window
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] d6242e3 fix: replace chrome.runtime.sendMessage with chrome.storage.local for saves
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 0ed9c64 fix: increase flush interval to 5s to stay under hourly quota
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 83e61dc fix: replace throttle with debounced write queue for dailyProgress
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] e7c04f4 fix: unify landing section containers to max-w-6xl for consistent alignment
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 03c7b08 fix: map extension vocabulary/mistake fields to web app schema
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] [0m
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] e373a2e fix: batch all chrome.storage writes to stay under quota
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] e8d6661 fix: use page localStorage as fallback when chrome.storage context is invalidated
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 4bdefa4 fix: remove storeToChromeStorage timeout that silently lost saves
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 485e0b6 feat: replace emoji icons with @ielts/ui SVGs, add autoAiLookup setting
+[2026-07-08T07:45:34.373Z] [INFO] [stderr] 0a7314e fix: unify all chrome.storage.local writes through a single rate limiter
+[2026-07-08T07:45:34.876Z] [INFO] [stderr] [0m$ [0mgit diff --name-only HEAD~1..HEAD 2>/dev/null || git log --name-only --oneline -1 HEAD
+[2026-07-08T07:45:34.876Z] [INFO] [stderr] apps/extension/src/content-script/aiExplain.ts
+[2026-07-08T07:45:34.876Z] [INFO] [stderr] apps/extension/src/popup/components/VocabularyCollector.tsx
+[2026-07-08T07:45:34.876Z] [INFO] [stderr] apps/extension/src/popup/components/WordDetails.tsx
+[2026-07-08T07:45:34.876Z] [INFO] [stderr] apps/web/src/pages/AITutorChat.tsx
+[2026-07-08T07:45:34.876Z] [INFO] [stderr] [0m
+[2026-07-08T07:45:34.876Z] [INFO] [stderr] apps/extension/src/popup/components/MiniTutor.tsx
+[2026-07-08T07:45:34.876Z] [INFO] [stderr] apps/extension/src/popup/components/PopupDashboard.tsx
+[2026-07-08T07:45:35.012Z] [INFO] [stderr] [0m✱ [0mGlob "docs/mobile*.md"[90m 1 match[0m
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] [0m$ [0mgit log --all --oneline --since="2026-07-01" --format="%h %s" 2>/dev/null | head -60
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] d42cc6e fix: update icon imports and minor fixes across extension and web
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 51a2151 refactor: replace emoji icons with SVG icons in AI explain panel
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] [0m
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 9c70787 fix: extension double save, React hooks violation causing error #300, WordDetails undefined array crash
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] a7b876f feat: add /landing route, make sidebar logo link to landing page
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 91b0361 fix: remove re-sync useEffect in settings pages that reset unsaved local state
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] e5db163 fix: add og:description and twitter:description for link previews
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 0cab5a3 fix: update og:title, twitter:card, and landing page SEO to match new description
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 0192e23 fix: restructure 404 page layout to use table-based centering, fix flex overflow bug in Safari
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 936c3d9 feat: add configurable host exclusion for auto-highlight feature
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 485e0b6 feat: replace emoji icons with @ielts/ui SVGs, add autoAiLookup setting
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 4bdefa4 fix: remove storeToChromeStorage timeout that silently lost saves
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 0aa6d4a fix: suppress Unchecked runtime.lastError warning by reading lastError in all callbacks
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] f1b0f6a fix: landing page child width, Get Started button color, hamburger visibility
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 8d89f3f refactor: remove all validation layers, replace chrome.storage.sync with local, clean dead code
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 9c60300 fix: globally rate-limit ALL chrome.storage.local writes to 1.5s intervals
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] cfdd6f6 chore: update site description to 'Learn IELTS with AI Tutor'
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] cdf6035 fix: route _pendingSaves writes through safeStorageSet rate limiter
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] deeb839 feat: redesign onboarding with modular step-by-step flow, repository pattern, resume support
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] f0a9c70 fix: cache API key config to avoid intermittent chrome.storage failures
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] c3098a6 fix: forward FORWARD_DATA_SYNC to tabs after processing _pendingSaves
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] e373a2e fix: batch all chrome.storage writes to stay under quota
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 470267e fix: add timeout to chrome.storage Promise, unify save queue via window
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 0c91e46 fix: map _pendingSaves 'text' field to 'word', prevent stale callback double-writes
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 0ed9c64 fix: increase flush interval to 5s to stay under hourly quota
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] e8d6661 fix: use page localStorage as fallback when chrome.storage context is invalidated
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] d6242e3 fix: replace chrome.runtime.sendMessage with chrome.storage.local for saves
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] e7c04f4 fix: unify landing section containers to max-w-6xl for consistent alignment
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 0a7314e fix: unify all chrome.storage.local writes through a single rate limiter
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 03c7b08 fix: map extension vocabulary/mistake fields to web app schema
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] a667bcb fix: prevent optimistic success toast from overwriting error toast
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 0c94da2 fix: revert saveText to fire-and-forget to avoid MV3 response timeout warning
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] f7c09d7 fix: simplify loadVocabulary to read only from IndexedDB, add save response check
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] f5d6c66 fix: handle Extension context invalidated error with clearer message
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 93c7119 fix: remove redundant chrome.storage.local write in VocabularyCollector
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] bbaf3d8 fix: break sync loop with syncInProgress flag
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 9468b35 fix: throttle chrome.storage.local writes in incrementDailyProgress
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 1552b87 fix: quality improvements - fix TS error, memoize deps, clear autoSentRef on chat clear
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 562b2d5 fix: remove pushSync from background handlers to prevent self-referential loop
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] f2ee71b fix: remove Tutor Suggestions section and stale AITutorChat
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] c9daaa9 fix: change h-full to min-h-full in WelcomeState to prevent content clipping
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] 5b0e764 fix: break sync loop with messageId dedup
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] a291031 feat: auto-send proactive messages as chat assistant messages
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] 0772d41 chore: update domain from ielts-journey.app to ieltsjourney.dev
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] 83e61dc fix: replace throttle with debounced write queue for dailyProgress
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] af85323 chore: prepare extension for Chrome Web Store publishing
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] c2baac5 chore: production readiness improvements
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] 4e4e492 feat: forward DATA_SYNC from background to page via content script
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] 3b2776a feat: handle incoming DATA_SYNC in extension background
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] 451caaa feat: add web app outbound push on data save
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] b35cbf9 feat: hook extension save operations into SyncManager push
+[2026-07-08T07:45:38.931Z] [INFO] [stderr] f6c9539 fix: swap floating chat popup to use AITutorPopup instead of AITutorChat
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] 788371f fix: remove privacy_policy from manifest (set in Chrome Web Store dashboard)
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] f9b81c1 feat: add web app DataSyncManager to receive and persist extension data
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] c60addf feat: add useDataRefresh hook and wire into Dashboard for live updates
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] 8b2e07b fix: add destroySyncListener and use Set for handlers
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] c435382 fix: extract sync protocol into dedicated file, fix null check
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] 03bfa6c feat: add extension SyncManager for outbound push and inbound listen
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] d36eba4 fix: use larger border-radius for extension popup icon
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] [0m
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] bdb5ee0 chore: commit flowtask updates and documentation-cleanup-report
+[2026-07-08T07:45:38.932Z] [INFO] [stderr] a39a146 feat: add shared data sync protocol types and validation
+[2026-07-08T07:45:39.231Z] [INFO] [stderr] [0m→ [0mRead docs/mobile-pwa-audit-report.md
+[2026-07-08T07:45:39.556Z] [INFO] [stderr] [0m✱ [0mGlob "**/*.tsx"[90m in apps/web/src/components · 56 matches[0m
+[2026-07-08T07:45:43.008Z] [INFO] [stderr] [0m→ [0mRead apps/web/index.html
+[2026-07-08T07:45:43.451Z] [INFO] [stderr] [0m$ [0mgit diff --stat HEAD~20..HEAD 2>/dev/null | tail -80
+[2026-07-08T07:45:43.451Z] [INFO] [stderr] [0m
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  apps/extension/src/background/index.ts             |   67 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr] .../background/__tests__/settingsStorage.test.ts   |   10 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  apps/extension/src/background/storage-bridge.ts    |  238 +---
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  apps/extension/src/background/messaging.ts         |   81 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  apps/extension/src/content-script/aiExplain.ts     |   31 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  apps/extension/src/background/settingsStorage.ts   |   58 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  apps/extension/src/content-script/bridge-client.ts |    4 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  .../highlighter/savedKeywordHighlighter.ts         |   34 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  .../src/content-script/dictionaryPanel.ts          |    8 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  .../src/content-script/proactiveMessagePanel.tsx   |   44 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  .../src/options/components/GeneralSettings.tsx     |    6 +
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/popup/components/ArticleCollector.tsx      |    2 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  .../extension/src/content-script/selectionPanel.ts |   48 +-
+[2026-07-08T07:45:43.451Z] [INFO] [stderr]  .../src/content-script/saveSelectedText.ts         |    1 -
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../components/ExtensionProactiveMessages.tsx      |   17 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/extension/src/popup/components/MiniTutor.tsx  |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/popup/components/ImportExportSection.tsx   |    4 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/popup/components/MistakeNotebook.tsx       |    4 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/popup/components/PopupDashboard.tsx        |  234 +++-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/popup/components/QuickAddVocab.tsx         |   64 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/popup/components/SaveTextForm.tsx          |   55 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/popup/components/SavedWordsView.tsx        |   12 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/popup/components/VocabularyCollector.tsx   |  163 ++-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../extension/src/popup/components/VideoHelper.tsx |   15 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/popup/components/SyncStatusBadge.tsx       |    3 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../extension/src/popup/components/WordDetails.tsx |   10 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/extension/src/services/syncManager.ts         |   17 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/extension/src/storage/vocabularyStore.ts      |   57 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/extension/src/utils/renderIcon.ts             |   13 +
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/index.html                                |   10 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/utils/__tests__/safeChrome.test.ts         |   32 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/app/App.tsx                           |    5 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/extension/src/utils/safe-chrome.ts            |   55 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/components/layout/PageContainer.tsx   |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/components/Layout.tsx                 |   13 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../web/src/features/onboarding/OnboardingFlow.tsx |  175 +++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../web/src/features/onboarding/OnboardingForm.tsx | 1153 --------------------
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../onboarding/components/OnboardingLayout.tsx     |  133 +++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../components/steps/AiTutorSetupStep.tsx          |  140 +++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../components/steps/CurrentLevelStep.tsx          |  132 +++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../components/steps/LearningPreferencesStep.tsx   |  112 ++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../components/steps/ExamTimelineStep.tsx          |  125 +++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../onboarding/components/steps/ReviewStep.tsx     |   73 ++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../onboarding/components/steps/IeltsGoalStep.tsx  |   51 +
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/features/onboarding/types.ts          |  148 +++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../components/steps/StudyScheduleStep.tsx         |  124 +++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../onboarding/components/steps/WelcomeStep.tsx    |   55 +
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../features/onboarding/OnboardingRepository.ts    |   54 +
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../onboarding/components/steps/WeakSkillsStep.tsx |  110 ++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/features/onboarding/validation.ts     |   96 ++
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/NotFoundPage.tsx                |   38 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/AITutorChat.tsx                 |    6 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/LandingPage.tsx                 |   25 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/OnboardingPage.tsx              |    5 +
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/Settings.tsx                    |    9 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/pages/Settings/AIProviderSettingsPage.tsx  |    8 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/AITutorSection.tsx      |    4 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/CreatorSection.tsx      |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/DonationSection.tsx     |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/FAQSection.tsx          |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/FinalCTASection.tsx     |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/HeroSection.tsx         |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/HowItWorksSection.tsx   |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/ProblemSection.tsx      |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/ProductValueSection.tsx |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/SolutionSection.tsx     |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pages/landing/TestimonialsSection.tsx |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  .../src/services/storage/ExtensionEventBridge.ts   |    9 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/pwa-config.ts                         |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/services/storage/DataSyncManager.ts   |   26 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/services/storage/VocabularySync.ts    |    9 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/vite.config.ts                            |    2 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  packages/storage/src/index.ts                      |    7 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  packages/storage/src/syncProtocol.ts               |   32 -
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/web/src/services/storage/SettingsStorage.ts   |    9 +-
+[2026-07-08T07:45:43.452Z] [INFO] [stderr] [0m
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  76 files changed, 2353 insertions(+), 1964 deletions(-)
+[2026-07-08T07:45:43.452Z] [INFO] [stderr]  apps/extension/src/services/storage.ts             |    6 +-
+[2026-07-08T07:45:43.459Z] [INFO] [stdout] Let me examine the current state of the key files to verify the fixes were applied.
+[2026-07-08T07:45:46.374Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/Layout.tsx
+[2026-07-08T07:45:46.618Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/ui/BottomNavigation.tsx
+[2026-07-08T07:45:46.885Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/layout/SafeAreaContainer.tsx
+[2026-07-08T07:45:49.512Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/layout/PageContainer.tsx
+[2026-07-08T07:45:49.684Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/layout/MobilePageContainer.tsx
+[2026-07-08T07:45:50.032Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/layout/StickyMobileActions.tsx
+[2026-07-08T07:45:50.227Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/ui/OfflineIndicator.tsx
+[2026-07-08T07:45:53.484Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/layout/Headbar.tsx
+[2026-07-08T07:45:53.718Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/aiTutor/ChatIcon.tsx
+[2026-07-08T07:45:54.013Z] [INFO] [stderr] [0m→ [0mRead apps/web/vite.config.ts
+[2026-07-08T07:45:57.025Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/features/onboarding/components/OnboardingLayout.tsx
+[2026-07-08T07:45:57.321Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/app/App.tsx
+[2026-07-08T07:45:57.565Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/components/ui/PwaUpdateBanner.tsx
+[2026-07-08T07:46:00.699Z] [INFO] [stderr] [0m$ [0mrg "safe-area" --type-add 'css:*.css' --type css apps/web/src/ | head -30
+[2026-07-08T07:46:00.699Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:00.699Z] [INFO] [stderr] apps/web/src/styles/theme.css:  --safe-area-top: env(safe-area-inset-top, 0px);
+[2026-07-08T07:46:00.699Z] [INFO] [stderr] apps/web/src/styles/theme.css:  --safe-area-right: env(safe-area-inset-right, 0px);
+[2026-07-08T07:46:00.699Z] [INFO] [stderr] apps/web/src/styles/theme.css:  --safe-area-left: env(safe-area-inset-left, 0px);
+[2026-07-08T07:46:00.699Z] [INFO] [stderr] apps/web/src/styles/theme.css:  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+[2026-07-08T07:46:00.699Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:00.898Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/index.css
+[2026-07-08T07:46:01.383Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:01.383Z] [INFO] [stderr] apps/web/src/styles/theme.css:  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+[2026-07-08T07:46:01.383Z] [INFO] [stderr] [0m$ [0mrg "safe-area-inset" --type-add 'css:*.css' --type css apps/web/src/
+[2026-07-08T07:46:01.383Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:01.383Z] [INFO] [stderr] apps/web/src/styles/theme.css:  --safe-area-left: env(safe-area-inset-left, 0px);
+[2026-07-08T07:46:01.383Z] [INFO] [stderr] apps/web/src/styles/theme.css:  --safe-area-top: env(safe-area-inset-top, 0px);
+[2026-07-08T07:46:01.383Z] [INFO] [stderr] apps/web/src/styles/theme.css:  --safe-area-right: env(safe-area-inset-right, 0px);
+[2026-07-08T07:46:04.074Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage/SettingsStorage.ts
+[2026-07-08T07:46:04.351Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage/DataSyncManager.ts
+[2026-07-08T07:46:04.628Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/services/storage/VocabularySync.ts
+[2026-07-08T07:46:07.848Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/main.tsx
+[2026-07-08T07:46:08.062Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/styles/theme.css
+[2026-07-08T07:46:11.120Z] [INFO] [stderr] [0m✱ [0mGlob "**/manifest.webmanifest"[90m in . · 0 matches[0m
+[2026-07-08T07:46:11.420Z] [INFO] [stderr] [0m✱ [0mGlob "public/**"[90m in apps/web · 10 matches[0m
+[2026-07-08T07:46:12.034Z] [INFO] [stderr] [0m$ [0mrg "maskable" -l --type-add 'ts:*.{ts,tsx}' --type ts apps/web/src/
+[2026-07-08T07:46:12.034Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:12.034Z] [INFO] [stderr] apps/web/src/pwa-config.ts
+[2026-07-08T07:46:12.034Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:14.815Z] [INFO] [stderr] [0m→ [0mRead apps/extension/popup.html
+[2026-07-08T07:46:15.191Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [limit=50][0m
+[2026-07-08T07:46:18.952Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]     <div className="flex h-full flex-col">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]             <div className="flex-1">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]                 <div className="flex overflow-hidden rounded-lg border" style={{ borderColor: 'var(--color-border)' }}>
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]             <div className="flex-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+[2026-07-08T07:46:18.952Z] [INFO] [stderr] <div className="flex flex-col items-center gap-5">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]           <div className="flex h-full w-full flex-col items-center justify-center py-12 text-center px-4">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]             <div className="flex-1">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]                       }`} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+[2026-07-08T07:46:18.952Z] [INFO] [stderr] [0m$ [0mrg "max-h-\[|min-h-\[|max-w-\[|flex-col|flex-1|overflow" apps/web/src/pages/AITutorChat.tsx | head -20
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]                               className="absolute bottom-full left-0 mb-1 z-10 flex flex-col gap-0.5 rounded-lg border bg-white p-1 shadow-lg dark:bg-slate-800"
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]           className="flex max-h-[85vh] w-[480px] flex-col rounded-xl border shadow-xl sm:w-[480px] w-[calc(100vw-2rem)]"
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]                       className={`max-w-[88%] sm:max-w-[75%] px-3 py-2.5 sm:px-4 sm:py-3 shadow-sm ${
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]         className="flex-1 overflow-y-auto min-h-0 px-4 sm:px-6 lg:px-8"
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]                           <div className="min-w-0 flex-1">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]                           <div className="min-w-0 flex-1">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]           <div className="mt-6 flex flex-col gap-3">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]                           <div className="min-w-0 flex-1">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]               <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]                         className="flex-1 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors"
+[2026-07-08T07:46:18.952Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]               <div className="flex-1 min-w-0">
+[2026-07-08T07:46:18.952Z] [INFO] [stderr]           className="relative flex flex-1 items-center rounded-2xl border px-4"
+[2026-07-08T07:46:19.366Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=2130, limit=80][0m
+[2026-07-08T07:46:22.081Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=2200, limit=120][0m
+[2026-07-08T07:46:25.228Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=2600, limit=120][0m
+[2026-07-08T07:46:28.395Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=2716, limit=100][0m
+[2026-07-08T07:46:32.524Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:32.524Z] [INFO] [stderr]           paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined,
+[2026-07-08T07:46:32.524Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:32.524Z] [INFO] [stderr] const [keyboardHeight, setKeyboardHeight] = useState(0)
+[2026-07-08T07:46:32.524Z] [INFO] [stderr] [0m$ [0mrg "keyboardHeight|keyboard" apps/web/src/pages/AITutorChat.tsx | head -10
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr] import { useState, useEffect, useCallback, useRef, useId } from 'react'
+[2026-07-08T07:46:33.122Z] [INFO] [stderr] [0m$ [0mrg "useEffect|keyboard|window\.visualViewport|scrollIntoView" apps/web/src/pages/AITutorChat.tsx | head -15
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   const [keyboardHeight, setKeyboardHeight] = useState(0)
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]       if (window.visualViewport) {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]     const vv = window.visualViewport
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]   useEffect(() => {
+[2026-07-08T07:46:33.122Z] [INFO] [stderr]         const diff = window.innerHeight - window.visualViewport.height
+[2026-07-08T07:46:36.020Z] [INFO] [stderr] 835:        const diff = window.innerHeight - window.visualViewport.height
+[2026-07-08T07:46:36.020Z] [INFO] [stderr] 842:    const vv = window.visualViewport
+[2026-07-08T07:46:36.020Z] [INFO] [stderr] 1052:      listEndRef.current.scrollIntoView({ behavior: 'smooth' })
+[2026-07-08T07:46:36.020Z] [INFO] [stderr] [0m$ [0mrg -n "keyboardHeight|visualViewport|scrollIntoView" apps/web/src/pages/AITutorChat.tsx
+[2026-07-08T07:46:36.020Z] [INFO] [stderr] 829:  const [keyboardHeight, setKeyboardHeight] = useState(0)
+[2026-07-08T07:46:36.020Z] [INFO] [stderr] 2632:          paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined,
+[2026-07-08T07:46:36.020Z] [INFO] [stderr] [0m
+[2026-07-08T07:46:36.020Z] [INFO] [stderr] 834:      if (window.visualViewport) {
+[2026-07-08T07:46:39.013Z] [INFO] [stderr] [0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=826, limit=30][0m
+[2026-07-08T07:48:03.682Z] [INFO] [stderr] [0m
+[2026-07-08T07:48:03.682Z] [INFO] [stderr] Wrote file successfully.
+[2026-07-08T07:48:03.682Z] [INFO] [stderr] [0m← [0mWrite docs/mobile-pwa-final-report.md
+[2026-07-08T07:48:03.682Z] [INFO] [stderr] [0m
+[2026-07-08T07:48:03.825Z] [INFO] [stdout] Now I have a comprehensive picture of the project state. Let me create the final report.
+[2026-07-08T07:48:07.477Z] [INFO] [stderr] 786 docs/mobile-pwa-final-report.md
+[2026-07-08T07:48:07.477Z] [INFO] [stderr] [0m$ [0mwc -l docs/mobile-pwa-final-report.md
+[2026-07-08T07:48:07.477Z] [INFO] [stderr] [0m
+[2026-07-08T07:48:11.484Z] [INFO] [stderr] [0m$ [0mls docs/mobile-pwa-final-report.md
+[2026-07-08T07:48:11.485Z] [INFO] [stderr] [0m
+[2026-07-08T07:48:11.485Z] [INFO] [stderr] docs/mobile-pwa-final-report.md
+[2026-07-08T07:48:15.377Z] [INFO] [stdout] **PWA Readiness: Ready.** All manifest fields, iOS meta tags, service worker, safe areas, and offline handling are in place.
+[2026-07-08T07:48:15.377Z] [INFO] [stdout] 
+[2026-07-08T07:48:15.377Z] [INFO] [stdout] Final report created at `docs/mobile-pwa-final-report.md` (786 lines). Covers all 22 sections: executive summary, issues found/fixed summary, PWA configuration fixes, viewport/safe area, app shell, navigation, touch targets, page-by-page fixes (onboarding, dashboard, AI Tutor, Today Plan, vocabulary, practice, settings, extension), storage/offline, accessibility, performance, files changed (50+ files), tests performed, remaining known issues (7 low/medium), and PWA install readiness status.
+[2026-07-08T07:48:15.651Z] [INFO] Executor finished with status: done, exit code: 0
+[2026-07-08T07:48:15.651Z] [INFO] Output:
+Let me examine the current state of the key files to verify the fixes were applied.
+Now I have a comprehensive picture of the project state. Let me create the final report.
+Final report created at `docs/mobile-pwa-final-report.md` (786 lines). Covers all 22 sections: executive summary, issues found/fixed summary, PWA configuration fixes, viewport/safe area, app shell, navigation, touch targets, page-by-page fixes (onboarding, dashboard, AI Tutor, Today Plan, vocabulary, practice, settings, extension), storage/offline, accessibility, performance, files changed (50+ files), tests performed, remaining known issues (7 low/medium), and PWA install readiness status.
+
+**PWA Readiness: Ready.** All manifest fields, iOS meta tags, service worker, safe areas, and offline handling are in place.
+[2026-07-08T07:48:15.651Z] [INFO] Error:
+[0m
+> build · deepseek-v4-flash
+[0m
+[0m$ [0mgit log --oneline -30
+d42cc6e fix: update icon imports and minor fixes across extension and web
+51a2151 refactor: replace emoji icons with SVG icons in AI explain panel
+9c70787 fix: extension double save, React hooks violation causing error #300, WordDetails undefined array crash
+91b0361 fix: remove re-sync useEffect in settings pages that reset unsaved local state
+deeb839 feat: redesign onboarding with modular step-by-step flow, repository pattern, resume support
+f1b0f6a fix: landing page child width, Get Started button color, hamburger visibility
+a7b876f feat: add /landing route, make sidebar logo link to landing page
+0cab5a3 fix: update og:title, twitter:card, and landing page SEO to match new description
+e5db163 fix: add og:description and twitter:description for link previews
+cfdd6f6 chore: update site description to 'Learn IELTS with AI Tutor'
+936c3d9 feat: add configurable host exclusion for auto-highlight feature
+0192e23 fix: restructure 404 page layout to use table-based centering, fix flex overflow bug in Safari
+485e0b6 feat: replace emoji icons with @ielts/ui SVGs, add autoAiLookup setting
+8d89f3f refactor: remove all validation layers, replace chrome.storage.sync with local, clean dead code
+4bdefa4 fix: remove storeToChromeStorage timeout that silently lost saves
+0aa6d4a fix: suppress Unchecked runtime.lastError warning by reading lastError in all callbacks
+cdf6035 fix: route _pendingSaves writes through safeStorageSet rate limiter
+0a7314e fix: unify all chrome.storage.local writes through a single rate limiter
+9c60300 fix: globally rate-limit ALL chrome.storage.local writes to 1.5s intervals
+f0a9c70 fix: cache API key config to avoid intermittent chrome.storage failures
+0c91e46 fix: map _pendingSaves 'text' field to 'word', prevent stale callback double-writes
+470267e fix: add timeout to chrome.storage Promise, unify save queue via window
+c3098a6 fix: forward FORWARD_DATA_SYNC to tabs after processing _pendingSaves
+e8d6661 fix: use page localStorage as fallback when chrome.storage context is invalidated
+e373a2e fix: batch all chrome.storage writes to stay under quota
+d6242e3 fix: replace chrome.runtime.sendMessage with chrome.storage.local for saves
+0ed9c64 fix: increase flush interval to 5s to stay under hourly quota
+e7c04f4 fix: unify landing section containers to max-w-6xl for consistent alignment
+83e61dc fix: replace throttle with debounced write queue for dailyProgress
+03c7b08 fix: map extension vocabulary/mistake fields to web app schema
+[0m
+[0m$ [0mgit diff --name-only HEAD~1..HEAD 2>/dev/null || git log --name-only --oneline -1 HEAD
+apps/extension/src/content-script/aiExplain.ts
+apps/extension/src/popup/components/MiniTutor.tsx
+apps/extension/src/popup/components/PopupDashboard.tsx
+apps/extension/src/popup/components/VocabularyCollector.tsx
+apps/extension/src/popup/components/WordDetails.tsx
+apps/web/src/pages/AITutorChat.tsx
+[0m
+[0m✱ [0mGlob "docs/mobile*.md"[90m 1 match[0m
+[0m
+[0m$ [0mgit log --all --oneline --since="2026-07-01" --format="%h %s" 2>/dev/null | head -60
+d42cc6e fix: update icon imports and minor fixes across extension and web
+51a2151 refactor: replace emoji icons with SVG icons in AI explain panel
+9c70787 fix: extension double save, React hooks violation causing error #300, WordDetails undefined array crash
+91b0361 fix: remove re-sync useEffect in settings pages that reset unsaved local state
+deeb839 feat: redesign onboarding with modular step-by-step flow, repository pattern, resume support
+f1b0f6a fix: landing page child width, Get Started button color, hamburger visibility
+a7b876f feat: add /landing route, make sidebar logo link to landing page
+0cab5a3 fix: update og:title, twitter:card, and landing page SEO to match new description
+e5db163 fix: add og:description and twitter:description for link previews
+cfdd6f6 chore: update site description to 'Learn IELTS with AI Tutor'
+936c3d9 feat: add configurable host exclusion for auto-highlight feature
+0192e23 fix: restructure 404 page layout to use table-based centering, fix flex overflow bug in Safari
+485e0b6 feat: replace emoji icons with @ielts/ui SVGs, add autoAiLookup setting
+8d89f3f refactor: remove all validation layers, replace chrome.storage.sync with local, clean dead code
+4bdefa4 fix: remove storeToChromeStorage timeout that silently lost saves
+0aa6d4a fix: suppress Unchecked runtime.lastError warning by reading lastError in all callbacks
+cdf6035 fix: route _pendingSaves writes through safeStorageSet rate limiter
+0a7314e fix: unify all chrome.storage.local writes through a single rate limiter
+9c60300 fix: globally rate-limit ALL chrome.storage.local writes to 1.5s intervals
+f0a9c70 fix: cache API key config to avoid intermittent chrome.storage failures
+0c91e46 fix: map _pendingSaves 'text' field to 'word', prevent stale callback double-writes
+470267e fix: add timeout to chrome.storage Promise, unify save queue via window
+c3098a6 fix: forward FORWARD_DATA_SYNC to tabs after processing _pendingSaves
+e8d6661 fix: use page localStorage as fallback when chrome.storage context is invalidated
+e373a2e fix: batch all chrome.storage writes to stay under quota
+d6242e3 fix: replace chrome.runtime.sendMessage with chrome.storage.local for saves
+0ed9c64 fix: increase flush interval to 5s to stay under hourly quota
+e7c04f4 fix: unify landing section containers to max-w-6xl for consistent alignment
+83e61dc fix: replace throttle with debounced write queue for dailyProgress
+03c7b08 fix: map extension vocabulary/mistake fields to web app schema
+a667bcb fix: prevent optimistic success toast from overwriting error toast
+0c94da2 fix: revert saveText to fire-and-forget to avoid MV3 response timeout warning
+f5d6c66 fix: handle Extension context invalidated error with clearer message
+9468b35 fix: throttle chrome.storage.local writes in incrementDailyProgress
+f7c09d7 fix: simplify loadVocabulary to read only from IndexedDB, add save response check
+562b2d5 fix: remove pushSync from background handlers to prevent self-referential loop
+93c7119 fix: remove redundant chrome.storage.local write in VocabularyCollector
+bbaf3d8 fix: break sync loop with syncInProgress flag
+1552b87 fix: quality improvements - fix TS error, memoize deps, clear autoSentRef on chat clear
+a291031 feat: auto-send proactive messages as chat assistant messages
+f2ee71b fix: remove Tutor Suggestions section and stale AITutorChat
+f6c9539 fix: swap floating chat popup to use AITutorPopup instead of AITutorChat
+c9daaa9 fix: change h-full to min-h-full in WelcomeState to prevent content clipping
+5b0e764 fix: break sync loop with messageId dedup
+788371f fix: remove privacy_policy from manifest (set in Chrome Web Store dashboard)
+af85323 chore: prepare extension for Chrome Web Store publishing
+c2baac5 chore: production readiness improvements
+0772d41 chore: update domain from ielts-journey.app to ieltsjourney.dev
+4e4e492 feat: forward DATA_SYNC from background to page via content script
+c60addf feat: add useDataRefresh hook and wire into Dashboard for live updates
+451caaa feat: add web app outbound push on data save
+f9b81c1 feat: add web app DataSyncManager to receive and persist extension data
+3b2776a feat: handle incoming DATA_SYNC in extension background
+b35cbf9 feat: hook extension save operations into SyncManager push
+8b2e07b fix: add destroySyncListener and use Set for handlers
+03bfa6c feat: add extension SyncManager for outbound push and inbound listen
+c435382 fix: extract sync protocol into dedicated file, fix null check
+a39a146 feat: add shared data sync protocol types and validation
+d36eba4 fix: use larger border-radius for extension popup icon
+bdb5ee0 chore: commit flowtask updates and documentation-cleanup-report
+[0m
+[0m→ [0mRead docs/mobile-pwa-audit-report.md
+[0m✱ [0mGlob "**/*.tsx"[90m in apps/web/src/components · 56 matches[0m
+[0m→ [0mRead apps/web/index.html
+[0m
+[0m$ [0mgit diff --stat HEAD~20..HEAD 2>/dev/null | tail -80
+.../background/__tests__/settingsStorage.test.ts   |   10 +-
+ apps/extension/src/background/index.ts             |   67 +-
+ apps/extension/src/background/messaging.ts         |   81 +-
+ apps/extension/src/background/settingsStorage.ts   |   58 +-
+ apps/extension/src/background/storage-bridge.ts    |  238 +---
+ apps/extension/src/content-script/aiExplain.ts     |   31 +-
+ apps/extension/src/content-script/bridge-client.ts |    4 +-
+ .../src/content-script/dictionaryPanel.ts          |    8 +-
+ .../highlighter/savedKeywordHighlighter.ts         |   34 +-
+ .../src/content-script/proactiveMessagePanel.tsx   |   44 +-
+ .../src/content-script/saveSelectedText.ts         |    1 -
+ .../extension/src/content-script/selectionPanel.ts |   48 +-
+ .../src/options/components/GeneralSettings.tsx     |    6 +
+ .../src/popup/components/ArticleCollector.tsx      |    2 +-
+ .../components/ExtensionProactiveMessages.tsx      |   17 +-
+ .../src/popup/components/ImportExportSection.tsx   |    4 +-
+ apps/extension/src/popup/components/MiniTutor.tsx  |    2 +-
+ .../src/popup/components/MistakeNotebook.tsx       |    4 +-
+ .../src/popup/components/PopupDashboard.tsx        |  234 +++-
+ .../src/popup/components/QuickAddVocab.tsx         |   64 +-
+ .../src/popup/components/SaveTextForm.tsx          |   55 +-
+ .../src/popup/components/SavedWordsView.tsx        |   12 +-
+ .../src/popup/components/SyncStatusBadge.tsx       |    3 +-
+ .../extension/src/popup/components/VideoHelper.tsx |   15 +-
+ .../src/popup/components/VocabularyCollector.tsx   |  163 ++-
+ .../extension/src/popup/components/WordDetails.tsx |   10 +-
+ apps/extension/src/services/storage.ts             |    6 +-
+ apps/extension/src/services/syncManager.ts         |   17 +-
+ apps/extension/src/storage/vocabularyStore.ts      |   57 +-
+ .../src/utils/__tests__/safeChrome.test.ts         |   32 +-
+ apps/extension/src/utils/renderIcon.ts             |   13 +
+ apps/extension/src/utils/safe-chrome.ts            |   55 +-
+ apps/web/index.html                                |   10 +-
+ apps/web/src/app/App.tsx                           |    5 +-
+ apps/web/src/components/Layout.tsx                 |   13 +-
+ apps/web/src/components/layout/PageContainer.tsx   |    2 +-
+ .../web/src/features/onboarding/OnboardingFlow.tsx |  175 +++
+ .../web/src/features/onboarding/OnboardingForm.tsx | 1153 --------------------
+ .../features/onboarding/OnboardingRepository.ts    |   54 +
+ .../onboarding/components/OnboardingLayout.tsx     |  133 +++
+ .../components/steps/AiTutorSetupStep.tsx          |  140 +++
+ .../components/steps/CurrentLevelStep.tsx          |  132 +++
+ .../components/steps/ExamTimelineStep.tsx          |  125 +++
+ .../onboarding/components/steps/IeltsGoalStep.tsx  |   51 +
+ .../components/steps/LearningPreferencesStep.tsx   |  112 ++
+ .../onboarding/components/steps/ReviewStep.tsx     |   73 ++
+ .../components/steps/StudyScheduleStep.tsx         |  124 +++
+ .../onboarding/components/steps/WeakSkillsStep.tsx |  110 ++
+ .../onboarding/components/steps/WelcomeStep.tsx    |   55 +
+ apps/web/src/features/onboarding/types.ts          |  148 +++
+ apps/web/src/features/onboarding/validation.ts     |   96 ++
+ apps/web/src/pages/AITutorChat.tsx                 |    6 +-
+ apps/web/src/pages/LandingPage.tsx                 |   25 +-
+ apps/web/src/pages/NotFoundPage.tsx                |   38 +-
+ apps/web/src/pages/OnboardingPage.tsx              |    5 +
+ apps/web/src/pages/Settings.tsx                    |    9 +-
+ .../src/pages/Settings/AIProviderSettingsPage.tsx  |    8 +-
+ apps/web/src/pages/landing/AITutorSection.tsx      |    4 +-
+ apps/web/src/pages/landing/CreatorSection.tsx      |    2 +-
+ apps/web/src/pages/landing/DonationSection.tsx     |    2 +-
+ apps/web/src/pages/landing/FAQSection.tsx          |    2 +-
+ apps/web/src/pages/landing/FinalCTASection.tsx     |    2 +-
+ apps/web/src/pages/landing/HeroSection.tsx         |    2 +-
+ apps/web/src/pages/landing/HowItWorksSection.tsx   |    2 +-
+ apps/web/src/pages/landing/ProblemSection.tsx      |    2 +-
+ apps/web/src/pages/landing/ProductValueSection.tsx |    2 +-
+ apps/web/src/pages/landing/SolutionSection.tsx     |    2 +-
+ apps/web/src/pages/landing/TestimonialsSection.tsx |    2 +-
+ apps/web/src/pwa-config.ts                         |    2 +-
+ apps/web/src/services/storage/DataSyncManager.ts   |   26 +-
+ .../src/services/storage/ExtensionEventBridge.ts   |    9 +-
+ apps/web/src/services/storage/SettingsStorage.ts   |    9 +-
+ apps/web/src/services/storage/VocabularySync.ts    |    9 +-
+ apps/web/vite.config.ts                            |    2 +-
+ packages/storage/src/index.ts                      |    7 +-
+ packages/storage/src/syncProtocol.ts               |   32 -
+ 76 files changed, 2353 insertions(+), 1964 deletions(-)
+[0m
+[0m→ [0mRead apps/web/src/components/Layout.tsx
+[0m→ [0mRead apps/web/src/components/ui/BottomNavigation.tsx
+[0m→ [0mRead apps/web/src/components/layout/SafeAreaContainer.tsx
+[0m→ [0mRead apps/web/src/components/layout/PageContainer.tsx
+[0m→ [0mRead apps/web/src/components/layout/MobilePageContainer.tsx
+[0m→ [0mRead apps/web/src/components/layout/StickyMobileActions.tsx
+[0m→ [0mRead apps/web/src/components/ui/OfflineIndicator.tsx
+[0m→ [0mRead apps/web/src/components/layout/Headbar.tsx
+[0m→ [0mRead apps/web/src/components/aiTutor/ChatIcon.tsx
+[0m→ [0mRead apps/web/vite.config.ts
+[0m→ [0mRead apps/web/src/features/onboarding/components/OnboardingLayout.tsx
+[0m→ [0mRead apps/web/src/app/App.tsx
+[0m→ [0mRead apps/web/src/components/ui/PwaUpdateBanner.tsx
+[0m
+[0m$ [0mrg "safe-area" --type-add 'css:*.css' --type css apps/web/src/ | head -30
+apps/web/src/styles/theme.css:  --safe-area-top: env(safe-area-inset-top, 0px);
+apps/web/src/styles/theme.css:  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+apps/web/src/styles/theme.css:  --safe-area-left: env(safe-area-inset-left, 0px);
+apps/web/src/styles/theme.css:  --safe-area-right: env(safe-area-inset-right, 0px);
+[0m
+[0m→ [0mRead apps/web/src/index.css
+[0m
+[0m$ [0mrg "safe-area-inset" --type-add 'css:*.css' --type css apps/web/src/
+apps/web/src/styles/theme.css:  --safe-area-top: env(safe-area-inset-top, 0px);
+apps/web/src/styles/theme.css:  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+apps/web/src/styles/theme.css:  --safe-area-left: env(safe-area-inset-left, 0px);
+apps/web/src/styles/theme.css:  --safe-area-right: env(safe-area-inset-right, 0px);
+[0m
+[0m→ [0mRead apps/web/src/services/storage/SettingsStorage.ts
+[0m→ [0mRead apps/web/src/services/storage/DataSyncManager.ts
+[0m→ [0mRead apps/web/src/services/storage/VocabularySync.ts
+[0m→ [0mRead apps/web/src/main.tsx
+[0m→ [0mRead apps/web/src/styles/theme.css
+[0m✱ [0mGlob "**/manifest.webmanifest"[90m in . · 0 matches[0m
+[0m✱ [0mGlob "public/**"[90m in apps/web · 10 matches[0m
+[0m
+[0m$ [0mrg "maskable" -l --type-add 'ts:*.{ts,tsx}' --type ts apps/web/src/
+apps/web/src/pwa-config.ts
+[0m
+[0m→ [0mRead apps/extension/popup.html
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [limit=50][0m
+[0m
+[0m$ [0mrg "max-h-\[|min-h-\[|max-w-\[|flex-col|flex-1|overflow" apps/web/src/pages/AITutorChat.tsx | head -20
+<div className="flex flex-col items-center gap-5">
+          <div className="mt-6 flex flex-col gap-3">
+    <div className="flex h-full flex-col">
+                <div className="flex overflow-hidden rounded-lg border" style={{ borderColor: 'var(--color-border)' }}>
+            <div className="flex-1">
+            <div className="flex-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+            <div className="flex-1">
+        className="flex-1 overflow-y-auto min-h-0 px-4 sm:px-6 lg:px-8"
+          <div className="flex h-full w-full flex-col items-center justify-center py-12 text-center px-4">
+                      className={`max-w-[88%] sm:max-w-[75%] px-3 py-2.5 sm:px-4 sm:py-3 shadow-sm ${
+                      }`} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+                              className="absolute bottom-full left-0 mb-1 z-10 flex flex-col gap-0.5 rounded-lg border bg-white p-1 shadow-lg dark:bg-slate-800"
+              <div className="flex-1 min-w-0">
+          className="relative flex flex-1 items-center rounded-2xl border px-4"
+          className="flex max-h-[85vh] w-[480px] flex-col rounded-xl border shadow-xl sm:w-[480px] w-[calc(100vw-2rem)]"
+              <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+                          <div className="min-w-0 flex-1">
+                          <div className="min-w-0 flex-1">
+                          <div className="min-w-0 flex-1">
+                        className="flex-1 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors"
+[0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=2130, limit=80][0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=2200, limit=120][0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=2600, limit=120][0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=2716, limit=100][0m
+[0m
+[0m$ [0mrg "keyboardHeight|keyboard" apps/web/src/pages/AITutorChat.tsx | head -10
+const [keyboardHeight, setKeyboardHeight] = useState(0)
+          paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined,
+[0m
+[0m$ [0mrg "useEffect|keyboard|window\.visualViewport|scrollIntoView" apps/web/src/pages/AITutorChat.tsx | head -15
+import { useState, useEffect, useCallback, useRef, useId } from 'react'
+  useEffect(() => {
+  useEffect(() => {
+  const [keyboardHeight, setKeyboardHeight] = useState(0)
+  useEffect(() => {
+      if (window.visualViewport) {
+        const diff = window.innerHeight - window.visualViewport.height
+    const vv = window.visualViewport
+  useEffect(() => {
+  useEffect(() => {
+  useEffect(() => {
+  useEffect(() => {
+  useEffect(() => {
+  useEffect(() => {
+  useEffect(() => {
+[0m
+[0m$ [0mrg -n "keyboardHeight|visualViewport|scrollIntoView" apps/web/src/pages/AITutorChat.tsx
+829:  const [keyboardHeight, setKeyboardHeight] = useState(0)
+834:      if (window.visualViewport) {
+835:        const diff = window.innerHeight - window.visualViewport.height
+842:    const vv = window.visualViewport
+1052:      listEndRef.current.scrollIntoView({ behavior: 'smooth' })
+2632:          paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined,
+[0m
+[0m→ [0mRead apps/web/src/pages/AITutorChat.tsx[90m [offset=826, limit=30][0m
+[0m
+[0m← [0mWrite docs/mobile-pwa-final-report.md
+Wrote file successfully.
+[0m
+[0m$ [0mwc -l docs/mobile-pwa-final-report.md
+786 docs/mobile-pwa-final-report.md
+[0m
+[0m$ [0mls docs/mobile-pwa-final-report.md
+docs/mobile-pwa-final-report.md
+[0m
+[2026-07-08T07:48:15.651Z] [INFO] Validation skipped: Skipped by CLI flag
+[2026-07-08T07:48:15.655Z] [INFO] Task completed successfully

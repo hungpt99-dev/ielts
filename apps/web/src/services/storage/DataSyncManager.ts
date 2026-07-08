@@ -118,7 +118,7 @@ export function initDataSyncManager(): void {
     if (event.origin !== window.location.origin) return
     const msg = event.data
     if (!msg || typeof msg !== 'object') return
-    if (msg.source === 'ielts-page' || msg.action !== DATA_SYNC_ACTION) return
+    if (msg.source !== 'ielts-extension' || msg.action !== DATA_SYNC_ACTION) return
     if (!msg.data || typeof msg.data !== 'object') return
 
     handleDataSync(msg.data as DataSyncPayload)

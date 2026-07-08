@@ -45,7 +45,7 @@ export default function LandingPage() {
         >
           <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
             <div className="flex items-center gap-2">
-              <img src="/icon.png" alt="" className="h-6 w-6 rounded-lg" />
+              <img src="/icon.png" alt="" className="h-6 w-6 rounded-lg" loading="lazy" decoding="async" />
               <span className="text-base font-bold" style={{ color: 'var(--color-text)' }}>
                 IELTS Journey
               </span>
@@ -153,7 +153,7 @@ export default function LandingPage() {
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <img src="/icon.png" alt="" className="h-6 w-6 rounded-lg" />
+                  <img src="/icon.png" alt="" className="h-6 w-6 rounded-lg" loading="lazy" decoding="async" />
                   <span className="text-base font-bold" style={{ color: 'var(--color-text)' }}>
                     IELTS Journey
                   </span>

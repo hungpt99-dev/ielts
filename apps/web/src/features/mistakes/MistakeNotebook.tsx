@@ -10,6 +10,7 @@ import Modal from '../../components/ui/Modal'
 import { ErrorState, EmptyStateIllustrated } from '../../components/ui/EmptyState'
 import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton'
 import PageHeader from '../../components/layout/PageHeader'
+import PageContent from '../../components/layout/PageContent'
 import { IconMistakeReview, IconAdd } from '@ielts/ui'
 import { generateId } from '../../utils'
 
@@ -384,7 +385,7 @@ export default function MistakeNotebook() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl space-y-6 p-6">
+      <PageContent className="space-y-6">
         <div className="space-y-2">
           <LoadingSkeleton variant="text" width="40%" />
           <LoadingSkeleton variant="text" width="25%" />
@@ -403,20 +404,20 @@ export default function MistakeNotebook() {
           <LoadingSkeleton variant="card" />
           <LoadingSkeleton variant="card" />
         </div>
-      </div>
+      </PageContent>
     )
   }
 
   if (error) {
     return (
-      <div className="mx-auto max-w-6xl p-6">
+      <PageContent>
         <ErrorState message={error} onRetry={loadEntries} title="Could not load your mistakes" />
-      </div>
+      </PageContent>
     )
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
+    <PageContent className="space-y-6">
       {/* Toast */}
       {toast && (
         <div className={`fixed right-4 top-4 z-50 rounded-lg px-4 py-3 text-sm font-medium shadow-lg transition-all ${
@@ -1342,6 +1343,6 @@ export default function MistakeNotebook() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageContent>
   )
 }

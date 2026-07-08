@@ -6,6 +6,7 @@ import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconTarget } from '@ielts/ui'
 
 function formatDate(dateStr: string): string {
@@ -239,7 +240,7 @@ export default function MockTests() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconTarget size={20} />}
         title="Mock Test Tracker"
@@ -743,6 +744,6 @@ export default function MockTests() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageContent>
   )
 }

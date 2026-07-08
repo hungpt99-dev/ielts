@@ -17,6 +17,7 @@ import {
 import { getModeRenderer } from './reviewModes'
 import SessionSummary from './SessionSummary'
 import PageHeader from '../../components/layout/PageHeader'
+import PageContent from '../../components/layout/PageContent'
 import { IconVocabularyReview } from '@ielts/ui'
 
 const ALL_TOPICS = [
@@ -158,7 +159,7 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
 
   if (showConfig) {
     return (
-      <div className="mx-auto max-w-7xl">
+      <PageContent>
         <PageHeader
           icon={<IconVocabularyReview size={22} />}
           title="Review Settings"
@@ -311,7 +312,7 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
             Start Review
           </Button>
         </div>
-      </div>
+      </PageContent>
     )
   }
 
@@ -353,7 +354,7 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
 
   if (queue.length === 0) {
     return (
-      <div className="mx-auto max-w-7xl">
+      <PageContent>
         <Card className="text-center">
           <CardContent className="py-12">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
@@ -371,12 +372,12 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
             </div>
           </CardContent>
         </Card>
-      </div>
+      </PageContent>
     )
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconVocabularyReview size={22} />}
         title="Vocabulary Review"
@@ -448,6 +449,6 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
           </CardContent>
         </Card>
       )}
-    </div>
+    </PageContent>
   )
 }

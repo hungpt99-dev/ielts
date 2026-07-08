@@ -112,6 +112,11 @@ export function LoadingSkeleton({
           0% { background-position: 200% 0; }
           100% { background-position: -200% 0; }
         }
+        @media (prefers-reduced-motion: reduce) {
+          [role="status"] > div {
+            animation: none !important;
+          }
+        }
       `}</style>
     </div>
   )

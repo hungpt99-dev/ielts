@@ -6,6 +6,7 @@ import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import ErrorDisplay from '../components/ui/ErrorDisplay'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconDatabase } from '@ielts/ui'
 
 const REQUIRED_ARRAYS = [
@@ -155,7 +156,7 @@ export default function ImportExport() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconDatabase size={20} />}
         title="Import / Export Backup"
@@ -300,6 +301,6 @@ export default function ImportExport() {
           and can be safely stored or transferred to another device.
         </p>
       </div>
-    </div>
+    </PageContent>
   )
 }

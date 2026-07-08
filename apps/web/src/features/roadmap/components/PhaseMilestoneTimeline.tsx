@@ -23,8 +23,7 @@ function PhaseNode({
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center gap-1.5 shrink-0 transition-all hover:scale-105 active:scale-95"
-      style={{ width: 96, minWidth: 96 }}
+      className="flex flex-col items-center gap-1.5 shrink-0 transition-all hover:scale-105 active:scale-95 w-20 sm:w-24"
       aria-label={`${phase.name}${isCurrent ? ' — current phase' : ''}${isComplete ? ' — completed' : ''}${isLocked ? ' — upcoming' : ''}`}
       aria-current={isCurrent ? 'step' : undefined}
     >
@@ -49,7 +48,7 @@ function PhaseNode({
         {isComplete ? '✓' : isLocked ? '🔒' : phase.order + 1}
       </div>
       <span
-        className="text-center text-xs font-medium leading-tight"
+        className="text-center text-xs font-medium leading-tight break-words w-full"
         style={{
           color: isCurrent
             ? 'var(--color-primary)'
@@ -61,7 +60,7 @@ function PhaseNode({
       >
         {phase.name}
       </span>
-      <span className="text-[10px] leading-tight" style={{ color: 'var(--color-muted)' }}>
+      <span className="text-[10px] leading-tight break-words w-full" style={{ color: 'var(--color-muted)' }}>
         {phase.targetRange}
       </span>
     </button>
@@ -88,7 +87,7 @@ export default function PhaseMilestoneTimeline({ phases, currentPhaseIndex, onPh
   return (
     <section aria-label="Study plan phases">
       <div
-        className="flex items-center gap-0 overflow-x-auto rounded-2xl border p-4"
+        className="flex items-center gap-0 overflow-x-auto rounded-2xl border p-3 sm:p-4"
         style={{
           backgroundColor: 'var(--color-surface)',
           borderColor: 'var(--color-border)',

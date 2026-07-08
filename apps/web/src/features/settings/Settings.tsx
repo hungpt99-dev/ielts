@@ -16,6 +16,7 @@ import ToggleSwitch from '../../components/ui/ToggleSwitch'
 import Input from '../../components/ui/Input'
 import Select from '../../components/ui/Select'
 import AISettings from './AISettings'
+import MobilePageContainer from '../../components/layout/MobilePageContainer'
 import { ConfigProvider } from '../configuration/configSlice'
 import BasicSettingsForm from '../configuration/components/BasicSettingsForm'
 import AdvancedSettingsForm from '../configuration/components/AdvancedSettingsForm'
@@ -277,7 +278,8 @@ export default function Settings() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <MobilePageContainer className="mx-auto w-full max-w-3xl px-4 sm:px-6">
+      <div className="space-y-6">
       <PageHeader
         icon={<IconSettings size={22} />}
         title="Settings"
@@ -364,7 +366,7 @@ export default function Settings() {
                 key={skill}
                 type="button"
                 onClick={() => { setForm(prev => ({ ...prev, weakSkills: toggleArrayItem(prev.weakSkills, skill) })); setDirty(true) }}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`min-h-[44px] rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   form.weakSkills.includes(skill)
                     ? 'bg-red-600 text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600'
@@ -389,7 +391,7 @@ export default function Settings() {
                 key={topic}
                 type="button"
                 onClick={() => { setForm(prev => ({ ...prev, preferredTopics: toggleArrayItem(prev.preferredTopics, topic) })); setDirty(true) }}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`min-h-[44px] rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   form.preferredTopics.includes(topic)
                     ? 'bg-blue-600 text-white'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600'
@@ -408,7 +410,7 @@ export default function Settings() {
           <CardTitle>Study Goal</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <button
               type="button"
               onClick={() => { setForm(prev => ({ ...prev, studyGoal: 'academic' })); setDirty(true) }}
@@ -449,7 +451,7 @@ export default function Settings() {
                 key={day.value}
                 type="button"
                 onClick={() => { setForm(prev => ({ ...prev, preferredSchedule: toggleArrayItem(prev.preferredSchedule, day.value) as typeof prev.preferredSchedule })); setDirty(true) }}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+                className={`min-h-[44px] rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                   form.preferredSchedule.includes(day.value as typeof form.preferredSchedule[number])
                     ? 'bg-blue-600 text-white'
                     : 'bg-[var(--color-surface-alt)] text-[var(--color-text-secondary)] hover:brightness-95'
@@ -511,7 +513,7 @@ export default function Settings() {
                   type="button"
                   title={c.name}
                   onClick={() => { setAccentColor(c.value); setDirty(true) }}
-                  className={`h-8 w-8 rounded-full ring-2 ring-offset-2 transition-all ${
+                  className={`h-10 w-10 rounded-full ring-2 ring-offset-2 transition-all ${
                     accentColor === c.value ? 'ring-slate-400 scale-110' : 'ring-transparent hover:scale-110'
                   }`}
                   style={{ backgroundColor: c.value }}
@@ -583,8 +585,8 @@ export default function Settings() {
             Your data is stored locally in this browser. Download a backup regularly.
           </p>
 
-          <div className="flex flex-wrap gap-3">
-            <Button onClick={handleExport}>
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Button onClick={handleExport} className="w-full sm:w-auto">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
@@ -599,14 +601,14 @@ export default function Settings() {
               className="hidden"
               aria-hidden="true"
             />
-            <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
+            <Button variant="outline" onClick={() => fileInputRef.current?.click()} className="w-full sm:w-auto">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L5 8m4-4v12" />
               </svg>
               Import Backup
             </Button>
 
-            <Button variant="danger" onClick={handleClearAll}>
+            <Button variant="danger" onClick={handleClearAll} className="w-full sm:w-auto">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
@@ -624,11 +626,11 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <Button onClick={handleSave} disabled={!dirty}>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <Button onClick={handleSave} disabled={!dirty} className="w-full sm:w-auto">
           Save Settings
         </Button>
-        <Button variant="ghost" onClick={handleReset}>
+        <Button variant="ghost" onClick={handleReset} className="w-full sm:w-auto">
           Reset to Defaults
         </Button>
       </div>
@@ -645,6 +647,7 @@ export default function Settings() {
           await confirmAction?.action()
         }}
       />
-    </div>
+      </div>
+    </MobilePageContainer>
   )
 }

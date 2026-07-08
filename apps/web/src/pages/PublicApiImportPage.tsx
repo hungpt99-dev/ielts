@@ -3,6 +3,7 @@ import PublicApiSearch from '../features/publicApiIntegration/components/PublicA
 import ImportedContentManager from '../features/publicApiIntegration/components/ImportedContentManager'
 import Card, { CardContent } from '../components/ui/Card'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconDownload } from '@ielts/ui'
 
 type Tab = 'search' | 'imported'
@@ -11,7 +12,7 @@ export default function PublicApiImportPage() {
   const [activeTab, setActiveTab] = useState<Tab>('search')
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconDownload size={20} />}
         title="Public API Content"
@@ -70,6 +71,6 @@ export default function PublicApiImportPage() {
           </p>
         </CardContent>
       </Card>
-    </div>
+    </PageContent>
   )
 }

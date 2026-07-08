@@ -8,7 +8,7 @@ interface VoiceButtonProps {
   buttonHeight?: number
 }
 
-export default function VoiceButton({ onTranscript, disabled, size = 20, buttonHeight = 40 }: VoiceButtonProps) {
+export default function VoiceButton({ onTranscript, disabled, size = 20, buttonHeight = 44 }: VoiceButtonProps) {
   const { state, startListening, stopListening, cancel, isSpeechSupported } = useVoice()
   const prevStatusRef = useRef(state.status)
 
@@ -62,7 +62,6 @@ export default function VoiceButton({ onTranscript, disabled, size = 20, buttonH
         transition: 'all 0.2s ease',
         flexShrink: 0,
         position: 'relative',
-        outline: 'none',
       }}
       onMouseEnter={(e) => {
         if (!isActive) {
@@ -73,6 +72,13 @@ export default function VoiceButton({ onTranscript, disabled, size = 20, buttonH
         if (!isActive) {
           e.currentTarget.style.background = 'var(--color-surface-alt)'
         }
+      }}
+      onFocus={(e) => {
+        e.currentTarget.style.outline = '2px solid var(--color-primary)'
+        e.currentTarget.style.outlineOffset = '2px'
+      }}
+      onBlur={(e) => {
+        e.currentTarget.style.outline = 'none'
       }}
       aria-label={isActive ? 'Stop recording' : 'Start voice input'}
     >

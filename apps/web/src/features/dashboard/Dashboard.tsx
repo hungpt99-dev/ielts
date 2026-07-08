@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTutorNavigation } from '../../hooks/useTutorNavigation'
 import { useDashboard } from '../../hooks/useDashboard'
+import PageContent from '../../components/layout/PageContent'
 import { useDataRefresh } from '../../hooks/useDataRefresh'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
@@ -136,12 +137,12 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-6xl space-y-6 pb-8" role="status" aria-label="Loading dashboard">
+      <PageContent className="space-y-4 md:space-y-6" role="status" aria-label="Loading dashboard" style={{ paddingBottom: 'calc(var(--spacing-xl) + env(safe-area-inset-bottom, 0px))' }}>
         <LoadingSkeleton variant="dashboard" />
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[1, 2, 3, 4].map(i => <LoadingSkeleton key={i} variant="rect" height={96} />)}
         </div>
-        <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-4">
             <LoadingSkeleton variant="card" height={256} />
           </div>
@@ -151,37 +152,41 @@ export default function Dashboard() {
           </div>
         </div>
         <LoadingSkeleton variant="card" height={112} />
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <LoadingSkeleton variant="card" height={208} />
           <LoadingSkeleton variant="card" height={208} />
         </div>
         <LoadingSkeleton variant="card" height={80} />
-      </div>
+      </PageContent>
     )
   }
 
   if (error) {
     return (
-      <div className="mx-auto max-w-lg py-8">
-        <ErrorState
-          message={error}
-          onRetry={() => refresh()}
-          variant="card"
-        />
-      </div>
+      <PageContent className="flex justify-center">
+        <div className="w-full max-w-lg">
+          <ErrorState
+            message={error}
+            onRetry={() => refresh()}
+            variant="card"
+          />
+        </div>
+      </PageContent>
     )
   }
 
   if (!data) {
     return (
-      <div className="mx-auto max-w-lg py-8">
-        <EmptyStateIllustrated
-          variant="default"
-          title="Your IELTS journey starts here"
-          description="Complete your onboarding and let's build your first study plan."
-          action={{ label: 'Create My First Study Plan', onClick: () => navigate('/plan') }}
-        />
-      </div>
+      <PageContent className="flex justify-center">
+        <div className="w-full max-w-lg">
+          <EmptyStateIllustrated
+            variant="default"
+            title="Your IELTS journey starts here"
+            description="Complete your onboarding and let's build your first study plan."
+            action={{ label: 'Create My First Study Plan', onClick: () => navigate('/plan') }}
+          />
+        </div>
+      </PageContent>
     )
   }
 
@@ -225,7 +230,7 @@ export default function Dashboard() {
   const greeting = getGreeting()
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 px-0 pb-8 pt-4 sm:pt-6">
+    <PageContent className="space-y-4 md:space-y-6" style={{ paddingBottom: 'calc(var(--spacing-xl) + env(safe-area-inset-bottom, 0px))' }}>
       {/* ============================================================ */}
       {/* 1. Hero Greeting Section                                      */}
       {/* ============================================================ */}
@@ -299,7 +304,7 @@ export default function Dashboard() {
             className="mt-5 rounded-2xl p-4 backdrop-blur-sm sm:p-5"
             style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)', border: '1px solid var(--color-border)' }}
           >
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <IconCheck size={16} style={{ color: 'var(--color-primary)' }} />
@@ -317,16 +322,18 @@ export default function Dashboard() {
                   {getTodayMission()}
                 </p>
               </div>
-              <div className="flex shrink-0 gap-2">
+              <div className="flex flex-col sm:flex-row shrink-0 gap-2 w-full sm:w-auto">
                 <Button
-                  size="sm"
+                  size="md"
+                  className="w-full sm:w-auto"
                   onClick={() => navigate('/today-plan')}
                 >
                   {tasks.length > 0 ? 'Continue Learning' : 'Plan Today'}
                 </Button>
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="md"
+                  className="w-full sm:w-auto"
                   onClick={() => goToTutor({
                     prompt: `I'm at band ${currentBand} targeting band ${targetBand} with a ${studyStreak}-day streak. Today's mission: ${getTodayMission()}. Help me plan my study session.`,
                     title: 'AI Study Assistant',
@@ -358,7 +365,7 @@ export default function Dashboard() {
       {/* ============================================================ */}
       {/* 2. Key Stats Row                                              */}
       {/* ============================================================ */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 md:gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <ProgressSummaryCard
           label="Study Streak"
           value={`${studyStreak}`}
@@ -392,7 +399,7 @@ export default function Dashboard() {
       {/* ============================================================ */}
       {/* 3. Main Content: Tasks + AI Tutor + Quick Stats               */}
       {/* ============================================================ */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-3">
         {/* Left: Today's Study Tasks */}
         <section className="lg:col-span-2" aria-label="Today's study tasks">
           <Card>
@@ -559,12 +566,12 @@ export default function Dashboard() {
                     <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>{roadmapProgress}%</span>
                   </div>
                 </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Button size="sm" variant={dueReviews > 0 ? 'primary' : 'outline'} onClick={() => navigate('/vocabulary')}>
+                <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                  <Button size="md" className="w-full sm:w-auto" variant={dueReviews > 0 ? 'primary' : 'outline'} onClick={() => navigate('/vocabulary')}>
                     {dueReviews > 0 ? `Review (${dueReviews})` : 'Vocabulary'}
                   </Button>
                   {recentMistakes > 0 && (
-                    <Button size="sm" variant="outline" onClick={() => navigate('/mistakes')}>
+                    <Button size="md" className="w-full sm:w-auto" variant="outline" onClick={() => navigate('/mistakes')}>
                       View Mistakes
                     </Button>
                   )}
@@ -588,7 +595,7 @@ export default function Dashboard() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                 <div className="flex flex-wrap gap-2">
                   {weakSkills.map(skill => {
                     const variant = skill.toLowerCase() as 'listening' | 'reading' | 'writing' | 'speaking'
@@ -599,11 +606,11 @@ export default function Dashboard() {
                     )
                   })}
                 </div>
-                <div className="flex gap-2">
-                  <Button size="sm" onClick={() => navigate(`/practice/${weakSkills[0].toLowerCase()}`)}>
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                  <Button size="md" className="w-full sm:w-auto" onClick={() => navigate(`/practice/${weakSkills[0].toLowerCase()}`)}>
                     Practice Now
                   </Button>
-                  <Button size="sm" variant="outline" onClick={() => goToTutor({
+                  <Button size="md" variant="outline" className="w-full sm:w-auto" onClick={() => goToTutor({
                     prompt: `I need tips to improve my weak skills: ${weakSkills.join(', ')}. I'm at band ${currentBand} targeting band ${targetBand}. Give me specific strategies for each.`,
                     type: 'tips',
                     title: 'Weak Skills Improvement',
@@ -632,7 +639,7 @@ export default function Dashboard() {
             View Details
           </Button>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 md:gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {skillProgress.map(skill => (
             <SkillCard
               key={skill.name}
@@ -652,7 +659,7 @@ export default function Dashboard() {
       {/* ============================================================ */}
       {/* 6. Charts Row: Weekly Chart + Band Progress                    */}
       {/* ============================================================ */}
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-2">
         {/* Weekly Study Chart */}
         <section aria-label="Weekly study chart">
           <Card>
@@ -748,7 +755,7 @@ export default function Dashboard() {
               <button
                 key={skill.label}
                 onClick={() => navigate(skill.path)}
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-all hover:shadow-md active:scale-[0.98] w-full"
+                className="flex items-center gap-3 rounded-xl px-4 py-3.5 sm:py-3 text-left transition-all hover:shadow-md active:scale-[0.98] w-full min-h-[56px] sm:min-h-[48px]"
                 style={{ backgroundColor: skill.lightColor }}
               >
                 <div
@@ -766,6 +773,6 @@ export default function Dashboard() {
           })}
         </div>
       </section>
-    </div>
+    </PageContent>
   )
 }

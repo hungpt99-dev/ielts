@@ -8,13 +8,15 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ label, error, className, id, ...props }, ref) => {
     const textareaId = id || label?.toLowerCase().replace(/\s+/g, '-')
+    const errorId = textareaId ? `${textareaId}-error` : undefined
+
     return (
       <div>
         {label && (
           <label
             htmlFor={textareaId}
             className="mb-1 block text-sm font-medium"
-            style={{ color: 'var(--color-text-secondary)' }}
+            style={{ color: 'var(--color-text)' }}
           >
             {label}
           </label>
@@ -30,10 +32,12 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             backgroundColor: 'var(--color-surface)',
             color: 'var(--color-text)',
           }}
+          aria-invalid={error ? 'true' : undefined}
+          aria-describedby={error ? errorId : undefined}
           {...props}
         />
         {error && (
-          <p className="mt-1 text-xs" style={{ color: 'var(--color-danger)' }}>
+          <p id={errorId} className="mt-1 text-xs" style={{ color: 'var(--color-danger-dark)' }} role="alert">
             {error}
           </p>
         )}

@@ -24,6 +24,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
       lg: 'px-4 py-3 text-base',
     }
 
+    const errorId = selectId ? `${selectId}-error` : undefined
+
     return (
       <div>
         {label && (
@@ -40,6 +42,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             <span
               className="absolute top-1/2 -translate-y-1/2 left-3 flex items-center justify-center pointer-events-none"
               style={{ color: 'var(--color-muted)' }}
+              aria-hidden="true"
             >
               {icon}
             </span>
@@ -56,6 +59,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
               cursor: 'pointer',
               paddingRight: 'var(--spacing-xl)',
             }}
+            aria-invalid={error ? 'true' : undefined}
+            aria-describedby={error ? errorId : undefined}
             onFocus={(e) => {
               e.currentTarget.style.borderColor = error ? 'var(--color-danger)' : 'var(--color-primary)'
               e.currentTarget.style.boxShadow = error
@@ -81,10 +86,11 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             size={16}
             className="absolute top-1/2 -translate-y-1/2 pointer-events-none"
             style={{ right: 'var(--spacing-sm)', color: 'var(--color-muted)' }}
+            aria-hidden="true"
           />
         </div>
         {error && (
-          <p className="mt-1.5 text-xs" style={{ color: 'var(--color-danger)' }}>
+          <p id={errorId} className="mt-1.5 text-xs" style={{ color: 'var(--color-danger-dark)' }} role="alert">
             {error}
           </p>
         )}

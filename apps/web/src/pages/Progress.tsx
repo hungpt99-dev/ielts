@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import ProgressTracker from '../features/progress/ProgressTracker'
-import PageContainer from '../components/layout/PageContainer'
+import MobilePageContainer from '../components/layout/MobilePageContainer'
 import PageHeader from '../components/layout/PageHeader'
 import { IconProgress } from '@ielts/ui'
 import { emitProgressViewed } from '../features/websiteActions/eventEmitters'
@@ -56,9 +56,9 @@ export default function Progress() {
   }, [load])
 
   return (
-    <PageContainer width="wide" className="pt-4 sm:pt-6">
+    <MobilePageContainer className="pt-4 pb-8">
       <PageHeader icon={<IconProgress size={20} />} title="Learning Progress" description="Track your study progress across all IELTS skills" />
       <ProgressTracker snapshot={snapshot} loading={loading} error={error} onRetry={handleRetry} />
-    </PageContainer>
+    </MobilePageContainer>
   )
 }

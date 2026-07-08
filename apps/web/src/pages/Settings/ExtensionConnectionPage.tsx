@@ -10,6 +10,7 @@ import { DatabaseService } from '../../services/storage/Database'
 import type { VocabularyEntry } from '../../models'
 import { EXTENSION_URL } from '../landing/config'
 import PageHeader from '../../components/layout/PageHeader'
+import PageContent from '../../components/layout/PageContent'
 import { IconExtension } from '@ielts/ui'
 
 const EDGE_EXTENSION_URL = 'https://microsoftedge.microsoft.com/addons/detail/ielts-journey'
@@ -341,7 +342,7 @@ export default function ExtensionConnectionPage() {
   const isError = connectionStatus === 'error'
 
   return (
-    <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', paddingTop: 'var(--spacing-md)' }}>
+    <PageContent className="flex flex-col" style={{ gap: 'var(--spacing-lg)' }}>
       <ExtensionBackButton />
 
       {isError && (
@@ -380,7 +381,7 @@ export default function ExtensionConnectionPage() {
 
       <FeatureCardsSection />
       <TroubleshootingSection />
-    </div>
+    </PageContent>
   )
 
   function ExtensionBackButton() {

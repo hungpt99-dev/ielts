@@ -77,29 +77,30 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(functi
         {...props}
       />
       {currentValue && (
-        <button
-          type="button"
-          aria-label="Clear search"
-          onClick={handleClear}
-          style={{
-            position: 'absolute',
-            right: 'var(--spacing-sm)',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 'var(--spacing-lg)',
-            height: 'var(--spacing-lg)',
-            padding: '0',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'var(--color-muted)',
-            borderRadius: 'var(--radius-full)',
-            transition: 'all var(--transition-fast)',
-            fontSize: inputSize === 'sm' ? '12px' : '14px',
-          }}
+          <button
+            type="button"
+            aria-label="Clear search"
+            onClick={handleClear}
+            style={{
+              position: 'absolute',
+              right: 'var(--spacing-sm)',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '44px',
+              height: '44px',
+              padding: '0',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'var(--color-muted)',
+              borderRadius: 'var(--radius-full)',
+              transition: 'all var(--transition-fast)',
+              fontSize: inputSize === 'sm' ? '12px' : '14px',
+              WebkitTapHighlightColor: 'transparent',
+            }}
         >
           <IconClose size={inputSize === 'sm' ? 12 : 14} />
         </button>

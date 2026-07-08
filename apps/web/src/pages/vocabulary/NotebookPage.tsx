@@ -21,6 +21,7 @@ import { onVocabularyChanged } from '../../features/vocabulary/vocabularyEvents'
 import { onVocabSavedFromExtension, notifyExtensionVocabSaved } from '../../services/storage/VocabularySync'
 import { generateWordFamily } from '../../features/vocabulary/vocabularyService'
 import PageHeader from '../../components/layout/PageHeader'
+import PageContent from '../../components/layout/PageContent'
 import VocabularyListItem from '../../components/vocabulary/VocabularyListItem'
 import { IconRefresh, IconDownload, IconUpload, IconAdd, IconFilter, IconVocabularyBook, IconSearch, IconAITutor, IconChevronLeft, IconChevronRight, IconClose } from '@ielts/ui'
 
@@ -303,13 +304,13 @@ export default function NotebookPage() {
   if (loading) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', padding: 'var(--spacing-md) 0' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <LoadingSkeleton variant="text" width="200px" height="24px" />
           <LoadingSkeleton variant="text" width="120px" height="36px" />
         </div>
-        <div style={{ display: 'flex', gap: 'var(--spacing-sm)', overflow: 'hidden' }}>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <LoadingSkeleton key={i} variant="card" height="80px" width="100px" />
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <LoadingSkeleton key={i} variant="card" height="80px" />
           ))}
         </div>
         <LoadingSkeleton variant="rect" height="48px" />
@@ -331,16 +332,9 @@ export default function NotebookPage() {
   }
 
   return (
-    <div
-      style={{
-        maxWidth: '1280px',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 'var(--spacing-lg)',
-        paddingTop: 'var(--spacing-md)',
-        paddingBottom: 'var(--spacing-2xl)',
-      }}
+    <PageContent
+      className="flex flex-col"
+      style={{ gap: 'var(--spacing-lg)', paddingBottom: 'var(--spacing-2xl)' }}
     >
       {error && (
         <div
@@ -381,7 +375,7 @@ export default function NotebookPage() {
           title="Vocabulary Notebook"
           description="Build your IELTS vocabulary with words, meanings, and examples"
           actions={
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
               <Button variant="secondary" size="sm" onClick={() => navigate('/review')}>
                 <IconRefresh size={16} style={{ marginRight: 'var(--spacing-2xs)' }} />
                 Review
@@ -413,13 +407,7 @@ export default function NotebookPage() {
       </div>
 
       {entries.length > 0 && (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
-            gap: 'var(--spacing-sm)',
-          }}
-        >
+        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-3">
           <StatCard label="Total" count={stats.total} color="var(--color-primary)" />
           <StatCard label="New" count={stats.newCount} color="var(--color-status-info)" />
           <StatCard label="Learning" count={stats.learning} color="var(--color-warning)" />
@@ -921,6 +909,6 @@ export default function NotebookPage() {
           </div>
         )}
       </Drawer>
-    </div>
+    </PageContent>
   )
 }

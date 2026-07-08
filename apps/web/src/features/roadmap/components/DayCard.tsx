@@ -90,7 +90,7 @@ export default function DayCard({ day, isToday, isPast, onToggle, onAskAI }: Day
 
   return (
     <div
-      className="rounded-xl border px-4 py-3 transition-all"
+      className="rounded-xl border px-3 sm:px-4 py-3 transition-all"
       style={{
         ...todayStyle,
         opacity: isPast && !day.isComplete ? 0.7 : 1,
@@ -112,7 +112,7 @@ export default function DayCard({ day, isToday, isPast, onToggle, onAskAI }: Day
         </div>
 
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
             <span className="text-xs font-medium" style={{ color: isToday ? 'var(--color-primary)' : 'var(--color-text-secondary)' }}>
               {dayOfWeek} · Day {day.dayNumber}
             </span>

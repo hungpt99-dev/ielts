@@ -12,7 +12,10 @@ export default function Headbar({ onMenuToggle }: HeadbarProps) {
         display: 'flex',
         alignItems: 'center',
         height: '64px',
-        padding: '0 16px',
+        paddingTop: 'var(--safe-area-top, env(safe-area-inset-top, 0px))',
+        paddingRight: '16px',
+        paddingBottom: '0',
+        paddingLeft: '16px',
         backgroundColor: 'var(--color-surface)',
         borderBottom: '1px solid var(--color-border)',
         flexShrink: 0,
@@ -28,8 +31,8 @@ export default function Headbar({ onMenuToggle }: HeadbarProps) {
         onClick={onMenuToggle}
         className="flex items-center justify-center lg:hidden"
         style={{
-          width: '40px',
-          height: '40px',
+          width: '44px',
+          height: '44px',
           borderRadius: 'var(--radius-lg)',
           border: 'none',
           background: 'none',
@@ -45,7 +48,7 @@ export default function Headbar({ onMenuToggle }: HeadbarProps) {
       </button>
 
       <div className="flex items-center gap-2">
-        <img src="/icon.png" alt="" className="h-6 w-6 rounded-md" />
+        <img src="/icon.png" alt="" className="h-6 w-6 rounded-md" loading="lazy" decoding="async" />
         <span className="hidden text-sm font-bold sm:inline" style={{ color: 'var(--color-text)' }}>IELTS Journey</span>
       </div>
 

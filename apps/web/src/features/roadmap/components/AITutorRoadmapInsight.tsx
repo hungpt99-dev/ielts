@@ -91,7 +91,7 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
     return (
       <section aria-label="AI Roadmap insight loading" className="space-y-3">
         <div
-          className="rounded-2xl border p-5"
+          className="rounded-2xl border p-4 sm:p-5"
           style={{
             backgroundColor: 'var(--color-surface)',
             borderColor: 'var(--color-border)',
@@ -115,7 +115,7 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
     return (
       <section aria-label="AI Tutor insight" className="space-y-4">
         <div
-          className="rounded-2xl border p-5"
+          className="rounded-2xl border p-4 sm:p-5"
           style={{
             backgroundColor: 'var(--color-tutor-accent-light)',
             borderColor: 'var(--color-tutor-border)',
@@ -151,7 +151,7 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
     return (
       <section aria-label="AI insight error" className="space-y-4">
         <div
-          className="rounded-2xl border p-5"
+          className="rounded-2xl border p-4 sm:p-5"
           style={{
             backgroundColor: 'var(--color-surface)',
             borderColor: 'var(--color-border)',
@@ -175,7 +175,7 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
   return (
     <section aria-label="AI Tutor roadmap insight" className="space-y-4">
       <div
-        className="rounded-2xl border p-5"
+        className="rounded-2xl border p-4 sm:p-5"
         style={{
           backgroundColor: 'var(--color-tutor-accent-light)',
           borderColor: 'var(--color-tutor-border)',

@@ -218,3 +218,26 @@ export function setDarkMode(dark: boolean): void {
   setSetting(KEYS.DARK_MODE, dark)
   debouncedNotifyExtension()
 }
+
+export function getStorageQuotaStatus(): { usedBytes: number; remaining: number | null; percentUsed: number; isLow: boolean } {
+  let usedBytes = 0
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key) {
+      const val = localStorage.getItem(key)
+      if (val) usedBytes += key.length + val.length
+    }
+  }
+  let remaining: number | null = null
+  try {
+    const testKey = '__ielts_quota_test__'
+    localStorage.setItem(testKey, 'a')
+    localStorage.removeItem(testKey)
+    remaining = null
+  } catch {
+    remaining = Math.max(0, 5 * 1024 * 1024 - usedBytes)
+  }
+  const percentUsed = remaining !== null ? Math.round((usedBytes / (usedBytes + remaining)) * 100) : 0
+  const isLow = (remaining !== null && remaining < 50 * 1024) || percentUsed > 90
+  return { usedBytes, remaining, percentUsed, isLow }
+}

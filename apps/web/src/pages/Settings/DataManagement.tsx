@@ -5,6 +5,7 @@ import PageHeader from '../../components/layout/PageHeader'
 import { IconDatabase } from '@ielts/ui'
 import type { AppExportData } from '../../models'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
+import PageContent from '../../components/layout/PageContent'
 import Button from '../../components/ui/Button'
 
 const TABLE_NAMES: (keyof AppExportData)[] = [
@@ -181,7 +182,7 @@ export default function DataManagement() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconDatabase size={22} />}
         title="Data Management"
@@ -417,6 +418,6 @@ export default function DataManagement() {
           </div>
         </div>
       )}
-    </div>
+    </PageContent>
   )
 }

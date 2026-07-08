@@ -17,6 +17,7 @@ import {
   IconMistakeReview, IconMistakes, IconArrowRight,
 } from '@ielts/ui'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { LoadingSkeleton } from '@ielts/ui/components/LoadingSkeleton'
 
 const SKILL_BADGE_VARIANTS: Record<MistakeSkill, 'vocabulary' | 'grammar' | 'reading' | 'listening' | 'writing' | 'speaking'> = {
@@ -285,25 +286,25 @@ export default function Mistakes() {
 
   if (loading) {
     return (
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: 'var(--spacing-md)' }}>
+      <PageContent>
         <LoadingSkeleton variant="text" width="200px" height="24px" />
         <div style={{ marginTop: 'var(--spacing-md)' }}>
           <LoadingSkeleton variant="card" height="80px" count={4} gap="var(--spacing-sm)" />
         </div>
-      </div>
+      </PageContent>
     )
   }
 
   if (error) {
     return (
-      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: 'var(--spacing-md)' }}>
+      <PageContent>
         <ErrorDisplay title="Couldn't Load Mistakes" message={error} onRetry={loadEntries} />
-      </div>
+      </PageContent>
     )
   }
 
   return (
-    <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', paddingTop: 'var(--spacing-md)' }}>
+    <PageContent className="flex flex-col" style={{ gap: 'var(--spacing-lg)' }}>
       <PageHeader
         icon={<IconMistakeReview size={22} />}
         title="Mistake Notebook"
@@ -857,6 +858,6 @@ export default function Mistakes() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageContent>
   )
 }

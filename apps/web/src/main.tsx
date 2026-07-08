@@ -7,8 +7,11 @@ import './index.css'
 import './styles/theme.css'
 
 registerSW({
+  onNeedRefresh() {
+    window.dispatchEvent(new CustomEvent('pwa-update-available'))
+  },
   onOfflineReady() {
-    console.log('[PWA] App ready for offline use')
+    window.dispatchEvent(new CustomEvent('pwa-offline-ready'))
   },
 })
 

@@ -146,8 +146,8 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
                     className="rounded-lg px-3 py-2"
                     style={{ backgroundColor: 'var(--color-surface-alt)' }}
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-medium break-words" style={{ color: 'var(--color-text)' }}>
                         {form.word}
                       </span>
                       <PronounceButton word={form.word} size="sm" />
@@ -185,8 +185,8 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
                 className="flex flex-col gap-1 rounded-lg px-3 py-2"
                 style={{ backgroundColor: 'var(--color-surface-alt)' }}
               >
-                <div className="flex items-center gap-1.5">
-                  <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="text-sm font-medium break-words" style={{ color: 'var(--color-text)' }}>
                     {parsed.word}
                   </span>
                   <PronounceButton word={parsed.word} size="sm" />

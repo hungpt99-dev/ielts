@@ -20,6 +20,7 @@ import Button from '../components/ui/Button'
 import { LoadingSkeleton } from '../components/ui/LoadingSkeleton'
 import { ErrorState } from '../components/ui/EmptyState'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconSearch } from '@ielts/ui'
 
 const SEARCHABLE_TYPES = [
@@ -381,13 +382,7 @@ export default function Search() {
   }
 
   return (
-    <div
-      style={{
-        maxWidth: '1280px',
-        margin: '0 auto',
-        paddingTop: 'var(--spacing-md)',
-      }}
-    >
+    <PageContent>
       <PageHeader
         icon={<IconSearch size={20} />}
         title="Search"
@@ -717,6 +712,6 @@ export default function Search() {
           })}
         </div>
       )}
-    </div>
+    </PageContent>
   )
 }

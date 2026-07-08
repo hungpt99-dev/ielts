@@ -13,6 +13,7 @@ import Modal from '../components/ui/Modal'
 import ErrorDisplay from '../components/ui/ErrorDisplay'
 import Pagination from '../components/ui/Pagination'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconVocabularyBook } from '@ielts/ui'
 
 const IELTS_TOPICS = [
@@ -353,7 +354,7 @@ export default function Vocabulary() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconVocabularyBook size={20} />}
         title="Vocabulary Notebook"
@@ -1055,6 +1056,6 @@ export default function Vocabulary() {
           </div>
         )}
       </Modal>
-    </div>
+    </PageContent>
   )
 }

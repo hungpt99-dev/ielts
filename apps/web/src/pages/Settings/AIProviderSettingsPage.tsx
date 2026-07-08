@@ -17,6 +17,7 @@ import {
   IconAlertCircle,
   IconClose,
 } from '@ielts/ui'
+import PageContent from '../../components/layout/PageContent'
 
 export default function AIProviderSettingsPage() {
   const navigate = useNavigate()
@@ -119,7 +120,7 @@ export default function AIProviderSettingsPage() {
 
   if (pageError) {
     return (
-      <div style={{ maxWidth: '1280px', margin: '0 auto', paddingTop: 'var(--spacing-md)' }}>
+      <PageContent>
         <ErrorState
           title="Failed to load AI settings"
           message={pageError}
@@ -130,13 +131,13 @@ export default function AIProviderSettingsPage() {
           }}
           variant="card"
         />
-      </div>
+      </PageContent>
     )
   }
 
   if (loading) {
     return (
-      <div style={{ maxWidth: '1280px', margin: '0 auto', paddingTop: 'var(--spacing-md)' }}>
+      <PageContent>
         <div style={{ marginBottom: 'var(--spacing-lg)' }}>
           <LoadingSkeleton variant="text" width="180px" height="28px" />
           <div style={{ marginTop: 'var(--spacing-xs)' }}>
@@ -147,12 +148,12 @@ export default function AIProviderSettingsPage() {
           <LoadingSkeleton variant="card" height="60px" />
           <LoadingSkeleton variant="card" height="400px" />
         </div>
-      </div>
+      </PageContent>
     )
   }
 
   return (
-    <div style={{ maxWidth: '1280px', margin: '0 auto', paddingTop: 'var(--spacing-md)' }}>
+    <PageContent>
       <div
         style={{
           display: 'flex',
@@ -382,6 +383,6 @@ export default function AIProviderSettingsPage() {
           Reset AI Settings
         </Button>
       </div>
-    </div>
+    </PageContent>
   )
 }

@@ -22,6 +22,7 @@ import PhaseMilestoneTimeline from '../../features/roadmap/components/PhaseMiles
 import PhaseSection from '../../features/roadmap/components/PhaseSection'
 import RoadmapSummary from '../../features/roadmap/components/RoadmapSummary'
 import AITutorRoadmapInsight from '../../features/roadmap/components/AITutorRoadmapInsight'
+import PageContent from '../../components/layout/PageContent'
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr + 'T00:00:00')
@@ -153,7 +154,7 @@ export default function FullStudyRoadmapPage() {
   // ---- Loading State ----
   if (loading) {
     return (
-      <div className="mx-auto w-full max-w-6xl space-y-6 p-4 sm:p-6" role="status" aria-label="Loading your IELTS roadmap">
+      <PageContent className="space-y-6" role="status" aria-label="Loading your IELTS roadmap">
         <div className="space-y-4" aria-hidden="true">
           <div className="h-5 w-32 animate-pulse rounded" style={{ backgroundColor: 'var(--color-surface-alt)' }} />
           <div className="h-40 w-full animate-pulse rounded-2xl" style={{ backgroundColor: 'var(--color-surface-alt)' }} />
@@ -163,14 +164,14 @@ export default function FullStudyRoadmapPage() {
           ))}
           <div className="h-24 w-full animate-pulse rounded-2xl" style={{ backgroundColor: 'var(--color-surface-alt)' }} />
         </div>
-      </div>
+      </PageContent>
     )
   }
 
   // ---- Error State ----
   if (error) {
     return (
-      <div className="mx-auto flex w-full max-w-md items-center justify-center p-8" role="alert">
+      <PageContent className="flex items-center justify-center" role="alert">
         <div className="w-full space-y-4 text-center">
           <div className="text-5xl">🗺️</div>
           <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
@@ -206,14 +207,14 @@ export default function FullStudyRoadmapPage() {
             </button>
           </div>
         </div>
-      </div>
+      </PageContent>
     )
   }
 
   // ---- Null state ----
   if (!roadmap) {
     return (
-      <div className="mx-auto flex w-full max-w-lg items-center justify-center p-8">
+      <PageContent className="flex items-center justify-center">
         <div className="w-full space-y-4 text-center">
           <div className="text-5xl">🗺️</div>
           <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
@@ -239,7 +240,7 @@ export default function FullStudyRoadmapPage() {
             </button>
           </div>
         </div>
-      </div>
+      </PageContent>
     )
   }
 
@@ -250,7 +251,7 @@ export default function FullStudyRoadmapPage() {
 
   if (isAllComplete) {
     return (
-      <div className="mx-auto w-full max-w-4xl space-y-8 p-4 sm:p-6">
+    <PageContent className="space-y-4 sm:space-y-6">
         <RoadmapHeader
           roadmap={roadmap}
           profile={profile}
@@ -309,13 +310,13 @@ export default function FullStudyRoadmapPage() {
           onAskAIReview={handleAskFollowUp}
           regenerating={regenerating}
         />
-      </div>
+      </PageContent>
     )
   }
 
   // ---- Normal Roadmap View ----
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-6 p-4 sm:p-6">
+    <PageContent className="space-y-6">
       {/* Skip link for keyboard users */}
       <a
         href="#today-section"
@@ -338,7 +339,7 @@ export default function FullStudyRoadmapPage() {
         onPhaseClick={handlePhaseClick}
       />
 
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+      <div className="flex flex-col gap-4 lg:gap-6 lg:flex-row lg:items-start">
         {/* Main content: phase list */}
         <div className="min-w-0 flex-1 space-y-5" id="phase-list">
           <div className="flex items-center justify-between">
@@ -377,7 +378,7 @@ export default function FullStudyRoadmapPage() {
         </div>
 
         {/* Sidebar */}
-        <aside className="w-full space-y-5 lg:w-80 lg:sticky lg:top-24 lg:shrink-0" aria-label="Roadmap sidebar">
+        <aside className="w-full space-y-4 sm:space-y-5 lg:w-80 lg:sticky lg:top-24 lg:shrink-0" aria-label="Roadmap sidebar">
           <AITutorRoadmapInsight
             roadmap={roadmap}
             profile={profile}
@@ -395,6 +396,6 @@ export default function FullStudyRoadmapPage() {
           />
         </aside>
       </div>
-    </div>
+    </PageContent>
   )
 }

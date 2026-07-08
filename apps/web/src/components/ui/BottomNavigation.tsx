@@ -98,14 +98,14 @@ export default function BottomNavigation({ items }: BottomNavigationProps) {
           </div>
           <span
             style={{
-              fontSize: '11px',
+              fontSize: '12px',
               fontWeight: item.active ? 'var(--weight-semibold)' : 'var(--weight-medium)',
               fontFamily: 'var(--font-sans)',
               lineHeight: 1.2,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              maxWidth: '64px',
+              maxWidth: '72px',
             }}
           >
             {item.label}

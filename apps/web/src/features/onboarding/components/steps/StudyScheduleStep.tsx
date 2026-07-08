@@ -89,7 +89,7 @@ export default function StudyScheduleStep({ profile, update, errors }: StudySche
                   fontWeight: isSelected ? 'var(--weight-semibold)' : 'var(--weight-medium)',
                   color: isSelected ? 'var(--color-primary-dark)' : 'var(--color-text)',
                   transition: 'all var(--transition-fast)',
-                  minHeight: '36px',
+                  minHeight: '44px',
                 }}
                 aria-pressed={isSelected}
               >

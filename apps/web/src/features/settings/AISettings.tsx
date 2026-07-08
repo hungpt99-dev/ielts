@@ -165,8 +165,8 @@ export default function AISettings() {
               placeholder={DEFAULT_MODEL}
             />
 
-            <div className="flex flex-wrap gap-3">
-              <Button variant="outline" size="sm" onClick={handleTestConnection} loading={testing}>
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Button variant="outline" size="sm" onClick={handleTestConnection} loading={testing} className="w-full sm:w-auto">
                 Test Connection
               </Button>
               {testResult && (
@@ -193,11 +193,11 @@ export default function AISettings() {
           </>
         )}
 
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
-          <Button onClick={handleSave} disabled={saving || (!apiKey && enabled)}>
+        <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+          <Button onClick={handleSave} disabled={saving || (!apiKey && enabled)} className="w-full sm:w-auto">
             {saving ? 'Saving...' : 'Save AI Settings'}
           </Button>
-          <Button variant="ghost" onClick={handleReset}>
+          <Button variant="ghost" onClick={handleReset} className="w-full sm:w-auto">
             Reset AI Settings
           </Button>
         </div>

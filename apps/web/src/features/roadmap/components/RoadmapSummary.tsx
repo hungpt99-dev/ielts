@@ -86,7 +86,7 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
   return (
     <section className="space-y-4" aria-label="Plan overview">
       <div
-        className="rounded-2xl border p-5 sm:p-6"
+        className="rounded-2xl border p-4 sm:p-6"
         style={{
           backgroundColor: 'var(--color-surface)',
           borderColor: 'var(--color-border)',

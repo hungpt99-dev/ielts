@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useId } from 'react'
+import { useSettings } from '../context/SettingsContext'
 import { emitAITutorOpened } from '../features/websiteActions/eventEmitters'
 import { VoiceProvider } from '../voice/VoiceProvider'
 import { useVoice } from '../voice/useVoice'
@@ -824,6 +825,29 @@ export default function AITutorChat() {
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const listEndRef = useRef<HTMLDivElement>(null)
 
+  // Keyboard avoidance
+  const [keyboardHeight, setKeyboardHeight] = useState(0)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.visualViewport) {
+        const diff = window.innerHeight - window.visualViewport.height
+        setKeyboardHeight(diff > 100 ? diff : 0)
+        if (diff > 100 && messagesContainerRef.current) {
+          messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight
+        }
+      }
+    }
+    const vv = window.visualViewport
+    if (vv) {
+      vv.addEventListener('resize', handleResize)
+    }
+    return () => {
+      if (vv) vv.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   // Proactive suggestions state
   const [suggestions, setSuggestions] = useState<ProactiveSuggestion[]>([])
   const [suggestionsLoading, setSuggestionsLoading] = useState(false)
@@ -852,6 +876,9 @@ export default function AITutorChat() {
       // Use defaults
     }
   }, [])
+
+  const { settings } = useSettings()
+  const aiConfigured = settings.aiEnabled && !!settings.aiApiKey
 
   // Consume navigation context (from Ask AI buttons)
   const location = useLocation()
@@ -1909,6 +1936,40 @@ export default function AITutorChat() {
     )
   }
 
+  if (!aiConfigured) {
+    return (
+      <div className="flex h-full items-center justify-center p-4">
+        <div className="w-full rounded-2xl p-8 text-center" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl" style={{ backgroundColor: 'var(--color-tutor-accent-light)' }}>
+            <IconAITutor size={28} style={{ color: 'var(--color-tutor-accent)' }} />
+          </div>
+          <h2 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+            AI Tutor Not Configured
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+            To use the AI Tutor, you need to configure an AI provider with an API key. Your data stays on your device and is only sent to your chosen provider.
+          </p>
+          <div className="mt-6 flex flex-col gap-3">
+            <button
+              onClick={() => navigate('/settings/ai')}
+              className="w-full rounded-xl px-5 py-3 text-sm font-medium text-white transition-colors hover:brightness-110"
+              style={{ backgroundColor: 'var(--color-primary)' }}
+            >
+              Configure AI Provider
+            </button>
+            <button
+              onClick={() => navigate(-1)}
+              className="w-full rounded-xl border px-5 py-3 text-sm font-medium transition-colors"
+              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
+            >
+              Go Back
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const quickActions: { key: string; label: string; icon: React.ReactNode }[] = [
     { key: 'teach-me', label: 'Teach Me', icon: <IconVocabulary size={12} /> },
     { key: 'quiz-me', label: 'Quiz Me', icon: <IconCheckCircle size={12} /> },
@@ -1922,69 +1983,71 @@ export default function AITutorChat() {
 
   return (
     <VoiceProvider>
-    <PageContainer width="wide" className="pt-4 sm:pt-6">
-      <PageHeader
-        icon={<IconAITutor size={22} />}
-        title="AI Tutor"
-        description="Your IELTS learning companion"
-        actions={
-          <div className="flex items-center gap-1.5">
-            <div className="flex overflow-hidden rounded-lg border" style={{ borderColor: 'var(--color-border)' }}>
-              {(['english', 'vietnamese', 'both'] as Language[]).map(lang => (
+    <div className="flex h-full flex-col">
+      <div className="shrink-0">
+        <PageContainer width="wide" className="pt-3 sm:pt-4">
+          <PageHeader
+            icon={<IconAITutor size={22} />}
+            title="AI Tutor"
+            description="Your IELTS learning companion"
+            actions={
+              <div className="flex items-center gap-1.5">
+                <div className="flex overflow-hidden rounded-lg border" style={{ borderColor: 'var(--color-border)' }}>
+                  {(['english', 'vietnamese', 'both'] as Language[]).map(lang => (
+                    <button
+                      key={lang}
+                      onClick={() => handleLanguageChange(lang)}
+                      className="px-2.5 py-1.5 text-[11px] font-medium transition-colors"
+                      style={{
+                        backgroundColor: language === lang ? 'var(--color-primary)' : 'transparent',
+                        color: language === lang ? 'var(--color-on-primary)' : 'var(--color-text-secondary)',
+                      }}
+                    >
+                      {lang === 'english' ? 'EN' : lang === 'vietnamese' ? 'VI' : 'EN/VI'}
+                    </button>
+                  ))}
+                </div>
                 <button
-                  key={lang}
-                  onClick={() => handleLanguageChange(lang)}
-                  className="px-2.5 py-1.5 text-[11px] font-medium transition-colors"
-                  style={{
-                    backgroundColor: language === lang ? 'var(--color-primary)' : 'transparent',
-                    color: language === lang ? 'var(--color-on-primary)' : 'var(--color-text-secondary)',
-                  }}
+                  onClick={openMemoryPanel}
+                  className="rounded-lg p-2 text-sm transition-colors hover:bg-[var(--color-surface-alt)]"
+                  style={{ color: 'var(--color-muted)' }}
+                  aria-label="Assistant memory"
                 >
-                  {lang === 'english' ? 'EN' : lang === 'vietnamese' ? 'VI' : 'EN/VI'}
+                  <IconFolderOpen size={16} />
                 </button>
-              ))}
-            </div>
-            <button
-              onClick={openMemoryPanel}
-              className="rounded-lg p-2 text-sm transition-colors hover:bg-[var(--color-surface-alt)]"
-              style={{ color: 'var(--color-muted)' }}
-              aria-label="Assistant memory"
-            >
-              <IconFolderOpen size={16} />
-            </button>
-            <button
-              onClick={clearChat}
-              className="rounded-lg p-2 text-sm transition-colors hover:bg-[var(--color-surface-alt)]"
-              style={{ color: 'var(--color-muted)' }}
-              aria-label="Clear chat"
-            >
-              <IconDelete size={16} />
-            </button>
+                <button
+                  onClick={clearChat}
+                  className="rounded-lg p-2 text-sm transition-colors hover:bg-[var(--color-surface-alt)]"
+                  style={{ color: 'var(--color-muted)' }}
+                  aria-label="Clear chat"
+                >
+                  <IconDelete size={16} />
+                </button>
+              </div>
+            }
+          />
+          <div className="flex flex-wrap items-center gap-1.5">
+            {currentTopicName && (
+              <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
+                <IconHash size={10} />
+                {currentTopicName}
+              </span>
+            )}
+            {mode === 'friendly-chat' && (
+              <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}>
+                <IconMessageCircle size={10} />
+                Friend Mode
+              </span>
+            )}
+            {mode === 'socratic-tutor' && (
+              <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-skill-reading-light)', color: 'var(--color-skill-reading)' }}>
+                <IconExplain size={10} />
+                Socratic Mode
+              </span>
+            )}
           </div>
-        }
-      />
-      <div className="flex flex-wrap items-center gap-1.5">
-        {currentTopicName && (
-          <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary)' }}>
-            <IconHash size={10} />
-            {currentTopicName}
-          </span>
-        )}
-        {mode === 'friendly-chat' && (
-          <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}>
-            <IconMessageCircle size={10} />
-            Friend Mode
-          </span>
-        )}
-        {mode === 'socratic-tutor' && (
-          <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-skill-reading-light)', color: 'var(--color-skill-reading)' }}>
-            <IconExplain size={10} />
-            Socratic Mode
-          </span>
-        )}
-      </div>
 
-      <ModeSelector selectedMode={mode} onModeChange={handleModeChange} disabled={sending} />
+          <ModeSelector selectedMode={mode} onModeChange={handleModeChange} disabled={sending} />
 
       {/* Mode description */}
       {session && session.messageCount === 0 && (
@@ -2138,15 +2201,13 @@ export default function AITutorChat() {
           </div>
         </div>
       )}
+        </PageContainer>
+      </div>
 
       {/* Chat messages */}
       <div
-        ref={listRef}
-        className="overflow-y-auto rounded-2xl px-4 py-4 shadow-sm max-h-[60vh] min-h-[200px]"
-        style={{
-          border: '1px solid var(--color-border)',
-          backgroundColor: 'var(--color-surface)',
-        }}
+        ref={messagesContainerRef}
+        className="flex-1 overflow-y-auto min-h-0 px-4 sm:px-6 lg:px-8"
       >
         {messages.length === 0 ? (
           <div className="flex h-full w-full flex-col items-center justify-center py-12 text-center px-4">
@@ -2335,7 +2396,7 @@ export default function AITutorChat() {
                       </div>
                     )}
                     <div
-                      className={`max-w-[85%] sm:max-w-[75%] px-4 py-3 shadow-sm ${
+                      className={`max-w-[88%] sm:max-w-[75%] px-3 py-2.5 sm:px-4 sm:py-3 shadow-sm ${
                         isUser
                           ? 'rounded-2xl rounded-br-sm'
                           : 'rounded-2xl rounded-bl-sm'
@@ -2348,7 +2409,7 @@ export default function AITutorChat() {
                     >
                       <div className={`whitespace-pre-wrap break-words text-sm leading-relaxed ${
                         isUser ? 'text-[var(--color-on-primary)]' : 'text-[var(--color-text)]'
-                      }`}>
+                      }`} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
                         {msg.content}
                       </div>
                       <div className={`mt-1.5 flex items-center gap-1.5 text-[10px] ${
@@ -2564,9 +2625,17 @@ export default function AITutorChat() {
         )}
       </div>
 
+      <div
+        className="shrink-0 border-t"
+        style={{
+          borderColor: 'var(--color-border)',
+          paddingBottom: keyboardHeight > 0 ? `${keyboardHeight}px` : undefined,
+        }}
+      >
+        <PageContainer width="wide" className="py-2.5">
       {/* Quick actions */}
       {messages.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        <div className="mb-2 flex flex-wrap gap-1.5">
           {quickActions.map(action => (
             <button
               key={action.key}
@@ -2588,7 +2657,7 @@ export default function AITutorChat() {
 
       {/* Proactive Suggestions */}
       {suggestions.length > 0 && (
-        <div className="mt-3 space-y-2">
+        <div className="mb-2 space-y-2">
           <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
             <IconExplain size={14} />
             Suggestions
@@ -2637,9 +2706,14 @@ export default function AITutorChat() {
           0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
           30% { transform: translateY(-6px); opacity: 1; }
         }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-spin, [style*="animation"], [class*="animate-"] {
+            animation: none !important;
+          }
+        }
       `}</style>
       {/* Input area */}
-      <div className="mt-3 mb-4 flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <div
           className="relative flex flex-1 items-center rounded-2xl border px-4"
           style={{
@@ -2694,25 +2768,28 @@ export default function AITutorChat() {
           )}
         </button>
       </div>
+        </PageContainer>
+      </div>
+    </div>
 
-      {/* ── Memory Panel Modal ─────────────────────────────────── */}
-      {showMemoryPanel && (
+    {/* ── Memory Panel Modal ─────────────────────────────────── */}
+    {showMemoryPanel && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ backgroundColor: 'var(--color-overlay)' }}
+        onClick={closeMemoryPanel}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Assistant memory management"
+      >
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{ backgroundColor: 'var(--color-overlay)' }}
-          onClick={closeMemoryPanel}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Assistant memory management"
+          className="flex max-h-[85vh] w-[480px] flex-col rounded-xl border shadow-xl sm:w-[480px] w-[calc(100vw-2rem)]"
+          style={{
+            backgroundColor: 'var(--color-surface)',
+            borderColor: 'var(--color-border)',
+          }}
+          onClick={(e) => e.stopPropagation()}
         >
-          <div
-            className="flex max-h-[85vh] w-[480px] flex-col rounded-xl border shadow-xl"
-            style={{
-              backgroundColor: 'var(--color-surface)',
-              borderColor: 'var(--color-border)',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
             {/* Header */}
             <div className="flex shrink-0 items-center justify-between border-b px-5 py-4" style={{ borderColor: 'var(--color-border)' }}>
               <div>
@@ -3023,10 +3100,9 @@ export default function AITutorChat() {
                 </div>
               </div>
             )}
-          </div>
         </div>
-      )}
-    </PageContainer>
+      </div>
+    )}
     </VoiceProvider>
   )
 }

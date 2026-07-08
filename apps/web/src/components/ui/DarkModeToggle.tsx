@@ -8,7 +8,8 @@ export default function DarkModeToggle() {
     <button
       onClick={toggle}
       aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="rounded-lg p-2 text-[var(--color-muted)] hover:bg-[var(--color-surface-alt)]"
+      className="flex items-center justify-center rounded-lg text-[var(--color-muted)] hover:bg-[var(--color-surface-alt)]"
+      style={{ width: '44px', height: '44px', WebkitTapHighlightColor: 'transparent' }}
     >
       {dark ? <IconSun size={20} /> : <IconMoon size={20} />}
     </button>

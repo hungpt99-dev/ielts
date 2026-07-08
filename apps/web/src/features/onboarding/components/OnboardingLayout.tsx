@@ -31,6 +31,7 @@ export default function OnboardingLayout({
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: 'var(--spacing-sm) var(--spacing-md)',
+          paddingTop: 'calc(var(--spacing-sm) + env(safe-area-inset-top, 0px))',
           borderBottom: '1px solid var(--color-border)',
           background: 'var(--color-surface)',
           position: 'sticky',
@@ -47,16 +48,18 @@ export default function OnboardingLayout({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '36px', height: '36px',
+                width: '44px', height: '44px',
                 borderRadius: 'var(--radius-lg)',
                 border: 'none',
                 background: 'none',
                 color: 'var(--color-text-secondary)',
                 cursor: 'pointer',
+                touchAction: 'manipulation',
+                WebkitTapHighlightColor: 'transparent',
               }}
               aria-label="Go back"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
@@ -65,7 +68,7 @@ export default function OnboardingLayout({
             IELTS Journey
           </span>
         </div>
-        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
+        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', whiteSpace: 'nowrap' }}>
           Step {currentStep + 1} of {TOTAL_ONBOARDING_STEPS}
         </span>
       </header>
@@ -98,9 +101,11 @@ export default function OnboardingLayout({
           flex: 1,
           overflowY: 'auto',
           padding: 'var(--spacing-lg) var(--spacing-md)',
-          maxWidth: '520px',
+          paddingBottom: 'var(--spacing-lg)',
+          maxWidth: '560px',
           width: '100%',
           margin: '0 auto',
+          boxSizing: 'border-box',
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-lg)' }}>
@@ -119,11 +124,17 @@ export default function OnboardingLayout({
 
       {footer && (
         <div style={{
-          padding: 'var(--spacing-sm) var(--spacing-md)',
+          position: 'sticky',
+          bottom: 0,
+          padding: 'var(--spacing-md) var(--spacing-md)',
+          paddingBottom: 'calc(var(--spacing-md) + env(safe-area-inset-bottom, 0px))',
           borderTop: '1px solid var(--color-border-light)',
-          maxWidth: '520px',
+          background: 'var(--color-background)',
+          maxWidth: '560px',
           width: '100%',
           margin: '0 auto',
+          boxSizing: 'border-box',
+          zIndex: 10,
         }}>
           {footer}
         </div>

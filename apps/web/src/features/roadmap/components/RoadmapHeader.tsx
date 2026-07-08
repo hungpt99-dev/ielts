@@ -48,7 +48,7 @@ export default function RoadmapHeader({ roadmap, profile, onScrollToToday, onAsk
   return (
     <section className="space-y-4" aria-label="Roadmap overview">
       <div
-        className="rounded-2xl border p-5 sm:p-6"
+        className="rounded-2xl border p-4 sm:p-6"
         style={{
           backgroundColor: 'var(--color-surface)',
           borderColor: 'var(--color-border)',
@@ -113,7 +113,7 @@ export default function RoadmapHeader({ roadmap, profile, onScrollToToday, onAsk
                 />
               ))}
             </div>
-            <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-muted)' }}>
+            <div className="flex flex-wrap items-center gap-x-3 text-xs" style={{ color: 'var(--color-muted)' }}>
               <span>{roadmap.completedTasks} of {roadmap.totalTasks} tasks completed</span>
               <span>{weeksRemaining} weeks remaining</span>
             </div>
@@ -121,26 +121,26 @@ export default function RoadmapHeader({ roadmap, profile, onScrollToToday, onAsk
 
           {!isComplete && currentPhase && (
             <div
-              className="flex flex-wrap items-center gap-2 rounded-xl px-4 py-3 text-sm"
+              className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-xl px-4 py-3 text-sm"
               style={{
                 backgroundColor: 'var(--color-primary-light)',
                 color: 'var(--color-primary)',
               }}
             >
               <span>📍</span>
-              <span className="font-medium">
+              <span className="font-medium break-words min-w-0">
                 You are here: {currentPhase.name} · Week {roadmap.currentWeekIndex + 1}
               </span>
-              <span className="text-xs opacity-75">
+              <span className="text-xs opacity-75 whitespace-nowrap">
                 · {currentPhase.completedTasks}/{currentPhase.totalTasks} tasks
               </span>
             </div>
           )}
 
           {profile?.examDate && examCountdown > 0 && (
-            <div className="flex items-center gap-2 text-sm" style={{ color: getExamUrgencyColor() }}>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm" style={{ color: getExamUrgencyColor() }}>
               <span>📅</span>
-              <span className="font-medium">
+              <span className="font-medium break-words min-w-0">
                 Exam: {formatDate(profile.examDate)} ({examCountdown} days away)
               </span>
             </div>

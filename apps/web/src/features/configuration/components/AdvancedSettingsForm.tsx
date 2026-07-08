@@ -292,8 +292,8 @@ export default function AdvancedSettingsForm() {
           AI Provider
         </h3>
 
-        <div className="mb-4 flex flex-wrap items-end gap-3">
-          <div className="min-w-[200px] flex-1">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+          <div className="w-full sm:min-w-[200px] sm:flex-1">
             <Select
               label="Active Provider"
               value={activeProviderId}
@@ -301,11 +301,11 @@ export default function AdvancedSettingsForm() {
               options={providerSelectOptions}
             />
           </div>
-          <Button variant="outline" size="sm" onClick={handleAddProvider}>
+          <Button variant="outline" size="sm" onClick={handleAddProvider} className="w-full sm:w-auto">
             + Add Provider
           </Button>
           {providerIds.length > 1 && (
-            <Button variant="danger" size="sm" onClick={handleRemoveProvider}>
+            <Button variant="danger" size="sm" onClick={handleRemoveProvider} className="w-full sm:w-auto">
               Remove
             </Button>
           )}
@@ -767,13 +767,13 @@ export default function AdvancedSettingsForm() {
 
       {/* ---------- Actions ---------- */}
       <div
-        className="flex justify-end gap-3 border-t pt-6"
+        className="flex flex-col gap-3 border-t pt-6 sm:flex-row sm:justify-end"
         style={{ borderColor: 'var(--color-border)' }}
       >
-        <Button variant="ghost" onClick={handleDiscard}>
+        <Button variant="ghost" onClick={handleDiscard} className="w-full sm:w-auto">
           Discard Changes
         </Button>
-        <Button onClick={handleSave}>Save Settings</Button>
+        <Button onClick={handleSave} className="w-full sm:w-auto">Save Settings</Button>
       </div>
     </div>
   )

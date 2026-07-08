@@ -4,6 +4,7 @@ import { DatabaseService } from '../services/storage/Database'
 import Card, { CardContent } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconProgress } from '@ielts/ui'
 
 function formatDate(dateStr: string): string {
@@ -100,7 +101,7 @@ export default function TopicsProgress() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconProgress size={20} />}
         title="Topics Progress"
@@ -271,6 +272,6 @@ export default function TopicsProgress() {
           ))}
         </div>
       )}
-    </div>
+    </PageContent>
   )
 }

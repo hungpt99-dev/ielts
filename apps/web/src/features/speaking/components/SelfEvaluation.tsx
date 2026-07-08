@@ -49,8 +49,8 @@ interface SelfEvaluationProps {
 
 function RatingSlider({ value, onChange, label }: { value: number; onChange: (v: number) => void; label: string }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="w-8 text-center text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
+    <div className="flex items-center gap-2 sm:gap-3">
+      <span className="w-6 text-center text-xs font-medium sm:w-8" style={{ color: 'var(--color-muted)' }}>
         {value}
       </span>
       <input
@@ -60,10 +60,10 @@ function RatingSlider({ value, onChange, label }: { value: number; onChange: (v:
         step="1"
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-blue-600 dark:bg-slate-600"
+        className="h-1.5 min-w-0 flex-1 cursor-pointer appearance-none rounded-full bg-slate-200 accent-blue-600 dark:bg-slate-600"
         aria-label={label}
       />
-      <div className="flex w-16 gap-0.5">
+      <div className="hidden sm:flex w-16 gap-0.5">
         {Array.from({ length: 10 }, (_, i) => (
           <div
             key={i}

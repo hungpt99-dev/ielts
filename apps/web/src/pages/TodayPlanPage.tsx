@@ -11,7 +11,7 @@ import {
   emitStudyDayCompleted,
 } from '../features/websiteActions/eventEmitters'
 import { IconListening, IconReading, IconWriting, IconSpeaking, IconVocabulary, IconGrammar, IconVocabularyReview, IconAITutor, IconCheckCircle, IconCheck, IconChevronLeft, IconChevronRight, IconClock, IconMenu, IconTodayPlan } from '@ielts/ui'
-import PageContainer from '../components/layout/PageContainer'
+import PageContent from '../components/layout/PageContent'
 import type {
   DailyPlanItem,
   DailyPlanStatus,
@@ -255,19 +255,19 @@ export default function TodayPlanPage() {
 
   if (loading) {
     return (
-      <PageContainer width="narrow" className="space-y-5 pb-8" role="status" aria-label="Loading today's plan">
+      <PageContent className="space-y-6" style={{ paddingBottom: 'calc(var(--spacing-xl, 2rem) + env(safe-area-inset-bottom, 0px))' }} role="status" aria-label="Loading today's plan">
         <LoadingSkeleton variant="card" count={1} height="180px" />
         <LoadingSkeleton variant="card" count={1} height="80px" />
         <LoadingSkeleton variant="card" count={1} height="100px" />
         <LoadingSkeleton variant="card" count={3} />
         <LoadingSkeleton variant="card" count={1} height="80px" />
-      </PageContainer>
+      </PageContent>
     )
   }
 
   if (error) {
     return (
-      <PageContainer width="narrow">
+      <PageContent className="space-y-6">
         <ErrorState
           title="Couldn't load today's plan"
           message={error}
@@ -279,13 +279,13 @@ export default function TodayPlanPage() {
             Go to Dashboard
           </Button>
         </div>
-      </PageContainer>
+      </PageContent>
     )
   }
 
   if (!planDay && !planId && tasks.length === 0) {
     return (
-      <PageContainer width="full">
+      <PageContent>
         <div
           className="flex flex-col items-center justify-center rounded-2xl p-8 text-center"
           style={{ border: '1px solid var(--color-border)' }}
@@ -311,13 +311,13 @@ export default function TodayPlanPage() {
             </Button>
           </div>
         </div>
-      </PageContainer>
+      </PageContent>
     )
   }
 
   if (!planDay && tasks.length === 0) {
     return (
-      <PageContainer width="full">
+      <PageContent>
         <div
           className="flex flex-col items-center justify-center rounded-2xl p-8 text-center"
           style={{ border: '1px solid var(--color-border)' }}
@@ -343,12 +343,12 @@ export default function TodayPlanPage() {
             </Button>
           </div>
         </div>
-      </PageContainer>
+      </PageContent>
     )
   }
 
   return (
-    <PageContainer width="wide" className="space-y-5 pb-8 pt-4 sm:pt-6">
+    <PageContent className="space-y-6" style={{ paddingBottom: 'calc(var(--spacing-xl, 2rem) + env(safe-area-inset-bottom, 0px))' }}>
       {/* ============================================================ */}
       {/* 1. Today's Goal Header                                       */}
       {/* ============================================================ */}
@@ -433,7 +433,7 @@ export default function TodayPlanPage() {
                 </span>
               )}
             </div>
-            <div className="mt-1.5 h-3 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.5)' }}>
+            <div className="mt-1.5 h-4 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.5)' }}>
               <div
                 className="h-full rounded-full transition-all duration-700 ease-out"
                 style={{
@@ -574,7 +574,7 @@ export default function TodayPlanPage() {
                     type="checkbox"
                     checked={item.checked}
                     onChange={() => handleToggleChecklist(index)}
-                    className="h-4 w-4 rounded border-2 transition-colors"
+                    className="h-5 w-5 rounded border-2 transition-colors shrink-0"
                     style={{
                       accentColor: 'var(--color-success)',
                     }}
@@ -624,7 +624,7 @@ export default function TodayPlanPage() {
                   <div className="flex items-start gap-3">
                     <button
                       onClick={() => handleToggleDayTask(key, task, planDay)}
-                      className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
                         isCompleted
                           ? 'border-[var(--color-success)] bg-[var(--color-success)] text-white'
                           : 'border-[var(--color-border)] hover:border-[var(--color-primary)]'
@@ -632,7 +632,7 @@ export default function TodayPlanPage() {
                       aria-label={isCompleted ? `Mark ${task.title} incomplete` : `Mark ${task.title} done`}
                     >
                       {isCompleted && (
-                        <IconCheck size={12} strokeWidth={3} />
+                        <IconCheck size={14} strokeWidth={3} />
                       )}
                     </button>
 
@@ -672,10 +672,10 @@ export default function TodayPlanPage() {
 
                       <button
                         onClick={() => goToTutor({ prompt: `Help me with ${label}: ${task.title}${task.description ? '. ' + task.description : ''}`, type: label.toLowerCase(), title: task.title })}
-                        className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium transition-colors hover:opacity-80"
+                        className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
                         style={{ backgroundColor: 'var(--color-tutor-accent-light)', color: 'var(--color-tutor-accent)' }}
                       >
-                        <IconAITutor size={12} />
+                        <IconAITutor size={14} />
                         Ask AI
                         </button>
 
@@ -687,7 +687,7 @@ export default function TodayPlanPage() {
                             tomorrow.setDate(dayNum + 1)
                             navigate('/plan?date=' + tomorrow.toISOString().slice(0, 10))
                           }}
-                          className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium transition-colors hover:opacity-80"
+                          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
                           style={{ backgroundColor: 'var(--color-surface-alt)', color: 'var(--color-muted)' }}
                         >
                           Open Practice
@@ -732,7 +732,7 @@ export default function TodayPlanPage() {
                 >
                   <button
                     onClick={() => handleToggleTaskDone(task)}
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
                       task.isDone
                         ? 'border-[var(--color-success)] bg-[var(--color-success)] text-white'
                         : 'border-[var(--color-border)] hover:border-[var(--color-primary)]'
@@ -740,7 +740,7 @@ export default function TodayPlanPage() {
                     aria-label={task.isDone ? `Mark "${task.title}" incomplete` : `Mark "${task.title}" done`}
                   >
                     {task.isDone && (
-                      <IconCheck size={12} strokeWidth={3} />
+                      <IconCheck size={14} strokeWidth={3} />
                     )}
                   </button>
                   <div className="min-w-0 flex-1">
@@ -809,7 +809,7 @@ export default function TodayPlanPage() {
                     {DAY_LABELS[dayNum]}
                   </span>
                   <div
-                    className={`h-7 w-7 sm:h-8 sm:w-8 rounded-full border-2 flex items-center justify-center transition-all ${
+                    className={`h-9 w-9 sm:h-10 sm:w-10 rounded-full border-2 flex items-center justify-center transition-all ${
                       isToday ? 'scale-110 shadow-sm' : ''
                     }`}
                     style={{
@@ -819,7 +819,7 @@ export default function TodayPlanPage() {
                     aria-label={isToday ? 'Today' : DAY_LABELS[dayNum]}
                   >
                     <span
-                      className="text-[10px] sm:text-[11px] font-semibold"
+                      className="text-xs font-semibold"
                       style={{ color: isToday ? 'var(--color-on-primary)' : 'var(--color-muted)' }}
                     >
                       {new Date(date + 'T00:00:00').getDate()}
@@ -834,6 +834,6 @@ export default function TodayPlanPage() {
           </p>
         </section>
       )}
-    </PageContainer>
+    </PageContent>
   )
 }

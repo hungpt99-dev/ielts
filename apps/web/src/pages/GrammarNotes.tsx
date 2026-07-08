@@ -7,6 +7,7 @@ import Card, { CardContent } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Modal from '../components/ui/Modal'
 import PageHeader from '../components/layout/PageHeader'
+import PageContent from '../components/layout/PageContent'
 import { IconGrammar } from '@ielts/ui'
 
 const RELATED_SKILLS = ['reading', 'listening', 'writing', 'speaking'] as const
@@ -250,7 +251,7 @@ export default function GrammarNotes() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 pt-4 sm:pt-6">
+    <PageContent className="space-y-6">
       <PageHeader
         icon={<IconGrammar size={20} />}
         title="Grammar Notebook"
@@ -722,6 +723,6 @@ export default function GrammarNotes() {
           </div>
         </div>
       </Modal>
-    </div>
+    </PageContent>
   )
 }
