@@ -169,16 +169,16 @@ chrome.storage.onChanged.addListener((changes, area) => {
       if (!pending.text || !pending.category) continue
       try {
         const now = new Date().toISOString()
-        const entryId = crypto.randomUUID()
+        const sharedId = crypto.randomUUID()
         const entity: Record<string, unknown> = {
           ...pending,
-          id: entryId,
+          id: sharedId,
           createdAt: now,
           updatedAt: now,
         } as Record<string, unknown>
 
         const learningEntry: LearningEntry = {
-          id: entryId,
+          id: sharedId,
           text: pending.text as string,
           category: pending.category as LearningEntry['category'],
           topic: (pending.topic as string) || 'general',
@@ -197,9 +197,8 @@ chrome.storage.onChanged.addListener((changes, area) => {
         if (pending.category === 'vocabulary') {
           vocabCount++
           const text = pending.text as string
-          const vocabId = crypto.randomUUID()
           await saveVocabularyEntry({
-            id: vocabId,
+            id: sharedId,
             word: text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
             sourceSentence: text,
             pageTitle: (pending.pageTitle as string) || '',
@@ -223,10 +222,10 @@ chrome.storage.onChanged.addListener((changes, area) => {
             createdAt: now,
             updatedAt: now,
           }).catch(() => {})
-          entity.vocabId = vocabId
+          entity.vocabId = sharedId
         }
 
-        savedEntries.push({ id: entryId, category: pending.category as string, entity })
+        savedEntries.push({ id: sharedId, category: pending.category as string, entity })
       } catch (err) {
         console.error('[PendingSave] Item failed:', err)
       }

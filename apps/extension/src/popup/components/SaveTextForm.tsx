@@ -105,8 +105,9 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
         .filter(Boolean)
 
       const now = new Date().toISOString()
+      const sharedId = crypto.randomUUID()
       const entry = entrySchema.parse({
-        id: crypto.randomUUID(),
+        id: sharedId,
         text: form.text,
         category: form.category,
         topic: form.topic,
@@ -126,7 +127,7 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
 
       if (form.category === 'vocabulary') {
         const vocabEntry: ExtensionVocabEntry = {
-          id: crypto.randomUUID(),
+          id: sharedId,
           word: form.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
           sourceSentence: form.text,
           pageTitle: pageInfo.title,

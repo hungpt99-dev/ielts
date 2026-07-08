@@ -257,9 +257,9 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
       .filter(Boolean)
 
     const now = new Date().toISOString()
-    const id = generateId()
+    const sharedId = generateId()
     const entry: ExtensionVocabEntry = {
-      id,
+      id: sharedId,
       word: wordTrimmed,
       sourceSentence: sourceSentence.trim(),
       pageTitle: pageInfo.title,
@@ -295,7 +295,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
     try { pushSync('vocabulary', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
 
     const learningEntryData = {
-      id: generateId(),
+      id: sharedId,
       text: wordTrimmed,
       category: 'vocabulary',
       topic: topic.trim() || 'general',

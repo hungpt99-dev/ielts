@@ -83,12 +83,6 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
     }
   }, [])
 
-  if (selectedEntry) {
-    return (
-      <WordDetails entry={selectedEntry} onBack={() => setSelectedEntry(null)} />
-    )
-  }
-
   const filtered = useMemo(() => {
     let result = entries
     if (filter !== 'all') {
@@ -111,6 +105,12 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
     }
     return result
   }, [entries, filter, search, sortBy])
+
+  if (selectedEntry) {
+    return (
+      <WordDetails entry={selectedEntry} onBack={() => setSelectedEntry(null)} />
+    )
+  }
 
   if (loading) {
     return (

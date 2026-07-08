@@ -219,7 +219,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
             </DetailSection>
           )}
 
-          {entry.synonyms.length > 0 && (
+          {Array.isArray(entry.synonyms) && entry.synonyms.length > 0 && (
             <DetailSection title="Synonyms">
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                 {entry.synonyms.map((s, i) => (
@@ -237,7 +237,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
             </DetailSection>
           )}
 
-          {entry.antonyms.length > 0 && (
+          {Array.isArray(entry.antonyms) && entry.antonyms.length > 0 && (
             <DetailSection title="Antonyms">
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                 {entry.antonyms.map((a, i) => (
@@ -255,7 +255,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
             </DetailSection>
           )}
 
-          {entry.wordFamily.length > 0 && (
+          {Array.isArray(entry.wordFamily) && entry.wordFamily.length > 0 && (
             <DetailSection title="Word Family">
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
                 {entry.wordFamily.map((wf, i) => (
@@ -273,7 +273,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
             </DetailSection>
           )}
 
-          {entry.collocations.length > 0 && (
+          {Array.isArray(entry.collocations) && entry.collocations.length > 0 && (
             <DetailSection title="Collocations">
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
                 {entry.collocations.map((c, i) => (
