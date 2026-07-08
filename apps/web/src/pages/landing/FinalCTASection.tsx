@@ -12,7 +12,7 @@ export default function FinalCTASection() {
         <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
           Start your IELTS journey today.
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-lg leading-relaxed"
+        <p className="mx-auto mt-4 text-lg leading-relaxed"
           style={{ color: 'rgba(255,255,255,0.85)' }}>
           No account required. No credit card. Your data stays in your browser.
         </p>

@@ -74,7 +74,7 @@ export default function FAQSection() {
       className="bg-[var(--color-surface)] px-4 py-16 text-[var(--color-text)] sm:py-20 lg:py-24"
       id="faq"
     >
-      <div className="mx-auto max-w-3xl">
+      <div className="mx-auto">
         <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">
           Frequently asked questions
         </h2>

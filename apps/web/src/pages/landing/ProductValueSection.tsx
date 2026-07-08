@@ -92,7 +92,7 @@ export default function ProductValueSection() {
         <h2 className="text-center text-3xl font-bold tracking-tight text-[var(--color-text)] sm:text-4xl">
           Why IELTS Journey works
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-lg leading-relaxed text-[var(--color-text-secondary)]">
+        <p className="mx-auto mt-4 text-center text-lg leading-relaxed text-[var(--color-text-secondary)]">
           IELTS Journey is built around one idea — make IELTS self-study simple,
           clear, and consistent. Here is how it helps.
         </p>

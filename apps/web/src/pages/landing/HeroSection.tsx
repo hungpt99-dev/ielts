@@ -43,7 +43,7 @@ export default function HeroSection() {
           Your IELTS goal, actually achievable.
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed sm:text-lg"
+        <p className="mx-auto mt-6 text-base leading-relaxed sm:text-lg"
           style={{ color: 'var(--color-text-secondary)' }}>
           IELTS Journey creates a personalized daily study plan from today to your exam day.
           Open the app, see what to study, and learn with real content.

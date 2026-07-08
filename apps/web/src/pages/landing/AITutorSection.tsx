@@ -56,7 +56,7 @@ export default function AITutorSection() {
             style={{ color: 'var(--color-tutor-text)' }}>
             A personal AI tutor that actually knows you.
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed"
+          <p className="mx-auto mt-4 text-lg leading-relaxed"
             style={{ color: 'var(--color-text-secondary)' }}>
             Not a generic chatbot. Your AI Tutor knows your target band, weak skills,
             saved vocabulary, and study history.
@@ -79,7 +79,7 @@ export default function AITutorSection() {
           ))}
         </div>
 
-        <div className="mt-10 mx-auto max-w-2xl">
+        <div className="mt-10 mx-auto">
           <Card variant="tutor" padding="lg" style={{ borderRadius: 'var(--radius-2xl)' }}>
             <div className="flex items-start gap-3">
               <div style={{

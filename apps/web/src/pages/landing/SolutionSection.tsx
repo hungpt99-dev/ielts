@@ -40,7 +40,7 @@ export default function SolutionSection() {
           style={{ color: 'var(--color-text)' }}>
           IELTS Journey gives you what&apos;s missing.
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-lg leading-relaxed"
+        <p className="mx-auto mt-4 text-center text-lg leading-relaxed"
           style={{ color: 'var(--color-text-secondary)' }}>
           Instead of guessing what to study, get a clear daily plan with everything you need.
         </p>

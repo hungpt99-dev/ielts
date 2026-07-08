@@ -12,7 +12,7 @@ export default function DonationSection() {
       className="bg-[var(--color-background)] text-[var(--color-text)] px-4 py-16 sm:py-20 lg:py-24"
       id="donation"
     >
-      <div className="mx-auto max-w-3xl text-center">
+      <div className="mx-auto text-center">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
           Support the project
         </h2>

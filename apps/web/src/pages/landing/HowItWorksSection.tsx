@@ -53,7 +53,7 @@ export default function HowItWorksSection() {
           style={{ color: 'var(--color-text)' }}>
           Start learning in 4 simple steps.
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-lg leading-relaxed"
+        <p className="mx-auto mt-4 text-center text-lg leading-relaxed"
           style={{ color: 'var(--color-text-secondary)' }}>
           From setting your goal to tracking progress — here&apos;s how IELTS Journey works.
         </p>

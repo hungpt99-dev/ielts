@@ -10,7 +10,7 @@ export default function TestimonialsSection() {
           style={{ color: 'var(--color-text)' }}>
           Join IELTS learners worldwide.
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed"
+        <p className="mx-auto mt-4 text-lg leading-relaxed"
           style={{ color: 'var(--color-text-secondary)' }}>
           Thousands of learners use IELTS Journey to prepare for their exam.
           Be among the first to experience personalized AI-powered IELTS prep.

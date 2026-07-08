@@ -49,7 +49,7 @@ export default function ProblemSection() {
           style={{ color: 'var(--color-text)' }}>
           Studying for IELTS alone is hard.
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-lg leading-relaxed"
+        <p className="mx-auto mt-4 text-center text-lg leading-relaxed"
           style={{ color: 'var(--color-text-secondary)' }}>
           Every day, IELTS self-learners face the same challenges. Do any of these sound familiar?
         </p>

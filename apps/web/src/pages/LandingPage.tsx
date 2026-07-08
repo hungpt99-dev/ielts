@@ -63,20 +63,17 @@ export default function LandingPage() {
               </a>
               <a
                 href={APP_URL}
-                className="rounded-xl px-4 py-1.5 text-sm font-semibold text-white transition-all hover:brightness-110"
-                style={{ backgroundColor: 'var(--color-primary)' }}
+                className="rounded-xl px-4 py-1.5 text-sm font-semibold transition-all hover:brightness-110"
+                style={{ backgroundColor: 'var(--color-primary)', color: '#fff' }}
               >
                 Get Started
               </a>
             </nav>
 
             <button
-              className="sm:hidden"
+              className="sm:hidden flex items-center justify-center"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
                 width: '36px',
                 height: '36px',
                 borderRadius: 'var(--radius-lg)',
@@ -123,8 +120,8 @@ export default function LandingPage() {
                   How It Works
                 </a>
                 <a href={APP_URL} onClick={() => setMobileMenuOpen(false)}
-                  className="mt-2 inline-flex h-10 items-center justify-center rounded-xl text-sm font-semibold text-white"
-                  style={{ backgroundColor: 'var(--color-primary)' }}>
+                  className="mt-2 inline-flex h-10 items-center justify-center rounded-xl text-sm font-semibold"
+                  style={{ backgroundColor: 'var(--color-primary)', color: '#fff' }}>
                   Get Started
                 </a>
               </div>
@@ -132,7 +129,7 @@ export default function LandingPage() {
           )}
         </header>
 
-        <main id="main-content" aria-label="IELTS Journey landing page">
+        <main id="main-content" className="w-full" aria-label="IELTS Journey landing page">
           <HeroSection />
           <ProblemSection />
           <SolutionSection />

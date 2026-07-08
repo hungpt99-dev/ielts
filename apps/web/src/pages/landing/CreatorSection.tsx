@@ -19,7 +19,7 @@ export default function CreatorSection() {
           project, consider supporting or reaching out.
         </p>
 
-        <div className="mx-auto mt-10 max-w-xl rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-alt)] p-8 text-left">
+        <div className="mx-auto mt-10 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-alt)] p-8 text-left">
           <div className="flex items-center gap-5">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-primary-light)] text-2xl font-bold text-[var(--color-primary)]">
               {CREATOR.englishName[0]}
