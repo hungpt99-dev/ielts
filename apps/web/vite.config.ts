@@ -13,7 +13,7 @@ const pwaConfig = {
   manifest: {
     name: 'IELTS Learning Journey',
     short_name: 'IELTS',
-    description: 'Personal IELTS study system — offline-first, no backend needed.',
+    description: 'Learn IELTS with AI Tutor',
     theme_color: '#1e293b',
     background_color: '#0f172a',
     display: 'standalone' as const,
