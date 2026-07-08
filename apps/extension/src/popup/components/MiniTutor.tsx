@@ -30,7 +30,7 @@ interface MiniTutorProps {
 const ACTIONS: ActionConfig[] = [
   { id: 'explain', icon: <IconExplain />, label: 'Explain', description: 'Explain in simple English', color: 'var(--color-primary)' },
   { id: 'simplify', icon: <IconSimplify />, label: 'Simplify', description: 'Rewrite with simpler words', color: 'var(--color-success)' },
-  { id: 'translate', icon: <IconGlobe />, label: 'Translate', description: 'Translate to Vietnamese', color: 'var(--color-skill-reading)' },
+  { id: 'translate', icon: <IconGlobe />, label: 'Translate', description: 'Translate selected text', color: 'var(--color-skill-reading)' },
   { id: 'exercise', icon: <IconEdit />, label: 'Exercise', description: 'Turn into practice quiz', color: 'var(--color-warning)' },
   { id: 'vocabulary', icon: <IconVocabulary />, label: 'Vocabulary', description: 'Extract IELTS vocabulary', color: 'var(--color-primary)' },
   { id: 'questions', icon: <IconHelpCircle />, label: 'Questions', description: 'Generate follow-up questions', color: 'var(--color-skill-speaking)' },

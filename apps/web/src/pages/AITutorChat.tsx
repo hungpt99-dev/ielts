@@ -772,7 +772,7 @@ export default function AITutorChat() {
   }, [])
   const [input, setInput] = useState('')
   const [mode, setMode] = useState<AssistantMode>('ielts-tutor')
-  const [language, setLanguage] = useState<Language>('both')
+  const [language, setLanguage] = useState<Language>('english')
   const [preferences, setPreferences] = useState<UserTutorPreferences>(DEFAULT_TUTOR_PREFERENCES)
   const [loading, setLoading] = useState(true)
   const [sending, setSending] = useState(false)
@@ -847,7 +847,7 @@ export default function AITutorChat() {
       const prefs = LocalTutorStorage.loadPreferences()
       setPreferences(prefs)
       setMode(prefs.preferredMode)
-      setLanguage(prefs.language as Language || 'both')
+      setLanguage(prefs.language as Language || 'english')
     } catch {
       // Use defaults
     }
@@ -880,7 +880,7 @@ export default function AITutorChat() {
         const newSession: ChatSession = {
           id: sessionId,
           mode,
-          language: prefs.language || 'both',
+          language: prefs.language || 'english',
           topic: stateContext?.type || 'general',
           messageCount: 0,
           createdAt: now,

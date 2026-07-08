@@ -672,7 +672,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
                     }}
                   >
                     <div style={{ fontWeight: 'var(--weight-semibold)', marginBottom: 'var(--spacing-2xs)' }}>
-                      Vietnamese Translation
+                      Translation
                     </div>
                     <div>{lookupResult.translation}</div>
                     {lookupResult.vocabularyNotes.length > 0 && (

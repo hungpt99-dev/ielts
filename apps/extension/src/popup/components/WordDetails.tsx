@@ -195,7 +195,7 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
           )}
 
           {entry.meaningVi && (
-            <DetailSection title="Vietnamese Meaning">
+            <DetailSection title="Translation">
               <p style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', lineHeight: 1.5, margin: 0 }}>
                 {entry.meaningVi}
               </p>

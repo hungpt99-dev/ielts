@@ -392,7 +392,7 @@ function renderSimpleResult(data: SimpleExplain): string {
 }
 
 function renderVietnameseResult(data: VietnameseExplain): string {
-  let html = renderSection('Vietnamese Translation', escapeHtml(data.translation))
+  let html = renderSection('Translation', escapeHtml(data.translation))
   if (data.vocabularyNotes && data.vocabularyNotes.length > 0) {
     html += renderListSection('Vocabulary Notes', data.vocabularyNotes.map(v => `<strong>${escapeHtml(v.word)}</strong>: ${escapeHtml(v.meaning)}`))
   }

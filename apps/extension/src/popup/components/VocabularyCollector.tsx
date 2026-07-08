@@ -709,7 +709,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
 
           {aiDetails.meaningVi && (
             <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
-              <strong>Vietnamese:</strong> {aiDetails.meaningVi}
+              <strong>Translation:</strong> {aiDetails.meaningVi}
             </div>
           )}
 
