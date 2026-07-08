@@ -6,10 +6,6 @@ export type { ToastType, ToastMessage, ToastPosition, ToastProviderProps, ToastC
 export { Button } from './components/Button'
 export type { ButtonProps, ButtonVariant, ButtonSize } from './components/Button'
 
-// IconButton
-export { IconButton } from './components/IconButton'
-export type { IconButtonProps, IconButtonVariant, IconButtonSize } from './components/IconButton'
-
 // Card
 export { Card } from './components/Card'
 export type { CardProps, CardVariant, CardPadding, CardTint } from './components/Card'
@@ -17,10 +13,6 @@ export type { CardProps, CardVariant, CardPadding, CardTint } from './components
 // Badge
 export { Badge } from './components/Badge'
 export type { BadgeProps, BadgeVariant, BadgeSize } from './components/Badge'
-
-// Input
-export { Input } from './components/Input'
-export type { InputProps, InputSize } from './components/Input'
 
 // SearchInput
 export { SearchInput } from './components/SearchInput'
@@ -54,37 +46,9 @@ export type { EmptyStateProps } from './components/EmptyState'
 export { SkillCard } from './components/SkillCard'
 export type { SkillCardProps, SkillType } from './components/SkillCard'
 
-// AITutorMessageCard
-export { AITutorMessageCard } from './components/AITutorMessageCard'
-export type { AITutorMessageCardProps, AITutorMessageVariant } from './components/AITutorMessageCard'
-
-// StudyTaskCard
-export { StudyTaskCard } from './components/StudyTaskCard'
-export type { StudyTaskCardProps, TaskStatus } from './components/StudyTaskCard'
-
-// VocabularyWordCard
-export { VocabularyWordCard } from './components/VocabularyWordCard'
-export type { VocabularyWordCardProps, DifficultyLevel, ReviewStatus } from './components/VocabularyWordCard'
-
-// DashboardSection
-export { DashboardSection } from './components/DashboardSection'
-export type { DashboardSectionProps } from './components/DashboardSection'
-
 // MobileBottomNavigation
 export { MobileBottomNavigation } from './components/MobileBottomNavigation'
 export type { MobileBottomNavigationProps, MobileNavItem } from './components/MobileBottomNavigation'
-
-// ExtensionPopupCard
-export { ExtensionPopupCard } from './components/ExtensionPopupCard'
-export type { ExtensionPopupCardProps } from './components/ExtensionPopupCard'
-
-// ExtensionActionMenu
-export { ExtensionActionMenu } from './components/ExtensionActionMenu'
-export type { ExtensionActionMenuProps, ExtensionActionMenuItem } from './components/ExtensionActionMenu'
-
-// ExtensionSelectedTextMenu
-export { ExtensionSelectedTextMenu } from './components/ExtensionSelectedTextMenu'
-export type { ExtensionSelectedTextMenuProps } from './components/ExtensionSelectedTextMenu'
 
 // ExtensionSyncStatusBadge
 export { ExtensionSyncStatusBadge } from './components/ExtensionSyncStatusBadge'
@@ -106,48 +70,22 @@ export type { ErrorStateProps } from './components/ErrorState'
 export { ProgressSummaryCard } from './components/ProgressSummaryCard'
 export type { ProgressSummaryCardProps } from './components/ProgressSummaryCard'
 
-// PracticeCard
-export { PracticeCard } from './components/PracticeCard'
-export type { PracticeCardProps } from './components/PracticeCard'
-
-// MistakeCard
-export { MistakeCard } from './components/MistakeCard'
-export type { MistakeCardProps } from './components/MistakeCard'
-
-// SettingsSectionCard
-export { SettingsSectionCard } from './components/SettingsSectionCard'
-export type { SettingsSectionCardProps } from './components/SettingsSectionCard'
-
 // AITutorRecommendationCard
 export { AITutorRecommendationCard } from './components/AITutorRecommendationCard'
 export type { AITutorRecommendationCardProps } from './components/AITutorRecommendationCard'
 
-// DatePicker
-export { DatePicker } from './components/DatePicker'
-export type { DatePickerProps, DatePickerSize } from './components/DatePicker'
-
-// VocabularyDetailPanel
-export { VocabularyDetailPanel } from './components/VocabularyDetailPanel'
-export type { VocabularyDetailPanelProps, VocabularyExample } from './components/VocabularyDetailPanel'
-
 // Icons
 export {
-  IconDashboard,
   IconTodayPlan,
   IconStudyPlan,
   IconHome,
   IconBack,
-  IconNext,
   IconChevronLeft,
   IconChevronRight,
   IconChevronDown,
-  IconChevronUp,
   IconMenu,
-  IconMore,
   IconClose,
-  IconMaximize,
   IconMinimize,
-  IconShare,
   IconExternalLink,
   IconAITutor,
   IconVocabulary,
@@ -176,10 +114,10 @@ export {
   IconCheck,
   IconRefresh,
   IconRefreshOff,
-  IconRoadmap,
   IconRotate,
   IconUndo,
   IconRedo,
+  IconDashboard,
   IconDownload,
   IconUpload,
   IconPrint,
@@ -237,14 +175,11 @@ export {
   IconTag,
   IconAward,
   IconTarget,
-  IconTheme,
   IconTimer,
   IconClock,
   IconCalendar,
   IconFlame,
   IconStreak,
-  IconStudyRoadmap,
-  IconCrown,
   IconDatabase,
   IconShield,
   IconCheckSquare,
@@ -268,7 +203,6 @@ export {
   IconAskAI,
   IconEmpty,
   IconLock,
-  IconHighlightAction,
   IconBookText,
   IconFileText,
 } from './icons'
@@ -281,7 +215,6 @@ export {
   TOKENS,
   DARK_TOKENS,
   ACCENT_COLOR_PRESETS,
-  DEFAULT_ACCENT_COLOR,
   THEME_MODES,
 } from './theme'
 export type {

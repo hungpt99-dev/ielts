@@ -70,23 +70,6 @@ export function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value))
 }
 
-export function classNames(...classes: (string | false | undefined | null)[]): string {
-  return classes.filter(Boolean).join(' ')
-}
-
-export function downloadJson(data: unknown, filename: string): void {
-  const json = JSON.stringify(data, null, 2)
-  const blob = new Blob([json], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-}
-
 export function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }

@@ -1,29 +1,14 @@
-export { initDb, getDb, destroyDb, isDbOpen, safeDb, TABLE_NAMES, DB_NAME, AppDatabase } from './db'
-export type { IDatabase } from './db'
+export { initDb, getDb, destroyDb, isDbOpen, safeDb, TABLE_NAMES, AppDatabase } from './db'
 
 export {
   APP_SCHEMA,
-  CURRENT_DB_VERSION,
-  getSchemaForVersion,
-  getStoreNamesForVersion,
-  applyMigrations,
-  getAppliedVersion,
-  clearAppliedVersion,
 } from './migrations'
-export type { AppDatabaseSchema, StorageVersion } from './migrations'
 
 export {
-  StorageError,
   ValidationError,
-  MigrationError,
-  BackupError,
-  EntityNotFoundError,
-  DuplicateEntityError,
-  DatabaseClosedError,
 } from './errors'
 
 export {
-  BaseRepository,
   VocabularyRepository,
   VocabReviewRepository,
   MistakeRepository,
@@ -93,63 +78,17 @@ export type {
 
 export {
   exportAllData,
-  downloadBackup,
-  validateBackupData,
-  validateBackupDataDetailed,
-  readBackupFile,
   importBackup,
   clearAllTables,
-  mergeBackupWithDedup,
-  isDuplicate,
-  collectExistingIds,
-  generateBackupFilename,
-  DuplicateStrategy,
 } from './backup'
 export type { AppBackupData, ImportMode, ImportSummary } from './backup'
 
 export {
-  addVocabularyToReview,
-  getDueReviews,
-  updateReview,
-  getReviewStats,
-} from './reviewService'
-export type { ReviewStats, ReviewRating } from './reviewService'
-
-export {
-  exportExtensionData,
-  importExtensionData,
-  getSyncStatus,
-  saveSyncStatus,
-  markItemPending,
-  markItemsSynced,
-  markSyncFailed,
-  downloadJson,
-  generateExportFilename,
-  readJsonFile,
-  validateExtensionExportData,
-  createBridgeMessage,
-} from './syncService'
-export {
   DATA_SYNC_ACTION,
-  SYNC_ENTITY_TYPES,
-  SYNC_OPERATIONS,
   createMessageId,
 } from './syncProtocol'
 export type {
-  ExtensionExportData,
-  ImportMode as SyncImportMode,
-  SyncSummary,
-  SyncStatus,
-  StorageGet,
-  StorageSet,
-  StorageHandlers,
-  BridgeMessage,
-  BridgeResponse,
-} from './syncService'
-export type {
+  DataSyncPayload,
   SyncEntityType,
   SyncOperation,
-  DataSyncPayload,
 } from './syncProtocol'
-
-export * from './schema'
