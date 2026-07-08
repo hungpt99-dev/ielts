@@ -10,7 +10,6 @@ import {
   type ExampleSentencesResult,
   type QuizResult,
   AI_EXPLAIN_LABELS,
-  AI_EXPLAIN_ICONS,
 } from '@ielts/ai'
 import { injectContentStyles } from './sharedStyles'
 import { safeSendMessage, safeFetchProviderConfig } from '../utils/safe-chrome'
@@ -19,7 +18,11 @@ import {
   emitExtensionSelectedTextSimplified,
 } from '../background/eventEmitters'
 import { iconToHtml } from '../utils/renderIcon'
-import { IconWarning, IconAITutor, IconClose } from '@ielts/ui'
+import {
+  IconWarning, IconAITutor, IconClose, IconExplain,
+  IconGlobe, IconTarget, IconVocabularyBook, IconSimplify,
+  IconEdit, IconHelpCircle, IconLock,
+} from '@ielts/ui'
 
 const PANEL_ID = 'ielts-ai-explain-panel'
 const OVERLAY_ID = 'ielts-ai-explain-overlay'
@@ -43,6 +46,16 @@ let overlayEl: HTMLDivElement | null = null
 let keyHandler: ((e: KeyboardEvent) => void) | null = null
 
 const ALL_TYPES: AiExplainType[] = ['simple', 'vietnamese', 'ielts-vocab', 'grammar', 'rewrite', 'example-sentences', 'quiz']
+
+const TAB_ICONS: Record<AiExplainType, ReturnType<typeof iconToHtml>> = {
+  simple: iconToHtml(IconExplain, 14),
+  vietnamese: iconToHtml(IconGlobe, 14),
+  'ielts-vocab': iconToHtml(IconTarget, 14),
+  grammar: iconToHtml(IconVocabularyBook, 14),
+  rewrite: iconToHtml(IconSimplify, 14),
+  'example-sentences': iconToHtml(IconEdit, 14),
+  quiz: iconToHtml(IconHelpCircle, 14),
+}
 
 function createEntries(): Record<AiExplainType, AiExplainEntry> {
   const e = {} as Record<AiExplainType, AiExplainEntry>
@@ -141,7 +154,7 @@ function createPanel(): HTMLDivElement {
   el.innerHTML = `
     <div id="${PANEL_ID}-header" style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--ielts-border);flex-shrink:0;">
       <div style="display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--ielts-text);">
-        <span role="img" aria-label="AI">🤖</span>
+        ${iconToHtml(IconAITutor, 18)}
         <span>AI Explain</span>
       </div>
       <button id="${PANEL_ID}-close" style="background:none;border:none;color:var(--ielts-muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px;line-height:1;" aria-label="Close panel">${iconToHtml(IconClose, 14)}</button>
@@ -159,7 +172,7 @@ function createPanel(): HTMLDivElement {
     for (const t of ALL_TYPES) {
       const tab = document.createElement('button')
       tab.dataset.type = t
-      tab.textContent = `${AI_EXPLAIN_ICONS[t]} ${AI_EXPLAIN_LABELS[t]}`
+      tab.innerHTML = `${TAB_ICONS[t]} ${AI_EXPLAIN_LABELS[t]}`
       tab.setAttribute('role', 'tab')
       tab.setAttribute('aria-selected', String(t === activeTab))
       tab.setAttribute('aria-controls', `${PANEL_ID}-body`)
@@ -289,7 +302,7 @@ function renderLoading(bodyEl: HTMLDivElement): void {
 function renderMissingKey(bodyEl: HTMLDivElement): void {
   bodyEl.innerHTML = `
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;gap:12px;text-align:center;">
-      <div style="font-size:32px;" role="img" aria-label="Key icon">🔑</div>
+      <div style="font-size:32px;" role="img" aria-label="Key icon">${iconToHtml(IconLock, 32)}</div>
       <div style="color:var(--ielts-text);font-size:14px;font-weight:600;">AI API Key Required</div>
       <div style="color:var(--ielts-text-secondary);font-size:13px;line-height:1.5;max-width:360px;">
         Add your AI API key in the extension Settings to use AI features like explanations, translations, and vocabulary analysis.
