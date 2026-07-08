@@ -5,6 +5,17 @@ import {
   dictionaryCache,
   type DictionaryEntry,
 } from '@ielts/ai'
+import {
+  IconVocabulary,
+  IconEdit,
+  IconWarning,
+  IconAITutor,
+  IconSimplify,
+  IconGlobe,
+  IconTarget,
+  IconClose,
+} from '@ielts/ui'
+import { iconToHtml } from '../utils/renderIcon'
 import { showExplainPanel } from './aiExplain'
 import { injectContentStyles } from './sharedStyles'
 import { handleVocabSaved } from './vocabularySaveHandler'
@@ -32,14 +43,14 @@ interface ToolbarAction {
 }
 
 const ACTIONS: ToolbarAction[] = [
-  { id: 'save-word', icon: '📖', label: 'Save Word', category: 'vocabulary' },
-  { id: 'save-sentence', icon: '📝', label: 'Save Sentence', category: 'sentence' },
-  { id: 'save-mistake', icon: '⚠️', label: 'Mistake Note', category: 'mistake' },
+  { id: 'save-word', icon: iconToHtml(IconVocabulary, 16), label: 'Save Word', category: 'vocabulary' },
+  { id: 'save-sentence', icon: iconToHtml(IconEdit, 16), label: 'Save Sentence', category: 'sentence' },
+  { id: 'save-mistake', icon: iconToHtml(IconWarning, 16), label: 'Mistake Note', category: 'mistake' },
   { id: 'divider', icon: '', label: '' },
-  { id: 'explain', icon: '💡', label: 'Explain', isAiAction: true },
-  { id: 'simplify', icon: '✂️', label: 'Simplify', isAiAction: true },
-  { id: 'translate', icon: '🌐', label: 'Translate', isAiAction: true },
-  { id: 'ielts-vocab', icon: '🎯', label: 'IELTS Vocab', isAiAction: true },
+  { id: 'explain', icon: iconToHtml(IconAITutor, 16), label: 'Explain', isAiAction: true },
+  { id: 'simplify', icon: iconToHtml(IconSimplify, 16), label: 'Simplify', isAiAction: true },
+  { id: 'translate', icon: iconToHtml(IconGlobe, 16), label: 'Translate', isAiAction: true },
+  { id: 'ielts-vocab', icon: iconToHtml(IconTarget, 16), label: 'IELTS Vocab', isAiAction: true },
 ]
 
 const ACTION_TO_AI_TYPE: Record<string, AiExplainType> = {
@@ -518,7 +529,7 @@ function renderPanel(isWord: boolean): void {
       actionsHtml += `<button class="action-btn" data-action="${action.id}" title="${escapeHtml(action.label)}" aria-label="${escapeHtml(action.label)}" role="button" tabindex="0">${action.icon}</button>`
     }
   }
-  actionsHtml += `<button class="close-btn" data-action="close" aria-label="Close" title="Close" tabindex="0">✕</button>`
+  actionsHtml += `<button class="close-btn" data-action="close" aria-label="Close" title="Close" tabindex="0">${iconToHtml(IconClose, 14)}</button>`
 
   panelEl.innerHTML = `
     <div class="panel-text">&ldquo;${escapedText}&rdquo;</div>

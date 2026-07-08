@@ -1,4 +1,20 @@
 import { injectContentStyles } from './sharedStyles'
+import { iconToHtml } from '../utils/renderIcon'
+import {
+  IconVocabularyBook,
+  IconWarning,
+  IconTodayPlan,
+  IconSpeaking,
+  IconWriting,
+  IconReading,
+  IconListening,
+  IconTarget,
+  IconThumbsUp,
+  IconSaved,
+  IconExplain,
+  IconProgress,
+  IconHelpCircle,
+} from '@ielts/ui'
 
 const PANEL_ID = 'ielts-proactive-panel'
 const STYLES_ID = 'ielts-proactive-styles'
@@ -24,23 +40,23 @@ let onDismiss: DismissHandler | null = null
 let onAction: ActionHandler | null = null
 
 const categoryIcons: Record<string, string> = {
-  'vocabulary-review': '📖',
-  'mistake-review': '⚠️',
-  'study-plan': '📋',
-  'speaking-practice': '🎤',
-  'writing-practice': '✍️',
-  'reading-practice': '📰',
-  'listening-practice': '🎧',
-  'exam-countdown': '🎯',
-  motivation: '💪',
-  'saved-content': '💾',
-  'daily-tip': '💡',
-  'progress-report': '📊',
-  suggestion: '🤔',
+  'vocabulary-review': iconToHtml(IconVocabularyBook, 18),
+  'mistake-review': iconToHtml(IconWarning, 18),
+  'study-plan': iconToHtml(IconTodayPlan, 18),
+  'speaking-practice': iconToHtml(IconSpeaking, 18),
+  'writing-practice': iconToHtml(IconWriting, 18),
+  'reading-practice': iconToHtml(IconReading, 18),
+  'listening-practice': iconToHtml(IconListening, 18),
+  'exam-countdown': iconToHtml(IconTarget, 18),
+  motivation: iconToHtml(IconThumbsUp, 18),
+  'saved-content': iconToHtml(IconSaved, 18),
+  'daily-tip': iconToHtml(IconExplain, 18),
+  'progress-report': iconToHtml(IconProgress, 18),
+  suggestion: iconToHtml(IconHelpCircle, 18),
 }
 
 function getCategoryIcon(category?: string): string {
-  return (category && categoryIcons[category]) || '💬'
+  return (category && categoryIcons[category]) || iconToHtml(IconSpeaking, 18)
 }
 
 function createPanel(data: ProactiveMessageData): HTMLDivElement {

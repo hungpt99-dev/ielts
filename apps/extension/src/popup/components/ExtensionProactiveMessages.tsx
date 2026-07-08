@@ -1,19 +1,20 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
 import { ProactiveMessageService, ProactiveEventBus } from '@ielts/ai-tutor'
 import type { ProactiveMessage, ProactiveMessageSettings } from '@ielts/ai-tutor'
+import { IconVocabularyBook, IconWarning, IconTarget, IconExplain, IconClose } from '@ielts/ui'
 
-const categoryIcons: Record<string, string> = {
-  'vocabulary-review': '📖',
-  'mistake-review': '⚠️',
+const categoryIcons: Record<string, ReactNode> = {
+  'vocabulary-review': <IconVocabularyBook size={16} />,
+  'mistake-review': <IconWarning size={16} />,
   'study-plan': '📋',
   'speaking-practice': '🎤',
   'writing-practice': '✍️',
   'reading-practice': '📰',
   'listening-practice': '🎧',
-  'exam-countdown': '🎯',
+  'exam-countdown': <IconTarget size={16} />,
   motivation: '💪',
   'saved-content': '💾',
-  'daily-tip': '💡',
+  'daily-tip': <IconExplain size={16} />,
   'progress-report': '📊',
   suggestion: '🤔',
 }
@@ -30,7 +31,7 @@ const priorityBgColors: Record<string, string> = {
   low: 'transparent',
 }
 
-function getCategoryIcon(category: string): string {
+function getCategoryIcon(category: string): ReactNode {
   return categoryIcons[category] || '💬'
 }
 
@@ -285,7 +286,7 @@ export default function ExtensionProactiveMessages() {
                     title="Dismiss"
                     aria-label="Dismiss"
                   >
-                    ✕
+                    <IconClose size={12} />
                   </button>
                   {msg.action && (
                     <button

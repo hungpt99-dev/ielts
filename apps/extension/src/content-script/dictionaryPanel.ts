@@ -10,6 +10,8 @@ import {
   safeSendMessage,
   safeFetchProviderConfig,
 } from '../utils/safe-chrome'
+import { iconToHtml } from '../utils/renderIcon'
+import { IconVocabulary, IconWarning, IconClose } from '@ielts/ui'
 
 const PANEL_ID = 'ielts-dict-panel'
 const TOAST_ID = 'ielts-dict-toast'
@@ -169,7 +171,7 @@ function showPanel(rect: DOMRect): void {
   panelEl.innerHTML = `
     <div id="${PANEL_ID}-header" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px 0;gap:8px;">
       <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
-        <span style="flex-shrink:0;font-size:15px;">📖</span>
+        <span style="flex-shrink:0;font-size:15px;display:inline-flex;align-items:center;">${iconToHtml(IconVocabulary, 15)}</span>
         <span id="${PANEL_ID}-word" style="font-size:14px;font-weight:600;color:var(--ielts-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(currentWord)}</span>
       </div>
       <div id="${PANEL_ID}-meta" style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
@@ -180,7 +182,7 @@ function showPanel(rect: DOMRect): void {
     <div id="${PANEL_ID}-body" style="padding:4px 12px 8px;min-height:32px;color:var(--ielts-text);"></div>
     <div id="${PANEL_ID}-footer" style="display:none;padding:0 12px 8px;gap:6px;align-items:center;">
       <button id="${PANEL_ID}-save" style="display:flex;align-items:center;gap:4px;padding:5px 12px;border:none;border-radius:6px;background:var(--ielts-primary);color:var(--ielts-on-primary, #fff);font-size:12px;cursor:pointer;font-weight:500;line-height:1;">📥 Save Word</button>
-      <button id="${PANEL_ID}-close" aria-label="Close" style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:none;border-radius:6px;background:transparent;color:var(--ielts-muted);font-size:13px;cursor:pointer;line-height:1;">✕</button>
+      <button id="${PANEL_ID}-close" aria-label="Close" style="display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:none;border-radius:6px;background:transparent;color:var(--ielts-muted);font-size:13px;cursor:pointer;line-height:1;">${iconToHtml(IconClose, 13)}</button>
     </div>
   `
 
@@ -231,7 +233,7 @@ async function loadDictionaryData(): Promise<void> {
     bodyEl.innerHTML = `
       <div style="padding:6px 0;">
         <div style="font-size:12px;color:var(--ielts-text-secondary);line-height:1.5;">
-          <span style="color:var(--ielts-warning);">⚠️</span> Add AI key in Settings to see dictionary data.
+          <span style="color:var(--ielts-warning);display:inline-flex;align-items:center;">${iconToHtml(IconWarning, 14)}</span> Add AI key in Settings to see dictionary data.
         </div>
       </div>
     `

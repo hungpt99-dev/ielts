@@ -23,6 +23,7 @@ export type ExtensionSettings = SharedSettings & {
   floatingToolbar: boolean
   autoSaveSelected: boolean
   autoHighlightSavedVocabulary: boolean
+  autoAiLookup: boolean
   defaultCategory: typeof SAVE_CATEGORIES[number]
   defaultTopic: string
 }
@@ -32,6 +33,7 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   floatingToolbar: true,
   autoSaveSelected: false,
   autoHighlightSavedVocabulary: true,
+  autoAiLookup: false,
   defaultCategory: 'vocabulary',
   defaultTopic: 'general',
 }
@@ -64,6 +66,7 @@ interface SyncSettings {
   floatingToolbar: boolean
   autoSaveSelected: boolean
   autoHighlightSavedVocabulary: boolean
+  autoAiLookup: boolean
   defaultCategory: typeof SAVE_CATEGORIES[number]
   defaultTopic: string
 }
@@ -81,6 +84,7 @@ function toSyncSettings(s: ExtensionSettings): SyncSettings {
     floatingToolbar: s.floatingToolbar,
     autoSaveSelected: s.autoSaveSelected,
     autoHighlightSavedVocabulary: s.autoHighlightSavedVocabulary,
+    autoAiLookup: s.autoAiLookup,
     defaultCategory: s.defaultCategory,
     defaultTopic: s.defaultTopic,
   }

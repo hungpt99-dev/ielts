@@ -18,6 +18,8 @@ import {
   emitExtensionSelectedTextExplained,
   emitExtensionSelectedTextSimplified,
 } from '../background/eventEmitters'
+import { iconToHtml } from '../utils/renderIcon'
+import { IconWarning, IconAITutor, IconClose } from '@ielts/ui'
 
 const PANEL_ID = 'ielts-ai-explain-panel'
 const OVERLAY_ID = 'ielts-ai-explain-overlay'
@@ -142,7 +144,7 @@ function createPanel(): HTMLDivElement {
         <span role="img" aria-label="AI">🤖</span>
         <span>AI Explain</span>
       </div>
-      <button id="${PANEL_ID}-close" style="background:none;border:none;color:var(--ielts-muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px;line-height:1;" aria-label="Close panel">✕</button>
+      <button id="${PANEL_ID}-close" style="background:none;border:none;color:var(--ielts-muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px;line-height:1;" aria-label="Close panel">${iconToHtml(IconClose, 14)}</button>
     </div>
     <div id="${PANEL_ID}-text" style="padding:12px 18px;border-bottom:1px solid var(--ielts-border);font-size:13px;color:var(--ielts-text-secondary);max-height:80px;overflow-y:auto;flex-shrink:0;word-break:break-word;line-height:1.5;"></div>
     <div id="${PANEL_ID}-tabs" role="tablist" aria-label="AI explain options" style="display:flex;gap:4px;padding:10px 18px;border-bottom:1px solid var(--ielts-border);overflow-x:auto;flex-shrink:0;scrollbar-width:thin;"></div>
@@ -316,7 +318,7 @@ function renderMissingKey(bodyEl: HTMLDivElement): void {
 function renderError(bodyEl: HTMLDivElement, error: string): void {
   bodyEl.innerHTML = `
     <div role="alert" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;gap:12px;text-align:center;">
-      <div style="font-size:28px;" role="img" aria-label="Warning">⚠️</div>
+      <div role="img" aria-label="Warning">${iconToHtml(IconWarning, 28)}</div>
       <div style="color:var(--ielts-danger);font-size:13px;line-height:1.5;max-width:380px;word-break:break-word;">${escapeHtml(error)}</div>
       <button id="${PANEL_ID}-retry" style="padding:8px 16px;border-radius:8px;border:none;background:var(--ielts-surface-alt);color:var(--ielts-muted);font-size:13px;cursor:pointer;">Try Again</button>
     </div>
@@ -477,7 +479,7 @@ function renderQuizResult(data: QuizResult): string {
           `).join('')}
         </div>
         <div style="margin-top:8px;padding:8px 10px;background:var(--ielts-success);border-radius:6px;font-size:12px;color:var(--ielts-on-primary, #fff);line-height:1.5;">
-          💡 ${escapeHtml(q.explanation)}
+          ${iconToHtml(IconAITutor, 16)} ${escapeHtml(q.explanation)}
         </div>
       </div>
     `

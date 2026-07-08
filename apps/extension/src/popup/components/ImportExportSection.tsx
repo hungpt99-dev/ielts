@@ -11,7 +11,7 @@ import {
 import { saveVocabularyEntry, type ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveArticleEntry, type ExtensionArticleEntry } from '../../storage/articleStore'
 import { incrementDailyProgress } from '../../services/storage'
-import { IconBack, IconSearch, IconInfo } from '@ielts/ui'
+import { IconBack, IconSearch, IconInfo, IconClose } from '@ielts/ui'
 
 interface ImportExportSectionProps {
   onBack: () => void
@@ -458,7 +458,7 @@ background: 'var(--color-danger-light)',
                   }}
                   aria-label="Close preview"
                 >
-                  ✕
+                  <IconClose size={16} />
                 </button>
               </div>
               <div

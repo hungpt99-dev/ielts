@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { ExtensionMistakeEntry } from '../../storage/mistakeStore'
-import { IconAdd, IconInfo } from '@ielts/ui'
+import { IconAdd, IconInfo, IconClose } from '@ielts/ui'
 import {
   MISTAKE_SKILLS,
   STATUS_OPTIONS,
@@ -796,7 +796,7 @@ export default function MistakeNotebook({ onBack }: MistakeNotebookProps) {
                 padding: '4px',
                 lineHeight: 1,
               }}>
-                ✕
+                <IconClose size={16} />
               </button>
             </div>
 

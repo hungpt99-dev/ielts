@@ -104,6 +104,12 @@ export default function GeneralSettings({ settings, onSave }: GeneralSettingsPro
           checked={settings.autoHighlightSavedVocabulary}
           onChange={(v) => doSave({ autoHighlightSavedVocabulary: v })}
         />
+        <ToggleField
+          label="Auto AI Lookup"
+          description="When the popup opens with a highlighted word, automatically look it up with AI"
+          checked={settings.autoAiLookup}
+          onChange={(v) => doSave({ autoAiLookup: v })}
+        />
       </Section>
 
       <Section title="Defaults">
