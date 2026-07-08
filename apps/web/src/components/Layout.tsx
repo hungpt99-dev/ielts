@@ -410,10 +410,10 @@ export default function AppLayout() {
         </div>
       </aside>
 
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col">
         <Headbar onMenuToggle={() => setSidebarOpen(true)} />
 
-        <main className="flex-1 overflow-y-auto pb-20 lg:pb-0">
+        <main className="flex-1 min-w-0 w-full overflow-y-auto pb-20 lg:pb-0">
           <Routes>
             <Route path="/tutor" element={<AITutorPage />} />
             <Route path="*" element={

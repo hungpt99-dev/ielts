@@ -24,7 +24,7 @@ export default function PageContainer({
 }: PageContainerProps) {
   return (
     <div
-      className={`mx-auto w-full px-4 sm:px-6 lg:px-8 ${widths[width]} ${className}`}
+      className={`mx-auto w-full min-w-0 ${widths[width]} px-4 sm:px-6 lg:px-8 ${className}`}
       style={style}
       {...props}
     >
