@@ -1,0 +1,47 @@
+{
+  "appId": "com.ieltsjourney.app",
+  "appName": "IELTS Journey",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "iosScheme": "capacitor",
+    "hostname": "localhost"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": true,
+      "backgroundColor": "#f8fafc",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false,
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
+    "Keyboard": {
+      "resize": "body",
+      "style": "DARK",
+      "resizeOnFullScreen": true
+    },
+    "StatusBar": {
+      "style": "DEFAULT",
+      "backgroundColor": "#2563eb",
+      "overlaysWebView": false
+    }
+  },
+  "ios": {
+    "contentInset": "always",
+    "preferredContentMode": "mobile",
+    "allowsLinkPreview": true,
+    "scrollEnabled": true,
+    "backgroundColor": "#f8fafc",
+    "minVersion": "16.0"
+  },
+  "android": {
+    "backgroundColor": "#f8fafc",
+    "minVersion": "26",
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  }
+}

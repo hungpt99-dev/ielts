@@ -14,6 +14,7 @@ import { initProactiveTutor } from '../services/proactiveTutorInit'
 import { initDataSyncManager } from '../services/storage/DataSyncManager'
 import { APP_SCHEMA } from '@ielts/storage'
 import { initDb, getDb } from '@ielts/storage'
+import { initNativePlatform, useNativeBackButton, useNativeAppState } from '../services/nativePlatform'
 
 const DB_INIT_RETRIES = 2
 const DB_INIT_RETRY_DELAY = 500
@@ -39,6 +40,9 @@ export default function App() {
   const [initError, setInitError] = useState(false)
   const initAttempted = useRef(false)
 
+  useNativeBackButton()
+  useNativeAppState()
+
   useEffect(() => {
     if (initAttempted.current) return
     initAttempted.current = true
@@ -46,6 +50,7 @@ export default function App() {
     let cancelled = false
 
     async function bootstrap() {
+      await initNativePlatform()
       const ok = await ensureDbReady()
       if (cancelled) return
       if (!ok) {
