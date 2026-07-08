@@ -417,7 +417,7 @@ export default function AppLayout() {
         <Headbar onMenuToggle={() => setSidebarOpen(true)} />
 
         <SafeAreaContainer left right className="flex flex-1 flex-col min-w-0 overflow-hidden">
-          <main className="flex-1 min-w-0 w-full overflow-y-auto pb-[calc(72px+env(safe-area-inset-bottom,0px))] lg:pb-0" style={{ WebkitOverflowScrolling: 'touch' }}>
+          <main className="flex min-h-0 flex-1 flex-col min-w-0 w-full overflow-hidden">
             <Routes>
               <Route path="/tutor" element={
                 <Suspense fallback={<LoadingSpinner fullPage message="Loading AI Tutor..." />}>
@@ -425,45 +425,47 @@ export default function AppLayout() {
                 </Suspense>
               } />
               <Route path="*" element={
-                <PageContainer width="wide">
-                  <Suspense fallback={<LoadingSpinner fullPage />}>
-                    <Routes>
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/plan" element={<StudyPlan />} />
-                      <Route path="/today-plan" element={<TodayPlanPage />} />
-                      <Route path="/roadmap" element={<FullStudyRoadmapPage />} />
-                      <Route path="/vocabulary" element={<NotebookPage />} />
-                      <Route path="/review" element={<VocabularyReview />} />
-                      <Route path="/review-center" element={<ReviewCenter />} />
-                      <Route path="/reading" element={<ReadingPracticePage />} />
-                      <Route path="/listening" element={<ListeningPracticePage />} />
-                      <Route path="/writing" element={<WritingPracticePage />} />
-                      <Route path="/speaking" element={<SpeakingPracticePage />} />
-                      <Route path="/grammar" element={<GrammarExercisePage />} />
-                      <Route path="/mistakes" element={<MistakeNotebook />} />
-                      <Route path="/mock-tests" element={<MockTests />} />
-                      <Route path="/topics" element={<TopicsProgress />} />
-                      <Route path="/progress" element={<Progress />} />
-                      <Route path="/progress-review" element={<Navigate to="/progress" replace />} />
-                      <Route path="/artifacts" element={<ArtifactsPage />} />
-                      <Route path="/search" element={<SearchPage />} />
-                      <Route path="/public-api" element={<PublicApiImportPage />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="/settings/ai" element={<AIProviderSettingsPage />} />
-                      <Route path="/settings/data" element={<DataManagement />} />
-                      <Route path="/settings/extension" element={<ExtensionConnectionPage />} />
-                      <Route path="/import-export" element={<ImportExport />} />
-                      <Route path="/info" element={<PublicTabPage />} />
-                      <Route path="/website-info" element={<RedirectWithHash to="/info" hash="about-website" />} />
-                      <Route path="/about-me" element={<RedirectWithHash to="/info" hash="about-me" />} />
-                      <Route path="/recruit" element={<RedirectWithHash to="/info" hash="recruit" />} />
-                      <Route path="/donate" element={<RedirectWithHash to="/info" hash="donate" />} />
-                      <Route path="/feedback" element={<RedirectWithHash to="/info" hash="feedback" />} />
-                      <Route path="/privacy" element={<PrivacyPage />} />
-                      <Route path="*" element={<NotFoundPage />} />
-                    </Routes>
-                  </Suspense>
-                </PageContainer>
+                <div className="h-full overflow-y-auto pb-[calc(72px+env(safe-area-inset-bottom,0px))] lg:pb-0" style={{ WebkitOverflowScrolling: 'touch' }}>
+                  <PageContainer width="wide" className="min-h-full">
+                    <Suspense fallback={<LoadingSpinner fullPage />}>
+                      <Routes>
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/plan" element={<StudyPlan />} />
+                        <Route path="/today-plan" element={<TodayPlanPage />} />
+                        <Route path="/roadmap" element={<FullStudyRoadmapPage />} />
+                        <Route path="/vocabulary" element={<NotebookPage />} />
+                        <Route path="/review" element={<VocabularyReview />} />
+                        <Route path="/review-center" element={<ReviewCenter />} />
+                        <Route path="/reading" element={<ReadingPracticePage />} />
+                        <Route path="/listening" element={<ListeningPracticePage />} />
+                        <Route path="/writing" element={<WritingPracticePage />} />
+                        <Route path="/speaking" element={<SpeakingPracticePage />} />
+                        <Route path="/grammar" element={<GrammarExercisePage />} />
+                        <Route path="/mistakes" element={<MistakeNotebook />} />
+                        <Route path="/mock-tests" element={<MockTests />} />
+                        <Route path="/topics" element={<TopicsProgress />} />
+                        <Route path="/progress" element={<Progress />} />
+                        <Route path="/progress-review" element={<Navigate to="/progress" replace />} />
+                        <Route path="/artifacts" element={<ArtifactsPage />} />
+                        <Route path="/search" element={<SearchPage />} />
+                        <Route path="/public-api" element={<PublicApiImportPage />} />
+                        <Route path="/settings" element={<Settings />} />
+                        <Route path="/settings/ai" element={<AIProviderSettingsPage />} />
+                        <Route path="/settings/data" element={<DataManagement />} />
+                        <Route path="/settings/extension" element={<ExtensionConnectionPage />} />
+                        <Route path="/import-export" element={<ImportExport />} />
+                        <Route path="/info" element={<PublicTabPage />} />
+                        <Route path="/website-info" element={<RedirectWithHash to="/info" hash="about-website" />} />
+                        <Route path="/about-me" element={<RedirectWithHash to="/info" hash="about-me" />} />
+                        <Route path="/recruit" element={<RedirectWithHash to="/info" hash="recruit" />} />
+                        <Route path="/donate" element={<RedirectWithHash to="/info" hash="donate" />} />
+                        <Route path="/feedback" element={<RedirectWithHash to="/info" hash="feedback" />} />
+                        <Route path="/privacy" element={<PrivacyPage />} />
+                        <Route path="*" element={<NotFoundPage />} />
+                      </Routes>
+                    </Suspense>
+                  </PageContainer>
+                </div>
               } />
             </Routes>
             {location.pathname !== '/tutor' && (
