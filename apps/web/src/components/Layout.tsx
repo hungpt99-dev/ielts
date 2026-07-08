@@ -1,5 +1,5 @@
 import { useState, useEffect, type ReactNode } from 'react'
-import { NavLink, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Headbar from './layout/Headbar'
 import Dashboard from '../features/dashboard/Dashboard'
 import OnboardingForm from '../features/onboarding/OnboardingForm'
@@ -256,12 +256,12 @@ export default function AppLayout() {
           className="flex h-16 shrink-0 items-center justify-between border-b px-4"
           style={{ borderColor: 'var(--color-border)' }}
         >
-          <div className="flex items-center gap-2">
+          <Link to="/landing" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
             <img src="/icon.png" alt="" className="h-7 w-7 rounded-lg" />
             <span style={{ color: 'var(--color-text)', fontWeight: 700, fontSize: '1.125rem', fontFamily: 'var(--font-sans)' }}>
               IELTS Journey
             </span>
-          </div>
+          </Link>
           <button
               onClick={closeSidebar}
               className="rounded-lg p-2 lg:hidden"

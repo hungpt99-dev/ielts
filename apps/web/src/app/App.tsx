@@ -30,6 +30,7 @@ export default function App() {
                     : <LandingPage />
                 }
               />
+              <Route path="/landing" element={<LandingPage />} />
               <Route path="/*" element={<AppLayout />} />
             </Routes>
           </ToastProvider>
