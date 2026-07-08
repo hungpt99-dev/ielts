@@ -2,7 +2,6 @@ import { useState, useEffect, type ReactNode } from 'react'
 import { Link, NavLink, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Headbar from './layout/Headbar'
 import Dashboard from '../features/dashboard/Dashboard'
-import OnboardingForm from '../features/onboarding/OnboardingForm'
 import { isOnboardingComplete } from '../features/onboarding/onboardingService'
 import StudyPlan from '../features/study-plan/StudyPlan'
 import NotebookPage from '../pages/vocabulary/NotebookPage'
@@ -419,7 +418,7 @@ export default function AppLayout() {
             <Route path="*" element={
               <PageContainer width="wide">
                 <Routes>
-                  <Route path="/onboarding" element={<OnboardingForm />} />
+
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/plan" element={<StudyPlan />} />
                   <Route path="/today-plan" element={<TodayPlanPage />} />

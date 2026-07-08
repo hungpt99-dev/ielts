@@ -4,6 +4,7 @@ import { ThemeProvider } from '../context/ThemeContext'
 import { SettingsProvider } from '../context/SettingsContext'
 import AppLayout from '../components/Layout'
 import LandingPage from '../pages/LandingPage'
+import OnboardingPage from '../pages/OnboardingPage'
 import { isOnboardingComplete } from '../features/onboarding/onboardingService'
 import { ToastProvider } from '../components/ui/Toast'
 import ErrorBoundary from '../components/ui/ErrorBoundary'
@@ -27,10 +28,11 @@ export default function App() {
                 element={
                   isOnboardingComplete()
                     ? <Navigate to="/dashboard" replace />
-                    : <LandingPage />
+                    : <Navigate to="/onboarding" replace />
                 }
               />
               <Route path="/landing" element={<LandingPage />} />
+              <Route path="/onboarding" element={<OnboardingPage />} />
               <Route path="/*" element={<AppLayout />} />
             </Routes>
           </ToastProvider>
