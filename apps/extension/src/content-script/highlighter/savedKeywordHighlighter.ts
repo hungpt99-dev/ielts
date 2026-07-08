@@ -36,10 +36,19 @@ interface SavedVocabEntry {
 
 let currentWords: HighlightWord[] = []
 let isEnabled = true
+let excludedHosts: string[] = []
 let observer: MutationObserver | null = null
 let scanTimer: ReturnType<typeof setTimeout> | null = null
 let isInitialized = false
 let retryCount = 0
+
+function isExcludedHost(): boolean {
+  const host = window.location.hostname
+  return excludedHosts.some(pattern => {
+    const normalized = pattern.startsWith('.') ? pattern : `.${pattern}`
+    return host === pattern || host.endsWith(normalized)
+  })
+}
 
 async function loadSettings(): Promise<boolean> {
   try {
@@ -47,9 +56,11 @@ async function loadSettings(): Promise<boolean> {
       chrome.storage.local.get([SETTINGS_KEY], r),
     )
     const settings = result[SETTINGS_KEY] || {}
+    excludedHosts = settings.highlightExcludedHosts ?? []
     return settings.autoHighlightSavedVocabulary !== false
   } catch {
     console.debug('[IELTS Journey] Could not load settings, defaulting to enabled')
+    excludedHosts = []
     return true
   }
 }
@@ -103,7 +114,7 @@ async function loadVocabulary(): Promise<HighlightWord[]> {
 }
 
 function scanPage(root?: Node): void {
-  if (!isActive() || currentWords.length === 0) return
+  if (!isActive() || currentWords.length === 0 || isExcludedHost()) return
 
   const target = root ?? document.body
   if (!target) return
@@ -181,7 +192,7 @@ async function refreshHighlights(): Promise<void> {
 
   removeAllHighlights()
 
-  if (!isActive() || currentWords.length === 0) return
+  if (!isActive() || currentWords.length === 0 || isExcludedHost()) return
 
   if (!document.body) {
     if (retryCount < MAX_RETRIES) {
@@ -202,10 +213,16 @@ function onStorageChanged(
     const newVal = changes[SETTINGS_KEY].newValue || {}
     const enabled = newVal.autoHighlightSavedVocabulary !== false
 
-    if (enabled !== isEnabled) {
+    const newExcludedHosts: string[] = newVal.highlightExcludedHosts ?? []
+    const hostsChanged = JSON.stringify(newExcludedHosts) !== JSON.stringify(excludedHosts)
+    if (hostsChanged) {
+      excludedHosts = newExcludedHosts
+    }
+
+    if (enabled !== isEnabled || hostsChanged) {
       isEnabled = enabled
-      setActive(enabled)
-      if (enabled) {
+      setActive(enabled && !isExcludedHost())
+      if (enabled && !isExcludedHost()) {
         refreshHighlights()
         emitExtensionAutoHighlightEnabled()
       } else {
@@ -241,6 +258,11 @@ export async function initSavedKeywordHighlighter(): Promise<void> {
 
   isEnabled = await loadSettings()
   setActive(isEnabled)
+
+  if (isExcludedHost()) {
+    console.debug(`[IELTS Journey] Auto-highlight disabled for host: ${window.location.hostname}`)
+    return
+  }
 
   injectContentStyles()
   injectHighlightStyles()

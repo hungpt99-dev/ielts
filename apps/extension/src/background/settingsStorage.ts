@@ -24,6 +24,7 @@ export type ExtensionSettings = SharedSettings & {
   autoSaveSelected: boolean
   autoHighlightSavedVocabulary: boolean
   autoAiLookup: boolean
+  highlightExcludedHosts: string[]
   defaultCategory: typeof SAVE_CATEGORIES[number]
   defaultTopic: string
 }
@@ -34,6 +35,7 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   autoSaveSelected: false,
   autoHighlightSavedVocabulary: true,
   autoAiLookup: false,
+  highlightExcludedHosts: ['ieltsjourney.dev'],
   defaultCategory: 'vocabulary',
   defaultTopic: 'general',
 }
@@ -67,6 +69,7 @@ interface SyncSettings {
   autoSaveSelected: boolean
   autoHighlightSavedVocabulary: boolean
   autoAiLookup: boolean
+  highlightExcludedHosts: string[]
   defaultCategory: typeof SAVE_CATEGORIES[number]
   defaultTopic: string
 }
@@ -85,6 +88,7 @@ function toSyncSettings(s: ExtensionSettings): SyncSettings {
     autoSaveSelected: s.autoSaveSelected,
     autoHighlightSavedVocabulary: s.autoHighlightSavedVocabulary,
     autoAiLookup: s.autoAiLookup,
+    highlightExcludedHosts: s.highlightExcludedHosts,
     defaultCategory: s.defaultCategory,
     defaultTopic: s.defaultTopic,
   }
