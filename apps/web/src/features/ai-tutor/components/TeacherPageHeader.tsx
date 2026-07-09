@@ -33,7 +33,7 @@ export default function TeacherPageHeader({ streak, bandInfo, examCountdown }: T
             <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>{streak}d</span>
           </div>
         )}
-        {examCountdown && examCountdown > 0 && (
+        {examCountdown !== undefined && examCountdown > 0 && (
           <div
             className="rounded-lg px-2.5 py-1.5"
             style={{

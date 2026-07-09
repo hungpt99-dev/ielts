@@ -12,6 +12,7 @@ import { getRecentActivities, recordActivity } from '../services/activityReposit
 import { emitAITutorEvent } from '../services/aiTutorEventService'
 import { getTeacherProgressReview, invalidateAIReviewCache } from '../services/teacherProgressReviewService'
 import { getRouteForSkill } from '../utils/skillRouting'
+import { AI_TUTOR_REFRESH } from '../constants'
 import type { TutorSession, LearningProfile, FeedbackSummary, TeacherAdviceItem, ActivityItem } from '../types/aiTutor.types'
 import type { ProgressReview } from '../services/teacherProgressReviewService'
 
@@ -39,6 +40,7 @@ const emptyProgressReview: ProgressReview = {
   skillProgress: [],
   studyPlanAdherence: '',
   tutorFeedback: '',
+  generatedAt: null,
 }
 
 const emptyProfile: LearningProfile = {
@@ -168,6 +170,11 @@ export function useAITutorPage(): AITutorPageState {
   const [progressReview, setProgressReview] = useState<ProgressReview>(emptyProgressReview)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  const refreshingRef = useRef(false)
+  const refreshGenRef = useRef(0)
+  const reviewGenRef = useRef(0)
+  const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const isAiConfigured = useCheckAiConfig()
   const mountedRef = useRef(true)
 
@@ -177,50 +184,90 @@ export function useAITutorPage(): AITutorPageState {
 
   useEffect(() => {
     let cancelled = false
+    mountedRef.current = true
 
-    loadLearningProfile().then(async (raw) => {
-      if (cancelled) return
-      const data = applyRawProfile(raw)
-      setProfile(data.profile)
-      setSession(data.session)
-      setFeedbackSummary(data.feedbackSummary)
-      setAdviceItems(data.adviceItems)
-      setRecentActivities(data.recentActivities)
-      setLoading(false)
+    loadLearningProfile()
+      .then(async (raw) => {
+        if (cancelled) return
+        const data = applyRawProfile(raw)
+        setProfile(data.profile)
+        setSession(data.session)
+        setFeedbackSummary(data.feedbackSummary)
+        setAdviceItems(data.adviceItems)
+        setRecentActivities(data.recentActivities)
+        setLoading(false)
 
-      const review = await getTeacherProgressReview(raw.context)
-      if (cancelled) return
-      setProgressReview(review)
-    })
+        const pageGen = reviewGenRef.current
+        const review = await getTeacherProgressReview(raw.context)
+        if (cancelled || pageGen !== reviewGenRef.current) return
+        setProgressReview(review)
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false)
+      })
 
     return () => {
       cancelled = true
       mountedRef.current = false
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current)
+        refreshTimeoutRef.current = null
+      }
     }
   }, [])
 
-  const onRefresh = useCallback(async () => {
-    if (refreshing) return
-    setRefreshing(true)
-    invalidateAIReviewCache()
-    try {
-      const raw = await loadLearningProfile()
-      if (!mountedRef.current) return
-      const data = applyRawProfile(raw)
-      setProfile(data.profile)
-      setSession(data.session)
-      setFeedbackSummary(data.feedbackSummary)
-      setAdviceItems(data.adviceItems)
-      setRecentActivities(data.recentActivities)
-
-      const review = await getTeacherProgressReview(raw.context)
-      if (mountedRef.current) setProgressReview(review)
-    } catch {
-      // keep existing data on error
-    } finally {
-      if (mountedRef.current) setRefreshing(false)
+  const finishRefresh = useCallback(() => {
+    if (refreshTimeoutRef.current) {
+      clearTimeout(refreshTimeoutRef.current)
+      refreshTimeoutRef.current = null
     }
-  }, [refreshing])
+    refreshingRef.current = false
+    setRefreshing(false)
+  }, [])
+
+  const onRefresh = useCallback(() => {
+    if (refreshingRef.current) return
+    const gen = ++refreshGenRef.current
+    refreshingRef.current = true
+    setRefreshing(true)
+
+    refreshTimeoutRef.current = setTimeout(() => {
+      if (gen === refreshGenRef.current) finishRefresh()
+    }, AI_TUTOR_REFRESH.SAFETY_TIMEOUT_MS)
+
+    const MIN_REFRESH_DURATION_MS = 600
+    const refreshStartedAt = Date.now()
+
+    setTimeout(async () => {
+      try {
+        const raw = await loadLearningProfile()
+        if (!mountedRef.current) return
+        const data = applyRawProfile(raw)
+        setProfile(data.profile)
+        setSession(data.session)
+        setFeedbackSummary(data.feedbackSummary)
+        setAdviceItems(data.adviceItems)
+        setRecentActivities(data.recentActivities)
+
+        ++reviewGenRef.current
+
+        const review = await getTeacherProgressReview(raw.context, true)
+        if (mountedRef.current) setProgressReview(review)
+      } catch (err) {
+        console.error('AI Tutor refresh failed:', err)
+      } finally {
+        const elapsed = Date.now() - refreshStartedAt
+        const remaining = MIN_REFRESH_DURATION_MS - elapsed
+        if (remaining > 0) {
+          setTimeout(() => {
+            if (gen === refreshGenRef.current) finishRefresh()
+          }, remaining)
+        } else {
+          if (gen === refreshGenRef.current) finishRefresh()
+        }
+      }
+    }, 0)
+  }, [finishRefresh])
 
   const recordAndNavigate = useCallback((eventType: Parameters<typeof emitAITutorEvent>[0]['eventType'], activityLabel: string, route: string) => {
     emitAITutorEvent({ eventType, todayFocus: session.focus, skill: session.skill })

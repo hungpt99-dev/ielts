@@ -1,10 +1,22 @@
-import { IconAITutor, IconCheckCircle, IconTarget, IconStreak, IconTimer, IconVocabulary, IconMistakes } from '@ielts/ui'
+import { IconAITutor, IconTarget, IconStreak, IconTimer, IconVocabulary, IconMistakes } from '@ielts/ui'
 import type { ProgressReview, SkillBreakdown } from '../services/teacherProgressReviewService'
 
 interface TeacherProgressReviewCardProps {
   review: ProgressReview
   onRefresh?: () => void
   refreshing?: boolean
+}
+
+function agoLabel(iso: string | null): string | null {
+  if (!iso) return null
+  const diff = Date.now() - new Date(iso).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'Just now'
+  if (mins < 60) return `${mins}m ago`
+  const hours = Math.floor(mins / 60)
+  if (hours < 24) return `${hours}h ago`
+  const days = Math.floor(hours / 24)
+  return `${days}d ago`
 }
 
 export default function TeacherProgressReviewCard({ review, onRefresh, refreshing }: TeacherProgressReviewCardProps) {
@@ -16,7 +28,7 @@ export default function TeacherProgressReviewCard({ review, onRefresh, refreshin
         border: '1px solid var(--color-tutor-border)',
       }}
     >
-      <Header onRefresh={onRefresh} refreshing={refreshing} />
+      <Header onRefresh={onRefresh} refreshing={refreshing} generatedAt={review.generatedAt} />
 
       <SummaryText text={review.summary} />
 
@@ -55,7 +67,8 @@ export default function TeacherProgressReviewCard({ review, onRefresh, refreshin
   )
 }
 
-function Header({ onRefresh, refreshing }: { onRefresh?: () => void; refreshing?: boolean }) {
+function Header({ onRefresh, refreshing, generatedAt }: { onRefresh?: () => void; refreshing?: boolean; generatedAt?: string | null }) {
+  const label = agoLabel(generatedAt ?? null)
   return (
     <div className="flex items-center gap-3">
       <div
@@ -69,7 +82,7 @@ function Header({ onRefresh, refreshing }: { onRefresh?: () => void; refreshing?
           Teacher's Progress Review
         </p>
         <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-          AI-powered analysis of your recent performance
+          {label ? `Analysis from ${label}` : 'AI-powered analysis of your recent performance'}
         </p>
       </div>
       {onRefresh && (

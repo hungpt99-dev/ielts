@@ -10,6 +10,7 @@ import {
   emitStudyTaskCompleted,
   emitStudyDayCompleted,
 } from '../features/websiteActions/eventEmitters'
+import { getRouteForSkill } from '../features/ai-tutor/utils/skillRouting'
 import { IconListening, IconReading, IconWriting, IconSpeaking, IconVocabulary, IconGrammar, IconVocabularyReview, IconAITutor, IconCheckCircle, IconCheck, IconChevronLeft, IconChevronRight, IconClock, IconMenu, IconTodayPlan } from '@ielts/ui'
 import PageContent from '../components/layout/PageContent'
 import type {
@@ -248,9 +249,27 @@ export default function TodayPlanPage() {
 
   const estimatedTotal = planDay?.estimatedTotalMinutes || tasks.reduce((s, t) => s + (t.timeMinutes || 0), 0)
 
-  function scrollToFirstIncomplete() {
-    const el = document.querySelector('[data-task-incomplete]')
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  function handleStartStudying() {
+    const incomplete = allPlanTasks.find(t => !t.task.isCompleted)
+    if (incomplete) {
+      const skill = incomplete.key.replace('Task', '').toLowerCase()
+      navigate(getRouteForSkill(skill))
+      return
+    }
+    const incompleteLegacy = tasks.find(t => !t.isDone)
+    if (incompleteLegacy) {
+      const cat = incompleteLegacy.category.toLowerCase()
+      if (cat.includes('reading')) { navigate('/reading'); return }
+      if (cat.includes('listening')) { navigate('/listening'); return }
+      if (cat.includes('writing')) { navigate('/writing'); return }
+      if (cat.includes('speaking')) { navigate('/speaking'); return }
+      if (cat.includes('grammar')) { navigate('/grammar'); return }
+      if (cat.includes('vocabulary')) { navigate('/vocabulary'); return }
+      if (cat.includes('mock')) { navigate('/mock-tests'); return }
+      navigate('/dashboard')
+      return
+    }
+    navigate('/plan')
   }
 
   if (loading) {
@@ -450,11 +469,15 @@ export default function TodayPlanPage() {
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
             {!allDone && (
-              <Button size="sm" onClick={scrollToFirstIncomplete}>
+              <Button size="sm" onClick={handleStartStudying}>
                 {completedTasks > 0 ? 'Continue Studying' : 'Start Studying'}
               </Button>
             )}
-            <Button variant="ghost" size="sm" onClick={() => goToTutor({ prompt: `Help me with today's study goal: ${planDay?.mainGoal || "Today's Study Session"}` })}>
+            <Button variant="ghost" size="sm" onClick={() => {
+              const taskList = allPlanTasks.map(t => t.task.title).join(', ') || tasks.map(t => t.title).join(', ')
+              const goal = planDay?.mainGoal || "Today's Study Session"
+              goToTutor({ prompt: taskList ? `Help me with today's study: ${goal}. I need to do: ${taskList}` : `Help me plan today's IELTS study session` })
+            }}>
               Ask AI Tutor
             </Button>
           </div>
@@ -681,11 +704,8 @@ export default function TodayPlanPage() {
 
                         <button
                           onClick={() => {
-                            const month = new Date(todayStr).getMonth()
-                            const dayNum = new Date(todayStr).getDate()
-                            const tomorrow = new Date(todayStr)
-                            tomorrow.setDate(dayNum + 1)
-                            navigate('/plan?date=' + tomorrow.toISOString().slice(0, 10))
+                            const skill = key.replace('Task', '').toLowerCase()
+                            navigate(getRouteForSkill(skill))
                           }}
                           className="inline-flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
                           style={{ backgroundColor: 'var(--color-surface-alt)', color: 'var(--color-muted)' }}

@@ -2,12 +2,14 @@ import { AIProgressReviewController } from '@ielts/ai-tutor'
 import type { ProgressReviewData, SkillProgress, WeaknessReport, WeakSkill, RepeatedMistake, VocabularyStatus, ReviewSummary, StudyConsistency } from '@ielts/ai-tutor'
 import { callAI } from '@ielts/ai'
 import { buildPersonalizationContext, analyzeWeakSkills } from '../../personalization/personalizationService'
-import type { PersonalizationContext, SkillType, WeakSkillAnalysis } from '../../personalization/types'
+import type { PersonalizationContext, SkillType } from '../../personalization/types'
 import { loadConfiguration } from '../../configuration/storage'
 import { loadAppSettings } from '../../../services/storage/SettingsStorage'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import type { ProviderConfig } from '@ielts/ai'
 import type { AiProviderConfig as ConfigAiProviderConfig } from '../../configuration/models'
+import { CacheRepository } from '../../../services/storage/CacheRepository'
+import { AI_TUTOR_CACHE } from '../constants'
 
 export interface SkillBreakdown {
   skill: SkillType
@@ -43,7 +45,23 @@ export interface ProgressReview {
   skillProgress: { skill: string; status: string; sessions: number; accuracy: number; trend: string; analysis: string }[]
   studyPlanAdherence: string
   tutorFeedback: string
+  generatedAt: string | null
 }
+
+interface CachedReviewData {
+  improvements: string[]
+  struggles: string[]
+  skillProgress: { skill: string; status: string; sessions: number; accuracy: number; trend: string; analysis: string }[]
+  studyPlanAdherence: string
+  recommendedFocus: string[]
+  tutorFeedback: string
+  overallSummary: string
+}
+
+const reviewCache = new CacheRepository<CachedReviewData>({
+  ttlMs: AI_TUTOR_CACHE.PROGRESS_REVIEW_TTL_MS,
+  storageKey: AI_TUTOR_CACHE.PROGRESS_REVIEW_STORAGE_KEY,
+})
 
 function buildProviderConfig(): ProviderConfig | null {
   try {
@@ -189,7 +207,7 @@ async function getAIReview(ctx: PersonalizationContext): Promise<{
   const data: ProgressReviewData = {
     dateRange: {
       start: new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10),
-      end: new Date().toISOString().slice(0, 10),
+      end: new Date().toISOString(),
     },
     summary,
     skillProgress,
@@ -263,37 +281,11 @@ interface RawReviewData {
   tutorFeedback: string
 }
 
-interface AICacheEntry {
-  improvements: string[]
-  struggles: string[]
-  skillProgress: { skill: string; status: string; sessions: number; accuracy: number; trend: string; analysis: string }[]
-  studyPlanAdherence: string
-  recommendedFocus: string[]
-  tutorFeedback: string
-  cachedAt: number
-}
-
-let aiReviewCache: AICacheEntry | null = null
-const AI_CACHE_TTL = 5 * 60 * 1000
-
-function getCachedAIReview(): AICacheEntry | null {
-  if (!aiReviewCache) return null
-  if (Date.now() - aiReviewCache.cachedAt > AI_CACHE_TTL) {
-    aiReviewCache = null
-    return null
-  }
-  return aiReviewCache
-}
-
-function setCachedAIReview(data: Omit<AICacheEntry, 'cachedAt'>): void {
-  aiReviewCache = { ...data, cachedAt: Date.now() }
-}
-
 export function invalidateAIReviewCache(): void {
-  aiReviewCache = null
+  reviewCache.invalidate()
 }
 
-export async function getTeacherProgressReview(ctx?: PersonalizationContext): Promise<ProgressReview> {
+export async function getTeacherProgressReview(ctx?: PersonalizationContext, bypassCache = false): Promise<ProgressReview> {
   const resolvedCtx = ctx ?? await buildPersonalizationContext()
   const weakSkillAnalyses = analyzeWeakSkills(resolvedCtx)
 
@@ -307,7 +299,8 @@ export async function getTeacherProgressReview(ctx?: PersonalizationContext): Pr
     isWeak: resolvedCtx.profile.weakSkills.includes(a.skill),
   }))
 
-  const cachedAI = getCachedAIReview()
+  const cachedEntry = bypassCache ? null : reviewCache.get()
+
   let aiReport: {
     overallSummary: string
     improvements: string[]
@@ -319,46 +312,65 @@ export async function getTeacherProgressReview(ctx?: PersonalizationContext): Pr
     vocabularySummary: string
     vocabularyRecommendation: string
   }
+  let generatedAt: string | null
 
-  if (cachedAI) {
-    const cachedSummary = cachedAI.improvements.length > 0 || cachedAI.struggles.length > 0
-      ? `Your AI Tutor has reviewed your recent progress. ${cachedAI.studyPlanAdherence ? cachedAI.studyPlanAdherence.split('.')[0] + '.' : 'Keep up the good work!'}`
+  if (cachedEntry) {
+    const cached = cachedEntry.data
+    const cachedSummary = cached.improvements.length > 0 || cached.struggles.length > 0
+      ? `Your AI Tutor has reviewed your recent progress. ${cached.studyPlanAdherence ? cached.studyPlanAdherence.split('.')[0] + '.' : 'Keep up the good work!'}`
       : 'Your AI Tutor has reviewed your recent progress. Keep up the good work!'
 
     aiReport = {
       overallSummary: cachedSummary,
-      improvements: cachedAI.improvements,
-      struggles: cachedAI.struggles,
-      skillProgress: cachedAI.skillProgress,
-      studyPlanAdherence: cachedAI.studyPlanAdherence,
-      recommendedFocus: cachedAI.recommendedFocus,
-      tutorFeedback: cachedAI.tutorFeedback,
+      improvements: cached.improvements,
+      struggles: cached.struggles,
+      skillProgress: cached.skillProgress,
+      studyPlanAdherence: cached.studyPlanAdherence,
+      recommendedFocus: cached.recommendedFocus,
+      tutorFeedback: cached.tutorFeedback,
       vocabularySummary: '',
       vocabularyRecommendation: '',
     }
+    generatedAt = cachedEntry.generatedAt
   } else {
     const { report, rawReview } = await getAIReview(resolvedCtx)
 
-    aiReport = report ?? {
-      overallSummary: rawReview.overallSummary,
-      improvements: rawReview.improvements,
-      struggles: rawReview.struggles,
-      skillProgress: rawReview.skillProgress,
-      studyPlanAdherence: rawReview.studyPlanAdherence,
-      recommendedFocus: rawReview.recommendedFocus,
-      tutorFeedback: rawReview.tutorFeedback,
-      vocabularySummary: rawReview.vocabularyReviewStatus.summary,
-      vocabularyRecommendation: rawReview.vocabularyReviewStatus.recommendation,
-    }
+    if (report) {
+      aiReport = {
+        overallSummary: report.overallSummary,
+        improvements: report.improvements,
+        struggles: report.struggles,
+        skillProgress: report.skillProgress,
+        studyPlanAdherence: report.studyPlanAdherence,
+        recommendedFocus: report.recommendedFocus,
+        tutorFeedback: report.tutorFeedback,
+        vocabularySummary: report.vocabularySummary,
+        vocabularyRecommendation: report.vocabularyRecommendation,
+      }
 
-    setCachedAIReview({
-      improvements: aiReport.improvements,
-      struggles: aiReport.struggles,
-      skillProgress: aiReport.skillProgress,
-      studyPlanAdherence: aiReport.studyPlanAdherence,
-      recommendedFocus: aiReport.recommendedFocus,
-      tutorFeedback: aiReport.tutorFeedback,
-    })
+      reviewCache.set({
+        improvements: report.improvements,
+        struggles: report.struggles,
+        skillProgress: report.skillProgress,
+        studyPlanAdherence: report.studyPlanAdherence,
+        recommendedFocus: report.recommendedFocus,
+        tutorFeedback: report.tutorFeedback,
+        overallSummary: report.overallSummary,
+      })
+    } else {
+      aiReport = {
+        overallSummary: rawReview.overallSummary,
+        improvements: rawReview.improvements,
+        struggles: rawReview.struggles,
+        skillProgress: rawReview.skillProgress,
+        studyPlanAdherence: rawReview.studyPlanAdherence,
+        recommendedFocus: rawReview.recommendedFocus,
+        tutorFeedback: rawReview.tutorFeedback,
+        vocabularySummary: rawReview.vocabularyReviewStatus.summary,
+        vocabularyRecommendation: rawReview.vocabularyReviewStatus.recommendation,
+      }
+    }
+    generatedAt = new Date().toISOString()
   }
 
   const focusAreas = [
@@ -393,5 +405,6 @@ export async function getTeacherProgressReview(ctx?: PersonalizationContext): Pr
     skillProgress: aiReport.skillProgress,
     studyPlanAdherence: aiReport.studyPlanAdherence,
     tutorFeedback: aiReport.tutorFeedback,
+    generatedAt,
   }
 }

@@ -26,7 +26,7 @@ export default function TodayTutorSessionCard({
             <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-tutor-accent)' }}>
               {session.focus}
             </p>
-            {todayUnfinished && todayUnfinished > 0 && (
+            {todayUnfinished !== undefined && todayUnfinished > 0 && (
               <span
                 className="rounded px-1.5 py-0.5 text-[10px] font-medium"
                 style={{ backgroundColor: 'var(--color-warning-light, #fef3c7)', color: 'var(--color-warning, #d97706)' }}
@@ -46,7 +46,7 @@ export default function TodayTutorSessionCard({
               <IconClock size={12} style={{ color: 'var(--color-muted)' }} />
               <span className="text-xs" style={{ color: 'var(--color-muted)' }}>{session.estimatedTime}</span>
             </div>
-            {streak && streak > 0 && (
+            {streak !== undefined && streak > 0 && (
               <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
                 Streak: {streak}d
               </span>
