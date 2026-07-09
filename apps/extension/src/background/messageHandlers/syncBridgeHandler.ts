@@ -165,6 +165,12 @@ export async function handleImportData(payload: unknown): Promise<{
     meta.lastSyncFromWebAt = new Date().toISOString()
     saveMeta(meta)
 
+    // Sync to chrome.storage.local for auto-highlighter
+    try {
+      const allVocab = await getAllVocabulary().catch(() => [])
+      await new Promise<void>(r => chrome.storage.local.set({ vocabulary: allVocab }, r))
+    } catch {}
+
     return { success: true, data: { imported, updated } }
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : 'IMPORT failed' }

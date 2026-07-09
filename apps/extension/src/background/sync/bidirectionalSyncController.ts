@@ -127,6 +127,12 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
     }
   }
 
+  // Sync to chrome.storage.local for auto-highlighter
+  try {
+    const allVocab = await getAllVocabulary().catch(() => [])
+    await new Promise<void>(r => chrome.storage.local.set({ vocabulary: allVocab }, r))
+  } catch {}
+
   return { imported, updated }
 }
 
