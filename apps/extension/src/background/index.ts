@@ -1,7 +1,7 @@
 import type { SaveCategory, LearningEntry } from '../types'
 import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
-import { saveVocabularyEntry } from '../storage/vocabularyStore'
+import { saveVocabularyEntry, getAllVocabulary } from '../storage/vocabularyStore'
 import { safeStorageSet } from '../utils/safe-chrome'
 import { initMessaging } from './messaging'
 import { initAiService } from './ai-service'
@@ -149,6 +149,72 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 initMessaging()
 initAiService()
+
+// Sync bridge handlers
+import('./messageHandlers/syncBridgeHandler').then(({ handleGetSyncStatus, handleExportData, handleImportData }) => {
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (!message || typeof message !== 'object') return false
+    const msg = message as Record<string, unknown>
+
+    if (msg.type === 'GET_SYNC_STATUS') {
+      handleGetSyncStatus().then(sendResponse)
+      return true
+    }
+
+    if (msg.type === 'EXPORT_EXTENSION_DATA') {
+      handleExportData().then(sendResponse)
+      return true
+    }
+
+    if (msg.type === 'IMPORT_EXTENSION_DATA') {
+      handleImportData(msg.payload).then(sendResponse)
+      return true
+    }
+
+    return false
+  })
+})
+
+// Bidirectional sync handler (called from popup)
+import('./sync/bidirectionalSyncController').then(({ syncBidirectional }) => {
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (!message || typeof message !== 'object') return false
+    const msg = message as Record<string, unknown>
+
+    if (msg.type === 'BIDIRECTIONAL_SYNC') {
+      syncBidirectional().then(sendResponse).catch(() => sendResponse({ failed: 1 }))
+      return true
+    }
+
+    return false
+  })
+})
+
+// Web connection checker
+import('./sync/webTabConnection').then(({ findWebAppTab }) => {
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (!message || typeof message !== 'object') return false
+    const msg = message as Record<string, unknown>
+    if (msg.type === 'CHECK_WEB_CONNECTION') {
+      findWebAppTab().then((tab) => sendResponse({ connected: !!tab })).catch(() => sendResponse({ connected: false }))
+      return true
+    }
+    return false
+  })
+})
+
+// Auto sync message handlers
+import('./sync/SyncMessageHandlers').then(({ registerSyncMessageHandlers }) => {
+  registerSyncMessageHandlers()
+})
+
+// Trigger auto sync when extension popup opens
+import('./sync/AutoSyncController').then(({ onExtensionPopupOpen }) => {
+  chrome.runtime.onMessage.addListener((message) => {
+    if (message?.type === 'POPUP_OPENED') { onExtensionPopupOpen() }
+    return false
+  })
+})
 
 // Process batched saves queued by content scripts via chrome.storage.local.
 // Content scripts write to _pendingSaves (array) at most once per 2 seconds.

@@ -5,14 +5,11 @@ import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Ca
 import Button from '../../components/ui/Button'
 import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton'
 import { ErrorState, EmptyStateIllustrated } from '../../components/ui/EmptyState'
-import { DatabaseService } from '../../services/storage/Database'
-import type { VocabularyEntry } from '../../models'
 import { EXTENSION_URL } from '../landing/config'
 import PageHeader from '../../components/layout/PageHeader'
 import PageContent from '../../components/layout/PageContent'
 import { IconExtension } from '@ielts/ui'
-import { syncAll, SyncOrchestrator } from '../../services/sync/SyncOrchestrator'
-import type { SyncProgress } from '../../services/sync/SyncOrchestrator'
+import ManualSyncPanel from '../../features/sync/components/ManualSyncPanel'
 
 const EDGE_EXTENSION_URL = 'https://microsoftedge.microsoft.com/addons/detail/ielts-journey'
 
@@ -22,20 +19,6 @@ type SyncStatus = 'idle' | 'syncing' | 'error'
 interface ExtensionInfo {
   browser: string
   version: string
-  lastSyncTime: string | null
-}
-
-function formatRelativeTime(dateStr: string | null): string {
-  if (!dateStr) return 'Never synced'
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const minutes = Math.floor(diff / 60000)
-  if (minutes < 1) return 'Just now'
-  if (minutes < 60) return `${minutes} min ago`
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24) return `${hours}h ago`
-  const days = Math.floor(hours / 24)
-  if (days < 7) return `${days}d ago`
-  return new Date(dateStr).toLocaleDateString()
 }
 
 function getBrowserName(): string {
@@ -183,16 +166,11 @@ export default function ExtensionConnectionPage() {
   const { showToast } = useToast()
 
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('checking')
-  const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle')
-  const [extensionInfo, setExtensionInfo] = useState<ExtensionInfo>({ browser: getBrowserName(), version: '', lastSyncTime: null })
+  const [extensionInfo, setExtensionInfo] = useState<ExtensionInfo>({ browser: getBrowserName(), version: '' })
   const [pageLoading, setPageLoading] = useState(true)
   const [pageError, setPageError] = useState<string | null>(null)
-  const [importingVocab, setImportingVocab] = useState(false)
-  const [importingArticles, setImportingArticles] = useState(false)
   const [expandedFeature, setExpandedFeature] = useState<string | null>(null)
   const [expandedTroubleshooting, setExpandedTroubleshooting] = useState<string | null>(null)
-  const [vocabCount, setVocabCount] = useState(0)
-  const [lastSyncTime, setLastSyncTime] = useState<string | null>(localStorage.getItem('extension-last-sync'))
 
   const checkConnection = useCallback(() => {
     setConnectionStatus('checking')
@@ -219,9 +197,7 @@ export default function ExtensionConnectionPage() {
           version: e.data?.version || '',
           browser: e.data?.browser || getBrowserName(),
         }))
-        setLastSyncTime(new Date().toISOString())
         localStorage.setItem('extension-connected', 'true')
-        localStorage.setItem('extension-last-sync', new Date().toISOString())
         setPageLoading(false)
       }
     }
@@ -244,87 +220,8 @@ export default function ExtensionConnectionPage() {
 
   useEffect(() => {
     const cleanup = checkConnection()
-    DatabaseService.getAll<VocabularyEntry>('vocabulary').then(all => {
-      setVocabCount(all.length)
-    }).catch(() => {})
     return cleanup
   }, [checkConnection])
-
-  function handleSyncNow() {
-    setSyncStatus('syncing')
-    SyncOrchestrator.init()
-
-    syncAll().then((progress: SyncProgress) => {
-      setSyncStatus('idle')
-      if (progress.result === 'success' || progress.result === 'partial') {
-        const now = new Date().toISOString()
-        setLastSyncTime(now)
-        localStorage.setItem('extension-last-sync', now)
-      }
-      DatabaseService.getAll<VocabularyEntry>('vocabulary').then(all => {
-        setVocabCount(all.length)
-      }).catch(() => {})
-
-      if (progress.result === 'success') {
-        const details = [
-          progress.syncedVocabCount > 0 ? `${progress.syncedVocabCount} vocab` : '',
-          progress.syncedMistakeCount > 0 ? `${progress.syncedMistakeCount} mistakes` : '',
-        ].filter(Boolean).join(', ')
-        showToast('success', `Sync complete${details ? ` (${details})` : ''}`)
-      } else if (progress.result === 'partial') {
-        showToast('success', 'Web data synced to extension. Extension data was not available.')
-      } else {
-        showToast('error', progress.error || 'Sync failed')
-      }
-    })
-  }
-
-  async function handleImportVocab() {
-    setImportingVocab(true)
-    try {
-      SyncOrchestrator.init()
-      const { requestExtensionData } = await import('../../services/sync/SyncProtocol')
-      const extensionData = await requestExtensionData()
-      const existing = await DatabaseService.getAll<VocabularyEntry>('vocabulary')
-      const existingIds = new Set(existing.map(v => v.id))
-      const { mapExtensionVocabToWeb } = await import('../../services/sync/SyncMapper')
-      const newEntries = extensionData.vocabulary
-        .map(mapExtensionVocabToWeb)
-        .filter(v => !existingIds.has(v.id))
-      if (newEntries.length > 0) {
-        await DatabaseService.bulkAdd('vocabulary', newEntries as never[])
-      }
-      setVocabCount(existing.length + newEntries.length)
-      showToast('success', `${newEntries.length} words imported from extension.`)
-    } catch {
-      showToast('error', 'Failed to import vocabulary from extension.')
-    } finally {
-      setImportingVocab(false)
-    }
-  }
-
-  async function handleImportArticles() {
-    setImportingArticles(true)
-    try {
-      window.postMessage({ source: 'ielts-page', action: 'REQUEST_EXTENSION_ARTICLES' }, window.location.origin)
-      await new Promise(resolve => setTimeout(resolve, 2000))
-
-      showToast('success', 'Articles imported from extension. Check your Saved Content page.')
-    } catch {
-      showToast('error', 'Failed to import articles from extension.')
-    } finally {
-      setImportingArticles(false)
-    }
-  }
-
-  function handleExportForExtension() {
-    try {
-      window.postMessage({ source: 'ielts-page', action: 'EXPORT_VOCAB_FOR_EXTENSION' }, window.location.origin)
-      showToast('success', 'Vocabulary exported. Open the extension and use Backup & Restore to import.')
-    } catch {
-      showToast('error', 'Failed to export vocabulary.')
-    }
-  }
 
   function handleRetry() {
     setPageError(null)
@@ -395,12 +292,7 @@ export default function ExtensionConnectionPage() {
 
       {isConnected ? <ConnectedStateContent /> : <NotConnectedStateContent />}
 
-      {isConnected && (
-        <>
-          <SyncFlowSection />
-          <DataImportSection />
-        </>
-      )}
+      <ManualSyncPanel />
 
       <FeatureCardsSection />
       <TroubleshootingSection />
@@ -488,22 +380,10 @@ export default function ExtensionConnectionPage() {
                       {extensionInfo.browser} {extensionInfo.version ? `v${extensionInfo.version}` : ''}
                     </span>
                   </div>
-                  <p style={{ margin: 'var(--spacing-2xs) 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', fontFamily: 'var(--font-sans)' }}>
-                    Last synced: {formatRelativeTime(lastSyncTime)}
-                  </p>
                 </div>
               </div>
 
               <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
-                <Button
-                  size="sm"
-                  onClick={handleSyncNow}
-                  loading={syncStatus === 'syncing'}
-                  disabled={syncStatus === 'syncing'}
-                  aria-label="Sync extension data now"
-                >
-                  {syncStatus === 'syncing' ? 'Syncing...' : 'Sync Now'}
-                </Button>
                 <Button variant="outline" size="sm" onClick={handleRetry} aria-label="Refresh connection status">
                   Refresh
                 </Button>
@@ -768,166 +648,6 @@ export default function ExtensionConnectionPage() {
     )
   }
 
-  function SyncFlowSection() {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Sync & Data Flow</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--spacing-md)',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 'var(--spacing-sm)',
-                padding: 'var(--spacing-md)',
-                borderRadius: 'var(--radius-lg)',
-                background: 'var(--color-surface-alt)',
-              }}
-              aria-label="Data flow diagram: Browser connects to extension which syncs with website"
-            >
-              <SyncFlowStep icon="globe" label="Web Browser" />
-              <SyncFlowArrow />
-              <SyncFlowStep icon="puzzle" label="Extension" />
-              <SyncFlowArrow />
-              <SyncFlowStep icon="database" label="Extension Storage" />
-              <div style={{ width: '100%', height: '1px', background: 'var(--color-border)', flexBasis: '100%' }} aria-hidden="true" />
-              <div style={{ paddingLeft: 'var(--spacing-lg)', fontSize: 'var(--text-xs)', color: 'var(--color-muted)', fontFamily: 'var(--font-sans)', width: '100%' }}>
-                postMessage bridge
-              </div>
-              <div style={{ flexBasis: '100%' }} />
-              <SyncFlowStep icon="device" label="Website App" />
-              <SyncFlowArrow />
-              <SyncFlowStep icon="database" label="Website Storage" />
-              <SyncFlowArrow />
-              <SyncFlowStep icon="book" label="Vocabulary Notebook & Saved Articles" />
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-sm)' }}>
-              <div
-                style={{
-                  padding: 'var(--spacing-sm)',
-                  borderRadius: 'var(--radius-lg)',
-                  background: 'var(--color-success-light)',
-                }}
-              >
-                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-primary-dark)', fontFamily: 'var(--font-sans)' }}>
-                  Bidirectional sync (click "Sync Now")
-                </p>
-                <ul style={{ margin: 'var(--spacing-2xs) 0 0', paddingLeft: 'var(--spacing-md)', fontSize: 'var(--text-xs)', color: 'var(--color-primary-dark)', fontFamily: 'var(--font-sans)' }}>
-                  <li>Vocabulary (bi-directional, deduplicated)</li>
-                  <li>Mistakes (from extension)</li>
-                  <li>Saved articles (from extension)</li>
-                  <li>AI settings (web → extension)</li>
-                </ul>
-              </div>
-              <div
-                style={{
-                  padding: 'var(--spacing-sm)',
-                  borderRadius: 'var(--radius-lg)',
-                  background: 'var(--color-warning-light)',
-                }}
-              >
-                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-warning-dark)', fontFamily: 'var(--font-sans)' }}>
-                  Manual import required
-                </p>
-                <ul style={{ margin: 'var(--spacing-2xs) 0 0', paddingLeft: 'var(--spacing-md)', fontSize: 'var(--text-xs)', color: 'var(--color-warning-dark)', fontFamily: 'var(--font-sans)' }}>
-                  <li>Saved articles</li>
-                  <li>Saved text passages</li>
-                </ul>
-              </div>
-            </div>
-
-            <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', fontFamily: 'var(--font-sans)', lineHeight: '1.6' }}>
-              The extension and website store data in separate databases. Use the "Sync Now" button to sync your vocabulary from the website to the extension. Other content (articles, text) can be imported manually using the buttons below. All your data stays on your device — it is never sent to external servers except when using AI features.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
-
-  function DataImportSection() {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Data Import from Extension</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--spacing-md)',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: 'var(--spacing-sm)',
-              }}
-            >
-              <Button
-                size="sm"
-                onClick={handleImportVocab}
-                loading={importingVocab}
-                disabled={importingVocab}
-                aria-label="Import vocabulary from browser extension"
-              >
-                {importingVocab ? 'Importing...' : 'Import Vocabulary from Extension'}
-              </Button>
-              <Button
-                size="sm"
-                onClick={handleImportArticles}
-                loading={importingArticles}
-                disabled={importingArticles}
-                variant="secondary"
-                aria-label="Import articles from browser extension"
-              >
-                {importingArticles ? 'Importing...' : 'Import Articles from Extension'}
-              </Button>
-              <Button
-                size="sm"
-                onClick={handleExportForExtension}
-                variant="outline"
-                aria-label="Export vocabulary for extension"
-              >
-                Export for Extension
-              </Button>
-            </div>
-
-            {vocabCount > 0 && (
-              <div
-                style={{
-                  display: 'flex',
-                  gap: 'var(--spacing-md)',
-                  flexWrap: 'wrap',
-                  fontSize: 'var(--text-xs)',
-                  color: 'var(--color-text-secondary)',
-                  fontFamily: 'var(--font-sans)',
-                }}
-              >
-                <span>{vocabCount} words in your notebook</span>
-                {lastSyncTime && (
-                  <span>Last synced: {formatRelativeTime(lastSyncTime)}</span>
-                )}
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
 
   function TroubleshootingSection() {
     return (
@@ -1017,68 +737,4 @@ export default function ExtensionConnectionPage() {
     )
   }
 
-  function SyncFlowStep({ icon, label }: { icon: string; label: string }) {
-    const iconMap: Record<string, React.ReactNode> = {
-      globe: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-          <circle cx="12" cy="12" r="10" />
-          <path d="M2 12h20" />
-          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
-        </svg>
-      ),
-      puzzle: <PuzzlePieceIcon />,
-      database: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-          <ellipse cx="12" cy="5" rx="9" ry="3" />
-          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-        </svg>
-      ),
-      device: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-          <rect x="2" y="3" width="20" height="14" rx="2" />
-          <path d="M8 21h8" />
-          <path d="M12 17v4" />
-        </svg>
-      ),
-      book: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-          <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-        </svg>
-      ),
-    }
-
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 'var(--spacing-2xs)',
-          padding: 'var(--spacing-sm)',
-          borderRadius: 'var(--radius-lg)',
-          background: 'var(--color-surface)',
-          border: '1px solid var(--color-border)',
-          minWidth: '80px',
-        }}
-      >
-        <div style={{ color: 'var(--color-primary)' }}>
-          {iconMap[icon] || iconMap.globe}
-        </div>
-        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', fontFamily: 'var(--font-sans)', textAlign: 'center' }}>
-          {label}
-        </span>
-      </div>
-    )
-  }
-
-  function SyncFlowArrow() {
-    return (
-      <div style={{ color: 'var(--color-muted)', display: 'flex', alignItems: 'center' }} aria-hidden="true">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-        </svg>
-      </div>
-    )
-  }
 }

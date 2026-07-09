@@ -13,8 +13,10 @@ import SavedWordsView from './components/SavedWordsView'
 import PendingReviews from './components/PendingReviews'
 import ReviewSession from './components/ReviewSession'
 import { emitExtensionPopupOpened } from '../background/eventEmitters'
+import ManualSyncPanel from './components/ManualSyncPanel'
+import SyncStatusPanel from './components/SyncStatusPanel'
 
-type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'reviewSession'
+type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'reviewSession' | 'manualSync' | 'syncStatus'
 
 type NavFn = (view: ViewState) => void
 
@@ -29,6 +31,7 @@ function App() {
 
   useEffect(() => {
     emitExtensionPopupOpened()
+    chrome.runtime.sendMessage({ type: 'POPUP_OPENED' }).catch(() => {})
   }, [])
 
   const handleSaved = () => {
@@ -96,6 +99,10 @@ function App() {
             onBack={() => setView('pendingReviews')}
           />
         )
+      case 'manualSync':
+        return <ManualSyncPanel onBack={() => setView('dashboard')} />
+      case 'syncStatus':
+        return <SyncStatusPanel onBack={() => setView('dashboard')} />
       default:
         return <PopupDashboard key={key} onNavigate={setView as NavFn} />
     }

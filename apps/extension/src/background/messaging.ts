@@ -104,10 +104,6 @@ export function handleMessage(
   sendResponse: (response: unknown) => void,
 ): boolean {
   if (!isKnownMessage(message)) {
-    if (message && typeof message === 'object' && 'type' in message) {
-      console.warn(`[messaging] Unknown message type: ${(message as Record<string, unknown>).type}`)
-    }
-    sendResponse({ success: false, error: 'UNKNOWN_MESSAGE_TYPE' })
     return false
   }
 

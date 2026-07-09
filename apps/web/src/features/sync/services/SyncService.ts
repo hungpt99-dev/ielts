@@ -1,0 +1,144 @@
+import { DatabaseService } from '../../../services/storage/Database'
+import { loadAppSettings, saveAppSettings } from '../../../services/storage/SettingsStorage'
+import { getClient } from '../bridge/ExtensionBridgeClient'
+import type { VocabularyEntry, MistakeEntry, AppSettings } from '../../../models'
+
+export interface SyncResult {
+  success: boolean
+  dataImported: number
+  dataUpdated: number
+  settingsUpdated: boolean
+  error?: string
+}
+
+function mapWebSettingsToShared(): Record<string, unknown> {
+  const s = loadAppSettings()
+  return {
+    aiProvider: s.aiProvider || 'openai',
+    aiModel: s.aiModel || 'gpt-4o-mini',
+    aiBaseUrl: s.aiBaseUrl || s.aiEndpoint || '',
+    aiApiKey: s.aiApiKey || '',
+    themeMode: s.darkMode ? 'dark' : 'light',
+  }
+}
+
+function applySharedSettingsToWeb(ext: Record<string, unknown>): void {
+  const current = loadAppSettings()
+  const darkMode = ext.themeMode === 'dark'
+  saveAppSettings({
+    ...current,
+    aiProvider: (ext.aiProvider as AppSettings['aiProvider']) || current.aiProvider,
+    aiModel: (ext.aiModel as string) || current.aiModel,
+    aiBaseUrl: (ext.aiBaseUrl as string) || current.aiBaseUrl,
+    aiEndpoint: (ext.aiBaseUrl as string) || current.aiEndpoint,
+    aiApiKey: (ext.aiApiKey as string) || current.aiApiKey,
+    darkMode,
+    aiEnabled: true,
+  })
+  try { window.dispatchEvent(new CustomEvent('ielts-settings-updated')) } catch {}
+}
+
+export async function syncFromExtension(): Promise<SyncResult> {
+  const client = getClient()
+  try {
+    const response = await client.requestExport()
+    const data = response as Record<string, unknown> | undefined
+    if (!data) {
+      return { success: false, dataImported: 0, dataUpdated: 0, settingsUpdated: false, error: 'No data received' }
+    }
+
+    let imported = 0
+
+    const existingVocab = await DatabaseService.getAll<VocabularyEntry>('vocabulary')
+    const existingVocabIds = new Set(existingVocab.map(v => v.id))
+    const incomingVocab = data.vocabulary as Record<string, unknown>[] | undefined
+    if (Array.isArray(incomingVocab)) {
+      const normalized = incomingVocab.map(v => ({
+        id: v.id,
+        word: (v.word as string) || (v.sourceSentence as string)?.split(/\s+/)[0] || 'unknown',
+        meaning: (v.meaning as string) || (v.sourceSentence as string) || (v.word as string) || '',
+        meaningVi: (v.meaningVi as string) || '',
+        pronunciation: (v.pronunciation as string) || '',
+        partOfSpeech: (v.partOfSpeech as string) || '',
+        topic: (v.topic as string) || 'general',
+        exampleSentence: (v.exampleSentence as string) || (v.sourceSentence as string) || '',
+        collocations: Array.isArray(v.collocations) ? v.collocations as string[] : [],
+        synonyms: Array.isArray(v.synonyms) ? v.synonyms as string[] : [],
+        antonyms: Array.isArray(v.antonyms) ? v.antonyms as string[] : [],
+        wordFamily: Array.isArray(v.wordFamily) ? v.wordFamily as string[] : [],
+        personalNote: (v.personalNote as string) || '',
+        difficulty: ((v.difficulty as string) || 'medium') as 'easy' | 'medium' | 'hard',
+        status: ((v.status as string) || 'new') as 'new' | 'learning' | 'reviewing' | 'mastered',
+        tags: Array.isArray(v.tags) ? v.tags as string[] : [],
+        createdAt: (v.createdAt as string) || new Date().toISOString(),
+        updatedAt: (v.updatedAt as string) || new Date().toISOString(),
+      }))
+      const newVocab = normalized.filter(v => !existingVocabIds.has(v.id))
+      if (newVocab.length > 0) {
+        await DatabaseService.bulkAdd('vocabulary', newVocab as never[]).catch(() => {})
+        imported += newVocab.length
+        window.dispatchEvent(new CustomEvent('vocabulary-changed'))
+      }
+    }
+
+    const existingMistakes = await DatabaseService.getAll<MistakeEntry>('mistakes')
+    const existingMistakeIds = new Set(existingMistakes.map(m => m.id))
+    const incomingMistakes = data.mistakes as Record<string, unknown>[] | undefined
+    if (Array.isArray(incomingMistakes)) {
+      const newMistakes = incomingMistakes.filter(m => !existingMistakeIds.has(m.id as string))
+      if (newMistakes.length > 0) {
+        await DatabaseService.bulkAdd('mistakes', newMistakes as never[]).catch(() => {})
+        imported += newMistakes.length
+      }
+    }
+
+    let settingsUpdated = false
+    const extSettings = data.settings as Record<string, unknown> | undefined
+    if (extSettings && typeof extSettings === 'object') {
+      applySharedSettingsToWeb(extSettings)
+      settingsUpdated = true
+    }
+
+    return { success: true, dataImported: imported, dataUpdated: 0, settingsUpdated }
+  } catch (err) {
+    return { success: false, dataImported: 0, dataUpdated: 0, settingsUpdated: false, error: err instanceof Error ? err.message : 'Sync failed' }
+  }
+}
+
+export async function syncBidirectional(): Promise<{
+  toExt: SyncResult
+  fromExt: SyncResult
+}> {
+  const toExt = await syncToExtension()
+  if (!toExt.success) return { toExt, fromExt: toExt }
+  const fromExt = await syncFromExtension()
+  return { toExt, fromExt }
+}
+
+export async function syncToExtension(): Promise<SyncResult> {
+  const client = getClient()
+  try {
+    const [vocabEntries, mistakeEntries] = await Promise.all([
+      DatabaseService.getAll<VocabularyEntry>('vocabulary'),
+      DatabaseService.getAll<MistakeEntry>('mistakes'),
+    ])
+
+    const payload = {
+      vocabulary: vocabEntries as unknown as Record<string, unknown>[],
+      mistakes: mistakeEntries as unknown as Record<string, unknown>[],
+      settings: mapWebSettingsToShared(),
+    }
+
+    const response = await client.requestImport(payload)
+    const result = response as { imported?: number; updated?: number } | undefined
+
+    return {
+      success: true,
+      dataImported: result?.imported ?? 0,
+      dataUpdated: result?.updated ?? 0,
+      settingsUpdated: true,
+    }
+  } catch (err) {
+    return { success: false, dataImported: 0, dataUpdated: 0, settingsUpdated: false, error: err instanceof Error ? err.message : 'Sync failed' }
+  }
+}

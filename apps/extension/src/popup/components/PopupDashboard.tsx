@@ -22,7 +22,7 @@ import { safeStorageGet, safeStorageSet } from '../../utils/safe-chrome'
 import { getSyncState, onSyncStateChange, getPendingItemsCount } from '../../services/storage-bridge'
 
 interface PopupDashboardProps {
-  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews') => void
+  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'manualSync' | 'syncStatus') => void
 }
 
 const StatCard = memo(function StatCard({ label, value, icon }: { label: string; value: number; icon: ReactNode }) {
@@ -376,23 +376,9 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
     }
   }, [selectedText, lookupLoading])
 
-  const [syncing, setSyncing] = useState(false)
-  const handleSyncToWebsite = useCallback(async () => {
-    setSyncing(true)
-    try {
-      const res = await chrome.runtime.sendMessage({ type: 'SYNC_ALL_TO_WEB' })
-      if (res?.data?.ok) {
-        const count = res.data.count as number
-        showToast('success', count > 0 ? `Synced ${count} words to website` : 'No words to sync')
-      } else {
-        showToast('error', (res?.data?.error as string) || 'Sync failed')
-      }
-    } catch {
-      showToast('error', 'Sync failed')
-    } finally {
-      setSyncing(false)
-    }
-  }, [])
+  const handleOpenSyncStatus = useCallback(() => {
+    onNavigate('syncStatus')
+  }, [onNavigate])
 
   const actions = useMemo(
     () => [
@@ -950,8 +936,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
             Backup
           </button>
           <button
-            onClick={handleSyncToWebsite}
-            disabled={syncing}
+            onClick={handleOpenSyncStatus}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -959,7 +944,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
               background: 'none',
               border: 'none',
               color: 'var(--color-text-secondary)',
-              cursor: syncing ? 'wait' : 'pointer',
+              cursor: 'pointer',
               fontSize: 'var(--text-xs)',
               fontWeight: 'var(--weight-medium)',
               fontFamily: 'var(--font-sans)',
@@ -969,13 +954,12 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
               transition: 'all var(--transition-fast)',
               WebkitTapHighlightColor: 'transparent',
               touchAction: 'manipulation',
-              opacity: syncing ? 0.6 : 1,
             }}
-            onMouseEnter={(e) => { if (!syncing) { e.currentTarget.style.background = 'var(--color-surface-alt)'; e.currentTarget.style.color = 'var(--color-text)' } }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-alt)'; e.currentTarget.style.color = 'var(--color-text)' }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--color-text-secondary)' }}
           >
             <IconRefresh size={12} />
-            {syncing ? 'Syncing...' : 'Sync'}
+            Sync
           </button>
           <button
             onClick={handleOpenInfo}
