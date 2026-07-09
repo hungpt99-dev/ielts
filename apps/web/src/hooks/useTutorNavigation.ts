@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom'
-
 export interface TutorContext {
   prompt: string
   type?: string
@@ -7,14 +5,11 @@ export interface TutorContext {
 }
 
 export function useTutorNavigation() {
-  const navigate = useNavigate()
-
   return (context: TutorContext) => {
-    const params = new URLSearchParams({
-      q: context.prompt,
-      ...(context.type && { type: context.type }),
-      ...(context.title && { title: context.title }),
-    })
-    navigate(`/tutor?${params.toString()}`, { state: context })
+    const message = context.prompt + (context.title ? ` (${context.title})` : '')
+    try {
+      sessionStorage.setItem('ai-tutor-pending-message', message)
+    } catch {}
+    window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
   }
 }

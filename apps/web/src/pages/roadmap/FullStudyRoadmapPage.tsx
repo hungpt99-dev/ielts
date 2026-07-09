@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { openAITutorChat } from '../../features/ai-tutor/utils/openChat'
 import { emitStudyRoadmapViewed } from '../../features/websiteActions/eventEmitters'
 import {
   ensureRoadmap,
@@ -120,20 +121,20 @@ export default function FullStudyRoadmapPage() {
   }, [])
 
   const handleAskAITutor = useCallback(() => {
-    navigate('/tutor', { state: { context: 'roadmap-plan', roadmapData: roadmap } })
-  }, [navigate, roadmap])
+    openAITutorChat('Help me review my study roadmap and suggest what I should focus on.')
+  }, [])
 
   const handleAskAIPhase = useCallback((phase: RoadmapPhase) => {
-    navigate('/tutor', { state: { context: 'roadmap-phase', phaseName: phase.name, phaseId: phase.id } })
-  }, [navigate])
+    openAITutorChat(`Tell me more about the "${phase.name}" phase and what I should focus on.`)
+  }, [])
 
   const handleAskAIDay = useCallback((day: RoadmapDay) => {
-    navigate('/tutor', { state: { context: 'roadmap-day', dayId: day.id, date: day.date, objective: day.objective } })
-  }, [navigate])
+    openAITutorChat(`Help me with my study day: ${day.objective || `Day ${day.id}`}. What should I prioritize?`)
+  }, [])
 
   const handleAskFollowUp = useCallback(() => {
-    navigate('/tutor', { state: { context: 'roadmap-insight' } })
-  }, [navigate])
+    openAITutorChat('I have a follow-up question about my study roadmap.')
+  }, [])
 
   const handleAdjustPlan = useCallback(() => {
     navigate('/plan')
@@ -232,7 +233,7 @@ export default function FullStudyRoadmapPage() {
               Create My Study Plan
             </button>
             <button
-              onClick={() => navigate('/tutor')}
+              onClick={() => openAITutorChat()}
               className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
               style={{ borderColor: 'var(--color-tutor-border)', color: 'var(--color-tutor-accent)' }}
             >

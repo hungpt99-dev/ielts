@@ -10,6 +10,7 @@ import SafeAreaContainer from './layout/SafeAreaContainer'
 import LoadingSpinner from './ui/LoadingSpinner'
 import NotFoundPage from '../pages/NotFoundPage'
 import PrivacyPage from '../pages/PrivacyPage'
+import { openAITutorChat } from '../features/ai-tutor/utils/openChat'
 
 const Dashboard = lazy(() => import('../features/dashboard/Dashboard'))
 const StudyPlan = lazy(() => import('../features/study-plan/StudyPlan'))
@@ -36,7 +37,7 @@ const FullStudyRoadmapPage = lazy(() => import('../pages/roadmap/FullStudyRoadma
 const ArtifactsPage = lazy(() => import('../features/artifacts/ArtifactsPage'))
 const PublicTabPage = lazy(() => import('../components/PublicTabPage'))
 const TodayPlanPage = lazy(() => import('../pages/TodayPlanPage'))
-const AITutorPage = lazy(() => import('../pages/AITutorChat'))
+const AITutorPage = lazy(() => import('../features/ai-tutor/pages/AITutorPage'))
 import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconProgress, IconBack, IconMinimize, IconClose, IconSettings, IconChevronDown, IconFlame, IconSaved, IconInfo } from '@ielts/ui'
 
 function RedirectWithHash({ to, hash }: { to: string; hash: string }) {
@@ -466,9 +467,7 @@ export default function AppLayout() {
                 </PageContainer>
               } />
             </Routes>
-            {location.pathname !== '/tutor' && (
-              <ChatIcon />
-            )}
+            <ChatIcon hideButton={location.pathname === '/tutor'} />
           </main>
         </SafeAreaContainer>
 

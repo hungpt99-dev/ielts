@@ -28,9 +28,10 @@ function saveChatState(state: ChatIconState) {
 
 interface ChatIconProps {
   onToggle?: (isOpen: boolean) => void
+  hideButton?: boolean
 }
 
-export default function ChatIcon({ onToggle }: ChatIconProps) {
+export default function ChatIcon({ onToggle, hideButton }: ChatIconProps) {
   const [{ isOpen, unreadCount }, setState] = useState<ChatIconState>(loadChatState)
 
   useEffect(() => {
@@ -67,7 +68,7 @@ export default function ChatIcon({ onToggle }: ChatIconProps) {
     <>
       <AITutorPopup isOpen={isOpen} onClose={handleToggle} />
 
-      <button
+      {!hideButton && <button
         type="button"
         onClick={handleToggle}
         className="fixed right-4 sm:right-6 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all duration-200 hover:scale-105 hover:shadow-xl active:scale-95 bottom-[calc(72px+env(safe-area-inset-bottom,0px)+16px)] lg:bottom-6"
@@ -106,7 +107,7 @@ export default function ChatIcon({ onToggle }: ChatIconProps) {
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
-      </button>
+      </button>}
     </>
   )
 }

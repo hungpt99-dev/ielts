@@ -46,10 +46,25 @@ export default function AITutorPopup({
   const [contextSuggestions, setContextSuggestions] = useState<ContextSuggestion[]>([])
   const [greeting, setGreeting] = useState('')
   const [bandInfo, setBandInfo] = useState('IELTS Coach')
+  const [voiceInput, setVoiceInput] = useState<string | undefined>(undefined)
   const loadingRef = useRef(false)
 
   useEffect(() => {
-    if (!isOpen || loadingRef.current) return
+    if (!isOpen) return
+
+    let pendingMessage: string | null = null
+    try {
+      pendingMessage = sessionStorage.getItem('ai-tutor-pending-message')
+      if (pendingMessage) sessionStorage.removeItem('ai-tutor-pending-message')
+    } catch {
+      // storage not available
+    }
+
+    if (pendingMessage) {
+      setVoiceInput(pendingMessage)
+    }
+
+    if (loadingRef.current) return
     loadingRef.current = true
     let cancelled = false
 
@@ -162,16 +177,6 @@ export default function AITutorPopup({
     return "I am here to help with your IELTS journey! Ask me about what to study today, your weak skills, exam countdown, mistake review, vocabulary exercises, or anything else. What can I help with?"
   }, [context])
 
-  const handleQuickAction = useCallback((action: string) => {
-    if (action === 'practice-with-me') {
-      window.dispatchEvent(new CustomEvent('toggle-ai-tutor-chat'))
-      window.location.hash = '#/dashboard'
-    } else if (action === 'teach-me') {
-      window.dispatchEvent(new CustomEvent('toggle-ai-tutor-chat'))
-      window.location.hash = '#/plan'
-    }
-  }, [])
-
   return (
     <ChatPopup
       isOpen={isOpen}
@@ -179,11 +184,11 @@ export default function AITutorPopup({
       hasAiKey={hasAiKey}
       onOpenSettings={onOpenSettings}
       onSendMessage={handleSendMessage}
-      onQuickAction={handleQuickAction}
       contextSuggestions={contextSuggestions.length > 0 ? contextSuggestions : undefined}
       title={greeting || 'AI Tutor'}
       subtitle={bandInfo}
       placeholder="Ask me anything about IELTS..."
+      voiceInput={voiceInput}
     />
   )
 }

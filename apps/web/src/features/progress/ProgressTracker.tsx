@@ -6,6 +6,7 @@ import {
 import Button from '../../components/ui/Button'
 import ErrorDisplay from '../../components/ui/ErrorDisplay'
 import Card from '../../components/ui/Card'
+import { openAITutorChat } from '../ai-tutor/utils/openChat'
 import { EmptyState } from '@ielts/ui/components/EmptyState'
 import { LoadingSkeleton } from '@ielts/ui/components/LoadingSkeleton'
 import { ProgressRing } from '@ielts/ui/components/ProgressRing'
@@ -18,7 +19,6 @@ import {
   IconAITutor, IconStar, IconPlay,
 } from '@ielts/ui'
 import type { ProgressSnapshot, WeeklyProgressSummary, SkillProgressSummary } from './progressService'
-import AIReviewSection from '../progressReview/components/AIReviewSection'
 
 interface ProgressTrackerProps {
   snapshot: ProgressSnapshot | null
@@ -710,16 +710,13 @@ export default function ProgressTracker({ snapshot, loading, error, onRetry, onN
         </div>
       </div>
 
-      {/* AI Progress Review Section */}
-      <AIReviewSection />
-
       {/* Zone 1: Quick Stats */}
       <SummaryCards snapshot={snapshot} />
 
       {/* Zone 2: Band & Skill Progression + Skill Breakdown */}
       <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         <div>
-          <SectionHeader title="Band & Skill Progression" aiAction={{ label: 'Ask AI', onClick: () => navigate('/tutor') }} />
+          <SectionHeader title="Band & Skill Progression" aiAction={{ label: 'Ask AI', onClick: () => openAITutorChat('Review my progress and suggest what I should focus on.') }} />
           <div style={{ marginTop: 'var(--spacing-sm)' }}>
             <div style={{
               padding: 'var(--spacing-md)',
