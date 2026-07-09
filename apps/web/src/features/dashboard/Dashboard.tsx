@@ -607,7 +607,26 @@ export default function Dashboard() {
                   })}
                 </div>
                 <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                  <Button size="md" className="w-full sm:w-auto" onClick={() => navigate(`/practice/${weakSkills[0].toLowerCase()}`)}>
+                  <Button size="md" className="w-full sm:w-auto" onClick={() => {
+                    const skillPathMap: Record<string, string> = {
+                      reading: '/reading',
+                      listening: '/listening',
+                      writing: '/writing',
+                      speaking: '/speaking',
+                      grammar: '/grammar',
+                      vocabulary: '/vocabulary',
+                      pronunciation: '/speaking',
+                    }
+                    const path = skillPathMap[weakSkills[0].toLowerCase()]
+                    if (path) {
+                      navigate(path)
+                    } else {
+                      goToTutor({
+                        prompt: `Help me practice ${weakSkills[0]}. I'm at band ${currentBand} targeting band ${targetBand}. Give me exercises and strategies.`,
+                        title: `Practice ${weakSkills[0]}`,
+                      })
+                    }
+                  }}>
                     Practice Now
                   </Button>
                   <Button size="md" variant="outline" className="w-full sm:w-auto" onClick={() => goToTutor({
