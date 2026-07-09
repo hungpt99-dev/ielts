@@ -49,9 +49,7 @@ function setSyncStatus(s: SyncStatus): void {
   syncStatus = s
 }
 
-const scheduler = new SyncScheduler()
-
-scheduler.setCallback(async () => {
+async function runSync(): Promise<void> {
   if (!(await syncLock.acquire())) return
   try {
     setSyncStatus({ state: 'syncing' })
@@ -66,7 +64,10 @@ scheduler.setCallback(async () => {
   } finally {
     syncLock.release()
   }
-})
+}
+
+const scheduler = new SyncScheduler()
+scheduler.setCallback(runSync)
 
 export async function triggerAutoSync(): Promise<void> {
   const settings = await loadSettings()
@@ -90,7 +91,7 @@ export async function onExtensionPopupOpen(): Promise<void> {
 export async function checkAndSync(options?: { force?: boolean }): Promise<void> {
   if (options?.force) {
     scheduler.cancel()
-    await triggerAutoSync()
+    await runSync()
     return
   }
   if (!(await loadSettings()).enabled) return
