@@ -19,6 +19,7 @@ import type { LearningEntry } from '../../types'
 import { loadVocabulary } from '../services/popupDataService'
 import { getDueCount } from '../services/reviewService'
 import { safeStorageGet, safeStorageSet } from '../../utils/safe-chrome'
+import { getSyncState, onSyncStateChange, getPendingItemsCount } from '../../services/storage-bridge'
 
 interface PopupDashboardProps {
   onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews') => void
@@ -190,22 +191,24 @@ const ActivityItem = memo(function ActivityItem({ entry }: { entry: LearningEntr
 })
 
 function SyncBadge() {
-  const [status, setStatus] = useState<SyncStatus>('synced')
+  const [status, setStatus] = useState<SyncStatus>(() => {
+    const state = getSyncState()
+    if (state.status === 'syncing') return 'syncing'
+    if (state.lastSyncedAt) return 'synced'
+    return 'syncing'
+  })
 
   useEffect(() => {
-    const check = async () => {
-      try {
-        const result = await new Promise<any>(r => chrome.storage.local.get(['lastSyncTime'], r))
-        if (result.lastSyncTime) {
-          setStatus('synced')
-        }
-      } catch {
-        setStatus('disconnected')
+    const unsub = onSyncStateChange((state) => {
+      if (state.status === 'syncing') {
+        setStatus('syncing')
+      } else if (state.status === 'success') {
+        setStatus('synced')
+      } else if (state.status === 'error') {
+        setStatus('error')
       }
-    }
-    check()
-    const interval = setInterval(check, 30000)
-    return () => clearInterval(interval)
+    })
+    return unsub
   }, [])
 
   return <ExtensionSyncStatusBadge status={status} size="sm" />

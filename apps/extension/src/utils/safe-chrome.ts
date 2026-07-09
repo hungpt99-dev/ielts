@@ -36,34 +36,17 @@ export function safeStorageGet<T>(
   })
 }
 
-let lastWriteTime = 0
-const MIN_WRITE_INTERVAL = 2000
-
 export function safeStorageSet(
   data: Record<string, unknown>,
 ): Promise<void> {
   return new Promise((resolve) => {
-    const now = Date.now()
-    const delay = Math.max(0, MIN_WRITE_INTERVAL - (now - lastWriteTime))
-
-    const doWrite = () => {
-      lastWriteTime = Date.now()
-      try {
-        chrome.storage.local.set(data, () => {
-          // Read lastError to suppress 'Unchecked runtime.lastError' warnings
-          // that Chrome logs when storage quota is exceeded.
-          chrome.runtime.lastError
-          resolve()
-        })
-      } catch {
+    try {
+      chrome.storage.local.set(data, () => {
+        chrome.runtime.lastError
         resolve()
-      }
-    }
-
-    if (delay > 0) {
-      setTimeout(doWrite, delay)
-    } else {
-      doWrite()
+      })
+    } catch {
+      resolve()
     }
   })
 }

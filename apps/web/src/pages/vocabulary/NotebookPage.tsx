@@ -18,7 +18,7 @@ import PronounceButton from '../../components/ui/PronounceButton'
 import WordForm from '../../features/vocabulary/components/WordForm'
 import WordFamilyDisplay from '../../features/vocabulary/components/WordFamilyDisplay'
 import { onVocabularyChanged } from '../../features/vocabulary/vocabularyEvents'
-import { onVocabSavedFromExtension, notifyExtensionVocabSaved } from '../../services/storage/VocabularySync'
+
 import { generateWordFamily } from '../../features/vocabulary/vocabularyService'
 import PageHeader from '../../components/layout/PageHeader'
 import PageContent from '../../components/layout/PageContent'
@@ -136,7 +136,6 @@ export default function NotebookPage() {
 
   useEffect(() => { loadEntries() }, [loadEntries])
   useEffect(() => onVocabularyChanged(loadEntries), [loadEntries])
-  useEffect(() => onVocabSavedFromExtension(loadEntries), [loadEntries])
 
   const allTags = useMemo(() => {
     const tags = new Set<string>()
@@ -205,7 +204,6 @@ export default function NotebookPage() {
         await DatabaseService.add('vocabulary', entry)
         setEntries(prev => [...prev, entry])
       }
-      notifyExtensionVocabSaved(entry)
       setModalOpen(false)
       setEditingEntry(null)
     } catch (err) {

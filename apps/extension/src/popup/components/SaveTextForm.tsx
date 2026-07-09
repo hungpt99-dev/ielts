@@ -6,7 +6,6 @@ import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
 import { saveVocabularyEntry, type ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveArticleEntry, extensionArticleSchema } from '../../storage/articleStore'
-import { pushSync } from '../../services/syncManager'
 import { IconClose, IconCheck } from '@ielts/ui'
 
 interface SaveTextFormProps {
@@ -123,7 +122,6 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
       })
 
       await saveEntry(entry)
-      try { pushSync('learningEntry', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
 
       if (form.category === 'vocabulary') {
         const vocabEntry: ExtensionVocabEntry = {
@@ -152,7 +150,6 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
           updatedAt: now,
         }
         await saveVocabularyEntry(vocabEntry).catch(() => {})
-        try { pushSync('vocabulary', 'created', vocabEntry.id, vocabEntry as unknown as Record<string, unknown>) } catch {}
       }
 
       if (form.category === 'reading' && form.text.trim().length > 50) {
@@ -173,7 +170,6 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
             updatedAt: now,
           })
           await saveArticleEntry(articleEntry)
-          try { pushSync('article', 'created', articleEntry.id, articleEntry as unknown as Record<string, unknown>) } catch {}
         } catch {
           /* non-critical: article entry saved as learning entry already */
         }

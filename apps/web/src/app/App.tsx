@@ -11,7 +11,6 @@ import ErrorBoundary from '../components/ui/ErrorBoundary'
 import OfflineIndicator from '../components/ui/OfflineIndicator'
 import PwaUpdateBanner from '../components/ui/PwaUpdateBanner'
 import { initProactiveTutor } from '../services/proactiveTutorInit'
-import { initDataSyncManager } from '../services/storage/DataSyncManager'
 import { APP_SCHEMA } from '@ielts/storage'
 import { initDb, getDb } from '@ielts/storage'
 import { initNativePlatform, useNativeBackButton, useNativeAppState } from '../services/nativePlatform'
@@ -60,9 +59,6 @@ export default function App() {
       window.dispatchEvent(new Event('app-db-ready'))
       try {
         await initProactiveTutor()
-      } catch { /* non-critical */ }
-      try {
-        initDataSyncManager()
       } catch { /* non-critical */ }
     }
 

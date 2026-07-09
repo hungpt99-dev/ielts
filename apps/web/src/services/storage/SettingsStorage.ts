@@ -1,8 +1,6 @@
 import type { AppSettings } from '../../models'
 import { DEFAULT_SETTINGS } from '../../models'
-import { themeModeFromDarkMode, darkModeFromThemeMode } from '@ielts/settings'
-import type { SharedSettingsPatch } from '@ielts/settings'
-import { SETTINGS_BRIDGE_ACTIONS, BRIDGE_SOURCES } from '@ielts/settings'
+
 
 
 const KEYS = {
@@ -61,7 +59,6 @@ export function loadAppSettings(): AppSettings {
 
 export function saveAppSettings(settings: AppSettings): void {
   setSetting(KEYS.APP_SETTINGS, settings)
-  debouncedNotifyExtension()
 }
 
 export function removeAppSettings(): void {
@@ -93,95 +90,12 @@ export function patchAppSettings(patch: Partial<AppSettings>): AppSettings {
 }
 
 
-let _applyingRemote = false
-let _notifyTimer: ReturnType<typeof setTimeout> | null = null
-let _bridgeInitialized = false
-
-function overlappingFromApp(settings: AppSettings): SharedSettingsPatch {
-  return {
-    aiProvider: settings.aiProvider,
-    aiModel: settings.aiModel,
-    aiBaseUrl: settings.aiBaseUrl || settings.aiEndpoint,
-    aiApiKey: settings.aiApiKey,
-    themeMode: themeModeFromDarkMode(settings.darkMode),
-  }
-}
-
-function notifyExtension(): void {
-  if (_applyingRemote) return
-  const settings = loadAppSettings()
-  const data = overlappingFromApp(settings)
-  window.postMessage(
-    { source: BRIDGE_SOURCES.PAGE, action: SETTINGS_BRIDGE_ACTIONS.SETTINGS_CHANGED, data },
-    window.location.origin,
-  )
-}
-
-function debouncedNotifyExtension(): void {
-  if (_notifyTimer) clearTimeout(_notifyTimer)
-  _notifyTimer = setTimeout(() => {
-    _notifyTimer = null
-    notifyExtension()
-  }, 300)
-}
-
-function handleBridgeMessage(event: MessageEvent): void {
-  if (event.origin !== window.location.origin) return
-  const msg = event.data
-  if (!msg || typeof msg !== 'object') return
-  if (msg.source !== BRIDGE_SOURCES.EXTENSION || msg.action !== SETTINGS_BRIDGE_ACTIONS.SETTINGS_SYNC) return
-  if (!msg.data || typeof msg.data !== 'object') return
-
-  _applyingRemote = true
-  try {
-    const data = event.data.data as SharedSettingsPatch
-    const current = loadAppSettings()
-    const patch: Partial<AppSettings> = {}
-
-    if (typeof data.aiProvider === 'string') patch.aiProvider = data.aiProvider as AppSettings['aiProvider']
-    if (typeof data.aiModel === 'string') patch.aiModel = data.aiModel
-    if (typeof data.aiBaseUrl === 'string') patch.aiBaseUrl = data.aiBaseUrl
-    if (typeof data.aiApiKey === 'string') patch.aiApiKey = data.aiApiKey
-    if (data.themeMode === 'dark' || data.themeMode === 'light' || data.themeMode === 'system') {
-      patch.darkMode = darkModeFromThemeMode(data.themeMode)
-    }
-
-    const merged = { ...current, ...patch }
-    if (!merged.aiEndpoint && merged.aiBaseUrl) {
-      merged.aiEndpoint = merged.aiBaseUrl
-    }
-    setSetting(KEYS.APP_SETTINGS, merged)
-    try {
-      window.dispatchEvent(new CustomEvent('ielts-settings-updated', { detail: merged }))
-    } catch { /* ignore */ }
-  } finally {
-    _applyingRemote = false
-  }
-}
-
-export function initSettingsBridge(): void {
-  if (_bridgeInitialized) return
-  _bridgeInitialized = true
-  window.addEventListener('message', handleBridgeMessage)
-}
-
-export function destroySettingsBridge(): void {
-  if (!_bridgeInitialized) return
-  _bridgeInitialized = false
-  window.removeEventListener('message', handleBridgeMessage)
-  if (_notifyTimer) {
-    clearTimeout(_notifyTimer)
-    _notifyTimer = null
-  }
-}
-
 export function getThemeMode(): string {
   return getSetting(KEYS.THEME_MODE, 'system')
 }
 
 export function setThemeMode(mode: string): void {
   setSetting(KEYS.THEME_MODE, mode)
-  debouncedNotifyExtension()
 }
 
 export function getAccentColor(): string {
@@ -216,7 +130,6 @@ export function getDarkMode(): boolean {
 
 export function setDarkMode(dark: boolean): void {
   setSetting(KEYS.DARK_MODE, dark)
-  debouncedNotifyExtension()
 }
 
 export function getStorageQuotaStatus(): { usedBytes: number; remaining: number | null; percentUsed: number; isLow: boolean } {

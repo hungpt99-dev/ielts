@@ -173,12 +173,6 @@ export function initStorageBridge(): void {
     }
   })
 
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message && typeof message === 'object' && (message as Record<string, unknown>).type === 'SETTINGS_SYNC') {
-      forceSyncSettings()
-    }
-  })
-
   getSyncStatus().then((status) => {
     if (status.lastSyncAt) {
       notifySyncListeners({

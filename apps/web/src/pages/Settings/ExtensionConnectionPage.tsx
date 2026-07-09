@@ -5,13 +5,14 @@ import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Ca
 import Button from '../../components/ui/Button'
 import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton'
 import { ErrorState, EmptyStateIllustrated } from '../../components/ui/EmptyState'
-import { sendLatestVocabToExtension } from '../../services/storage/VocabularySync'
 import { DatabaseService } from '../../services/storage/Database'
 import type { VocabularyEntry } from '../../models'
 import { EXTENSION_URL } from '../landing/config'
 import PageHeader from '../../components/layout/PageHeader'
 import PageContent from '../../components/layout/PageContent'
 import { IconExtension } from '@ielts/ui'
+import { syncAll, SyncOrchestrator } from '../../services/sync/SyncOrchestrator'
+import type { SyncProgress } from '../../services/sync/SyncOrchestrator'
 
 const EDGE_EXTENSION_URL = 'https://microsoftedge.microsoft.com/addons/detail/ielts-journey'
 
@@ -127,7 +128,7 @@ const TROUBLESHOOTING_ITEMS = [
   {
     id: 'not-syncing',
     question: 'Vocabulary not syncing between extension and website',
-    answer: 'Make sure you\'re logged into the same IELTS Journey account on both the extension and website. Try clicking "Sync Now" above, or refresh both pages. Data syncs automatically when both are open.',
+    answer: 'Make sure you\'re logged into the same IELTS Journey account on both the extension and website. Try clicking "Sync Now" above to manually sync your vocabulary.',
   },
   {
     id: 'articles-not-appearing',
@@ -251,28 +252,50 @@ export default function ExtensionConnectionPage() {
 
   function handleSyncNow() {
     setSyncStatus('syncing')
-    try {
-      sendLatestVocabToExtension()
-      setTimeout(() => {
-        setSyncStatus('idle')
+    SyncOrchestrator.init()
+
+    syncAll().then((progress: SyncProgress) => {
+      setSyncStatus('idle')
+      if (progress.result === 'success' || progress.result === 'partial') {
         const now = new Date().toISOString()
         setLastSyncTime(now)
         localStorage.setItem('extension-last-sync', now)
-        showToast('success', 'Synced with extension successfully')
-      }, 1500)
-    } catch {
-      setSyncStatus('error')
-      showToast('error', 'Sync failed. Try refreshing both pages.')
-    }
+      }
+      DatabaseService.getAll<VocabularyEntry>('vocabulary').then(all => {
+        setVocabCount(all.length)
+      }).catch(() => {})
+
+      if (progress.result === 'success') {
+        const details = [
+          progress.syncedVocabCount > 0 ? `${progress.syncedVocabCount} vocab` : '',
+          progress.syncedMistakeCount > 0 ? `${progress.syncedMistakeCount} mistakes` : '',
+        ].filter(Boolean).join(', ')
+        showToast('success', `Sync complete${details ? ` (${details})` : ''}`)
+      } else if (progress.result === 'partial') {
+        showToast('success', 'Web data synced to extension. Extension data was not available.')
+      } else {
+        showToast('error', progress.error || 'Sync failed')
+      }
+    })
   }
 
   async function handleImportVocab() {
     setImportingVocab(true)
     try {
-      sendLatestVocabToExtension()
-      const allVocab = await DatabaseService.getAll<VocabularyEntry>('vocabulary')
-      setVocabCount(allVocab.length)
-      showToast('success', `Vocabulary synced with extension. ${allVocab.length} words in your notebook.`)
+      SyncOrchestrator.init()
+      const { requestExtensionData } = await import('../../services/sync/SyncProtocol')
+      const extensionData = await requestExtensionData()
+      const existing = await DatabaseService.getAll<VocabularyEntry>('vocabulary')
+      const existingIds = new Set(existing.map(v => v.id))
+      const { mapExtensionVocabToWeb } = await import('../../services/sync/SyncMapper')
+      const newEntries = extensionData.vocabulary
+        .map(mapExtensionVocabToWeb)
+        .filter(v => !existingIds.has(v.id))
+      if (newEntries.length > 0) {
+        await DatabaseService.bulkAdd('vocabulary', newEntries as never[])
+      }
+      setVocabCount(existing.length + newEntries.length)
+      showToast('success', `${newEntries.length} words imported from extension.`)
     } catch {
       showToast('error', 'Failed to import vocabulary from extension.')
     } finally {
@@ -797,13 +820,14 @@ export default function ExtensionConnectionPage() {
                   background: 'var(--color-success-light)',
                 }}
               >
-                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-success-dark)', fontFamily: 'var(--font-sans)' }}>
-                  Syncs automatically
+                <p style={{ margin: 0, fontSize: 'var(--text-xs)', fontWeight: 'var(--weight-semibold)', color: 'var(--color-primary-dark)', fontFamily: 'var(--font-sans)' }}>
+                  Bidirectional sync (click "Sync Now")
                 </p>
-                <ul style={{ margin: 'var(--spacing-2xs) 0 0', paddingLeft: 'var(--spacing-md)', fontSize: 'var(--text-xs)', color: 'var(--color-success-dark)', fontFamily: 'var(--font-sans)' }}>
-                  <li>Vocabulary entries (bi-directional)</li>
-                  <li>Vocabulary status changes</li>
-                  <li>Learning progress updates</li>
+                <ul style={{ margin: 'var(--spacing-2xs) 0 0', paddingLeft: 'var(--spacing-md)', fontSize: 'var(--text-xs)', color: 'var(--color-primary-dark)', fontFamily: 'var(--font-sans)' }}>
+                  <li>Vocabulary (bi-directional, deduplicated)</li>
+                  <li>Mistakes (from extension)</li>
+                  <li>Saved articles (from extension)</li>
+                  <li>AI settings (web → extension)</li>
                 </ul>
               </div>
               <div
@@ -824,7 +848,7 @@ export default function ExtensionConnectionPage() {
             </div>
 
             <p style={{ margin: 0, fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', fontFamily: 'var(--font-sans)', lineHeight: '1.6' }}>
-              The extension and website store data in separate databases. Vocabulary is synced automatically when both are open. Other content (articles, text) can be imported manually using the buttons below. All your data stays on your device — it is never sent to external servers except when using AI features.
+              The extension and website store data in separate databases. Use the "Sync Now" button to sync your vocabulary from the website to the extension. Other content (articles, text) can be imported manually using the buttons below. All your data stays on your device — it is never sent to external servers except when using AI features.
             </p>
           </div>
         </CardContent>

@@ -4,7 +4,6 @@ import type { ExtensionArticleEntry, ArticleQuestion } from '../../storage/artic
 import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
 import type { LearningEntry } from '../../types'
-import { pushSync } from '../../services/syncManager'
 import { IconArticle, IconClose, IconCheck, IconHelpCircle, IconBookText } from '@ielts/ui'
 
 interface ArticleCollectorProps {
@@ -231,7 +230,6 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
       })
 
       await saveArticleEntry(entry)
-      try { pushSync('article', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
 
       try {
         const learningEntry: LearningEntry = {
@@ -250,7 +248,6 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           updatedAt: now,
         }
         await saveEntry(learningEntry)
-        try { pushSync('learningEntry', 'created', learningEntry.id, learningEntry as unknown as Record<string, unknown>) } catch {}
       } catch {
         /* non-critical */
       }

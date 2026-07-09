@@ -7,7 +7,6 @@ import { incrementDailyProgress } from '../../services/storage'
 import { MESSAGE_TYPES, PROGRESS_KEYS } from '../../storage/db'
 import { IconVocabulary, IconClose, IconCheck, IconVolume } from '@ielts/ui'
 import type { LearningEntry } from '../../types'
-import { pushSync } from '../../services/syncManager'
 
 function speakWord(word: string) {
   if ('speechSynthesis' in window) {
@@ -292,8 +291,6 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
     } catch (err) {
       console.warn('[VocabularyCollector] IndexedDB save failed, falling back to chrome.storage:', err)
     }
-    try { pushSync('vocabulary', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
-
     const learningEntryData = {
       id: sharedId,
       text: wordTrimmed,
@@ -314,8 +311,6 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
     } catch (err) {
       console.warn('[VocabularyCollector] learningEntries save failed (non-critical):', err)
     }
-    try { pushSync('learningEntry', 'created', learningEntryData.id, learningEntryData as unknown as Record<string, unknown>) } catch {}
-
     try {
       await incrementDailyProgress(PROGRESS_KEYS.WORDS_ADDED, 1)
     } catch (err) {

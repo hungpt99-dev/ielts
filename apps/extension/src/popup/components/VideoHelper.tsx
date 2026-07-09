@@ -16,7 +16,6 @@ import { incrementDailyProgress } from '../../services/storage'
 import { safeStorageGet } from '../../utils/safe-chrome'
 import type { VideoQuestion, VideoVocabItem, ShadowingItem } from '../../storage/videoStore'
 import type { LearningEntry } from '../../types'
-import { pushSync } from '../../services/syncManager'
 import { IconVideo, IconClose, IconCheck, IconVocabulary, IconBookText, IconHelpCircle, IconVolume, IconLoading } from '@ielts/ui'
 
 interface VideoHelperProps {
@@ -287,7 +286,6 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
       })
 
       await saveVideoEntry(entry)
-      try { pushSync('video', 'created', entry.id, entry as unknown as Record<string, unknown>) } catch {}
 
       const listeningEntry: LearningEntry = {
         id: crypto.randomUUID(),
@@ -306,7 +304,6 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
       }
 
       await saveLearningEntry(listeningEntry)
-      try { pushSync('learningEntry', 'created', listeningEntry.id, listeningEntry as unknown as Record<string, unknown>) } catch {}
 
       if (vocabData && vocabData.length > 0) {
         for (const item of vocabData) {
@@ -336,7 +333,6 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
             updatedAt: now,
           }
           await saveVocabularyEntry(vocabEntry).catch(() => {})
-          try { pushSync('vocabulary', 'created', vocabEntry.id, vocabEntry as unknown as Record<string, unknown>) } catch {}
         }
       }
 

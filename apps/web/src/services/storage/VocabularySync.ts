@@ -1,24 +1,6 @@
 import type { VocabularyEntry } from '../../models'
 import { DatabaseService } from './Database'
 
-const BRIDGE_SOURCE = 'ielts-extension'
-const BRIDGE_ACTION = 'VOCAB_SAVED'
-
-type VocabSyncCallback = (entry: VocabularyEntry) => void
-let listeners: VocabSyncCallback[] = []
-let initialized = false
-
-export function onVocabSavedFromExtension(callback: VocabSyncCallback): () => void {
-  listeners.push(callback)
-  return () => {
-    listeners = listeners.filter(l => l !== callback)
-  }
-}
-
-function isFullVocabEntry(data: Record<string, unknown>): data is Record<string, unknown> & { word: string; meaning: string } {
-  return typeof data.word === 'string' && data.word.length > 0 && typeof data.meaning === 'string'
-}
-
 function isTextSnippet(data: Record<string, unknown>): data is Record<string, unknown> & { text: string } {
   return typeof data.text === 'string' && data.text.length > 0
 }
@@ -56,61 +38,6 @@ function buildVocabFromText(data: Record<string, unknown>): VocabularyEntry | nu
   }
 }
 
-async function handleVocabMessage(event: MessageEvent): Promise<void> {
-  if (event.origin !== window.location.origin) return
-  const msg = event.data
-  if (!msg || typeof msg !== 'object') return
-  if (msg.source !== BRIDGE_SOURCE || msg.action !== BRIDGE_ACTION) return
-  if (!msg.data || typeof msg.data !== 'object') return
-
-  const data = event.data.data as Record<string, unknown>
-
-  let vocabEntry: VocabularyEntry | null = null
-
-  if (isFullVocabEntry(data)) {
-    const now = new Date().toISOString()
-    vocabEntry = {
-      id: data.id as string || crypto.randomUUID(),
-      word: data.word,
-      meaning: data.meaning,
-      meaningVi: (data.meaningVi as string) || '',
-      pronunciation: (data.pronunciation as string) || '',
-      partOfSpeech: (data.partOfSpeech as string) || '',
-      topic: (data.topic as string) || 'general',
-      exampleSentence: (data.exampleSentence as string) || '',
-      collocations: (data.collocations as string[]) || [],
-      synonyms: (data.synonyms as string[]) || [],
-      antonyms: (data.antonyms as string[]) || [],
-      wordFamily: (data.wordFamily as string[]) || [],
-      personalNote: (data.personalNote as string) || '',
-      difficulty: (data.difficulty as VocabularyEntry['difficulty']) || 'medium',
-      status: (data.status as VocabularyEntry['status']) || 'new',
-      tags: (data.tags as string[]) || [],
-      createdAt: (data.createdAt as string) || now,
-      updatedAt: now,
-    }
-  } else if (isTextSnippet(data)) {
-    vocabEntry = buildVocabFromText(data)
-  }
-
-  if (!vocabEntry) return
-
-  try {
-    const existing = await DatabaseService.getAll<VocabularyEntry>('vocabulary')
-    const alreadySaved = existing.some(
-      v => v.word.toLowerCase() === vocabEntry!.word.toLowerCase(),
-    )
-    if (alreadySaved) return
-
-    await DatabaseService.add('vocabulary', vocabEntry)
-    for (const listener of listeners) {
-      try { listener(vocabEntry) } catch { /* ignore */ }
-    }
-  } catch { /* ignore */ }
-}
-
-const VOCAB_CHANGED_EVENT = 'vocabulary-changed'
-
 function handleVocabChanged(): void {
   DatabaseService.getAll<VocabularyEntry>('vocabulary').then((all) => {
     try {
@@ -118,47 +45,10 @@ function handleVocabChanged(): void {
         { source: 'ielts-page', action: 'VOCAB_LIST_SYNC', data: all },
         window.location.origin,
       )
-    } catch { /* ignore */ }
+    } catch {}
   }).catch(() => {})
-}
-
-export function notifyExtensionVocabSaved(entry: VocabularyEntry): void {
-  try {
-    window.postMessage(
-      { source: 'ielts-page', action: 'VOCAB_SAVED_BY_WEB', data: entry },
-      window.location.origin,
-    )
-  } catch { /* ignore */ }
 }
 
 export function sendLatestVocabToExtension(): void {
   handleVocabChanged()
-}
-
-export function initVocabSync(): void {
-  if (initialized) return
-  initialized = true
-  window.addEventListener('message', handleVocabMessage)
-  window.addEventListener(VOCAB_CHANGED_EVENT, handleVocabChanged)
-
-  try {
-    handleVocabChanged()
-  } catch { /* DB may not be ready yet */ }
-
-  // Request vocabulary saved in the extension's chrome.storage.local
-  // while the web app was not open (bootstrap sync).
-  // The extension's bridge-client will reply with VOCAB_SAVED messages.
-  try {
-    window.postMessage(
-      { source: 'ielts-page', action: 'REQUEST_EXTENSION_VOCAB' },
-      window.location.origin,
-    )
-  } catch { /* ignore */ }
-}
-
-export function destroyVocabSync(): void {
-  if (!initialized) return
-  initialized = false
-  window.removeEventListener('message', handleVocabMessage)
-  listeners = []
 }

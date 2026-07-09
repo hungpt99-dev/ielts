@@ -29,7 +29,6 @@ import type {
   AppExportData,
 } from '../../models'
 import { saveAppSettings, removeAppSettings, clearAllLocalStorage } from './SettingsStorage'
-import { pushDataSync } from './DataSyncManager'
 
 import { ValidationError } from '@ielts/storage'
 export { ValidationError } from '@ielts/storage'
@@ -292,7 +291,7 @@ export const DatabaseService = {
     const result = await safeDbLocal(async () => {
       return (await repo.vocabulary.create(item as never)) as unknown as VocabularyEntry
     })
-    try { pushDataSync('vocabulary', 'created', result.id, result as unknown as Record<string, unknown>) } catch {}
+
     return result
   },
 
@@ -450,7 +449,7 @@ export const DatabaseService = {
     const result = await safeDbLocal(async () => {
       return (await repo.mistakes.create(item as never)) as unknown as MistakeEntry
     })
-    try { pushDataSync('mistake', 'created', result.id, result as unknown as Record<string, unknown>) } catch {}
+
     return result
   },
 

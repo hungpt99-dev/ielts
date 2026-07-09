@@ -1,12 +1,9 @@
 import type { SaveCategory, LearningEntry } from '../types'
-import type { DataSyncPayload } from '@ielts/storage'
-import { createMessageId } from '@ielts/storage'
 import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry } from '../storage/vocabularyStore'
 import { safeStorageSet } from '../utils/safe-chrome'
 import { initMessaging } from './messaging'
-import { initializeStorageBridge } from './storage-bridge'
 import { initAiService } from './ai-service'
 
 interface AiExplainItem {
@@ -152,7 +149,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 initMessaging()
 initAiService()
-initializeStorageBridge()
 
 // Process batched saves queued by content scripts via chrome.storage.local.
 // Content scripts write to _pendingSaves (array) at most once per 2 seconds.
@@ -162,7 +158,6 @@ chrome.storage.onChanged.addListener((changes, area) => {
   if (!items || !Array.isArray(items) || items.length === 0) return
 
   safeStorageSet({ _pendingSaves: [] }).then(async () => {
-    const savedEntries: Array<{ id: string; category: string; entity: Record<string, unknown> }> = []
     let vocabCount = 0
 
     for (const pending of items) {
@@ -170,12 +165,6 @@ chrome.storage.onChanged.addListener((changes, area) => {
       try {
         const now = new Date().toISOString()
         const sharedId = crypto.randomUUID()
-        const entity: Record<string, unknown> = {
-          ...pending,
-          id: sharedId,
-          createdAt: now,
-          updatedAt: now,
-        } as Record<string, unknown>
 
         const learningEntry: LearningEntry = {
           id: sharedId,
@@ -222,10 +211,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
             createdAt: now,
             updatedAt: now,
           }).catch(() => {})
-          entity.vocabId = sharedId
         }
-
-        savedEntries.push({ id: sharedId, category: pending.category as string, entity })
       } catch (err) {
         console.error('[PendingSave] Item failed:', err)
       }
@@ -233,23 +219,6 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
     if (vocabCount > 0) {
       await incrementDailyProgress('wordsAdded', vocabCount)
-    }
-
-    // Forward to all tabs so the web app receives the data
-    const tabs = await chrome.tabs.query({}).catch(() => [] as chrome.tabs.Tab[])
-    for (const { id, category, entity } of savedEntries) {
-      const payload: DataSyncPayload = {
-        entityType: category === 'vocabulary' ? 'vocabulary' : 'learningEntry',
-        operation: 'created',
-        entityId: id,
-        entity,
-        timestamp: new Date().toISOString(),
-        messageId: createMessageId(),
-      }
-      for (const tab of tabs) {
-        if (!tab.id) continue
-        chrome.tabs.sendMessage(tab.id, { type: 'FORWARD_DATA_SYNC', payload }).catch(() => {})
-      }
     }
   })
 })

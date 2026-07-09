@@ -1,6 +1,4 @@
 import type { SaveCategory, LearningEntry } from '../types'
-import type { SharedSettingsPatch } from '@ielts/settings'
-import type { DataSyncPayload } from '@ielts/storage'
 import {
   updateDailyProgress,
   setVideoPageInfo,
@@ -9,9 +7,6 @@ import {
 } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry, type ExtensionVocabEntry } from '../storage/vocabularyStore'
-import { saveArticleEntry } from '../storage/articleStore'
-import { saveVideoEntry } from '../storage/videoStore'
-import { saveMistakeEntry } from '../storage/mistakeStore'
 import { emitFromBackground } from './eventEmitters'
 
 export interface SaveItemPayload {
@@ -71,9 +66,6 @@ interface MessageMap {
   SAVE_SELECTION_FULL: SaveItemPayload
   AI_EXPLAIN: AiExplainPayload
   MINI_TUTOR_TRIGGER: MiniTutorOpenPayload
-  SETTINGS_SYNC: SharedSettingsPatch
-  VOCAB_SAVED: Record<string, unknown>
-  EXTENSION_LEARNING_EVENT: Record<string, unknown>
 }
 
 export type ExtensionMessage<K extends keyof MessageMap = keyof MessageMap> = {
@@ -308,97 +300,39 @@ export function initMessaging(): void {
     }
   })
 
-  registerHandler('VOCAB_SAVED', async (_msg) => {
-    const msg = _msg as ExtensionMessage<'VOCAB_SAVED'>
-    const tabs = await chrome.tabs.query({})
-    for (const tab of tabs) {
-      if (!tab.id) continue
-      chrome.tabs.sendMessage(tab.id, {
-        type: 'VOCAB_SAVED',
-        payload: msg.payload,
-      }).catch(() => {})
-    }
-  })
-
-  registerHandler('SETTINGS_SYNC', async (_msg) => {
-    const msg = _msg as ExtensionMessage<'SETTINGS_SYNC'>
-    const { syncFromWebsite } = await import('./settingsStorage')
-    await syncFromWebsite(msg.payload)
-  })
-
-  registerHandler('EXTENSION_LEARNING_EVENT', async (_msg) => {
-    const msg = _msg as ExtensionMessage<'EXTENSION_LEARNING_EVENT'>
-    const tabs = await chrome.tabs.query({})
-    for (const tab of tabs) {
-      if (!tab.id) continue
-      chrome.tabs
-        .sendMessage(tab.id, {
-          type: 'EXTENSION_LEARNING_EVENT',
-          payload: msg.payload,
-        })
-        .catch(() => {})
-    }
-  })
-
-  registerHandler('DATA_SYNC', async (_msg) => {
-    const msg = _msg as unknown as { type: 'DATA_SYNC'; payload: DataSyncPayload }
-    const { payload } = msg
-    const { entityType, entity } = payload
-    try {
-      switch (entityType) {
-        case 'vocabulary':
-          await saveVocabularyEntry(entity as unknown as ExtensionVocabEntry)
-          break
-        case 'article':
-          await saveArticleEntry(entity as Parameters<typeof saveArticleEntry>[0])
-          break
-        case 'video':
-          await saveVideoEntry(entity as Parameters<typeof saveVideoEntry>[0])
-          break
-        case 'mistake':
-          await saveMistakeEntry(entity as Parameters<typeof saveMistakeEntry>[0])
-          break
-        case 'learningEntry':
-          await saveEntry(entity as Parameters<typeof saveEntry>[0])
-          break
-        case 'dailyProgress':
-          // computed, not synced directly
-          break
-      }
-
-      // Forward to all tabs so the web app can receive it
-      const tabs = await chrome.tabs.query({})
-      for (const tab of tabs) {
-        if (!tab.id) continue
-        chrome.tabs.sendMessage(tab.id, { type: 'FORWARD_DATA_SYNC', payload }).catch(() => {})
-      }
-    } catch (err) {
-      console.error(`[messaging] DATA_SYNC handler error for ${entityType}:`, err)
-    }
-  })
-
   registerHandler('SYNC_ALL_TO_WEB', async () => {
     try {
       const { getAllVocabulary } = await import('../storage/vocabularyStore')
       const allVocab = await getAllVocabulary()
-      const tabs = await chrome.tabs.query({})
-      let sentCount = 0
-      for (const vocab of allVocab) {
-        const payload: DataSyncPayload = {
-          entityType: 'vocabulary',
-          operation: 'created',
-          entityId: vocab.id,
-          entity: vocab as unknown as Record<string, unknown>,
-          timestamp: new Date().toISOString(),
-          messageId: `sync-all-${vocab.id}-${Date.now()}`,
-        }
-        for (const tab of tabs) {
-          if (!tab.id) continue
-          chrome.tabs.sendMessage(tab.id, { type: 'FORWARD_DATA_SYNC', payload }).catch(() => {})
-        }
-        sentCount++
+      if (allVocab.length === 0) {
+        return { ok: true, count: 0 }
       }
-      return { ok: true, count: sentCount }
+
+      const tabs = await chrome.tabs.query({})
+      const ieltsTabs = tabs.filter(t => {
+        if (!t.id || !t.url) return false
+        try { return new URL(t.url).hostname === 'ieltsjourney.dev' }
+        catch { return false }
+      })
+      const targets = ieltsTabs.length > 0 ? ieltsTabs : tabs.filter(t => t.id)
+
+      const batchPayload = allVocab.map(vocab => ({
+        entityType: 'vocabulary' as const,
+        operation: 'created' as const,
+        entityId: vocab.id,
+        entity: vocab as unknown as Record<string, unknown>,
+        timestamp: new Date().toISOString(),
+        messageId: `sync-all-${vocab.id}-${Date.now()}`,
+      }))
+
+      await Promise.all(targets.map(tab =>
+        chrome.tabs.sendMessage(tab.id!, {
+          type: 'FORWARD_DATA_SYNC_BATCH',
+          payload: batchPayload,
+        }).catch(() => {})
+      ))
+
+      return { ok: true, count: allVocab.length }
     } catch (err) {
       console.error('[messaging] SYNC_ALL_TO_WEB handler error:', err)
       return { ok: false, error: String(err) }
