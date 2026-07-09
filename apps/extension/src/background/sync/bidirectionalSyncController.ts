@@ -1,21 +1,16 @@
-import { getAllVocabulary } from '../../storage/vocabularyStore'
+import { getAllVocabulary, saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { getAllMistakes, saveMistakeEntry } from '../../storage/mistakeStore'
-import { saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { findWebAppTab } from './webTabConnection'
 import { loadSettings, saveSettings, setApiKey } from '../settingsStorage'
+import { toExtensionVocab, toExtensionMistake, syncStorageForHighlighter } from './syncHelpers'
 
 const TIMEOUT_MS = 15000
-const META_KEY = 'ielts-sync-metadata-background'
+const META_KEY = 'ielts-bidi-sync-meta'
 
-interface SyncMeta {
-  lastBidirectionalSyncAt: string | null
-}
+interface SyncMeta { lastBidirectionalSyncAt: string | null }
 
 function getMeta(): SyncMeta {
-  try {
-    const raw = localStorage.getItem(META_KEY)
-    if (raw) return JSON.parse(raw)
-  } catch {}
+  try { return JSON.parse(localStorage.getItem(META_KEY) || '{}') } catch {}
   return { lastBidirectionalSyncAt: null }
 }
 
@@ -31,20 +26,14 @@ export interface SyncSummary {
 }
 
 async function exportExtensionData(): Promise<Record<string, unknown>> {
-  console.log('[BidiSync] Exporting extension data...')
   const [vocab, mistakes] = await Promise.all([
-    getAllVocabulary().catch(() => { console.warn('[BidiSync] getAllVocabulary failed'); return [] }),
-    getAllMistakes().catch(() => { console.warn('[BidiSync] getAllMistakes failed'); return [] }),
+    getAllVocabulary().catch(() => []),
+    getAllMistakes().catch(() => []),
   ])
-  console.log('[BidiSync] Extension has', vocab.length, 'vocab,', mistakes.length, 'mistakes')
-  return {
-    vocabulary: vocab,
-    mistakes: mistakes,
-  }
+  return { vocabulary: vocab, mistakes }
 }
 
 async function importWebData(data: Record<string, unknown>): Promise<{ imported: number; updated: number }> {
-  console.log('[BidiSync] importWebData called')
   let imported = 0
   let updated = 0
 
@@ -60,10 +49,7 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
         themeMode: (webSettings.themeMode as string) || (current as any).themeMode || 'light',
       } as any)
       if (webSettings.aiApiKey) await setApiKey(webSettings.aiApiKey as string)
-      console.log('[BidiSync] Settings imported from web')
-    } catch (err) {
-      console.warn('[BidiSync] Failed to import settings:', err)
-    }
+    } catch {}
   }
 
   const vocabList = data.vocabulary as Record<string, unknown>[] | undefined
@@ -74,31 +60,7 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
       const id = (item.id as string) || crypto.randomUUID()
       if (existingIds.has(id)) { updated++ } else { imported++ }
       existingIds.add(id)
-      await saveVocabularyEntry({
-        id,
-        word: (item.word as string) || '',
-        sourceSentence: (item.sourceSentence as string) || (item.meaning as string) || '',
-        pageTitle: (item.pageTitle as string) || '',
-        pageUrl: (item.pageUrl as string) || '',
-        topic: (item.topic as string) || 'general',
-        personalNote: (item.personalNote as string) || '',
-        tags: Array.isArray(item.tags) ? item.tags as string[] : [],
-        meaning: (item.meaning as string) || '',
-        meaningVi: (item.meaningVi as string) || '',
-        partOfSpeech: (item.partOfSpeech as string) || '',
-        pronunciation: (item.pronunciation as string) || '',
-        exampleSentence: (item.exampleSentence as string) || '',
-        synonyms: Array.isArray(item.synonyms) ? item.synonyms as string[] : [],
-        antonyms: Array.isArray(item.antonyms) ? item.antonyms as string[] : [],
-        collocations: Array.isArray(item.collocations) ? item.collocations as string[] : [],
-        wordFamily: Array.isArray(item.wordFamily) ? item.wordFamily as string[] : [],
-        difficulty: (item.difficulty as string) || 'medium',
-        status: ((item.status as string) || 'new') as 'new' | 'learning' | 'reviewing' | 'mastered',
-        addedToReview: true,
-        reviewId: '',
-        createdAt: (item.createdAt as string) || new Date().toISOString(),
-        updatedAt: (item.updatedAt as string) || new Date().toISOString(),
-      }).catch(() => {})
+      await saveVocabularyEntry(toExtensionVocab(item, id)).catch(() => {})
     }
   }
 
@@ -110,29 +72,11 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
       const id = (item.id as string) || crypto.randomUUID()
       if (existingIds.has(id)) { updated++ } else { imported++ }
       existingIds.add(id)
-      await saveMistakeEntry({
-        id,
-        mistake: (item.mistake as string) || '',
-        correction: (item.correction as string) || '',
-        explanation: (item.explanation as string) || '',
-        source: (item.source as string) || '',
-        topic: (item.topic as string) || '',
-        date: (item.date as string) || new Date().toISOString(),
-        skill: (item.skill as 'vocabulary' | 'grammar' | 'reading' | 'listening' | 'writing' | 'speaking') || 'vocabulary',
-        status: ((item.status as string) === 'resolved' ? 'fixed' : (item.status as string) || 'new') as 'new' | 'reviewing' | 'fixed',
-        repetitionCount: (item.repetitionCount as number) || 0,
-        createdAt: (item.createdAt as string) || new Date().toISOString(),
-        updatedAt: (item.updatedAt as string) || new Date().toISOString(),
-      }).catch(() => {})
+      await saveMistakeEntry(toExtensionMistake(item, id)).catch(() => {})
     }
   }
 
-  // Sync to chrome.storage.local for auto-highlighter
-  try {
-    const allVocab = await getAllVocabulary().catch(() => [])
-    await new Promise<void>(r => chrome.storage.local.set({ vocabulary: allVocab }, r))
-  } catch {}
-
+  await syncStorageForHighlighter(getAllVocabulary)
   return { imported, updated }
 }
 

@@ -1,9 +1,9 @@
-import { getAllVocabulary } from '../../storage/vocabularyStore'
+import { getAllVocabulary, saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { getAllMistakes, saveMistakeEntry } from '../../storage/mistakeStore'
-import { saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { loadSettings, saveSettings, setApiKey } from '../settingsStorage'
+import { toExtensionVocab, toExtensionMistake, syncStorageForHighlighter } from '../sync/syncHelpers'
 
-const SYNC_META_KEY = 'ielts-sync-metadata-background'
+const SYNC_META_KEY = 'ielts-legacy-sync-meta'
 
 function getMeta(): { lastSyncFromWebAt: string | null; lastSyncToWebAt: string | null } {
   try {
@@ -109,31 +109,7 @@ export async function handleImportData(payload: unknown): Promise<{
         const id = (item.id as string) || crypto.randomUUID()
         if (existingIds.has(id)) { updated++ } else { imported++ }
         existingIds.add(id)
-        await saveVocabularyEntry({
-          id,
-          word: (item.word as string) || '',
-          sourceSentence: (item.sourceSentence as string) || (item.meaning as string) || '',
-          pageTitle: (item.pageTitle as string) || '',
-          pageUrl: (item.pageUrl as string) || '',
-          topic: (item.topic as string) || 'general',
-          personalNote: (item.personalNote as string) || '',
-          tags: Array.isArray(item.tags) ? item.tags as string[] : [],
-          meaning: (item.meaning as string) || '',
-          meaningVi: (item.meaningVi as string) || '',
-          partOfSpeech: (item.partOfSpeech as string) || '',
-          pronunciation: (item.pronunciation as string) || '',
-          exampleSentence: (item.exampleSentence as string) || '',
-          synonyms: Array.isArray(item.synonyms) ? item.synonyms as string[] : [],
-          antonyms: Array.isArray(item.antonyms) ? item.antonyms as string[] : [],
-          collocations: Array.isArray(item.collocations) ? item.collocations as string[] : [],
-          wordFamily: Array.isArray(item.wordFamily) ? item.wordFamily as string[] : [],
-          difficulty: (item.difficulty as string) || 'medium',
-          status: ((item.status as string) || 'new') as 'new' | 'learning' | 'reviewing' | 'mastered',
-          addedToReview: true,
-          reviewId: '',
-          createdAt: (item.createdAt as string) || new Date().toISOString(),
-          updatedAt: (item.updatedAt as string) || new Date().toISOString(),
-        }).catch(() => {})
+        await saveVocabularyEntry(toExtensionVocab(item, id)).catch(() => {})
       }
     }
 
@@ -144,20 +120,7 @@ export async function handleImportData(payload: unknown): Promise<{
         const id = (item.id as string) || crypto.randomUUID()
         if (existingIds.has(id)) { updated++ } else { imported++ }
         existingIds.add(id)
-        await saveMistakeEntry({
-          id,
-          mistake: (item.mistake as string) || '',
-          correction: (item.correction as string) || '',
-          explanation: (item.explanation as string) || '',
-          source: (item.source as string) || '',
-          topic: (item.topic as string) || '',
-          date: (item.date as string) || new Date().toISOString(),
-          skill: (item.skill as 'vocabulary' | 'grammar' | 'reading' | 'listening' | 'writing' | 'speaking') || 'vocabulary',
-          status: ((item.status as string) === 'resolved' ? 'fixed' : (item.status as string) || 'new') as 'new' | 'reviewing' | 'fixed',
-          repetitionCount: (item.repetitionCount as number) || 0,
-          createdAt: (item.createdAt as string) || new Date().toISOString(),
-          updatedAt: (item.updatedAt as string) || new Date().toISOString(),
-        }).catch(() => {})
+        await saveMistakeEntry(toExtensionMistake(item, id)).catch(() => {})
       }
     }
 
@@ -165,11 +128,7 @@ export async function handleImportData(payload: unknown): Promise<{
     meta.lastSyncFromWebAt = new Date().toISOString()
     saveMeta(meta)
 
-    // Sync to chrome.storage.local for auto-highlighter
-    try {
-      const allVocab = await getAllVocabulary().catch(() => [])
-      await new Promise<void>(r => chrome.storage.local.set({ vocabulary: allVocab }, r))
-    } catch {}
+    await syncStorageForHighlighter(getAllVocabulary)
 
     return { success: true, data: { imported, updated } }
   } catch (err) {
