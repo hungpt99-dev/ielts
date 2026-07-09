@@ -9,18 +9,14 @@ export interface AutoSyncSettings {
   enabled: boolean
   syncOnWebsiteOpen: boolean
   syncOnExtensionOpen: boolean
-  syncOnReconnect: boolean
   syncDebounceMs: number
-  syncRetryLimit: number
 }
 
 export const DEFAULT_SETTINGS: AutoSyncSettings = {
   enabled: false,
   syncOnWebsiteOpen: true,
   syncOnExtensionOpen: true,
-  syncOnReconnect: true,
   syncDebounceMs: 3000,
-  syncRetryLimit: 3,
 }
 
 export type SyncStatus =
@@ -28,8 +24,6 @@ export type SyncStatus =
   | { state: 'syncing' }
   | { state: 'success'; at: string }
   | { state: 'failed'; at: string; error?: string }
-  | { state: 'waiting_for_web' }
-  | { state: 'offline' }
 
 export function loadSettings(): Promise<AutoSyncSettings> {
   return new Promise((resolve) => {
@@ -46,20 +40,13 @@ export function saveSettings(settings: AutoSyncSettings): Promise<void> {
 }
 
 let syncStatus: SyncStatus = { state: 'idle' }
-const statusListeners = new Set<(s: SyncStatus) => void>()
 
 export function getSyncStatus(): SyncStatus {
   return syncStatus
 }
 
-export function onSyncStatusChange(fn: (s: SyncStatus) => void): () => void {
-  statusListeners.add(fn)
-  return () => statusListeners.delete(fn)
-}
-
 function setSyncStatus(s: SyncStatus): void {
   syncStatus = s
-  for (const fn of statusListeners) { try { fn(s) } catch {} }
 }
 
 const scheduler = new SyncScheduler()
@@ -71,27 +58,24 @@ scheduler.setCallback(async () => {
     const result = await syncBidirectional()
     if (result.failed) {
       setSyncStatus({ state: 'failed', at: new Date().toISOString(), error: 'Sync completed with errors' })
-      if (result.failed > 0) scheduler.scheduleRetry()
     } else {
       setSyncStatus({ state: 'success', at: new Date().toISOString() })
-      scheduler.resetRetry()
     }
   } catch (err) {
     setSyncStatus({ state: 'failed', at: new Date().toISOString(), error: err instanceof Error ? err.message : 'Sync failed' })
-    scheduler.scheduleRetry()
   } finally {
     syncLock.release()
   }
 })
 
-export function triggerAutoSync(): void {
-  scheduler.scheduleDebounce(3000)
+export async function triggerAutoSync(): Promise<void> {
+  const settings = await loadSettings()
+  scheduler.schedule(settings.syncDebounceMs)
 }
 
 export async function onWebTabAvailable(): Promise<void> {
-  const settings = await loadSettings()
-  if (!settings.enabled) return
-  if (settings.syncOnWebsiteOpen) triggerAutoSync()
+  if (!(await loadSettings()).enabled) return
+  triggerAutoSync()
 }
 
 export async function onExtensionPopupOpen(): Promise<void> {
@@ -105,11 +89,10 @@ export async function onExtensionPopupOpen(): Promise<void> {
 
 export async function checkAndSync(options?: { force?: boolean }): Promise<void> {
   if (options?.force) {
-    scheduler.resetRetry()
-    triggerAutoSync()
+    scheduler.cancel()
+    await triggerAutoSync()
     return
   }
-  const settings = await loadSettings()
-  if (!settings.enabled) return
-  triggerAutoSync()
+  if (!(await loadSettings()).enabled) return
+  await triggerAutoSync()
 }

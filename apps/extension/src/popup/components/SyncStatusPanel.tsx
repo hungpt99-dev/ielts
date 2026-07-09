@@ -26,7 +26,7 @@ async function fetchSettings(): Promise<AutoSyncSettings> {
 }
 
 async function fetchStatus(): Promise<SyncStatus> {
-  const res = await chrome.runtime.sendMessage({ type: 'GET_SYNC_STATUS' })
+  const res = await chrome.runtime.sendMessage({ type: 'GET_AUTO_SYNC_STATUS' })
   return res?.data || { state: 'idle' }
 }
 
@@ -147,17 +147,6 @@ export default function SyncStatusPanel({ onBack }: { onBack?: () => void }) {
         </button>
       </div>
 
-      {syncStatus.state === 'failed' && (
-        <button onClick={handleSyncNow} style={{
-          width: '100%', marginTop: 'var(--spacing-xs)',
-          padding: 'var(--spacing-2xs) var(--spacing-sm)',
-          borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)',
-          background: 'transparent', color: 'var(--color-text-secondary)',
-          fontSize: 'var(--text-xs)', cursor: 'pointer', fontFamily: 'var(--font-sans)',
-        }}>
-          Retry Sync
-        </button>
-      )}
     </div>
   )
 }

@@ -17,7 +17,7 @@ export function registerSyncMessageHandlers(): void {
       return true
     }
 
-    if (msg.type === 'GET_SYNC_STATUS') {
+    if (msg.type === 'GET_AUTO_SYNC_STATUS') {
       sendResponse({ success: true, data: getSyncStatus() })
       return false
     }
