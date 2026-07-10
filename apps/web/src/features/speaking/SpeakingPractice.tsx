@@ -11,6 +11,9 @@ import { generateId } from '../../utils'
 import { getSpeakingFeedback } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconSpeaking } from '@ielts/ui'
+import TimerCard from '../../components/TimerCard'
+import { useTimer } from '../../hooks/useTimer'
+import { DEFAULT_TIMER_CONFIG } from '../../models/timer'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -25,8 +28,7 @@ const SPEAKING_PARTS: { value: SpeakingPart; label: string }[] = [
   { value: 3, label: 'Part 3 (Discussion)' },
 ]
 
-const CUE_CARD_PREP_TIME = 60
-const PRACTICE_TIME = 120
+const TIMER_CONFIG = DEFAULT_TIMER_CONFIG
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
@@ -91,14 +93,11 @@ export default function SpeakingPractice() {
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
   const [aiFeedback, setAiFeedback] = useState<string | null>(null)
-  const [isSpeaking, setIsSpeaking] = useState(false)
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
 
-  const [timerSeconds, setTimerSeconds] = useState(0)
-  const [timerRunning, setTimerRunning] = useState(false)
-  const [timerMode, setTimerMode] = useState<'countdown' | 'stopwatch'>('stopwatch')
-  const [countdownTotal, setCountdownTotal] = useState(PRACTICE_TIME)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const timer = useTimer({
+    config: TIMER_CONFIG,
+    onTimeUp: () => {},
+  })
 
   const [recording, setRecording] = useState(false)
   const [recordingSupported, setRecordingSupported] = useState(true)
@@ -133,7 +132,6 @@ export default function SpeakingPractice() {
 
   useEffect(() => {
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
       if (recordingTimerRef.current) clearInterval(recordingTimerRef.current)
     }
   }, [])
@@ -169,57 +167,6 @@ export default function SpeakingPractice() {
       phrases: cat.phrases.filter(p => p.toLowerCase().includes(query)),
     })).filter(cat => cat.phrases.length > 0)
   }, [phrasesFilter])
-
-  function startTimer(mode: 'countdown' | 'stopwatch', countdownSecs?: number) {
-    if (timerRef.current) clearInterval(timerRef.current)
-    setTimerMode(mode)
-    if (mode === 'countdown') {
-      setTimerSeconds(countdownSecs ?? PRACTICE_TIME)
-      setCountdownTotal(countdownSecs ?? PRACTICE_TIME)
-    } else {
-      setTimerSeconds(0)
-    }
-    setTimerRunning(true)
-    timerRef.current = setInterval(() => {
-      if (mode === 'countdown') {
-        setTimerSeconds(prev => {
-          if (prev <= 1) {
-            if (timerRef.current) clearInterval(timerRef.current)
-            setTimerRunning(false)
-            return 0
-          }
-          return prev - 1
-        })
-      } else {
-        setTimerSeconds(prev => prev + 1)
-      }
-    }, 1000)
-  }
-
-  function stopTimer() {
-    if (timerRef.current) {
-      clearInterval(timerRef.current)
-      timerRef.current = null
-    }
-    setTimerRunning(false)
-  }
-
-  function toggleTimer() {
-    if (timerRunning) {
-      stopTimer()
-    } else {
-      startTimer(timerMode, timerMode === 'countdown' ? timerSeconds || PRACTICE_TIME : undefined)
-    }
-  }
-
-  function resetTimer() {
-    stopTimer()
-    if (timerMode === 'countdown') {
-      setTimerSeconds(countdownTotal)
-    } else {
-      setTimerSeconds(0)
-    }
-  }
 
   async function startRecording() {
     if (!recordingSupported) return
@@ -307,10 +254,11 @@ export default function SpeakingPractice() {
     setCustomTopic(question.topic)
     setView('practice')
 
-    setTimerMode(question.part === 2 ? 'countdown' : 'stopwatch')
-    setCountdownTotal(question.part === 2 ? CUE_CARD_PREP_TIME : PRACTICE_TIME)
-    setTimerSeconds(question.part === 2 ? CUE_CARD_PREP_TIME : 0)
-    setTimerRunning(false)
+    if (question.part === 2) {
+      timer.configure('countdown', TIMER_CONFIG.part2PrepSeconds)
+    } else {
+      timer.configure('stopwatch')
+    }
   }
 
   function startCustomPractice() {
@@ -328,18 +276,16 @@ export default function SpeakingPractice() {
     setImprovedAnswer('')
     setCustomTopic('')
     setView('practice')
-    setTimerMode('stopwatch')
-    setTimerSeconds(0)
-    setTimerRunning(false)
+    timer.configure('stopwatch')
   }
 
   function saveSession() {
     if (!answerNotes.trim() && !selectedQuestion) return
     const now = new Date().toISOString()
     const part = selectedQuestion?.part ?? 1
-    const duration = timerMode === 'countdown'
-      ? countdownTotal - timerSeconds
-      : timerSeconds
+    const duration = timer.mode === 'countdown'
+      ? timer.total - timer.seconds
+      : timer.seconds
 
     const session: SpeakingSession = {
       id: sessionId || generateId(),
@@ -444,33 +390,8 @@ export default function SpeakingPractice() {
     }
   }
 
-  function speakFeedback(text: string) {
-    if (!('speechSynthesis' in window)) return
-    window.speechSynthesis.cancel()
-    const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = 'en-GB'
-    utterance.rate = 0.85
-    utterance.onend = () => setIsSpeaking(false)
-    utterance.onerror = () => setIsSpeaking(false)
-    utteranceRef.current = utterance
-    window.speechSynthesis.speak(utterance)
-    setIsSpeaking(true)
-  }
-
-  function stopSpeaking() {
-    window.speechSynthesis.cancel()
-    setIsSpeaking(false)
-    utteranceRef.current = null
-  }
-
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis.cancel()
-    }
-  }, [])
-
   function handleFinish() {
-    stopTimer()
+    timer.stop()
     if (recording) stopRecording()
     saveSession()
     setView('results')
@@ -482,7 +403,7 @@ export default function SpeakingPractice() {
   }
 
   function handleReset() {
-    stopTimer()
+    timer.stop()
     if (recording) stopRecording()
     setSelectedQuestion(null)
     setAnswerNotes('')
@@ -842,208 +763,33 @@ export default function SpeakingPractice() {
                 </Card>
               )}
 
-              {/* Timer & Recording */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Timer</CardTitle>
-                  <div className="flex gap-2">
-                    <select
-                      value={timerMode}
-                      onChange={(e) => {
-                        stopTimer()
-                        const mode = e.target.value as 'countdown' | 'stopwatch'
-                        setTimerMode(mode)
-                        if (mode === 'countdown') {
-                          setTimerSeconds(selectedQuestion?.part === 2 ? CUE_CARD_PREP_TIME : PRACTICE_TIME)
-                          setCountdownTotal(selectedQuestion?.part === 2 ? CUE_CARD_PREP_TIME : PRACTICE_TIME)
-                        } else {
-                          setTimerSeconds(0)
-                        }
-                      }}
-                      className="rounded-lg border px-2 py-1 text-xs"
-                      style={{
-                        borderColor: 'var(--color-border)',
-                        backgroundColor: 'var(--color-surface)',
-                        color: 'var(--color-text)',
-                      }}
-                      aria-label="Timer mode"
-                    >
-                      <option value="stopwatch">Stopwatch</option>
-                      <option value="countdown">Countdown</option>
-                    </select>
-                    {timerMode === 'countdown' && selectedQuestion?.part === 2 && (
-                      <select
-                        value={countdownTotal}
-                        onChange={(e) => {
-                          const val = Number(e.target.value)
-                          setCountdownTotal(val)
-                          if (!timerRunning) setTimerSeconds(val)
-                        }}
-                        className="rounded-lg border px-2 py-1 text-xs"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface)',
-                          color: 'var(--color-text)',
-                        }}
-                        aria-label="Countdown duration"
-                      >
-                        <option value={60}>Prep: 1 min</option>
-                        <option value={120}>Speaking: 2 min</option>
-                        <option value={180}>3 min</option>
-                        <option value={300}>5 min</option>
-                      </select>
-                    )}
-                    {timerMode === 'countdown' && selectedQuestion?.part !== 2 && (
-                      <select
-                        value={countdownTotal}
-                        onChange={(e) => {
-                          const val = Number(e.target.value)
-                          setCountdownTotal(val)
-                          if (!timerRunning) setTimerSeconds(val)
-                        }}
-                        className="rounded-lg border px-2 py-1 text-xs"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface)',
-                          color: 'var(--color-text)',
-                        }}
-                        aria-label="Countdown duration"
-                      >
-                        <option value={60}>1 min</option>
-                        <option value={120}>2 min</option>
-                        <option value={180}>3 min</option>
-                        <option value={300}>5 min</option>
-                      </select>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-col items-center">
-                    <div className="relative mb-4 flex h-24 w-24 items-center justify-center">
-                      <svg className="h-24 w-24 -rotate-90" viewBox="0 0 100 100">
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="42"
-                          fill="none"
-                          stroke="var(--color-border)"
-                          strokeWidth="8"
-                        />
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="42"
-                          fill="none"
-                          stroke="var(--color-primary)"
-                          strokeWidth="8"
-                          strokeDasharray={`${2 * Math.PI * 42}`}
-                          strokeDashoffset={timerMode === 'countdown' && countdownTotal > 0
-                            ? `${2 * Math.PI * 42 * (1 - timerSeconds / countdownTotal)}`
-                            : '0'}
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                      <span
-                        className="absolute text-2xl font-bold tabular-nums"
-                        style={{
-                          color: timerSeconds <= 10 && timerRunning && timerMode === 'countdown'
-                            ? 'var(--color-danger)'
-                            : 'var(--color-text)',
-                        }}
-                      >
-                        {Math.floor(timerSeconds / 60)}:{String(timerSeconds % 60).padStart(2, '0')}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Button
-                        onClick={() => {
-                          if (timerRunning) {
-                            stopTimer()
-                          } else {
-                            startTimer(timerMode, timerMode === 'countdown' ? timerSeconds || countdownTotal : undefined)
-                          }
-                        }}
-                        variant={timerRunning ? 'secondary' : 'primary'}
-                        size="sm"
-                      >
-                        {timerRunning ? 'Pause' : 'Start Timer'}
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={resetTimer} disabled={timerRunning}>
-                        Reset
-                      </Button>
-                      {recordingSupported && (
-                        <button
-                          onClick={() => recording ? stopRecording() : startRecording()}
-                          title={recording ? 'Stop recording' : 'Start recording'}
-                          aria-label={recording ? 'Stop recording' : 'Start recording'}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            width: '44px',
-                            height: '44px',
-                            borderRadius: '12px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            background: recording ? 'var(--color-danger)' : 'var(--color-surface-alt)',
-                            color: recording ? 'var(--color-on-danger)' : 'var(--color-muted)',
-                            transition: 'all 0.2s ease',
-                            flexShrink: 0,
-                            outline: 'none',
-                          }}
-                        >
-                          {recording ? (
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                              <rect x="6" y="6" width="12" height="12" rx="2" />
-                            </svg>
-                          ) : (
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-                              <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                              <line x1="12" y1="19" x2="12" y2="22" />
-                            </svg>
-                          )}
-                        </button>
-                      )}
-                      <button
-                        onClick={stopSpeaking}
-                        title="AI voice off"
-                        aria-label="Enable AI voice"
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          width: '44px',
-                          height: '44px',
-                          borderRadius: '12px',
-                          border: 'none',
-                          cursor: 'pointer',
-                          background: 'var(--color-surface-alt)',
-                          color: isSpeaking ? 'var(--color-danger)' : 'var(--color-muted)',
-                          transition: 'all 0.2s ease',
-                          flexShrink: 0,
-                          outline: 'none',
-                        }}
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                          {isSpeaking && (
-                            <>
-                              <line x1="23" y1="9" x2="17" y2="15" />
-                              <line x1="17" y1="9" x2="23" y2="15" />
-                            </>
-                          )}
-                        </svg>
-                      </button>
-                    </div>
-                    {recording && (
-                      <p className="mt-2 text-xs" style={{ color: 'var(--color-danger)' }}>
-                        Recording... {Math.floor(recordingTime / 60)}:{String(recordingTime % 60).padStart(2, '0')}
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
+              <TimerCard
+                timer={timer}
+                isPart2={selectedQuestion?.part === 2}
+                config={TIMER_CONFIG}
+                recording={recording}
+                onStart={startRecording}
+                onPause={stopRecording}
+                onReset={() => {
+                  stopRecording()
+                  setAnswerNotes('')
+                }}
+              />
+
+              {/* Recording Indicator */}
+              {recording && (
+                <div
+                  className="flex items-center gap-2 rounded-lg border px-4 py-2 text-sm"
+                  style={{
+                    borderColor: 'var(--color-danger)',
+                    backgroundColor: 'var(--color-danger-light)',
+                    color: 'var(--color-danger)',
+                  }}
+                >
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-current" />
+                  Recording... {Math.floor(recordingTime / 60)}:{String(recordingTime % 60).padStart(2, '0')}
+                </div>
+              )}
 
               {/* Answer Notes */}
               <Card>
