@@ -4,6 +4,7 @@ import { getAllSavedItems } from '../../services/savedItemsService'
 import type { SaveCategory } from '../../types'
 import { CATEGORY_LABELS, CATEGORY_ICONS, CATEGORY_COLORS } from '../../types'
 import { IconBack, IconSearch, IconWarning } from '@ielts/ui'
+import SavedItemDetailView from './SavedItemDetailView'
 
 interface SavedItemsViewProps {
   onBack: () => void
@@ -73,6 +74,7 @@ export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<SaveCategory | 'all'>('all')
+  const [selectedItem, setSelectedItem] = useState<SavedItemDisplay | null>(null)
 
   useEffect(() => {
     getAllSavedItems()
@@ -114,10 +116,23 @@ export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
   }, [items, categoryFilter, search])
 
   const handleItemClick = useCallback((item: SavedItemDisplay) => {
-    if (item.pageUrl) {
-      chrome.tabs.create({ url: item.pageUrl })
-    }
+    setSelectedItem(item)
   }, [])
+
+  const handleDeleted = useCallback(() => {
+    setItems((prev) => prev.filter((i) => i.id !== selectedItem?.id))
+    setSelectedItem(null)
+  }, [selectedItem])
+
+  if (selectedItem) {
+    return (
+      <SavedItemDetailView
+        item={selectedItem}
+        onBack={() => setSelectedItem(null)}
+        onDeleted={handleDeleted}
+      />
+    )
+  }
 
   if (loading) {
     return (

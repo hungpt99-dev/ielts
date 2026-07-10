@@ -1,8 +1,8 @@
-import { getAllEntries } from '../storage/indexedDB'
-import { getAllVocabulary } from '../storage/vocabularyStore'
-import { getAllArticles } from '../storage/articleStore'
-import { getAllMistakes } from '../storage/mistakeStore'
-import { safeStorageGet } from '../utils/safe-chrome'
+import { getAllEntries, deleteEntry, saveEntry } from '../storage/indexedDB'
+import { getAllVocabulary, deleteVocabularyEntry } from '../storage/vocabularyStore'
+import { getAllArticles, deleteArticleEntry } from '../storage/articleStore'
+import { getAllMistakes, deleteMistakeEntry } from '../storage/mistakeStore'
+import { safeStorageGet, safeStorageSet } from '../utils/safe-chrome'
 import type { LearningEntry, SaveCategory } from '../types'
 
 export interface SavedItemDisplay extends LearningEntry {
@@ -156,4 +156,51 @@ export async function getSavedItemsStats(): Promise<SavedItemsStats> {
     byCategory[item.category] = (byCategory[item.category] || 0) + 1
   }
   return { total: all.length, byCategory }
+}
+
+async function deleteFromChromeStorage(id: string): Promise<void> {
+  try {
+    const result = await safeStorageGet<unknown[]>(STORAGE_KEY)
+    const items = (result[STORAGE_KEY] as Record<string, unknown>[]) || []
+    const filtered = items.filter((item) => (item.id as string) !== id)
+    if (filtered.length !== items.length) {
+      await safeStorageSet({ [STORAGE_KEY]: filtered })
+    }
+  } catch {}
+}
+
+async function updateChromeStorageItem(id: string, updates: Record<string, unknown>): Promise<void> {
+  try {
+    const result = await safeStorageGet<unknown[]>(STORAGE_KEY)
+    const items = (result[STORAGE_KEY] as Record<string, unknown>[]) || []
+    const index = items.findIndex((item) => (item.id as string) === id)
+    if (index >= 0) {
+      items[index] = { ...items[index], ...updates, updatedAt: new Date().toISOString() }
+      await safeStorageSet({ [STORAGE_KEY]: items })
+    }
+  } catch {}
+}
+
+export async function deleteSavedItem(item: SavedItemDisplay): Promise<void> {
+  await Promise.all([
+    deleteEntry(item.id).catch(() => {}),
+    deleteVocabularyEntry(item.id).catch(() => {}),
+    deleteArticleEntry(item.id).catch(() => {}),
+    deleteMistakeEntry(item.id).catch(() => {}),
+    deleteFromChromeStorage(item.id),
+  ])
+}
+
+export async function updateSavedItem(
+  item: SavedItemDisplay,
+  updates: Partial<Pick<SavedItemDisplay, 'text' | 'topic' | 'tags' | 'personalNote' | 'pageTitle' | 'pageUrl'>>,
+): Promise<void> {
+  const timestamp = new Date().toISOString()
+  const data = { ...updates, updatedAt: timestamp }
+
+  if (item.source === 'chromeStorage') {
+    await updateChromeStorageItem(item.id, data)
+  } else {
+    await saveEntry({ ...item, ...data, updatedAt: timestamp })
+  }
 }
