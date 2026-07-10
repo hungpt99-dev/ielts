@@ -99,7 +99,7 @@ export default function SettingsPage() {
       <header>
         <h1 style={{ fontSize: '24px', fontWeight: 700, margin: 0 }}>Extension Settings</h1>
         <p style={{ color: 'var(--color-text-secondary)', marginTop: '4px', fontSize: '14px' }}>
-          Configure your IELTS Learning Journey extension
+          Configure your IELTS Journey extension
         </p>
       </header>
 

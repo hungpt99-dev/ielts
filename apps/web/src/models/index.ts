@@ -1,5 +1,5 @@
 // ============================================================
-// IELTS Learning Journey — TypeScript Data Models
+// IELTS Journey — TypeScript Data Models
 // ============================================================
 
 

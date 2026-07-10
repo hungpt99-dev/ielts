@@ -1,6 +1,6 @@
 # Storage Design
 
-> How the IELTS Learning Journey implements local-first persistent storage using IndexedDB with a repository pattern.
+> How the IELTS Journey implements local-first persistent storage using IndexedDB with a repository pattern.
 
 ---
 

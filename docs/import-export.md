@@ -1,6 +1,6 @@
 # Import & Export
 
-> How the IELTS Learning Journey handles data portability through JSON backup/restore, content pack exchange, and cross-origin synchronization.
+> How the IELTS Journey handles data portability through JSON backup/restore, content pack exchange, and cross-origin synchronization.
 
 ---
 

@@ -1,6 +1,6 @@
 # Loading the Extension in Chrome (Unpacked)
 
-This guide explains how to load the IELTS Learning Journey browser extension into Google Chrome for development and testing.
+This guide explains how to load the IELTS Journey browser extension into Google Chrome for development and testing.
 
 ## Prerequisites
 
@@ -74,7 +74,7 @@ pnpm build
 ### Reloading After Changes
 
 1. After rebuilding, go to `chrome://extensions`
-2. Click the refresh icon on the IELTS Learning Journey extension card
+2. Click the refresh icon on the IELTS Journey extension card
 3. Or use the keyboard shortcut: **Cmd+R** (Mac) / **Ctrl+R** (Windows/Linux) on `chrome://extensions` with the extension focused
 
 > **Tip:** Use the extension's **Update** button on `chrome://extensions` rather than removing and re-adding it to preserve stored data.

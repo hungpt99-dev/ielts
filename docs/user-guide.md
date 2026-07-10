@@ -1,6 +1,6 @@
-# IELTS Learning Journey — User Guide
+# IELTS Journey — User Guide
 
-> Welcome to IELTS Learning Journey! This guide walks you through getting started, using core and AI features, and getting the most out of your study experience.
+> Welcome to IELTS Journey! This guide walks you through getting started, using core and AI features, and getting the most out of your study experience.
 
 ---
 
@@ -21,7 +21,7 @@
 
 ## 1. Welcome
 
-IELTS Learning Journey is a comprehensive, local-first IELTS preparation tool that runs entirely in your browser. It helps you manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for personalized feedback — all while keeping your data private and under your control.
+IELTS Journey is a comprehensive, local-first IELTS preparation tool that runs entirely in your browser. It helps you manage vocabulary, practice all four IELTS skills (Reading, Listening, Writing, Speaking), track mistakes, monitor progress, and optionally use AI for personalized feedback — all while keeping your data private and under your control.
 
 ### What Makes It Different
 
@@ -36,9 +36,9 @@ IELTS Learning Journey is a comprehensive, local-first IELTS preparation tool th
 
 ### 2.1 Opening the App
 
-Open IELTS Learning Journey in any modern browser (Chrome, Edge, Firefox, or Safari). For the best experience:
+Open IELTS Journey in any modern browser (Chrome, Edge, Firefox, or Safari). For the best experience:
 
-- **Install as PWA**: Click the install icon in your browser's address bar to add IELTS Learning Journey to your home screen. It will then work like a native app and remain usable offline.
+- **Install as PWA**: Click the install icon in your browser's address bar to add IELTS Journey to your home screen. It will then work like a native app and remain usable offline.
 - **Chrome users**: Use the extension for collecting content from any webpage directly into your study database.
 
 ### 2.2 First-Run Experience

@@ -1,6 +1,6 @@
 # Deployment Guide
 
-> How to build, deploy, and distribute the IELTS Learning Journey web app and browser extension.
+> How to build, deploy, and distribute the IELTS Journey web app and browser extension.
 
 ---
 

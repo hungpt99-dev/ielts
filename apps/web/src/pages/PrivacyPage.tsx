@@ -9,7 +9,7 @@ export default function PrivacyPage() {
 
       <section className="space-y-4 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
         <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>Information We Collect</h2>
-        <p>IELTS Learning Journey is a local-first application. Your study data — vocabulary, mistakes, articles, videos, and progress — is stored entirely on your device in IndexedDB and localStorage. We do not collect, transmit, or store any of your personal data on external servers.</p>
+        <p>IELTS Journey is a local-first application. Your study data — vocabulary, mistakes, articles, videos, and progress — is stored entirely on your device in IndexedDB and localStorage. We do not collect, transmit, or store any of your personal data on external servers.</p>
         <p>The only external service used is the AI provider you configure (e.g., OpenAI). When you use AI features, the text you submit is sent to your chosen AI provider for processing. Your API key is stored locally on your device.</p>
       </section>
 

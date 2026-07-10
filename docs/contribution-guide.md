@@ -1,6 +1,6 @@
 # Contribution Guide
 
-> How to contribute to the IELTS Learning Journey project.
+> How to contribute to the IELTS Journey project.
 
 ---
 

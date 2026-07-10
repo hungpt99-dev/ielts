@@ -1,8 +1,8 @@
-# IELTS Learning Journey — Browser Extension Architecture
+# IELTS Journey — Browser Extension Architecture
 
 ## 1. Overview
 
-The IELTS Learning Journey browser extension is a Manifest V3 Chrome extension that allows users to collect English learning material from any webpage and save it into their local IELTS study database. It operates entirely client-side with no backend, sharing data with the main website through a local storage bridge strategy.
+The IELTS Journey browser extension is a Manifest V3 Chrome extension that allows users to collect English learning material from any webpage and save it into their local IELTS study database. It operates entirely client-side with no backend, sharing data with the main website through a local storage bridge strategy.
 
 ### Design Principles
 
@@ -491,7 +491,7 @@ chrome.storage.local keys:
 
 #### Tier 3: Website Bridge (Optional, Direct Sync)
 
-When the user has the IELTS Learning Journey website open in a tab, a bridge script injected by the content script enables direct data transfer.
+When the user has the IELTS Journey website open in a tab, a bridge script injected by the content script enables direct data transfer.
 
 **Bridge mechanism:**
 
@@ -849,7 +849,7 @@ export async function getExtensionDb(): Promise<IDBPDatabase<ExtensionSchema>> {
 ```json
 {
   "manifest_version": 3,
-  "name": "IELTS Learning Journey",
+  "name": "IELTS Journey",
   "version": "0.1.0",
   "description": "Collect English learning material from any webpage and save to your IELTS study app.",
   "permissions": [
@@ -876,7 +876,7 @@ export async function getExtensionDb(): Promise<IDBPDatabase<ExtensionSchema>> {
   ],
   "action": {
     "default_popup": "popup/index.html",
-    "default_title": "IELTS Learning Journey",
+    "default_title": "IELTS Journey",
     "default_icon": {
       "16": "icons/icon-16.png",
       "48": "icons/icon-48.png",

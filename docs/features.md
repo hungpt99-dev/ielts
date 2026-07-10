@@ -1,4 +1,4 @@
-# IELTS Learning Journey — Features
+# IELTS Journey — Features
 
 > Detailed technical documentation of all project features, their architecture, data flow, and implementation details.
 
@@ -551,7 +551,7 @@ PWA is implemented via `vite-plugin-pwa` with the following service worker strat
 
 | Property | Value |
 |----------|-------|
-| `name` | IELTS Learning Journey |
+| `name` | IELTS Journey |
 | `short_name` | IELTS Journey |
 | `display` | `standalone` |
 | `start_url` | `/` |

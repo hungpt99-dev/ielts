@@ -1,6 +1,6 @@
 # Security & Privacy
 
-> Security and privacy considerations for the local-first IELTS Learning Journey application.
+> Security and privacy considerations for the local-first IELTS Journey application.
 
 ---
 

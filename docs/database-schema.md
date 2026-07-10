@@ -1,6 +1,6 @@
 # Database Schema
 
-> Complete reference for the IndexedDB schema, object stores, indexes, and data models used in the IELTS Learning Journey.
+> Complete reference for the IndexedDB schema, object stores, indexes, and data models used in the IELTS Journey.
 
 ---
 

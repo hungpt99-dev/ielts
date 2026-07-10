@@ -1,6 +1,6 @@
 # Local-First Design
 
-> How the IELTS Learning Journey implements a local-first architecture with no backend dependency.
+> How the IELTS Journey implements a local-first architecture with no backend dependency.
 
 ---
 

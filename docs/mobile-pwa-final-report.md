@@ -77,7 +77,7 @@ IELTS Journey has been fully audited and fixed for mobile responsiveness, PWA co
 
 | # | Issue | Fix Applied |
 |---|-------|-------------|
-| 1 | `name: 'IELTS Learning Journey'` — inconsistent branding | Changed to `'IELTS Journey'` |
+| 1 | `name: 'IELTS Journey'` — inconsistent branding | Changed to `'IELTS Journey'` |
 | 2 | `short_name: 'IELTS'` — too generic | Changed to `'IELTS Journey'` |
 | 3 | No `categories` field in manifest | Added `['education', 'productivity']` |
 | 4 | `description` inconsistent with `index.html` | Unified to `'Learn IELTS with AI Tutor'` |

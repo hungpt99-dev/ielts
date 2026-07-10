@@ -1,6 +1,6 @@
 # AI Coding Agent Guide
 
-> Guidelines, conventions, and workflows for AI coding agents working with the IELTS Learning Journey codebase. Both AI agents and human contributors should read this before making changes.
+> Guidelines, conventions, and workflows for AI coding agents working with the IELTS Journey codebase. Both AI agents and human contributors should read this before making changes.
 
 ---
 

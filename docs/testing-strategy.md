@@ -1,6 +1,6 @@
 # Testing Strategy
 
-> The testing approach for the IELTS Learning Journey, covering unit, integration, and component tests.
+> The testing approach for the IELTS Journey, covering unit, integration, and component tests.
 
 ---
 

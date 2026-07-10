@@ -8,7 +8,7 @@
 
 ## Context
 
-The IELTS Learning Journey is a personal study tool. We considered two architectures:
+The IELTS Journey is a personal study tool. We considered two architectures:
 
 1. **Backend architecture:** Server-side database + API + client app
 2. **Local-first architecture:** All data stored in browser IndexedDB, no backend

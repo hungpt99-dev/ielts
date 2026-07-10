@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-> Common issues, their causes, and solutions for the IELTS Learning Journey.
+> Common issues, their causes, and solutions for the IELTS Journey.
 
 ---
 
@@ -105,7 +105,7 @@ rm -rf node_modules/.vite
 ### 3.2 Content Script Not Running
 
 1. Open `chrome://extensions/`
-2. Find "IELTS Learning Journey"
+2. Find "IELTS Journey"
 3. Click "Inspect views: background page" to open service worker console
 4. Check for content script injection errors
 5. Ensure host permissions allow the current site

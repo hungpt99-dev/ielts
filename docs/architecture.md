@@ -1,6 +1,6 @@
-# IELTS Learning Journey — Architecture
+# IELTS Journey — Architecture
 
-> The clean architecture of the IELTS Learning Journey codebase.  
+> The clean architecture of the IELTS Journey codebase.  
 > This document describes the architecture layers, folder structure, dependency rules, and data flows.
 
 ---

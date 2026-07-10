@@ -47,7 +47,7 @@ The PWA manifest is **generated at build time** by `vite-plugin-pwa` in `vite.co
 
 | # | Issue | File | Severity |
 |---|-------|------|----------|
-| 1 | **Manifest name mismatch**: `name: 'IELTS Learning Journey'` and `short_name: 'IELTS'` — "IELTS" as short_name is too generic and may be confused with the official IELTS brand. Should match the app logo `short_name: 'IELTS Journey'`. | `vite.config.ts:14-15` | Medium |
+| 1 | **Manifest name mismatch**: `name: 'IELTS Journey'` and `short_name: 'IELTS'` — "IELTS" as short_name is too generic and may be confused with the official IELTS brand. Should match the app logo `short_name: 'IELTS Journey'`. | `vite.config.ts:14-15` | Medium |
 | 2 | **No `categories` field** in manifest. Not critical but helps app discovery in some contexts. | `vite.config.ts:13-39` | Low |
 | 3 | **No `description` alignment**: manifest says `"Personal IELTS study system..."` while `index.html` says `"Learn IELTS with AI Tutor"`. Should be consistent. | `vite.config.ts:16` vs `index.html:8` | Low |
 | 4 | **No `screenshots`** for PWA install prompt. Not required but helps on some Android browsers. | `vite.config.ts` | Low |

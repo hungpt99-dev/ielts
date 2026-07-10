@@ -1,6 +1,6 @@
 <p align="center">
   <br/>
-  <h1 align="center">IELTS Learning Journey</h1>
+  <h1 align="center">IELTS Journey</h1>
   <p align="center">
     A fully client-side, offline-first personal IELTS study system.
     <br/>
