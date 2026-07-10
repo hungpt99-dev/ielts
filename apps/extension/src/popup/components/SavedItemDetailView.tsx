@@ -2,8 +2,9 @@ import { useState, useCallback } from 'react'
 import type { SavedItemDisplay } from '../../services/savedItemsService'
 import { deleteSavedItem, updateSavedItem } from '../../services/savedItemsService'
 import type { SaveCategory } from '../../types'
-import { CATEGORY_LABELS, CATEGORY_ICONS, CATEGORY_COLORS } from '../../types'
-import { IconBack, IconAITutor, IconDelete, IconEdit, IconCheck } from '@ielts/ui'
+import { CATEGORY_LABELS, CATEGORY_COLORS } from '../../types'
+import { IconBack, IconAITutor, IconDelete, IconEdit, IconCheck, IconInfo } from '@ielts/ui'
+import { CategoryIcon } from '../../components/CategoryIcon'
 import {
   enrichVocabulary,
   explainText,
@@ -100,7 +101,7 @@ export default function SavedItemDetailView({ item: initialItem, onBack, onDelet
           <IconBack size={16} />
         </button>
         <span style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)' }}>
-          {CATEGORY_ICONS[item.category as SaveCategory]} {CATEGORY_LABELS[item.category as SaveCategory]}
+          <CategoryIcon category={item.category as SaveCategory} size={14} /> {CATEGORY_LABELS[item.category as SaveCategory]}
         </span>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: '4px' }}>
           {!editing && (
@@ -134,7 +135,7 @@ export default function SavedItemDetailView({ item: initialItem, onBack, onDelet
 
             {/* Meta pills */}
             <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', padding: '8px 10px', borderRadius: '10px', background: 'var(--color-surface-alt)' }}>
-              <Pill icon={CATEGORY_ICONS[item.category as SaveCategory]} label={CATEGORY_LABELS[item.category as SaveCategory]} color={color} />
+              <Pill icon={<CategoryIcon category={item.category as SaveCategory} size={11} />} label={CATEGORY_LABELS[item.category as SaveCategory]} color={color} />
               {item.topic && <Pill label={`#${item.topic}`} />}
               {item.difficulty && <Pill label={item.difficulty} />}
               <Pill label={item.status} />
@@ -201,10 +202,10 @@ export default function SavedItemDetailView({ item: initialItem, onBack, onDelet
 
 /* ─── Sub-components ─── */
 
-function Pill({ label, icon, color }: { label: string; icon?: string; color?: string }) {
+function Pill({ label, icon, color }: { label: string; icon?: React.ReactNode; color?: string }) {
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 8px', borderRadius: '8px', fontSize: '10px', fontWeight: 500, background: color ? `${color}15` : 'var(--color-surface)', color: color || 'var(--color-text-secondary)', border: color ? 'none' : '1px solid var(--color-border-light)' }}>
-      {icon && <span>{icon}</span>}{label}
+      {icon}{label}
     </span>
   )
 }
@@ -359,7 +360,7 @@ function IeltsVocabResult({ data }: { data: IeltsVocabResult }) {
           </ul>
         </div>
       )}
-      {data.tips && <div style={{ padding: '6px 8px', borderRadius: '6px', background: 'var(--color-primary-light)', color: 'var(--color-primary)', fontSize: '11px', lineHeight: 1.4 }}>💡 {data.tips}</div>}
+      {data.tips && <div style={{ padding: '6px 8px', borderRadius: '6px', background: 'var(--color-primary-light)', color: 'var(--color-primary)', fontSize: '11px', lineHeight: 1.4, display: 'flex', alignItems: 'flex-start', gap: '4px' }}><IconInfo size={14} style={{ flexShrink: 0, marginTop: '1px' }} />{data.tips}</div>}
     </div>
   )
 }

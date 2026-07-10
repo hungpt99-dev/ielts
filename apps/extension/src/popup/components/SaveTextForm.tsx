@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { entryFormSchema, entrySchema } from '../../types'
 import type { EntryFormData } from '../../types'
-import { SAVE_CATEGORIES, CATEGORY_LABELS, CATEGORY_COLORS, CATEGORY_ICONS, SKILL_OPTIONS, SKILL_LABELS } from '../../types'
+import { SAVE_CATEGORIES, CATEGORY_LABELS, CATEGORY_COLORS, SKILL_OPTIONS, SKILL_LABELS } from '../../types'
+import { CategoryIcon } from '../../components/CategoryIcon'
 import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
 import { saveVocabularyEntry, type ExtensionVocabEntry } from '../../storage/vocabularyStore'
@@ -343,7 +344,7 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
                 textAlign: 'left',
               }}
             >
-              <span>{CATEGORY_ICONS[cat]}</span>
+              <CategoryIcon category={cat} size={16} />
               <span>{CATEGORY_LABELS[cat]}</span>
             </button>
           ))}

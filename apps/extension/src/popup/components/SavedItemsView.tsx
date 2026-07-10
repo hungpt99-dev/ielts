@@ -2,8 +2,9 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import type { SavedItemDisplay } from '../../services/savedItemsService'
 import { getAllSavedItems } from '../../services/savedItemsService'
 import type { SaveCategory } from '../../types'
-import { CATEGORY_LABELS, CATEGORY_ICONS, CATEGORY_COLORS } from '../../types'
-import { IconBack, IconSearch, IconWarning } from '@ielts/ui'
+import { CATEGORY_LABELS, CATEGORY_COLORS } from '../../types'
+import { IconBack, IconSearch, IconWarning, IconFileText } from '@ielts/ui'
+import { CategoryIcon } from '../../components/CategoryIcon'
 import SavedItemDetailView from './SavedItemDetailView'
 
 interface SavedItemsViewProps {
@@ -110,13 +111,7 @@ export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
       {items.length === 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, padding: '48px 24px', gap: '12px', textAlign: 'center' }}>
           <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'var(--color-surface-alt)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="16" y1="13" x2="8" y2="13" />
-              <line x1="16" y1="17" x2="8" y2="17" />
-              <polyline points="10 9 9 9 8 9" />
-            </svg>
+            <IconFileText size={28} style={{ color: 'var(--color-muted)' }} />
           </div>
           <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--color-text)' }}>No saved items yet</span>
           <span style={{ fontSize: '12px', color: 'var(--color-muted)', lineHeight: 1.4 }}>
@@ -152,14 +147,14 @@ export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
               />
             </div>
             <div style={{ display: 'flex', gap: '4px', marginTop: '8px', overflowX: 'auto', paddingBottom: '2px' }}>
-              <FilterTab label="All" active={categoryFilter === 'all'} color="var(--color-primary)" icon="" onClick={() => setCategoryFilter('all')} />
+              <FilterTab label="All" active={categoryFilter === 'all'} color="var(--color-primary)" onClick={() => setCategoryFilter('all')} />
               {ALL_CATEGORIES.filter((c) => (byCategory[c] || 0) > 0).map((c) => (
                 <FilterTab
                   key={c}
                   label={CATEGORY_LABELS[c]}
                   active={categoryFilter === c}
                   color={CATEGORY_COLORS[c]}
-                  icon={CATEGORY_ICONS[c]}
+                  icon={<CategoryIcon category={c} size={12} />}
                   onClick={() => setCategoryFilter(c)}
                 />
               ))}
@@ -169,7 +164,7 @@ export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
           <div style={{ flex: 1, overflowY: 'auto' }}>
             {filtered.length === 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 16px', gap: '8px', textAlign: 'center' }}>
-                <span style={{ fontSize: '32px', opacity: 0.3 }}>{categoryFilter !== 'all' ? CATEGORY_ICONS[categoryFilter] : '🔍'}</span>
+                <span style={{ opacity: 0.3 }}>{categoryFilter !== 'all' ? <CategoryIcon category={categoryFilter as SaveCategory} size={32} /> : <IconSearch size={32} />}</span>
                 <span style={{ fontSize: '13px', color: 'var(--color-muted)' }}>
                   {search ? 'No items match your search.' : 'No items in this category.'}
                 </span>
@@ -193,7 +188,7 @@ export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
 
 /* ─── Sub-components ─── */
 
-function FilterTab({ label, active, color, icon, onClick }: { label: string; active: boolean; color: string; icon: string; onClick: () => void }) {
+function FilterTab({ label, active, color, icon, onClick }: { label: string; active: boolean; color: string; icon?: React.ReactNode; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -216,7 +211,7 @@ function FilterTab({ label, active, color, icon, onClick }: { label: string; act
         whiteSpace: 'nowrap',
       }}
     >
-      {icon && <span style={{ fontSize: '12px' }}>{icon}</span>}
+      {icon && <span style={{ display: 'inline-flex' }}>{icon}</span>}
       {label}
     </button>
   )
@@ -249,7 +244,7 @@ function ItemCard({ item, onClick }: { item: SavedItemDisplay; onClick: () => vo
 
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', marginBottom: '4px' }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 6px', borderRadius: '6px', fontSize: '10px', fontWeight: 500, background: `${color}15`, color }}>
-          {CATEGORY_ICONS[item.category as SaveCategory]} {CATEGORY_LABELS[item.category as SaveCategory]}
+          <CategoryIcon category={item.category as SaveCategory} size={12} /> {CATEGORY_LABELS[item.category as SaveCategory]}
         </span>
         <span style={{ fontSize: '10px', color: 'var(--color-muted)', whiteSpace: 'nowrap', marginTop: '2px' }}>
           {formatDate(item.createdAt)}

@@ -75,15 +75,16 @@ export const CATEGORY_LABELS: Record<SaveCategory, string> = {
   mistake: 'Mistake Note',
 }
 
+// Use <CategoryIcon> component from '../components/CategoryIcon' instead
 export const CATEGORY_ICONS: Record<SaveCategory, string> = {
-  vocabulary: '📖',
-  phrase: '💬',
-  sentence: '📝',
-  grammar: '📚',
-  reading: '📰',
-  writing: '✍️',
-  speaking: '🎤',
-  mistake: '⚠️',
+  vocabulary: '',
+  phrase: '',
+  sentence: '',
+  grammar: '',
+  reading: '',
+  writing: '',
+  speaking: '',
+  mistake: '',
 }
 
 export const CATEGORY_COLORS: Record<SaveCategory, string> = {
