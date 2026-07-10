@@ -1,6 +1,6 @@
-const PANEL_ID = 'ielts-video-helper'
-
 import { safeSendMessage } from '../utils/safe-chrome'
+
+const PANEL_ID = 'ielts-video-helper'
 
 interface VideoPageInfo {
   isVideoPage: boolean
@@ -10,18 +10,29 @@ interface VideoPageInfo {
   videoId: string
 }
 
+const VIDEO_BADGE_SVG = `
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="23 7 16 12 23 17 23 7" />
+    <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+  </svg>
+`
+
 function extractYoutubeVideoId(url: string): string {
-  const urlObj = new URL(url)
-  if (urlObj.hostname.includes('youtu.be')) {
-    return urlObj.pathname.slice(1).split('/')[0].split('?')[0]
+  try {
+    const urlObj = new URL(url)
+    if (urlObj.hostname.includes('youtu.be')) {
+      return urlObj.pathname.slice(1).split('/')[0].split('?')[0]
+    }
+    if (urlObj.pathname.startsWith('/shorts/')) {
+      return urlObj.pathname.split('/shorts/')[1]?.split('?')[0] || ''
+    }
+    const id = urlObj.searchParams.get('v') || ''
+    if (id) return id
+    const match = urlObj.pathname.match(/^\/embed\/([^/?]+)/)
+    return match?.[1] || ''
+  } catch {
+    return ''
   }
-  if (urlObj.pathname.startsWith('/shorts/')) {
-    return urlObj.pathname.split('/shorts/')[1]?.split('?')[0] || ''
-  }
-  const id = urlObj.searchParams.get('v') || ''
-  if (id) return id
-  const match = urlObj.pathname.match(/^\/embed\/([^/?]+)/)
-  return match?.[1] || ''
 }
 
 function extractYoutubeTitle(): string {
@@ -78,7 +89,7 @@ function detectVideoPage(): VideoPageInfo {
   }
 }
 
-function injectStyles() {
+function injectStyles(): void {
   if (document.getElementById(`${PANEL_ID}-styles`)) return
   const style = document.createElement('style')
   style.id = `${PANEL_ID}-styles`
@@ -117,8 +128,6 @@ function injectStyles() {
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 14px;
       flex-shrink: 0;
     }
     #${PANEL_ID}-badge .badge-text {
@@ -135,57 +144,84 @@ function injectStyles() {
   document.head.appendChild(style)
 }
 
+/**
+ * Extract the JSON object starting at `startIdx` in `text` by counting braces.
+ * Handles nested objects, strings containing braces, and multiline content.
+ */
+function extractJsonBounded(text: string, startIdx: number): { json: string; endIdx: number } | null {
+  if (text[startIdx] !== '{') return null
+  let depth = 0
+  let inString = false
+  let escape = false
+  for (let i = startIdx; i < text.length; i++) {
+    const ch = text[i]
+    if (escape) { escape = false; continue }
+    if (ch === '\\') { escape = true; continue }
+    if (ch === '"') { inString = !inString; continue }
+    if (inString) continue
+    if (ch === '{') depth++
+    if (ch === '}') depth--
+    if (depth === 0) {
+      return { json: text.slice(startIdx, i + 1), endIdx: i + 1 }
+    }
+  }
+  return null
+}
+
 async function extractYoutubeTranscriptFromPage(): Promise<string> {
   try {
     const scripts = document.querySelectorAll('script')
-    let playerResponse: Record<string, unknown> | null = null
+    let captionTracks: Array<{ languageCode: string; baseUrl: string }> | null = null
 
     for (const s of scripts) {
       const text = s.textContent || ''
-      if (text.includes('ytInitialPlayerResponse') || text.includes('playerCaptionsTracklistRenderer')) {
-        const match = text.match(/ytInitialPlayerResponse\s*=\s*({.+?});/)
-        if (match) {
-          try {
-            playerResponse = JSON.parse(match[1])
-            break
-          } catch {
-            /* try next script */
-          }
+      if (!text.includes('ytInitialPlayerResponse') && !text.includes('playerCaptionsTracklistRenderer')) continue
+
+      const matchIdx = text.indexOf('ytInitialPlayerResponse')
+      if (matchIdx === -1) continue
+
+      const eqIdx = text.indexOf('=', matchIdx)
+      if (eqIdx === -1) continue
+
+      const bounded = extractJsonBounded(text, eqIdx + 1)
+      if (!bounded) continue
+
+      try {
+        const parsed = JSON.parse(bounded.json)
+        const tracks = (parsed as any)?.captions?.playerCaptionsTracklistRenderer?.captionTracks
+        if (tracks?.length) {
+          captionTracks = tracks
+          break
         }
+      } catch {
+        continue
       }
     }
 
-    if (!playerResponse) {
+    if (!captionTracks) {
       const dataEl = document.getElementById('player-container')
       if (dataEl) {
         const dataScript = dataEl.querySelector('script')
         if (dataScript?.textContent) {
-          const match = dataScript.textContent.match(/window\.__INITIAL_STATE__\s*=\s*({.+?});/)
-          if (match) {
+          const initMatch = dataScript.textContent.match(/window\.__INITIAL_STATE__\s*=\s*(.*?});\s*<\/script>/)
+          if (initMatch) {
             try {
-              const state = JSON.parse(match[1])
-              const tracks = state?.playerOverlays?.playerOverlayRenderer?.captionsTracklist ??
-                             state?.captions?.playerCaptionsTracklistRenderer?.captionTracks
+              const state = JSON.parse(initMatch[1])
+              const tracks = (state as any)?.playerOverlays?.playerOverlayRenderer?.captionsTracklist ??
+                             (state as any)?.captions?.playerCaptionsTracklistRenderer?.captionTracks
               if (tracks?.length) {
-                playerResponse = {
-                  captions: {
-                    playerCaptionsTracklistRenderer: { captionTracks: tracks },
-                  },
-                }
+                captionTracks = tracks
               }
-            } catch {
-              /* continue */
-            }
+            } catch { /* continue */ }
           }
         }
       }
     }
 
-    const captionTracks = (playerResponse as any)?.captions?.playerCaptionsTracklistRenderer?.captionTracks
     if (!captionTracks?.length) return ''
 
-    const track = captionTracks.find((t: { languageCode: string }) => t.languageCode === 'en')
-      || captionTracks.find((t: { languageCode: string }) => t.languageCode?.startsWith('en'))
+    const track = captionTracks.find((t) => t.languageCode === 'en')
+      || captionTracks.find((t) => t.languageCode?.startsWith('en'))
       || captionTracks[0]
     if (!track?.baseUrl) return ''
 
@@ -244,7 +280,7 @@ class VideoHelperUI {
     this.badge.setAttribute('aria-label', 'IELTS Video Helper')
 
     this.badge.innerHTML = `
-      <div class="badge-icon">🎬</div>
+      <div class="badge-icon">${VIDEO_BADGE_SVG}</div>
       <div>
         <div class="badge-text">IELTS Video Helper</div>
         <div class="badge-sub">Save for learning</div>
@@ -298,7 +334,7 @@ class VideoHelperUI {
 
 const instance = new VideoHelperUI()
 
-function initVideoHelper() {
+function initVideoHelper(): void {
   instance.init()
 }
 
@@ -310,7 +346,7 @@ if (document.readyState === 'loading') {
 
 let lastUrl = location.href
 
-function onUrlChange() {
+function onUrlChange(): void {
   if (location.href !== lastUrl) {
     lastUrl = location.href
     setTimeout(() => instance.init(), 800)
