@@ -1,0 +1,60 @@
+<h2>High-Level Architecture: 2 Approaches</h2>
+<p class="subtitle">Both keep the overview panel as an iframe communicating via postMessage</p>
+
+<div class="section">
+<h3>Approach A: All-in-One Analysis Message</h3>
+<p>Single new message type <code>ANALYSIS_DATA</code> returns all overview sections in one response. Content script computes everything (AI + deterministic), sends once.</p>
+
+<div class="pros-cons" style="margin-top:12px">
+<div class="pros"><h4>Pros</h4><ul>
+<li>Simple message flow</li>
+<li>Panel renders once</li>
+<li>Easy to cache</li>
+<li>Minimal iframe complexity</li>
+</ul></div>
+<div class="cons"><h4>Cons</h4><ul>
+<li>Long wait for everything to load</li>
+<li>Hard to show partial content</li>
+<li>AI errors block everything</li>
+<li>Harder to add/remove sections</li>
+</ul></div>
+</div>
+</div>
+
+<div class="section">
+<h3>Approach B: Section-by-Section Messages</h3>
+<p><strong>Recommended.</strong> Panel requests individual section data. Content script streams results as they're ready. Each section handles its own loading/error state.</p>
+
+<pre style="font-size:12px;background:var(--bg-code);padding:12px;border-radius:8px;line-height:1.5">
+Panel → Request: { type: 'REQUEST_OVERVIEW', payload: { sections: ['suitability','vocab','topics','questions'] } }
+       ← Section: { type: 'OVERVIEW_SUITABILITY', payload: { ... } }
+       ← Section: { type: 'OVERVIEW_VOCAB', payload: { ... } }
+       ← Section: { type: 'OVERVIEW_TOPICS', payload: { ... } }
+       ← Section: { type: 'OVERVIEW_TECHNICAL', payload: { ... } }  // error in one section
+</pre>
+
+<div class="pros-cons" style="margin-top:12px">
+<div class="pros"><h4>Pros</h4><ul>
+<li>Progressive loading — panels appear as ready</li>
+<li>One failed section doesn't block others</li>
+<li>Easy to cache per section</li>
+<li>Lazy loading — only request visible sections</li>
+</ul></div>
+<div class="cons"><h4>Cons</h4><ul>
+<li>More message types</li>
+<li>More complex panel state management</li>
+<li>Section ordering logic in panel</li>
+</ul></div>
+</div>
+</div>
+
+<div class="options" style="margin-top:24px">
+<div class="option" data-choice="a" onclick="toggleSelect(this)">
+<div class="letter">A</div>
+<div class="content"><h3>All-in-One</h3><p>Single message, simpler panel, slower load, less resilient</p></div>
+</div>
+<div class="option" data-choice="b" onclick="toggleSelect(this)">
+<div class="letter">B</div>
+<div class="content"><h3>Section-by-Section <span style="color:var(--accent)">★ Recommended</span></h3><p>Progressive loading, resilient, cacheable per section</p></div>
+</div>
+</div>

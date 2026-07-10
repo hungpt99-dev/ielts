@@ -39,6 +39,25 @@ export interface IDatabase {
   listeningExercises: Table<Record<string, unknown>, string>
   artifacts: Table<Record<string, unknown>, string>
   learningEvents: Table<Record<string, unknown>, string>
+  youtubeVideos: Table<Record<string, unknown>, string>
+  transcripts: Table<Record<string, unknown>, string>
+  videoAnalyses: Table<Record<string, unknown>, string>
+  videoVocabularySources: Table<Record<string, unknown>, string>
+  savedSentences: Table<Record<string, unknown>, string>
+  timestampedNotes: Table<Record<string, unknown>, string>
+  learningPlaylists: Table<Record<string, unknown>, string>
+  playlistItems: Table<Record<string, unknown>, string>
+  videoStudySessions: Table<Record<string, unknown>, string>
+  studyActivities: Table<Record<string, unknown>, string>
+  youtubeExercises: Table<Record<string, unknown>, string>
+  exerciseAttempts: Table<Record<string, unknown>, string>
+  dictationAttempts: Table<Record<string, unknown>, string>
+  shadowingAttempts: Table<Record<string, unknown>, string>
+  speakingAttempts: Table<Record<string, unknown>, string>
+  summaryAttempts: Table<Record<string, unknown>, string>
+  tutorInterventions: Table<Record<string, unknown>, string>
+  aiGenerationCache: Table<Record<string, unknown>, string>
+  channelEvaluations: Table<Record<string, unknown>, string>
 }
 
 export class AppDatabase extends Dexie implements IDatabase {
@@ -76,6 +95,25 @@ export class AppDatabase extends Dexie implements IDatabase {
   listeningExercises!: Table<Record<string, unknown>, string>
   artifacts!: Table<Record<string, unknown>, string>
   learningEvents!: Table<Record<string, unknown>, string>
+  youtubeVideos!: Table<Record<string, unknown>, string>
+  transcripts!: Table<Record<string, unknown>, string>
+  videoAnalyses!: Table<Record<string, unknown>, string>
+  videoVocabularySources!: Table<Record<string, unknown>, string>
+  savedSentences!: Table<Record<string, unknown>, string>
+  timestampedNotes!: Table<Record<string, unknown>, string>
+  learningPlaylists!: Table<Record<string, unknown>, string>
+  playlistItems!: Table<Record<string, unknown>, string>
+  videoStudySessions!: Table<Record<string, unknown>, string>
+  studyActivities!: Table<Record<string, unknown>, string>
+  youtubeExercises!: Table<Record<string, unknown>, string>
+  exerciseAttempts!: Table<Record<string, unknown>, string>
+  dictationAttempts!: Table<Record<string, unknown>, string>
+  shadowingAttempts!: Table<Record<string, unknown>, string>
+  speakingAttempts!: Table<Record<string, unknown>, string>
+  summaryAttempts!: Table<Record<string, unknown>, string>
+  tutorInterventions!: Table<Record<string, unknown>, string>
+  aiGenerationCache!: Table<Record<string, unknown>, string>
+  channelEvaluations!: Table<Record<string, unknown>, string>
 
   constructor(schema: AppDatabaseSchema, options?: DexieOptions) {
     super(DB_NAME, options)
@@ -171,4 +209,23 @@ export const TABLE_NAMES: (keyof IDatabase)[] = [
   'listeningExercises',
   'artifacts',
   'learningEvents',
+  'youtubeVideos',
+  'transcripts',
+  'videoAnalyses',
+  'videoVocabularySources',
+  'savedSentences',
+  'timestampedNotes',
+  'learningPlaylists',
+  'playlistItems',
+  'videoStudySessions',
+  'studyActivities',
+  'youtubeExercises',
+  'exerciseAttempts',
+  'dictationAttempts',
+  'shadowingAttempts',
+  'speakingAttempts',
+  'summaryAttempts',
+  'tutorInterventions',
+  'aiGenerationCache',
+  'channelEvaluations',
 ]

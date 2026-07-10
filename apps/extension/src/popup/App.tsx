@@ -34,14 +34,6 @@ function App() {
   useEffect(() => {
     emitExtensionPopupOpened()
     chrome.runtime.sendMessage({ type: 'POPUP_OPENED' }).catch(() => {})
-
-    safeStorageGet<Record<string, unknown>>('pendingVideoInfo').then((result) => {
-      const pending = result.pendingVideoInfo as Record<string, unknown> | undefined
-      if (pending?.isVideoPage) {
-        setView('videoHelper')
-        safeStorageSet({ pendingVideoInfo: null }).catch(() => {})
-      }
-    }).catch(() => {})
   }, [])
 
   const handleSaved = () => {

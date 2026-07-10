@@ -230,6 +230,20 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
   const [vocabCount, setVocabCount] = useState(0)
   const [vocabCountLoading, setVocabCountLoading] = useState(true)
   const [dueCount, setDueCount] = useState(0)
+  const [isYouTubePage, setIsYouTubePage] = useState(false)
+  const [autoOpenEnabled, setAutoOpenEnabled] = useState(false)
+
+  useEffect(() => {
+    chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+      const url = tab?.url || ''
+      setIsYouTubePage(url.includes('youtube.com/watch') || url.includes('youtu.be/'))
+    }).catch(() => setIsYouTubePage(false))
+    try {
+      chrome.storage.local.get('yt-learning-auto-open', (result) => {
+        setAutoOpenEnabled(result['yt-learning-auto-open'] === true)
+      })
+    } catch {}
+  }, [])
 
   useEffect(() => {
     setVocabCountLoading(true)
@@ -687,6 +701,84 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* YouTube Learning Card */}
+      {isYouTubePage && (
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #1e3a5f, #0f172a)',
+            borderRadius: 'var(--radius-xl)',
+            padding: 'var(--spacing-sm) var(--spacing-md)',
+            border: '1px solid rgba(59,130,246,0.3)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', marginBottom: 'var(--spacing-xs)' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="23 7 16 12 23 17 23 7" />
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+            </svg>
+            <span style={{ fontWeight: 600, fontSize: 'var(--text-sm)', color: '#f1f5f9' }}>YouTube Learning</span>
+          </div>
+          <div style={{ fontSize: 'var(--text-xs)', color: '#94a3b8', lineHeight: 1.4, marginBottom: 'var(--spacing-sm)' }}>
+            Study vocabulary, take notes, and practice while watching YouTube videos.
+          </div>
+          <div style={{ display: 'flex', gap: 'var(--spacing-xs)', marginBottom: 'var(--spacing-sm)' }}>
+            <Button
+              variant="primary"
+              size="xs"
+              onClick={() => {
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                  const tab = tabs[0]
+                  if (tab?.id) {
+                    chrome.tabs.sendMessage(tab.id, { type: 'TOGGLE_YOUTUBE_LEARNING', payload: true }).catch(() => {})
+                  }
+                })
+              }}
+              icon={
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="23 7 16 12 23 17 23 7" />
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                </svg>
+              }
+            >
+              Open Learning Panel
+            </Button>
+            <Button
+              variant="secondary"
+              size="xs"
+              onClick={() => {
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                  const tab = tabs[0]
+                  if (tab?.id) {
+                    chrome.tabs.sendMessage(tab.id, { type: 'TOGGLE_FOCUS_MODE', payload: undefined }).catch(() => {})
+                  }
+                })
+              }}
+            >
+              Focus Mode
+            </Button>
+          </div>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', cursor: 'pointer', fontSize: 'var(--text-xs)', color: '#94a3b8' }}>
+            <input
+              type="checkbox"
+              checked={autoOpenEnabled}
+              onChange={(e) => {
+                const enabled = e.target.checked
+                setAutoOpenEnabled(enabled)
+                chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                  const tab = tabs[0]
+                  if (tab?.id) {
+                    chrome.tabs.sendMessage(tab.id, { type: 'SET_AUTO_OPEN', payload: enabled }).catch(() => {})
+                    chrome.storage.local.set({ 'yt-learning-auto-open': enabled }).catch(() => {})
+                  }
+                })
+              }}
+              style={{ accentColor: '#3b82f6' }}
+            />
+            Auto-open learning panel on YouTube videos
+          </label>
         </div>
       )}
 

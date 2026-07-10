@@ -24,6 +24,7 @@ export default defineConfig({
       input: {
         popup: resolve(__dirname, 'popup.html'),
         options: resolve(__dirname, 'options.html'),
+        youtubeLearning: resolve(__dirname, 'youtube-learning.html'),
       },
       output: {
         entryFileNames: 'assets/[name].js',

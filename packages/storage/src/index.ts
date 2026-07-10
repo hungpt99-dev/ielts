@@ -77,6 +77,38 @@ export type {
 } from './repositories'
 
 export {
+  YouTubeVideoRepository,
+  TranscriptRepository,
+  VideoAnalysisRepository,
+  VideoVocabularySourceRepository,
+  SavedSentenceRepository,
+  TimestampedNoteRepository,
+  LearningPlaylistRepository,
+  PlaylistItemRepository,
+  VideoStudySessionRepository,
+  StudyActivityRepository,
+  ExerciseRepository,
+  ExerciseAttemptRepository,
+  DictationAttemptRepository,
+  ShadowingAttemptRepository,
+  SpeakingAttemptRepository,
+  SummaryAttemptRepository,
+  TutorInterventionRepository,
+  AIGenerationCacheRepository,
+  ChannelEvaluationRepository,
+} from './youtube-repositories'
+
+export type {
+  YouTubeVideo, Transcript, TranscriptSegment,
+  VideoAnalysis, VideoVocabularySource, SavedSentence,
+  TimestampedNote, LearningPlaylist, PlaylistItem,
+  VideoStudySession, StudyActivity, Exercise,
+  ExerciseAttempt, DictationAttempt, ShadowingAttempt,
+  SpeakingAttempt, SummaryAttempt, TutorIntervention,
+  AIGenerationCache, ChannelEvaluation,
+} from './youtube-schemas'
+
+export {
   exportAllData,
   importBackup,
   clearAllTables,

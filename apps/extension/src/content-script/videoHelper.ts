@@ -243,8 +243,21 @@ async function extractYoutubeTranscriptFromPage(): Promise<string> {
 class VideoHelperUI {
   private badge: HTMLDivElement | null = null
   private lastVideoId = ''
+  private hidden = false
+
+  setHidden(hidden: boolean): void {
+    this.hidden = hidden
+    if (hidden) {
+      this.removeBadge()
+    } else {
+      this.lastVideoId = ''
+      this.init()
+    }
+  }
 
   init(): void {
+    if (this.hidden) return
+
     const info = detectVideoPage()
     if (!info.isVideoPage) {
       this.removeBadge()
@@ -374,5 +387,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return true
   }
 })
+
+export function setVideoHelperHidden(hidden: boolean): void {
+  instance.setHidden(hidden)
+}
 
 export { detectVideoPage }
