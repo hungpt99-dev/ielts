@@ -94,10 +94,7 @@ export default function SpeakingPractice() {
   const [aiError, setAiError] = useState<string | null>(null)
   const [aiFeedback, setAiFeedback] = useState<string | null>(null)
 
-  const timer = useTimer({
-    config: TIMER_CONFIG,
-    onTimeUp: () => {},
-  })
+  const timer = useTimer({ config: TIMER_CONFIG })
 
   const [recording, setRecording] = useState(false)
   const [recordingSupported, setRecordingSupported] = useState(true)

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
-import type { SavedItemDisplay, SavedItemsStats } from '../../services/savedItemsService'
-import { getAllSavedItems, getSavedItemsStats } from '../../services/savedItemsService'
+import type { SavedItemDisplay } from '../../services/savedItemsService'
+import { getAllSavedItems } from '../../services/savedItemsService'
 import type { SaveCategory } from '../../types'
 import { CATEGORY_LABELS, CATEGORY_ICONS, CATEGORY_COLORS } from '../../types'
 import { IconBack, IconSearch, IconWarning } from '@ielts/ui'
@@ -69,17 +69,15 @@ function StatBadge({ label, count, color }: { label: string; count: number; colo
 
 export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
   const [items, setItems] = useState<SavedItemDisplay[]>([])
-  const [stats, setStats] = useState<SavedItemsStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState<SaveCategory | 'all'>('all')
 
   useEffect(() => {
-    Promise.all([getAllSavedItems(), getSavedItemsStats()])
-      .then(([all, s]) => {
+    getAllSavedItems()
+      .then((all) => {
         setItems(all)
-        setStats(s)
         setLoading(false)
       })
       .catch((err) => {
@@ -87,6 +85,14 @@ export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
         setLoading(false)
       })
   }, [])
+
+  const byCategory = useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const item of items) {
+      counts[item.category] = (counts[item.category] || 0) + 1
+    }
+    return counts
+  }, [items])
 
   const filtered = useMemo(() => {
     let result = items
@@ -194,7 +200,7 @@ export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
     <div>
       <Header onBack={onBack} title="Saved Items" count={items.length} />
 
-      {stats && (
+      {items.length > 0 && (
         <div
           style={{
             display: 'flex',
@@ -203,12 +209,12 @@ export default function SavedItemsView({ onBack }: SavedItemsViewProps) {
             borderBottom: '1px solid var(--color-border)',
           }}
         >
-          <StatBadge label="Total" count={stats.total} color="var(--color-text)" />
-          {ALL_CATEGORIES.filter((c) => (stats.byCategory[c] || 0) > 0).map((c) => (
+          <StatBadge label="Total" count={items.length} color="var(--color-text)" />
+          {ALL_CATEGORIES.filter((c) => (byCategory[c] || 0) > 0).map((c) => (
             <StatBadge
               key={c}
               label={CATEGORY_LABELS[c]}
-              count={stats.byCategory[c] || 0}
+              count={byCategory[c] || 0}
               color={CATEGORY_COLORS[c]}
             />
           ))}

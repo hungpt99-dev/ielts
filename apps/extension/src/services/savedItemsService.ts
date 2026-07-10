@@ -149,14 +149,6 @@ export async function getAllSavedItems(): Promise<SavedItemDisplay[]> {
   return loadSavedItems()
 }
 
-export async function getSavedItemsByCategory(
-  category: SaveCategory | 'all',
-): Promise<SavedItemDisplay[]> {
-  const all = await getAllSavedItems()
-  if (category === 'all') return all
-  return all.filter((item) => item.category === category)
-}
-
 export async function getSavedItemsStats(): Promise<SavedItemsStats> {
   const all = await getAllSavedItems()
   const byCategory: Record<string, number> = {}
@@ -164,17 +156,4 @@ export async function getSavedItemsStats(): Promise<SavedItemsStats> {
     byCategory[item.category] = (byCategory[item.category] || 0) + 1
   }
   return { total: all.length, byCategory }
-}
-
-export async function searchSavedItems(query: string): Promise<SavedItemDisplay[]> {
-  const all = await getAllSavedItems()
-  const lower = query.toLowerCase()
-  return all.filter(
-    (item) =>
-      item.text.toLowerCase().includes(lower) ||
-      item.topic.toLowerCase().includes(lower) ||
-      item.pageTitle.toLowerCase().includes(lower) ||
-      item.personalNote.toLowerCase().includes(lower) ||
-      item.tags.some((t) => t.toLowerCase().includes(lower)),
-  )
 }

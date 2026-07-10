@@ -75,19 +75,6 @@ export function useTimer({
     }
   }, [clearTick, mode])
 
-  const switchMode = useCallback(
-    (newMode: TimerMode) => {
-      stop()
-      setMode(newMode)
-      if (newMode === 'countdown') {
-        setSeconds(total)
-      } else {
-        setSeconds(0)
-      }
-    },
-    [stop, total],
-  )
-
   const setDuration = useCallback(
     (newTotal: number) => {
       setTotal(newTotal)
