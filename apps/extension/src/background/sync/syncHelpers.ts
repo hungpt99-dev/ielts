@@ -20,7 +20,7 @@ export function toExtensionVocab(item: Record<string, unknown>, id: string): Ext
     antonyms: Array.isArray(item.antonyms) ? item.antonyms as string[] : [],
     collocations: Array.isArray(item.collocations) ? item.collocations as string[] : [],
     wordFamily: Array.isArray(item.wordFamily) ? item.wordFamily as string[] : [],
-    difficulty: (item.difficulty as string) || 'medium',
+    difficulty: ((item.difficulty as string) || 'medium') as '' | 'easy' | 'medium' | 'hard',
     status: ((item.status as string) || 'new') as ExtensionVocabEntry['status'],
     addedToReview: true,
     reviewId: '',

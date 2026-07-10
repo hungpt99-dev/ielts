@@ -1,5 +1,7 @@
 import { getAllVocabulary, saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { getAllMistakes, saveMistakeEntry } from '../../storage/mistakeStore'
+import { getAllEntries, saveEntry } from '../../storage/indexedDB'
+import { getAllArticles, saveArticleEntry } from '../../storage/articleStore'
 import { findWebAppTab } from './webTabConnection'
 import { loadSettings, saveSettings, setApiKey } from '../settingsStorage'
 import { toExtensionVocab, toExtensionMistake, syncStorageForHighlighter } from './syncHelpers'
@@ -26,11 +28,13 @@ export interface SyncSummary {
 }
 
 async function exportExtensionData(): Promise<Record<string, unknown>> {
-  const [vocab, mistakes] = await Promise.all([
+  const [vocab, mistakes, entries, articles] = await Promise.all([
     getAllVocabulary().catch(() => []),
     getAllMistakes().catch(() => []),
+    getAllEntries().catch(() => []),
+    getAllArticles().catch(() => []),
   ])
-  return { vocabulary: vocab, mistakes }
+  return { vocabulary: vocab, mistakes, learningEntries: entries, articles }
 }
 
 async function importWebData(data: Record<string, unknown>): Promise<{ imported: number; updated: number }> {
@@ -73,6 +77,59 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
       if (existingIds.has(id)) { updated++ } else { imported++ }
       existingIds.add(id)
       await saveMistakeEntry(toExtensionMistake(item, id)).catch(() => {})
+    }
+  }
+
+  const entriesList = data.learningEntries as Record<string, unknown>[] | undefined
+  if (Array.isArray(entriesList)) {
+    const existing = await getAllEntries().catch(() => [])
+    const existingIds = new Set(existing.map(e => e.id))
+    for (const item of entriesList) {
+      const id = (item.id as string) || crypto.randomUUID()
+      if (existingIds.has(id)) { updated++ } else { imported++ }
+      existingIds.add(id)
+      await saveEntry({
+        id,
+        text: (item.text as string) || '',
+        category: (item.category as any) || 'reading',
+        topic: (item.topic as string) || '',
+        skill: (item.skill as any) || 'general',
+        difficulty: ((item.difficulty as string) || '') as '' | 'easy' | 'medium' | 'hard',
+        tags: Array.isArray(item.tags) ? item.tags as string[] : [],
+        personalNote: (item.personalNote as string) || '',
+        pageTitle: (item.pageTitle as string) || '',
+        pageUrl: (item.pageUrl as string) || '',
+        status: (item.status as any) || 'new',
+        createdAt: (item.createdAt as string) || new Date().toISOString(),
+        updatedAt: (item.updatedAt as string) || new Date().toISOString(),
+      }).catch(() => {})
+    }
+  }
+
+  const articlesList = data.articles as Record<string, unknown>[] | undefined
+  if (Array.isArray(articlesList)) {
+    const existing = await getAllArticles().catch(() => [])
+    const existingIds = new Set(existing.map(a => a.id))
+    for (const item of articlesList) {
+      const id = (item.id as string) || crypto.randomUUID()
+      if (existingIds.has(id)) { updated++ } else { imported++ }
+      existingIds.add(id)
+      await saveArticleEntry({
+        id,
+        title: (item.title as string) || (item.pageTitle as string) || 'Untitled',
+        url: (item.source as string) || (item.pageUrl as string) || '',
+        content: (item.content as string) || (item.text as string) || '',
+        selectedParagraph: '',
+        topic: (item.topic as string) || 'general',
+        tags: Array.isArray(item.tags) ? item.tags as string[] : [],
+        personalNote: (item.personalNote as string) || '',
+        isReadingPractice: false,
+        difficulty: (item.difficulty as string) || '',
+        aiQuestions: [],
+        status: 'new',
+        createdAt: (item.createdAt as string) || new Date().toISOString(),
+        updatedAt: (item.updatedAt as string) || new Date().toISOString(),
+      } as any).catch(() => {})
     }
   }
 

@@ -10,13 +10,14 @@ import BackupRestore from './components/BackupRestore'
 import ImportExportSection from './components/ImportExportSection'
 import AITutorEntry from './components/AITutorEntry'
 import SavedWordsView from './components/SavedWordsView'
+import SavedItemsView from './components/SavedItemsView'
 import PendingReviews from './components/PendingReviews'
 import ReviewSession from './components/ReviewSession'
 import { emitExtensionPopupOpened } from '../background/eventEmitters'
 import ManualSyncPanel from './components/ManualSyncPanel'
 import SyncStatusPanel from './components/SyncStatusPanel'
 
-type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'reviewSession' | 'manualSync' | 'syncStatus'
+type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'savedItems' | 'pendingReviews' | 'reviewSession' | 'manualSync' | 'syncStatus'
 
 type NavFn = (view: ViewState) => void
 
@@ -83,6 +84,8 @@ function App() {
         return <AITutorEntry onBack={() => setView('dashboard')} />
       case 'savedWords':
         return <SavedWordsView onBack={() => setView('dashboard')} />
+      case 'savedItems':
+        return <SavedItemsView onBack={() => setView('dashboard')} />
       case 'pendingReviews':
         return (
           <div style={sharedCardStyle}>

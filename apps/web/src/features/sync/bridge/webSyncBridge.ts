@@ -64,13 +64,93 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
           await DatabaseService.bulkAdd('mistakes', newMistakes as never[]).catch(() => {})
         }
       }
+
+      const entriesList = data.learningEntries as Record<string, unknown>[] | undefined
+      if (Array.isArray(entriesList)) {
+        const existingNotes = await DatabaseService.getAll<Record<string, unknown>>('studyNotes')
+        const existingNoteIds = new Set(existingNotes.map(n => n.id as string))
+        const existingPassages = await DatabaseService.getAll<Record<string, unknown>>('passages')
+        const existingPassageIds = new Set(existingPassages.map(p => p.id as string))
+
+        for (const entry of entriesList) {
+          const id = entry.id as string
+          if (entry.category === 'reading') {
+            if (!existingPassageIds.has(id)) {
+              await DatabaseService.add('passages', {
+                id,
+                title: entry.pageTitle || entry.topic || 'Saved from extension',
+                content: entry.text as string,
+                source: (entry.pageUrl as string) || '',
+                topic: entry.topic || 'general',
+                skill: 'reading',
+                pageTitle: entry.pageTitle as string,
+                pageUrl: entry.pageUrl as string,
+                tags: Array.isArray(entry.tags) ? entry.tags as string[] : [],
+                personalNote: (entry.personalNote as string) || '',
+                difficulty: (entry.difficulty as string) || '',
+                status: (entry.status as string) || 'new',
+                createdAt: (entry.createdAt as string) || new Date().toISOString(),
+                updatedAt: (entry.updatedAt as string) || new Date().toISOString(),
+              } as never).catch(() => {})
+              existingPassageIds.add(id)
+            }
+          } else {
+            if (!existingNoteIds.has(id)) {
+              await DatabaseService.add('studyNotes', {
+                id,
+                text: entry.text as string,
+                category: entry.category as string,
+                topic: entry.topic || '',
+                skill: entry.skill || 'general',
+                tags: Array.isArray(entry.tags) ? entry.tags as string[] : [],
+                personalNote: (entry.personalNote as string) || '',
+                pageTitle: entry.pageTitle as string,
+                pageUrl: entry.pageUrl as string,
+                status: (entry.status as string) || 'new',
+                createdAt: (entry.createdAt as string) || new Date().toISOString(),
+                updatedAt: (entry.updatedAt as string) || new Date().toISOString(),
+              } as never).catch(() => {})
+              existingNoteIds.add(id)
+            }
+          }
+        }
+      }
+
+      const articlesList = data.articles as Record<string, unknown>[] | undefined
+      if (Array.isArray(articlesList)) {
+        const existingPassages = await DatabaseService.getAll<Record<string, unknown>>('passages')
+        const existingPassageIds = new Set(existingPassages.map(p => p.id as string))
+        for (const article of articlesList) {
+          const id = article.id as string
+          if (!existingPassageIds.has(id)) {
+            await DatabaseService.add('passages', {
+              id,
+              title: (article.title as string) || (article.pageTitle as string) || 'Article',
+              content: (article.content as string) || (article.text as string) || '',
+              source: (article.url as string) || (article.pageUrl as string) || '',
+              topic: article.topic || 'general',
+              skill: 'reading',
+              pageTitle: article.pageTitle as string,
+              pageUrl: article.pageUrl as string,
+              tags: Array.isArray(article.tags) ? article.tags as string[] : [],
+              difficulty: '',
+              status: 'new',
+              createdAt: (article.createdAt as string) || new Date().toISOString(),
+              updatedAt: (article.updatedAt as string) || new Date().toISOString(),
+            } as never).catch(() => {})
+            existingPassageIds.add(id)
+          }
+        }
+      }
       return
     }
 
     if (msg.type === 'EXPORT_EXTENSION_DATA') {
-      const [vocabEntries, mistakeEntries] = await Promise.all([
+      const [vocabEntries, mistakeEntries, noteEntries, passageEntries] = await Promise.all([
         DatabaseService.getAll<Record<string, unknown>>('vocabulary').catch(() => []),
         DatabaseService.getAll<Record<string, unknown>>('mistakes').catch(() => []),
+        DatabaseService.getAll<Record<string, unknown>>('studyNotes').catch(() => []),
+        DatabaseService.getAll<Record<string, unknown>>('passages').catch(() => []),
       ])
 
       const settings = loadAppSettings()
@@ -86,6 +166,8 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
           payload: {
             vocabulary: vocabEntries,
             mistakes: mistakeEntries,
+            learningEntries: noteEntries,
+            articles: passageEntries,
             settings: {
               aiProvider: settings.aiProvider || 'openai',
               aiModel: settings.aiModel || 'gpt-4o-mini',

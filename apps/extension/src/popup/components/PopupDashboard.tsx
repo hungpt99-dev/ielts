@@ -22,7 +22,7 @@ import { safeStorageGet, safeStorageSet } from '../../utils/safe-chrome'
 import { getSyncState, onSyncStateChange, getPendingItemsCount } from '../../services/storage-bridge'
 
 interface PopupDashboardProps {
-  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'pendingReviews' | 'manualSync' | 'syncStatus') => void
+  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'savedItems' | 'pendingReviews' | 'manualSync' | 'syncStatus') => void
 }
 
 const StatCard = memo(function StatCard({ label, value, icon }: { label: string; value: number; icon: ReactNode }) {
@@ -776,7 +776,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         </div>
       </div>
 
-      {/* Saved Words & Review Links */}
+      {/* Saved Items Links */}
       <div
         style={{
           display: 'grid',
@@ -785,7 +785,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
         }}
       >
         <button
-          onClick={() => onNavigate('savedWords')}
+          onClick={() => onNavigate('savedItems')}
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -808,7 +808,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
           }}
         >
           <IconBookText size={14} style={{ color: 'var(--color-primary)' }} />
-          <span>{vocabCountLoading ? 'Words...' : `${vocabCount} Saved Words`}</span>
+          <span>Saved Items</span>
         </button>
         <button
           onClick={handleStartReview}
