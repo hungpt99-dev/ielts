@@ -16,6 +16,7 @@ import ReviewSession from './components/ReviewSession'
 import { emitExtensionPopupOpened } from '../background/eventEmitters'
 import ManualSyncPanel from './components/ManualSyncPanel'
 import SyncStatusPanel from './components/SyncStatusPanel'
+import { safeStorageGet, safeStorageSet } from '../utils/safe-chrome'
 
 type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'savedItems' | 'pendingReviews' | 'reviewSession' | 'manualSync' | 'syncStatus'
 
@@ -33,6 +34,14 @@ function App() {
   useEffect(() => {
     emitExtensionPopupOpened()
     chrome.runtime.sendMessage({ type: 'POPUP_OPENED' }).catch(() => {})
+
+    safeStorageGet<Record<string, unknown>>('pendingVideoInfo').then((result) => {
+      const pending = result.pendingVideoInfo as Record<string, unknown> | undefined
+      if (pending?.isVideoPage) {
+        setView('videoHelper')
+        safeStorageSet({ pendingVideoInfo: null }).catch(() => {})
+      }
+    }).catch(() => {})
   }, [])
 
   const handleSaved = () => {

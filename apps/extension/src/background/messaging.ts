@@ -173,6 +173,11 @@ export function initMessaging(): void {
   registerHandler('VIDEO_HELPER_OPEN', async (_msg) => {
     const msg = _msg as ExtensionMessage<'VIDEO_HELPER_OPEN'>
     await setPendingVideoInfo(msg.payload)
+    try {
+      await chrome.action.openPopup()
+    } catch {
+      // Popup may already be open or action not available — data is saved anyway
+    }
   })
 
   registerHandler('MINI_TUTOR_SAVE_RESULT', async (_msg) => {
