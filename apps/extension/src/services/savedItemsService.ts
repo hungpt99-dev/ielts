@@ -1,4 +1,7 @@
 import { getAllEntries } from '../storage/indexedDB'
+import { getAllVocabulary } from '../storage/vocabularyStore'
+import { getAllArticles } from '../storage/articleStore'
+import { getAllMistakes } from '../storage/mistakeStore'
 import { safeStorageGet } from '../utils/safe-chrome'
 import type { LearningEntry, SaveCategory } from '../types'
 
@@ -41,6 +44,78 @@ async function loadChromeStorageItems(): Promise<SavedItemDisplay[]> {
   }
 }
 
+async function loadVocabularyItems(): Promise<SavedItemDisplay[]> {
+  try {
+    const entries = await getAllVocabulary()
+    return entries.map((v) => ({
+      id: v.id,
+      text: v.word + (v.meaning ? ` — ${v.meaning}` : ''),
+      category: 'vocabulary' as SaveCategory,
+      topic: v.topic,
+      skill: 'vocabulary' as LearningEntry['skill'],
+      difficulty: v.difficulty as LearningEntry['difficulty'],
+      tags: v.tags,
+      personalNote: v.personalNote,
+      pageTitle: v.pageTitle,
+      pageUrl: v.pageUrl,
+      status: v.status as LearningEntry['status'],
+      createdAt: v.createdAt,
+      updatedAt: v.updatedAt,
+      source: 'indexedDB' as const,
+    }))
+  } catch {
+    return []
+  }
+}
+
+async function loadArticleItems(): Promise<SavedItemDisplay[]> {
+  try {
+    const entries = await getAllArticles()
+    return entries.map((a) => ({
+      id: a.id,
+      text: a.title + (a.content ? ` — ${a.content.slice(0, 200)}` : ''),
+      category: 'reading' as SaveCategory,
+      topic: a.topic,
+      skill: 'reading' as LearningEntry['skill'],
+      difficulty: a.difficulty as LearningEntry['difficulty'],
+      tags: a.tags,
+      personalNote: a.personalNote,
+      pageTitle: a.title,
+      pageUrl: a.url,
+      status: a.status as LearningEntry['status'],
+      createdAt: a.createdAt,
+      updatedAt: a.updatedAt,
+      source: 'indexedDB' as const,
+    }))
+  } catch {
+    return []
+  }
+}
+
+async function loadMistakeItems(): Promise<SavedItemDisplay[]> {
+  try {
+    const entries = await getAllMistakes()
+    return entries.map((m) => ({
+      id: m.id,
+      text: m.mistake + (m.correction ? ` → ${m.correction}` : ''),
+      category: 'mistake' as SaveCategory,
+      topic: m.topic,
+      skill: m.skill as LearningEntry['skill'],
+      difficulty: '' as LearningEntry['difficulty'],
+      tags: [],
+      personalNote: m.explanation,
+      pageTitle: m.source,
+      pageUrl: '',
+      status: m.status as LearningEntry['status'],
+      createdAt: m.createdAt,
+      updatedAt: m.updatedAt,
+      source: 'indexedDB' as const,
+    }))
+  } catch {
+    return []
+  }
+}
+
 async function loadIndexedDbItems(): Promise<SavedItemDisplay[]> {
   try {
     const entries = await getAllEntries()
@@ -50,14 +125,28 @@ async function loadIndexedDbItems(): Promise<SavedItemDisplay[]> {
   }
 }
 
-export async function getAllSavedItems(): Promise<SavedItemDisplay[]> {
-  const [idbItems, chromeItems] = await Promise.all([
+async function loadSavedItems(): Promise<SavedItemDisplay[]> {
+  const [vocab, articles, mistakes, idb, chrome] = await Promise.all([
+    loadVocabularyItems(),
+    loadArticleItems(),
+    loadMistakeItems(),
     loadIndexedDbItems(),
     loadChromeStorageItems(),
   ])
-  const all = [...chromeItems, ...idbItems]
+  const seen = new Set<string>()
+  const all: SavedItemDisplay[] = []
+  for (const item of [...chrome, ...vocab, ...articles, ...mistakes, ...idb]) {
+    if (!seen.has(item.id)) {
+      seen.add(item.id)
+      all.push(item)
+    }
+  }
   all.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
   return all
+}
+
+export async function getAllSavedItems(): Promise<SavedItemDisplay[]> {
+  return loadSavedItems()
 }
 
 export async function getSavedItemsByCategory(
