@@ -76,6 +76,8 @@ export type { AITutorRecommendationCardProps } from './components/AITutorRecomme
 
 // Icons
 export {
+  IconMap,
+  IconHeadphones,
   IconTodayPlan,
   IconStudyPlan,
   IconHome,

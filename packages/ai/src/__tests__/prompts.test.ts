@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest'
 import {
   buildExplainPrompt,
   AI_EXPLAIN_LABELS,
-  AI_EXPLAIN_ICONS,
   AI_EXPLAIN_PROMPTS,
 } from '../prompts/explain'
 import { buildVocabularyDetailsPrompt, buildVocabularyQuizPrompt } from '../prompts/vocabulary'
@@ -72,11 +71,6 @@ describe('Explain prompt', () => {
     expect(AI_EXPLAIN_LABELS.rewrite).toBe('Natural Rewrite')
     expect(AI_EXPLAIN_LABELS['example-sentences']).toBe('Example Sentences')
     expect(AI_EXPLAIN_LABELS.quiz).toBe('Quiz Questions')
-  })
-
-  it('exports all AI explain icons', () => {
-    expect(AI_EXPLAIN_ICONS.simple).toBeTruthy()
-    expect(AI_EXPLAIN_ICONS.quiz).toBeTruthy()
   })
 
   it('exports all AI explain prompts', () => {

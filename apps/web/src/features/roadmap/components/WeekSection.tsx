@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { IconCheck, IconFlame } from '@ielts/ui'
 import type { RoadmapWeek, RoadmapDay } from '../roadmapService'
 import DayCard from './DayCard'
 
@@ -58,12 +59,12 @@ export default function WeekSection({ week, weekIndex, isCurrentWeek, phaseIndex
               {week.label}: {week.focus}
             </span>
             {week.isComplete ? (
-              <span className="rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/40 dark:text-green-300">
-                ✅ Done
+<span className="inline-flex items-center gap-1 rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/40 dark:text-green-300">
+                <IconCheck size={10} /> Done
               </span>
             ) : isCurrentWeek ? (
-              <span className="rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
-                🔥 In Progress
+<span className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                <IconFlame size={10} /> In Progress
               </span>
             ) : null}
           </div>

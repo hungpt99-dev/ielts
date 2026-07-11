@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { IconCheck, IconProgress, IconRefresh, IconAITutor } from '@ielts/ui'
 import Modal from '../../../components/ui/Modal'
 import Button from '../../../components/ui/Button'
 import type { RoadmapData } from '../roadmapService'
@@ -95,14 +96,14 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
-            📊 Plan Overview
+<IconProgress size={16} /> Plan Overview
           </h2>
           {isComplete && (
             <span
               className="rounded-xl px-3 py-1 text-xs font-bold"
               style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}
             >
-              ✅ All Phases Complete
+<IconCheck size={14} /> All Phases Complete
             </span>
           )}
         </div>
@@ -227,7 +228,7 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
               opacity: regenerating ? 0.6 : 1,
             }}
           >
-            🔄 Regenerate Plan
+<IconRefresh size={16} /> Regenerate Plan
           </button>
           <button
             className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-medium transition-all hover:brightness-95 active:scale-[0.98]"
@@ -248,7 +249,7 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
               border: '1px solid var(--color-tutor-border)',
             }}
           >
-            🤖 Ask AI to Review Plan
+<IconAITutor size={16} /> Ask AI to Review Plan
           </button>
         </div>
       </div>

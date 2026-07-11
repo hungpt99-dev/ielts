@@ -8,6 +8,7 @@ import { VocabularyDetail } from './presentation/components/VocabularyDetail'
 import { SentenceExplanationPanel } from './presentation/components/SentenceExplanation'
 import { QuizPanel } from './presentation/components/QuizPanel'
 import { FillInBlankPanel } from './presentation/components/FillInBlank'
+import { IconHeadphones } from '@ielts/ui'
 import { tokenizeSegment, normalizeWord, formatTime } from './presentation/utils/tokenizeTranscript'
 
 export type PanelTab = 'overview' | 'transcript' | 'practice'
@@ -665,7 +666,7 @@ function PracticePanel({ transcriptAvailable, videoId, sendToParent }: {
           </div>
         </button>
         <button onClick={() => setMode('quiz')} disabled={!transcriptAvailable} style={card} aria-label="Listening quiz">
-          <div style={{ ...iconBox, background: 'rgba(59,130,246,0.15)', color: 'var(--color-primary-hover)' }}>🎧</div>
+          <div style={{ ...iconBox, background: 'rgba(59,130,246,0.15)', color: 'var(--color-primary-hover)' }}><IconHeadphones size={16} /></div>
           <div style={{ textAlign: 'left' }}>
             <div style={{ fontWeight: 600, fontSize: '13px', color: 'var(--color-text)' }}>Listening Quiz</div>
             <div style={{ fontSize: '11px', color: 'var(--color-muted)', marginTop: '2px' }}>AI-generated IELTS listening questions</div>

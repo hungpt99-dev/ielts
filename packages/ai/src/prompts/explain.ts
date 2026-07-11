@@ -19,16 +19,6 @@ export const AI_EXPLAIN_LABELS: Record<AiExplainType, string> = {
   quiz: 'Quiz Questions',
 }
 
-export const AI_EXPLAIN_ICONS: Record<AiExplainType, string> = {
-  simple: '💡',
-  translate: '🌐',
-  'ielts-vocab': '🎯',
-  grammar: '📚',
-  rewrite: '✂️',
-  'example-sentences': '📝',
-  quiz: '❓',
-}
-
 const EXPLAIN_PROMPT_VERSION: PromptVersion = { version: 1, description: 'Initial explain prompts' }
 
 export const AI_EXPLAIN_PROMPTS: Record<AiExplainType, string> = {

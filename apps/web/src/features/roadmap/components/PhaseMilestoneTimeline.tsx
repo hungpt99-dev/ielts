@@ -1,5 +1,6 @@
 import { useRef, useEffect, useCallback } from 'react'
 import type { RoadmapPhase } from '../roadmapService'
+import { IconLock } from '@ielts/ui'
 
 interface PhaseMilestoneTimelineProps {
   phases: RoadmapPhase[]
@@ -45,7 +46,7 @@ function PhaseNode({
           opacity: isLocked ? 0.5 : 1,
         }}
       >
-        {isComplete ? '✓' : isLocked ? '🔒' : phase.order + 1}
+        {isComplete ? '✓' : isLocked ? <IconLock size={14} /> : phase.order + 1}
       </div>
       <span
         className="text-center text-xs font-medium leading-tight break-words w-full"

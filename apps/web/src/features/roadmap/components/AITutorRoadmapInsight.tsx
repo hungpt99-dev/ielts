@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { IconAITutor, IconMessageSquare, IconSettings } from '@ielts/ui'
 import type { RoadmapData } from '../roadmapService'
 
 interface AITutorRoadmapInsightProps {
@@ -122,7 +123,7 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
           }}
         >
           <div className="flex items-center gap-3">
-            <span className="text-2xl">🤖</span>
+<IconAITutor size={24} />
             <div>
               <h3 className="text-sm font-bold" style={{ color: 'var(--color-tutor-accent)' }}>
                 AI Roadmap Insights
@@ -182,9 +183,9 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
         }}
       >
         <div className="flex items-center gap-3 mb-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-full text-lg"
+<span className="flex h-9 w-9 items-center justify-center rounded-full"
             style={{ backgroundColor: 'var(--color-tutor-accent)', color: 'white' }}>
-            🤖
+            <IconAITutor size={18} />
           </span>
           <div>
             <h3 className="text-sm font-bold" style={{ color: 'var(--color-tutor-accent)' }}>
@@ -210,7 +211,7 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
               color: 'white',
             }}
           >
-            💬 Ask Follow-up Question
+<IconMessageSquare size={14} /> Ask Follow-up Question
           </button>
           <button
             onClick={onAdjustPlan}
@@ -221,7 +222,7 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
               backgroundColor: 'transparent',
             }}
           >
-            🔧 Adjust Plan Based on This
+<IconSettings size={14} /> Adjust Plan Based on This
           </button>
         </div>
       </div>

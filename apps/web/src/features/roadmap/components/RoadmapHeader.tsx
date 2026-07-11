@@ -1,6 +1,6 @@
 import type { RoadmapData } from '../roadmapService'
 import PageHeader from '../../../components/layout/PageHeader'
-import { IconStudyPlan } from '@ielts/ui'
+import { IconStudyPlan, IconStar, IconFlag, IconCalendar } from '@ielts/ui'
 
 interface RoadmapHeaderProps {
   roadmap: RoadmapData
@@ -67,7 +67,7 @@ export default function RoadmapHeader({ roadmap, profile, onScrollToToday, onAsk
                 color: 'var(--color-success)',
               }}
             >
-              <span>🎉</span>
+              <IconStar size={20} />
               <span>Journey Complete!</span>
             </div>
           ) : undefined}
@@ -127,7 +127,7 @@ export default function RoadmapHeader({ roadmap, profile, onScrollToToday, onAsk
                 color: 'var(--color-primary)',
               }}
             >
-              <span>📍</span>
+              <IconFlag size={16} />
               <span className="font-medium break-words min-w-0">
                 You are here: {currentPhase.name} · Week {roadmap.currentWeekIndex + 1}
               </span>
@@ -139,7 +139,7 @@ export default function RoadmapHeader({ roadmap, profile, onScrollToToday, onAsk
 
           {profile?.examDate && examCountdown > 0 && (
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm" style={{ color: getExamUrgencyColor() }}>
-              <span>📅</span>
+              <IconCalendar size={16} />
               <span className="font-medium break-words min-w-0">
                 Exam: {formatDate(profile.examDate)} ({examCountdown} days away)
               </span>

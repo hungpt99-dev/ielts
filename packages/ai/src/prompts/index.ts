@@ -1,4 +1,4 @@
-export { AI_EXPLAIN_LABELS, AI_EXPLAIN_ICONS, AI_EXPLAIN_PROMPTS, buildExplainPrompt } from './explain'
+export { AI_EXPLAIN_LABELS, AI_EXPLAIN_PROMPTS, buildExplainPrompt } from './explain'
 export type { AiExplainType } from './explain'
 
 export { buildVocabularyDetailsPrompt, buildVocabularyQuizPrompt } from './vocabulary'

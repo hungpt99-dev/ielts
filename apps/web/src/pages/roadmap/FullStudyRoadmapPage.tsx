@@ -23,6 +23,7 @@ import PhaseMilestoneTimeline from '../../features/roadmap/components/PhaseMiles
 import PhaseSection from '../../features/roadmap/components/PhaseSection'
 import RoadmapSummary from '../../features/roadmap/components/RoadmapSummary'
 import AITutorRoadmapInsight from '../../features/roadmap/components/AITutorRoadmapInsight'
+import { IconAward, IconEdit, IconMap, IconProgress, IconRefresh } from '@ielts/ui'
 import PageContent from '../../components/layout/PageContent'
 
 function formatDate(dateStr: string): string {
@@ -174,7 +175,7 @@ export default function FullStudyRoadmapPage() {
     return (
       <PageContent className="flex items-center justify-center" role="alert">
         <div className="w-full space-y-4 text-center">
-          <div className="text-5xl">🗺️</div>
+          <IconMap size={32} />
           <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
             Couldn't load your roadmap
           </h2>
@@ -217,7 +218,7 @@ export default function FullStudyRoadmapPage() {
     return (
       <PageContent className="flex items-center justify-center">
         <div className="w-full space-y-4 text-center">
-          <div className="text-5xl">🗺️</div>
+          <IconMap size={48} />
           <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
             Your IELTS journey hasn't started yet
           </h2>
@@ -261,7 +262,7 @@ export default function FullStudyRoadmapPage() {
         />
 
         <div className="space-y-4 text-center">
-          <div className="text-6xl">🏆</div>
+          <IconAward size={32} />
           <h2 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
             {getGreeting()}, Champion!
           </h2>
@@ -275,14 +276,14 @@ export default function FullStudyRoadmapPage() {
               className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-white transition-all hover:brightness-95"
               style={{ backgroundColor: 'var(--color-primary)' }}
             >
-              📝 Take a Mock Test
+<IconEdit size={16} /> Take a Mock Test
             </button>
             <button
               onClick={() => navigate('/progress')}
               className="inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-3 text-sm font-medium transition-all hover:brightness-95"
               style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
             >
-              📊 View Full Progress
+<IconProgress size={16} /> View Full Progress
             </button>
             <button
               onClick={handleRegenerate}
@@ -298,7 +299,7 @@ export default function FullStudyRoadmapPage() {
               {regenerating ? (
                 <span className="inline-block h-4 w-4 animate-spin rounded-full border-2" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
               ) : (
-                '🔄 Start a New Journey'
+                <><IconRefresh size={16} /> Start a New Journey</>
               )}
             </button>
           </div>

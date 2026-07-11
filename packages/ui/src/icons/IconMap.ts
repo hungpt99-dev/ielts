@@ -49,6 +49,7 @@ import {
   Highlighter,
   Sparkles,
   AlignLeft,
+  Headphones,
   MessageSquare,
   Inbox,
   Lock,
@@ -132,6 +133,7 @@ export type { LucideProps }
 // ── Navigation & Layout ──
 export const IconDashboard = LayoutDashboard
 export const IconTodayPlan = CalendarCheck
+export const IconMap = Map
 export const IconStudyPlan = Map
 export const IconHome = Home
 export const IconBack = ArrowLeft
@@ -234,6 +236,7 @@ export const IconGlobe = Globe
 // ── Media & Content ──
 export const IconPlay = Play
 export const IconPause = Pause
+export const IconHeadphones = Headphones
 export const IconVolume = Volume2
 export const IconVolumeLow = Volume1
 export const IconVolumeOff = VolumeX

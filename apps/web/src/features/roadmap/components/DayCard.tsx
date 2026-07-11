@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { IconAITutor } from '@ielts/ui'
 import type { RoadmapDay } from '../roadmapService'
 
 interface DayCardProps {
@@ -173,7 +174,7 @@ export default function DayCard({ day, isToday, isPast, onToggle, onAskAI }: Day
                 border: '1px solid var(--color-tutor-border)',
               }}
             >
-              🧠 Ask AI
+<IconAITutor size={12} /> Ask AI
             </button>
             {isToday && (
               <button

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { IconCheck, IconLock, IconSearch, IconAITutor, IconFlame } from '@ielts/ui'
 import type { RoadmapPhase, RoadmapWeek, RoadmapDay } from '../roadmapService'
 import WeekSection from './WeekSection'
 
@@ -37,9 +38,9 @@ export default function PhaseSection({
   const isUpcoming = !isComplete && !isCurrentPhase
 
   function getStatusBadge() {
-    if (isComplete) return { label: '✅ Complete', color: 'var(--color-success)', bg: 'var(--color-success-light)' }
-    if (isCurrentPhase) return { label: '🔥 In Progress', color: 'var(--color-primary)', bg: 'var(--color-primary-light)' }
-    return { label: '🔒 Upcoming', color: 'var(--color-muted)', bg: 'var(--color-surface-alt)' }
+    if (isComplete) return { label: <><IconCheck size={12} /> Complete</>, color: 'var(--color-success)', bg: 'var(--color-success-light)' }
+    if (isCurrentPhase) return { label: <><IconFlame size={14} /> In Progress</>, color: 'var(--color-primary)', bg: 'var(--color-primary-light)' }
+    return { label: <><IconLock size={12} /> Upcoming</>, color: 'var(--color-muted)', bg: 'var(--color-surface-alt)' }
   }
 
   const status = getStatusBadge()
@@ -200,7 +201,7 @@ export default function PhaseSection({
                 border: '1px solid var(--color-tutor-border)',
               }}
             >
-              🧠 AI Summary of {phase.name}
+<IconAITutor size={12} /> AI Summary of {phase.name}
             </button>
             {!isUpcoming && (
               <button
@@ -220,7 +221,7 @@ export default function PhaseSection({
                   color: 'var(--color-primary)',
                 }}
               >
-                🔍 Preview Phase
+<IconSearch size={12} /> Preview Phase
               </button>
             )}
           </div>
