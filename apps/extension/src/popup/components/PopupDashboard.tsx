@@ -339,9 +339,6 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
   }, [])
 
   const [selectedText, setSelectedText] = useState('')
-  const [lookupResult, setLookupResult] = useState<{ translation: string; vocabularyNotes: Array<{ word: string; meaning: string }> } | null>(null)
-  const [lookupLoading, setLookupLoading] = useState(false)
-  const [lookupError, setLookupError] = useState<string | null>(null)
   const [autoAiLookup, setAutoAiLookup] = useState(false)
 
   useEffect(() => {
@@ -368,27 +365,10 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
 
   useEffect(() => {
     if (!autoAiLookup || !selectedText) return
-    handleLookup()
+    // Opens the AI explain panel on the webpage. The content script handles
+    // the actual AI lookup and shows the result overlay on the page.
+    chrome.runtime.sendMessage({ type: 'AI_EXPLAIN', payload: { text: selectedText, action: 'vietnamese' } }).catch(() => {})
   }, [autoAiLookup, selectedText])
-
-  const handleLookup = useCallback(async () => {
-    if (!selectedText || lookupLoading) return
-    setLookupLoading(true)
-    setLookupResult(null)
-    setLookupError(null)
-    try {
-      const res = await chrome.runtime.sendMessage({ type: 'AI_EXPLAIN', payload: { text: selectedText, action: 'vietnamese' } })
-      if (!res?.success) {
-        setLookupError((res as any)?.message || 'Lookup failed')
-        return
-      }
-      setLookupResult(res.data as typeof lookupResult)
-    } catch (err) {
-      setLookupError(err instanceof Error ? err.message : 'Lookup failed')
-    } finally {
-      setLookupLoading(false)
-    }
-  }, [selectedText, lookupLoading])
 
   const handleOpenSyncStatus = useCallback(() => {
     onNavigate('syncStatus')
@@ -627,78 +607,32 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
               >
                 &ldquo;{selectedText}&rdquo;
               </p>
-              {!lookupResult && !lookupLoading && !lookupError && (
-                <button
-                  onClick={handleLookup}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 'var(--spacing-2xs)',
-                    marginTop: 'var(--spacing-xs)',
-                    padding: 'var(--spacing-2xs) var(--spacing-sm)',
-                    borderRadius: 'var(--radius-lg)',
-                    border: '1px solid var(--color-border)',
-                    background: 'var(--color-surface)',
-                    color: 'var(--color-text)',
-                    cursor: 'pointer',
-                    fontSize: 'var(--text-xs)',
-                    fontWeight: 'var(--weight-medium)',
-                    fontFamily: 'var(--font-sans)',
-                    transition: 'all var(--transition-fast)',
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-alt)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-surface)' }}
-                >
-                  <IconSearch size={12} />
-                  Lookup
-                </button>
-              )}
-              {lookupLoading && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', marginTop: 'var(--spacing-xs)' }}>
-                  <IconLoading size={14} style={{ animation: 'spin 1s linear infinite' }} />
-                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', fontFamily: 'var(--font-sans)' }}>
-                    Looking up&hellip;
-                  </span>
-                </div>
-              )}
-              {lookupResult && (
-                <div style={{ marginTop: 'var(--spacing-xs)' }}>
-                  <div
-                    style={{
-                      padding: 'var(--spacing-xs) var(--spacing-sm)',
-                      background: 'var(--color-surface-alt)',
-                      borderRadius: 'var(--radius-lg)',
-                      fontSize: 'var(--text-xs)',
-                      fontFamily: 'var(--font-sans)',
-                      lineHeight: 'var(--leading-normal)',
-                      color: 'var(--color-text)',
-                    }}
-                  >
-                    <div style={{ fontWeight: 'var(--weight-semibold)', marginBottom: 'var(--spacing-2xs)' }}>
-                      Translation
-                    </div>
-                    <div>{lookupResult.translation}</div>
-                    {lookupResult.vocabularyNotes.length > 0 && (
-                      <div style={{ marginTop: 'var(--spacing-xs)', borderTop: '1px solid var(--color-border)', paddingTop: 'var(--spacing-xs)' }}>
-                        <div style={{ fontWeight: 'var(--weight-semibold)', marginBottom: 'var(--spacing-2xs)' }}>
-                          Vocabulary Notes
-                        </div>
-                        {lookupResult.vocabularyNotes.map((note, i) => (
-                          <div key={i} style={{ display: 'flex', gap: 'var(--spacing-xs)', marginBottom: 'var(--spacing-2xs)' }}>
-                            <span style={{ fontWeight: 'var(--weight-medium)', color: 'var(--color-primary)' }}>{note.word}</span>
-                            <span style={{ color: 'var(--color-text-secondary)' }}>{note.meaning}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-              {lookupError && (
-                <div style={{ marginTop: 'var(--spacing-xs)', fontSize: 'var(--text-xs)', color: 'var(--color-danger)', fontFamily: 'var(--font-sans)' }}>
-                  {lookupError}
-                </div>
-              )}
+              <button
+                onClick={() => {
+                  chrome.runtime.sendMessage({ type: 'AI_EXPLAIN', payload: { text: selectedText, action: 'vietnamese' } }).catch(() => {})
+                }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 'var(--spacing-2xs)',
+                  marginTop: 'var(--spacing-xs)',
+                  padding: 'var(--spacing-2xs) var(--spacing-sm)',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid var(--color-border)',
+                  background: 'var(--color-surface)',
+                  color: 'var(--color-text)',
+                  cursor: 'pointer',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--weight-medium)',
+                  fontFamily: 'var(--font-sans)',
+                  transition: 'all var(--transition-fast)',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--color-surface-alt)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--color-surface)' }}
+              >
+                <IconSearch size={12} />
+                Explain
+              </button>
             </div>
           </div>
         </div>
