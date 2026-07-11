@@ -23,6 +23,8 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
       const data = msg.payload as Record<string, unknown> | undefined
       if (!data) { console.warn('[WebSyncBridge] IMPORT_EXTENSION_DATA: no payload'); return }
 
+      console.log('[WebSyncBridge] IMPORT_EXTENSION_DATA received, keys:', Object.keys(data))
+
       const existingVocab = await DatabaseService.getAll<Record<string, unknown>>('vocabulary')
       const existingIds = new Set(existingVocab.map(v => v.id as string))
 
@@ -69,7 +71,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
       if (Array.isArray(entriesList)) {
         const existingNotes = await DatabaseService.getAll<Record<string, unknown>>('studyNotes')
         const existingNoteIds = new Set(existingNotes.map(n => n.id as string))
-        const existingPassages = await DatabaseService.getAll<Record<string, unknown>>('passages')
+        const existingPassages = await DatabaseService.getAll<Record<string, unknown>>('passages').catch(() => [] as Record<string, unknown>[])
         const existingPassageIds = new Set(existingPassages.map(p => p.id as string))
 
         for (const entry of entriesList) {
@@ -80,7 +82,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
                 id,
                 title: entry.pageTitle || entry.topic || 'Saved from extension',
                 content: entry.text as string,
-                source: (entry.pageUrl as string) || '',
+                source: 'user-created',
                 topic: entry.topic || 'general',
                 skill: 'reading',
                 pageTitle: entry.pageTitle as string,
@@ -118,16 +120,18 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
 
       const articlesList = data.articles as Record<string, unknown>[] | undefined
       if (Array.isArray(articlesList)) {
-        const existingPassages = await DatabaseService.getAll<Record<string, unknown>>('passages')
+        console.log('[WebSyncBridge] Received', articlesList.length, 'articles from extension')
+        const existingPassages = await DatabaseService.getAll<Record<string, unknown>>('passages').catch(() => [] as Record<string, unknown>[])
         const existingPassageIds = new Set(existingPassages.map(p => p.id as string))
         for (const article of articlesList) {
           const id = article.id as string
           if (!existingPassageIds.has(id)) {
+            console.log('[WebSyncBridge] Saving article:', (article.title as string)?.slice(0, 50))
             await DatabaseService.add('passages', {
               id,
               title: (article.title as string) || (article.pageTitle as string) || 'Article',
               content: (article.content as string) || (article.text as string) || '',
-              source: (article.url as string) || (article.pageUrl as string) || '',
+              source: 'user-created',
               topic: article.topic || 'general',
               skill: 'reading',
               pageTitle: article.pageTitle as string,

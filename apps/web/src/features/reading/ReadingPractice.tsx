@@ -10,7 +10,7 @@ import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import EmptyState from '../../components/ui/EmptyState'
 import Question from './components/Question'
-import { SAMPLE_PASSAGES } from './data/passages'
+import { ensureSeedData, loadAllPassages } from './passageSeedService'
 import { generateId } from '../../utils'
 import { generateReadingPassage } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
@@ -137,6 +137,7 @@ export default function ReadingPractice() {
     questionResults: Array<{ question: ReadingQuestion; answer: unknown; isCorrect: boolean }>
   } | null>(null)
   const [aiGeneratedPassage, setAiGeneratedPassage] = useState<ReadingPassageWithQuestions | null>(null)
+  const [allPassages, setAllPassages] = useState<ReadingPassageWithQuestions[]>([])
 
   const [timerSeconds, setTimerSeconds] = useState(0)
   const [timerRunning, setTimerRunning] = useState(false)
@@ -166,6 +167,18 @@ export default function ReadingPractice() {
     }
   }, [])
 
+  const loadPassages = useCallback(async () => {
+    try {
+      await ensureSeedData()
+      const passages = await loadAllPassages()
+      setAllPassages(passages)
+    } catch {}
+  }, [])
+
+  useEffect(() => {
+    loadPassages()
+  }, [loadPassages])
+
   useEffect(() => {
     loadHistory()
   }, [loadHistory])
@@ -176,14 +189,14 @@ export default function ReadingPractice() {
     }
   }, [])
 
-  const allPassages = useMemo(() => {
-    const passages = [...SAMPLE_PASSAGES]
+  const displayPassages = useMemo(() => {
+    const passages = [...allPassages]
     if (aiGeneratedPassage) passages.unshift(aiGeneratedPassage)
     return passages
-  }, [aiGeneratedPassage])
+  }, [allPassages, aiGeneratedPassage])
 
   const filteredPassages = useMemo(() => {
-    let filtered = allPassages
+    let filtered = displayPassages
     if (search.trim()) {
       const query = search.toLowerCase()
       filtered = filtered.filter(
@@ -196,7 +209,7 @@ export default function ReadingPractice() {
     if (topicFilter) filtered = filtered.filter(p => p.topic === topicFilter)
     if (difficultyFilter) filtered = filtered.filter(p => p.difficulty === difficultyFilter)
     return filtered
-  }, [allPassages, search, topicFilter, difficultyFilter])
+  }, [displayPassages, search, topicFilter, difficultyFilter])
 
   function startPassage(passage: ReadingPassageWithQuestions) {
     setCurrentPassage(passage)
