@@ -27,6 +27,7 @@ export type ExtensionSettings = SharedSettings & {
   highlightExcludedHosts: string[]
   defaultCategory: typeof SAVE_CATEGORIES[number]
   defaultTopic: string
+  nativeLanguage: string
 }
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
@@ -38,6 +39,7 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   highlightExcludedHosts: ['ieltsjourney.dev'],
   defaultCategory: 'vocabulary',
   defaultTopic: 'general',
+  nativeLanguage: '',
 }
 
 // Fields shared between extension and website settings
@@ -72,6 +74,7 @@ interface SyncSettings {
   highlightExcludedHosts: string[]
   defaultCategory: typeof SAVE_CATEGORIES[number]
   defaultTopic: string
+  nativeLanguage: string
 }
 
 const SYNC_KEY = 'extensionSettings'
@@ -91,6 +94,7 @@ function toSyncSettings(s: ExtensionSettings): SyncSettings {
     highlightExcludedHosts: s.highlightExcludedHosts,
     defaultCategory: s.defaultCategory,
     defaultTopic: s.defaultTopic,
+    nativeLanguage: s.nativeLanguage,
   }
 }
 

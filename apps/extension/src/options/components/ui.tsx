@@ -29,7 +29,7 @@ export function Section({ title, children }: { title: string; children: ReactNod
 
 const idCounter = { value: 0 }
 
-export function Field({ label, error, required, children }: { label: string; error?: string; required?: boolean; children: ReactNode }) {
+export function Field({ label, error, required, description, children }: { label: string; error?: string; required?: boolean; description?: string; children: ReactNode }) {
   const errorId = `field-error-${++idCounter.value}`
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -40,6 +40,11 @@ export function Field({ label, error, required, children }: { label: string; err
         {required && <span style={{ color: 'var(--color-danger)', marginLeft: '2px' }}>*</span>}
       </label>
       {children}
+      {description && !error && (
+        <p style={{ margin: 0, fontSize: '11px', color: 'var(--color-muted)', lineHeight: '1.4' }}>
+          {description}
+        </p>
+      )}
       {error && (
         <p
           id={errorId}

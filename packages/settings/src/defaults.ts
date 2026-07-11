@@ -11,4 +11,5 @@ export const DEFAULT_AI_SETTINGS: AISettings = {
 export const DEFAULT_SHARED_SETTINGS: SharedSettings = {
   ...DEFAULT_AI_SETTINGS,
   themeMode: 'system',
+  nativeLanguage: '',
 }

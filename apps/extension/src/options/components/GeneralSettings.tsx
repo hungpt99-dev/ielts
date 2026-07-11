@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { ExtensionSettings } from '@/background/settingsStorage'
 import { SAVE_CATEGORIES, THEME_MODES } from '@/background/settingsStorage'
+import { NATIVE_LANGUAGES } from '@ielts/settings'
 import { Section, Field, ToggleField, inputStyle, selectStyle } from './ui'
 
 interface GeneralSettingsProps {
@@ -106,6 +107,19 @@ export default function GeneralSettings({ settings, onChange }: GeneralSettingsP
             placeholder="general"
             style={inputStyle}
           />
+        </Field>
+        <Field label="Native Language" description="Used for AI translations and vocabulary explanations">
+          <select
+            value={settings.nativeLanguage}
+            onChange={(e) => onChange({ nativeLanguage: e.target.value })}
+            style={selectStyle}
+          >
+            {NATIVE_LANGUAGES.map((lang) => (
+              <option key={lang.value} value={lang.value}>
+                {lang.label}
+              </option>
+            ))}
+          </select>
         </Field>
       </Section>
     </>
