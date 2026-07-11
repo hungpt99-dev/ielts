@@ -95,12 +95,12 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
         }}
       >
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-lg font-bold" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: 'var(--color-text)' }}>
 <IconProgress size={16} /> Plan Overview
           </h2>
           {isComplete && (
             <span
-              className="rounded-xl px-3 py-1 text-xs font-bold"
+              className="inline-flex items-center gap-1 rounded-xl px-3 py-1 text-xs font-bold"
               style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success)' }}
             >
 <IconCheck size={14} /> All Phases Complete
@@ -219,7 +219,7 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
             type="button"
             onClick={() => setShowConfirm(true)}
             disabled={regenerating}
-            className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-medium transition-all hover:brightness-95 active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm font-medium transition-all hover:brightness-95 active:scale-[0.98]"
             style={{
               borderColor: 'var(--color-border)',
               color: 'var(--color-text-secondary)',
@@ -242,7 +242,7 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
           </button>
           <button
             onClick={onAskAIReview}
-            className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-all hover:brightness-95 active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-all hover:brightness-95 active:scale-[0.98]"
             style={{
               backgroundColor: 'var(--color-tutor-accent-light)',
               color: 'var(--color-tutor-accent)',

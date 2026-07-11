@@ -167,7 +167,7 @@ export default function DayCard({ day, isToday, isPast, onToggle, onAskAI }: Day
             </button>
             <button
               onClick={() => onAskAI(day)}
-              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
               style={{
                 backgroundColor: 'var(--color-tutor-accent-light)',
                 color: 'var(--color-tutor-accent)',

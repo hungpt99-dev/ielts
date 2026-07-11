@@ -81,7 +81,7 @@ export default function PhaseSection({
               {phase.name}
             </span>
             <span
-              className="rounded-full px-2 py-0.5 text-[10px] font-medium"
+              className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
               style={{ backgroundColor: status.bg, color: status.color }}
             >
               {status.label}
@@ -194,7 +194,7 @@ export default function PhaseSection({
           <div className="flex flex-wrap gap-2 pt-2">
             <button
               onClick={() => onAskAIPhase(phase)}
-              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
+              className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
               style={{
                 backgroundColor: 'var(--color-tutor-accent-light)',
                 color: 'var(--color-tutor-accent)',
@@ -215,7 +215,7 @@ export default function PhaseSection({
             {isUpcoming && (
               <button
                 onClick={() => onAskAIPhase(phase)}
-                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
+                className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
                 style={{
                   backgroundColor: 'var(--color-primary-light)',
                   color: 'var(--color-primary)',

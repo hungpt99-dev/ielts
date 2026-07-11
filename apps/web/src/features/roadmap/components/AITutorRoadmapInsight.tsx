@@ -205,7 +205,7 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
         <div className="mt-4 flex flex-wrap gap-2">
           <button
             onClick={onAskFollowUp}
-            className="inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
             style={{
               backgroundColor: 'var(--color-tutor-accent)',
               color: 'white',
@@ -215,7 +215,7 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
           </button>
           <button
             onClick={onAdjustPlan}
-            className="inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
+            className="inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
             style={{
               borderColor: 'var(--color-tutor-border)',
               color: 'var(--color-tutor-accent)',
