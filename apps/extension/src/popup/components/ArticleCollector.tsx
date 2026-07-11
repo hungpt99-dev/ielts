@@ -1,15 +1,37 @@
 import { useState, useEffect, useCallback } from 'react'
-import { extensionArticleSchema, saveArticleEntry, IELTS_TOPICS } from '../../storage/articleStore'
+import { extensionArticleSchema, articleQuestionSchema, saveArticleEntry, IELTS_TOPICS } from '../../storage/articleStore'
 import type { ExtensionArticleEntry, ArticleQuestion } from '../../storage/articleStore'
 import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
 import type { LearningEntry } from '../../types'
 import { IconArticle, IconClose, IconCheck, IconHelpCircle, IconBookText } from '@ielts/ui'
+import type { ExtractResult } from '../../content-script/articleExtractor'
 
 interface ArticleCollectorProps {
   onSaved: () => void
   onCancel: () => void
-  viewArticleId?: string
+}
+
+type CrawlState = { status: 'idle' } | { status: 'loading' } | { status: 'success'; result: ExtractResult } | { status: 'error'; error: string }
+
+function crawlActiveTab(): Promise<ExtractResult> {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs[0]
+      if (!tab?.id) { reject(new Error('No active tab found')); return }
+      chrome.tabs.sendMessage(tab.id, { type: 'EXTRACT_ARTICLE' }, (response) => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message))
+          return
+        }
+        if (!response?.success) {
+          reject(new Error(response?.error || 'Failed to extract article'))
+          return
+        }
+        resolve(response.data as ExtractResult)
+      })
+    })
+  })
 }
 
 interface PageInfo {
@@ -148,25 +170,46 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
-
   const [showQuestions, setShowQuestions] = useState(false)
+  const [crawl, setCrawl] = useState<CrawlState>({ status: 'idle' })
+
+  const doCrawl = useCallback(async () => {
+    setCrawl({ status: 'loading' })
+    try {
+      const result = await crawlActiveTab()
+      setTitle(result.title)
+      setContent(result.content)
+      setCrawl({ status: 'success', result })
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to extract article'
+      setCrawl({ status: 'error', error: message })
+    }
+  }, [])
 
   useEffect(() => {
+    let cancelled = false
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tab = tabs[0]
-      if (!tab.id) return
+      if (!tab?.id || cancelled) return
       chrome.tabs.sendMessage(tab.id, { type: 'GET_PAGE_INFO' }, (response) => {
-        if (chrome.runtime.lastError) return
+        if (cancelled || chrome.runtime.lastError) return
         const pageTitle = response?.title || tab.title || ''
         const pageUrl = response?.url || tab.url || ''
         const selectedText = response?.selectedText || ''
         setPageInfo({ title: pageTitle, url: pageUrl, selectedText })
-        setTitle(pageTitle)
-        if (selectedText) {
-          setSelectedParagraph(selectedText)
+        if (selectedText) setSelectedParagraph(selectedText)
+      })
+      chrome.tabs.sendMessage(tab.id, { type: 'EXTRACT_ARTICLE' }, (response) => {
+        if (cancelled || chrome.runtime.lastError) return
+        if (response?.success && response.data) {
+          const data = response.data as ExtractResult
+          setTitle(data.title)
+          setContent(data.content)
+          setCrawl({ status: 'success', result: data })
         }
       })
     })
+    return () => { cancelled = true }
   }, [])
 
   const handleGenerateQuestions = useCallback(async () => {
@@ -187,7 +230,12 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
     if (result.error) {
       setAiError(result.error)
     } else if (result.data) {
-      setAiQuestions(result.data)
+      const valid = result.data.filter(q => articleQuestionSchema.safeParse(q).success)
+      setAiQuestions(valid)
+      if (valid.length > 0) setShowQuestions(true)
+      if (valid.length !== result.data.length) {
+        setAiError(`${result.data.length - valid.length} question(s) had invalid format and were skipped`)
+      }
     }
     setAiLoading(false)
   }, [selectedParagraph, content, title, pageInfo.title, pageInfo.url, topic])
@@ -209,6 +257,7 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
         .filter(Boolean)
 
       const now = new Date().toISOString()
+      const validQuestions = aiQuestions.filter(q => articleQuestionSchema.safeParse(q).success)
       const entry: ExtensionArticleEntry = extensionArticleSchema.parse({
         id: crypto.randomUUID(),
         title: titleTrimmed,
@@ -221,8 +270,8 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
         isReadingPractice,
         difficulty,
 
-        aiQuestions,
-        aiQuestionsGeneratedAt: aiQuestions.length > 0 ? now : undefined,
+        aiQuestions: validQuestions,
+        aiQuestionsGeneratedAt: validQuestions.length > 0 ? now : undefined,
 
         status: 'new',
         createdAt: now,
@@ -344,6 +393,31 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           }}
         >
           <IconClose size={18} />
+        </button>
+      </div>
+
+      {/* Crawl status */}
+      <div style={{
+        padding: 'var(--spacing-sm) var(--spacing-md)', borderRadius: 'var(--radius-md)',
+        background: crawl.status === 'loading' ? 'var(--color-primary-light)' :
+                    crawl.status === 'success' ? 'var(--color-success-light)' :
+                    crawl.status === 'error' ? 'var(--color-danger-light)' : 'transparent',
+        border: crawl.status !== 'idle' ? '1px solid var(--color-border)' : 'none',
+        fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <span>
+          {crawl.status === 'idle' && 'Open a page and click Crawl to extract article content'}
+          {crawl.status === 'loading' && 'Extracting article content from page...'}
+          {crawl.status === 'success' && `Extracted ${crawl.result.wordCount} words from "${crawl.result.title}"`}
+          {crawl.status === 'error' && `Crawl failed: ${crawl.error}`}
+        </span>
+        <button type="button" onClick={doCrawl} disabled={crawl.status === 'loading'} style={{
+          padding: '4px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)',
+          background: 'var(--color-surface)', cursor: crawl.status === 'loading' ? 'not-allowed' : 'pointer',
+          fontSize: 'var(--text-xs)', opacity: crawl.status === 'loading' ? 0.5 : 1,
+        }}>
+          {crawl.status === 'loading' ? 'Extracting...' : 'Crawl'}
         </button>
       </div>
 
@@ -661,7 +735,7 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                         fontWeight: 'var(--weight-semibold)',
                         textTransform: 'uppercase',
                       }}>
-                        {q.type}
+                        {typeof q.type === 'string' ? q.type : ''}
                       </span>
                       <span style={{
                         padding: '1px 6px',
@@ -671,9 +745,9 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                         fontSize: 'var(--text-xs)',
                         fontWeight: 'var(--weight-semibold)',
                       }}>
-                        {q.difficulty}
+                        {typeof q.difficulty === 'string' ? q.difficulty : ''}
                       </span>
-                      {q.bandScore && (
+                      {typeof q.bandScore === 'string' && q.bandScore && (
                         <span style={{
                           fontSize: 'var(--text-xs)',
                           color: 'var(--color-muted)',
@@ -683,9 +757,9 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                       )}
                     </div>
                     <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text)', fontWeight: 'var(--weight-medium)', marginBottom: '4px' }}>
-                      {i + 1}. {q.question}
+                      {i + 1}. {typeof q.question === 'string' ? q.question : ''}
                     </div>
-                    {q.passage && (
+                    {typeof q.passage === 'string' && q.passage && (
                       <div style={{
                         fontSize: 'var(--text-xs)',
                         color: 'var(--color-muted)',
@@ -697,7 +771,7 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                         {q.passage}
                       </div>
                     )}
-                    {q.options && q.options.length > 0 && (
+                    {Array.isArray(q.options) && q.options.length > 0 && (
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', marginBottom: '4px' }}>
                         {q.options.map((opt, oi) => (
                           <div key={oi} style={{
@@ -705,16 +779,16 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
                             color: 'var(--color-text-secondary)',
                             padding: '2px 4px',
                           }}>
-                            {String.fromCharCode(65 + oi)}. {opt}
+                            {String.fromCharCode(65 + oi)}. {typeof opt === 'string' ? opt : String(opt)}
                           </div>
                         ))}
                       </div>
                     )}
                     <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-success)', marginTop: '4px' }}>
-                      ✓ {q.correctAnswer}
+                      ✓ {typeof q.correctAnswer === 'string' ? q.correctAnswer : ''}
                     </div>
                     <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', marginTop: '2px' }}>
-                      {q.explanation}
+                      {typeof q.explanation === 'string' ? q.explanation : ''}
                     </div>
                   </div>
                 ))}

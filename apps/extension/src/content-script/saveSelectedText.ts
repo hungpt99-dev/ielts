@@ -8,6 +8,7 @@ import {
   emitExtensionVocabularySaved,
   emitExtensionArticleSaved,
 } from '../background/eventEmitters'
+import { extractArticle } from './articleExtractor'
 
 interface SaveSelectionPayload {
   text: string
@@ -71,6 +72,16 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         selectedText: getSelectedText(),
       })
     } catch { /* ignore */ }
+    return false
+  }
+
+  if (message.type === 'EXTRACT_ARTICLE') {
+    try {
+      const result = extractArticle()
+      sendResponse({ success: true, data: result })
+    } catch {
+      sendResponse({ success: false, error: 'Failed to extract article' })
+    }
     return false
   }
 
