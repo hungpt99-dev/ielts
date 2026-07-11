@@ -1,12 +1,11 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
-import { useToast } from '../../../../../packages/ui/src/components/Toast'
+import { useState, useEffect } from 'react'
 import type { ExtensionSettings } from '@/background/settingsStorage'
 import { SAVE_CATEGORIES, THEME_MODES } from '@/background/settingsStorage'
 import { Section, Field, ToggleField, inputStyle, selectStyle } from './ui'
 
 interface GeneralSettingsProps {
   settings: ExtensionSettings
-  onSave: (patch: Partial<ExtensionSettings>) => Promise<void>
+  onChange: (patch: Partial<ExtensionSettings>) => void
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -26,45 +25,12 @@ const THEME_LABELS: Record<string, string> = {
   system: 'System (follow device)',
 }
 
-export default function GeneralSettings({ settings, onSave }: GeneralSettingsProps) {
-  const { showToast } = useToast()
+export default function GeneralSettings({ settings, onChange }: GeneralSettingsProps) {
   const [localTopic, setLocalTopic] = useState(settings.defaultTopic)
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const latestTopicRef = useRef(localTopic)
-  latestTopicRef.current = localTopic
 
   useEffect(() => {
     setLocalTopic(settings.defaultTopic)
   }, [settings.defaultTopic])
-
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current)
-    }
-  }, [])
-
-  const doSave = useCallback(
-    async (patch: Partial<ExtensionSettings>) => {
-      try {
-        await onSave(patch)
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Unknown error'
-        showToast('error', `Failed to save: ${msg}`)
-      }
-    },
-    [onSave, showToast],
-  )
-
-  const handleTopicChange = useCallback(
-    (value: string) => {
-      setLocalTopic(value)
-      if (debounceRef.current) clearTimeout(debounceRef.current)
-      debounceRef.current = setTimeout(() => {
-        doSave({ defaultTopic: latestTopicRef.current })
-      }, 400)
-    },
-    [doSave],
-  )
 
   return (
     <>
@@ -73,7 +39,7 @@ export default function GeneralSettings({ settings, onSave }: GeneralSettingsPro
           <select
             value={settings.themeMode}
             onChange={(e) =>
-              doSave({ themeMode: e.target.value as 'light' | 'dark' | 'system' })
+              onChange({ themeMode: e.target.value as 'light' | 'dark' | 'system' })
             }
             style={selectStyle}
           >
@@ -91,25 +57,25 @@ export default function GeneralSettings({ settings, onSave }: GeneralSettingsPro
           label="Floating Toolbar"
           description="Show a floating toolbar when selecting text on webpages"
           checked={settings.floatingToolbar}
-          onChange={(v) => doSave({ floatingToolbar: v })}
+          onChange={(v) => onChange({ floatingToolbar: v })}
         />
         <ToggleField
           label="Auto-save Selected Text"
           description="Automatically save selected text without showing the save dialog"
           checked={settings.autoSaveSelected}
-          onChange={(v) => doSave({ autoSaveSelected: v })}
+          onChange={(v) => onChange({ autoSaveSelected: v })}
         />
         <ToggleField
           label="Auto-highlight Saved Vocabulary"
           description="Automatically highlight your saved vocabulary words and phrases on every webpage you visit"
           checked={settings.autoHighlightSavedVocabulary}
-          onChange={(v) => doSave({ autoHighlightSavedVocabulary: v })}
+          onChange={(v) => onChange({ autoHighlightSavedVocabulary: v })}
         />
         <ToggleField
           label="Auto AI Lookup"
           description="When the popup opens with a highlighted word, automatically look it up with AI"
           checked={settings.autoAiLookup}
-          onChange={(v) => doSave({ autoAiLookup: v })}
+          onChange={(v) => onChange({ autoAiLookup: v })}
         />
       </Section>
 
@@ -118,7 +84,7 @@ export default function GeneralSettings({ settings, onSave }: GeneralSettingsPro
           <select
             value={settings.defaultCategory}
             onChange={(e) =>
-              doSave({ defaultCategory: e.target.value as (typeof SAVE_CATEGORIES)[number] })
+              onChange({ defaultCategory: e.target.value as (typeof SAVE_CATEGORIES)[number] })
             }
             style={selectStyle}
           >
@@ -133,7 +99,10 @@ export default function GeneralSettings({ settings, onSave }: GeneralSettingsPro
           <input
             type="text"
             value={localTopic}
-            onChange={(e) => handleTopicChange(e.target.value)}
+            onChange={(e) => {
+              setLocalTopic(e.target.value)
+              onChange({ defaultTopic: e.target.value })
+            }}
             placeholder="general"
             style={inputStyle}
           />

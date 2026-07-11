@@ -1,36 +1,21 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useToast } from '../../../../../packages/ui/src/components/Toast'
 import type { ExtensionSettings } from '@/background/settingsStorage'
 import { Section, Field, inputStyle, selectStyle, buttonStyle } from './ui'
 
 interface AiSettingsFormProps {
   settings: ExtensionSettings
-  onSave: (patch: Partial<ExtensionSettings>) => Promise<void>
-}
-
-interface Errors {
-  aiBaseUrl?: string
-  aiApiKey?: string
-  aiModel?: string
-}
-
-function getErrors(values: {
-  aiProvider: string
-  aiBaseUrl: string
-  aiApiKey: string
-  aiModel: string
-}): Errors {
-  const e: Errors = {}
-  if (values.aiProvider === 'custom' && !values.aiBaseUrl.trim()) {
-    e.aiBaseUrl = 'Base URL is required when using a custom provider'
+  onChange: (patch: Partial<ExtensionSettings>) => void
+  errors: {
+    aiProvider?: string
+    aiBaseUrl?: string
+    aiApiKey?: string
+    aiModel?: string
   }
-  if (!values.aiModel.trim()) {
-    e.aiModel = 'Model name is required'
-  }
-  return e
+  setErrors: (e: { aiProvider?: string; aiBaseUrl?: string; aiApiKey?: string; aiModel?: string }) => void
 }
 
-export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps) {
+export default function AiSettingsForm({ settings, onChange, errors, setErrors }: AiSettingsFormProps) {
   const { showToast } = useToast()
   const [local, setLocal] = useState({
     aiProvider: settings.aiProvider,
@@ -39,15 +24,7 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
     aiModel: settings.aiModel,
   })
   const [showApiKey, setShowApiKey] = useState(false)
-  const [errors, setErrors] = useState<Errors>({})
-  const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState(false)
-  const [saveFeedback, setSaveFeedback] = useState<'success' | 'error' | null>(null)
-
-  const latestRef = useRef(local)
-  latestRef.current = local
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const isSavingRef = useRef(false)
 
   useEffect(() => {
     setLocal({
@@ -58,100 +35,27 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
     })
   }, [settings.aiProvider, settings.aiBaseUrl, settings.aiApiKey, settings.aiModel])
 
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current)
+  const handleProviderChange = (value: string) => {
+    const provider = value as 'openai' | 'custom'
+    setLocal((prev) => ({ ...prev, aiProvider: provider }))
+    setErrors({})
+    onChange({ aiProvider: provider })
+  }
+
+  const handleTextChange = (field: 'aiBaseUrl' | 'aiApiKey' | 'aiModel', value: string) => {
+    setLocal((prev) => ({ ...prev, [field]: value }))
+    setErrors((prev) => ({ ...prev, [field]: undefined }))
+    onChange({ [field]: value })
+  }
+
+  const handleTestConnection = async () => {
+    const vals = local
+    if (vals.aiProvider === 'custom' && !vals.aiBaseUrl.trim()) {
+      showToast('error', 'Enter a Base URL before testing')
+      return
     }
-  }, [])
-
-  const doSave = useCallback(
-    async (patch: Partial<ExtensionSettings>) => {
-      if (isSavingRef.current) return
-      isSavingRef.current = true
-      setSaving(true)
-      setSaveFeedback(null)
-      try {
-        await onSave(patch)
-        setSaveFeedback('success')
-        setTimeout(() => setSaveFeedback(null), 2000)
-      } catch {
-        setSaveFeedback('error')
-        showToast('error', 'Failed to save AI settings')
-      } finally {
-        setSaving(false)
-        isSavingRef.current = false
-      }
-    },
-    [onSave, showToast],
-  )
-
-  const doSaveAll = useCallback(() => {
-    const vals = latestRef.current
-    const e = getErrors(vals)
-    setErrors(e)
-    if (Object.keys(e).length === 0) {
-      doSave({
-        aiProvider: vals.aiProvider,
-        aiBaseUrl: vals.aiBaseUrl,
-        aiApiKey: vals.aiApiKey,
-        aiModel: vals.aiModel,
-      })
-    }
-  }, [doSave])
-
-  const scheduleSaveAll = useCallback(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current)
-    debounceRef.current = setTimeout(() => {
-      const vals = latestRef.current
-      const e = getErrors(vals)
-      if (Object.keys(e).length === 0) {
-        doSave({
-          aiProvider: vals.aiProvider,
-          aiBaseUrl: vals.aiBaseUrl,
-          aiApiKey: vals.aiApiKey,
-          aiModel: vals.aiModel,
-        })
-      }
-    }, 500)
-  }, [doSave])
-
-  const handleProviderChange = useCallback(
-    (value: string) => {
-      const provider = value as 'openai' | 'custom'
-      setLocal((prev) => ({ ...prev, aiProvider: provider }))
-      setErrors({})
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current)
-        debounceRef.current = null
-      }
-      doSave({ aiProvider: provider })
-    },
-    [doSave],
-  )
-
-  const handleTextChange = useCallback(
-    (field: 'aiBaseUrl' | 'aiApiKey' | 'aiModel', value: string) => {
-      setLocal((prev) => ({ ...prev, [field]: value }))
-      setErrors((prev) => ({ ...prev, [field]: undefined }))
-      scheduleSaveAll()
-    },
-    [scheduleSaveAll],
-  )
-
-  const handleBlur = useCallback(() => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current)
-      debounceRef.current = null
-    }
-    doSaveAll()
-  }, [doSaveAll])
-
-  const handleTestConnection = useCallback(async () => {
-    const vals = latestRef.current
-    const e = getErrors(vals)
-    setErrors(e)
-    if (Object.keys(e).length > 0) {
-      showToast('error', 'Fix validation errors before testing')
+    if (!vals.aiModel.trim()) {
+      showToast('error', 'Enter a Model name before testing')
       return
     }
     if (!vals.aiApiKey.trim()) {
@@ -184,7 +88,7 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
     } finally {
       setTesting(false)
     }
-  }, [showToast])
+  }
 
   return (
     <Section title="AI Provider">
@@ -193,7 +97,6 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
           value={local.aiProvider}
           onChange={(e) => handleProviderChange(e.target.value)}
           style={selectStyle}
-          disabled={saving}
         >
           <option value="openai">OpenAI</option>
           <option value="custom">Custom (OpenAI-compatible)</option>
@@ -204,10 +107,8 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
           type="url"
           value={local.aiBaseUrl}
           onChange={(e) => handleTextChange('aiBaseUrl', e.target.value)}
-          onBlur={handleBlur}
           placeholder="https://api.openai.com/v1"
           style={inputStyle}
-          disabled={saving}
         />
       </Field>
       <Field label="API Key" error={errors.aiApiKey} required>
@@ -216,11 +117,9 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
             type={showApiKey ? 'text' : 'password'}
             value={local.aiApiKey}
             onChange={(e) => handleTextChange('aiApiKey', e.target.value)}
-            onBlur={handleBlur}
             placeholder="sk-..."
             style={{ ...inputStyle, flex: 1 }}
             autoComplete="off"
-            disabled={saving}
           />
           <button
             onClick={() => setShowApiKey((v) => !v)}
@@ -245,57 +144,25 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
           type="text"
           value={local.aiModel}
           onChange={(e) => handleTextChange('aiModel', e.target.value)}
-          onBlur={handleBlur}
           placeholder="gpt-4o-mini"
           style={inputStyle}
-          disabled={saving}
-          aria-required="true"
-          aria-invalid={errors.aiModel ? 'true' : undefined}
-          aria-describedby={errors.aiModel ? 'model-error' : undefined}
         />
       </Field>
 
-      <div
+      <button
+        onClick={handleTestConnection}
+        disabled={testing}
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px',
-          flexWrap: 'wrap',
+          ...buttonStyle,
+          background: 'var(--color-primary)',
+          color: '#fff',
+          border: 'none',
+          opacity: testing ? 0.6 : 1,
         }}
+        aria-label="Test AI provider connection"
       >
-        <button
-          onClick={handleTestConnection}
-          disabled={testing || saving}
-          style={{
-            ...buttonStyle,
-            background: 'var(--color-primary)',
-            color: '#fff',
-            border: 'none',
-            opacity: testing || saving ? 0.6 : 1,
-          }}
-          aria-label="Test AI provider connection"
-        >
-          {testing ? 'Testing...' : 'Test Connection'}
-        </button>
-
-        <div
-          style={{
-            fontSize: '12px',
-            color:
-              saveFeedback === 'success'
-                ? 'var(--color-success, #16a34a)'
-                : saveFeedback === 'error'
-                  ? 'var(--color-danger, #dc2626)'
-                  : 'var(--color-muted, #94a3b8)',
-          }}
-          role="status"
-          aria-live="polite"
-        >
-          {saving && 'Saving...'}
-          {saveFeedback === 'success' && !saving && 'Settings saved.'}
-          {saveFeedback === 'error' && !saving && 'Failed to save settings.'}
-        </div>
-      </div>
+        {testing ? 'Testing...' : 'Test Connection'}
+      </button>
     </Section>
   )
 }

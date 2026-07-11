@@ -17,7 +17,6 @@ function applyTheme(mode: 'light' | 'dark' | 'system'): void {
   const isDark =
     mode === 'dark' ||
     (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
-
   document.documentElement.classList.toggle('dark', isDark)
 }
 
@@ -29,15 +28,31 @@ const REQUIRED_SETTINGS_KEYS: (keyof ExtensionSettings)[] = [
   'floatingToolbar',
 ]
 
+const SAVE_BAR_HEIGHT = 64
+
 export default function SettingsPage() {
   const { showToast } = useToast()
   const [settings, setSettings] = useState<ExtensionSettings>(DEFAULT_SETTINGS)
   const [loading, setLoading] = useState(true)
   const [importing, setImporting] = useState(false)
   const [confirmClear, setConfirmClear] = useState(false)
+
+  // Pending unsaved changes (merged by key, newest wins)
+  const [pending, setPending] = useState<Partial<ExtensionSettings> | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [aiErrors, setAiErrors] = useState<{
+    aiProvider?: string
+    aiBaseUrl?: string
+    aiApiKey?: string
+    aiModel?: string
+  }>({})
+
   const settingsRef = useRef(settings)
   settingsRef.current = settings
 
+  const dirty = pending !== null && Object.keys(pending).length > 0
+
+  // ── Load ──
   useEffect(() => {
     loadSettings()
       .then((s) => {
@@ -51,26 +66,80 @@ export default function SettingsPage() {
       })
   }, [showToast])
 
-  // Sync theme to DOM whenever settings.themeMode changes
+  // ── Theme ──
   useEffect(() => {
     const mode = settings.themeMode
     applyTheme(mode)
-
     if (mode !== 'system') return
-
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
     const handler = () => applyTheme('system')
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [settings.themeMode])
 
-  const handleSave = useCallback(async (patch: Partial<ExtensionSettings>) => {
-    const next = { ...settingsRef.current, ...patch }
-    settingsRef.current = next
-    setSettings(next)
-    await saveSettings(next)
+  // ── Cmd+S / Ctrl+S ──
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault()
+        if (dirty && !saving) handleSaveClick()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  })
+
+  // ── Accumulate changes ──
+  const handleChange = useCallback((patch: Partial<ExtensionSettings>) => {
+    setPending((prev) => ({ ...prev, ...patch }))
   }, [])
 
+  // ── Validation ──
+  function validate(): boolean {
+    const merged = { ...settingsRef.current, ...pending } as ExtensionSettings
+    const e: typeof aiErrors = {}
+    if (merged.aiProvider === 'custom' && !merged.aiBaseUrl.trim()) {
+      e.aiBaseUrl = 'Base URL is required when using a custom provider'
+    }
+    if (!merged.aiModel.trim()) {
+      e.aiModel = 'Model name is required'
+    }
+    setAiErrors(e)
+    return Object.keys(e).length === 0
+  }
+
+  // ── Save ──
+  const handleSaveClick = useCallback(async () => {
+    if (!pending || !validate()) {
+      showToast('error', 'Fix validation errors before saving')
+      return
+    }
+    setSaving(true)
+    try {
+      const next = { ...settingsRef.current, ...pending }
+      await saveSettings(next)
+      settingsRef.current = next
+      setSettings(next)
+      setPending(null)
+      setAiErrors({})
+      showToast('success', 'Settings saved')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error'
+      showToast('error', `Failed to save: ${msg}`)
+    } finally {
+      setSaving(false)
+    }
+  }, [pending, showToast])
+
+  // ── Discard ──
+  const handleDiscard = useCallback(() => {
+    setPending(null)
+    setAiErrors({})
+    // Force remount of form components to reset their local state
+    setSettings({ ...settingsRef.current })
+  }, [])
+
+  // ── Export ──
   const handleExport = useCallback(async () => {
     try {
       const data = await exportSettingsData()
@@ -81,12 +150,13 @@ export default function SettingsPage() {
       a.download = `ielts-settings-${new Date().toISOString().slice(0, 10)}.json`
       a.click()
       URL.revokeObjectURL(url)
-      showToast('success', 'Settings exported successfully')
+      showToast('success', 'Settings exported')
     } catch (e) {
       showToast('error', `Export failed: ${e instanceof Error ? e.message : 'Unknown error'}`)
     }
   }, [showToast])
 
+  // ── Import ──
   const handleImport = useCallback(async () => {
     const input = document.createElement('input')
     input.type = 'file'
@@ -94,75 +164,55 @@ export default function SettingsPage() {
     input.onchange = async () => {
       const file = input.files?.[0]
       if (!file) return
-
       setImporting(true)
       try {
         const text = await file.text()
         let parsed: Record<string, unknown>
-        try {
-          parsed = JSON.parse(text)
-        } catch {
-          showToast('error', 'File is not valid JSON')
-          return
-        }
-
+        try { parsed = JSON.parse(text) } catch { showToast('error', 'File is not valid JSON'); return }
         const rawSettings = parsed?.settings as Record<string, unknown> | undefined
         if (!rawSettings || typeof rawSettings !== 'object') {
           showToast('error', 'Invalid settings file: missing "settings" object')
           return
         }
-
         for (const key of REQUIRED_SETTINGS_KEYS) {
-          if (!(key in rawSettings)) {
-            showToast(
-              'error',
-              `Invalid settings file: missing required field "${key}"`,
-            )
-            return
-          }
+          if (!(key in rawSettings)) { showToast('error', `Invalid settings file: missing required field "${key}"`); return }
         }
-
         await importSettingsData(parsed as { settings: ExtensionSettings })
         const reloaded = await loadSettings()
         setSettings(reloaded)
         settingsRef.current = reloaded
-        showToast('success', 'Settings imported successfully')
+        setPending(null)
+        showToast('success', 'Settings imported')
       } catch (e) {
-        const msg = e instanceof Error ? e.message : 'Invalid file'
-        showToast('error', `Import failed: ${msg}`)
-      } finally {
-        setImporting(false)
-      }
+        showToast('error', `Import failed: ${e instanceof Error ? e.message : 'Invalid file'}`)
+      } finally { setImporting(false) }
     }
     input.click()
   }, [showToast])
 
+  // ── Clear ──
   const handleClear = useCallback(async () => {
     await clearAllSettings()
     setSettings(DEFAULT_SETTINGS)
     settingsRef.current = DEFAULT_SETTINGS
+    setPending(null)
     setConfirmClear(false)
     showToast('info', 'All settings cleared')
   }, [showToast])
 
+  // ── Loading ──
   if (loading) {
     return (
-      <div
-        style={{ padding: '40px', textAlign: 'center', color: 'var(--color-muted)' }}
-        role="status"
-        aria-live="polite"
-      >
+      <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-muted)' }} role="status" aria-live="polite">
         Loading settings...
       </div>
     )
   }
 
+  const merged = pending ? { ...settings, ...pending } : settings
+
   return (
-    <div
-      style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
-      role="region"
-      aria-label="Extension settings"
-    >
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', paddingBottom: SAVE_BAR_HEIGHT + 24 }} role="region" aria-label="Extension settings">
       <header>
         <h1 style={{ fontSize: '24px', fontWeight: 700, margin: 0 }}>Extension Settings</h1>
         <p style={{ color: 'var(--color-text-secondary)', marginTop: '4px', fontSize: '14px' }}>
@@ -170,132 +220,104 @@ export default function SettingsPage() {
         </p>
       </header>
 
-      <AiSettingsForm settings={settings} onSave={handleSave} />
-      <GeneralSettings settings={settings} onSave={handleSave} />
+      <AiSettingsForm settings={merged} onChange={handleChange} errors={aiErrors} setErrors={setAiErrors} />
+      <GeneralSettings settings={merged} onChange={handleChange} />
 
       <Section title="Data Management">
-        <p
-          style={{
-            fontSize: '13px',
-            color: 'var(--color-text-secondary)',
-            margin: '0 0 12px',
-            lineHeight: '1.5',
-          }}
-        >
+        <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', margin: '0 0 12px', lineHeight: '1.5' }}>
           Export your settings as a JSON file to back them up or transfer to another device.
           Import a previously exported settings file to restore your configuration.
         </p>
-        <div
-          style={{ display: 'flex', gap: '8px' }}
-          role="group"
-          aria-label="Data management actions"
-        >
-          <button onClick={handleExport} style={buttonStyle} aria-label="Export settings to JSON file">
-            Export Settings
-          </button>
-          <button
-            onClick={handleImport}
-            style={{ ...buttonStyle, opacity: importing ? 0.6 : 1 }}
-            disabled={importing}
-            aria-label="Import settings from JSON file"
-          >
+        <div style={{ display: 'flex', gap: '8px' }} role="group" aria-label="Data management actions">
+          <button onClick={handleExport} style={buttonStyle} aria-label="Export settings to JSON file">Export Settings</button>
+          <button onClick={handleImport} style={{ ...buttonStyle, opacity: importing ? 0.6 : 1 }} disabled={importing} aria-label="Import settings from JSON file">
             {importing ? 'Importing...' : 'Import Settings'}
           </button>
         </div>
-        <div
-          style={{
-            marginTop: '16px',
-            borderTop: '1px solid var(--color-border)',
-            paddingTop: '16px',
-          }}
-        >
+        <div style={{ marginTop: '16px', borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
           {confirmClear ? (
-            <div
-              style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
-              role="alertdialog"
-              aria-label="Confirm clear settings"
-            >
-              <p
-                style={{
-                  fontSize: '13px',
-                  color: 'var(--color-danger)',
-                  margin: 0,
-                  fontWeight: 500,
-                }}
-              >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} role="alertdialog" aria-label="Confirm clear settings">
+              <p style={{ fontSize: '13px', color: 'var(--color-danger)', margin: 0, fontWeight: 500 }}>
                 Are you sure? This will reset all settings to defaults and remove your API key.
               </p>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <button
-                  onClick={handleClear}
-                  style={{
-                    ...buttonStyle,
-                    background: 'var(--color-danger)',
-                    color: '#fff',
-                    border: 'none',
-                  }}
-                  aria-label="Confirm clear all settings"
-                >
-                  Yes, Clear All
-                </button>
-                <button
-                  onClick={() => setConfirmClear(false)}
-                  style={buttonStyle}
-                  aria-label="Cancel clear settings"
-                >
-                  Cancel
-                </button>
+                <button onClick={handleClear} style={{ ...buttonStyle, background: 'var(--color-danger)', color: '#fff', border: 'none' }} aria-label="Confirm clear all settings">Yes, Clear All</button>
+                <button onClick={() => setConfirmClear(false)} style={buttonStyle} aria-label="Cancel clear settings">Cancel</button>
               </div>
             </div>
           ) : (
-            <button
-              onClick={() => setConfirmClear(true)}
-              style={{
-                ...buttonStyle,
-                color: 'var(--color-danger)',
-                borderColor: 'var(--color-danger)',
-              }}
-              aria-label="Clear all settings"
-            >
-              Clear All Settings
-            </button>
+            <button onClick={() => setConfirmClear(true)} style={{ ...buttonStyle, color: 'var(--color-danger)', borderColor: 'var(--color-danger)' }} aria-label="Clear all settings">Clear All Settings</button>
           )}
         </div>
       </Section>
 
       <Section title="Privacy">
-        <div
-          style={{
-            background: 'var(--color-primary-light)',
-            borderRadius: 'var(--radius-md)',
-            padding: '12px',
-            fontSize: '13px',
-            lineHeight: '1.6',
-            color: 'var(--color-text)',
-          }}
-        >
+        <div style={{ background: 'var(--color-primary-light)', borderRadius: 'var(--radius-md)', padding: '12px', fontSize: '13px', lineHeight: '1.6', color: 'var(--color-text)' }}>
           <p style={{ margin: '0 0 8px', fontWeight: 600 }}>Your Data Stays Local</p>
           <ul style={{ margin: 0, paddingLeft: '16px' }}>
-            <li>
-              All data is stored locally in your browser. There is no backend server.
-            </li>
-            <li>
-              Webpage content is never sent anywhere unless you explicitly use an AI feature.
-            </li>
-            <li>
-              Your API key is stored in your browser's local storage, not in cloud sync. It is
-              used only for AI requests you initiate.
-            </li>
-            <li>
-              We do not collect browsing history, personal information, or usage analytics.
-            </li>
-            <li>
-              You can export or delete all your data at any time from the Data Management
-              section.
-            </li>
+            <li>All data is stored locally in your browser. There is no backend server.</li>
+            <li>Webpage content is never sent anywhere unless you explicitly use an AI feature.</li>
+            <li>Your API key is stored in your browser's local storage, not in cloud sync. It is used only for AI requests you initiate.</li>
+            <li>We do not collect browsing history, personal information, or usage analytics.</li>
+            <li>You can export or delete all your data at any time from the Data Management section.</li>
           </ul>
         </div>
       </Section>
+
+      {/* ── Sticky save bar ── */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: SAVE_BAR_HEIGHT,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '12px',
+          background: 'var(--color-surface)',
+          borderTop: `1px solid var(--color-border)`,
+          padding: '0 16px',
+          zIndex: 100,
+        }}
+      >
+        {dirty && (
+          <span style={{ fontSize: '12px', color: 'var(--color-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-warning)', display: 'inline-block' }} />
+            Unsaved changes
+          </span>
+        )}
+
+        <button
+          onClick={handleDiscard}
+          style={{
+            ...buttonStyle,
+            opacity: dirty ? 1 : 0.4,
+            pointerEvents: dirty ? 'auto' : 'none',
+          }}
+          disabled={!dirty}
+          aria-label="Discard unsaved changes"
+        >
+          Discard
+        </button>
+
+        <button
+          onClick={handleSaveClick}
+          disabled={!dirty || saving}
+          style={{
+            ...buttonStyle,
+            background: dirty ? 'var(--color-primary)' : 'var(--color-border)',
+            color: dirty ? '#fff' : 'var(--color-muted)',
+            border: 'none',
+            cursor: dirty && !saving ? 'pointer' : 'default',
+            opacity: saving ? 0.6 : 1,
+          }}
+          aria-label="Save settings"
+        >
+          {saving ? 'Saving...' : 'Save Changes'}
+        </button>
+      </div>
     </div>
   )
 }
