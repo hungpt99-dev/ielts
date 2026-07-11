@@ -38,8 +38,13 @@ export function NotificationCenter({
   }, [messages])
 
   const filteredMessages = useMemo(() => {
-    if (activeFilter === 'all') return messages
-    return messages.filter(m => m.category === activeFilter)
+    const visible = messages.filter(m => {
+      if (m.isDismissed) return false
+      if (m.isSnoozed && m.snoozedUntil && new Date(m.snoozedUntil) > new Date()) return false
+      return true
+    })
+    if (activeFilter === 'all') return visible
+    return visible.filter(m => m.category === activeFilter)
   }, [messages, activeFilter])
 
   const unreadCountFor = useCallback(

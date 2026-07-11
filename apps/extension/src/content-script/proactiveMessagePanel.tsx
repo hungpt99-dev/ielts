@@ -34,10 +34,12 @@ interface ProactiveMessageData {
 }
 
 type DismissHandler = (id: string) => void
+type SnoozeHandler = (id: string) => void
 type ActionHandler = (data: ProactiveMessageData) => void
 
 let panelEl: HTMLDivElement | null = null
 let onDismiss: DismissHandler | null = null
+let onSnooze: SnoozeHandler | null = null
 let onAction: ActionHandler | null = null
 
 const categoryIcons: Record<string, string> = {
@@ -157,7 +159,7 @@ function bindEvents(el: HTMLDivElement, data: ProactiveMessageData): void {
   snoozeBtn?.addEventListener('click', (e) => {
     e.stopPropagation()
     hide()
-    onDismiss?.(data.id)
+    onSnooze?.(data.id)
   })
 
   actionBtn?.addEventListener('click', (e) => {
@@ -171,6 +173,7 @@ export function showProactiveMessage(
   data: ProactiveMessageData,
   handlers?: {
     onDismiss?: DismissHandler
+    onSnooze?: SnoozeHandler
     onAction?: ActionHandler
   },
 ): void {
@@ -178,6 +181,7 @@ export function showProactiveMessage(
   injectStyles()
 
   if (handlers?.onDismiss) onDismiss = handlers.onDismiss
+  if (handlers?.onSnooze) onSnooze = handlers.onSnooze
   if (handlers?.onAction) onAction = handlers.onAction
 
   panelEl = createPanel(data)
