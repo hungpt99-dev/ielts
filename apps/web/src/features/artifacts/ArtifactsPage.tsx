@@ -1,19 +1,23 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTutorNavigation } from '../../hooks/useTutorNavigation'
-import type { Artifact, ArtifactCategory } from '../../models'
+import type { Artifact, ArtifactCategory, VocabularyEntry } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import Card, { CardContent } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import Modal from '../../components/ui/Modal'
-import { EmptyState, EmptyStateIllustrated, ErrorState } from '../../components/ui/EmptyState'
+import { EmptyStateIllustrated, ErrorState } from '../../components/ui/EmptyState'
 import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton'
+import { SearchInput } from '../../components/ui/SearchInput'
+import Select from '../../components/ui/Select'
+import Input from '../../components/ui/Input'
+import Textarea from '../../components/ui/Textarea'
 import PageHeader from '../../components/layout/PageHeader'
 import PageContent from '../../components/layout/PageContent'
-import { IconSavedContent, IconAITutor } from '@ielts/ui'
-
-const CATEGORIES: ArtifactCategory[] = ['article', 'video', 'reference', 'tool', 'other']
+import { generateQuestionsForPassage } from '../../services/ai/AIService'
+import { extractVocabulary, getStoredAiConfig } from '../../features/publicApiIntegration/ai'
+import { IconSavedContent, IconAITutor, IconEdit, IconRefresh, IconVocabulary, IconReading, IconUpload } from '@ielts/ui'
 
 const CATEGORY_LABELS: Record<ArtifactCategory, string> = {
   article: 'Article',
@@ -21,14 +25,6 @@ const CATEGORY_LABELS: Record<ArtifactCategory, string> = {
   reference: 'Reference',
   tool: 'Tool',
   other: 'Other',
-}
-
-const CATEGORY_COLORS: Record<ArtifactCategory, string> = {
-  article: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-  video: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-  reference: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
-  tool: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-  other: 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300',
 }
 
 const IELTS_TOPICS = [
@@ -42,6 +38,18 @@ const IELTS_SKILLS = ['reading', 'listening', 'writing', 'speaking', 'grammar', 
 const READING_STATUSES = ['unread', 'in_progress', 'completed', 'saved_for_later']
 
 const CONTENT_TYPES = ['article', 'text', 'note', 'video', 'reference', 'tool', 'other']
+
+interface ArtifactWithDetails extends Artifact {
+  contentType?: string
+  contentText?: string
+  ieltsTopic?: string
+  skill?: string
+  difficulty?: string
+  readingStatus?: string
+  personalNote?: string
+  wordCount?: number
+  lastOpenedAt?: string
+}
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
@@ -167,25 +175,17 @@ export default function ArtifactsPage() {
     loadArtifacts()
   }, [loadArtifacts])
 
-  const allTags = useMemo(() => {
-    const tagSet = new Set<string>()
-    for (const a of artifacts) {
-      for (const t of a.tags) tagSet.add(t)
-    }
-    return Array.from(tagSet).sort()
-  }, [artifacts])
-
   const stats = useMemo(() => {
     const total = artifacts.length
     const articles = artifacts.filter(a => a.category === 'article').length
-    const text = artifacts.filter(a => (a as Record<string, unknown>).contentType === 'text').length
-    const notes = artifacts.filter(a => (a as Record<string, unknown>).contentType === 'note').length
+    const text = artifacts.filter(a => (a as ArtifactWithDetails).contentType === 'text').length
+    const notes = artifacts.filter(a => (a as ArtifactWithDetails).contentType === 'note').length
     const reading = artifacts.filter(a => {
-      const rs = (a as Record<string, unknown>).readingStatus
+      const rs = (a as ArtifactWithDetails).readingStatus
       return rs === 'in_progress' || rs === 'completed'
     }).length
     const unread = artifacts.filter(a => {
-      const rs = (a as Record<string, unknown>).readingStatus
+      const rs = (a as ArtifactWithDetails).readingStatus
       return !rs || rs === 'unread'
     }).length
     return { total, articles, text, notes, reading, unread }
@@ -206,22 +206,22 @@ export default function ArtifactsPage() {
 
     if (typeFilter) {
       if (typeFilter === 'text' || typeFilter === 'note') {
-        result = result.filter(a => (a as Record<string, unknown>).contentType === typeFilter)
+        result = result.filter(a => (a as ArtifactWithDetails).contentType === typeFilter)
       } else {
         result = result.filter(a => a.category === typeFilter)
       }
     }
 
     if (topicFilter) {
-      result = result.filter(a => (a as Record<string, unknown>).ieltsTopic === topicFilter)
+      result = result.filter(a => (a as ArtifactWithDetails).ieltsTopic === topicFilter)
     }
 
     if (skillFilter) {
-      result = result.filter(a => (a as Record<string, unknown>).skill === skillFilter)
+      result = result.filter(a => (a as ArtifactWithDetails).skill === skillFilter)
     }
 
     if (statusFilter) {
-      const rs = (a: Artifact) => (a as Record<string, unknown>).readingStatus
+      const rs = (a: Artifact) => (a as ArtifactWithDetails).readingStatus
       if (statusFilter === 'unread') {
         result = result.filter(a => !rs(a) || rs(a) === 'unread')
       } else {
@@ -233,8 +233,8 @@ export default function ArtifactsPage() {
       if (sortBy === 'oldest') return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       if (sortBy === 'title') return a.title.localeCompare(b.title)
       if (sortBy === 'lastOpened') {
-        const la = (a as Record<string, unknown>).lastOpenedAt as string | undefined
-        const lb = (b as Record<string, unknown>).lastOpenedAt as string | undefined
+        const la = (a as ArtifactWithDetails).lastOpenedAt
+        const lb = (b as ArtifactWithDetails).lastOpenedAt
         return (lb || '').localeCompare(la || '')
       }
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -262,19 +262,20 @@ export default function ArtifactsPage() {
   }
 
   function openEdit(artifact: Artifact) {
+    const a = artifact as ArtifactWithDetails
     setEditingId(artifact.id)
     setForm({
       url: artifact.url,
       title: artifact.title,
       description: artifact.description,
-      contentText: (artifact as Record<string, unknown>).contentText as string || '',
-      contentType: (artifact as Record<string, unknown>).contentType as string || artifact.category,
-      ieltsTopic: (artifact as Record<string, unknown>).ieltsTopic as string || '',
-      skill: (artifact as Record<string, unknown>).skill as string || '',
-      difficulty: (artifact as Record<string, unknown>).difficulty as string || '',
-      readingStatus: (artifact as Record<string, unknown>).readingStatus as string || 'unread',
+      contentText: a.contentText || '',
+      contentType: a.contentType || artifact.category,
+      ieltsTopic: a.ieltsTopic || '',
+      skill: a.skill || '',
+      difficulty: a.difficulty || '',
+      readingStatus: a.readingStatus || 'unread',
       tags: artifact.tags.join(', '),
-      personalNote: (artifact as Record<string, unknown>).personalNote as string || '',
+      personalNote: a.personalNote || '',
     })
     setFormError(null)
     setShowForm(true)
@@ -366,8 +367,149 @@ export default function ArtifactsPage() {
     const updated = { ...artifact, readingStatus: status, updatedAt: new Date().toISOString() }
     await DatabaseService.put('artifacts', updated)
     setArtifacts(prev => prev.map(a => a.id === artifact.id ? updated : a))
+    if (detailItem?.id === artifact.id) setDetailItem(updated)
     showToast(`Marked as ${getStatusLabel(status)}`)
   }
+
+  const [generatingExercise, setGeneratingExercise] = useState(false)
+
+  const handleGenerateExercise = useCallback(async () => {
+    if (!detailItem) return
+    const a = detailItem as ArtifactWithDetails
+    const text = a.contentText || ''
+    if (!text || text.split(/\s+/).length < 50) {
+      showToast('Content too short for exercise generation (min 50 words)', 'error')
+      return
+    }
+    setGeneratingExercise(true)
+    try {
+      const { content, error } = await generateQuestionsForPassage({
+        title: detailItem.title,
+        text,
+        difficulty: (a.difficulty as 'easy' | 'medium' | 'hard') || 'medium',
+      })
+      if (error) throw new Error(error)
+      if (!content) throw new Error('AI returned an empty response')
+
+      const jsonStart = content.indexOf('{')
+      const jsonEnd = content.lastIndexOf('}')
+      const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
+      const parsed = JSON.parse(jsonStr) as Record<string, unknown>
+      const questions = parsed.questions as Record<string, unknown>[]
+      if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions generated')
+
+      const now = new Date().toISOString()
+      await DatabaseService.add('passages', {
+        id: crypto.randomUUID(),
+        title: `${detailItem.title} (Exercises)`,
+        content: text,
+        source: 'user-created',
+        topic: a.ieltsTopic || 'General',
+        difficulty: a.difficulty || 'medium',
+        wordCount: text.split(/\s+/).length,
+        tags: detailItem.tags,
+        isFavorite: false,
+        status: 'new',
+        notes: JSON.stringify({ questions, generatedAt: now, artifactId: detailItem.id }),
+        createdAt: now,
+        updatedAt: now,
+      } as never)
+
+      setDetailItem(null)
+      showToast('Exercise generated! Find it in Reading Practice')
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'Failed to generate exercise', 'error')
+    } finally {
+      setGeneratingExercise(false)
+    }
+  }, [detailItem, showToast])
+
+  const handleStartReading = useCallback(async () => {
+    if (!detailItem) return
+    const a = detailItem as ArtifactWithDetails
+    const text = a.contentText || ''
+    if (!text || text.split(/\s+/).length < 50) {
+      showToast('Content too short for reading practice', 'error')
+      return
+    }
+    const now = new Date().toISOString()
+    await DatabaseService.add('passages', {
+      id: crypto.randomUUID(),
+      title: detailItem.title,
+      content: text,
+      source: 'user-created',
+      topic: a.ieltsTopic || 'General',
+      difficulty: a.difficulty || 'medium',
+      wordCount: text.split(/\s+/).length,
+      tags: detailItem.tags,
+      isFavorite: false,
+      status: 'new',
+      notes: '',
+      createdAt: now,
+      updatedAt: now,
+    } as never)
+    setDetailItem(null)
+    navigate('/reading')
+  }, [detailItem, navigate, showToast])
+
+  const [savingVocab, setSavingVocab] = useState(false)
+
+  const handleSaveVocabulary = useCallback(async () => {
+    if (!detailItem) return
+    const a = detailItem as ArtifactWithDetails
+    const text = a.contentText || ''
+    if (!text) {
+      navigate('/vocabulary')
+      return
+    }
+    setSavingVocab(true)
+    try {
+      const config = getStoredAiConfig()
+      if (!config.apiKey) {
+        navigate('/vocabulary', { state: { contentText: text, source: detailItem.title } })
+        return
+      }
+      const { data, error } = await extractVocabulary(text, config)
+      if (error || !data) {
+        navigate('/vocabulary', { state: { contentText: text, source: detailItem.title } })
+        return
+      }
+      const saved: VocabularyEntry[] = []
+      for (const w of data.words) {
+        const entry = await DatabaseService.addVocabulary({
+          word: w.word,
+          meaning: w.meaning,
+          meaningVi: '',
+          pronunciation: '',
+          partOfSpeech: w.partOfSpeech,
+          topic: a.ieltsTopic || 'General',
+          exampleSentence: w.example || '',
+          collocations: w.collocations || [],
+          synonyms: w.synonyms || [],
+          antonyms: [],
+          wordFamily: [],
+          personalNote: '',
+          difficulty: 'intermediate',
+          status: 'new',
+          tags: ['extracted', ...detailItem.tags],
+        })
+        saved.push(entry)
+      }
+      showToast(`Saved ${saved.length} vocabulary words from "${detailItem.title}"`)
+      navigate('/vocabulary')
+    } catch {
+      navigate('/vocabulary', { state: { contentText: a.contentText, source: detailItem.title } })
+    } finally {
+      setSavingVocab(false)
+    }
+  }, [detailItem, navigate, showToast])
+
+  const handleOpenEdit = useCallback(() => {
+    if (!detailItem) return
+    const item = detailItem
+    setDetailItem(null)
+    openEdit(item)
+  }, [detailItem])
 
   if (loading) {
     return (
@@ -447,22 +589,18 @@ export default function ArtifactsPage() {
           { label: 'Reading', count: stats.reading, color: 'var(--color-skill-reading)' },
           { label: 'Unread', count: stats.unread, color: 'var(--color-muted)' },
         ].map(stat => (
-          <button
-            key={stat.label}
-            className="flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-2.5 transition-all hover:shadow-sm sm:gap-2 sm:px-4 sm:py-3"
-            style={{
-              borderColor: 'var(--color-border)',
-              backgroundColor: 'var(--color-surface)',
-            }}
-            aria-label={`${stat.count} ${stat.label}`}
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ backgroundColor: `${stat.color}15`, color: stat.color }}>
-              <span className="text-sm font-bold">{stat.count}</span>
-            </div>
-            <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
-              {stat.label}
-            </span>
-          </button>
+          <Card key={stat.label} padding="sm" hoverable>
+            <CardContent>
+              <div className="flex items-center gap-1.5 sm:gap-2" aria-label={`${stat.count} ${stat.label}`}>
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg" style={{ backgroundColor: `${stat.color}15`, color: stat.color }}>
+                  <span className="text-sm font-bold">{stat.count}</span>
+                </div>
+                <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+                  {stat.label}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
@@ -471,86 +609,59 @@ export default function ArtifactsPage() {
         <CardContent>
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
             <div className="w-full sm:w-auto sm:min-w-[200px] sm:flex-1">
-              <div className="relative">
-                <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} style={{ color: 'var(--color-muted)' }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search titles, tags, content..."
-                  className="w-full rounded-lg border py-2 pl-10 pr-3 text-sm focus:outline-none focus:ring-1"
-                  style={{
-                    borderColor: 'var(--color-border)',
-                    backgroundColor: 'var(--color-surface)',
-                    color: 'var(--color-text)',
-                  }}
-                  aria-label="Search saved content"
-                />
-              </div>
+              <SearchInput
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onClear={() => setSearch('')}
+                placeholder="Search titles, tags, content..."
+                aria-label="Search saved content"
+              />
             </div>
-            <div className="flex items-center gap-2 overflow-x-auto pb-0.5 sm:flex-wrap sm:overflow-visible sm:pb-0 [-webkit-overflow-scrolling:touch]">
-              <select
+            <div className="flex items-center gap-2 overflow-x-auto pb-0.5 sm:flex-wrap sm:overflow-visible sm:pb-0">
+              <Select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                options={CONTENT_TYPES.map(t => ({ value: t, label: t.charAt(0).toUpperCase() + t.slice(1) }))}
+                placeholder="All Types"
                 aria-label="Filter by type"
-              >
-                <option value="">All Types</option>
-                {CONTENT_TYPES.map(t => (
-                  <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
-                ))}
-              </select>
-              <select
+                selectSize="sm"
+              />
+              <Select
                 value={topicFilter}
                 onChange={(e) => setTopicFilter(e.target.value)}
-                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                options={IELTS_TOPICS.map(t => ({ value: t, label: t }))}
+                placeholder="All Topics"
                 aria-label="Filter by topic"
-              >
-                <option value="">All Topics</option>
-                {IELTS_TOPICS.map(t => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
-              <select
+                selectSize="sm"
+              />
+              <Select
                 value={skillFilter}
                 onChange={(e) => setSkillFilter(e.target.value)}
-                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                options={IELTS_SKILLS.map(s => ({ value: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
+                placeholder="All Skills"
                 aria-label="Filter by skill"
-              >
-                <option value="">All Skills</option>
-                {IELTS_SKILLS.map(s => (
-                  <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
-                ))}
-              </select>
-              <select
+                selectSize="sm"
+              />
+              <Select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                options={READING_STATUSES.map(s => ({ value: s, label: getStatusLabel(s) }))}
+                placeholder="All Status"
                 aria-label="Filter by status"
-              >
-                <option value="">All Status</option>
-                {READING_STATUSES.map(s => (
-                  <option key={s} value={s}>{getStatusLabel(s)}</option>
-                ))}
-              </select>
-              <select
+                selectSize="sm"
+              />
+              <Select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="shrink-0 rounded-lg border px-2.5 py-2 text-xs focus:outline-none focus:ring-1 sm:px-3"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
+                options={[
+                  { value: 'newest', label: 'Newest' },
+                  { value: 'oldest', label: 'Oldest' },
+                  { value: 'title', label: 'Title A-Z' },
+                  { value: 'lastOpened', label: 'Last Opened' },
+                ]}
                 aria-label="Sort by"
-              >
-                <option value="newest">Newest</option>
-                <option value="oldest">Oldest</option>
-                <option value="title">Title A-Z</option>
-                <option value="lastOpened">Last Opened</option>
-              </select>
+                selectSize="sm"
+              />
               <div className="flex shrink-0 gap-1 rounded-lg border p-0.5" style={{ borderColor: 'var(--color-border)' }}>
                 <button
                   onClick={() => setViewMode('grid')}
@@ -604,7 +715,7 @@ export default function ArtifactsPage() {
       ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {filtered.map(artifact => {
-            const ext = artifact as Artifact & { contentType?: string; readingStatus?: string; ieltsTopic?: string; skill?: string; wordCount?: number }
+            const ext = artifact as ArtifactWithDetails
             const typeColor = getTypeColor(ext.contentType || artifact.category)
             return (
               <div
@@ -746,9 +857,7 @@ export default function ArtifactsPage() {
 
                   {/* Quick actions */}
                   <div className="mt-2 flex flex-wrap gap-1.5 sm:mt-3 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100">
-                    <Button variant="ghost" size="xs" onClick={() => {
-                      showToast('Generate exercise from this content - coming soon')
-                    }}>
+                    <Button variant="ghost" size="xs" onClick={() => setDetailItem(artifact)}>
                       Generate Exercise
                     </Button>
                     <Button variant="ghost" size="xs" onClick={() => {
@@ -756,10 +865,8 @@ export default function ArtifactsPage() {
                     }}>
                       Explain AI
                     </Button>
-                    {ext.contentType === 'article' && (
-                      <Button variant="ghost" size="xs" onClick={() => {
-                        navigate('/reading')
-                      }}>
+                    {ext.contentType === 'article' && ext.contentText && ext.contentText.split(/\s+/).length >= 50 && (
+                      <Button variant="ghost" size="xs" onClick={() => setDetailItem(artifact)}>
                         Read Practice
                       </Button>
                     )}
@@ -773,7 +880,7 @@ export default function ArtifactsPage() {
         /* List View */
         <div className="space-y-2">
           {filtered.map(artifact => {
-            const ext = artifact as Artifact & { contentType?: string; readingStatus?: string; ieltsTopic?: string; skill?: string }
+            const ext = artifact as ArtifactWithDetails
             return (
               <div
                 key={artifact.id}
@@ -830,182 +937,166 @@ export default function ArtifactsPage() {
       )}
 
       {/* Detail Panel Overlay */}
-      {detailItem && (
-        <div
-          className="fixed inset-0 z-40 flex justify-end"
-          style={{ backgroundColor: 'var(--color-overlay)' }}
-          onClick={() => setDetailItem(null)}
-        >
-          <div
-            className="flex h-full w-full flex-col overflow-y-auto sm:max-w-lg lg:max-w-xl"
-            style={{ backgroundColor: 'var(--color-background)' }}
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Detail: ${detailItem.title}`}
-          >
-            {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b p-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
+      {/* Detail Modal */}
+      <Modal
+        open={!!detailItem}
+        onClose={() => setDetailItem(null)}
+        title={detailItem?.title || ''}
+        size="lg"
+        footer={
+          <div className="flex items-center justify-end gap-2">
+            <Button variant="ghost" size="sm" onClick={handleOpenEdit}>
+              <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Edit
+            </Button>
+            <Button variant="danger" size="sm" onClick={() => { if (detailItem) setDeleteConfirm(detailItem.id) }}>
+              <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Delete
+            </Button>
+          </div>
+        }
+      >
+        {detailItem && (() => {
+          const a = detailItem as ArtifactWithDetails
+          return (
+          <div className="max-h-[70vh] space-y-4 overflow-y-auto pr-1">
+            {/* Metadata */}
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="primary" size="sm">
+                {CATEGORY_LABELS[detailItem.category]}
+              </Badge>
               <button
-                onClick={() => setDetailItem(null)}
-                className="flex items-center gap-2 text-sm font-medium"
-                style={{ color: 'var(--color-text)' }}
-                aria-label="Back to list"
+                onClick={() => handleToggleFavorite(detailItem.id)}
+                style={{ color: detailItem.isFavorite ? 'var(--color-warning)' : 'var(--color-muted)' }}
+                aria-label={detailItem.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                <svg className="h-5 w-5" fill={detailItem.isFavorite ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                 </svg>
-                Back
               </button>
-              <div className="flex items-center gap-2">
-                <Badge variant="primary" size="sm">
-                  {CATEGORY_LABELS[detailItem.category]}
-                </Badge>
-                <button
-                  onClick={() => handleToggleFavorite(detailItem.id)}
-                  style={{ color: detailItem.isFavorite ? 'var(--color-warning)' : 'var(--color-muted)' }}
-                  aria-label={detailItem.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-                >
-                  <svg className="h-5 w-5" fill={detailItem.isFavorite ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                  </svg>
-                </button>
-                <Button variant="ghost" size="xs" onClick={() => { setDetailItem(null); openEdit(detailItem) }} aria-label="Edit">
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
-                </Button>
-                <Button variant="ghost" size="xs" onClick={() => setDeleteConfirm(detailItem.id)} aria-label="Delete">
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </Button>
+              {a.ieltsTopic && (
+                <Badge variant="info" size="sm">{a.ieltsTopic}</Badge>
+              )}
+              {a.skill && (
+                <Badge variant="default" size="sm">{a.skill}</Badge>
+              )}
+              <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
+                Saved {formatDate(detailItem.createdAt)}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h2 className="text-xl font-bold leading-tight" style={{ color: 'var(--color-text)' }}>
+              {detailItem.title}
+            </h2>
+
+            {/* Tags */}
+            {detailItem.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {detailItem.tags.map((tag, i) => (
+                  <Badge key={i} variant="default" size="xs">#{tag}</Badge>
+                ))}
+              </div>
+            )}
+
+            {/* Reading Progress */}
+            <div className="flex items-center gap-3 rounded-xl border p-3" style={{ borderColor: 'var(--color-border)' }}>
+              <div className="flex-1">
+                <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                  <span>Reading Progress</span>
+                  <span>{getStatusLabel(a.readingStatus || 'unread')}</span>
+                </div>
+                <div className="mt-1.5 flex gap-1">
+                  {['unread', 'in_progress', 'completed'].map(status => (
+                    <Button
+                      key={status}
+                      size="xs"
+                      variant={a.readingStatus === status ? 'primary' : 'secondary'}
+                      onClick={() => handleStatusUpdate(detailItem, status)}
+                      aria-label={`Mark as ${getStatusLabel(status)}`}
+                    >
+                      {getStatusLabel(status)}
+                    </Button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="flex-1 p-6">
-              {/* Metadata */}
-              <div className="mb-4 flex flex-wrap items-center gap-2">
-                {(detailItem as Artifact & { ieltsTopic?: string }).ieltsTopic && (
-                  <Badge variant="info" size="sm">
-                    {(detailItem as Artifact & { ieltsTopic?: string }).ieltsTopic}
-                  </Badge>
-                )}
-                {(detailItem as Artifact & { skill?: string }).skill && (
-                  <Badge variant="default" size="sm">
-                    {(detailItem as Artifact & { skill?: string }).skill}
-                  </Badge>
-                )}
-                <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                  Saved {formatDate(detailItem.createdAt)}
-                </span>
-              </div>
-
-              {/* Title */}
-              <h2 className="text-xl font-bold leading-tight" style={{ color: 'var(--color-text)' }}>
-                {detailItem.title}
-              </h2>
-
-              {/* Tags */}
-              {detailItem.tags.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {detailItem.tags.map((tag, i) => (
-                    <span key={i} className="rounded-md px-2 py-0.5 text-[11px] font-medium" style={{ backgroundColor: 'var(--color-surface-alt)', color: 'var(--color-text-secondary)' }}>
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Reading Progress */}
-              <div className="mt-4 flex items-center gap-3 rounded-xl border p-3" style={{ borderColor: 'var(--color-border)' }}>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                    <span>Reading Progress</span>
-                    <span>{getStatusLabel((detailItem as Artifact & { readingStatus?: string }).readingStatus || 'unread')}</span>
-                  </div>
-                  <div className="mt-1.5 flex gap-1">
-                    {['unread', 'in_progress', 'completed'].map(status => (
-                      <button
-                        key={status}
-                        onClick={() => handleStatusUpdate(detailItem, status)}
-                        className={`flex-1 rounded-md py-1.5 text-[10px] font-medium transition-colors ${
-                          (detailItem as Artifact & { readingStatus?: string }).readingStatus === status
-                            ? 'bg-[var(--color-primary)] text-white'
-                            : ''
-                        }`}
-                        style={{
-                          backgroundColor: (detailItem as Artifact & { readingStatus?: string }).readingStatus !== status ? 'var(--color-surface-alt)' : undefined,
-                          color: (detailItem as Artifact & { readingStatus?: string }).readingStatus !== status ? 'var(--color-text-secondary)' : undefined,
-                        }}
-                        aria-label={`Mark as ${getStatusLabel(status)}`}
-                      >
-                        {getStatusLabel(status)}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Personal Note */}
-              {(detailItem as Artifact & { personalNote?: string }).personalNote && (
-                <div className="mt-4 rounded-xl border p-3" style={{ borderColor: 'var(--color-border)' }}>
+            {/* Personal Note */}
+            {a.personalNote && (
+              <Card padding="sm">
+                <CardContent>
                   <p className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>Personal Note</p>
-                  <p className="mt-1 text-sm" style={{ color: 'var(--color-text)' }}>
-                    {(detailItem as Artifact & { personalNote?: string }).personalNote}
-                  </p>
-                </div>
-              )}
+                  <p className="mt-1 text-sm" style={{ color: 'var(--color-text)' }}>{a.personalNote}</p>
+                </CardContent>
+              </Card>
+            )}
 
-              {/* Content Body */}
-              {(detailItem as Artifact & { contentText?: string }).contentText && (
-                <div className="mt-4">
-                  <article className="prose prose-sm max-w-none rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', lineHeight: '1.8' }}>
-                    {(detailItem as Artifact & { contentText?: string }).contentText}
-                  </article>
-                </div>
-              )}
+            {/* Content Body */}
+            {a.contentText && (
+              <article className="prose prose-sm max-w-none rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', lineHeight: '1.8' }}>
+                {a.contentText}
+              </article>
+            )}
 
-              {/* Learning Actions */}
-              <div className="mt-6">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>
-                  Learning Actions
-                </p>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  {[
-                    { icon: '📝', label: 'Generate Exercise', desc: 'Create IELTS exercises', action: () => showToast('Exercise generation coming soon') },
-                    { icon: '🤖', label: 'Explain with AI', desc: 'AI analysis in IELTS context', action: () => goToTutor({ prompt: 'Explain this: ' + detailItem.title, type: 'artifact', title: detailItem.title }) },
-                    { icon: '📖', label: 'Save Vocabulary', desc: 'Extract IELTS words', action: () => navigate('/vocabulary') },
-                    { icon: '📚', label: 'Start Reading', desc: 'Use as reading passage', action: () => navigate('/reading'), condition: (detailItem as Artifact & { contentText?: string }).contentText && (detailItem as Artifact & { contentText?: string }).contentText!.split(/\s+/).length >= 100 },
-                    { icon: '✏️', label: 'Add Note', desc: 'Attach a learning note', action: () => showToast('Open the edit form to add a note') },
-                    { icon: '📤', label: 'Share', desc: 'Share or export', action: () => {
-                      if (navigator.share && detailItem.url) {
-                        navigator.share({ title: detailItem.title, url: detailItem.url }).catch(() => {})
-                      } else if (detailItem.url) {
-                        navigator.clipboard.writeText(detailItem.url).then(() => showToast('Link copied to clipboard')).catch(() => showToast('Could not copy link', 'error'))
-                      } else {
-                        showToast('No URL to share', 'error')
-                      }
-                    }},
-                  ].filter(a => a.condition !== false).map(action => (
+            {/* Learning Actions */}
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-secondary)' }}>
+                Learning Actions
+              </p>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {[
+                  { icon: <IconRefresh size={20} />, label: 'Generate Exercise', desc: 'Create IELTS exercises', loading: generatingExercise, action: handleGenerateExercise, condition: ((detailItem as ArtifactWithDetails).contentText?.split(/\s+/).length ?? 0) >= 50 },
+                  { icon: <IconAITutor size={20} />, label: 'Explain with AI', desc: 'AI analysis in IELTS context', action: () => goToTutor({ prompt: 'Explain this: ' + detailItem.title, type: 'artifact', title: detailItem.title }) },
+                  { icon: <IconVocabulary size={20} />, label: 'Save Vocabulary', desc: 'Extract IELTS words', loading: savingVocab, action: handleSaveVocabulary },
+                  { icon: <IconReading size={20} />, label: 'Start Reading', desc: 'Use as reading passage', action: handleStartReading, condition: ((detailItem as ArtifactWithDetails).contentText?.split(/\s+/).length ?? 0) >= 50 },
+                  { icon: <IconEdit size={20} />, label: 'Add Note', desc: 'Attach a learning note', action: handleOpenEdit },
+                  { icon: <IconUpload size={20} />, label: 'Share', desc: 'Share or export', action: () => {
+                    const a = detailItem as ArtifactWithDetails
+                    const shareTitle = detailItem.title
+                    const shareUrl = detailItem.url
+                    const shareText = a.contentText || shareTitle
+                    if (navigator.share) {
+                      navigator.share({ title: shareTitle, text: shareText, url: shareUrl || undefined }).catch(() => {})
+                    } else {
+                      const copyContent = shareUrl || shareText
+                      navigator.clipboard.writeText(copyContent)
+                        .then(() => showToast(shareUrl ? 'Link copied to clipboard' : 'Content copied to clipboard'))
+                        .catch(() => showToast('Could not copy', 'error'))
+                    }
+                  }},
+                ].filter(a => a.condition !== false).map((action: Record<string, unknown>) => (
+                  <Card key={action.label as string} padding="sm" hoverable>
                     <button
-                      key={action.label}
-                      title={action.desc}
-                      className="flex flex-col items-center gap-1.5 rounded-xl border p-3 text-center transition-all hover:shadow-sm"
-                      style={{ borderColor: 'var(--color-border)' }}
-                      onClick={action.action}
+                      title={action.desc as string}
+                      disabled={!!action.loading}
+                      className="flex w-full flex-col items-center gap-1.5 text-center disabled:opacity-50"
+                      onClick={action.action as () => void}
                     >
-                      <span className="text-xl">{action.icon}</span>
-                      <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>{action.label}</span>
-                      <span className="text-[10px]" style={{ color: 'var(--color-muted)' }}>{action.desc}</span>
+                      <span className="flex items-center justify-center" style={{ color: 'var(--color-primary)' }}>
+                        {action.loading ? (
+                          <span className="h-5 w-5 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
+                        ) : (
+                          action.icon as React.ReactNode
+                        )}
+                      </span>
+                      <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
+                        {action.loading ? 'Generating...' : action.label as string}
+                      </span>
+                      <span className="text-[10px]" style={{ color: 'var(--color-muted)' }}>{action.desc as string}</span>
                     </button>
-                  ))}
-                </div>
+                  </Card>
+                ))}
               </div>
             </div>
           </div>
-        </div>
-      )}
+          )
+        })()}
+      </Modal>
 
       {/* Delete confirmation modal */}
       <Modal
@@ -1042,131 +1133,84 @@ export default function ArtifactsPage() {
             </div>
           )}
 
-          <div>
-            <label htmlFor="content-url" className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>URL</label>
-            <input
-              id="content-url"
-              type="url"
-              value={form.url}
-              onChange={(e) => setForm(prev => ({ ...prev, url: e.target.value }))}
-              className="w-full rounded-lg border px-3 py-2 text-sm"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              placeholder="https://example.com/article"
-            />
-          </div>
+          <Input
+            id="content-url"
+            label="URL"
+            type="url"
+            value={form.url}
+            onChange={(e) => setForm(prev => ({ ...prev, url: e.target.value }))}
+            placeholder="https://example.com/article"
+          />
 
-          <div>
-            <label htmlFor="content-title" className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>Title <span className="text-red-500">*</span></label>
-            <input
-              id="content-title"
-              type="text"
-              value={form.title}
-              onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full rounded-lg border px-3 py-2 text-sm"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              placeholder="Content title"
-            />
-          </div>
+          <Input
+            id="content-title"
+            label="Title *"
+            type="text"
+            value={form.title}
+            onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
+            placeholder="Content title"
+          />
 
-          <div>
-            <label htmlFor="content-text" className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>Content Text</label>
-            <textarea
-              id="content-text"
-              value={form.contentText}
-              onChange={(e) => setForm(prev => ({ ...prev, contentText: e.target.value }))}
-              rows={4}
-              className="w-full rounded-lg border px-3 py-2 text-sm"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              placeholder="Paste article text or notes here..."
-            />
-          </div>
+          <Textarea
+            id="content-text"
+            label="Content Text"
+            value={form.contentText}
+            onChange={(e) => setForm(prev => ({ ...prev, contentText: e.target.value }))}
+            rows={4}
+            placeholder="Paste article text or notes here..."
+          />
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label htmlFor="content-type" className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>Content Type</label>
-              <select
-                id="content-type"
-                value={form.contentType}
-                onChange={(e) => setForm(prev => ({ ...prev, contentType: e.target.value }))}
-                className="w-full rounded-lg border px-3 py-2 text-sm"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              >
-                {CONTENT_TYPES.map(t => (
-                  <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="content-topic" className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>IELTS Topic</label>
-              <select
-                id="content-topic"
-                value={form.ieltsTopic}
-                onChange={(e) => setForm(prev => ({ ...prev, ieltsTopic: e.target.value }))}
-                className="w-full rounded-lg border px-3 py-2 text-sm"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              >
-                <option value="">None</option>
-                {IELTS_TOPICS.map(t => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="content-skill" className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>Skill</label>
-              <select
-                id="content-skill"
-                value={form.skill}
-                onChange={(e) => setForm(prev => ({ ...prev, skill: e.target.value }))}
-                className="w-full rounded-lg border px-3 py-2 text-sm"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              >
-                <option value="">None</option>
-                {IELTS_SKILLS.map(s => (
-                  <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="content-status" className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>Reading Status</label>
-              <select
-                id="content-status"
-                value={form.readingStatus}
-                onChange={(e) => setForm(prev => ({ ...prev, readingStatus: e.target.value }))}
-                className="w-full rounded-lg border px-3 py-2 text-sm"
-                style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              >
-                {READING_STATUSES.map(s => (
-                  <option key={s} value={s}>{getStatusLabel(s)}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="content-tags" className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>Tags (comma separated)</label>
-            <input
-              id="content-tags"
-              type="text"
-              value={form.tags}
-              onChange={(e) => setForm(prev => ({ ...prev, tags: e.target.value }))}
-              className="w-full rounded-lg border px-3 py-2 text-sm"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              placeholder="ielts, reading, academic"
+            <Select
+              id="content-type"
+              label="Content Type"
+              value={form.contentType}
+              onChange={(e) => setForm(prev => ({ ...prev, contentType: e.target.value }))}
+              options={CONTENT_TYPES.map(t => ({ value: t, label: t.charAt(0).toUpperCase() + t.slice(1) }))}
+            />
+            <Select
+              id="content-topic"
+              label="IELTS Topic"
+              value={form.ieltsTopic}
+              onChange={(e) => setForm(prev => ({ ...prev, ieltsTopic: e.target.value }))}
+              options={IELTS_TOPICS.map(t => ({ value: t, label: t }))}
+              placeholder="None"
+            />
+            <Select
+              id="content-skill"
+              label="Skill"
+              value={form.skill}
+              onChange={(e) => setForm(prev => ({ ...prev, skill: e.target.value }))}
+              options={IELTS_SKILLS.map(s => ({ value: s, label: s.charAt(0).toUpperCase() + s.slice(1) }))}
+              placeholder="None"
+            />
+            <Select
+              id="content-status"
+              label="Reading Status"
+              value={form.readingStatus}
+              onChange={(e) => setForm(prev => ({ ...prev, readingStatus: e.target.value }))}
+              options={READING_STATUSES.map(s => ({ value: s, label: getStatusLabel(s) }))}
+              placeholder="Unread"
             />
           </div>
 
-          <div>
-            <label htmlFor="content-note" className="mb-1 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>Personal Note</label>
-            <textarea
-              id="content-note"
-              value={form.personalNote}
-              onChange={(e) => setForm(prev => ({ ...prev, personalNote: e.target.value }))}
-              rows={2}
-              className="w-full rounded-lg border px-3 py-2 text-sm"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-              placeholder="Add a personal learning note..."
-            />
-          </div>
+          <Input
+            id="content-tags"
+            label="Tags (comma separated)"
+            type="text"
+            value={form.tags}
+            onChange={(e) => setForm(prev => ({ ...prev, tags: e.target.value }))}
+            placeholder="ielts, reading, academic"
+          />
+
+          <Textarea
+            id="content-note"
+            label="Personal Note"
+            value={form.personalNote}
+            onChange={(e) => setForm(prev => ({ ...prev, personalNote: e.target.value }))}
+            rows={2}
+            placeholder="Add a personal learning note..."
+          />
 
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="secondary" onClick={() => setShowForm(false)}>
