@@ -12,7 +12,7 @@ import EmptyState from '../../components/ui/EmptyState'
 import Question from './components/Question'
 import { ensureSeedData, loadAllPassages } from './passageSeedService'
 import { generateId } from '../../utils'
-import { generateReadingPassage } from '../../services/ai/AIService'
+import { generateReadingPassage, generateQuestionsForPassage } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconReading } from '@ielts/ui'
 
@@ -154,6 +154,8 @@ export default function ReadingPractice() {
   const [aiError, setAiError] = useState<string | null>(null)
 
   const [historyDetail, setHistoryDetail] = useState<ReadingPracticeSession | null>(null)
+  const [generatingQuestions, setGeneratingQuestions] = useState<Record<string, boolean>>({})
+  const [generateError, setGenerateError] = useState<string | null>(null)
 
   const loadHistory = useCallback(async () => {
     try {
@@ -386,6 +388,61 @@ export default function ReadingPractice() {
     }
   }
 
+  const handleGenerateExercise = useCallback(async (passage: ReadingPassageWithQuestions) => {
+    setGeneratingQuestions(prev => ({ ...prev, [passage.id]: true }))
+    setGenerateError(null)
+
+    try {
+      const { content, error } = await generateQuestionsForPassage({
+        title: passage.title,
+        text: passage.text,
+        difficulty: passage.difficulty,
+      })
+
+      if (error) throw new Error(error)
+      if (!content) throw new Error('AI returned an empty response')
+
+      const jsonStart = content.indexOf('{')
+      const jsonEnd = content.lastIndexOf('}')
+      const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
+      const parsed = JSON.parse(jsonStr) as Record<string, unknown>
+      const questions = parsed.questions as Record<string, unknown>[]
+
+      if (!Array.isArray(questions) || questions.length === 0) {
+        throw new Error('AI returned no questions')
+      }
+
+      const validTypes = ['multiple-choice', 'true-false-not-given', 'gap-fill', 'matching-headings'] as const
+
+      const newQuestions: ReadingQuestion[] = questions.map((q, i) => ({
+        id: `${passage.id}-gq${i}`,
+        type: (validTypes as readonly string[]).includes(q.type as string)
+          ? (q.type as 'multiple-choice' | 'true-false-not-given' | 'gap-fill' | 'matching-headings')
+          : 'multiple-choice',
+        question: q.question as string,
+        options: Array.isArray(q.options) ? q.options as string[] : undefined,
+        correctAnswer: q.correctAnswer ?? 0,
+        explanation: (q.explanation as string) || '',
+        blanks: Array.isArray(q.blanks) ? q.blanks as string[] : undefined,
+        headings: Array.isArray(q.headings) ? q.headings as string[] : undefined,
+        paragraphs: Array.isArray(q.paragraphs) ? q.paragraphs as { id: string; text: string }[] : undefined,
+        correctMatches: q.correctMatches as Record<string, number> | undefined,
+      }))
+
+      setAllPassages(prev => prev.map(p =>
+        p.id === passage.id ? { ...p, questions: newQuestions } : p
+      ))
+
+      if (currentPassage?.id === passage.id) {
+        setCurrentPassage(prev => prev ? { ...prev, questions: newQuestions } : null)
+      }
+    } catch (err) {
+      setGenerateError(err instanceof Error ? err.message : 'Failed to generate questions')
+    } finally {
+      setGeneratingQuestions(prev => ({ ...prev, [passage.id]: false }))
+    }
+  }, [currentPassage])
+
   const historyStats = useMemo(() => {
     if (history.length === 0) return null
     const total = history.length
@@ -501,6 +558,23 @@ export default function ReadingPractice() {
             </CardContent>
           </Card>
 
+          {generateError && (
+            <div className="rounded-lg px-4 py-3 text-sm" style={{
+              backgroundColor: 'var(--color-danger-light)',
+              color: 'var(--color-danger)',
+              border: '1px solid var(--color-danger)',
+            }}>
+              {generateError}
+              <button
+                className="ml-2 underline"
+                onClick={() => setGenerateError(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontSize: 'inherit' }}
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
+
           {filteredPassages.length === 0 ? (
             <EmptyState
               icon={
@@ -574,9 +648,23 @@ export default function ReadingPractice() {
                       <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
                         {passage.questions.length} questions &middot; ~{passage.estimatedMinutes} min
                       </span>
-                      <Button size="sm" onClick={() => startPassage(passage)}>
-                        Start Practice
-                      </Button>
+                      <div className="flex gap-2">
+                        {passage.questions.length === 0 && (
+                          <Button
+                            size="sm"
+                            variant="secondary"
+                            onClick={() => handleGenerateExercise(passage)}
+                            loading={generatingQuestions[passage.id]}
+                            disabled={generatingQuestions[passage.id]}
+                            aria-label="Generate exercise questions"
+                          >
+                            {generatingQuestions[passage.id] ? 'Generating...' : 'Generate Exercise'}
+                          </Button>
+                        )}
+                        <Button size="sm" onClick={() => startPassage(passage)}>
+                          {passage.questions.length > 0 ? 'Start Practice' : 'Read'}
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -641,10 +729,45 @@ export default function ReadingPractice() {
           </Card>
 
           <div>
-            <h2 className="mb-4 text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
-              Questions ({currentPassage.questions.length})
-            </h2>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
+                Questions ({currentPassage.questions.length})
+              </h2>
+              {currentPassage.questions.length === 0 && (
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => handleGenerateExercise(currentPassage)}
+                  loading={generatingQuestions[currentPassage.id]}
+                  disabled={generatingQuestions[currentPassage.id]}
+                >
+                  {generatingQuestions[currentPassage.id] ? 'Generating...' : 'Generate Exercise'}
+                </Button>
+              )}
+            </div>
+
+            {generateError && (
+              <div className="mb-4 rounded-lg px-4 py-3 text-sm" style={{
+                backgroundColor: 'var(--color-danger-light)',
+                color: 'var(--color-danger)',
+                border: '1px solid var(--color-danger)',
+              }}>
+                {generateError}
+              </div>
+            )}
+
             <div className="space-y-4">
+              {currentPassage.questions.length === 0 && !generatingQuestions[currentPassage.id] && (
+                <Card>
+                  <CardContent>
+                    <div className="py-8 text-center">
+                      <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
+                        No questions yet. Generate exercise questions using AI.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
               {currentPassage.questions.map((q, i) => (
                 <Question
                   key={q.id}
@@ -658,7 +781,11 @@ export default function ReadingPractice() {
           </div>
 
           <div className="flex justify-center pb-8">
-            <Button size="lg" onClick={handleSubmit}>
+            <Button
+              size="lg"
+              onClick={handleSubmit}
+              disabled={currentPassage.questions.length === 0}
+            >
               Submit Answers
             </Button>
           </div>

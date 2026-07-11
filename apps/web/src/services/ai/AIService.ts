@@ -292,6 +292,67 @@ Make sure the passage is realistic and the questions are directly answerable fro
   return makeAIRequest(systemPrompt, prompt, { maxTokens: 2000 })
 }
 
+export async function generateQuestionsForPassage(params: {
+  title: string
+  text: string
+  difficulty: 'easy' | 'medium' | 'hard'
+}): Promise<AIRequestResult> {
+  const difficultyInstruction =
+    params.difficulty === 'easy'
+      ? 'Use simple vocabulary and straightforward sentence structures (IELTS band 5-6 level).'
+      : params.difficulty === 'hard'
+        ? 'Use complex vocabulary and sophisticated sentence structures (IELTS band 7-9 level).'
+        : 'Use moderate vocabulary and mixed sentence structures (IELTS band 6-7 level).'
+
+  const systemPrompt = 'You are an IELTS reading question generator. Always respond with valid JSON only, no other text.'
+
+  const prompt = `Generate 5-6 IELTS-style reading comprehension questions based on the following passage.
+
+Title: "${params.title}"
+
+Passage:
+${params.text}
+
+Requirements:
+- ${difficultyInstruction}
+- Include a mix of question types: multiple-choice, true/false/not given, and gap fill
+- Each question must be directly answerable from the passage text
+- Each must have a clear correct answer and detailed explanation
+
+Respond with valid JSON in this exact format:
+{
+  "questions": [
+    {
+      "id": "gq1",
+      "type": "multiple-choice",
+      "question": "Question text?",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
+      "correctAnswer": 0,
+      "explanation": "Why this is correct with reference to the passage"
+    },
+    {
+      "id": "gq2",
+      "type": "true-false-not-given",
+      "question": "Statement to evaluate",
+      "correctAnswer": "true",
+      "explanation": "Explanation..."
+    },
+    {
+      "id": "gq3",
+      "type": "gap-fill",
+      "question": "Complete the sentences:",
+      "blanks": ["word1", "word2"],
+      "correctAnswer": ["word1", "word2"],
+      "explanation": "Explanation..."
+    }
+  ]
+}
+
+Do not include any text outside the JSON object.`
+
+  return makeAIRequest(systemPrompt, prompt, { maxTokens: 2000 })
+}
+
 export async function checkWriting(essay: string, question: string, taskType: 'task1' | 'task2'): Promise<AIRequestResult> {
   const taskInstruction = taskType === 'task1'
     ? 'Task 1: The essay describes, summarizes, or explains a visual (chart, graph, table, map). Focus on whether the response accurately reports main features, makes comparisons, and stays objective.'
