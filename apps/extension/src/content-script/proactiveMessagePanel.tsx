@@ -14,6 +14,7 @@ import {
   IconExplain,
   IconProgress,
   IconHelpCircle,
+  IconClock,
 } from '@ielts/ui'
 
 const PANEL_ID = 'ielts-proactive-panel'
@@ -109,7 +110,7 @@ function createPanel(data: ProactiveMessageData): HTMLDivElement {
         <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
           <button id="${PANEL_ID}-snooze"
             style="${secondaryBtnStyle}">
-            ⏰ Snooze
+            ${iconToHtml(IconClock, 14)} Snooze
           </button>
           <button id="${PANEL_ID}-dismiss"
             style="${secondaryBtnStyle}">

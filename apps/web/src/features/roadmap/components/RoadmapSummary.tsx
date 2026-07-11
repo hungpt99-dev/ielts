@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { IconCheck, IconProgress, IconRefresh, IconAITutor } from '@ielts/ui'
+import { IconCheck, IconProgress, IconRefresh, IconAITutor, IconDownload } from '@ielts/ui'
 import Modal from '../../../components/ui/Modal'
 import Button from '../../../components/ui/Button'
 import type { RoadmapData } from '../roadmapService'
@@ -238,7 +238,7 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
               backgroundColor: 'var(--color-surface)',
             }}
           >
-            📥 Export Plan
+            <IconDownload size={14} /> Export Plan
           </button>
           <button
             onClick={onAskAIReview}
