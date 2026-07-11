@@ -19,4 +19,5 @@ export {
 export {
   themeModeFromDarkMode,
   darkModeFromThemeMode,
+  translationTarget,
 } from './utils'

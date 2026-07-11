@@ -1,11 +1,17 @@
 import type { PromptVersion } from './types'
 
+function translationTarget(lang: string): string {
+  return lang.trim() || 'your native language'
+}
+
 const VIDEO_PROMPT_VERSION: PromptVersion = { version: 1, description: 'Initial video/transcript prompts' }
 
 export function buildVocabularyFromTranscriptPrompt(
   transcript: string,
   videoTitle: string,
+  nativeLanguage = '',
 ): { systemPrompt: string; userPrompt: string } {
+  const lang = translationTarget(nativeLanguage)
   const systemPrompt = 'You are an IELTS vocabulary expert. Extract useful vocabulary from video transcripts for IELTS learners. Respond with valid JSON only.'
 
   const userPrompt = `Extract IELTS-level vocabulary from the following video transcript.
@@ -98,7 +104,9 @@ Requirements:
 
 export function buildShadowingScriptsPrompt(
   transcript: string,
+  nativeLanguage = '',
 ): { systemPrompt: string; userPrompt: string } {
+  const lang = translationTarget(nativeLanguage)
   const systemPrompt = 'You are an IELTS speaking coach. Create shadowing practice scripts from video transcripts. Respond with valid JSON only.'
 
   const userPrompt = `Create shadowing practice sentences from the following transcript. Select 5-8 sentences that are useful for IELTS speaking practice.
@@ -117,7 +125,7 @@ Respond with valid JSON in this exact format:
   "scripts": [
     {
       "sentence": "The original sentence for shadowing practice",
-      "translation": "translation in your native language",
+      "translation": "translation in ${lang}",
       "focusWords": ["word1", "word2"],
       "notes": "Pronunciation or intonation notes"
     }

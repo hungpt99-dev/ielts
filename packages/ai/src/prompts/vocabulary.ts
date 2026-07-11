@@ -1,12 +1,18 @@
 import type { PromptVersion } from './types'
 
+function translationTarget(lang: string): string {
+  return lang.trim() || 'your native language'
+}
+
 const VOCAB_PROMPT_VERSION: PromptVersion = { version: 1, description: 'Initial vocabulary prompts' }
 
 export function buildVocabularyDetailsPrompt(
   word: string,
   sourceSentence: string,
   topic: string,
+  nativeLanguage = '',
 ): { systemPrompt: string; userPrompt: string } {
+  const lang = translationTarget(nativeLanguage)
   const systemPrompt = 'You are an IELTS vocabulary expert assistant. Always respond with valid JSON only, no other text.'
 
   const userPrompt = `Generate detailed IELTS vocabulary information for the word "${word}".
@@ -17,7 +23,7 @@ ${topic ? `Topic: ${topic}\n` : ''}
 Respond with valid JSON in this exact format:
 {
   "meaning": "Clear English definition suitable for IELTS",
-  "translation": "translation in your native language",
+  "translation": "translation in ${lang}",
   "partOfSpeech": "e.g. noun, verb, adjective, adverb",
   "pronunciation": "IPA pronunciation /ˈeksəmpl/",
   "exampleSentence": "An IELTS-style example sentence using the word",
