@@ -449,6 +449,38 @@ export function initMessaging(): void {
     }
   })
 
+  registerHandler('SAVE_YOUTUBE_VOCAB_TO_IDB', async (_msg) => {
+    const msg = _msg as { type: string; payload: Record<string, unknown> }
+    const { word, sentence, videoTitle, videoUrl, timestamp } = msg.payload
+    const now = new Date().toISOString()
+    await saveVocabularyEntry({
+      id: crypto.randomUUID(),
+      word: (word as string) ?? '',
+      sourceSentence: (sentence as string) ?? '',
+      pageTitle: (videoTitle as string) ?? '',
+      pageUrl: (videoUrl as string) ?? '',
+      topic: '',
+      personalNote: '',
+      tags: [],
+      meaning: '',
+      meaningVi: '',
+      partOfSpeech: '',
+      pronunciation: '',
+      exampleSentence: '',
+      synonyms: [],
+      antonyms: [],
+      collocations: [],
+      wordFamily: [],
+      difficulty: '',
+      status: 'new',
+      addedToReview: false,
+      reviewId: '',
+      createdAt: now,
+      updatedAt: now,
+    }).catch(() => {})
+    return { success: true }
+  })
+
   registerHandler('SYNC_ALL_TO_WEB', async () => {
     try {
       const { getAllVocabulary } = await import('../storage/vocabularyStore')

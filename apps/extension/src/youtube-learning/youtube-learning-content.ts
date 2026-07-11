@@ -47,17 +47,13 @@ function getOrCreateLayoutManager(): YouTubeLayoutManager {
   return layoutManager
 }
 
-const PANEL_ORIGIN = (() => {
-  try { return chrome.runtime.getURL('/').replace(/\/$/, '') } catch { return '*' }
-})()
-
 function postToPanel(type: string, payload?: unknown): void {
   const iframe = document.getElementById(PANEL_IFRAME_ID) as HTMLIFrameElement | null
   if (iframe?.contentWindow) {
     try {
       iframe.contentWindow.postMessage(
         { source: 'ielts-content-script', type, payload },
-        PANEL_ORIGIN,
+        '*',
       )
     } catch {
       // iframe may be detached
@@ -453,6 +449,8 @@ async function handleSaveVocab(payload: Record<string, unknown>): Promise<void> 
   const word = typeof payload.word === 'string' ? payload.word : ''
   const sentence = typeof payload.sentence === 'string' ? payload.sentence : ''
   const videoId = currentVideoInfo?.videoId
+  const videoTitle = currentVideoInfo?.videoTitle || ''
+  const videoUrl = currentVideoInfo?.videoUrl || ''
   const timestamp = typeof payload.timestamp === 'number' ? payload.timestamp : 0
 
   if (!word || !videoId || !vocabService) {
@@ -462,6 +460,13 @@ async function handleSaveVocab(payload: Record<string, unknown>): Promise<void> 
 
   try {
     await vocabService.saveWord(word, sentence, videoId, timestamp)
+    // Save to IndexedDB via background script (runs at extension origin,
+    // so the popup dashboard can read it — content-script IndexedDB lives
+    // at the host page origin, not the extension's).
+    chrome.runtime.sendMessage({
+      type: 'SAVE_YOUTUBE_VOCAB_TO_IDB',
+      payload: { word, sentence, videoTitle, videoUrl, timestamp },
+    }).catch(() => {})
     postToParent('VOCAB_SAVED', { success: true, word })
   } catch {
     postToParent('VOCAB_SAVED', { error: 'Failed to save word' })
