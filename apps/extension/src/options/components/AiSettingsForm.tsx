@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { useToast } from '../../../../../packages/ui/src/components/Toast'
 import type { ExtensionSettings } from '@/background/settingsStorage'
-import { Section, Field, inputStyle, selectStyle } from './ui'
+import { Section, Field, inputStyle, selectStyle, buttonStyle } from './ui'
 
 interface AiSettingsFormProps {
   settings: ExtensionSettings
@@ -14,16 +14,18 @@ interface Errors {
   aiModel?: string
 }
 
-function getErrors(values: { aiProvider: string; aiBaseUrl: string; aiApiKey: string; aiModel: string }): Errors {
+function getErrors(values: {
+  aiProvider: string
+  aiBaseUrl: string
+  aiApiKey: string
+  aiModel: string
+}): Errors {
   const e: Errors = {}
   if (values.aiProvider === 'custom' && !values.aiBaseUrl.trim()) {
     e.aiBaseUrl = 'Base URL is required when using a custom provider'
   }
   if (!values.aiModel.trim()) {
     e.aiModel = 'Model name is required'
-  }
-  if (!values.aiApiKey.trim()) {
-    e.aiApiKey = 'API key is required'
   }
   return e
 }
@@ -39,12 +41,13 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
   const [showApiKey, setShowApiKey] = useState(false)
   const [errors, setErrors] = useState<Errors>({})
   const [saving, setSaving] = useState(false)
+  const [testing, setTesting] = useState(false)
   const [saveFeedback, setSaveFeedback] = useState<'success' | 'error' | null>(null)
 
   const latestRef = useRef(local)
   latestRef.current = local
-
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isSavingRef = useRef(false)
 
   useEffect(() => {
     setLocal({
@@ -61,26 +64,28 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
     }
   }, [])
 
-  const doSave = useCallback(async (patch: Partial<ExtensionSettings>) => {
-    setSaving(true)
-    setSaveFeedback(null)
-    try {
-      await onSave(patch)
-      setSaveFeedback('success')
-      setTimeout(() => setSaveFeedback(null), 2000)
-    } catch {
-      setSaveFeedback('error')
-      showToast('error', 'Failed to save AI settings')
-    } finally {
-      setSaving(false)
-    }
-  }, [onSave, showToast])
+  const doSave = useCallback(
+    async (patch: Partial<ExtensionSettings>) => {
+      if (isSavingRef.current) return
+      isSavingRef.current = true
+      setSaving(true)
+      setSaveFeedback(null)
+      try {
+        await onSave(patch)
+        setSaveFeedback('success')
+        setTimeout(() => setSaveFeedback(null), 2000)
+      } catch {
+        setSaveFeedback('error')
+        showToast('error', 'Failed to save AI settings')
+      } finally {
+        setSaving(false)
+        isSavingRef.current = false
+      }
+    },
+    [onSave, showToast],
+  )
 
-  const flushSave = useCallback(() => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current)
-      debounceRef.current = null
-    }
+  const doSaveAll = useCallback(() => {
     const vals = latestRef.current
     const e = getErrors(vals)
     setErrors(e)
@@ -94,41 +99,92 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
     }
   }, [doSave])
 
-  const handleProviderChange = useCallback((value: string) => {
-    const provider = value as 'openai' | 'custom'
-    setLocal((prev) => ({ ...prev, aiProvider: provider }))
-    setErrors({})
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current)
-      debounceRef.current = null
-    }
-    doSave({ aiProvider: provider })
+  const scheduleSaveAll = useCallback(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => {
+      const vals = latestRef.current
+      const e = getErrors(vals)
+      if (Object.keys(e).length === 0) {
+        doSave({
+          aiProvider: vals.aiProvider,
+          aiBaseUrl: vals.aiBaseUrl,
+          aiApiKey: vals.aiApiKey,
+          aiModel: vals.aiModel,
+        })
+      }
+    }, 500)
   }, [doSave])
+
+  const handleProviderChange = useCallback(
+    (value: string) => {
+      const provider = value as 'openai' | 'custom'
+      setLocal((prev) => ({ ...prev, aiProvider: provider }))
+      setErrors({})
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current)
+        debounceRef.current = null
+      }
+      doSave({ aiProvider: provider })
+    },
+    [doSave],
+  )
 
   const handleTextChange = useCallback(
     (field: 'aiBaseUrl' | 'aiApiKey' | 'aiModel', value: string) => {
       setLocal((prev) => ({ ...prev, [field]: value }))
       setErrors((prev) => ({ ...prev, [field]: undefined }))
-      if (debounceRef.current) clearTimeout(debounceRef.current)
-      debounceRef.current = setTimeout(() => {
-        const vals = latestRef.current
-        const e = getErrors(vals)
-        if (Object.keys(e).length === 0) {
-          doSave({
-            aiProvider: vals.aiProvider,
-            aiBaseUrl: vals.aiBaseUrl,
-            aiApiKey: vals.aiApiKey,
-            aiModel: vals.aiModel,
-          })
-        }
-      }, 500)
+      scheduleSaveAll()
     },
-    [doSave],
+    [scheduleSaveAll],
   )
 
   const handleBlur = useCallback(() => {
-    flushSave()
-  }, [flushSave])
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current)
+      debounceRef.current = null
+    }
+    doSaveAll()
+  }, [doSaveAll])
+
+  const handleTestConnection = useCallback(async () => {
+    const vals = latestRef.current
+    const e = getErrors(vals)
+    setErrors(e)
+    if (Object.keys(e).length > 0) {
+      showToast('error', 'Fix validation errors before testing')
+      return
+    }
+    if (!vals.aiApiKey.trim()) {
+      showToast('error', 'API key is required to test the connection')
+      return
+    }
+    setTesting(true)
+    try {
+      const baseUrl = (vals.aiBaseUrl || 'https://api.openai.com/v1').replace(/\/+$/, '')
+      const res = await fetch(`${baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${vals.aiApiKey}`,
+        },
+        body: JSON.stringify({
+          model: vals.aiModel,
+          messages: [{ role: 'user', content: 'Respond with one word: ok' }],
+          max_tokens: 10,
+        }),
+      })
+      if (!res.ok) {
+        const body = await res.text().catch(() => '')
+        throw new Error(res.status === 401 ? 'Invalid API key' : `HTTP ${res.status}: ${body.slice(0, 80)}`)
+      }
+      showToast('success', 'Connection successful')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Connection failed'
+      showToast('error', `Connection failed: ${msg}`)
+    } finally {
+      setTesting(false)
+    }
+  }, [showToast])
 
   return (
     <Section title="AI Provider">
@@ -193,23 +249,53 @@ export default function AiSettingsForm({ settings, onSave }: AiSettingsFormProps
           placeholder="gpt-4o-mini"
           style={inputStyle}
           disabled={saving}
+          aria-required="true"
+          aria-invalid={errors.aiModel ? 'true' : undefined}
+          aria-describedby={errors.aiModel ? 'model-error' : undefined}
         />
       </Field>
-      {saving && (
-        <div style={{ fontSize: '12px', color: 'var(--color-muted)', marginTop: '4px' }}>
-          Saving...
+
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          flexWrap: 'wrap',
+        }}
+      >
+        <button
+          onClick={handleTestConnection}
+          disabled={testing || saving}
+          style={{
+            ...buttonStyle,
+            background: 'var(--color-primary)',
+            color: '#fff',
+            border: 'none',
+            opacity: testing || saving ? 0.6 : 1,
+          }}
+          aria-label="Test AI provider connection"
+        >
+          {testing ? 'Testing...' : 'Test Connection'}
+        </button>
+
+        <div
+          style={{
+            fontSize: '12px',
+            color:
+              saveFeedback === 'success'
+                ? 'var(--color-success, #16a34a)'
+                : saveFeedback === 'error'
+                  ? 'var(--color-danger, #dc2626)'
+                  : 'var(--color-muted, #94a3b8)',
+          }}
+          role="status"
+          aria-live="polite"
+        >
+          {saving && 'Saving...'}
+          {saveFeedback === 'success' && !saving && 'Settings saved.'}
+          {saveFeedback === 'error' && !saving && 'Failed to save settings.'}
         </div>
-      )}
-      {saveFeedback === 'success' && !saving && (
-        <div style={{ fontSize: '12px', color: 'var(--color-success, #16a34a)', marginTop: '4px' }}>
-          Settings saved.
-        </div>
-      )}
-      {saveFeedback === 'error' && !saving && (
-        <div style={{ fontSize: '12px', color: 'var(--color-danger, #dc2626)', marginTop: '4px' }}>
-          Failed to save settings.
-        </div>
-      )}
+      </div>
     </Section>
   )
 }

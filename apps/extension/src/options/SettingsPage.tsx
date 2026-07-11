@@ -13,21 +13,56 @@ import AiSettingsForm from './components/AiSettingsForm'
 import GeneralSettings from './components/GeneralSettings'
 import { Section, buttonStyle } from './components/ui'
 
+function applyTheme(mode: 'light' | 'dark' | 'system'): void {
+  const isDark =
+    mode === 'dark' ||
+    (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+  document.documentElement.classList.toggle('dark', isDark)
+}
+
+const REQUIRED_SETTINGS_KEYS: (keyof ExtensionSettings)[] = [
+  'aiProvider',
+  'aiBaseUrl',
+  'aiModel',
+  'themeMode',
+  'floatingToolbar',
+]
+
 export default function SettingsPage() {
   const { showToast } = useToast()
   const [settings, setSettings] = useState<ExtensionSettings>(DEFAULT_SETTINGS)
   const [loading, setLoading] = useState(true)
+  const [importing, setImporting] = useState(false)
   const [confirmClear, setConfirmClear] = useState(false)
   const settingsRef = useRef(settings)
   settingsRef.current = settings
 
   useEffect(() => {
-    loadSettings().then((s) => {
-      setSettings(s)
-      settingsRef.current = s
-      setLoading(false)
-    })
-  }, [])
+    loadSettings()
+      .then((s) => {
+        setSettings(s)
+        settingsRef.current = s
+        setLoading(false)
+      })
+      .catch((err) => {
+        showToast('error', `Failed to load settings: ${err instanceof Error ? err.message : 'Unknown error'}`)
+        setLoading(false)
+      })
+  }, [showToast])
+
+  // Sync theme to DOM whenever settings.themeMode changes
+  useEffect(() => {
+    const mode = settings.themeMode
+    applyTheme(mode)
+
+    if (mode !== 'system') return
+
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = () => applyTheme('system')
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [settings.themeMode])
 
   const handleSave = useCallback(async (patch: Partial<ExtensionSettings>) => {
     const next = { ...settingsRef.current, ...patch }
@@ -59,20 +94,44 @@ export default function SettingsPage() {
     input.onchange = async () => {
       const file = input.files?.[0]
       if (!file) return
+
+      setImporting(true)
       try {
         const text = await file.text()
-        const data = JSON.parse(text)
-        if (!data.settings || !data.settings.aiProvider) {
-          showToast('error', 'Invalid settings file format')
+        let parsed: Record<string, unknown>
+        try {
+          parsed = JSON.parse(text)
+        } catch {
+          showToast('error', 'File is not valid JSON')
           return
         }
-        await importSettingsData(data)
+
+        const rawSettings = parsed?.settings as Record<string, unknown> | undefined
+        if (!rawSettings || typeof rawSettings !== 'object') {
+          showToast('error', 'Invalid settings file: missing "settings" object')
+          return
+        }
+
+        for (const key of REQUIRED_SETTINGS_KEYS) {
+          if (!(key in rawSettings)) {
+            showToast(
+              'error',
+              `Invalid settings file: missing required field "${key}"`,
+            )
+            return
+          }
+        }
+
+        await importSettingsData(parsed as { settings: ExtensionSettings })
         const reloaded = await loadSettings()
         setSettings(reloaded)
         settingsRef.current = reloaded
         showToast('success', 'Settings imported successfully')
       } catch (e) {
-        showToast('error', `Import failed: ${e instanceof Error ? e.message : 'Invalid file'}`)
+        const msg = e instanceof Error ? e.message : 'Invalid file'
+        showToast('error', `Import failed: ${msg}`)
+      } finally {
+        setImporting(false)
       }
     }
     input.click()
@@ -88,14 +147,22 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div style={{ padding: '40px', textAlign: 'center', color: 'var(--color-muted)' }}>
+      <div
+        style={{ padding: '40px', textAlign: 'center', color: 'var(--color-muted)' }}
+        role="status"
+        aria-live="polite"
+      >
         Loading settings...
       </div>
     )
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div
+      style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+      role="region"
+      aria-label="Extension settings"
+    >
       <header>
         <h1 style={{ fontSize: '24px', fontWeight: 700, margin: 0 }}>Extension Settings</h1>
         <p style={{ color: 'var(--color-text-secondary)', marginTop: '4px', fontSize: '14px' }}>
@@ -118,12 +185,21 @@ export default function SettingsPage() {
           Export your settings as a JSON file to back them up or transfer to another device.
           Import a previously exported settings file to restore your configuration.
         </p>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button onClick={handleExport} style={buttonStyle}>
+        <div
+          style={{ display: 'flex', gap: '8px' }}
+          role="group"
+          aria-label="Data management actions"
+        >
+          <button onClick={handleExport} style={buttonStyle} aria-label="Export settings to JSON file">
             Export Settings
           </button>
-          <button onClick={handleImport} style={buttonStyle}>
-            Import Settings
+          <button
+            onClick={handleImport}
+            style={{ ...buttonStyle, opacity: importing ? 0.6 : 1 }}
+            disabled={importing}
+            aria-label="Import settings from JSON file"
+          >
+            {importing ? 'Importing...' : 'Import Settings'}
           </button>
         </div>
         <div
@@ -134,7 +210,11 @@ export default function SettingsPage() {
           }}
         >
           {confirmClear ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+              role="alertdialog"
+              aria-label="Confirm clear settings"
+            >
               <p
                 style={{
                   fontSize: '13px',
@@ -154,10 +234,15 @@ export default function SettingsPage() {
                     color: '#fff',
                     border: 'none',
                   }}
+                  aria-label="Confirm clear all settings"
                 >
                   Yes, Clear All
                 </button>
-                <button onClick={() => setConfirmClear(false)} style={buttonStyle}>
+                <button
+                  onClick={() => setConfirmClear(false)}
+                  style={buttonStyle}
+                  aria-label="Cancel clear settings"
+                >
                   Cancel
                 </button>
               </div>
@@ -170,6 +255,7 @@ export default function SettingsPage() {
                 color: 'var(--color-danger)',
                 borderColor: 'var(--color-danger)',
               }}
+              aria-label="Clear all settings"
             >
               Clear All Settings
             </button>

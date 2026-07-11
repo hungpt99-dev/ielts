@@ -36,6 +36,53 @@ function App() {
     chrome.runtime.sendMessage({ type: 'POPUP_OPENED' }).catch(() => {})
   }, [])
 
+  // Sync theme from settings to DOM
+  useEffect(() => {
+    function readMode(): Promise<string> {
+      return safeStorageGet<Record<string, unknown>>('extensionSettings').then(
+        (result) => {
+          const extSettings = result['extensionSettings'] as
+            | { themeMode?: string }
+            | undefined
+          return extSettings?.themeMode || 'system'
+        },
+      )
+    }
+
+    function apply(mode: string) {
+      const isDark =
+        mode === 'dark' ||
+        (mode === 'system' &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      document.documentElement.classList.toggle('dark', isDark)
+    }
+
+    readMode().then(apply)
+
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const onSysChange = () => {
+      readMode().then((mode) => {
+        if (mode === 'system') apply('system')
+      })
+    }
+    mq.addEventListener('change', onSysChange)
+
+    const onStorageChange = (
+      changes: Record<string, chrome.storage.StorageChange>,
+    ) => {
+      const raw = changes.extensionSettings?.newValue as
+        | { themeMode?: string }
+        | undefined
+      if (raw?.themeMode) apply(raw.themeMode)
+    }
+    chrome.storage.onChanged.addListener(onStorageChange)
+
+    return () => {
+      mq.removeEventListener('change', onSysChange)
+      chrome.storage.onChanged.removeListener(onStorageChange)
+    }
+  }, [])
+
   const handleSaved = () => {
     setView('dashboard')
     setKey((k) => k + 1)

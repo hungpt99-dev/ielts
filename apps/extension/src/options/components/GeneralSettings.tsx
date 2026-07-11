@@ -47,8 +47,9 @@ export default function GeneralSettings({ settings, onSave }: GeneralSettingsPro
     async (patch: Partial<ExtensionSettings>) => {
       try {
         await onSave(patch)
-      } catch {
-        showToast('error', 'Failed to save settings')
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Unknown error'
+        showToast('error', `Failed to save: ${msg}`)
       }
     },
     [onSave, showToast],
