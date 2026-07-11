@@ -180,17 +180,11 @@ export interface UseProactiveSettingsReturn {
 
 export function useProactiveSettings(): UseProactiveSettingsReturn {
   const [initialSettings, setInitialSettings] = useState<ProactiveMessageSettings>(() => loadProactiveSettings())
-  const [settings, setSettings] = useState<ProactiveMessageSettings>(() => loadProactiveSettings())
+  const [settings, setSettings] = useState<ProactiveMessageSettings>(initialSettings)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
   const [saved, setSaved] = useState(false)
-
-  useEffect(() => {
-    const loaded = loadProactiveSettings()
-    setSettings(loaded)
-    setInitialSettings(loaded)
-  }, [])
 
   const update = useCallback((patch: Partial<ProactiveMessageSettings>) => {
     setSettings(prev => {

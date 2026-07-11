@@ -28,8 +28,17 @@ Respond with valid JSON in this exact format:
   "exampleSentence": "An IELTS-style example sentence using the word",
   "synonyms": ["synonym1", "synonym2", "synonym3"],
   "collocations": ["collocation1", "collocation2"],
-  "ieltsTopic": "Most relevant IELTS topic: education, environment, technology, health, travel, culture, economy, society, science, work, or general"
-}`
+  "ieltsTopic": "Most relevant IELTS topic: education, environment, technology, health, travel, culture, economy, society, science, work, or general",
+  "verbConjugation": {
+    "base": "base form (omit if not a verb)",
+    "pastSimple": "past simple form",
+    "pastParticiple": "past participle form",
+    "presentParticiple": "present participle (-ing) form",
+    "thirdPersonSingular": "third person singular (-s) form"
+  }
+}
+
+IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, omit verbConjugation entirely.`
 
   return { systemPrompt, userPrompt }
 }

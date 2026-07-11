@@ -2,6 +2,14 @@ import { AIAdapter } from '../../infrastructure/ai/AIAdapter'
 import { StorageAdapter } from '../../infrastructure/persistence/StorageAdapter'
 import { safeStorageGet, safeStorageSet } from '../../../utils/safe-chrome'
 
+export interface VerbConjugation {
+  base: string
+  pastSimple: string
+  pastParticiple: string
+  presentParticiple: string
+  thirdPersonSingular: string
+}
+
 export interface VocabEntry {
   id: string
   word: string
@@ -14,6 +22,7 @@ export interface VocabEntry {
   synonyms?: string[]
   antonyms?: string[]
   wordFamily?: string[]
+  verbConjugation?: VerbConjugation
   difficulty?: string
   topic?: string
   sourceVideoId: string
@@ -33,6 +42,7 @@ export interface WordDetails {
   synonyms?: string[]
   antonyms?: string[]
   wordFamily?: string[]
+  verbConjugation?: VerbConjugation
   difficulty?: string
   topic?: string
 }
@@ -157,13 +167,23 @@ export class VocabularyService {
     const contextPart = contextSentence
       ? `Context sentence: "${contextSentence}"\n`
       : ''
-    const userPrompt = `Analyze this word for IELTS learners: "${word}"\n${contextPart}Provide: meaning, translation, partOfSpeech, pronunciation, exampleSentence (string), collocations (array of strings), synonyms (array of strings), antonyms (array of strings), wordFamily (array of strings), difficulty (A1-C2 or IELTS band), topic.`
+    const userPrompt = `Analyze this word for IELTS learners: "${word}"\n${contextPart}Provide: meaning, translation, partOfSpeech, pronunciation, exampleSentence (string), collocations (array of strings), synonyms (array of strings), antonyms (array of strings), wordFamily (array of strings), difficulty (A1-C2 or IELTS band), topic. If the word is a verb, also provide verbConjugation with base, pastSimple, pastParticiple, presentParticiple, thirdPersonSingular fields.`
 
     const result = await this.aiAdapter.request(systemPrompt, userPrompt, { temperature: 0.3 })
     if (result.error || !result.content) return null
 
     try {
       const parsed = JSON.parse(result.content)
+      const rawVc = parsed.verbConjugation
+      const verbConjugation = rawVc && typeof rawVc === 'object' && !Array.isArray(rawVc)
+        ? {
+            base: String(rawVc.base || ''),
+            pastSimple: String(rawVc.pastSimple || ''),
+            pastParticiple: String(rawVc.pastParticiple || ''),
+            presentParticiple: String(rawVc.presentParticiple || ''),
+            thirdPersonSingular: String(rawVc.thirdPersonSingular || ''),
+          }
+        : undefined
       return {
         word: parsed.word ?? word,
         meaning: parsed.meaning ?? '',
@@ -175,6 +195,7 @@ export class VocabularyService {
         synonyms: parsed.synonyms,
         antonyms: parsed.antonyms,
         wordFamily: parsed.wordFamily,
+        verbConjugation,
         difficulty: parsed.difficulty,
         topic: parsed.topic,
       }

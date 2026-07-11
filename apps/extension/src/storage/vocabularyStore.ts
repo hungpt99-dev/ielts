@@ -1,5 +1,13 @@
 import { openDB, STORE_NAMES } from './db'
 
+export interface VerbConjugation {
+  base: string
+  pastSimple: string
+  pastParticiple: string
+  presentParticiple: string
+  thirdPersonSingular: string
+}
+
 export interface ExtensionVocabEntry {
   id: string
   word: string
@@ -18,6 +26,7 @@ export interface ExtensionVocabEntry {
   antonyms: string[]
   collocations: string[]
   wordFamily: string[]
+  verbConjugation?: VerbConjugation
   difficulty: 'easy' | 'medium' | 'hard' | ''
   status: 'new' | 'learning' | 'reviewing' | 'mastered'
   addedToReview: boolean

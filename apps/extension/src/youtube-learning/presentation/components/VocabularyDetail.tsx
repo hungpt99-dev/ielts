@@ -25,6 +25,14 @@ export interface VocabSaveData {
   videoTitle: string
 }
 
+interface VerbConjugation {
+  base: string
+  pastSimple: string
+  pastParticiple: string
+  presentParticiple: string
+  thirdPersonSingular: string
+}
+
 interface VocabExplanation {
   word: string
   normalizedWord: string
@@ -38,6 +46,7 @@ interface VocabExplanation {
   collocations: Array<{ phrase: string; example?: string }>
   synonyms: string[]
   wordFamily: Array<{ word: string; partOfSpeech: string }>
+  verbConjugation?: VerbConjugation
   simpleExample: string
   ieltsExample?: string
   sourceSentence: string
@@ -195,6 +204,31 @@ export function VocabularyDetail({
               <div style={{ color: 'var(--color-muted)', fontSize: '10px', marginBottom: '2px' }}>In this video</div>
               {sourceSentence}
             </div>
+
+            {explanation.verbConjugation && explanation.verbConjugation.base && (
+              <div>
+                <div style={{ color: 'var(--color-muted)', fontSize: '10px', marginBottom: '4px' }}>Verb Conjugation</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                  {[
+                    { label: 'V1', value: explanation.verbConjugation.base },
+                    { label: 'V2', value: explanation.verbConjugation.pastSimple },
+                    { label: 'V3', value: explanation.verbConjugation.pastParticiple },
+                    { label: '-ing', value: explanation.verbConjugation.presentParticiple },
+                    { label: '-s', value: explanation.verbConjugation.thirdPersonSingular },
+                  ].filter(f => f.value).map((f, i) => (
+                    <span key={i} style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '3px',
+                      padding: '2px 8px', borderRadius: '4px',
+                      background: 'rgba(16,185,129,0.15)', color: 'var(--color-success)',
+                      fontSize: '11px', fontWeight: 500,
+                    }}>
+                      <span style={{ opacity: 0.6 }}>{f.label}</span>
+                      {f.value}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {explanation.synonyms.length > 0 && (
               <div>

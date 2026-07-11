@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { verbConjugationSchema } from './verb'
 
 export const dictionaryEntrySchema = z.object({
   word: z.string().min(1),
@@ -10,5 +11,6 @@ export const dictionaryEntrySchema = z.object({
   synonyms: z.array(z.string()).default([]),
   collocations: z.array(z.string()).default([]),
   ieltsTopic: z.string().default(''),
+  verbConjugation: verbConjugationSchema.optional(),
 })
 export type DictionaryEntry = z.infer<typeof dictionaryEntrySchema>

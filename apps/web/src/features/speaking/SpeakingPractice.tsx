@@ -800,6 +800,7 @@ export default function SpeakingPractice() {
                   <textarea
                     value={answerNotes}
                     onChange={(e) => setAnswerNotes(e.target.value)}
+                    readOnly
                     rows={8}
                     className="w-full rounded-lg border px-3 py-2 text-sm leading-relaxed focus:outline-none focus:ring-1"
                     style={{

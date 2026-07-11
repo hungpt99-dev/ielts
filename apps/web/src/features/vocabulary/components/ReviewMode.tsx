@@ -256,6 +256,24 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
                   /{currentItem.vocab.pronunciation}/
                 </p>
               )}
+              {currentItem.vocab.verbConjugation?.base && (
+                <div className="mt-2 flex flex-wrap justify-center gap-1">
+                  {[
+                    { label: 'V1', value: currentItem.vocab.verbConjugation.base },
+                    { label: 'V2', value: currentItem.vocab.verbConjugation.pastSimple },
+                    { label: 'V3', value: currentItem.vocab.verbConjugation.pastParticiple },
+                    { label: '-ing', value: currentItem.vocab.verbConjugation.presentParticiple },
+                    { label: '-s', value: currentItem.vocab.verbConjugation.thirdPersonSingular },
+                  ].filter(f => f.value).map((f, i) => (
+                    <span key={i} className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
+                      style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success-dark)' }}
+                    >
+                      <span style={{ opacity: 0.7 }}>{f.label}</span>
+                      {f.value}
+                    </span>
+                  ))}
+                </div>
+              )}
               <div className="mt-6 rounded-lg p-4" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
                 <p className="text-sm font-medium" style={{ color: 'var(--color-muted)' }}>Meaning</p>
                 <p className="mt-1 text-lg" style={{ color: 'var(--color-text)' }}>
@@ -289,6 +307,24 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
                   <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
                     /{currentItem.vocab.pronunciation}/
                   </p>
+                )}
+                {currentItem.vocab.verbConjugation?.base && (
+                  <div className="mt-2 flex flex-wrap justify-center gap-1">
+                    {[
+                      { label: 'V1', value: currentItem.vocab.verbConjugation.base },
+                      { label: 'V2', value: currentItem.vocab.verbConjugation.pastSimple },
+                      { label: 'V3', value: currentItem.vocab.verbConjugation.pastParticiple },
+                      { label: '-ing', value: currentItem.vocab.verbConjugation.presentParticiple },
+                      { label: '-s', value: currentItem.vocab.verbConjugation.thirdPersonSingular },
+                    ].filter(f => f.value).map((f, i) => (
+                      <span key={i} className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
+                        style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success-dark)' }}
+                      >
+                        <span style={{ opacity: 0.7 }}>{f.label}</span>
+                        {f.value}
+                      </span>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>

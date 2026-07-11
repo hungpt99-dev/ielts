@@ -39,3 +39,6 @@ export type {
 
 export { dictionaryEntrySchema } from './dictionary'
 export type { DictionaryEntry } from './dictionary'
+
+export { verbConjugationSchema, verbAnalysisSchema } from './verb'
+export type { VerbConjugation, VerbAnalysis } from './verb'

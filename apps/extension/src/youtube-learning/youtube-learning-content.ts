@@ -356,7 +356,7 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
   try {
     // First try: AI-powered rich explanation with full schema
     const systemPrompt = 'You are an IELTS vocabulary expert. Return ONLY valid JSON, no markdown, no code fences.'
-    const userPrompt = `Analyze this word for an IELTS learner:\n\nWord: "${word}"\nContext sentence: "${sentence}"\n\nReturn JSON with:\n- word: the original word\n- normalizedWord: lowercase lemma\n- lemma: base form\n- pronunciation: IPA pronunciation (optional)\n- partOfSpeech: e.g. noun, verb, adjective\n- contextualDefinition: definition matching this context\n- translation: translation in the user's preferred language (optional)\n- cefrLevel: "A1"|"A2"|"B1"|"B2"|"C1"|"C2"\n- ieltsRelevance: "low"|"medium"|"high"\n- collocations: array of {phrase: string, example?: string}\n- synonyms: array of strings\n- wordFamily: array of {word: string, partOfSpeech: string}\n- simpleExample: simple example sentence\n- ieltsExample: IELTS-style example sentence (optional)\n\nContextual definition must relate to the provided sentence. If the word has multiple meanings, explain the one used in the context sentence first.`
+    const userPrompt = `Analyze this word for an IELTS learner:\n\nWord: "${word}"\nContext sentence: "${sentence}"\n\nReturn JSON with:\n- word: the original word\n- normalizedWord: lowercase lemma\n- lemma: base form\n- pronunciation: IPA pronunciation (optional)\n- partOfSpeech: e.g. noun, verb, adjective\n- contextualDefinition: definition matching this context\n- translation: translation in the user's preferred language (optional)\n- cefrLevel: "A1"|"A2"|"B1"|"B2"|"C1"|"C2"\n- ieltsRelevance: "low"|"medium"|"high"\n- collocations: array of {phrase: string, example?: string}\n- synonyms: array of strings\n- wordFamily: array of {word: string, partOfSpeech: string}\n- simpleExample: simple example sentence\n- ieltsExample: IELTS-style example sentence (optional)\n- verbConjugation: {base: string, pastSimple: string, pastParticiple: string, presentParticiple: string, thirdPersonSingular: string} (omit if not a verb)\n\nContextual definition must relate to the provided sentence. If the word has multiple meanings, explain the one used in the context sentence first.`
 
     const result = await aiAdapter.request(systemPrompt, userPrompt, { temperature: 0.3 })
 
@@ -372,6 +372,17 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
         ? parsed.wordFamily.map((wf: any) => ({ word: typeof wf === 'string' ? wf : wf.word || '', partOfSpeech: wf.partOfSpeech || '' }))
         : []
 
+      const rawVc = parsed.verbConjugation
+      const verbConjugation = rawVc && typeof rawVc === 'object' && !Array.isArray(rawVc)
+        ? {
+            base: String((rawVc as Record<string, unknown>).base || ''),
+            pastSimple: String((rawVc as Record<string, unknown>).pastSimple || ''),
+            pastParticiple: String((rawVc as Record<string, unknown>).pastParticiple || ''),
+            presentParticiple: String((rawVc as Record<string, unknown>).presentParticiple || ''),
+            thirdPersonSingular: String((rawVc as Record<string, unknown>).thirdPersonSingular || ''),
+          }
+        : undefined
+
       postToParent('VOCAB_EXPLANATION', {
         word: parsed.word || word,
         normalizedWord: parsed.normalizedWord || normalized,
@@ -385,6 +396,7 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
         collocations,
         synonyms: Array.isArray(parsed.synonyms) ? parsed.synonyms : [],
         wordFamily,
+        verbConjugation,
         simpleExample: parsed.simpleExample || '',
         ieltsExample: parsed.ieltsExample || undefined,
         sourceSentence: sentence,

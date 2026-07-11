@@ -30,8 +30,17 @@ Respond with valid JSON in this exact format:
   "synonyms": ["synonym1", "synonym2", "synonym3"],
   "antonyms": ["antonym1", "antonym2"],
   "collocations": ["collocation1 with example", "collocation2 with example"],
-  "wordFamily": ["related word forms like noun form, verb form"]
-}`
+  "wordFamily": ["related word forms like noun form, verb form"],
+  "verbConjugation": {
+    "base": "base form of verb (omit if not a verb)",
+    "pastSimple": "past simple form",
+    "pastParticiple": "past participle form",
+    "presentParticiple": "present participle (-ing) form",
+    "thirdPersonSingular": "third person singular (-s) form"
+  }
+}
+
+IMPORTANT: Only include verbConjugation if the word is a verb. If the word is not a verb, omit verbConjugation entirely or set it to null.`
 
   return { systemPrompt, userPrompt }
 }

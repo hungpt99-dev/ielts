@@ -29,6 +29,14 @@ interface PageInfo {
   selectedText: string
 }
 
+interface VerbConjugation {
+  base: string
+  pastSimple: string
+  pastParticiple: string
+  presentParticiple: string
+  thirdPersonSingular: string
+}
+
 interface AIDetails {
   meaning: string
   translation: string
@@ -39,6 +47,7 @@ interface AIDetails {
   antonyms: string[]
   collocations: string[]
   wordFamily: string[]
+  verbConjugation?: VerbConjugation
 }
 
 async function getAIProviderConfig(): Promise<{
@@ -92,8 +101,17 @@ Respond with valid JSON in this exact format:
   "synonyms": ["synonym1", "synonym2", "synonym3"],
   "antonyms": ["antonym1", "antonym2"],
   "collocations": ["collocation1 — example", "collocation2 — example"],
-  "wordFamily": ["noun form", "verb form", "adjective form"]
-}`
+  "wordFamily": ["noun form", "verb form", "adjective form"],
+  "verbConjugation": {
+    "base": "base form (omit if not a verb)",
+    "pastSimple": "past tense form",
+    "pastParticiple": "past participle form",
+    "presentParticiple": "-ing form",
+    "thirdPersonSingular": "-s form"
+  }
+}
+
+IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, omit verbConjugation entirely.`
 
   const url = `${config.baseUrl.replace(/\/+$/, '')}/chat/completions`
 
@@ -133,6 +151,17 @@ Respond with valid JSON in this exact format:
 
     const parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
 
+    const rawVc = parsed.verbConjugation
+    const verbConjugation = rawVc && typeof rawVc === 'object' && !Array.isArray(rawVc)
+      ? {
+          base: String(rawVc.base || ''),
+          pastSimple: String(rawVc.pastSimple || ''),
+          pastParticiple: String(rawVc.pastParticiple || ''),
+          presentParticiple: String(rawVc.presentParticiple || ''),
+          thirdPersonSingular: String(rawVc.thirdPersonSingular || ''),
+        }
+      : undefined
+
     const details: AIDetails = {
       meaning: parsed.meaning || '',
       translation: parsed.translation || '',
@@ -143,6 +172,7 @@ Respond with valid JSON in this exact format:
       antonyms: Array.isArray(parsed.antonyms) ? parsed.antonyms : [],
       collocations: Array.isArray(parsed.collocations) ? parsed.collocations : [],
       wordFamily: Array.isArray(parsed.wordFamily) ? parsed.wordFamily : [],
+      verbConjugation,
     }
 
     return { data: details, error: null }
@@ -284,6 +314,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
       antonyms: aiDetails?.antonyms || [],
       collocations: aiDetails?.collocations || [],
       wordFamily: aiDetails?.wordFamily || [],
+      verbConjugation: aiDetails?.verbConjugation,
 
       difficulty,
       status: 'new',

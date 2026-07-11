@@ -61,6 +61,7 @@ export interface AppSettings {
   targetBand: number
   currentBand: number
   examDate: string
+  nativeLanguage: string
   dailyStudyMinutes: number
   weakSkills: string[]
   preferredTopics: string[]
@@ -80,6 +81,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   targetBand: 7.0,
   currentBand: 5.5,
   examDate: '',
+  nativeLanguage: '',
   dailyStudyMinutes: 60,
   weakSkills: [],
   preferredTopics: [],
@@ -96,6 +98,14 @@ export const DEFAULT_SETTINGS: AppSettings = {
 }
 
 
+export interface VerbConjugation {
+  base: string
+  pastSimple: string
+  pastParticiple: string
+  presentParticiple: string
+  thirdPersonSingular: string
+}
+
 export interface VocabularyEntry {
   id: string
   word: string
@@ -109,6 +119,7 @@ export interface VocabularyEntry {
   synonyms: string[]
   antonyms: string[]
   wordFamily: string[]
+  verbConjugation?: VerbConjugation
   personalNote: string
   difficulty: VocabDifficulty
   status: VocabStatus

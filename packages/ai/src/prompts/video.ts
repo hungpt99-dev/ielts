@@ -9,9 +9,8 @@ const VIDEO_PROMPT_VERSION: PromptVersion = { version: 1, description: 'Initial 
 export function buildVocabularyFromTranscriptPrompt(
   transcript: string,
   videoTitle: string,
-  nativeLanguage = '',
+  _nativeLanguage = '',
 ): { systemPrompt: string; userPrompt: string } {
-  const lang = translationTarget(nativeLanguage)
   const systemPrompt = 'You are an IELTS vocabulary expert. Extract useful vocabulary from video transcripts for IELTS learners. Respond with valid JSON only.'
 
   const userPrompt = `Extract IELTS-level vocabulary from the following video transcript.
@@ -33,10 +32,19 @@ Respond with valid JSON in this exact format:
       "example": "example sentence from the transcript or IELTS-style",
       "synonyms": ["synonym1", "synonym2"],
       "collocations": ["collocation1", "collocation2"],
-      "context": "the original sentence from the transcript"
+      "context": "the original sentence from the transcript",
+      "verbConjugation": {
+        "base": "base form (omit if not a verb)",
+        "pastSimple": "past tense form",
+        "pastParticiple": "past participle form",
+        "presentParticiple": "-ing form",
+        "thirdPersonSingular": "-s form"
+      }
     }
   ]
-}`
+}
+
+IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, omit it entirely.`
 
   return { systemPrompt, userPrompt }
 }

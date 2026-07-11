@@ -24,7 +24,7 @@ const handlers: EventHandlers = {
   settingsChanged: new Set(),
 }
 
-function safeInvoke<T extends (...args: never[]) => void>(fn: T, ...args: Parameters<T>): void {
+function safeInvoke<T extends (...args: any[]) => void>(fn: T, ...args: Parameters<T>): void {
   try {
     fn(...args)
   } catch (e) {

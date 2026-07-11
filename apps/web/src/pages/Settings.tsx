@@ -65,9 +65,34 @@ const DAYS_OF_WEEK = [
 
 const BAND_OPTIONS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9]
 
+const NATIVE_LANGUAGE_OPTIONS = [
+  { value: '', label: 'Not specified' },
+  { value: 'Arabic', label: 'Arabic' },
+  { value: 'Bengali', label: 'Bengali' },
+  { value: 'Chinese', label: 'Chinese' },
+  { value: 'English', label: 'English' },
+  { value: 'French', label: 'French' },
+  { value: 'German', label: 'German' },
+  { value: 'Hindi', label: 'Hindi' },
+  { value: 'Indonesian', label: 'Indonesian' },
+  { value: 'Italian', label: 'Italian' },
+  { value: 'Japanese', label: 'Japanese' },
+  { value: 'Korean', label: 'Korean' },
+  { value: 'Malay', label: 'Malay' },
+  { value: 'Portuguese', label: 'Portuguese' },
+  { value: 'Russian', label: 'Russian' },
+  { value: 'Spanish', label: 'Spanish' },
+  { value: 'Tamil', label: 'Tamil' },
+  { value: 'Thai', label: 'Thai' },
+  { value: 'Turkish', label: 'Turkish' },
+  { value: 'Urdu', label: 'Urdu' },
+  { value: 'Vietnamese', label: 'Vietnamese' },
+]
+
 interface FormErrors {
   targetBand?: string
   currentBand?: string
+  nativeLanguage?: string
   dailyStudyMinutes?: string
   studyReminder?: string
 }
@@ -243,6 +268,7 @@ export default function Settings() {
           targetBand: 7.0,
           currentBand: 5.5,
           examDate: '',
+          nativeLanguage: '',
           dailyStudyMinutes: 60,
           weakSkills: [],
           preferredTopics: [],
@@ -617,6 +643,14 @@ export default function Settings() {
                         ? `${Math.max(0, Math.ceil((new Date(form.examDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))} days until exam`
                         : 'Leave empty if not yet scheduled'
                       }
+                    />
+
+                    <Select
+                      id="native-language"
+                      label="Native Language"
+                      value={form.nativeLanguage}
+                      onChange={(e) => { setForm(prev => ({ ...prev, nativeLanguage: (e.target as HTMLSelectElement).value })); setDirty(true) }}
+                      options={NATIVE_LANGUAGE_OPTIONS}
                     />
 
                     <Input

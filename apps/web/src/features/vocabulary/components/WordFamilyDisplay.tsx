@@ -1,11 +1,20 @@
 import { useMemo } from 'react'
 import PronounceButton from '../../../components/ui/PronounceButton'
 
+interface VerbConjugation {
+  base: string
+  pastSimple: string
+  pastParticiple: string
+  presentParticiple: string
+  thirdPersonSingular: string
+}
+
 interface ParsedWordForm {
   word: string
   pos: string | null
   meaning: string
   pronunciation: string
+  verbConjugation?: VerbConjugation
 }
 
 interface WordFamilyDisplayProps {
@@ -43,11 +52,22 @@ function parseEntry(s: string, word: string): ParsedWordForm {
     try {
       const parsed = JSON.parse(s)
       if (parsed.word && parsed.pos) {
+        const rawVc = parsed.verbConjugation
+        const verbConjugation = rawVc && typeof rawVc === 'object' && !Array.isArray(rawVc)
+          ? {
+              base: String(rawVc.base || ''),
+              pastSimple: String(rawVc.pastSimple || ''),
+              pastParticiple: String(rawVc.pastParticiple || ''),
+              presentParticiple: String(rawVc.presentParticiple || ''),
+              thirdPersonSingular: String(rawVc.thirdPersonSingular || ''),
+            }
+          : undefined
         return {
           word: parsed.word,
           pos: parsed.pos,
           meaning: parsed.meaning || '',
           pronunciation: parsed.pronunciation || '',
+          verbConjugation,
         }
       }
     } catch { /* ignore */ }
@@ -166,6 +186,26 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
                       <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
                         {form.meaning}
                       </p>
+                    )}
+                    {form.pos === 'verb' && form.verbConjugation?.base && (
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {[
+                          { label: 'V1', value: form.verbConjugation.base },
+                          { label: 'V2', value: form.verbConjugation.pastSimple },
+                          { label: 'V3', value: form.verbConjugation.pastParticiple },
+                          { label: '-ing', value: form.verbConjugation.presentParticiple },
+                          { label: '-s', value: form.verbConjugation.thirdPersonSingular },
+                        ].filter(f => f.value).map(f => (
+                          <span
+                            key={f.label}
+                            className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium"
+                            style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success-dark)' }}
+                          >
+                            <span style={{ opacity: 0.7 }}>{f.label}</span>
+                            <span>{f.value}</span>
+                          </span>
+                        ))}
+                      </div>
                     )}
                   </div>
                 ))}

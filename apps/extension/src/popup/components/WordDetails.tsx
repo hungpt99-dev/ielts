@@ -273,6 +273,35 @@ export default function WordDetails({ entry, onBack }: WordDetailsProps) {
             </DetailSection>
           )}
 
+          {entry.verbConjugation && entry.verbConjugation.base && (
+            <DetailSection title="Verb Conjugation">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-2xs)' }}>
+                {[
+                  { label: 'V1', value: entry.verbConjugation.base },
+                  { label: 'V2', value: entry.verbConjugation.pastSimple },
+                  { label: 'V3', value: entry.verbConjugation.pastParticiple },
+                  { label: '-ing', value: entry.verbConjugation.presentParticiple },
+                  { label: '-s', value: entry.verbConjugation.thirdPersonSingular },
+                ].filter(f => f.value).map((f, i) => (
+                  <span key={i} style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '3px',
+                    padding: 'var(--spacing-3xs) var(--spacing-xs)',
+                    borderRadius: 'var(--radius-full)',
+                    background: 'var(--color-success-light)',
+                    color: 'var(--color-success-dark)',
+                    fontSize: 'var(--text-xs)',
+                    fontWeight: 'var(--weight-medium)',
+                  }}>
+                    <span style={{ opacity: 0.7 }}>{f.label}</span>
+                    {f.value}
+                  </span>
+                ))}
+              </div>
+            </DetailSection>
+          )}
+
           {Array.isArray(entry.collocations) && entry.collocations.length > 0 && (
             <DetailSection title="Collocations">
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>

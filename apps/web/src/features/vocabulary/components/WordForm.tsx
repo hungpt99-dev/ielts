@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../../../models'
+import type { VocabularyEntry, VerbConjugation, VocabDifficulty, VocabStatus } from '../../../models'
 import Button from '../../../components/ui/Button'
 import { useSettings } from '../../../context/SettingsContext'
 import { callAI } from '@ielts/ai'
@@ -56,10 +56,21 @@ interface WordFormProps {
   saving?: boolean
 }
 
+const CONJUGATION_FIELDS: Array<{ key: keyof VerbConjugation; label: string; placeholder: string }> = [
+  { key: 'base', label: 'Base Form (V1)', placeholder: 'run' },
+  { key: 'pastSimple', label: 'Past Simple (V2)', placeholder: 'ran' },
+  { key: 'pastParticiple', label: 'Past Participle (V3)', placeholder: 'run' },
+  { key: 'presentParticiple', label: 'Present Participle (-ing)', placeholder: 'running' },
+  { key: 'thirdPersonSingular', label: 'Third Person (-s)', placeholder: 'runs' },
+]
+
 export default function WordForm({ initialValues, onSave, onCancel, saving }: WordFormProps) {
   const { settings } = useSettings()
   const [generating, setGenerating] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
+  const [verbConjugation, setVerbConjugation] = useState<VerbConjugation>(
+    initialValues?.verbConjugation ?? { base: '', pastSimple: '', pastParticiple: '', presentParticiple: '', thirdPersonSingular: '' },
+  )
 
   const {
     register,
@@ -106,9 +117,11 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
 
   const word = watch('word')
   const topic = watch('topic')
+  const partOfSpeech = watch('partOfSpeech')
 
   function buildEntry(values: VocabFormValues): VocabularyEntry {
     const now = new Date().toISOString()
+    const hasVerbData = partOfSpeech === 'verb' && verbConjugation?.base
     return {
       id: initialValues?.id ?? crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9),
       word: values.word.trim(),
@@ -122,6 +135,7 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
       synonyms: parseList(values.synonyms),
       antonyms: parseList(values.antonyms),
       wordFamily: parseList(values.wordFamily),
+      verbConjugation: hasVerbData ? verbConjugation : undefined,
       personalNote: values.personalNote.trim(),
       difficulty: values.difficulty,
       status: values.status,
@@ -135,6 +149,10 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
     const entry = buildEntry(values)
     onSave(entry)
   }
+
+  const updateConjugation = useCallback((field: keyof VerbConjugation, value: string) => {
+    setVerbConjugation(prev => ({ ...prev, [field]: value }))
+  }, [])
 
   async function generateExample() {
     if (!word.trim()) {
@@ -330,6 +348,35 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
           </div>
         </div>
       </div>
+
+      {partOfSpeech === 'verb' && (
+        <div className="rounded-lg border p-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-alt)' }}>
+          <p className="mb-3 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+            Verb Conjugation
+          </p>
+          <div className="grid gap-3 sm:grid-cols-5">
+            {CONJUGATION_FIELDS.map(field => (
+              <div key={field.key}>
+                <label className="block text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
+                  {field.label}
+                </label>
+                <input
+                  type="text"
+                  value={verbConjugation[field.key]}
+                  onChange={e => updateConjugation(field.key, e.target.value)}
+                  placeholder={field.placeholder}
+                  className="mt-1 w-full rounded-lg border px-2 py-1.5 text-sm focus:outline-none focus:ring-1"
+                  style={{
+                    borderColor: 'var(--color-border)',
+                    backgroundColor: 'var(--color-surface)',
+                    color: 'var(--color-text)',
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div>
         <div className="flex items-start justify-between gap-2">

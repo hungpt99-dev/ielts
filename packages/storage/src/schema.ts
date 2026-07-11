@@ -69,6 +69,14 @@ export const sourceNameSchema = z.enum([
   'wiktionary', 'datamuse', 'tatoeba', 'oer-commons', 'wikipedia', 'gutendex', 'youtube',
 ])
 
+export const verbConjugationSchema = z.object({
+  base: z.string().default(''),
+  pastSimple: z.string().default(''),
+  pastParticiple: z.string().default(''),
+  presentParticiple: z.string().default(''),
+  thirdPersonSingular: z.string().default(''),
+})
+
 export const vocabularyEntrySchema = z.object({
   id: z.string().min(1),
   word: z.string().min(1),
@@ -82,6 +90,7 @@ export const vocabularyEntrySchema = z.object({
   synonyms: z.array(z.string()).default([]),
   antonyms: z.array(z.string()).default([]),
   wordFamily: z.array(z.string()).default([]),
+  verbConjugation: verbConjugationSchema.optional(),
   personalNote: z.string().default(''),
   difficulty: vocabDifficultySchema,
   status: vocabStatusSchema,

@@ -122,6 +122,7 @@ export interface ConfigurationAdvanced {
 export interface ConfigurationBasic {
   targetBand: number
   examDate: string
+  nativeLanguage: string
   responseLanguage: AiResponseLanguage
   tutorMode: AiTutorMode
   dailyStudyMinutes: number

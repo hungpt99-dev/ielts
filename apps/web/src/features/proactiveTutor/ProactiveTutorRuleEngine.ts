@@ -136,7 +136,10 @@ const EVENT_TYPE_TO_MESSAGE_TYPE: Partial<Record<LearningEventType, string>> = {
   study_task_completed: 'task_completed',
   scheduled_check_triggered: 'scheduled_check',
   user_returned_after_inactivity: 'return_after_inactivity',
+  extension_popup_opened: 'extension_popup_opened',
   extension_vocabulary_saved: 'vocabulary_saved_ext',
+  extension_vocabulary_review_started: 'vocabulary_review_started_ext',
+  extension_ai_tutor_opened: 'extension_ai_tutor_opened',
   extension_selected_text_explained: 'text_explained',
   extension_selected_text_simplified: 'text_simplified',
 }
@@ -172,7 +175,7 @@ const AGGREGATION_THRESHOLDS: Partial<Record<LearningEventType, AggregationThres
 // ─── Default Priority Mapping ───────────────────────────────────────────────
 
 const PRIORITY_BY_EVENT_TYPE: Partial<Record<LearningEventType, MessagePriority>> = {
-  exam_date_is_close: 'urgent',
+  exam_date_is_close: 'normal',
   study_day_missed: 'high',
   repeated_mistake_detected: 'high',
   streak_milestone_reached: 'high',

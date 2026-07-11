@@ -76,6 +76,14 @@ function extractJson(text: string): Record<string, unknown> | null {
   }
 }
 
+export interface VerbConjugation {
+  base: string
+  pastSimple: string
+  pastParticiple: string
+  presentParticiple: string
+  thirdPersonSingular: string
+}
+
 export interface VocabEnrichResult {
   meaning: string
   translation: string
@@ -86,6 +94,7 @@ export interface VocabEnrichResult {
   antonyms: string[]
   collocations: string[]
   wordFamily: string[]
+  verbConjugation?: VerbConjugation
 }
 
 export async function enrichVocabulary(
@@ -105,13 +114,33 @@ Respond with JSON:
   "synonyms": ["word1", "word2", "word3"],
   "antonyms": ["word1", "word2"],
   "collocations": ["phrase — meaning"],
-  "wordFamily": ["noun", "verb", "adjective"]
-}`
+  "wordFamily": ["noun", "verb", "adjective"],
+  "verbConjugation": {
+    "base": "base form (omit if not a verb)",
+    "pastSimple": "past tense form",
+    "pastParticiple": "past participle form",
+    "presentParticiple": "-ing form",
+    "thirdPersonSingular": "-s form"
+  }
+}
+
+IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, omit it entirely.`
 
   const { content, error } = await callAI(systemPrompt, userPrompt)
   if (error) return { data: null, error }
   const json = extractJson(content || '')
   if (!json) return { data: null, error: 'AI response was not valid JSON' }
+
+  const rawVc = json.verbConjugation
+  const verbConjugation = rawVc && typeof rawVc === 'object' && !Array.isArray(rawVc)
+    ? {
+        base: String((rawVc as Record<string, unknown>).base || ''),
+        pastSimple: String((rawVc as Record<string, unknown>).pastSimple || ''),
+        pastParticiple: String((rawVc as Record<string, unknown>).pastParticiple || ''),
+        presentParticiple: String((rawVc as Record<string, unknown>).presentParticiple || ''),
+        thirdPersonSingular: String((rawVc as Record<string, unknown>).thirdPersonSingular || ''),
+      }
+    : undefined
 
   return {
     data: {
@@ -124,6 +153,7 @@ Respond with JSON:
       antonyms: Array.isArray(json.antonyms) ? json.antonyms as string[] : [],
       collocations: Array.isArray(json.collocations) ? json.collocations as string[] : [],
       wordFamily: Array.isArray(json.wordFamily) ? json.wordFamily as string[] : [],
+      verbConjugation,
     },
     error: null,
   }

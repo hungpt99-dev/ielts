@@ -9,6 +9,7 @@ import { generateId } from '../../utils'
 import { checkWriting } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconWriting } from '@ielts/ui'
+import FeedbackPanel, { type WritingFeedback } from './components/FeedbackPanel'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',

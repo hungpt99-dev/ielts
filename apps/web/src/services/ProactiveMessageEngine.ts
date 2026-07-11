@@ -356,8 +356,7 @@ export class ProactiveMessageEngine {
     return existing.some(
       m =>
         m.triggerType === candidate.triggerType &&
-        isSameDay(m.createdAt, today) &&
-        !m.isDismissed,
+        isSameDay(m.createdAt, today),
     )
   }
 
@@ -465,8 +464,10 @@ export class ProactiveMessageEngine {
       return {
         targetBand: 0, currentBand: 0, examDate: '',
         dailyStudyMinutes: 0, weakSkills: [], preferredTopics: [],
-        studyReminder: '', aiApiKey: '', aiProvider: 'openai',
-        aiEndpoint: '', aiModel: '', darkMode: false,
+        studyReminder: '', studyGoal: 'academic' as const,
+        preferredSchedule: [] as ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[],
+        aiApiKey: '', aiProvider: 'openai',
+        aiBaseUrl: '', aiEndpoint: '', aiModel: '', darkMode: false,
         aiEnabled: false,
       }
     }
@@ -806,9 +807,7 @@ export class ProactiveMessageEngine {
         isSnoozed: false,
         createdAt: new Date().toISOString(),
       })
-    }
-
-    if (memory.learningStreak >= 3) {
+    } else if (memory.learningStreak >= 3) {
       const today = todayKey()
       const lastStudy = memory.lastStudyDate ? memory.lastStudyDate.slice(0, 10) : ''
       if (lastStudy === today) {
@@ -1210,14 +1209,16 @@ export class ProactiveMessageEngine {
 
   async forceGenerate(): Promise<ProactiveMessage[]> {
     const messages = await this.analyzeAndGenerate()
-    const existing = loadMessages()
+    const saved: ProactiveMessage[] = []
     for (const msg of messages) {
+      const existing = loadMessages()
       if (!this.isDuplicateMessage(existing, msg)) {
         existing.push(msg)
+        saveMessages(existing)
+        saved.push(msg)
       }
     }
-    saveMessages(existing)
-    return messages
+    return saved
   }
 }
 

@@ -13,6 +13,30 @@ const RESPONSE_LANGUAGE_OPTIONS: { value: AiResponseLanguage; label: string }[] 
   { value: 'both', label: 'Both' },
 ]
 
+const NATIVE_LANGUAGE_OPTIONS = [
+  { value: '', label: 'Not specified' },
+  { value: 'Arabic', label: 'Arabic' },
+  { value: 'Bengali', label: 'Bengali' },
+  { value: 'Chinese', label: 'Chinese' },
+  { value: 'English', label: 'English' },
+  { value: 'French', label: 'French' },
+  { value: 'German', label: 'German' },
+  { value: 'Hindi', label: 'Hindi' },
+  { value: 'Indonesian', label: 'Indonesian' },
+  { value: 'Italian', label: 'Italian' },
+  { value: 'Japanese', label: 'Japanese' },
+  { value: 'Korean', label: 'Korean' },
+  { value: 'Malay', label: 'Malay' },
+  { value: 'Portuguese', label: 'Portuguese' },
+  { value: 'Russian', label: 'Russian' },
+  { value: 'Spanish', label: 'Spanish' },
+  { value: 'Tamil', label: 'Tamil' },
+  { value: 'Thai', label: 'Thai' },
+  { value: 'Turkish', label: 'Turkish' },
+  { value: 'Urdu', label: 'Urdu' },
+  { value: 'Vietnamese', label: 'Vietnamese' },
+]
+
 const TUTOR_MODE_OPTIONS: { value: AiTutorMode; label: string; description: string }[] = [
   { value: 'friendly-tutor', label: 'Friendly Tutor', description: 'Supportive and encouraging' },
   { value: 'strict-examiner', label: 'Strict IELTS Examiner', description: 'Official exam standards' },
@@ -28,6 +52,7 @@ const TUTOR_MODE_OPTIONS: { value: AiTutorMode; label: string; description: stri
 interface FormErrors {
   targetBand?: string
   examDate?: string
+  nativeLanguage?: string
   dailyStudyMinutes?: string
 }
 
@@ -89,6 +114,13 @@ export default function BasicSettingsForm() {
           helperText="Leave empty if not yet scheduled"
         />
       </div>
+
+      <Select
+        label="Native Language"
+        value={form.nativeLanguage}
+        onChange={e => updateField('nativeLanguage', e.target.value)}
+        options={NATIVE_LANGUAGE_OPTIONS}
+      />
 
       <Select
         label="AI Response Language"

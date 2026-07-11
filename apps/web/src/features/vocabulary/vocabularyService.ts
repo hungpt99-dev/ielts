@@ -382,11 +382,20 @@ export async function searchVocabulary(query: string): Promise<VocabularyEntry[]
   )
 }
 
+export interface VerbConjugation {
+  base: string
+  pastSimple: string
+  pastParticiple: string
+  presentParticiple: string
+  thirdPersonSingular: string
+}
+
 export interface WordFormEntry {
   word: string
   pos: string
   meaning: string
   pronunciation: string
+  verbConjugation?: VerbConjugation
 }
 
 function encodeWordForm(form: WordFormEntry): string {
@@ -435,6 +444,12 @@ For each form, provide:
 4. IPA pronunciation
 
 If a form does not commonly exist for this word, omit it. Only include real, commonly used English words.
+For verb forms, additionally include verbConjugation with:
+- base: base form of the verb
+- pastSimple: past simple form
+- pastParticiple: past participle form
+- presentParticiple: present participle (-ing) form
+- thirdPersonSingular: third person singular (-s) form
 
 Respond with valid JSON in this exact format:
 {

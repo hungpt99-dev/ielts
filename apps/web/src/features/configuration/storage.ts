@@ -95,6 +95,7 @@ function createDefaultBasic(): ConfigurationBasic {
   return {
     targetBand: 7.0,
     examDate: '',
+    nativeLanguage: '',
     responseLanguage: 'english' as AiResponseLanguage,
     tutorMode: 'friendly-tutor' as AiTutorMode,
     dailyStudyMinutes: 60,

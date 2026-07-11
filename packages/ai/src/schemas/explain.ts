@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { verbConjugationSchema, verbAnalysisSchema } from './verb'
 
 export const simpleExplainSchema = z.object({
   explanation: z.string().min(1),
@@ -22,6 +23,8 @@ export const ieltsVocabSchema = z.object({
     example: z.string().min(1),
     synonyms: z.array(z.string()).default([]),
     collocations: z.array(z.string()).default([]),
+    verbConjugation: verbConjugationSchema.optional(),
+    verbAnalysis: verbAnalysisSchema.optional(),
   })).min(1),
 })
 export type IeltsVocabResult = z.infer<typeof ieltsVocabSchema>
@@ -31,6 +34,7 @@ export const grammarExplainSchema = z.object({
   structure: z.string().default(''),
   rules: z.array(z.string()).default([]),
   commonMistakes: z.array(z.string()).default([]),
+  verbs: z.array(verbAnalysisSchema).default([]),
 })
 export type GrammarExplain = z.infer<typeof grammarExplainSchema>
 

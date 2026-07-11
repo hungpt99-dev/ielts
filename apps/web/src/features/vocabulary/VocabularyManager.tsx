@@ -748,6 +748,30 @@ function WordDetail({ entry, onEdit, onClose }: { entry: VocabularyEntry; onEdit
         </div>
       )}
 
+      {entry.verbConjugation && entry.verbConjugation.base && (
+        <div>
+          <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Verb Conjugation</p>
+          <div className="mt-1 flex flex-wrap gap-1.5">
+            {[
+              { label: 'V1', value: entry.verbConjugation.base },
+              { label: 'V2', value: entry.verbConjugation.pastSimple },
+              { label: 'V3', value: entry.verbConjugation.pastParticiple },
+              { label: '-ing', value: entry.verbConjugation.presentParticiple },
+              { label: '-s', value: entry.verbConjugation.thirdPersonSingular },
+            ].filter(f => f.value).map((f, i) => (
+              <span
+                key={i}
+                className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium"
+                style={{ backgroundColor: 'var(--color-success-light)', color: 'var(--color-success-dark)' }}
+              >
+                <span style={{ opacity: 0.7 }}>{f.label}</span>
+                {f.value}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {entry.personalNote && (
         <div>
           <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Personal Note</p>

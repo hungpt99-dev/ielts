@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { verbConjugationSchema } from './verb'
 
 export const vocabularyDetailsSchema = z.object({
   meaning: z.string().min(1),
@@ -10,6 +11,7 @@ export const vocabularyDetailsSchema = z.object({
   antonyms: z.array(z.string()).default([]),
   collocations: z.array(z.string()).default([]),
   wordFamily: z.array(z.string()).default([]),
+  verbConjugation: verbConjugationSchema.optional(),
 })
 export type VocabularyDetails = z.infer<typeof vocabularyDetailsSchema>
 

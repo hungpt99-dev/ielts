@@ -399,9 +399,37 @@ function renderTranslateResult(data: TranslateExplain): string {
   return sectionWrapper(html)
 }
 
+function renderVerbConjugation(vc: { base: string; pastSimple: string; pastParticiple: string; presentParticiple: string; thirdPersonSingular: string }): string {
+  const forms = [
+    { label: 'V1', value: vc.base },
+    { label: 'V2', value: vc.pastSimple },
+    { label: 'V3', value: vc.pastParticiple },
+    { label: '-ing', value: vc.presentParticiple },
+    { label: '-s', value: vc.thirdPersonSingular },
+  ].filter(f => f.value)
+  if (forms.length === 0) return ''
+  return `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">${forms.map(f => `<span style="display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:4px;background:var(--ielts-success);font-size:10px;color:var(--ielts-on-primary, #fff);"><span style="opacity:0.7">${f.label}</span> ${escapeHtml(f.value)}</span>`).join('')}</div>`
+}
+
+function renderVerbAnalysis(va: { verb: string; tense: string; aspect: string; voice: string; mood: string; explanation: string }): string {
+  const fields = [
+    { label: 'Tense', value: va.tense },
+    { label: 'Aspect', value: va.aspect },
+    { label: 'Voice', value: va.voice },
+    { label: 'Mood', value: va.mood },
+  ].filter(f => f.value)
+  if (fields.length === 0) return ''
+  return `<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--ielts-border);font-size:11px;">
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;">${fields.map(f => `<span style="padding:1px 5px;border-radius:3px;background:var(--ielts-surface);color:var(--ielts-text-secondary);">${escapeHtml(f.label)}: <strong style="color:var(--ielts-text)">${escapeHtml(f.value)}</strong></span>`).join('')}</div>
+    ${va.explanation ? `<div style="color:var(--ielts-muted);font-size:10px;line-height:1.4;">${escapeHtml(va.explanation)}</div>` : ''}
+  </div>`
+}
+
 function renderIELTSVocabResult(data: IeltsVocabResult): string {
   let html = ''
   for (const w of data.words) {
+    const verbConjugationHtml = w.verbConjugation ? renderVerbConjugation(w.verbConjugation) : ''
+    const verbAnalysisHtml = w.verbAnalysis && w.verbAnalysis.verb ? renderVerbAnalysis(w.verbAnalysis) : ''
     html += `
       <div style="background:var(--ielts-surface-alt);border-radius:10px;padding:12px;margin-bottom:10px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -410,12 +438,34 @@ function renderIELTSVocabResult(data: IeltsVocabResult): string {
         </div>
         <div style="color:var(--ielts-text);font-size:13px;margin-bottom:6px;">${escapeHtml(w.meaning)}</div>
         <div style="color:var(--ielts-text-secondary);font-size:12px;font-style:italic;">"${escapeHtml(w.example)}"</div>
+        ${verbConjugationHtml}
+        ${verbAnalysisHtml}
         ${w.synonyms.length > 0 ? `<div style="margin-top:6px;font-size:12px;color:var(--ielts-muted);">Synonyms: ${w.synonyms.map(s => `<span style="color:var(--ielts-primary);">${escapeHtml(s)}</span>`).join(', ')}</div>` : ''}
         ${w.collocations.length > 0 ? `<div style="font-size:12px;color:var(--ielts-muted);margin-top:2px;">Collocations: ${w.collocations.map(c => `<span style="color:var(--ielts-success);">${escapeHtml(c)}</span>`).join(', ')}</div>` : ''}
       </div>
     `
   }
   return sectionWrapper(html)
+}
+
+function renderGrammarVerbs(verbs: Array<{ verb: string; tense: string; aspect: string; voice: string; mood: string; explanation: string }>): string {
+  if (verbs.length === 0) return ''
+  let html = '<div style="margin-bottom:14px;"><div style="font-size:12px;font-weight:600;color:var(--ielts-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Verbs in this text</div>'
+  for (const v of verbs) {
+    const fields = [
+      { label: 'Tense', value: v.tense },
+      { label: 'Aspect', value: v.aspect },
+      { label: 'Voice', value: v.voice },
+      { label: 'Mood', value: v.mood },
+    ].filter(f => f.value)
+    html += `<div style="background:var(--ielts-surface);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
+      <div style="font-size:13px;font-weight:600;color:var(--ielts-primary);margin-bottom:4px;">${escapeHtml(v.verb)}${v.verb !== v.verb ? '' : ''}</div>
+      ${fields.length > 0 ? `<div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px;">${fields.map(f => `<span style="padding:1px 5px;border-radius:3px;background:var(--ielts-surface-alt);font-size:10px;color:var(--ielts-text-secondary);">${escapeHtml(f.label)}: <strong style="color:var(--ielts-text)">${escapeHtml(f.value)}</strong></span>`).join('')}</div>` : ''}
+      ${v.explanation ? `<div style="font-size:11px;color:var(--ielts-text-secondary);line-height:1.4;">${escapeHtml(v.explanation)}</div>` : ''}
+    </div>`
+  }
+  html += '</div>'
+  return html
 }
 
 function renderGrammarResult(data: GrammarExplain): string {
@@ -428,6 +478,9 @@ function renderGrammarResult(data: GrammarExplain): string {
   }
   if (data.commonMistakes.length > 0) {
     html += renderListSection('Common Mistakes', data.commonMistakes.map(m => escapeHtml(m)))
+  }
+  if (data.verbs && data.verbs.length > 0) {
+    html += renderGrammarVerbs(data.verbs)
   }
   return sectionWrapper(html)
 }

@@ -181,7 +181,6 @@ export function useChatWidget(options: UseChatWidgetOptions): UseChatWidgetRetur
       const text = msg.title ? `${msg.title}\n\n${msg.message}` : msg.message
       addMessage('assistant', text)
       markAsReadRef.current(msg.id)
-      dismissMessageRef.current(msg.id)
     }
   }, [proactive.messages, addMessage])
 

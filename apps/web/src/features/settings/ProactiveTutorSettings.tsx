@@ -6,6 +6,7 @@ import Input from '../../components/ui/Input'
 import { proactiveTutorSettingsRepository } from '../proactiveTutor/ProactiveTutorSettingsRepository'
 import type { ProactiveTutorSettings } from '../proactiveTutor/ProactiveTutorSettingsRepository'
 import type { TutorTone, ReminderFrequency } from '../aiTutor/hooks/useProactiveSettings'
+import { proactiveMessageEngine } from '../../services/ProactiveMessageEngine'
 
 const TONE_OPTIONS: { value: TutorTone; label: string }[] = [
   { value: 'friendly', label: 'Friendly' },
@@ -67,6 +68,12 @@ export default function ProactiveTutorSettings() {
     setSaveFeedback(null)
     try {
       proactiveTutorSettingsRepository.patch(settings)
+      proactiveMessageEngine.updateSettings({
+        enabled: settings.enabled,
+        maxMessagesPerDay: settings.maxMessagesPerDay,
+        quietHoursStart: settings.quietHoursStart,
+        quietHoursEnd: settings.quietHoursEnd,
+      })
       setSaveFeedback('success')
     } catch {
       setSaveFeedback('error')
@@ -79,6 +86,12 @@ export default function ProactiveTutorSettings() {
   function handleReset() {
     const defaults = proactiveTutorSettingsRepository.reset()
     setSettings(defaults)
+    proactiveMessageEngine.updateSettings({
+      enabled: defaults.enabled,
+      maxMessagesPerDay: defaults.maxMessagesPerDay,
+      quietHoursStart: defaults.quietHoursStart,
+      quietHoursEnd: defaults.quietHoursEnd,
+    })
     setSaveFeedback('success')
     setTimeout(() => setSaveFeedback(null), 2500)
   }

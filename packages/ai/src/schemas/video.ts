@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { verbConjugationSchema } from './verb'
 
 export const transcriptVocabularySchema = z.object({
   words: z.array(z.object({
@@ -9,6 +10,7 @@ export const transcriptVocabularySchema = z.object({
     synonyms: z.array(z.string()).default([]),
     collocations: z.array(z.string()).default([]),
     context: z.string().default(''),
+    verbConjugation: verbConjugationSchema.optional(),
   })).min(1),
 })
 export type TranscriptVocabulary = z.infer<typeof transcriptVocabularySchema>
