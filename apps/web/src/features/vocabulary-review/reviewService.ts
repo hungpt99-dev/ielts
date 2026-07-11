@@ -80,9 +80,12 @@ export function buildReviewQueue(
 
   const today = new Date().toISOString().slice(0, 10)
   const due = getDailyReviewQueue(filtered, reviews, today)
-  const shuffled = due.sort(() => Math.random() - 0.5)
 
-  return shuffled.slice(0, Math.max(1, config.sessionSize))
+  for (let i = due.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [due[i], due[j]] = [due[j], due[i]]
+  }
+  return due.slice(0, Math.max(1, config.sessionSize))
 }
 
 export function getVocabStatus(rating: ReviewRating, currentStatus: VocabStatus): VocabStatus {

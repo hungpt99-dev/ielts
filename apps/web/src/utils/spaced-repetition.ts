@@ -119,13 +119,5 @@ export function getDailyReviewQueue(
     }
   }
 
-  queue.sort((a, b) => {
-    if (a.review && !b.review) return -1
-    if (!a.review && b.review) return 1
-    const dateA = a.review?.nextReviewDate ?? '9999-12-31' // far-future sentinel sorts new items last
-    const dateB = b.review?.nextReviewDate ?? '9999-12-31'
-    return dateA.localeCompare(dateB)
-  })
-
   return queue
 }

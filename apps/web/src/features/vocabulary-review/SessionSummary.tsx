@@ -34,13 +34,6 @@ export default function SessionSummary({ items, ratings, totalTimeMs, onRestart,
   const seconds = Math.round((totalTimeMs % 60000) / 1000)
   const timeStr = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`
 
-  const weakWords = items
-    .filter((_, i) => {
-      const r = ratings[Object.keys(ratings).find(k => ratings[k as ReviewRating] > 0) as ReviewRating]
-      return false
-    })
-    .slice(0, 5)
-
   return (
     <div className="mx-auto max-w-7xl space-y-6">
       <Card className="text-center">

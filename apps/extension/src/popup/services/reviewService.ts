@@ -173,16 +173,11 @@ export async function buildReviewQueue(maxSize: number = 20): Promise<ReviewItem
     }
   }
 
-  queue.sort((a, b) => {
-    if (a.review && !b.review) return -1
-    if (!a.review && b.review) return 1
-    const dateA = a.review?.nextReviewDate ?? '9999-12-31'
-    const dateB = b.review?.nextReviewDate ?? '9999-12-31'
-    return dateA.localeCompare(dateB)
-  })
-
-  const shuffled = queue.sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, Math.max(1, maxSize))
+  for (let i = queue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [queue[i], queue[j]] = [queue[j], queue[i]]
+  }
+  return queue.slice(0, Math.max(1, maxSize))
 }
 
 export async function handleRating(

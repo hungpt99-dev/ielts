@@ -55,13 +55,12 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
   const [mcAnswered, setMcAnswered] = useState(false)
   const [mcSelected, setMcSelected] = useState<string | null>(null)
   const [allVocabulary, setAllVocabulary] = useState<VocabularyEntry[]>([])
+  const [modeOffset, setModeOffset] = useState(0)
 
   const currentItem = useMemo(() => queue[currentIndex] ?? null, [queue, currentIndex])
 
   function cycleMode() {
-    const modeIndex = config.modes.indexOf(currentMode)
-    const nextMode = config.modes[(modeIndex + 1) % config.modes.length]
-    setConfig(prev => ({ ...prev, modes: prev.modes }))
+    setModeOffset(prev => prev + 1)
     setRevealed(false)
     setMcAnswered(false)
     setMcSelected(null)
@@ -70,8 +69,8 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
   const currentMode: ReviewMode = useMemo(() => {
     const modes = config.modes
     if (modes.length === 0) return 'word-to-meaning'
-    return modes[currentIndex % modes.length]
-  }, [config.modes, currentIndex])
+    return modes[(currentIndex + modeOffset) % modes.length]
+  }, [config.modes, currentIndex, modeOffset])
 
   const ModeRenderer = useMemo(() => getModeRenderer(currentMode), [currentMode])
 
@@ -413,7 +412,7 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
               revealed={revealed}
               {...(currentMode === 'multiple-choice' ? {
                 distractors,
-                onAnswer: (correct: boolean) => { setMcAnswered(true); setMcSelected(distractors[0]) },
+                onAnswer: (selected: string) => { setMcAnswered(true); setMcSelected(selected) },
                 answered: mcAnswered,
                 selected: mcSelected,
               } : {})}

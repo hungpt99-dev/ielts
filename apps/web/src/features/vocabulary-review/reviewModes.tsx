@@ -234,11 +234,11 @@ export function MultipleChoice({
   selected,
 }: ModeRendererProps & {
   distractors: string[]
-  onAnswer: (correct: boolean) => void
+  onAnswer: (selected: string) => void
   answered: boolean
   selected: string | null
 }) {
-  const options = [...distractors, vocab.meaning].sort(() => Math.random() - 0.5)
+  const options = [...distractors, vocab.meaning]
 
   return (
     <div className="text-center">
@@ -267,7 +267,7 @@ export function MultipleChoice({
           return (
             <button
               key={i}
-              onClick={() => !answered && onAnswer(isCorrect)}
+              onClick={() => !answered && onAnswer(opt)}
               disabled={answered}
               className={`w-full rounded-lg border px-4 py-3 text-left text-sm transition-colors ${bg}`}
               style={{ borderColor: answered && isCorrect ? 'var(--color-success)' : 'var(--color-border)' }}
