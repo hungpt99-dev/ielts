@@ -1,22 +1,13 @@
 import type { ReviewRating } from '../../models'
-import type { ReviewItem } from './reviewService'
 import { RATING_BUTTONS } from './reviewService'
 import Card, { CardContent } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 
 interface SessionSummaryProps {
-  items: ReviewItem[]
   ratings: Record<ReviewRating, number>
   totalTimeMs: number
   onRestart: () => void
   onBack: () => void
-}
-
-const LABELS: Record<ReviewRating, string> = {
-  again: 'Needs review',
-  hard: 'Challenging',
-  good: 'Good',
-  easy: 'Easy',
 }
 
 const COLORS: Record<ReviewRating, string> = {
@@ -26,7 +17,7 @@ const COLORS: Record<ReviewRating, string> = {
   easy: 'text-green-600 dark:text-green-400',
 }
 
-export default function SessionSummary({ items, ratings, totalTimeMs, onRestart, onBack }: SessionSummaryProps) {
+export default function SessionSummary({ ratings, totalTimeMs, onRestart, onBack }: SessionSummaryProps) {
   const total = Object.values(ratings).reduce((s, v) => s + v, 0)
   const correct = (ratings.good ?? 0) + (ratings.easy ?? 0)
   const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0

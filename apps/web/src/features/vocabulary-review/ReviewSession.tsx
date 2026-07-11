@@ -3,7 +3,6 @@ import type { VocabularyEntry, VocabReviewEntry, ReviewRating } from '../../mode
 import { DatabaseService } from '../../services/storage/Database'
 import Card, { CardContent } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
-import Modal from '../../components/ui/Modal'
 import {
   RATING_BUTTONS,
   REVIEW_MODES,
@@ -31,8 +30,11 @@ const ALL_DIFFICULTIES = ['easy', 'medium', 'hard']
 
 function shufflePool(pool: VocabularyEntry[], current: VocabularyEntry, count: number): string[] {
   const others = pool.filter(v => v.id !== current.id && v.meaning)
-  const shuffled = others.sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, count).map(v => v.meaning)
+  for (let i = others.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [others[i], others[j]] = [others[j], others[i]]
+  }
+  return others.slice(0, count).map(v => v.meaning)
 }
 
 interface ReviewSessionProps {
@@ -296,7 +298,7 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
                 max={50}
                 step={5}
                 value={config.sessionSize}
-                onChange={(e) => setConfig(prev => ({ ...prev, sessionSize: parseInt(e.target.value) }))}
+                onChange={(e) => setConfig(prev => ({ ...prev, sessionSize: Number(e.target.value) }))}
                 className="w-full"
               />
               <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -342,7 +344,6 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
   if (completed) {
     return (
       <SessionSummary
-        items={queue}
         ratings={ratings}
         totalTimeMs={Date.now() - startTimeRef.current}
         onRestart={() => setShowConfig(true)}

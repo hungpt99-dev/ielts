@@ -98,11 +98,6 @@ export function getDailyReviewQueue(
     reviewMap.set(r.vocabularyId, r)
   }
 
-  const vocabMap = new Map<string, VocabularyEntry>()
-  for (const v of vocabulary) {
-    vocabMap.set(v.id, v)
-  }
-
   const queue: Array<{ vocab: VocabularyEntry; review: VocabReviewEntry | null }> = []
 
   for (const v of vocabulary) {

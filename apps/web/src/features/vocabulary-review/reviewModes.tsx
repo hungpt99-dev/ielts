@@ -1,12 +1,15 @@
 import type { VocabularyEntry } from '../../models'
+import type { ReviewMode } from './reviewService'
 
 function maskWord(word: string): string {
   if (word.length <= 2) return '\u200B' + '_'.repeat(word.length)
   return word[0] + '\u200B' + '_'.repeat(word.length - 2) + '\u200B' + word[word.length - 1]
 }
 
-function generateGapFill(sentence: string, word: string): { before: string; blank: string; after: string } {
-  const regex = new RegExp(`(${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$')})`, 'gi')
+function generateGapFill(sentence: string | undefined, word: string): { before: string; blank: string; after: string } {
+  if (!sentence) return { before: '', blank: '', after: '' }
+  const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$')
+  const regex = new RegExp(`(${escaped})`, 'gi')
   const match = regex.exec(sentence)
   if (!match) return { before: sentence, blank: '', after: '' }
   const idx = match.index
@@ -21,9 +24,13 @@ function playPronunciation(word: string): void {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel()
     const utterance = new SpeechSynthesisUtterance(word)
-    utterance.lang = 'en-US'
+    utterance.lang = navigator.language || 'en-US'
     utterance.rate = 0.9
-    window.speechSynthesis.speak(utterance)
+    try {
+      window.speechSynthesis.speak(utterance)
+    } catch {
+      /* speech synthesis not available */
+    }
   }
 }
 
@@ -331,7 +338,7 @@ export function TypingMode({ vocab, onReveal, revealed }: ModeRendererProps) {
   )
 }
 
-export function getModeRenderer(mode: string) {
+export function getModeRenderer(mode: ReviewMode) {
   switch (mode) {
     case 'word-to-meaning': return WordToMeaning
     case 'meaning-to-word': return MeaningToWord
