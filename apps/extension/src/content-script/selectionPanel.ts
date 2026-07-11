@@ -751,7 +751,9 @@ async function loadDictionaryData(): Promise<void> {
     return
   }
 
-  const result = await generateDictionaryEntry(word, context, () => config)
+  const syncResult = await safeSyncGet<any>(['extensionSettings'])
+  const nativeLang = syncResult.extensionSettings?.nativeLanguage || ''
+  const result = await generateDictionaryEntry(word, context, () => config, nativeLang)
   if (result.data) {
     renderDictionaryData(result.data)
   } else if (result.error) {

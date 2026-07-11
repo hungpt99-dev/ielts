@@ -15,6 +15,7 @@ export async function generateVocabularyDetails(
   sourceSentence: string,
   topic: string,
   getConfig: () => ProviderConfig,
+  nativeLanguage = '',
 ): Promise<{ data: VocabularyDetails | null; error: string | null }> {
   const cacheKey = AiGenerateResultCache.generateKey('vocab-details', word, topic, sourceSentence.slice(0, 80))
   const cached = vocabularyCache.get(cacheKey)
@@ -26,7 +27,7 @@ export async function generateVocabularyDetails(
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
   }
 
-  const { systemPrompt, userPrompt } = buildVocabularyDetailsPrompt(word, sourceSentence, topic)
+  const { systemPrompt, userPrompt } = buildVocabularyDetailsPrompt(word, sourceSentence, topic, nativeLanguage)
 
   const url = `${config.baseUrl.replace(/\/+$/, '')}/chat/completions`
 

@@ -6,6 +6,7 @@ import {
   generateShadowingScripts,
 } from '@ielts/ai'
 import { saveVocabularyEntry, type ExtensionVocabEntry } from '../../storage/vocabularyStore'
+import { safeStorageGet } from '../../utils/safe-chrome'
 import {
   saveVideoEntry,
   videoEntrySchema,
@@ -13,8 +14,13 @@ import {
 } from '../../storage/videoStore'
 import { saveEntry as saveLearningEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
-import { safeStorageGet } from '../../utils/safe-chrome'
 import type { VideoQuestion, VideoVocabItem, ShadowingItem } from '../../storage/videoStore'
+
+async function getNativeLanguage(): Promise<string> {
+  const result = await safeStorageGet<Record<string, unknown>>('extensionSettings')
+  const settings = result['extensionSettings'] as { nativeLanguage?: string } | undefined
+  return settings?.nativeLanguage || ''
+}
 import type { LearningEntry } from '../../types'
 import { IconVideo, IconClose, IconCheck, IconVocabulary, IconBookText, IconHelpCircle, IconVolume, IconLoading } from '@ielts/ui'
 
@@ -235,7 +241,8 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
       return
     }
 
-    const result = await generateShadowingScripts(transcript, () => config)
+    const natLang = await getNativeLanguage()
+    const result = await generateShadowingScripts(transcript, () => config, natLang)
     if (result.error) {
       setShadowingState({ status: 'error', message: result.error })
     } else if (result.data) {

@@ -116,6 +116,7 @@ export async function generateListeningQuestions(
 export async function generateShadowingScripts(
   transcript: string,
   getConfig: () => ProviderConfig,
+  nativeLanguage = '',
 ): Promise<{ data: ShadowingScripts | null; error: string | null }> {
   const cacheKey = AiGenerateResultCache.generateKey('video-shadowing', transcript.slice(0, 80))
   const cached = shadowingScriptsCache.get(cacheKey)
@@ -126,7 +127,7 @@ export async function generateShadowingScripts(
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
   }
 
-  const { systemPrompt, userPrompt } = buildShadowingScriptsPrompt(transcript)
+  const { systemPrompt, userPrompt } = buildShadowingScriptsPrompt(transcript, nativeLanguage)
 
   const { content, error } = await callAI(systemPrompt, userPrompt, getConfig, {
     maxTokens: 2000,

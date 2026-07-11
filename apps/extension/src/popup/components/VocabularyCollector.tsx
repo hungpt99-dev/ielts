@@ -58,11 +58,17 @@ async function getAIProviderConfig(): Promise<{
   }
 }
 
+function translationTarget(lang: string): string {
+  return lang.trim() || 'your language'
+}
+
 async function generateVocabularyDetails(
   word: string,
   sourceSentence: string,
   topic: string,
+  nativeLanguage = '',
 ): Promise<{ data: AIDetails | null; error: string | null }> {
+  const lang = translationTarget(nativeLanguage)
   const config = await getAIProviderConfig()
 
   if (!config.apiKey) {
@@ -79,7 +85,7 @@ ${topic ? `Topic: ${topic}\n` : ''}
 Respond with valid JSON in this exact format:
 {
   "meaning": "Clear English definition suitable for IELTS",
-  "translation": "translation in your language",
+  "translation": "translation in ${lang}",
   "partOfSpeech": "e.g. noun, verb, adjective, adverb",
   "pronunciation": "IPA pronunciation like /ˈeksəmpl/",
   "exampleSentence": "An IELTS-style example sentence using the word",
@@ -231,7 +237,9 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
     setAiError(null)
     setAiDetails(null)
 
-    const result = await generateVocabularyDetails(wordToEnrich, sourceSentence.trim(), topic.trim())
+    const settingsResult = await safeStorageGet<Record<string, unknown>>('extensionSettings')
+    const nativeLang = ((settingsResult['extensionSettings'] as { nativeLanguage?: string })?.nativeLanguage) || ''
+    const result = await generateVocabularyDetails(wordToEnrich, sourceSentence.trim(), topic.trim(), nativeLang)
     if (result.error) {
       setAiError(result.error)
     } else if (result.data) {

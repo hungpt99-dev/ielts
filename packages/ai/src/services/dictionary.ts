@@ -29,6 +29,7 @@ export async function generateDictionaryEntry(
   selectedWord: string,
   contextSentence: string,
   getConfig: () => ProviderConfig,
+  nativeLanguage = '',
 ): Promise<{ data: DictionaryEntry | null; error: string | null }> {
   const cached = dictionaryCache.get(selectedWord, contextSentence)
   if (cached) return { data: cached, error: null }
@@ -38,7 +39,7 @@ export async function generateDictionaryEntry(
     return { data: null, error: 'API key not configured.' }
   }
 
-  const { systemPrompt, userPrompt } = buildDictionaryEntryPrompt(selectedWord, contextSentence)
+  const { systemPrompt, userPrompt } = buildDictionaryEntryPrompt(selectedWord, contextSentence, nativeLanguage)
 
   const { content, error } = await callAI(systemPrompt, userPrompt, getConfig, {
     maxTokens: 800,
