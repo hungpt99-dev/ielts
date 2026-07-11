@@ -1,6 +1,6 @@
 export {
   simpleExplainSchema,
-  vietnameseExplainSchema,
+  translateExplainSchema,
   ieltsVocabSchema,
   grammarExplainSchema,
   rewriteSchema,

@@ -5,14 +5,14 @@ export const simpleExplainSchema = z.object({
 })
 export type SimpleExplain = z.infer<typeof simpleExplainSchema>
 
-export const vietnameseExplainSchema = z.object({
+export const translateExplainSchema = z.object({
   translation: z.string().min(1),
   vocabularyNotes: z.array(z.object({
     word: z.string(),
     meaning: z.string(),
   })).default([]),
 })
-export type TranslateExplain = z.infer<typeof vietnameseExplainSchema>
+export type TranslateExplain = z.infer<typeof translateExplainSchema>
 
 export const ieltsVocabSchema = z.object({
   words: z.array(z.object({

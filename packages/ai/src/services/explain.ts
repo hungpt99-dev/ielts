@@ -5,7 +5,7 @@ import { buildExplainPrompt } from '../prompts'
 import type { AiExplainType } from '../prompts'
 import {
   simpleExplainSchema,
-  vietnameseExplainSchema,
+  translateExplainSchema,
   ieltsVocabSchema,
   grammarExplainSchema,
   rewriteSchema,
@@ -18,7 +18,7 @@ import { extractJSON } from '../utils'
 
 const typeSchemas: Record<AiExplainType, z.ZodTypeAny> = {
   simple: simpleExplainSchema,
-  translate: vietnameseExplainSchema,
+  translate: translateExplainSchema,
   'ielts-vocab': ieltsVocabSchema,
   grammar: grammarExplainSchema,
   rewrite: rewriteSchema,

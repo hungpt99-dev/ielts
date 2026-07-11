@@ -14,7 +14,7 @@ interface AiExplainItem {
 
 const AI_EXPLAIN_ITEMS: AiExplainItem[] = [
   { id: 'ai-explain-simple', title: 'Explain in Simple English', action: 'simple' },
-  { id: 'ai-explain-vietnamese', title: 'Translate', action: 'translate' },
+  { id: 'ai-explain-translate', title: 'Translate', action: 'translate' },
   { id: 'ai-explain-ielts-vocab', title: 'IELTS Vocabulary', action: 'ielts-vocab' },
   { id: 'ai-explain-grammar', title: 'Grammar Explanation', action: 'grammar' },
   { id: 'ai-explain-rewrite', title: 'Rewrite Naturally', action: 'rewrite' },
