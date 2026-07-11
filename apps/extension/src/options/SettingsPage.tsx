@@ -37,8 +37,9 @@ export default function SettingsPage() {
   const [importing, setImporting] = useState(false)
   const [confirmClear, setConfirmClear] = useState(false)
 
-  // Pending unsaved changes (merged by key, newest wins)
-  const [pending, setPending] = useState<Partial<ExtensionSettings> | null>(null)
+  // Track pending changes via ref to avoid stale closures in event handlers
+  const pendingRef = useRef<Partial<ExtensionSettings> | null>(null)
+  const [dirty, setDirty] = useState(false)
   const [saving, setSaving] = useState(false)
   const [aiErrors, setAiErrors] = useState<{
     aiProvider?: string
@@ -47,17 +48,15 @@ export default function SettingsPage() {
     aiModel?: string
   }>({})
 
-  const settingsRef = useRef(settings)
-  settingsRef.current = settings
-
-  const dirty = pending !== null && Object.keys(pending).length > 0
+  const savedRef = useRef(settings)
+  savedRef.current = settings
 
   // ── Load ──
   useEffect(() => {
     loadSettings()
       .then((s) => {
         setSettings(s)
-        settingsRef.current = s
+        savedRef.current = s
         setLoading(false)
       })
       .catch((err) => {
@@ -66,37 +65,32 @@ export default function SettingsPage() {
       })
   }, [showToast])
 
-  // ── Theme ──
+  // ── Theme — apply on every render that changes the effective themeMode ──
+  const merged = pendingRef.current ? { ...settings, ...pendingRef.current } : settings
+  // Sync theme to DOM whenever merged.themeMode changes
   useEffect(() => {
-    const mode = settings.themeMode
-    applyTheme(mode)
-    if (mode !== 'system') return
+    applyTheme(merged.themeMode)
+  }, [merged.themeMode])
+  // Listen for system preference changes when in 'system' mode
+  useEffect(() => {
+    if (merged.themeMode !== 'system') return
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
     const handler = () => applyTheme('system')
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
-  }, [settings.themeMode])
+  }, [merged.themeMode])
 
-  // ── Cmd+S / Ctrl+S ──
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
-        e.preventDefault()
-        if (dirty && !saving) handleSaveClick()
-      }
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  })
-
-  // ── Accumulate changes ──
+  // ── Accumulate changes & update dirty flag ──
   const handleChange = useCallback((patch: Partial<ExtensionSettings>) => {
-    setPending((prev) => ({ ...prev, ...patch }))
+    pendingRef.current = { ...pendingRef.current, ...patch }
+    setDirty(true)
+    // If caller needs the merged values for display, React re-render picks it up
+    setSettings((prev) => ({ ...prev })) // force re-render to refresh merged
   }, [])
 
-  // ── Validation ──
-  function validate(): boolean {
-    const merged = { ...settingsRef.current, ...pending } as ExtensionSettings
+  // ── Validation (reads ref, always fresh) ──
+  function hasErrors(): boolean {
+    const merged = { ...savedRef.current, ...pendingRef.current } as ExtensionSettings
     const e: typeof aiErrors = {}
     if (merged.aiProvider === 'custom' && !merged.aiBaseUrl.trim()) {
       e.aiBaseUrl = 'Base URL is required when using a custom provider'
@@ -105,22 +99,24 @@ export default function SettingsPage() {
       e.aiModel = 'Model name is required'
     }
     setAiErrors(e)
-    return Object.keys(e).length === 0
+    return Object.keys(e).length > 0
   }
 
-  // ── Save ──
-  const handleSaveClick = useCallback(async () => {
-    if (!pending || !validate()) {
+  // ── Save (reads ref, always fresh) ──
+  const handleSave = useCallback(async () => {
+    if (!pendingRef.current || Object.keys(pendingRef.current).length === 0) return
+    if (hasErrors()) {
       showToast('error', 'Fix validation errors before saving')
       return
     }
     setSaving(true)
     try {
-      const next = { ...settingsRef.current, ...pending }
+      const next = { ...savedRef.current, ...pendingRef.current }
       await saveSettings(next)
-      settingsRef.current = next
+      savedRef.current = next
       setSettings(next)
-      setPending(null)
+      pendingRef.current = null
+      setDirty(false)
       setAiErrors({})
       showToast('success', 'Settings saved')
     } catch (err) {
@@ -129,14 +125,26 @@ export default function SettingsPage() {
     } finally {
       setSaving(false)
     }
-  }, [pending, showToast])
+  }, [showToast])
+
+  // ── Keyboard shortcut ──
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault()
+        handleSave()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [handleSave])
 
   // ── Discard ──
   const handleDiscard = useCallback(() => {
-    setPending(null)
+    pendingRef.current = null
+    setDirty(false)
     setAiErrors({})
-    // Force remount of form components to reset their local state
-    setSettings({ ...settingsRef.current })
+    setSettings({ ...savedRef.current })
   }, [])
 
   // ── Export ──
@@ -180,8 +188,9 @@ export default function SettingsPage() {
         await importSettingsData(parsed as { settings: ExtensionSettings })
         const reloaded = await loadSettings()
         setSettings(reloaded)
-        settingsRef.current = reloaded
-        setPending(null)
+        savedRef.current = reloaded
+        pendingRef.current = null
+        setDirty(false)
         showToast('success', 'Settings imported')
       } catch (e) {
         showToast('error', `Import failed: ${e instanceof Error ? e.message : 'Invalid file'}`)
@@ -194,8 +203,9 @@ export default function SettingsPage() {
   const handleClear = useCallback(async () => {
     await clearAllSettings()
     setSettings(DEFAULT_SETTINGS)
-    settingsRef.current = DEFAULT_SETTINGS
-    setPending(null)
+    savedRef.current = DEFAULT_SETTINGS
+    pendingRef.current = null
+    setDirty(false)
     setConfirmClear(false)
     showToast('info', 'All settings cleared')
   }, [showToast])
@@ -208,8 +218,6 @@ export default function SettingsPage() {
       </div>
     )
   }
-
-  const merged = pending ? { ...settings, ...pending } : settings
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', paddingBottom: SAVE_BAR_HEIGHT + 24 }} role="region" aria-label="Extension settings">
@@ -277,7 +285,7 @@ export default function SettingsPage() {
           justifyContent: 'center',
           gap: '12px',
           background: 'var(--color-surface)',
-          borderTop: `1px solid var(--color-border)`,
+          borderTop: '1px solid var(--color-border)',
           padding: '0 16px',
           zIndex: 100,
         }}
@@ -303,7 +311,7 @@ export default function SettingsPage() {
         </button>
 
         <button
-          onClick={handleSaveClick}
+          onClick={handleSave}
           disabled={!dirty || saving}
           style={{
             ...buttonStyle,
