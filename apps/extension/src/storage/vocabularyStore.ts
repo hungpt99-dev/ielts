@@ -10,7 +10,7 @@ export interface ExtensionVocabEntry {
   personalNote: string
   tags: string[]
   meaning: string
-  meaningVi: string
+  translation: string
   partOfSpeech: string
   pronunciation: string
   exampleSentence: string

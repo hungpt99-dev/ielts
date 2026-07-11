@@ -356,7 +356,7 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
   try {
     // First try: AI-powered rich explanation with full schema
     const systemPrompt = 'You are an IELTS vocabulary expert. Return ONLY valid JSON, no markdown, no code fences.'
-    const userPrompt = `Analyze this word for an IELTS learner:\n\nWord: "${word}"\nContext sentence: "${sentence}"\n\nReturn JSON with:\n- word: the original word\n- normalizedWord: lowercase lemma\n- lemma: base form\n- pronunciation: IPA pronunciation (optional)\n- partOfSpeech: e.g. noun, verb, adjective\n- contextualDefinition: definition matching this context\n- vietnameseMeaning: Vietnamese translation (optional)\n- cefrLevel: "A1"|"A2"|"B1"|"B2"|"C1"|"C2"\n- ieltsRelevance: "low"|"medium"|"high"\n- collocations: array of {phrase: string, example?: string}\n- synonyms: array of strings\n- wordFamily: array of {word: string, partOfSpeech: string}\n- simpleExample: simple example sentence\n- ieltsExample: IELTS-style example sentence (optional)\n\nContextual definition must relate to the provided sentence. If the word has multiple meanings, explain the one used in the context sentence first.`
+    const userPrompt = `Analyze this word for an IELTS learner:\n\nWord: "${word}"\nContext sentence: "${sentence}"\n\nReturn JSON with:\n- word: the original word\n- normalizedWord: lowercase lemma\n- lemma: base form\n- pronunciation: IPA pronunciation (optional)\n- partOfSpeech: e.g. noun, verb, adjective\n- contextualDefinition: definition matching this context\n- translation: translation in the user's preferred language (optional)\n- cefrLevel: "A1"|"A2"|"B1"|"B2"|"C1"|"C2"\n- ieltsRelevance: "low"|"medium"|"high"\n- collocations: array of {phrase: string, example?: string}\n- synonyms: array of strings\n- wordFamily: array of {word: string, partOfSpeech: string}\n- simpleExample: simple example sentence\n- ieltsExample: IELTS-style example sentence (optional)\n\nContextual definition must relate to the provided sentence. If the word has multiple meanings, explain the one used in the context sentence first.`
 
     const result = await aiAdapter.request(systemPrompt, userPrompt, { temperature: 0.3 })
 
@@ -379,7 +379,7 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
         pronunciation: parsed.pronunciation || undefined,
         partOfSpeech: parsed.partOfSpeech || 'unknown',
         contextualDefinition: parsed.contextualDefinition || '',
-        vietnameseMeaning: parsed.vietnameseMeaning || undefined,
+        translation: parsed.translation || undefined,
         cefrLevel: typeof parsed.cefrLevel === 'string' ? parsed.cefrLevel : undefined,
         ieltsRelevance: typeof parsed.ieltsRelevance === 'string' ? parsed.ieltsRelevance : undefined,
         collocations,
@@ -403,7 +403,7 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
         pronunciation: details.pronunciation || undefined,
         partOfSpeech: details.partOfSpeech || 'unknown',
         contextualDefinition: details.meaning || '',
-        vietnameseMeaning: details.meaningVi || undefined,
+        translation: details.translation || undefined,
         cefrLevel: undefined,
         ieltsRelevance: undefined,
         collocations: (details.collocations || []).map((c: string) => ({ phrase: c })),
@@ -487,7 +487,7 @@ async function handleExplainSentence(payload: Record<string, unknown>): Promise<
   try {
     const contextText = [...contextBefore, sentence, ...contextAfter].join(' ')
     const systemPrompt = 'You are an IELTS listening and grammar tutor. Analyze the given transcript sentence. Return ONLY valid JSON, no markdown, no code fences.'
-    const userPrompt = `Analyze this transcript sentence for an IELTS learner:\n\nSentence: "${sentence}"\n\nContext: "${contextText}"\n\nReturn JSON with:\n- simpleMeaning: clear simple explanation\n- translation: Vietnamese translation (optional)\n- sentenceStructure: grammar structure explanation\n- grammarPoints: array of {name, explanation, sourceText?}\n- vocabulary: array of {word, meaningInContext}\n- listeningNotes: array of listening difficulty notes\n- simplifiedVersion: simpler English version\n- academicAlternative: more academic IELTS version (optional)\n- practiceQuestion: {prompt, answer} (optional)`
+    const userPrompt = `Analyze this transcript sentence for an IELTS learner:\n\nSentence: "${sentence}"\n\nContext: "${contextText}"\n\nReturn JSON with:\n- simpleMeaning: clear simple explanation\n- translation: translation in the user's preferred language (optional)\n- sentenceStructure: grammar structure explanation\n- grammarPoints: array of {name, explanation, sourceText?}\n- vocabulary: array of {word, meaningInContext}\n- listeningNotes: array of listening difficulty notes\n- simplifiedVersion: simpler English version\n- academicAlternative: more academic IELTS version (optional)\n- practiceQuestion: {prompt, answer} (optional)`
 
     const result = await aiAdapter.request(systemPrompt, userPrompt, { temperature: 0.3 })
 

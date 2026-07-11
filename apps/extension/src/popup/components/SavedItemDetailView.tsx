@@ -324,7 +324,7 @@ function VocabResult({ data }: { data: VocabEnrichResult }) {
       {data.pronunciation && <div style={{ fontFamily: 'var(--font-mono)', color: 'var(--color-muted)', fontSize: '13px', marginBottom: '6px' }}>/{data.pronunciation}/</div>}
       {data.partOfSpeech && <span style={{ display: 'inline-block', padding: '2px 6px', borderRadius: '6px', fontSize: '10px', background: 'var(--color-primary-light)', color: 'var(--color-primary)', marginBottom: '6px', fontWeight: 500 }}>{data.partOfSpeech}</span>}
       {data.meaning && <p style={{ margin: '0 0 4px', color: 'var(--color-text)', fontWeight: 500 }}>{data.meaning}</p>}
-      {data.meaningVi && <p style={{ margin: '0 0 6px', color: 'var(--color-text-secondary)', fontStyle: 'italic', fontSize: '11px' }}>{data.meaningVi}</p>}
+      {data.translation && <p style={{ margin: '0 0 6px', color: 'var(--color-text-secondary)', fontStyle: 'italic', fontSize: '11px' }}>{data.translation}</p>}
       {data.exampleSentence && <div style={{ padding: '6px 8px', borderRadius: '6px', background: 'var(--color-surface)', marginBottom: '6px', borderLeft: '2px solid var(--color-primary)' }}><span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.02em', display: 'block', marginBottom: '2px' }}>Example</span><p style={{ margin: 0, color: 'var(--color-text-secondary)', fontStyle: 'italic', fontSize: '11px' }}>"{data.exampleSentence}"</p></div>}
       <RowChips label="Synonyms" items={data.synonyms} />
       <RowChips label="Antonyms" items={data.antonyms} />

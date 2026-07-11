@@ -6,7 +6,7 @@ export interface VocabEntry {
   id: string
   word: string
   meaning?: string
-  meaningVi?: string
+  translation?: string
   partOfSpeech?: string
   pronunciation?: string
   exampleSentence?: string
@@ -25,7 +25,7 @@ export interface VocabEntry {
 export interface WordDetails {
   word: string
   meaning: string
-  meaningVi?: string
+  translation?: string
   partOfSpeech?: string
   pronunciation?: string
   exampleSentence?: string
@@ -101,7 +101,7 @@ export class VocabularyService {
       id: crypto.randomUUID(),
       word,
       meaning: details?.meaning ?? '',
-      meaningVi: details?.meaningVi,
+      translation: details?.translation,
       partOfSpeech: details?.partOfSpeech,
       pronunciation: details?.pronunciation,
       exampleSentence: details?.exampleSentence,
@@ -157,7 +157,7 @@ export class VocabularyService {
     const contextPart = contextSentence
       ? `Context sentence: "${contextSentence}"\n`
       : ''
-    const userPrompt = `Analyze this word for IELTS learners: "${word}"\n${contextPart}Provide: meaning, meaningVi, partOfSpeech, pronunciation, exampleSentence (string), collocations (array of strings), synonyms (array of strings), antonyms (array of strings), wordFamily (array of strings), difficulty (A1-C2 or IELTS band), topic.`
+    const userPrompt = `Analyze this word for IELTS learners: "${word}"\n${contextPart}Provide: meaning, translation, partOfSpeech, pronunciation, exampleSentence (string), collocations (array of strings), synonyms (array of strings), antonyms (array of strings), wordFamily (array of strings), difficulty (A1-C2 or IELTS band), topic.`
 
     const result = await this.aiAdapter.request(systemPrompt, userPrompt, { temperature: 0.3 })
     if (result.error || !result.content) return null
@@ -167,7 +167,7 @@ export class VocabularyService {
       return {
         word: parsed.word ?? word,
         meaning: parsed.meaning ?? '',
-        meaningVi: parsed.meaningVi,
+        translation: parsed.translation,
         partOfSpeech: parsed.partOfSpeech,
         pronunciation: parsed.pronunciation,
         exampleSentence: parsed.exampleSentence,
@@ -200,7 +200,7 @@ export class VocabularyService {
     return {
       word: entry.word,
       meaning: entry.meaning ?? '',
-      meaningVi: entry.meaningVi,
+      translation: entry.translation,
       partOfSpeech: entry.partOfSpeech,
       pronunciation: entry.pronunciation,
       exampleSentence: entry.exampleSentence,

@@ -18,7 +18,7 @@ import { extractJSON } from '../utils'
 
 const typeSchemas: Record<AiExplainType, z.ZodTypeAny> = {
   simple: simpleExplainSchema,
-  vietnamese: vietnameseExplainSchema,
+  translate: vietnameseExplainSchema,
   'ielts-vocab': ieltsVocabSchema,
   grammar: grammarExplainSchema,
   rewrite: rewriteSchema,

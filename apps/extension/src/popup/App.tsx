@@ -16,7 +16,6 @@ import ReviewSession from './components/ReviewSession'
 import { emitExtensionPopupOpened } from '../background/eventEmitters'
 import ManualSyncPanel from './components/ManualSyncPanel'
 import SyncStatusPanel from './components/SyncStatusPanel'
-import { safeStorageGet, safeStorageSet } from '../utils/safe-chrome'
 
 type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'savedItems' | 'pendingReviews' | 'reviewSession' | 'manualSync' | 'syncStatus'
 
@@ -38,42 +37,45 @@ function App() {
 
   // Sync theme from settings to DOM
   useEffect(() => {
-    function readMode(): Promise<string> {
-      return safeStorageGet<Record<string, unknown>>('extensionSettings').then(
-        (result) => {
-          const extSettings = result['extensionSettings'] as
-            | { themeMode?: string }
-            | undefined
-          return extSettings?.themeMode || 'system'
-        },
-      )
-    }
-
-    function apply(mode: string) {
+    new Promise<string>((resolve) => {
+      chrome.storage.local.get('extensionSettings', (result) => {
+        const raw = (result.extensionSettings as { themeMode?: string } | undefined)
+          ?.themeMode
+        resolve(raw || 'system')
+      })
+    }).then((mode) => {
       const isDark =
         mode === 'dark' ||
         (mode === 'system' &&
           window.matchMedia('(prefers-color-scheme: dark)').matches)
       document.documentElement.classList.toggle('dark', isDark)
-    }
-
-    readMode().then(apply)
+    })
 
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
     const onSysChange = () => {
-      readMode().then((mode) => {
-        if (mode === 'system') apply('system')
-      })
+      if (mq.matches) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
     }
     mq.addEventListener('change', onSysChange)
 
     const onStorageChange = (
       changes: Record<string, chrome.storage.StorageChange>,
     ) => {
-      const raw = changes.extensionSettings?.newValue as
-        | { themeMode?: string }
-        | undefined
-      if (raw?.themeMode) apply(raw.themeMode)
+      const themeMode = (
+        changes.extensionSettings?.newValue as
+          | { themeMode?: string }
+          | undefined
+      )?.themeMode
+      if (themeMode) {
+        const isDark =
+          themeMode === 'dark' ||
+          (themeMode === 'system' &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.classList.toggle('dark', isDark)
+      }
     }
     chrome.storage.onChanged.addListener(onStorageChange)
 

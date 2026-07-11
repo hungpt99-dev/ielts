@@ -71,7 +71,7 @@ export function SentenceExplanationPanel({ sentence, startTime, onClose, onSeek 
               {sentence}
             </div>
             <Section title="Simple Meaning">{explanation.simpleMeaning}</Section>
-            {explanation.translation && <Section title="Vietnamese">{explanation.translation}</Section>}
+            {explanation.translation && <Section title="Translation">{explanation.translation}</Section>}
             <Section title="Sentence Structure">{explanation.sentenceStructure}</Section>
             {explanation.grammarPoints.length > 0 && (
               <div><div style={{ color: 'var(--color-muted)', fontSize: '10px', marginBottom: '4px' }}>Grammar</div>

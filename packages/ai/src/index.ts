@@ -18,7 +18,7 @@ export type { AiExplainType } from './prompts'
 export type {
   AiExplainResult,
   SimpleExplain,
-  VietnameseExplain,
+  TranslateExplain,
   IeltsVocabResult,
   GrammarExplain,
   RewriteResult,

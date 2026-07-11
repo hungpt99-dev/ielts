@@ -317,7 +317,7 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
             personalNote: '',
             tags: [],
             meaning: item.meaning,
-            meaningVi: '',
+            translation: '',
             partOfSpeech: item.partOfSpeech,
             pronunciation: '',
             exampleSentence: item.example,

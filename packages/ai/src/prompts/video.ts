@@ -117,7 +117,7 @@ Respond with valid JSON in this exact format:
   "scripts": [
     {
       "sentence": "The original sentence for shadowing practice",
-      "translation": "Vietnamese translation of the sentence",
+      "translation": "translation in your native language",
       "focusWords": ["word1", "word2"],
       "notes": "Pronunciation or intonation notes"
     }

@@ -2,7 +2,7 @@ import type { PromptVersion } from './types'
 
 export type AiExplainType =
   | 'simple'
-  | 'vietnamese'
+  | 'translate'
   | 'ielts-vocab'
   | 'grammar'
   | 'rewrite'
@@ -11,7 +11,7 @@ export type AiExplainType =
 
 export const AI_EXPLAIN_LABELS: Record<AiExplainType, string> = {
   simple: 'Simple English',
-  vietnamese: 'Vietnamese',
+  translate: 'Translation',
   'ielts-vocab': 'IELTS Vocabulary',
   grammar: 'Grammar Explanation',
   rewrite: 'Natural Rewrite',
@@ -21,7 +21,7 @@ export const AI_EXPLAIN_LABELS: Record<AiExplainType, string> = {
 
 export const AI_EXPLAIN_ICONS: Record<AiExplainType, string> = {
   simple: '💡',
-  vietnamese: '🌐',
+  translate: '🌐',
   'ielts-vocab': '🎯',
   grammar: '📚',
   rewrite: '✂️',
@@ -33,7 +33,7 @@ const EXPLAIN_PROMPT_VERSION: PromptVersion = { version: 1, description: 'Initia
 
 export const AI_EXPLAIN_PROMPTS: Record<AiExplainType, string> = {
   simple: 'Explain this text in simple English that an IELTS learner can easily understand:',
-  vietnamese: 'Translate this text to Vietnamese and explain any difficult English words:',
+  translate: 'Translate this text and explain any difficult English words:',
   'ielts-vocab': 'Analyze this text and extract IELTS-level vocabulary with meanings and examples:',
   grammar: 'Explain the grammar structures in this text, including rules and common mistakes:',
   rewrite: 'Rewrite this text in more natural English while keeping the same meaning:',
@@ -43,7 +43,7 @@ export const AI_EXPLAIN_PROMPTS: Record<AiExplainType, string> = {
 
 const SYSTEM_PROMPTS: Record<AiExplainType, string> = {
   simple: 'You are an IELTS tutor. Explain text in simple English for learners. Respond with valid JSON only.',
-  vietnamese: 'You are an IELTS tutor. Translate to Vietnamese and add vocabulary notes. Respond with valid JSON only.',
+  translate: 'You are an IELTS tutor. Translate the text and add vocabulary notes. Respond with valid JSON only.',
   'ielts-vocab': 'You are an IELTS vocabulary expert. Extract vocabulary and provide details. Respond with valid JSON only.',
   grammar: 'You are an IELTS grammar expert. Analyze grammar structures. Respond with valid JSON only.',
   rewrite: 'You are an IELTS writing tutor. Rewrite text naturally. Respond with valid JSON only.',
@@ -53,7 +53,7 @@ const SYSTEM_PROMPTS: Record<AiExplainType, string> = {
 
 const JSON_SCHEMAS: Record<AiExplainType, string> = {
   simple: '{"explanation": "simple explanation of the text"}',
-  vietnamese: '{"translation": "Vietnamese translation", "vocabularyNotes": [{"word": "word", "meaning": "meaning"}]}',
+  translate: '{"translation": "translation in the user\'s language", "vocabularyNotes": [{"word": "word", "meaning": "meaning"}]}',
   'ielts-vocab': '{"words": [{"word": "word", "meaning": "meaning", "partOfSpeech": "noun", "example": "example sentence", "synonyms": ["syn1"], "collocations": ["coll1"]}]}',
   grammar: '{"explanation": "grammar explanation", "structure": "grammar structure", "rules": ["rule1"], "commonMistakes": ["mistake1"]}',
   rewrite: '{"rewritten": "rewritten text", "changes": "what was changed", "tone": "formal/casual"}',

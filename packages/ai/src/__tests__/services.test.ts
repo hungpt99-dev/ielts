@@ -36,7 +36,7 @@ function createMockAISuccess(content: string) {
 const mockVocabDetails = {
   word: 'test',
   meaning: 'a procedure intended to establish quality',
-  meaningVi: 'kiểm tra',
+  translation: 'kiểm tra',
   pronunciation: '/tɛst/',
   partOfSpeech: 'noun',
   exampleSentence: 'This is a test.',

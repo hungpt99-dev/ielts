@@ -3,7 +3,7 @@ import {
   type AiExplainType,
   type AiExplainResult,
   type SimpleExplain,
-  type VietnameseExplain,
+  type TranslateExplain,
   type IeltsVocabResult,
   type GrammarExplain,
   type RewriteResult,
@@ -45,11 +45,11 @@ let panelEl: HTMLDivElement | null = null
 let overlayEl: HTMLDivElement | null = null
 let keyHandler: ((e: KeyboardEvent) => void) | null = null
 
-const ALL_TYPES: AiExplainType[] = ['simple', 'vietnamese', 'ielts-vocab', 'grammar', 'rewrite', 'example-sentences', 'quiz']
+const ALL_TYPES: AiExplainType[] = ['simple', 'translate', 'ielts-vocab', 'grammar', 'rewrite', 'example-sentences', 'quiz']
 
 const TAB_ICONS: Record<AiExplainType, ReturnType<typeof iconToHtml>> = {
   simple: iconToHtml(IconExplain, 14),
-  vietnamese: iconToHtml(IconGlobe, 14),
+  translate: iconToHtml(IconGlobe, 14),
   'ielts-vocab': iconToHtml(IconTarget, 14),
   grammar: iconToHtml(IconVocabularyBook, 14),
   rewrite: iconToHtml(IconSimplify, 14),
@@ -351,8 +351,8 @@ function renderResult(bodyEl: HTMLDivElement, type: AiExplainType, data: AiExpla
     case 'simple':
       bodyEl.innerHTML = renderSimpleResult(data as SimpleExplain)
       break
-    case 'vietnamese':
-      bodyEl.innerHTML = renderVietnameseResult(data as VietnameseExplain)
+    case 'translate':
+      bodyEl.innerHTML = renderTranslateResult(data as TranslateExplain)
       break
     case 'ielts-vocab':
       bodyEl.innerHTML = renderIELTSVocabResult(data as IeltsVocabResult)
@@ -391,7 +391,7 @@ function renderSimpleResult(data: SimpleExplain): string {
   return sectionWrapper(renderSection('Explanation', escapeHtml(data.explanation)))
 }
 
-function renderVietnameseResult(data: VietnameseExplain): string {
+function renderTranslateResult(data: TranslateExplain): string {
   let html = renderSection('Translation', escapeHtml(data.translation))
   if (data.vocabularyNotes && data.vocabularyNotes.length > 0) {
     html += renderListSection('Vocabulary Notes', data.vocabularyNotes.map(v => `<strong>${escapeHtml(v.word)}</strong>: ${escapeHtml(v.meaning)}`))

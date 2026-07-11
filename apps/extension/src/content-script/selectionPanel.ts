@@ -56,7 +56,7 @@ const ACTIONS: ToolbarAction[] = [
 const ACTION_TO_AI_TYPE: Record<string, AiExplainType> = {
   explain: 'simple',
   simplify: 'rewrite',
-  translate: 'vietnamese',
+  translate: 'translate',
   'ielts-vocab': 'ielts-vocab',
 }
 

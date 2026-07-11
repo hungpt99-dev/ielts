@@ -17,7 +17,7 @@ ${topic ? `Topic: ${topic}\n` : ''}
 Respond with valid JSON in this exact format:
 {
   "meaning": "Clear English definition suitable for IELTS",
-  "meaningVi": "Vietnamese translation of the meaning",
+  "translation": "translation in your native language",
   "partOfSpeech": "e.g. noun, verb, adjective, adverb",
   "pronunciation": "IPA pronunciation /ˈeksəmpl/",
   "exampleSentence": "An IELTS-style example sentence using the word",

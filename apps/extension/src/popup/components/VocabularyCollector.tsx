@@ -31,7 +31,7 @@ interface PageInfo {
 
 interface AIDetails {
   meaning: string
-  meaningVi: string
+  translation: string
   partOfSpeech: string
   pronunciation: string
   exampleSentence: string
@@ -79,7 +79,7 @@ ${topic ? `Topic: ${topic}\n` : ''}
 Respond with valid JSON in this exact format:
 {
   "meaning": "Clear English definition suitable for IELTS",
-  "meaningVi": "Vietnamese translation of the meaning",
+  "translation": "translation in your language",
   "partOfSpeech": "e.g. noun, verb, adjective, adverb",
   "pronunciation": "IPA pronunciation like /ˈeksəmpl/",
   "exampleSentence": "An IELTS-style example sentence using the word",
@@ -129,7 +129,7 @@ Respond with valid JSON in this exact format:
 
     const details: AIDetails = {
       meaning: parsed.meaning || '',
-      meaningVi: parsed.meaningVi || '',
+      translation: parsed.translation || '',
       partOfSpeech: parsed.partOfSpeech || '',
       pronunciation: parsed.pronunciation || '',
       exampleSentence: parsed.exampleSentence || '',
@@ -268,7 +268,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
       tags,
 
       meaning: aiDetails?.meaning || '',
-      meaningVi: aiDetails?.meaningVi || '',
+      translation: aiDetails?.translation || '',
       partOfSpeech: aiDetails?.partOfSpeech || '',
       pronunciation: aiDetails?.pronunciation || '',
       exampleSentence: aiDetails?.exampleSentence || '',
@@ -702,9 +702,9 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
             <strong>Meaning:</strong> {aiDetails.meaning}
           </div>
 
-          {aiDetails.meaningVi && (
+          {aiDetails.translation && (
             <div style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
-              <strong>Translation:</strong> {aiDetails.meaningVi}
+              <strong>Translation:</strong> {aiDetails.translation}
             </div>
           )}
 

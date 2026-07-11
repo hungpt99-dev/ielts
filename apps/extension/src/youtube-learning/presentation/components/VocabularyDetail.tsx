@@ -18,7 +18,7 @@ export interface VocabSaveData {
   definition: string
   partOfSpeech: string
   pronunciation?: string
-  vietnameseMeaning?: string
+  translation?: string
   exampleSentence: string
   sourceSentence: string
   startTime: number
@@ -32,7 +32,7 @@ interface VocabExplanation {
   pronunciation?: string
   partOfSpeech: string
   contextualDefinition: string
-  vietnameseMeaning?: string
+  translation?: string
   cefrLevel?: string
   ieltsRelevance?: string
   collocations: Array<{ phrase: string; example?: string }>
@@ -90,7 +90,7 @@ export function VocabularyDetail({
       definition: explanation.contextualDefinition,
       partOfSpeech: explanation.partOfSpeech,
       pronunciation: explanation.pronunciation,
-      vietnameseMeaning: explanation.vietnameseMeaning,
+      translation: explanation.translation,
       exampleSentence: explanation.simpleExample,
       sourceSentence: explanation.sourceSentence,
       startTime: explanation.startTime,
@@ -181,9 +181,9 @@ export function VocabularyDetail({
               {explanation.contextualDefinition}
             </p>
 
-            {explanation.vietnameseMeaning && (
+            {explanation.translation && (
               <p style={{ color: 'var(--color-muted)', fontSize: 'var(--text-xs)', fontStyle: 'italic', margin: 0 }}>
-                {explanation.vietnameseMeaning}
+                {explanation.translation}
               </p>
             )}
 

@@ -27,7 +27,7 @@ interface SavedVocabEntry {
   word?: string
   text?: string
   meaning?: string
-  meaningVi?: string
+  translation?: string
   exampleSentence?: string
   personalNote?: string
   note?: string
@@ -74,7 +74,7 @@ function normalizeVocabEntry(
   return {
     id: item.id,
     text: text.trim(),
-    meaning: item.meaning || item.meaningVi || '',
+    meaning: item.meaning || item.translation || '',
     exampleSentence: item.exampleSentence || '',
     personalNote: item.personalNote || item.note || '',
   }

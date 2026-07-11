@@ -48,7 +48,7 @@ export const vocabularyExplanationSchema = z.object({
   pronunciation: z.string().optional(),
   partOfSpeech: z.string().min(1),
   contextualDefinition: z.string().min(1),
-  vietnameseMeaning: z.string().optional(),
+  translation: z.string().optional(),
   cefrLevel: z.enum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2']).optional(),
   ieltsRelevance: z.enum(['low', 'medium', 'high']).optional(),
   collocations: z.array(z.object({

@@ -5,7 +5,7 @@ import { safeStorageGet, safeStorageSet, safeSendMessage } from '../../utils/saf
 import type {
   AiExplainType,
   SimpleExplain,
-  VietnameseExplain,
+  TranslateExplain,
   IeltsVocabResult,
   RewriteResult,
   QuizResult,
@@ -41,7 +41,7 @@ const ACTIONS: ActionConfig[] = [
 const ACTION_AI_MAP: Record<string, AiExplainType | null> = {
   explain: 'simple',
   simplify: 'rewrite',
-  translate: 'vietnamese',
+  translate: 'translate',
   exercise: 'quiz',
   vocabulary: 'ielts-vocab',
   questions: null,
@@ -70,8 +70,8 @@ function formatExplainResult(type: AiExplainType, data: unknown): string {
       const d = data as SimpleExplain
       return d.explanation
     }
-    case 'vietnamese': {
-      const d = data as VietnameseExplain
+    case 'translate': {
+      const d = data as TranslateExplain
       let text = `[Translation]\n${d.translation}`
       if (d.vocabularyNotes?.length) {
         text += '\n\n[Vocabulary Notes]\n'

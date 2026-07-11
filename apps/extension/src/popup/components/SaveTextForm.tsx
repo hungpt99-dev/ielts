@@ -147,7 +147,7 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
           personalNote: form.personalNote,
           tags,
           meaning: '',
-          meaningVi: '',
+          translation: '',
           partOfSpeech: '',
           pronunciation: '',
           exampleSentence: '',

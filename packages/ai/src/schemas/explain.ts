@@ -12,7 +12,7 @@ export const vietnameseExplainSchema = z.object({
     meaning: z.string(),
   })).default([]),
 })
-export type VietnameseExplain = z.infer<typeof vietnameseExplainSchema>
+export type TranslateExplain = z.infer<typeof vietnameseExplainSchema>
 
 export const ieltsVocabSchema = z.object({
   words: z.array(z.object({
@@ -59,7 +59,7 @@ export type QuizResult = z.infer<typeof quizSchema>
 
 export type AiExplainResult =
   | SimpleExplain
-  | VietnameseExplain
+  | TranslateExplain
   | IeltsVocabResult
   | GrammarExplain
   | RewriteResult

@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const vocabularyDetailsSchema = z.object({
   meaning: z.string().min(1),
-  meaningVi: z.string().default(''),
+  translation: z.string().default(''),
   partOfSpeech: z.string().default(''),
   pronunciation: z.string().default(''),
   exampleSentence: z.string().min(1),

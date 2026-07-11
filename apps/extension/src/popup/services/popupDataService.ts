@@ -78,7 +78,7 @@ function toPopupEntry(raw: Record<string, unknown>): PopupVocabEntry {
   return {
     id: (raw.id as string) ?? crypto.randomUUID(),
     word: (raw.word as string) ?? '',
-    meaning: (raw.meaning as string) ?? (raw.meaningVi as string) ?? '',
+    meaning: (raw.meaning as string) ?? (raw.translation as string) ?? '',
     pronunciation: (raw.pronunciation as string) ?? '',
     partOfSpeech: (raw.partOfSpeech as string) ?? '',
     topic: (raw.topic as string) ?? '',

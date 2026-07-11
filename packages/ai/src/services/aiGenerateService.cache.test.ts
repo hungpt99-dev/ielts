@@ -33,7 +33,7 @@ function createMockAISuccess(content: string) {
 const mockVocabResponse = JSON.stringify({
   word: 'cache',
   meaning: 'a storage mechanism that stores frequently accessed data',
-  meaningVi: 'bộ nhớ đệm',
+  translation: 'bộ nhớ đệm',
   pronunciation: '/kæʃ/',
   partOfSpeech: 'noun',
   exampleSentence: 'The cache stores recently accessed data.',

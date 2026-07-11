@@ -78,7 +78,7 @@ function extractJson(text: string): Record<string, unknown> | null {
 
 export interface VocabEnrichResult {
   meaning: string
-  meaningVi: string
+  translation: string
   partOfSpeech: string
   pronunciation: string
   exampleSentence: string
@@ -98,7 +98,7 @@ ${context ? `Context: "${context}"\n` : ''}
 Respond with JSON:
 {
   "meaning": "English definition for IELTS",
-  "meaningVi": "Vietnamese translation",
+  "translation": "translation in your language",
   "partOfSpeech": "noun/verb/adjective/adverb",
   "pronunciation": "IPA like /wɜːrd/",
   "exampleSentence": "IELTS-style example",
@@ -116,7 +116,7 @@ Respond with JSON:
   return {
     data: {
       meaning: (json.meaning as string) || '',
-      meaningVi: (json.meaningVi as string) || '',
+      translation: (json.translation as string) || '',
       partOfSpeech: (json.partOfSpeech as string) || '',
       pronunciation: (json.pronunciation as string) || '',
       exampleSentence: (json.exampleSentence as string) || '',

@@ -23,10 +23,10 @@ describe('Explain prompt', () => {
     expect(userPrompt).toContain('valid JSON')
   })
 
-  it('builds vietnamese explain prompt', () => {
-    const { systemPrompt, userPrompt } = buildExplainPrompt('vietnamese', 'text')
+  it('builds translate explain prompt', () => {
+    const { systemPrompt, userPrompt } = buildExplainPrompt('translate', 'text')
     expect(systemPrompt).toContain('Translate')
-    expect(userPrompt).toContain('Vietnamese')
+    expect(userPrompt).toContain('translation')
   })
 
   it('builds ielts vocab prompt', () => {
@@ -66,7 +66,7 @@ describe('Explain prompt', () => {
 
   it('exports all AI explain labels', () => {
     expect(AI_EXPLAIN_LABELS.simple).toBe('Simple English')
-    expect(AI_EXPLAIN_LABELS.vietnamese).toBe('Vietnamese')
+    expect(AI_EXPLAIN_LABELS.translate).toBe('Translation')
     expect(AI_EXPLAIN_LABELS['ielts-vocab']).toBe('IELTS Vocabulary')
     expect(AI_EXPLAIN_LABELS.grammar).toBe('Grammar Explanation')
     expect(AI_EXPLAIN_LABELS.rewrite).toBe('Natural Rewrite')
@@ -81,7 +81,7 @@ describe('Explain prompt', () => {
 
   it('exports all AI explain prompts', () => {
     expect(AI_EXPLAIN_PROMPTS.simple).toContain('simple English')
-    expect(AI_EXPLAIN_PROMPTS.vietnamese).toContain('Vietnamese')
+    expect(AI_EXPLAIN_PROMPTS.translate).toContain('Translate')
     expect(AI_EXPLAIN_PROMPTS.quiz).toContain('quiz')
   })
 })

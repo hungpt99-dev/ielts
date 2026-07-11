@@ -367,7 +367,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
     if (!autoAiLookup || !selectedText) return
     // Opens the AI explain panel on the webpage. The content script handles
     // the actual AI lookup and shows the result overlay on the page.
-    chrome.runtime.sendMessage({ type: 'AI_EXPLAIN', payload: { text: selectedText, action: 'vietnamese' } }).catch(() => {})
+    chrome.runtime.sendMessage({ type: 'AI_EXPLAIN', payload: { text: selectedText, action: 'translate' } }).catch(() => {})
   }, [autoAiLookup, selectedText])
 
   const handleOpenSyncStatus = useCallback(() => {
@@ -609,7 +609,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
               </p>
               <button
                 onClick={() => {
-                  chrome.runtime.sendMessage({ type: 'AI_EXPLAIN', payload: { text: selectedText, action: 'vietnamese' } }).catch(() => {})
+                  chrome.runtime.sendMessage({ type: 'AI_EXPLAIN', payload: { text: selectedText, action: 'translate' } }).catch(() => {})
                 }}
                 style={{
                   display: 'inline-flex',

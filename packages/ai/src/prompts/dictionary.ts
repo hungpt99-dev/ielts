@@ -16,7 +16,7 @@ Respond with valid JSON in this exact format:
 {
   "word": "${selectedWord}",
   "meaning": "Clear English definition suitable for IELTS learners",
-  "meaningVi": "Vietnamese translation of the meaning",
+  "translation": "translation in your native language",
   "pronunciation": "IPA pronunciation like /ˈeksəmpl/",
   "partOfSpeech": "e.g. noun, verb, adjective, adverb",
   "exampleSentence": "An IELTS-style example sentence using the word",

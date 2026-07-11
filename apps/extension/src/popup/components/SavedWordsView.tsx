@@ -55,7 +55,7 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
           id: popupEntry.id,
           word: popupEntry.word,
           meaning: popupEntry.meaning,
-          meaningVi: '',
+          translation: '',
           pronunciation: popupEntry.pronunciation,
           partOfSpeech: popupEntry.partOfSpeech,
           topic: popupEntry.topic,

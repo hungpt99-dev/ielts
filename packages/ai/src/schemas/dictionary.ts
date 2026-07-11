@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const dictionaryEntrySchema = z.object({
   word: z.string().min(1),
   meaning: z.string().min(1),
-  meaningVi: z.string().default(''),
+  translation: z.string().default(''),
   pronunciation: z.string().default(''),
   partOfSpeech: z.string().default(''),
   exampleSentence: z.string().default(''),

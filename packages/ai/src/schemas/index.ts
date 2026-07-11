@@ -9,7 +9,7 @@ export {
 } from './explain'
 export type {
   SimpleExplain,
-  VietnameseExplain,
+  TranslateExplain,
   IeltsVocabResult,
   GrammarExplain,
   RewriteResult,

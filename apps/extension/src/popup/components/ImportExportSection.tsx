@@ -87,7 +87,7 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
           personalNote: '',
           tags: ['public-api', previewItem.sourceName],
           meaning: previewItem.content || previewItem.title,
-          meaningVi: '',
+          translation: '',
           partOfSpeech: '',
           pronunciation: '',
           exampleSentence: '',
