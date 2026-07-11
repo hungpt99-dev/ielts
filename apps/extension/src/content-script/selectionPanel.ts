@@ -66,6 +66,8 @@ let panelEl: HTMLElement | null = null
 let styleEl: HTMLStyleElement | null = null
 let selectedText = ''
 let isEnabled = true
+let autoSaveEnabled = false
+let defaultCategory: SaveCategory = 'vocabulary'
 let scrollTimer: ReturnType<typeof setTimeout> | null = null
 let selectionCheckTimer: ReturnType<typeof setTimeout> | null = null
 let mouseDownTarget: EventTarget | null = null
@@ -366,10 +368,16 @@ async function init(): Promise<void> {
   chrome.storage.onChanged.addListener((changes) => {
     if (!changes.extensionSettings) return
     const next = changes.extensionSettings.newValue
-    const enabled = next?.floatingToolbar !== false
-    if (enabled !== isEnabled) {
-      isEnabled = enabled
-      if (!enabled) hide()
+    if (next) {
+      const enabled = next.floatingToolbar !== false
+      if (enabled !== isEnabled) {
+        isEnabled = enabled
+        if (!enabled) hide()
+      }
+      autoSaveEnabled = next.autoSaveSelected === true
+      if (autoSaveEnabled) {
+        defaultCategory = next.defaultCategory || 'vocabulary'
+      }
     }
   })
 }
@@ -378,6 +386,10 @@ async function loadSettings(): Promise<void> {
   const result = await safeSyncGet<any>(['extensionSettings'])
   const settings = result.extensionSettings || {}
   isEnabled = settings.floatingToolbar !== false
+  autoSaveEnabled = settings.autoSaveSelected === true
+  if (autoSaveEnabled) {
+    defaultCategory = settings.defaultCategory || 'vocabulary'
+  }
 }
 
 function onMouseUp(e: MouseEvent): void {
@@ -408,6 +420,13 @@ function performSelectionCheck(): void {
     return
   }
   selectedText = text
+
+  // Auto-save without showing toolbar when setting is enabled
+  if (autoSaveEnabled) {
+    saveText(text, defaultCategory)
+    return
+  }
+
   const range = sel.getRangeAt(0)
   if (range) show(range.getBoundingClientRect())
 }

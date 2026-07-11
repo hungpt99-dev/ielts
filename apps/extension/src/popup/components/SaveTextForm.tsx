@@ -29,6 +29,18 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
     tags: '',
     personalNote: '',
   })
+
+  useEffect(() => {
+    import('../../background/settingsStorage').then(({ loadSettings }) => {
+      loadSettings().then((s) => {
+        setForm(prev => ({
+          ...prev,
+          category: s.defaultCategory || 'vocabulary',
+          topic: s.defaultTopic || '',
+        }))
+      }).catch(() => {})
+    }).catch(() => {})
+  }, [])
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)

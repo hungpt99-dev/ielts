@@ -107,13 +107,13 @@ export function safeFetchProviderConfig(): Promise<{
     try {
       const [syncResult, localResult] = await Promise.all([
         safeSyncGet<any>(['extensionSettings']),
-        safeStorageGet<any>(['aiApiKey', 'aiBaseUrl', 'aiModel']),
+        safeStorageGet<any>(['aiApiKey']),
       ])
       const syncSettings = syncResult.extensionSettings || {}
 
-      const apiKey = localResult.aiApiKey || syncSettings.aiApiKey || ''
-      const baseUrl = localResult.aiBaseUrl || syncSettings.aiBaseUrl || OPENAI_BASE_URL
-      const model = localResult.aiModel || syncSettings.aiModel || DEFAULT_MODEL
+      const apiKey = localResult.aiApiKey || ''
+      const baseUrl = syncSettings.aiBaseUrl || OPENAI_BASE_URL
+      const model = syncSettings.aiModel || DEFAULT_MODEL
 
       cachedConfig = { apiKey, baseUrl, model }
       return cachedConfig
