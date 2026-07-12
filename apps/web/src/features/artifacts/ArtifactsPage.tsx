@@ -185,8 +185,14 @@ export default function ArtifactsPage() {
   const stats = useMemo(() => {
     const total = artifacts.length
     const articles = artifacts.filter(a => a.category === 'article').length
-    const text = artifacts.filter(a => (a as ArtifactWithDetails).contentType === 'text').length
-    const notes = artifacts.filter(a => (a as ArtifactWithDetails).contentType === 'note').length
+    const text = artifacts.filter(a => {
+      const ct = (a as ArtifactWithDetails).contentType
+      return ct === 'text' || (!ct && a.category === 'text')
+    }).length
+    const notes = artifacts.filter(a => {
+      const ct = (a as ArtifactWithDetails).contentType
+      return ct === 'note' || (!ct && a.category === 'note')
+    }).length
     const reading = artifacts.filter(a => {
       const rs = (a as ArtifactWithDetails).readingStatus
       return rs === 'in_progress' || rs === 'completed'

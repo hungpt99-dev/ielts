@@ -435,6 +435,7 @@ export default function AppLayout() {
                       <Route path="/roadmap" element={<FullStudyRoadmapPage />} />
                       <Route path="/vocabulary" element={<NotebookPage />} />
                       <Route path="/review" element={<VocabularyReview />} />
+                      <Route path="/review/Notebook" element={<Navigate to="/review" replace />} />
                       <Route path="/review-center" element={<ReviewCenter />} />
                       <Route path="/reading" element={<ReadingPracticePage />} />
                       <Route path="/listening" element={<ListeningPracticePage />} />
