@@ -6,9 +6,17 @@ export interface TokenizedWord {
 }
 
 const PUNCTUATION_RE = /^[.,!?;:'"()\[\]{}–—…\u2013\u2014\u2026]+$/
-const PUNCTUATION_OR_WHITESPACE_RE = /^[\s.,!?;:'"()\[\]{}–—…\u2013\u2014\u2026]+$/
-const MEANINGFUL_RE = /^[a-zA-Z\u00C0-\u024F\u0400-\u04FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+(?:['\u2019][a-zA-Z]+)?$/
+const WHITESPACE_RE = /^\s+$/
+const WORD_RE = /^[a-zA-Z\u00C0-\u024F\u0400-\u04FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+(?:['\u2019][a-zA-Z]+)?$/
+const HYPHENATED_WORD_RE = /^[a-zA-Z\u00C0-\u024F]+(?:-[a-zA-Z\u00C0-\u024F]+)+$/
 const NUMBER_RE = /^\d+(?:[.,]\d+)?$/
+
+function isMeaningfulWord(part: string): boolean {
+  if (NUMBER_RE.test(part)) return true
+  if (WORD_RE.test(part)) return true
+  if (HYPHENATED_WORD_RE.test(part)) return true
+  return false
+}
 
 export function tokenize(text: string): TokenizedWord[] {
   const tokens: TokenizedWord[] = []
@@ -17,12 +25,14 @@ export function tokenize(text: string): TokenizedWord[] {
   for (const part of parts) {
     if (!part) continue
 
-    if (PUNCTUATION_OR_WHITESPACE_RE.test(part)) {
+    if (WHITESPACE_RE.test(part)) continue
+
+    if (PUNCTUATION_RE.test(part)) {
       tokens.push({ text: part, isPunctuation: true, isMeaningful: false, normalized: '' })
       continue
     }
 
-    const isMeaningful = MEANINGFUL_RE.test(part) || NUMBER_RE.test(part)
+    const isMeaningful = isMeaningfulWord(part)
     tokens.push({
       text: part,
       isPunctuation: false,
@@ -38,7 +48,7 @@ export function normalizeWord(word: string): string {
   return word
     .toLowerCase()
     .replace(/^['\u2019]+|['\u2019]+$/g, '')
-    .replace(/[^a-zA-Z\u00C0-\u024F\u0400-\u04FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF'-]/g, '')
+    .replace(/[^a-zA-Z\u00C0-\u024F\u0400-\u04FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF'’-]/g, '')
 }
 
 export function tokenizeSegment(text: string, maxWords?: number): TokenizedWord[] {
