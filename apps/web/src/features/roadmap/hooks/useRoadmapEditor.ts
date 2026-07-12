@@ -6,8 +6,6 @@ export interface RoadmapEditor {
   roadmap: RoadmapData | null
   isEditMode: boolean
   toggleEditMode: () => void
-  enterEditMode: () => void
-  exitEditMode: () => void
   applyCommand: (command: (r: RoadmapData) => RoadmapData) => void
   undo: () => void
   redo: () => void
@@ -16,82 +14,85 @@ export interface RoadmapEditor {
   loadRoadmap: (data: RoadmapData) => void
 }
 
+interface State {
+  roadmap: RoadmapData | null
+  isEditMode: boolean
+  pastStates: RoadmapData[]
+  futureStates: RoadmapData[]
+}
+
 export function useRoadmapEditor(): RoadmapEditor {
-  const [roadmap, setRoadmap] = useState<RoadmapData | null>(null)
-  const [isEditMode, setIsEditMode] = useState(false)
-  const [pastStates, setPastStates] = useState<RoadmapData[]>([])
-  const [futureStates, setFutureStates] = useState<RoadmapData[]>([])
-  const roadmapRef = useRef<RoadmapData | null>(null)
+  const [state, setState] = useState<State>({
+    roadmap: null,
+    isEditMode: false,
+    pastStates: [],
+    futureStates: [],
+  })
+  const stateRef = useRef(state)
+  stateRef.current = state
 
   const loadRoadmap = useCallback((data: RoadmapData) => {
-    setRoadmap(data)
-    roadmapRef.current = data
-    setPastStates([])
-    setFutureStates([])
-    setIsEditMode(false)
+    setState({
+      roadmap: data,
+      isEditMode: false,
+      pastStates: [],
+      futureStates: [],
+    })
   }, [])
 
   const applyCommand = useCallback((command: (r: RoadmapData) => RoadmapData) => {
-    setRoadmap(prev => {
-      if (!prev) return prev
-      const updated = command(prev)
-      roadmapRef.current = updated
-      setPastStates(p => [...p, prev])
-      setFutureStates([])
-      saveRoadmap(updated)
-      return updated
+    const s = stateRef.current
+    if (!s.roadmap) return
+    const updated = command(s.roadmap)
+    saveRoadmap(updated)
+    setState({
+      ...s,
+      roadmap: updated,
+      pastStates: [...s.pastStates, s.roadmap],
+      futureStates: [],
     })
   }, [])
 
   const undo = useCallback(() => {
-    if (pastStates.length === 0) return
-    const prev = pastStates[pastStates.length - 1]
-    roadmapRef.current = prev
-    setPastStates(p => p.slice(0, -1))
-    setRoadmap(prev => {
-      setFutureStates(f => [prev, ...f])
-      return prev
+    const s = stateRef.current
+    if (s.pastStates.length === 0) return
+    const prev = s.pastStates[s.pastStates.length - 1]
+    setState({
+      ...s,
+      roadmap: prev,
+      pastStates: s.pastStates.slice(0, -1),
+      futureStates: s.roadmap ? [s.roadmap, ...s.futureStates] : s.futureStates,
     })
-  }, [pastStates])
-
-  const redo = useCallback(() => {
-    if (futureStates.length === 0) return
-    const next = futureStates[0]
-    roadmapRef.current = next
-    setFutureStates(f => f.slice(1))
-    setRoadmap(prev => {
-      setPastStates(p => [...p, prev])
-      return next
-    })
-  }, [futureStates])
-
-  const enterEditMode = useCallback(() => {
-    setPastStates([])
-    setFutureStates([])
-    setIsEditMode(true)
   }, [])
 
-  const exitEditMode = useCallback(() => {
-    setPastStates([])
-    setFutureStates([])
-    setIsEditMode(false)
+  const redo = useCallback(() => {
+    const s = stateRef.current
+    if (s.futureStates.length === 0) return
+    const next = s.futureStates[0]
+    setState({
+      ...s,
+      roadmap: next,
+      futureStates: s.futureStates.slice(1),
+      pastStates: s.roadmap ? [...s.pastStates, s.roadmap] : s.pastStates,
+    })
   }, [])
 
   const toggleEditMode = useCallback(() => {
-    setIsEditMode(prev => !prev)
+    setState(prev => ({
+      ...prev,
+      isEditMode: !prev.isEditMode,
+    }))
   }, [])
 
   return {
-    roadmap,
-    isEditMode,
-    enterEditMode,
-    exitEditMode,
+    roadmap: state.roadmap,
+    isEditMode: state.isEditMode,
     toggleEditMode,
     applyCommand,
     undo,
     redo,
-    canUndo: pastStates.length > 0,
-    canRedo: futureStates.length > 0,
+    canUndo: state.pastStates.length > 0,
+    canRedo: state.futureStates.length > 0,
     loadRoadmap,
   }
 }
