@@ -445,7 +445,19 @@ export function parseWordForm(s: string): WordFormEntry | null {
   return null
 }
 
+export async function normalizeToLemma(word: string): Promise<string> {
+  if (!word.trim()) return word
+  const clean = word.trim().toLowerCase()
+  const { makeAIRequest } = await import('../../services/ai/AIService')
+  const systemPrompt = 'You are a linguist. Respond with a single word only — the dictionary lemma form.'
+  const prompt = `What is the dictionary lemma of "${clean}"? Example: running→run, better→good, mice→mouse, studied→study. Respond with only the lemma.`
+  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 50, temperature: 0 })
+  if (result.error || !result.content) return clean
+  return result.content.trim().toLowerCase().replace(/[^a-z\-]/g, '') || clean
+}
+
 export interface EnrichResult {
+  lemma?: string
   meaning?: string
   pronunciation?: string
   partOfSpeech?: string
@@ -459,6 +471,7 @@ export interface EnrichResult {
 }
 
 export async function enrichVocabulary(word: string, topic?: string): Promise<{ data: EnrichResult | null; error: string | null }> {
+  const lemma = await normalizeToLemma(word).catch(() => word)
   const { makeAIRequest } = await import('../../services/ai/AIService')
 
   const topicHint = topic ? ` on the topic of "${topic}"` : ''
@@ -509,7 +522,7 @@ Now for "${word}" — generate EVERY field EXACTLY like the example above:
     }
 
     const parsed = JSON.parse(result.content.slice(jsonStart, jsonEnd + 1)) as Record<string, unknown>
-    const enriched: EnrichResult = {}
+    const enriched: EnrichResult = { lemma }
 
     if (parsed.meaning && typeof parsed.meaning === 'string') enriched.meaning = parsed.meaning
     if (parsed.pronunciation && typeof parsed.pronunciation === 'string') enriched.pronunciation = parsed.pronunciation

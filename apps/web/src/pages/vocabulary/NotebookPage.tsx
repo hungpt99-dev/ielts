@@ -277,6 +277,7 @@ export default function NotebookPage() {
     const mergedWordFamily = [...new Set([...detailEntry.wordFamily, ...(data.wordFamily || [])])]
     const updated: VocabularyEntry = {
       ...detailEntry,
+      word: data.lemma || detailEntry.word,
       meaning: data.meaning || detailEntry.meaning,
       pronunciation: data.pronunciation || detailEntry.pronunciation,
       partOfSpeech: data.partOfSpeech || detailEntry.partOfSpeech,

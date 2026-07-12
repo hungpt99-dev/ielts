@@ -54,6 +54,7 @@ function VocabularyListItem({
       const mergedWordFamily = [...new Set([...entry.wordFamily, ...(data.wordFamily || [])])]
       const updated: VocabularyEntry = {
         ...entry,
+        word: data.lemma || displayEntry.word,
         meaning: data.meaning || displayEntry.meaning,
         pronunciation: data.pronunciation || displayEntry.pronunciation,
         partOfSpeech: data.partOfSpeech || displayEntry.partOfSpeech,

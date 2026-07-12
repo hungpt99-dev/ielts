@@ -100,13 +100,11 @@ export interface VocabEnrichResult {
 export async function normalizeToLemma(word: string): Promise<string> {
   if (!word.trim()) return word
   const clean = word.trim().toLowerCase()
-  const systemPrompt = 'You are a linguist. Respond with a single word only — the dictionary lemma form. No punctuation, no explanation.'
-  const userPrompt = `What is the dictionary lemma (base form) of the word "${clean}"? For example: running → run, better → good, mice → mouse, cars → car, studied → study, biggest → big, quickly → quick. Respond with only the lemma word, nothing else.`
-
+  const systemPrompt = 'You are a linguist. Respond with a single word only — the dictionary lemma form.'
+  const userPrompt = `What is the dictionary lemma of "${clean}"? Example: running→run, better→good, mice→mouse, studied→study. Respond with only the lemma.`
   const { content, error } = await callAI(systemPrompt, userPrompt)
   if (error || !content) return clean
-  const lemma = content.trim().toLowerCase().replace(/[^a-z\-]/g, '')
-  return lemma || clean
+  return content.trim().toLowerCase().replace(/[^a-z\-]/g, '') || clean
 }
 
 export async function enrichVocabulary(
