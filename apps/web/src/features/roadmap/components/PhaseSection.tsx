@@ -112,13 +112,52 @@ export default function PhaseSection({
       }}
       aria-label={`Phase ${phaseIndex + 1}: ${phase.name}`}
     >
-      <button
-        onClick={() => !isEditMode && setExpanded(!expanded)}
-        className="flex w-full items-center gap-4 px-4 sm:px-5 py-4 text-left transition-colors hover:brightness-95"
-        aria-expanded={expanded}
-        aria-controls={`phase-${phase.id}-content`}
-      >
-        {phaseEditControls || (
+      {isEditMode ? (
+        <div className="flex w-full items-center gap-4 px-4 sm:px-5 py-4">
+          {phaseEditControls}
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <EditableText
+                value={phase.name}
+                onSave={val => applyCommand?.(r => updatePhase(r, phaseIndex, { name: val }))}
+                isEditing={true}
+                className="text-base font-bold"
+              />
+              <span
+                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
+                style={{ backgroundColor: status.bg, color: status.color }}
+              >
+                {status.label}
+              </span>
+            </div>
+            <div className="mt-0.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <EditableText
+                value={phase.description}
+                onSave={val => applyCommand?.(r => updatePhase(r, phaseIndex, { description: val }))}
+                isEditing={true}
+                multiline
+                className="text-sm"
+              />
+            </div>
+            <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
+              <EditableText
+                value={phase.targetRange}
+                onSave={val => applyCommand?.(r => updatePhase(r, phaseIndex, { targetRange: val }))}
+                isEditing={true}
+                className="text-xs"
+              />
+              {' · '}
+              {getPhaseDateRange(phase)}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="flex w-full items-center gap-4 px-4 sm:px-5 py-4 text-left transition-colors hover:brightness-95"
+          aria-expanded={expanded}
+          aria-controls={`phase-${phase.id}-content`}
+        >
           <div
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-base font-bold transition-all"
             style={{
@@ -128,77 +167,43 @@ export default function PhaseSection({
           >
             {isComplete ? '✓' : phase.order + 1}
           </div>
-        )}
-
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            {isEditMode && applyCommand ? (
-              <EditableText
-                value={phase.name}
-                onSave={val => applyCommand(r => updatePhase(r, phaseIndex, { name: val }))}
-                isEditing={true}
-                className="text-base font-bold"
-              />
-            ) : (
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-base font-bold" style={{ color: 'var(--color-text)' }}>
                 {phase.name}
               </span>
-            )}
-            <span
-              className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
-              style={{ backgroundColor: status.bg, color: status.color }}
-            >
-              {status.label}
-            </span>
-          </div>
-          <div className="mt-0.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            {isEditMode && applyCommand ? (
-              <EditableText
-                value={phase.description}
-                onSave={val => applyCommand(r => updatePhase(r, phaseIndex, { description: val }))}
-                isEditing={true}
-                multiline
-                className="text-sm"
-              />
-            ) : phase.description}
-          </div>
-          <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
-            {isEditMode && applyCommand ? (
-              <>
-                <EditableText
-                  value={phase.targetRange}
-                  onSave={val => applyCommand(r => updatePhase(r, phaseIndex, { targetRange: val }))}
-                  isEditing={true}
-                  className="text-xs"
-                />
-                {' · '}
-              </>
-            ) : (
-              <>{phase.completedTasks}/{phase.totalTasks} tasks · {phase.targetRange} · </>
-            )}
-            {getPhaseDateRange(phase)}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="hidden sm:flex flex-col items-end">
-            <div
-              className="h-2 w-20 overflow-hidden rounded-full"
-              style={{ backgroundColor: 'var(--color-surface-alt)' }}
-            >
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{
-                  width: `${phaseProgress}%`,
-                  backgroundColor: isComplete ? 'var(--color-success)' : 'var(--color-primary)',
-                }}
-              />
+              <span
+                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
+                style={{ backgroundColor: status.bg, color: status.color }}
+              >
+                {status.label}
+              </span>
             </div>
-            <span className="mt-0.5 text-[10px] font-medium" style={{ color: 'var(--color-muted)' }}>
-              {phaseProgress}%
-            </span>
+            <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              {phase.description}
+            </p>
+            <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
+              {phase.completedTasks}/{phase.totalTasks} tasks · {phase.targetRange} · {getPhaseDateRange(phase)}
+            </p>
           </div>
-          {!isEditMode && (
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="hidden sm:flex flex-col items-end">
+              <div
+                className="h-2 w-20 overflow-hidden rounded-full"
+                style={{ backgroundColor: 'var(--color-surface-alt)' }}
+              >
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${phaseProgress}%`,
+                    backgroundColor: isComplete ? 'var(--color-success)' : 'var(--color-primary)',
+                  }}
+                />
+              </div>
+              <span className="mt-0.5 text-[10px] font-medium" style={{ color: 'var(--color-muted)' }}>
+                {phaseProgress}%
+              </span>
+            </div>
             <svg
               className={`h-5 w-5 shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`}
               fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
@@ -206,9 +211,9 @@ export default function PhaseSection({
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
-          )}
-        </div>
-      </button>
+          </div>
+        </button>
+      )}
 
       {!expanded && !isUpcoming && !isEditMode && (
         <div className="border-t px-4 sm:px-5 py-3" style={{ borderColor: 'var(--color-border)' }}>

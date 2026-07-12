@@ -155,75 +155,89 @@ export default function DayCard({
       }}
       aria-current={isToday ? 'date' : undefined}
     >
-      <button
-        onClick={() => !isEditMode && setExpanded(!expanded)}
-        className="flex w-full items-center gap-3 text-left"
-        aria-expanded={expanded}
-        aria-label={`Day ${day.dayNumber}, ${dayOfWeek} ${formatDate(day.date)}, ${day.isComplete ? 'completed' : isToday ? 'today — not started' : 'pending'}`}
-      >
-        {editControls}
-
-        <div
-          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-all"
-          style={{ backgroundColor: status.bg, color: status.color }}
+      {isEditMode ? (
+        <>
+          <div className="flex w-full items-center gap-3">
+            {editControls}
+            <div
+              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-all"
+              style={{ backgroundColor: status.bg, color: status.color }}
+            >
+              <span className="text-xs font-bold">{status.icon}</span>
+            </div>
+          </div>
+          <div className="min-w-0 flex-1 mt-2">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+              <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+                {dayOfWeek} · Day {day.dayNumber}
+              </span>
+              {onUpdateDay && (
+                <select
+                  value={day.skillFocus}
+                  onChange={e => onUpdateDay({ skillFocus: e.target.value })}
+                  className="rounded px-1.5 py-0.5 text-[10px] font-medium border"
+                  style={{ backgroundColor: skillCfg.bg, color: skillCfg.color, borderColor: skillCfg.color }}
+                >
+                  {SKILL_OPTIONS.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <div className="mt-0.5 text-sm">
+              {onUpdateDay && (
+                <EditableText
+                  value={day.objective}
+                  onSave={val => onUpdateDay({ objective: val })}
+                  isEditing={true}
+                  multiline
+                  placeholder="Enter task objective..."
+                  className="text-sm"
+                />
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="flex w-full items-center gap-3 text-left"
+          aria-expanded={expanded}
+          aria-label={`Day ${day.dayNumber}, ${dayOfWeek} ${formatDate(day.date)}, ${day.isComplete ? 'completed' : isToday ? 'today — not started' : 'pending'}`}
         >
-          <span className="text-xs font-bold">{status.icon}</span>
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
-            <span className="text-xs font-medium" style={{ color: isToday ? 'var(--color-primary)' : 'var(--color-text-secondary)' }}>
-              {dayOfWeek} · Day {day.dayNumber}
-            </span>
-            {isEditMode && onUpdateDay ? (
-              <select
-                value={day.skillFocus}
-                onClick={e => e.stopPropagation()}
-                onChange={e => onUpdateDay({ skillFocus: e.target.value })}
-                className="rounded px-1.5 py-0.5 text-[10px] font-medium border"
-                style={{ backgroundColor: skillCfg.bg, color: skillCfg.color, borderColor: skillCfg.color }}
-              >
-                {SKILL_OPTIONS.map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            ) : (
+          <div
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-all"
+            style={{ backgroundColor: status.bg, color: status.color }}
+          >
+            <span className="text-xs font-bold">{status.icon}</span>
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
+              <span className="text-xs font-medium" style={{ color: isToday ? 'var(--color-primary)' : 'var(--color-text-secondary)' }}>
+                {dayOfWeek} · Day {day.dayNumber}
+              </span>
               <span
                 className="rounded px-1.5 py-0.5 text-[10px] font-medium"
                 style={{ backgroundColor: skillCfg.bg, color: skillCfg.color }}
               >
                 {skillCfg.label}
               </span>
-            )}
-            {isToday && (
-              <span
-                className="rounded px-1.5 py-0.5 text-[10px] font-bold"
-                style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}
-              >
-                Today
-              </span>
-            )}
+              {isToday && (
+                <span
+                  className="rounded px-1.5 py-0.5 text-[10px] font-bold"
+                  style={{ backgroundColor: 'var(--color-primary)', color: 'white' }}
+                >
+                  Today
+                </span>
+              )}
+            </div>
+            <div className="mt-0.5 text-sm" style={{
+              color: day.isComplete ? 'var(--color-muted)' : isToday ? 'var(--color-text)' : 'var(--color-text-secondary)',
+              textDecoration: day.isComplete ? 'line-through' : 'none',
+            }}>
+              {day.objective}
+            </div>
           </div>
-          <div className="mt-0.5 text-sm" style={{
-            color: day.isComplete ? 'var(--color-muted)' : isToday ? 'var(--color-text)' : 'var(--color-text-secondary)',
-            textDecoration: day.isComplete ? 'line-through' : 'none',
-          }}>
-            {isEditMode && onUpdateDay ? (
-              <EditableText
-                value={day.objective}
-                onSave={val => onUpdateDay({ objective: val })}
-                isEditing={true}
-                multiline
-                placeholder="Enter task objective..."
-                className="text-sm"
-              />
-            ) : (
-              day.objective
-            )}
-          </div>
-        </div>
-
-        {!isEditMode && (
           <svg
             className={`h-4 w-4 shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`}
             fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
@@ -231,8 +245,8 @@ export default function DayCard({
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
-        )}
-      </button>
+        </button>
+      )}
 
       {expanded && !isEditMode && (
         <div className="mt-3 border-t pt-3" style={{ borderColor: 'var(--color-border)' }}>

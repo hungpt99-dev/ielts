@@ -93,13 +93,44 @@ export default function WeekSection({
           : 'var(--color-surface)',
       }}
     >
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="flex w-full items-center gap-3 px-3 sm:px-4 py-3 text-left transition-colors hover:brightness-95"
-        aria-expanded={expanded}
-        aria-controls={`week-${week.id}-content`}
-      >
-        {weekEditControls || (
+      {isEditMode ? (
+        <div className="flex w-full items-center gap-3 px-3 sm:px-4 py-3">
+          {weekEditControls}
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span className="flex flex-wrap items-center gap-1 text-sm font-semibold break-words min-w-0" style={{ color: 'var(--color-text)' }}>
+                <EditableText
+                  value={week.label}
+                  onSave={val => applyCommand?.(r => updateWeek(r, phaseIndex, weekIndex, { label: val }))}
+                  isEditing={true}
+                  className="text-sm font-semibold"
+                />
+                :
+                <EditableText
+                  value={week.focus}
+                  onSave={val => applyCommand?.(r => updateWeek(r, phaseIndex, weekIndex, { focus: val }))}
+                  isEditing={true}
+                  className="text-sm font-semibold"
+                />
+              </span>
+            </div>
+            <div className="mt-0.5 text-xs" style={{ color: 'var(--color-muted)' }}>
+              <EditableText
+                value={week.goal}
+                onSave={val => applyCommand?.(r => updateWeek(r, phaseIndex, weekIndex, { goal: val }))}
+                isEditing={true}
+                className="text-xs"
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="flex w-full items-center gap-3 px-3 sm:px-4 py-3 text-left transition-colors hover:brightness-95"
+          aria-expanded={expanded}
+          aria-controls={`week-${week.id}-content`}
+        >
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold"
             style={{
               backgroundColor: week.isComplete ? 'var(--color-success)' : isCurrentWeek ? 'var(--color-primary)' : 'var(--color-surface-alt)',
@@ -108,70 +139,41 @@ export default function WeekSection({
           >
             {week.weekNumber}
           </div>
-        )}
-
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            {isEditMode && applyCommand ? (
-              <span className="flex flex-wrap items-center gap-1 text-sm font-semibold break-words min-w-0" style={{ color: 'var(--color-text)' }}>
-                <EditableText
-                  value={week.label}
-                  onSave={val => applyCommand(r => updateWeek(r, phaseIndex, weekIndex, { label: val }))}
-                  isEditing={true}
-                  className="text-sm font-semibold"
-                />
-                :
-                <EditableText
-                  value={week.focus}
-                  onSave={val => applyCommand(r => updateWeek(r, phaseIndex, weekIndex, { focus: val }))}
-                  isEditing={true}
-                  className="text-sm font-semibold"
-                />
-              </span>
-            ) : (
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <span className="text-sm font-semibold break-words min-w-0" style={{ color: 'var(--color-text)' }}>
                 {week.label}: {week.focus}
               </span>
-            )}
-            {week.isComplete ? (
+              {week.isComplete ? (
 <span className="inline-flex items-center gap-1 rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/40 dark:text-green-300">
-                <IconCheck size={10} /> Done
-              </span>
-            ) : isCurrentWeek ? (
+                  <IconCheck size={10} /> Done
+                </span>
+              ) : isCurrentWeek ? (
 <span className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
-                <IconFlame size={10} /> In Progress
-              </span>
-            ) : null}
+                  <IconFlame size={10} /> In Progress
+                </span>
+              ) : null}
+            </div>
+            <p className="mt-0.5 text-xs" style={{ color: 'var(--color-muted)' }}>
+              {week.goal}
+            </p>
           </div>
-          <div className="mt-0.5 text-xs" style={{ color: 'var(--color-muted)' }}>
-            {isEditMode && applyCommand ? (
-              <EditableText
-                value={week.goal}
-                onSave={val => applyCommand(r => updateWeek(r, phaseIndex, weekIndex, { goal: val }))}
-                isEditing={true}
-                className="text-xs"
-              />
-            ) : week.goal}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
-            {week.completedTasks}/{week.totalTasks}
-          </span>
-          <div
-            className="h-2 w-16 overflow-hidden rounded-full sm:w-20"
-            style={{ backgroundColor: 'var(--color-surface-alt)' }}
-          >
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+              {week.completedTasks}/{week.totalTasks}
+            </span>
             <div
-              className="h-full rounded-full transition-all"
-              style={{
-                width: `${weekProgress}%`,
-                backgroundColor: week.isComplete ? 'var(--color-success)' : 'var(--color-primary)',
-              }}
-            />
-          </div>
-          {!isEditMode && (
+              className="h-2 w-16 overflow-hidden rounded-full sm:w-20"
+              style={{ backgroundColor: 'var(--color-surface-alt)' }}
+            >
+              <div
+                className="h-full rounded-full transition-all"
+                style={{
+                  width: `${weekProgress}%`,
+                  backgroundColor: week.isComplete ? 'var(--color-success)' : 'var(--color-primary)',
+                }}
+              />
+            </div>
             <svg
               className={`h-4 w-4 shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`}
               fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
@@ -179,9 +181,9 @@ export default function WeekSection({
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
-          )}
-        </div>
-      </button>
+          </div>
+        </button>
+      )}
 
       <div
         id={`week-${week.id}-content`}
