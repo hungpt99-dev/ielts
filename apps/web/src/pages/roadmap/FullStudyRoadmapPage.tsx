@@ -239,8 +239,6 @@ export default function FullStudyRoadmapPage() {
 
   // ---- All Complete! Celebration State ----
   const isAllComplete = roadmap.overallProgress >= 100
-  const todayStr = new Date().toISOString().split('T')[0]
-  const bandGap = profile ? profile.targetBand - profile.currentBand : 0
 
   if (isAllComplete) {
     return (

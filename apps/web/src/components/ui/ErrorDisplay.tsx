@@ -117,10 +117,10 @@ export default function ErrorDisplay({
   if (variant === 'page') {
     return (
       <div
-        className="flex min-h-[300px] items-center justify-center p-8"
+        className="flex w-full min-h-[300px] items-center justify-center p-8"
         role="alert"
       >
-        <div className="max-w-md text-center">
+        <div className="w-full max-w-lg text-center">
           <div
             className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full"
             style={{
@@ -171,8 +171,8 @@ export default function ErrorDisplay({
   }
 
   return (
-    <div className="flex h-full min-h-[200px] items-center justify-center p-8">
-      <div className="max-w-md text-center">
+    <div className="flex w-full h-full min-h-[200px] items-center justify-center p-8">
+      <div className="w-full max-w-lg text-center">
         <div
           className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full"
           style={{
