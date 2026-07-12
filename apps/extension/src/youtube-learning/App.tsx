@@ -389,6 +389,7 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
   const [translations, setTranslations] = useState<Map<string, string>>(new Map())
   const [translating, setTranslating] = useState(false)
   const translateLanguageRef = useRef('')
+  const [languageInput, setLanguageInput] = useState('')
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -563,8 +564,6 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
     background: translateEnabled ? 'var(--color-primary)' : 'rgba(59,130,246,0.15)',
     color: translateEnabled ? '#fff' : 'var(--color-primary-hover)',
   }
-
-  const [languageInput, setLanguageInput] = useState('')
 
   const handleToggleTranslate = () => {
     if (translateEnabled) {
