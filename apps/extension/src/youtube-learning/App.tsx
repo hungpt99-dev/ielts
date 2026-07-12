@@ -447,8 +447,10 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
     try {
       chrome.storage.local.get('extensionSettings', (result) => {
         const s = (result.extensionSettings as { autoTranslateTranscript?: boolean; nativeLanguage?: string }) || {}
-        if (s.autoTranslateTranscript && s.nativeLanguage) {
+        if (s.nativeLanguage) {
           translateLanguageRef.current = s.nativeLanguage
+        }
+        if (s.autoTranslateTranscript && s.nativeLanguage) {
           setTranslateEnabled(true)
         }
       })
@@ -562,11 +564,31 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
     color: translateEnabled ? '#fff' : 'var(--color-primary-hover)',
   }
 
+  const [languageInput, setLanguageInput] = useState('')
+
   const handleToggleTranslate = () => {
     if (translateEnabled) {
       setTranslateEnabled(false)
       setTranslations(new Map())
+    } else if (!translateLanguageRef.current) {
+      const lang = languageInput.trim() || prompt('Enter target language for translation (e.g. Vietnamese, Spanish, French):')
+      if (lang) {
+        translateLanguageRef.current = lang
+        setLanguageInput(lang)
+        setTranslateEnabled(true)
+      }
     } else {
+      setTranslateEnabled(true)
+    }
+  }
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLanguageInput(e.target.value)
+  }
+
+  const handleLanguageKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && languageInput.trim()) {
+      translateLanguageRef.current = languageInput.trim()
       setTranslateEnabled(true)
     }
   }
@@ -574,14 +596,33 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
   return (
     <div style={{ position: 'relative', height: '100%' }}>
       <div ref={containerRef} style={{ height: '100%', padding: 'var(--spacing-xs)', overflow: 'auto' }}>
-        {translateLanguageRef.current && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 6px 8px', borderBottom: '1px solid var(--color-border)', marginBottom: '6px' }}>
-            <button onClick={handleToggleTranslate} style={translateBtnStyle} aria-label={translateEnabled ? 'Hide translation' : 'Show translation'}>
-              {translateEnabled ? `Translate: ON` : `Translate`}
-            </button>
-            {translating && <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Translating...</span>}
-          </div>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 6px 8px', borderBottom: '1px solid var(--color-border)', marginBottom: '6px', flexWrap: 'wrap' }}>
+          <button onClick={handleToggleTranslate} style={translateBtnStyle} aria-label={translateEnabled ? 'Hide translation' : 'Show translation'}>
+            {translateEnabled ? 'Translate: ON' : 'Translate'}
+          </button>
+          {!translateLanguageRef.current && (
+            <input
+              type="text"
+              value={languageInput}
+              onChange={handleLanguageChange}
+              onKeyDown={handleLanguageKeyDown}
+              placeholder="Language (e.g. Vietnamese)"
+              style={{
+                flex: 1, minWidth: '100px', padding: '3px 6px', borderRadius: '4px',
+                border: '1px solid var(--color-border)', background: 'var(--color-surface)',
+                color: 'var(--color-text)', fontSize: '11px', outline: 'none',
+                fontFamily: 'var(--font-sans)',
+              }}
+              aria-label="Target language for translation"
+            />
+          )}
+          {translateLanguageRef.current && translateEnabled && (
+            <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>
+              → {translateLanguageRef.current}
+            </span>
+          )}
+          {translating && <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Translating...</span>}
+        </div>
         {(tokenizedSegments || segments).map((seg: any, idx: number) => {
           const tokens = seg.tokens || []
           const translatedText = translations.get(seg.id)
