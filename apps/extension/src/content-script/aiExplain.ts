@@ -274,7 +274,14 @@ async function loadTab(type: AiExplainType): Promise<void> {
     return
   }
 
-  const result = await explain(type, currentText, () => config)
+  const nativeLanguage = await new Promise<string>((resolve) => {
+    chrome.storage.local.get('extensionSettings', (result) => {
+      const s = result.extensionSettings as { nativeLanguage?: string } | undefined
+      resolve(s?.nativeLanguage || '')
+    })
+  })
+
+  const result = await explain(type, currentText, () => config, nativeLanguage || undefined)
 
   entry.loading = false
   if (result.error) {

@@ -54,8 +54,12 @@ const JSON_SCHEMAS: Record<AiExplainType, string> = {
 export function buildExplainPrompt(
   type: AiExplainType,
   text: string,
+  language?: string,
 ): { systemPrompt: string; userPrompt: string } {
-  const userPrompt = `${AI_EXPLAIN_PROMPTS[type]}\n\n"${text}"\n\nRespond with valid JSON in this exact format:\n${JSON_SCHEMAS[type]}`
+  const langInstruction = language && type === 'translate'
+    ? ` Translate into ${language}.`
+    : ''
+  const userPrompt = `${AI_EXPLAIN_PROMPTS[type]}${langInstruction}\n\n"${text}"\n\nRespond with valid JSON in this exact format:\n${JSON_SCHEMAS[type]}`
   return {
     systemPrompt: SYSTEM_PROMPTS[type],
     userPrompt,

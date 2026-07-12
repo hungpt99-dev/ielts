@@ -32,13 +32,14 @@ export async function explain(
   type: AiExplainType,
   text: string,
   getConfig: () => ProviderConfig,
+  language?: string,
 ): Promise<{ data: AiExplainResult | null; error: string | null }> {
   const cacheKey = `${type}:${text}`
   const cached = aiExplainCache.get(cacheKey)
   if (cached) return { data: cached, error: null }
 
   const schema = typeSchemas[type]
-  const { systemPrompt, userPrompt } = buildExplainPrompt(type, text)
+  const { systemPrompt, userPrompt } = buildExplainPrompt(type, text, language)
 
   const { content, error } = await callAI(systemPrompt, userPrompt, getConfig)
   if (error) return { data: null, error }
