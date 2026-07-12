@@ -649,18 +649,6 @@ export default function ReadingPractice() {
                         {passage.questions.length} questions &middot; ~{passage.estimatedMinutes} min
                       </span>
                       <div className="flex gap-2">
-                        {passage.questions.length === 0 && (
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={() => handleGenerateExercise(passage)}
-                            loading={generatingQuestions[passage.id]}
-                            disabled={generatingQuestions[passage.id]}
-                            aria-label="Generate exercise questions"
-                          >
-                            {generatingQuestions[passage.id] ? 'Generating...' : 'Generate Exercise'}
-                          </Button>
-                        )}
                         <Button size="sm" onClick={() => startPassage(passage)}>
                           {passage.questions.length > 0 ? 'Start Practice' : 'Read'}
                         </Button>
