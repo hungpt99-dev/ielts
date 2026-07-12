@@ -449,18 +449,37 @@ export async function enrichVocabulary(word: string, topic?: string): Promise<{ 
 
   const topicHint = topic ? ` on the topic of "${topic}"` : ''
   const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
-  const prompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a COMPLETE JSON object with EVERY field below — do not skip anything:
+  const prompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a COMPLETE JSON object — you MUST fill EVERY field listed below. Do not omit any field, even if the value is an empty array.
 
-- "meaning": clear English definition suitable for IELTS learners
-- "pronunciation": IPA pronunciation (e.g. "/juːˈbɪk.wɪ.təs/")
+Example output for word "ubiquitous":
+{
+  "meaning": "Present, appearing, or found everywhere",
+  "pronunciation": "/juːˈbɪk.wɪ.təs/",
+  "partOfSpeech": "adjective",
+  "exampleSentence": "Smartphones have become ubiquitous in modern society.",
+  "collocations": ["ubiquitous computing", "ubiquitous presence", "ubiquitous technology"],
+  "synonyms": ["widespread", "pervasive", "omnipresent"],
+  "antonyms": ["rare", "scarce"],
+  "wordFamily": [
+    {"word": "ubiquity", "pos": "noun", "meaning": "The state of being everywhere", "pronunciation": "/juːˈbɪk.wɪ.ti/"},
+    {"word": "ubiquitous", "pos": "adjective", "meaning": "Present everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs/"},
+    {"word": "ubiquitously", "pos": "adverb", "meaning": "In a way that is found everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs.li/"}
+  ],
+  "cefrLevel": "C1",
+  "ieltsRelevance": "high"
+}
+
+Now for "${word}" — generate EVERY field EXACTLY like the example above:
+- "meaning": clear English definition
+- "pronunciation": IPA pronunciation string
 - "partOfSpeech": one of: noun, verb, adjective, adverb, preposition, conjunction, pronoun, determiner, phrasal verb, idiom
 - "exampleSentence": natural IELTS-level example sentence using the word
-- "collocations": array of 2-3 common collocations (e.g. ["ubiquitous computing", "ubiquitous presence"])
+- "collocations": array of 2-3 common collocations
 - "synonyms": array of 2-3 synonyms
-- "antonyms": array of 1-2 antonyms if they exist, empty array otherwise
-- "wordFamily": array of objects. Generate EVERY related word form that exists — nouns, verbs, adjectives, adverbs. Do NOT skip any. Each object MUST have "word" (string), "pos" (part of speech), "meaning" (clear definition for that form), and "pronunciation" (IPA). For verb forms, MUST also include "verbConjugation" with ALL of: base, pastSimple, pastParticiple, presentParticiple, thirdPersonSingular.
-- "cefrLevel": estimated CEFR level as one of: A1, A2, B1, B2, C1, C2
-- "ieltsRelevance": estimated IELTS relevance as one of: low, medium, high`
+- "antonyms": array of 1-2 antonyms (empty array if none exist)
+- "wordFamily": array of objects. Generate EVERY related word form that exists — nouns, verbs, adjectives, adverbs. Do NOT skip any. Each object MUST have "word" (string), "pos" (part of speech), "meaning" (clear definition for that form), and "pronunciation" (IPA string). For verb forms, MUST also include "verbConjugation" with ALL of: base, pastSimple, pastParticiple, presentParticiple, thirdPersonSingular.
+- "cefrLevel": one of: A1, A2, B1, B2, C1, C2
+- "ieltsRelevance": one of: low, medium, high`
 
   const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 2000, temperature: 0.3 })
 
