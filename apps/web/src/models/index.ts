@@ -123,6 +123,8 @@ export interface VocabularyEntry {
   personalNote: string
   difficulty: VocabDifficulty
   status: VocabStatus
+  cefrLevel: '' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2'
+  ieltsRelevance: '' | 'low' | 'medium' | 'high'
   tags: string[]
   createdAt: ISOString
   updatedAt: ISOString

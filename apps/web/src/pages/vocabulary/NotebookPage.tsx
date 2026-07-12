@@ -768,6 +768,16 @@ export default function NotebookPage() {
               <Badge variant="default" size="sm">
                 {detailEntry.topic}
               </Badge>
+              {detailEntry.cefrLevel && (
+                <Badge variant={detailEntry.cefrLevel >= 'B2' ? 'success' : detailEntry.cefrLevel >= 'B1' ? 'warning' : 'primary'} size="sm">
+                  {detailEntry.cefrLevel}
+                </Badge>
+              )}
+              {detailEntry.ieltsRelevance && (
+                <Badge variant={detailEntry.ieltsRelevance === 'high' ? 'success' : detailEntry.ieltsRelevance === 'medium' ? 'warning' : 'default'} size="sm">
+                  IELTS: {detailEntry.ieltsRelevance}
+                </Badge>
+              )}
               {detailEntry.tags.map(tag => (
                 <Badge key={tag} variant="primary" size="sm">
                   {tag}

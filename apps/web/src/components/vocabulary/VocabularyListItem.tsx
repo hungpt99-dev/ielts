@@ -195,6 +195,42 @@ function VocabularyListItem({
             >
               {entry.topic}
             </span>
+            {entry.cefrLevel && (
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '2px var(--spacing-sm)',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--weight-bold)',
+                  fontFamily: 'var(--font-mono)',
+                  background: entry.cefrLevel >= 'B2' ? 'var(--color-success-light)' : entry.cefrLevel >= 'B1' ? 'var(--color-warning-light)' : 'var(--color-primary-light)',
+                  color: entry.cefrLevel >= 'B2' ? 'var(--color-success)' : entry.cefrLevel >= 'B1' ? 'var(--color-warning)' : 'var(--color-primary)',
+                  borderRadius: 'var(--radius-full)',
+                  lineHeight: 1.4,
+                }}
+              >
+                {entry.cefrLevel}
+              </span>
+            )}
+            {entry.ieltsRelevance && (
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '2px var(--spacing-sm)',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 'var(--weight-semibold)',
+                  fontFamily: 'var(--font-sans)',
+                  background: entry.ieltsRelevance === 'high' ? 'var(--color-success-light)' : entry.ieltsRelevance === 'medium' ? 'var(--color-warning-light)' : 'var(--color-surface-alt)',
+                  color: entry.ieltsRelevance === 'high' ? 'var(--color-success)' : entry.ieltsRelevance === 'medium' ? 'var(--color-warning)' : 'var(--color-text-secondary)',
+                  borderRadius: 'var(--radius-full)',
+                  lineHeight: 1.4,
+                }}
+              >
+                IELTS: {entry.ieltsRelevance}
+              </span>
+            )}
             {entry.tags.filter(t => t !== 'favorite').map(tag => (
               <span
                 key={tag}

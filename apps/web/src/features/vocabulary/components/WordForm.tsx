@@ -21,6 +21,8 @@ const PARTS_OF_SPEECH = [
 
 const DIFFICULTIES: VocabDifficulty[] = ['easy', 'medium', 'hard']
 const STATUSES: VocabStatus[] = ['new', 'learning', 'reviewing', 'mastered']
+const CEFR_LEVELS = ['', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const
+const IELTS_RELEVANCE = ['', 'low', 'medium', 'high'] as const
 
 const vocabSchema = z.object({
   word: z.string().min(1, 'Word is required').max(100),
@@ -37,6 +39,8 @@ const vocabSchema = z.object({
   personalNote: z.string().max(1000),
   difficulty: z.enum(['easy', 'medium', 'hard']),
   status: z.enum(['new', 'learning', 'reviewing', 'mastered']),
+  cefrLevel: z.string(),
+  ieltsRelevance: z.string(),
   tags: z.string(),
 })
 
@@ -139,6 +143,8 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
       personalNote: values.personalNote.trim(),
       difficulty: values.difficulty,
       status: values.status,
+      cefrLevel: (values.cefrLevel || '') as VocabularyEntry['cefrLevel'],
+      ieltsRelevance: (values.ieltsRelevance || '') as VocabularyEntry['ieltsRelevance'],
       tags: parseList(values.tags),
       createdAt: initialValues?.createdAt ?? now,
       updatedAt: now,
@@ -343,6 +349,36 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
             >
               {STATUSES.map(s => (
                 <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div>
+            <label htmlFor="cefrLevel" className={labelClass}>
+              CEFR Level
+            </label>
+            <select
+              id="cefrLevel"
+              {...register('cefrLevel')}
+              className="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              {CEFR_LEVELS.map(c => (
+                <option key={c} value={c}>{c || 'Not set'}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="ieltsRelevance" className={labelClass}>
+              IELTS Relevance
+            </label>
+            <select
+              id="ieltsRelevance"
+              {...register('ieltsRelevance')}
+              className="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            >
+              {IELTS_RELEVANCE.map(r => (
+                <option key={r} value={r}>{r || 'Not set'}</option>
               ))}
             </select>
           </div>
