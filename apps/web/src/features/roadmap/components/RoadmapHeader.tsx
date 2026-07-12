@@ -14,6 +14,8 @@ interface RoadmapHeaderProps {
   } | null
   onScrollToToday: () => void
   onAskAITutor: () => void
+  isEditMode?: boolean
+  onToggleEditMode?: () => void
 }
 
 function getExamCountdown(examDate: string): number {
@@ -30,7 +32,7 @@ function formatDate(dateStr: string): string {
   return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
 }
 
-export default function RoadmapHeader({ roadmap, profile, onScrollToToday, onAskAITutor }: RoadmapHeaderProps) {
+export default function RoadmapHeader({ roadmap, profile, onScrollToToday, onAskAITutor, isEditMode = false, onToggleEditMode }: RoadmapHeaderProps) {
   const examCountdown = profile?.examDate ? getExamCountdown(profile.examDate) : 0
   const bandGap = profile ? profile.targetBand - profile.currentBand : 0
   const currentPhase = roadmap.phases[roadmap.currentPhaseIndex]
@@ -162,20 +164,40 @@ export default function RoadmapHeader({ roadmap, profile, onScrollToToday, onAsk
             </svg>
             Scroll to Today
           </button>
-          <button
-            onClick={onAskAITutor}
-            className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-all hover:brightness-95 active:scale-[0.98]"
-            style={{
-              backgroundColor: 'var(--color-tutor-accent-light)',
-              color: 'var(--color-tutor-accent)',
-              border: '1px solid var(--color-tutor-border)',
-            }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-            Ask AI Tutor about Plan
-          </button>
+          {!isEditMode && (
+            <button
+              onClick={onAskAITutor}
+              className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-all hover:brightness-95 active:scale-[0.98]"
+              style={{
+                backgroundColor: 'var(--color-tutor-accent-light)',
+                color: 'var(--color-tutor-accent)',
+                border: '1px solid var(--color-tutor-border)',
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              Ask AI Tutor about Plan
+            </button>
+          )}
+          {onToggleEditMode && (
+            <button
+              onClick={onToggleEditMode}
+              className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-all hover:brightness-95 active:scale-[0.98] ${isEditMode ? 'ring-2' : ''}`}
+              style={{
+                backgroundColor: isEditMode ? 'var(--color-primary)' : 'var(--color-surface-alt)',
+                color: isEditMode ? 'var(--color-on-primary)' : 'var(--color-text-secondary)',
+                border: `1px solid ${isEditMode ? 'var(--color-primary)' : 'var(--color-border)'}`,
+                ringColor: isEditMode ? 'var(--color-primary)' : undefined,
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+              {isEditMode ? 'Editing...' : 'Edit Plan'}
+            </button>
+          )}
         </div>
       </div>
     </section>

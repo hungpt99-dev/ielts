@@ -18,12 +18,14 @@ import type {
   RoadmapDay,
   RoadmapUserProfile,
 } from '../../features/roadmap/roadmapService'
+import { useRoadmapEditor } from '../../features/roadmap/hooks/useRoadmapEditor'
+import { addPhase, movePhase, removePhase } from '../../features/roadmap/roadmapCommands'
 import RoadmapHeader from '../../features/roadmap/components/RoadmapHeader'
 import PhaseMilestoneTimeline from '../../features/roadmap/components/PhaseMilestoneTimeline'
 import PhaseSection from '../../features/roadmap/components/PhaseSection'
 import RoadmapSummary from '../../features/roadmap/components/RoadmapSummary'
 import AITutorRoadmapInsight from '../../features/roadmap/components/AITutorRoadmapInsight'
-import { IconAward, IconEdit, IconMap, IconProgress, IconRefresh } from '@ielts/ui'
+import { IconAward, IconEdit, IconMap, IconProgress, IconRefresh, IconUndo, IconRedo } from '@ielts/ui'
 import PageContent from '../../components/layout/PageContent'
 
 function formatDate(dateStr: string): string {
@@ -41,7 +43,7 @@ function getGreeting(): string {
 export default function FullStudyRoadmapPage() {
   const navigate = useNavigate()
   const todayRef = useRef<HTMLDivElement>(null)
-  const [roadmap, setRoadmap] = useState<RoadmapData | null>(null)
+  const editor = useRoadmapEditor()
   const [profile, setProfile] = useState<RoadmapUserProfile | null>(null)
   const [expandedPhases, setExpandedPhases] = useState<Set<number>>(new Set([0]))
   const [loading, setLoading] = useState(true)
@@ -49,12 +51,14 @@ export default function FullStudyRoadmapPage() {
   const [aiEnabled, setAiEnabled] = useState(false)
   const [regenerating, setRegenerating] = useState(false)
 
+  const roadmap = editor.roadmap
+
   const loadData = useCallback(async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true)
       setError(null)
       const data = await ensureRoadmap()
-      setRoadmap(data)
+      editor.loadRoadmap(data)
       const userProfile = getRoadmapUserProfile()
       setProfile(userProfile)
 
@@ -77,7 +81,7 @@ export default function FullStudyRoadmapPage() {
     } finally {
       if (showLoading) setLoading(false)
     }
-  }, [])
+  }, [editor])
 
   useEffect(() => {
     loadData()
@@ -97,17 +101,18 @@ export default function FullStudyRoadmapPage() {
   }, [loading, roadmap])
 
   const handleToggleTask = useCallback(async (phaseIndex: number, weekIndex: number, dayIndex: number) => {
-    if (!roadmap) return
+    const current = editor.roadmap
+    if (!current) return
     try {
-      const updated = await toggleTask(roadmap, phaseIndex, weekIndex, dayIndex)
-      setRoadmap(updated)
+      const updated = await toggleTask(current, phaseIndex, weekIndex, dayIndex)
+      editor.loadRoadmap(updated)
     } catch {
       // Revert handled by toggleTask
     }
-  }, [roadmap])
+  }, [editor])
 
   const handleRegenerate = useCallback(async () => {
-    if (!roadmap || regenerating) return
+    if (!editor.roadmap || regenerating) return
     setRegenerating(true)
     try {
       localStorage.removeItem('ielts-roadmap')
@@ -115,7 +120,7 @@ export default function FullStudyRoadmapPage() {
     } finally {
       setRegenerating(false)
     }
-  }, [roadmap, loadData, regenerating])
+  }, [editor, loadData, regenerating])
 
   const handleScrollToToday = useCallback(() => {
     todayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -317,8 +322,10 @@ export default function FullStudyRoadmapPage() {
   }
 
   // ---- Normal Roadmap View ----
+  const { isEditMode, toggleEditMode, applyCommand, undo, redo, canUndo, canRedo } = editor
+
   return (
-    <PageContent className="space-y-6">
+    <PageContent className={`space-y-6 ${isEditMode ? 'pb-24' : ''}`}>
       {/* Skip link for keyboard users */}
       <a
         href="#today-section"
@@ -333,13 +340,35 @@ export default function FullStudyRoadmapPage() {
         profile={profile}
         onScrollToToday={handleScrollToToday}
         onAskAITutor={handleAskAITutor}
+        isEditMode={isEditMode}
+        onToggleEditMode={toggleEditMode}
       />
 
-      <PhaseMilestoneTimeline
-        phases={roadmap.phases}
-        currentPhaseIndex={roadmap.currentPhaseIndex}
-        onPhaseClick={handlePhaseClick}
-      />
+      {!isEditMode && (
+        <PhaseMilestoneTimeline
+          phases={roadmap.phases}
+          currentPhaseIndex={roadmap.currentPhaseIndex}
+          onPhaseClick={handlePhaseClick}
+        />
+      )}
+
+      {isEditMode && (
+        <div
+          className="rounded-xl border px-4 py-3 text-sm flex items-center gap-2"
+          style={{
+            backgroundColor: 'var(--color-primary-light)',
+            borderColor: 'var(--color-primary)',
+            color: 'var(--color-primary)',
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+          <span className="font-medium">Edit Mode</span>
+          <span className="text-xs opacity-75">Click any text to edit · Use arrows to reorder · Add new items with the + buttons</span>
+        </div>
+      )}
 
       <div className="flex flex-col gap-4 lg:gap-6 lg:flex-row lg:items-start">
         {/* Main content: phase list */}
@@ -348,19 +377,21 @@ export default function FullStudyRoadmapPage() {
             <h2 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
               Learning Phases
             </h2>
-            <button
-              onClick={() => {
-                if (expandedPhases.size === roadmap.phases.length) {
-                  setExpandedPhases(new Set())
-                } else {
-                  setExpandedPhases(new Set(roadmap.phases.map((_, i) => i)))
-                }
-              }}
-              className="text-xs font-medium transition-colors hover:opacity-80"
-              style={{ color: 'var(--color-primary)' }}
-            >
-              {expandedPhases.size === roadmap.phases.length ? 'Collapse all' : 'Expand all'}
-            </button>
+            {!isEditMode && (
+              <button
+                onClick={() => {
+                  if (expandedPhases.size === roadmap.phases.length) {
+                    setExpandedPhases(new Set())
+                  } else {
+                    setExpandedPhases(new Set(roadmap.phases.map((_, i) => i)))
+                  }
+                }}
+                className="text-xs font-medium transition-colors hover:opacity-80"
+                style={{ color: 'var(--color-primary)' }}
+              >
+                {expandedPhases.size === roadmap.phases.length ? 'Collapse all' : 'Expand all'}
+              </button>
+            )}
           </div>
 
           {roadmap.phases.map((phase, pIdx) => (
@@ -369,35 +400,122 @@ export default function FullStudyRoadmapPage() {
                 phase={phase}
                 phaseIndex={pIdx}
                 isCurrentPhase={pIdx === roadmap.currentPhaseIndex}
-                defaultExpanded={expandedPhases.has(pIdx)}
+                defaultExpanded={expandedPhases.has(pIdx) || isEditMode}
                 currentWeekIndex={roadmap.currentWeekIndex}
                 onToggleTask={handleToggleTask}
                 onAskAI={handleAskAIDay}
                 onAskAIPhase={handleAskAIPhase}
+                isEditMode={isEditMode}
+                applyCommand={applyCommand}
+                onMoveUp={isEditMode && pIdx > 0
+                  ? () => applyCommand(r => movePhase(r, pIdx, pIdx - 1))
+                  : undefined}
+                onMoveDown={isEditMode && pIdx < roadmap.phases.length - 1
+                  ? () => applyCommand(r => movePhase(r, pIdx, pIdx + 1))
+                  : undefined}
+                canMoveUp={pIdx > 0}
+                canMoveDown={pIdx < roadmap.phases.length - 1}
+                onRemovePhase={isEditMode
+                  ? () => applyCommand(r => removePhase(r, pIdx))
+                  : undefined}
               />
             </div>
           ))}
+
+          {isEditMode && (
+            <button
+              onClick={() => applyCommand(r => addPhase(r))}
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-4 py-4 text-sm font-medium transition-colors hover:brightness-95"
+              style={{
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-primary)',
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add Phase
+            </button>
+          )}
         </div>
 
         {/* Sidebar */}
-        <aside className="w-full space-y-4 sm:space-y-5 lg:w-80 lg:sticky lg:top-24 lg:shrink-0" aria-label="Roadmap sidebar">
-          <AITutorRoadmapInsight
-            roadmap={roadmap}
-            profile={profile}
-            aiEnabled={aiEnabled}
-            onAskFollowUp={handleAskFollowUp}
-            onAdjustPlan={handleAdjustPlan}
-          />
+        {!isEditMode && (
+          <aside className="w-full space-y-4 sm:space-y-5 lg:w-80 lg:sticky lg:top-24 lg:shrink-0" aria-label="Roadmap sidebar">
+            <AITutorRoadmapInsight
+              roadmap={roadmap}
+              profile={profile}
+              aiEnabled={aiEnabled}
+              onAskFollowUp={handleAskFollowUp}
+              onAdjustPlan={handleAdjustPlan}
+            />
 
-          <RoadmapSummary
-            roadmap={roadmap}
-            profile={profile}
-            onRegenerate={handleRegenerate}
-            onAskAIReview={handleAskFollowUp}
-            regenerating={regenerating}
-          />
-        </aside>
+            <RoadmapSummary
+              roadmap={roadmap}
+              profile={profile}
+              onRegenerate={handleRegenerate}
+              onAskAIReview={handleAskFollowUp}
+              regenerating={regenerating}
+            />
+          </aside>
+        )}
       </div>
+
+      {/* Floating edit toolbar */}
+      {isEditMode && (
+        <div
+          className="fixed bottom-0 left-0 right-0 z-50 border-t px-4 py-3"
+          style={{
+            backgroundColor: 'var(--color-surface)',
+            borderColor: 'var(--color-border)',
+            boxShadow: '0 -4px 12px rgba(0,0,0,0.08)',
+          }}
+        >
+          <div className="mx-auto flex max-w-2xl items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={undo}
+                disabled={!canUndo}
+                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:brightness-95 disabled:opacity-40"
+                style={{
+                  backgroundColor: 'var(--color-surface-alt)',
+                  color: canUndo ? 'var(--color-text)' : 'var(--color-muted)',
+                }}
+              >
+                <IconUndo size={14} /> Undo
+              </button>
+              <button
+                onClick={redo}
+                disabled={!canRedo}
+                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:brightness-95 disabled:opacity-40"
+                style={{
+                  backgroundColor: 'var(--color-surface-alt)',
+                  color: canRedo ? 'var(--color-text)' : 'var(--color-muted)',
+                }}
+              >
+                <IconRedo size={14} /> Redo
+              </button>
+            </div>
+            <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
+              Changes save automatically
+            </span>
+            <button
+              onClick={toggleEditMode}
+              className="inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-sm font-bold transition-all hover:brightness-95 active:scale-[0.98]"
+              style={{
+                backgroundColor: 'var(--color-primary)',
+                color: 'var(--color-on-primary)',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Done Editing
+            </button>
+          </div>
+        </div>
+      )}
     </PageContent>
   )
 }

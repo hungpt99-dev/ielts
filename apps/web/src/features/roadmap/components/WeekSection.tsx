@@ -1,7 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IconCheck, IconFlame } from '@ielts/ui'
 import type { RoadmapWeek, RoadmapDay } from '../roadmapService'
 import DayCard from './DayCard'
+import EditableText from './EditableText'
+import {
+  updateWeek, addDay, removeDay, moveDay, updateDay,
+} from '../roadmapCommands'
+import type { RoadmapData } from '../roadmapService'
 
 interface WeekSectionProps {
   week: RoadmapWeek
@@ -10,6 +15,13 @@ interface WeekSectionProps {
   phaseIndex: number
   onToggleTask: (phaseIndex: number, weekIndex: number, dayIndex: number) => void
   onAskAI: (day: RoadmapDay) => void
+  isEditMode?: boolean
+  applyCommand?: (command: (r: RoadmapData) => RoadmapData) => void
+  onMoveUp?: () => void
+  onMoveDown?: () => void
+  canMoveUp?: boolean
+  canMoveDown?: boolean
+  onRemoveWeek?: () => void
 }
 
 function isToday(dateStr: string): boolean {
@@ -20,19 +32,62 @@ function isPast(dateStr: string): boolean {
   return dateStr < new Date().toISOString().split('T')[0]
 }
 
-export default function WeekSection({ week, weekIndex, isCurrentWeek, phaseIndex, onToggleTask, onAskAI }: WeekSectionProps) {
-  const [expanded, setExpanded] = useState(isCurrentWeek)
+export default function WeekSection({
+  week, weekIndex, isCurrentWeek, phaseIndex, onToggleTask, onAskAI,
+  isEditMode = false, applyCommand,
+  onMoveUp, onMoveDown, canMoveUp = false, canMoveDown = false,
+  onRemoveWeek,
+}: WeekSectionProps) {
+  const [expanded, setExpanded] = useState(isCurrentWeek || isEditMode)
   const weekProgress = week.totalTasks > 0 ? Math.round((week.completedTasks / week.totalTasks) * 100) : 0
+
+  useEffect(() => {
+    if (isEditMode) setExpanded(true)
+  }, [isEditMode])
+
+  const weekEditControls = isEditMode && (
+    <div className="flex items-center gap-0.5">
+      <button
+        onClick={(e) => { e.stopPropagation(); onMoveUp?.() }}
+        disabled={!canMoveUp}
+        className="flex h-6 w-6 items-center justify-center rounded transition-colors hover:bg-[var(--color-surface-alt)] disabled:opacity-30"
+        title="Move week up"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-text-secondary)' }}>
+          <polyline points="18 15 12 9 6 15" />
+        </svg>
+      </button>
+      <button
+        onClick={(e) => { e.stopPropagation(); onMoveDown?.() }}
+        disabled={!canMoveDown}
+        className="flex h-6 w-6 items-center justify-center rounded transition-colors hover:bg-[var(--color-surface-alt)] disabled:opacity-30"
+        title="Move week down"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-text-secondary)' }}>
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation()
+          if (window.confirm(`Delete "${week.label}" and all its tasks?`)) onRemoveWeek?.()
+        }}
+        className="flex h-6 w-6 items-center justify-center rounded transition-colors hover:bg-[var(--color-danger-light)]"
+        title="Delete week"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-danger)' }}>
+          <polyline points="3 6 5 6 21 6" />
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        </svg>
+      </button>
+    </div>
+  )
 
   return (
     <div
-      className="rounded-xl border transition-all"
+      className={`rounded-xl border transition-all ${isEditMode ? 'border-dashed' : ''}`}
       style={{
-        borderColor: isCurrentWeek
-          ? 'var(--color-primary)'
-          : week.isComplete
-            ? 'var(--color-success)'
-            : 'var(--color-border)',
+        borderColor: isEditMode ? 'var(--color-primary)' : isCurrentWeek ? 'var(--color-primary)' : week.isComplete ? 'var(--color-success)' : 'var(--color-border)',
         backgroundColor: isCurrentWeek
           ? 'var(--color-primary-light)'
           : 'var(--color-surface)',
@@ -44,20 +99,40 @@ export default function WeekSection({ week, weekIndex, isCurrentWeek, phaseIndex
         aria-expanded={expanded}
         aria-controls={`week-${week.id}-content`}
       >
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold"
-          style={{
-            backgroundColor: week.isComplete ? 'var(--color-success)' : isCurrentWeek ? 'var(--color-primary)' : 'var(--color-surface-alt)',
-            color: week.isComplete || isCurrentWeek ? 'var(--color-on-primary)' : 'var(--color-text-secondary)',
-          }}
-        >
-          {week.weekNumber}
-        </div>
+        {weekEditControls || (
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold"
+            style={{
+              backgroundColor: week.isComplete ? 'var(--color-success)' : isCurrentWeek ? 'var(--color-primary)' : 'var(--color-surface-alt)',
+              color: week.isComplete || isCurrentWeek ? 'var(--color-on-primary)' : 'var(--color-text-secondary)',
+            }}
+          >
+            {week.weekNumber}
+          </div>
+        )}
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span className="text-sm font-semibold break-words min-w-0" style={{ color: 'var(--color-text)' }}>
-              {week.label}: {week.focus}
-            </span>
+            {isEditMode && applyCommand ? (
+              <span className="flex flex-wrap items-center gap-1 text-sm font-semibold break-words min-w-0" style={{ color: 'var(--color-text)' }}>
+                <EditableText
+                  value={week.label}
+                  onSave={val => applyCommand(r => updateWeek(r, phaseIndex, weekIndex, { label: val }))}
+                  isEditing={true}
+                  className="text-sm font-semibold"
+                />
+                :
+                <EditableText
+                  value={week.focus}
+                  onSave={val => applyCommand(r => updateWeek(r, phaseIndex, weekIndex, { focus: val }))}
+                  isEditing={true}
+                  className="text-sm font-semibold"
+                />
+              </span>
+            ) : (
+              <span className="text-sm font-semibold break-words min-w-0" style={{ color: 'var(--color-text)' }}>
+                {week.label}: {week.focus}
+              </span>
+            )}
             {week.isComplete ? (
 <span className="inline-flex items-center gap-1 rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/40 dark:text-green-300">
                 <IconCheck size={10} /> Done
@@ -68,9 +143,16 @@ export default function WeekSection({ week, weekIndex, isCurrentWeek, phaseIndex
               </span>
             ) : null}
           </div>
-          <p className="mt-0.5 text-xs" style={{ color: 'var(--color-muted)' }}>
-            {week.goal}
-          </p>
+          <div className="mt-0.5 text-xs" style={{ color: 'var(--color-muted)' }}>
+            {isEditMode && applyCommand ? (
+              <EditableText
+                value={week.goal}
+                onSave={val => applyCommand(r => updateWeek(r, phaseIndex, weekIndex, { goal: val }))}
+                isEditing={true}
+                className="text-xs"
+              />
+            ) : week.goal}
+          </div>
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
@@ -89,34 +171,65 @@ export default function WeekSection({ week, weekIndex, isCurrentWeek, phaseIndex
               }}
             />
           </div>
-          <svg
-            className={`h-4 w-4 shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`}
-            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
-            style={{ color: 'var(--color-muted)' }}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
+          {!isEditMode && (
+            <svg
+              className={`h-4 w-4 shrink-0 transition-transform ${expanded ? 'rotate-180' : ''}`}
+              fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+              style={{ color: 'var(--color-muted)' }}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          )}
         </div>
       </button>
 
-      {expanded && (
-        <div
-          id={`week-${week.id}-content`}
-          className="border-t px-3 sm:px-4 py-3 space-y-2"
-          style={{ borderColor: 'var(--color-border)' }}
-        >
-          {week.days.map((day, dIdx) => (
-            <DayCard
-              key={day.id}
-              day={day}
-              isToday={isToday(day.date)}
-              isPast={isPast(day.date)}
-              onToggle={() => onToggleTask(phaseIndex, weekIndex, dIdx)}
-              onAskAI={onAskAI}
-            />
-          ))}
-        </div>
-      )}
+      <div
+        id={`week-${week.id}-content`}
+        className="border-t px-3 sm:px-4 py-3 space-y-2"
+        style={{ borderColor: 'var(--color-border)' }}
+      >
+        {week.days.map((day, dIdx) => (
+          <DayCard
+            key={day.id}
+            day={day}
+            isToday={isToday(day.date)}
+            isPast={isPast(day.date)}
+            onToggle={() => onToggleTask(phaseIndex, weekIndex, dIdx)}
+            onAskAI={onAskAI}
+            isEditMode={isEditMode}
+            onUpdateDay={isEditMode && applyCommand
+              ? (fields) => applyCommand(r => updateDay(r, phaseIndex, weekIndex, dIdx, fields))
+              : undefined}
+            onRemoveDay={isEditMode && applyCommand
+              ? () => applyCommand(r => removeDay(r, phaseIndex, weekIndex, dIdx))
+              : undefined}
+            onMoveUp={isEditMode && applyCommand && dIdx > 0
+              ? () => applyCommand(r => moveDay(r, phaseIndex, weekIndex, dIdx, dIdx - 1))
+              : undefined}
+            onMoveDown={isEditMode && applyCommand && dIdx < week.days.length - 1
+              ? () => applyCommand(r => moveDay(r, phaseIndex, weekIndex, dIdx, dIdx + 1))
+              : undefined}
+            canMoveUp={dIdx > 0}
+            canMoveDown={dIdx < week.days.length - 1}
+          />
+        ))}
+        {isEditMode && applyCommand && (
+          <button
+            onClick={() => applyCommand(r => addDay(r, phaseIndex, weekIndex))}
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl border-2 border-dashed px-4 py-2.5 text-xs font-medium transition-colors hover:brightness-95"
+            style={{
+              borderColor: 'var(--color-border)',
+              color: 'var(--color-primary)',
+            }}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            Add Task
+          </button>
+        )}
+      </div>
     </div>
   )
 }
