@@ -129,26 +129,26 @@ function VocabularyListItem({
                   lineHeight: 'var(--leading-tight)',
                 }}
               >
-                {entry.word}
+                {displayEntry.word}
               </span>
             </button>
-            <PronounceButton word={entry.word} />
-            {entry.pronunciation && (
+            <PronounceButton word={displayEntry.word} />
+            {displayEntry.pronunciation && (
               <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-muted)', fontFamily: 'var(--font-mono)' }}>
-                /{entry.pronunciation}/
+                /{displayEntry.pronunciation}/
               </span>
             )}
             <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)', fontStyle: 'italic' }}>
-              {entry.partOfSpeech}
+              {displayEntry.partOfSpeech}
             </span>
           </div>
 
           <p style={{ margin: 'var(--spacing-2xs) 0 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', fontFamily: 'var(--font-sans)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-            {entry.meaning}
+            {displayEntry.meaning}
           </p>
-          {entry.meaningVi && (
+          {displayEntry.meaningVi && (
             <p style={{ margin: 'var(--spacing-2xs) 0 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-muted)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-              {entry.meaningVi}
+              {displayEntry.meaningVi}
             </p>
           )}
 
@@ -169,7 +169,7 @@ function VocabularyListItem({
                 textTransform: 'capitalize',
               }}
             >
-              {entry.status}
+              {displayEntry.status}
             </span>
             <span
               style={{
@@ -186,7 +186,7 @@ function VocabularyListItem({
                 textTransform: 'capitalize',
               }}
             >
-              {entry.difficulty}
+              {displayEntry.difficulty}
             </span>
             <span
               style={{
@@ -202,9 +202,9 @@ function VocabularyListItem({
                 lineHeight: 1.4,
               }}
             >
-              {entry.topic}
+              {displayEntry.topic}
             </span>
-            {entry.cefrLevel && (
+            {displayEntry.cefrLevel && (
               <span
                 style={{
                   display: 'inline-flex',
@@ -219,10 +219,10 @@ function VocabularyListItem({
                   lineHeight: 1.4,
                 }}
               >
-                {entry.cefrLevel}
+                {displayEntry.cefrLevel}
               </span>
             )}
-            {entry.ieltsRelevance && (
+            {displayEntry.ieltsRelevance && (
               <span
                 style={{
                   display: 'inline-flex',
@@ -237,10 +237,10 @@ function VocabularyListItem({
                   lineHeight: 1.4,
                 }}
               >
-                IELTS: {entry.ieltsRelevance}
+                IELTS: {displayEntry.ieltsRelevance}
               </span>
             )}
-            {entry.tags.filter(t => t !== 'favorite').map(tag => (
+            {displayEntry.tags.filter(t => t !== 'favorite').map(tag => (
               <span
                 key={tag}
                 style={{
@@ -315,7 +315,7 @@ function VocabularyListItem({
             <IconStar size={18} fill={isFavorited ? 'currentColor' : 'none'} />
           </button>
 
-          {entry.status !== 'mastered' && (
+          {displayEntry.status !== 'mastered' && (
             <button
               onClick={() => onStatusChange(entry, 'mastered')}
               style={{
@@ -355,7 +355,7 @@ function VocabularyListItem({
               color: 'var(--color-text-secondary)',
               transition: 'all var(--transition-fast)',
             }}
-            aria-label={`Edit ${entry.word}`}
+            aria-label={`Edit ${displayEntry.word}`}
             title="Edit word"
           >
             <IconEdit size={18} />
@@ -377,7 +377,7 @@ function VocabularyListItem({
               color: 'var(--color-danger)',
               transition: 'all var(--transition-fast)',
             }}
-            aria-label={`Delete ${entry.word}`}
+            aria-label={`Delete ${displayEntry.word}`}
             title="Delete word"
           >
             <IconDelete size={18} />
@@ -449,8 +449,6 @@ function VocabularyListItem({
           <div style={{ marginTop: 'var(--spacing-sm)', minWidth: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
             <WordFamilyDisplay
               wordFamily={displayWordFamily}
-              onGenerate={handleEnrich}
-              generating={enriching}
             />
           </div>
         )}

@@ -19,8 +19,6 @@ interface ParsedWordForm {
 
 interface WordFamilyDisplayProps {
   wordFamily: string[]
-  onGenerate?: () => void
-  generating?: boolean
 }
 
 const POS_ORDER: Record<string, number> = {
@@ -84,9 +82,8 @@ function formatPosLabel(pos: string | null): string {
   return pos.charAt(0).toUpperCase() + pos.slice(1)
 }
 
-export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }: WordFamilyDisplayProps) {
+export default function WordFamilyDisplay({ wordFamily }: WordFamilyDisplayProps) {
   const hasAnyData = wordFamily.length > 0
-  const hasRichData = wordFamily.some(isEncodedJson)
 
   const grouped = useMemo(() => {
     if (wordFamily.length === 0) return null
@@ -108,50 +105,13 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
       })
   }, [wordFamily])
 
-  if (!hasAnyData && !onGenerate) return null
+  if (!hasAnyData) return null
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-          Word Forms
-        </p>
-        {onGenerate && (
-          <button
-            onClick={onGenerate}
-            disabled={generating}
-            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors"
-            style={{
-              backgroundColor: generating ? 'transparent' : 'var(--color-primary-light)',
-              color: 'var(--color-primary)',
-              border: 'none',
-              cursor: generating ? 'not-allowed' : 'pointer',
-              opacity: generating ? 0.6 : 1,
-            }}
-          >
-            {generating ? (
-              <>
-                <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
-                Generating...
-              </>
-            ) : (
-              <>
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Generate
-              </>
-            )}
-          </button>
-        )}
-      </div>
-
-      {generating && !hasAnyData && (
-        <div className="flex items-center gap-3 rounded-lg px-4 py-3" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
-          <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
-          <span className="text-sm" style={{ color: 'var(--color-muted)' }}>Generating word forms...</span>
-        </div>
-      )}
+      <p className="text-sm font-medium mb-3" style={{ color: 'var(--color-text)' }}>
+        Word Forms
+      </p>
 
       {grouped && (
         <div className="space-y-3">
@@ -248,11 +208,6 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
         </div>
       )}
 
-      {!hasAnyData && !generating && (
-        <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
-          No word forms yet.
-        </p>
-      )}
     </div>
   )
 }

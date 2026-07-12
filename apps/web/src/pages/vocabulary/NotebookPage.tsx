@@ -873,8 +873,6 @@ export default function NotebookPage() {
 
             <WordFamilyDisplay
               wordFamily={detailEntry.wordFamily}
-              onGenerate={handleEnrich}
-              generating={enriching}
             />
 
             {detailEntry.personalNote && (
