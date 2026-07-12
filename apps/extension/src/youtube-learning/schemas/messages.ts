@@ -38,6 +38,7 @@ export const contentScriptMessageSchema = z.object({
     'QUIZ_EVALUATION',
     'MISTAKES_SAVED',
     'TRANSLATED_SEGMENTS',
+    'SETTINGS_DATA',
   ]),
   payload: z.unknown().optional(),
 })

@@ -445,19 +445,20 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
   }, [videoId, sendToParent])
 
   useEffect(() => {
-    try {
-      chrome.storage.local.get('extensionSettings', (result) => {
-        const s = (result.extensionSettings as { autoTranslateTranscript?: boolean; nativeLanguage?: string }) || {}
-        if (s.nativeLanguage) {
-          translateLanguageRef.current = s.nativeLanguage
+    const handler = (event: MessageEvent) => {
+      if (event.data?.source !== 'ielts-content-script') return
+      if (event.data?.type === 'SETTINGS_DATA') {
+        const payload = event.data.payload as { nativeLanguage?: string; autoTranslateTranscript?: boolean } | undefined
+        if (payload?.nativeLanguage) {
+          translateLanguageRef.current = payload.nativeLanguage
         }
-        if (s.autoTranslateTranscript && s.nativeLanguage) {
+        if (payload?.autoTranslateTranscript && payload?.nativeLanguage) {
           setTranslateEnabled(true)
         }
-      })
-    } catch {
-      // not in extension context
+      }
     }
+    window.addEventListener('message', handler)
+    return () => window.removeEventListener('message', handler)
   }, [])
 
   useEffect(() => {

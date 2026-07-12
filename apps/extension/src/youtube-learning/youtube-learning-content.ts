@@ -12,6 +12,7 @@ import { TranscriptTranslationService } from './application/services/TranscriptT
 import { clearTranscriptCache } from './infrastructure/youtube/YouTubeTranscriptProvider'
 import { safeStorageGet } from '../utils/safe-chrome'
 import { setVideoHelperHidden } from '../content-script/videoHelper'
+import { loadSettings } from '../background/settingsStorage'
 
 const TRANSCRIPT_RETRY_COOLDOWN_MS = 3000
 const MAX_PENDING_MESSAGES = 50
@@ -84,6 +85,9 @@ function setupPanelMessaging(): void {
           postToPanel(msg.type, msg.payload)
         }
         postToPanel('LEARNING_MODE_STATE', isLearningMode)
+        loadSettings().then(settings => {
+          postToPanel('SETTINGS_DATA', { nativeLanguage: settings.nativeLanguage, autoTranslateTranscript: settings.autoTranslateTranscript })
+        }).catch(() => {})
         if (currentVideoInfo) {
           postToPanel('VIDEO_INFO', currentVideoInfo)
         }
