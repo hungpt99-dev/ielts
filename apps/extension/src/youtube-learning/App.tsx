@@ -385,6 +385,10 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
   const [vocabWord, setVocabWord] = useState<VocabWordState | null>(null)
   const [activeSentence, setActiveSentence] = useState<{ text: string; start: number; end: number } | null>(null)
   const [explainSentence, setExplainSentence] = useState<{ text: string; startTime: number } | null>(null)
+  const [translateEnabled, setTranslateEnabled] = useState(false)
+  const [translations, setTranslations] = useState<Map<string, string>>(new Map())
+  const [translating, setTranslating] = useState(false)
+  const translateLanguageRef = useRef('')
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -418,6 +422,19 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
         setError((payload?.message as string) || 'Transcript unavailable')
         clearTimeout(timeoutId)
       }
+      if (event.data?.type === 'TRANSLATED_SEGMENTS') {
+        const payload = event.data.payload as Record<string, unknown> | undefined
+        setTranslating(false)
+        if (payload?.error) return
+        const translated = payload?.segments as Array<{ id: string; translatedText: string }> | undefined
+        if (translated) {
+          setTranslations(prev => {
+            const next = new Map(prev)
+            for (const s of translated) next.set(s.id, s.translatedText)
+            return next
+          })
+        }
+      }
     }
     window.addEventListener('message', handleMessage)
     return () => {
@@ -425,6 +442,27 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
       clearTimeout(timeoutId)
     }
   }, [videoId, sendToParent])
+
+  useEffect(() => {
+    try {
+      chrome.storage.local.get('extensionSettings', (result) => {
+        const s = (result.extensionSettings as { autoTranslateTranscript?: boolean; nativeLanguage?: string }) || {}
+        if (s.autoTranslateTranscript && s.nativeLanguage) {
+          translateLanguageRef.current = s.nativeLanguage
+          setTranslateEnabled(true)
+        }
+      })
+    } catch {
+      // not in extension context
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!translateEnabled || !segments || segments.length === 0 || !translateLanguageRef.current) return
+    setTranslations(new Map())
+    setTranslating(true)
+    sendToParent('TRANSLATE_SEGMENTS', { segments, language: translateLanguageRef.current })
+  }, [translateEnabled, segments, sendToParent])
 
   const activeIndex = segments?.findIndex(
     s => currentTime >= s.start && currentTime < s.end,
@@ -518,11 +556,35 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
     )
   }
 
+  const translateBtnStyle: React.CSSProperties = {
+    ...smallBtnStyle,
+    background: translateEnabled ? 'var(--color-primary)' : 'rgba(59,130,246,0.15)',
+    color: translateEnabled ? '#fff' : 'var(--color-primary-hover)',
+  }
+
+  const handleToggleTranslate = () => {
+    if (translateEnabled) {
+      setTranslateEnabled(false)
+      setTranslations(new Map())
+    } else {
+      setTranslateEnabled(true)
+    }
+  }
+
   return (
     <div style={{ position: 'relative', height: '100%' }}>
       <div ref={containerRef} style={{ height: '100%', padding: 'var(--spacing-xs)', overflow: 'auto' }}>
+        {translateLanguageRef.current && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 6px 8px', borderBottom: '1px solid var(--color-border)', marginBottom: '6px' }}>
+            <button onClick={handleToggleTranslate} style={translateBtnStyle} aria-label={translateEnabled ? 'Hide translation' : 'Show translation'}>
+              {translateEnabled ? `Translate: ON` : `Translate`}
+            </button>
+            {translating && <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Translating...</span>}
+          </div>
+        )}
         {(tokenizedSegments || segments).map((seg: any, idx: number) => {
           const tokens = seg.tokens || []
+          const translatedText = translations.get(seg.id)
           return (
             <div
               key={seg.id}
@@ -576,6 +638,22 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
                   )
                 })}
               </div>
+              {translatedText && (
+                <div
+                  style={{
+                    marginTop: '3px',
+                    padding: '3px 6px',
+                    borderRadius: '4px',
+                    background: 'color-mix(in srgb, var(--color-primary) 8%, transparent)',
+                    fontSize: 'var(--text-xs)',
+                    color: 'var(--color-text-secondary)',
+                    lineHeight: 'var(--leading-normal)',
+                    borderLeft: '2px solid var(--color-primary)',
+                  }}
+                >
+                  {translatedText}
+                </div>
+              )}
               {activeSentence?.start === seg.start && activeSentence?.text === seg.text && (
                 <div style={{ display: 'flex', gap: '4px', marginTop: '4px', paddingTop: '4px', borderTop: '1px solid var(--color-border)' }}>
                   <button onClick={handleExplainSentence} style={smallBtnStyle}>Explain</button>

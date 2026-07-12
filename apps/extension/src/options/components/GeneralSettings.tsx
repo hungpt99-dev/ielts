@@ -78,6 +78,12 @@ export default function GeneralSettings({ settings, onChange }: GeneralSettingsP
           checked={settings.autoAiLookup}
           onChange={(v) => onChange({ autoAiLookup: v })}
         />
+        <ToggleField
+          label="Auto-translate YouTube Transcript"
+          description="Automatically translate YouTube video transcripts to your native language"
+          checked={settings.autoTranslateTranscript}
+          onChange={(v) => onChange({ autoTranslateTranscript: v })}
+        />
       </Section>
 
       <Section title="Defaults">

@@ -8,6 +8,7 @@ import { AIAdapter } from './infrastructure/ai/AIAdapter'
 import { LearningSessionService } from './application/services/LearningSessionService'
 import { VocabularyService } from './application/services/VocabularyService'
 import { AIAnalysisService } from './application/services/AIAnalysisService'
+import { TranscriptTranslationService } from './application/services/TranscriptTranslationService'
 import { clearTranscriptCache } from './infrastructure/youtube/YouTubeTranscriptProvider'
 import { safeStorageGet } from '../utils/safe-chrome'
 import { setVideoHelperHidden } from '../content-script/videoHelper'
@@ -31,6 +32,7 @@ let aiAdapter: AIAdapter | null = null
 let sessionService: LearningSessionService | null = null
 let vocabService: VocabularyService | null = null
 let analysisService: AIAnalysisService | null = null
+let translationService: TranscriptTranslationService | null = null
 let panelMessageHandler: ((event: MessageEvent) => void) | null = null
 let ytNavigationInitialized = false
 
@@ -153,6 +155,10 @@ function setupPanelMessaging(): void {
 
       case 'SAVE_VOCAB':
         if (payload && typeof payload === 'object') handleSaveVocab(payload as Record<string, unknown>)
+        break
+
+      case 'TRANSLATE_SEGMENTS':
+        if (payload && typeof payload === 'object') handleTranslateSegments(payload as Record<string, unknown>)
         break
     }
   }
@@ -457,6 +463,23 @@ async function handleSaveMistakes(payload: Record<string, unknown>): Promise<voi
   }
 }
 
+async function handleTranslateSegments(payload: Record<string, unknown>): Promise<void> {
+  const segments = payload.segments as Array<{ id: string; text: string; start: number; end: number }> | undefined
+  const language = payload.language as string | undefined
+  if (!segments || !language || !translationService) {
+    postToPanel('TRANSLATED_SEGMENTS', { error: 'Missing segments or language' })
+    return
+  }
+  try {
+    const data = segments.map(s => ({ id: s.id, text: s.text, start: s.start, end: s.end }))
+    const translated = await translationService.translateSegments(data, language)
+    postToPanel('TRANSLATED_SEGMENTS', { segments: translated })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Translation failed'
+    postToPanel('TRANSLATED_SEGMENTS', { error: message })
+  }
+}
+
 async function handleSaveVocab(payload: Record<string, unknown>): Promise<void> {
   const word = typeof payload.word === 'string' ? payload.word : ''
   const sentence = typeof payload.sentence === 'string' ? payload.sentence : ''
@@ -737,6 +760,7 @@ export async function initYouTubeLearning(): Promise<void> {
     sessionService = new LearningSessionService(storageAdapter, eventBus)
     vocabService = new VocabularyService(aiAdapter, storageAdapter)
     analysisService = new AIAnalysisService(aiAdapter)
+    translationService = new TranscriptTranslationService(aiAdapter)
 
     youtubeAdapter = new YouTubeAdapter({
       onVideoChange,
