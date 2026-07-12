@@ -400,6 +400,7 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
   const [translateEnabled, setTranslateEnabled] = useState(false)
   const [translations, setTranslations] = useState<Map<string, string>>(new Map())
   const [translating, setTranslating] = useState(false)
+  const [translateError, setTranslateError] = useState<string | null>(null)
   const translateLanguageRef = useRef(userSettings.nativeLanguage)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -446,9 +447,14 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
       if (event.data?.type === 'TRANSLATED_SEGMENTS') {
         const payload = event.data.payload as Record<string, unknown> | undefined
         setTranslating(false)
-        if (payload?.error) return
+        if (payload?.error) {
+          setTranslateError(typeof payload.error === 'string' ? payload.error : 'Translation failed')
+          setTranslateEnabled(false)
+          return
+        }
         const translated = payload?.segments as Array<{ id: string; translatedText: string }> | undefined
         if (translated) {
+          setTranslateError(null)
           setTranslations(prev => {
             const next = new Map(prev)
             for (const s of translated) next.set(s.id, s.translatedText)
@@ -573,13 +579,16 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
     if (translateEnabled) {
       setTranslateEnabled(false)
       setTranslations(new Map())
+      setTranslateError(null)
     } else if (!translateLanguageRef.current) {
       const lang = prompt('Set target language for translation (e.g. Vietnamese, Spanish, French):\nYou can also set a default in extension Settings → Native Language.')
       if (lang) {
         translateLanguageRef.current = lang
+        setTranslateError(null)
         setTranslateEnabled(true)
       }
     } else {
+      setTranslateError(null)
       setTranslateEnabled(true)
     }
   }
@@ -597,6 +606,7 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
             </span>
           )}
           {translating && <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Translating...</span>}
+          {translateError && <span style={{ fontSize: '10px', color: 'var(--color-danger)' }}>Translation error. Check AI settings.</span>}
         </div>
         <div style={{ padding: '0 var(--spacing-xs) var(--spacing-xs)' }}>
         {(tokenizedSegments || segments).map((seg: any, idx: number) => {
