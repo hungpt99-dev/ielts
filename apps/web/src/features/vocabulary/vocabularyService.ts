@@ -471,7 +471,6 @@ export interface EnrichResult {
 }
 
 export async function enrichVocabulary(word: string, topic?: string): Promise<{ data: EnrichResult | null; error: string | null }> {
-  const lemma = await normalizeToLemma(word).catch(() => word)
   const { makeAIRequest } = await import('../../services/ai/AIService')
 
   const topicHint = topic ? ` on the topic of "${topic}"` : ''
@@ -521,6 +520,7 @@ Now for "${word}" — generate EVERY field EXACTLY like the example above:
       return { data: null, error: 'AI returned an unexpected format.' }
     }
 
+    const lemma = await normalizeToLemma(word).catch(() => word)
     const parsed = JSON.parse(result.content.slice(jsonStart, jsonEnd + 1)) as Record<string, unknown>
     const enriched: EnrichResult = { lemma }
 
