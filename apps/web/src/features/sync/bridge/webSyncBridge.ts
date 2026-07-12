@@ -146,15 +146,46 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
           }
         }
       }
+      const artifactsList = data.artifacts as Record<string, unknown>[] | undefined
+      if (Array.isArray(artifactsList)) {
+        console.log('[WebSyncBridge] Received', artifactsList.length, 'artifacts from extension')
+        const existingArtifacts = await DatabaseService.getAll<Record<string, unknown>>('artifacts').catch(() => [] as Record<string, unknown>[])
+        const existingArtifactIds = new Set(existingArtifacts.map(a => a.id as string))
+        for (const artifact of artifactsList) {
+          const id = artifact.id as string
+          if (!existingArtifactIds.has(id)) {
+            await DatabaseService.add('artifacts', {
+              id,
+              url: (artifact.url as string) || (artifact.pageUrl as string) || '',
+              title: (artifact.title as string) || 'Untitled',
+              description: (artifact.description as string) || '',
+              favicon: (artifact.favicon as string) || '',
+              tags: Array.isArray(artifact.tags) ? artifact.tags as string[] : [],
+              isFavorite: !!artifact.isFavorite,
+              category: (artifact.category as string) || 'article',
+              source: (artifact.source as string) || 'extension',
+              contentType: (artifact.contentType as string) || 'article',
+              contentText: (artifact.contentText as string) || (artifact.content as string) || '',
+              wordCount: (artifact.wordCount as number) || 0,
+              readingStatus: (artifact.readingStatus as string) || 'unread',
+              personalNote: (artifact.personalNote as string) || '',
+              createdAt: (artifact.createdAt as string) || new Date().toISOString(),
+              updatedAt: (artifact.updatedAt as string) || new Date().toISOString(),
+            } as never).catch(() => {})
+            existingArtifactIds.add(id)
+          }
+        }
+      }
       return
     }
 
     if (msg.type === 'EXPORT_EXTENSION_DATA') {
-      const [vocabEntries, mistakeEntries, noteEntries, passageEntries] = await Promise.all([
+      const [vocabEntries, mistakeEntries, noteEntries, passageEntries, artifactEntries] = await Promise.all([
         DatabaseService.getAll<Record<string, unknown>>('vocabulary').catch(() => []),
         DatabaseService.getAll<Record<string, unknown>>('mistakes').catch(() => []),
         DatabaseService.getAll<Record<string, unknown>>('studyNotes').catch(() => []),
         DatabaseService.getAll<Record<string, unknown>>('passages').catch(() => []),
+        DatabaseService.getAll<Record<string, unknown>>('artifacts').catch(() => []),
       ])
 
       const settings = loadAppSettings()
@@ -172,6 +203,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
             mistakes: mistakeEntries,
             learningEntries: noteEntries,
             articles: passageEntries,
+            artifacts: artifactEntries,
             settings: {
               aiProvider: settings.aiProvider || 'openai',
               aiModel: settings.aiModel || 'gpt-4o-mini',

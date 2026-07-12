@@ -2,6 +2,7 @@ import { getAllVocabulary, saveVocabularyEntry } from '../../storage/vocabularyS
 import { getAllMistakes, saveMistakeEntry } from '../../storage/mistakeStore'
 import { getAllEntries, saveEntry } from '../../storage/indexedDB'
 import { getAllArticles, saveArticleEntry } from '../../storage/articleStore'
+import { getAllArtifacts, saveArtifact, type ExtensionArtifact } from '../../services/artifactService'
 import { findWebAppTab } from './webTabConnection'
 import { loadSettings, saveSettings, setApiKey } from '../settingsStorage'
 import { toExtensionVocab, toExtensionMistake, syncStorageForHighlighter } from './syncHelpers'
@@ -28,13 +29,14 @@ export interface SyncSummary {
 }
 
 async function exportExtensionData(): Promise<Record<string, unknown>> {
-  const [vocab, mistakes, entries, articles] = await Promise.all([
+  const [vocab, mistakes, entries, articles, artifacts] = await Promise.all([
     getAllVocabulary().catch(() => []),
     getAllMistakes().catch(() => []),
     getAllEntries().catch(() => []),
     getAllArticles().catch(() => []),
+    getAllArtifacts().catch(() => []),
   ])
-  return { vocabulary: vocab, mistakes, learningEntries: entries, articles }
+  return { vocabulary: vocab, mistakes, learningEntries: entries, articles, artifacts }
 }
 
 async function importWebData(data: Record<string, unknown>): Promise<{ imported: number; updated: number }> {
@@ -130,6 +132,34 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
         createdAt: (item.createdAt as string) || new Date().toISOString(),
         updatedAt: (item.updatedAt as string) || new Date().toISOString(),
       } as any).catch(() => {})
+    }
+  }
+
+  const artifactsList = data.artifacts as Record<string, unknown>[] | undefined
+  if (Array.isArray(artifactsList)) {
+    const existing = await getAllArtifacts().catch(() => [])
+    const existingIds = new Set(existing.map(a => a.id))
+    for (const item of artifactsList) {
+      const id = (item.id as string) || crypto.randomUUID()
+      if (existingIds.has(id)) { updated++ } else { imported++ }
+      existingIds.add(id)
+      await saveArtifact({
+        id,
+        url: (item.url as string) || (item.pageUrl as string) || '',
+        title: (item.title as string) || 'Untitled',
+        description: (item.description as string) || (item.excerpt as string) || '',
+        favicon: (item.favicon as string) || '',
+        contentText: (item.contentText as string) || (item.content as string) || (item.text as string) || '',
+        tags: Array.isArray(item.tags) ? item.tags as string[] : [],
+        isFavorite: !!item.isFavorite,
+        category: (item.category as ExtensionArtifact['category']) || 'article',
+        contentType: (item.contentType as string) || (item.category as string) || 'article',
+        source: (item.source as string) || 'web',
+        wordCount: (item.wordCount as number) || ((item.contentText as string) || '').split(/\s+/).filter(Boolean).length || 0,
+        readingStatus: (item.readingStatus as ExtensionArtifact['readingStatus']) || 'unread',
+        createdAt: (item.createdAt as string) || new Date().toISOString(),
+        updatedAt: (item.updatedAt as string) || new Date().toISOString(),
+      }).catch(() => {})
     }
   }
 

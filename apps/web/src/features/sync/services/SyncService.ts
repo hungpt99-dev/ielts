@@ -1,7 +1,7 @@
 import { DatabaseService } from '../../../services/storage/Database'
 import { loadAppSettings, saveAppSettings } from '../../../services/storage/SettingsStorage'
 import { getClient } from '../bridge/ExtensionBridgeClient'
-import type { VocabularyEntry, MistakeEntry, AppSettings } from '../../../models'
+import type { VocabularyEntry, MistakeEntry, AppSettings, Artifact, ArtifactCategory } from '../../../models'
 
 export interface SyncResult {
   success: boolean
@@ -92,6 +92,40 @@ export async function syncFromExtension(): Promise<SyncResult> {
       }
     }
 
+    const incomingArtifacts = data.artifacts as Record<string, unknown>[] | undefined
+    if (Array.isArray(incomingArtifacts)) {
+      const existingArtifacts = await DatabaseService.getAll<Artifact>('artifacts')
+      const existingArtifactIds = new Set(existingArtifacts.map(a => a.id))
+      for (const a of incomingArtifacts) {
+        const id = (a.id as string) || crypto.randomUUID()
+        if (!existingArtifactIds.has(id)) {
+          existingArtifactIds.add(id)
+          await DatabaseService.add('artifacts', {
+            id,
+            url: (a.url as string) || (a.pageUrl as string) || '',
+            title: (a.title as string) || 'Untitled',
+            description: (a.description as string) || '',
+            favicon: (a.favicon as string) || '',
+            tags: Array.isArray(a.tags) ? a.tags as string[] : [],
+            isFavorite: !!a.isFavorite,
+            category: (a.category as ArtifactCategory) || 'article',
+            source: (a.source as string) || 'extension',
+            contentType: (a.contentType as string) || 'article',
+            contentText: (a.contentText as string) || (a.content as string) || '',
+            wordCount: (a.wordCount as number) || 0,
+            readingStatus: (a.readingStatus as string) || 'unread',
+            personalNote: (a.personalNote as string) || '',
+            createdAt: (a.createdAt as string) || new Date().toISOString(),
+            updatedAt: (a.updatedAt as string) || new Date().toISOString(),
+          } as never).catch(() => {})
+          imported++
+        }
+      }
+      if (incomingArtifacts.length > 0) {
+        window.dispatchEvent(new CustomEvent('artifacts-changed'))
+      }
+    }
+
     let settingsUpdated = false
     const extSettings = data.settings as Record<string, unknown> | undefined
     if (extSettings && typeof extSettings === 'object') {
@@ -118,14 +152,16 @@ export async function syncBidirectional(): Promise<{
 export async function syncToExtension(): Promise<SyncResult> {
   const client = getClient()
   try {
-    const [vocabEntries, mistakeEntries] = await Promise.all([
+    const [vocabEntries, mistakeEntries, artifactEntries] = await Promise.all([
       DatabaseService.getAll<VocabularyEntry>('vocabulary'),
       DatabaseService.getAll<MistakeEntry>('mistakes'),
+      DatabaseService.getAll<Record<string, unknown>>('artifacts').catch(() => []),
     ])
 
     const payload = {
       vocabulary: vocabEntries as unknown as Record<string, unknown>[],
       mistakes: mistakeEntries as unknown as Record<string, unknown>[],
+      artifacts: artifactEntries as unknown as Record<string, unknown>[],
       settings: mapWebSettingsToShared(),
     }
 
