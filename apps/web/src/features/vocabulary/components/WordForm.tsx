@@ -435,36 +435,16 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
       )}
 
       <div>
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex-1">
-            <label htmlFor="exampleSentence" className={labelClass}>
-              Example Sentence
-            </label>
-            <textarea
-              id="exampleSentence"
-              rows={2}
-              {...register('exampleSentence')}
-              className={inputClass('exampleSentence')}
-              placeholder="Smartphones have become ubiquitous in modern society."
-            />
-          </div>
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            onClick={generateExample}
-            disabled={generating || !word.trim()}
-            loading={generating}
-            className="mt-6 shrink-0"
-            title="Generate example with AI"
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            AI Enrich
-          </Button>
-        </div>
-        {aiError && <p className="mt-1 text-xs text-red-500">{aiError}</p>}
+        <label htmlFor="exampleSentence" className={labelClass}>
+          Example Sentence
+        </label>
+        <textarea
+          id="exampleSentence"
+          rows={2}
+          {...register('exampleSentence')}
+          className={inputClass('exampleSentence')}
+          placeholder="Smartphones have become ubiquitous in modern society."
+        />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -494,10 +474,45 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
         </div>
       </div>
 
+      {/* AI Enrich — fills all fields from the word */}
+      <div
+        className="rounded-lg border p-3"
+        style={{
+          borderColor: 'var(--color-primary)',
+          backgroundColor: 'color-mix(in srgb, var(--color-primary) 6%, transparent)',
+        }}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+              AI Enrich
+            </p>
+            <p className="text-xs" style={{ color: 'var(--color-muted)', marginTop: '2px' }}>
+              Auto-fill meaning, pronunciation, examples, CEFR level, and more
+            </p>
+          </div>
+          <Button
+            type="button"
+            variant="primary"
+            size="sm"
+            onClick={generateExample}
+            disabled={generating || !word.trim()}
+            loading={generating}
+            className="shrink-0"
+          >
+            <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Enrich
+          </Button>
+        </div>
+        {aiError && <p className="mt-2 text-xs text-red-500">{aiError}</p>}
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="antonyms" className={labelClass}>
-            Antonyms (comma-separated)
+          <label htmlFor="partOfSpeech" className={labelClass}>
+            Part of Speech
           </label>
           <textarea
             id="antonyms"
