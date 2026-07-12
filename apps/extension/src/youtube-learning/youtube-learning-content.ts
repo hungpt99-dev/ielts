@@ -476,8 +476,8 @@ async function handleTranslateSegments(payload: Record<string, unknown>): Promis
   }
   try {
     const data = segments.map(s => ({ id: s.id, text: s.text, start: s.start, end: s.end }))
-    const translated = await translationService.translateSegments(data, language)
-    postToPanel('TRANSLATED_SEGMENTS', { segments: translated })
+    const result = await translationService.translateSegments(data, language)
+    postToPanel('TRANSLATED_SEGMENTS', { segments: result.segments, error: result.error })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Translation failed'
     postToPanel('TRANSLATED_SEGMENTS', { error: message })

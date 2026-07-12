@@ -447,19 +447,21 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
       if (event.data?.type === 'TRANSLATED_SEGMENTS') {
         const payload = event.data.payload as Record<string, unknown> | undefined
         setTranslating(false)
-        if (payload?.error) {
-          setTranslateError(typeof payload.error === 'string' ? payload.error : 'Translation failed')
-          setTranslateEnabled(false)
-          return
-        }
         const translated = payload?.segments as Array<{ id: string; translatedText: string }> | undefined
-        if (translated) {
-          setTranslateError(null)
+        if (translated && translated.length > 0) {
           setTranslations(prev => {
             const next = new Map(prev)
             for (const s of translated) next.set(s.id, s.translatedText)
             return next
           })
+          if (payload?.error) {
+            setTranslateError(typeof payload.error === 'string' ? payload.error : 'Some segments failed')
+          } else {
+            setTranslateError(null)
+          }
+        } else if (payload?.error) {
+          setTranslateError(typeof payload.error === 'string' ? payload.error : 'Translation failed')
+          setTranslateEnabled(false)
         }
       }
     }
@@ -606,7 +608,7 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
             </span>
           )}
           {translating && <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Translating...</span>}
-          {translateError && <span style={{ fontSize: '10px', color: 'var(--color-danger)' }}>Translation error. Check AI settings.</span>}
+          {translateError && <span style={{ fontSize: '10px', color: 'var(--color-danger)', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={translateError}>⚠ {translateError}</span>}
         </div>
         <div style={{ padding: '0 var(--spacing-xs) var(--spacing-xs)' }}>
         {(tokenizedSegments || segments).map((seg: any, idx: number) => {
