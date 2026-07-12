@@ -389,7 +389,6 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
   const [translations, setTranslations] = useState<Map<string, string>>(new Map())
   const [translating, setTranslating] = useState(false)
   const translateLanguageRef = useRef('')
-  const [languageInput, setLanguageInput] = useState('')
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -571,10 +570,9 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
       setTranslateEnabled(false)
       setTranslations(new Map())
     } else if (!translateLanguageRef.current) {
-      const lang = languageInput.trim() || prompt('Enter target language for translation (e.g. Vietnamese, Spanish, French):')
+      const lang = prompt('Set target language for translation (e.g. Vietnamese, Spanish, French):\nYou can also set a default in extension Settings → Native Language.')
       if (lang) {
         translateLanguageRef.current = lang
-        setLanguageInput(lang)
         setTranslateEnabled(true)
       }
     } else {
@@ -582,41 +580,14 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
     }
   }
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLanguageInput(e.target.value)
-  }
-
-  const handleLanguageKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && languageInput.trim()) {
-      translateLanguageRef.current = languageInput.trim()
-      setTranslateEnabled(true)
-    }
-  }
-
   return (
     <div style={{ position: 'relative', height: '100%' }}>
       <div ref={containerRef} style={{ height: '100%', padding: 'var(--spacing-xs)', overflow: 'auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 6px 8px', borderBottom: '1px solid var(--color-border)', marginBottom: '6px', flexWrap: 'wrap' }}>
+        <div style={{ position: 'sticky', top: 0, zIndex: 5, display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 6px 8px', borderBottom: '1px solid var(--color-border)', marginBottom: '6px', background: 'var(--color-background)' }}>
           <button onClick={handleToggleTranslate} style={translateBtnStyle} aria-label={translateEnabled ? 'Hide translation' : 'Show translation'}>
             {translateEnabled ? 'Translate: ON' : 'Translate'}
           </button>
-          {!translateLanguageRef.current && (
-            <input
-              type="text"
-              value={languageInput}
-              onChange={handleLanguageChange}
-              onKeyDown={handleLanguageKeyDown}
-              placeholder="Language (e.g. Vietnamese)"
-              style={{
-                flex: 1, minWidth: '100px', padding: '3px 6px', borderRadius: '4px',
-                border: '1px solid var(--color-border)', background: 'var(--color-surface)',
-                color: 'var(--color-text)', fontSize: '11px', outline: 'none',
-                fontFamily: 'var(--font-sans)',
-              }}
-              aria-label="Target language for translation"
-            />
-          )}
-          {translateLanguageRef.current && translateEnabled && (
+          {translateLanguageRef.current && (
             <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>
               → {translateLanguageRef.current}
             </span>
