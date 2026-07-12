@@ -20,6 +20,7 @@ import { loadVocabulary } from '../services/popupDataService'
 import { getDueCount } from '../services/reviewService'
 import { safeStorageGet, safeStorageSet } from '../../utils/safe-chrome'
 import { getSyncState, onSyncStateChange, getPendingItemsCount } from '../../services/storage-bridge'
+import { saveCurrentPageAsArtifact } from '../../services/artifactService'
 
 interface PopupDashboardProps {
   onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'savedItems' | 'pendingReviews' | 'manualSync' | 'syncStatus') => void
@@ -267,50 +268,25 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
       })
   }, [progress.reviewDue])
 
+  const [savingArtifact, setSavingArtifact] = useState(false)
+
   const handleQuickSavePage = useCallback(async () => {
+    if (savingArtifact) return
+    setSavingArtifact(true)
     try {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
-      if (!tab?.url || !tab?.title) {
-        showToast('warning', 'No active page to save')
-        return
-      }
-      const entry = {
-        id: crypto.randomUUID(),
-        text: `[Page] ${tab.title}`,
-        category: 'reading' as const,
-        topic: '',
-        skill: 'reading' as const,
-        difficulty: '' as const,
-        tags: [],
-        personalNote: '',
-        pageTitle: tab.title,
-        pageUrl: tab.url,
-        status: 'new' as const,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }
-
-      const [progressResult, savedItemsResult] = await Promise.all([
-        chrome.storage.local.get(['dailyProgress']),
-        chrome.storage.local.get(['savedItems']),
-      ])
-
-      const current = (progressResult.dailyProgress as DailyProgress) || {
-        wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0,
-      }
-      const items = (savedItemsResult.savedItems as unknown[]) || []
-      items.unshift(entry)
-
-      await Promise.all([
-        safeStorageSet({ dailyProgress: { ...current, articlesSaved: current.articlesSaved + 1 } }),
-        safeStorageSet({ savedItems: items }),
-      ])
-
-      showToast('success', 'Page saved to reading list')
+      const artifact = await saveCurrentPageAsArtifact()
+      showToast('success', `Saved "${artifact.title}" as Artifact`)
       refreshProgress()
       refreshRecent()
-    } catch {
-      showToast('error', 'Failed to save page')
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to save page'
+      if (message === 'No active page to save') {
+        showToast('warning', message)
+      } else {
+        showToast('error', message)
+      }
+    } finally {
+      setSavingArtifact(false)
     }
   }, [showToast, refreshProgress, refreshRecent])
 
@@ -380,7 +356,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
       { icon: <IconArticle />, label: 'Article', onClick: () => onNavigate('articleCollector') },
       { icon: <IconRefresh />, label: 'Review', onClick: handleStartReview },
       { icon: <IconAITutor />, label: 'AI Tutor', onClick: () => onNavigate('miniTutor') },
-      { icon: <IconSave />, label: 'Save Page', onClick: handleQuickSavePage },
+      { icon: <IconSave />, label: 'Save Artifact', onClick: handleQuickSavePage },
       { icon: <IconEdit />, label: 'Quick Note', onClick: handleQuickAddNote },
     ],
     [onNavigate, handleStartReview, handleQuickSavePage, handleQuickAddNote],
