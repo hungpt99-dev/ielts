@@ -123,53 +123,10 @@ export interface AITutorOpenedPayload {
   previousMessageCount: number
 }
 
-export interface TodayPlanOpenedPayload {
-  eventType: 'today_plan_opened'
-  pendingTasks: number
-  completedTasks: number
-}
-
-export interface StudyTaskStartedPayload {
-  eventType: 'study_task_started'
-  taskId: string
-  taskTitle: string
-  taskCategory: string
-  estimatedMinutes: number
-}
-
-export interface StudyTaskCompletedPayload {
-  eventType: 'study_task_completed'
-  taskId: string
-  taskTitle: string
-  taskCategory: string
-  timeSpentMinutes: number
-}
-
-export interface StudyTaskSkippedPayload {
-  eventType: 'study_task_skipped'
-  taskId: string
-  taskTitle: string
-  taskCategory: string
-}
-
-export interface StudyDayCompletedPayload {
-  eventType: 'study_day_completed'
-  date: ISOString
-  totalMinutes: number
-  tasksCompleted: number
-}
-
 export interface StudyDayMissedPayload {
   eventType: 'study_day_missed'
   missedDate: ISOString
   consecutiveMissedDays: number
-}
-
-export interface StudyPlanGeneratedPayload {
-  eventType: 'study_plan_generated'
-  planId: string
-  totalTasks: number
-  totalMinutes: number
 }
 
 export interface StudyRoadmapViewedPayload {
@@ -417,13 +374,7 @@ export type LearningEventPayload =
   | AppOpenedPayload
   | DashboardOpenedPayload
   | AITutorOpenedPayload
-  | TodayPlanOpenedPayload
-  | StudyTaskStartedPayload
-  | StudyTaskCompletedPayload
-  | StudyTaskSkippedPayload
-  | StudyDayCompletedPayload
   | StudyDayMissedPayload
-  | StudyPlanGeneratedPayload
   | StudyRoadmapViewedPayload
   | VocabularySavedPayload
   | VocabularyReviewedPayload

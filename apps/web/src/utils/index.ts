@@ -5,28 +5,9 @@ export function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
 }
 
-export function today(): string {
-  return new Date().toISOString().slice(0, 10)
-}
-
-export function nowISO(): string {
-  return new Date().toISOString()
-}
-
-export function formatDateLabel(dateStr: string): string {
-  const d = new Date(dateStr + 'T00:00:00')
-  return d.toLocaleDateString('en-US', {
-    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
-  })
-}
-
 export function formatShortDate(dateStr: string): string {
   const d = new Date(dateStr + 'T00:00:00')
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
-
-export function isTodayDate(dateStr: string): boolean {
-  return dateStr === today()
 }
 
 export function addDays(dateStr: string, n: number): string {

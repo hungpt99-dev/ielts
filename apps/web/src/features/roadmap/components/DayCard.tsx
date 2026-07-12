@@ -260,14 +260,14 @@ export default function DayCard({
             </button>
             {isToday && (
               <button
-                onClick={() => navigate('/today-plan')}
+                onClick={() => navigate('/roadmap')}
                 className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-all hover:brightness-95 active:scale-[0.98]"
                 style={{
                   backgroundColor: 'var(--color-primary)',
                   color: 'var(--color-on-primary)',
                 }}
               >
-                Go to Today's Plan →
+                View Roadmap →
               </button>
             )}
           </div>

@@ -3,12 +3,6 @@ import type {
   AppOpenedPayload,
   DashboardOpenedPayload,
   AITutorOpenedPayload,
-  TodayPlanOpenedPayload,
-  StudyTaskStartedPayload,
-  StudyTaskCompletedPayload,
-  StudyTaskSkippedPayload,
-  StudyDayCompletedPayload,
-  StudyPlanGeneratedPayload,
   StudyRoadmapViewedPayload,
   VocabularySavedPayload,
   VocabularyReviewedPayload,
@@ -60,82 +54,6 @@ export function emitAITutorOpened(previousMessageCount: number): void {
       page: '/ai-tutor',
       entityType: 'ai_tutor',
       payload: { eventType: 'ai_tutor_opened', previousMessageCount } satisfies AITutorOpenedPayload,
-    })
-  } catch { }
-}
-
-export function emitTodayPlanOpened(pendingTasks: number, completedTasks: number): void {
-  try {
-    emitLearningEvent({
-      eventType: 'today_plan_opened',
-      source: 'website',
-      page: '/today-plan',
-      entityType: 'today_plan',
-      payload: { eventType: 'today_plan_opened', pendingTasks, completedTasks } satisfies TodayPlanOpenedPayload,
-    })
-  } catch { }
-}
-
-export function emitStudyTaskStarted(taskId: string, taskTitle: string, taskCategory: string, estimatedMinutes: number): void {
-  try {
-    emitLearningEvent({
-      eventType: 'study_task_started',
-      source: 'website',
-      page: window.location.pathname,
-      entityType: 'task',
-      entityId: taskId,
-      payload: { eventType: 'study_task_started', taskId, taskTitle, taskCategory, estimatedMinutes } satisfies StudyTaskStartedPayload,
-    })
-  } catch { }
-}
-
-export function emitStudyTaskCompleted(taskId: string, taskTitle: string, taskCategory: string, timeSpentMinutes: number): void {
-  try {
-    emitLearningEvent({
-      eventType: 'study_task_completed',
-      source: 'website',
-      page: window.location.pathname,
-      entityType: 'task',
-      entityId: taskId,
-      payload: { eventType: 'study_task_completed', taskId, taskTitle, taskCategory, timeSpentMinutes } satisfies StudyTaskCompletedPayload,
-    })
-  } catch { }
-}
-
-export function emitStudyTaskSkipped(taskId: string, taskTitle: string, taskCategory: string): void {
-  try {
-    emitLearningEvent({
-      eventType: 'study_task_skipped',
-      source: 'website',
-      page: window.location.pathname,
-      entityType: 'task',
-      entityId: taskId,
-      payload: { eventType: 'study_task_skipped', taskId, taskTitle, taskCategory } satisfies StudyTaskSkippedPayload,
-    })
-  } catch { }
-}
-
-export function emitStudyDayCompleted(date: string, totalMinutes: number, tasksCompleted: number): void {
-  try {
-    emitLearningEvent({
-      eventType: 'study_day_completed',
-      source: 'website',
-      page: '/today-plan',
-      entityType: 'today_plan',
-      payload: { eventType: 'study_day_completed', date, totalMinutes, tasksCompleted } satisfies StudyDayCompletedPayload,
-    })
-  } catch { }
-}
-
-export function emitStudyPlanGenerated(planId: string, totalTasks: number, totalMinutes: number): void {
-  try {
-    emitLearningEvent({
-      eventType: 'study_plan_generated',
-      source: 'study_plan',
-      page: '/plan',
-      entityType: 'study_plan',
-      entityId: planId,
-      payload: { eventType: 'study_plan_generated', planId, totalTasks, totalMinutes } satisfies StudyPlanGeneratedPayload,
     })
   } catch { }
 }

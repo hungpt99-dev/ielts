@@ -35,7 +35,6 @@ const PublicApiImportPage = lazy(() => import('../pages/PublicApiImportPage'))
 const FullStudyRoadmapPage = lazy(() => import('../pages/roadmap/FullStudyRoadmapPage'))
 const ArtifactsPage = lazy(() => import('../features/artifacts/ArtifactsPage'))
 const PublicTabPage = lazy(() => import('../components/PublicTabPage'))
-const TodayPlanPage = lazy(() => import('../pages/TodayPlanPage'))
 const AITutorPage = lazy(() => import('../features/ai-tutor/pages/AITutorPage'))
 const BooksPage = lazy(() => import('../pages/BooksPage'))
 import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconProgress, IconBack, IconMinimize, IconClose, IconSettings, IconChevronDown, IconFlame, IconSaved, IconInfo, IconBookText } from '@ielts/ui'
@@ -55,7 +54,6 @@ interface NavItemDefinition {
 
 const mainNavItems: NavItemDefinition[] = [
   { to: '/dashboard', label: 'Dashboard', icon: <IconHome size={20} />, end: true },
-  { to: '/today-plan', label: "Today's Plan", icon: <IconTodayPlan size={20} />, end: false },
   { to: '/roadmap', label: 'Study Roadmap', icon: <IconStudyPlan size={20} />, end: false },
 ]
 
@@ -203,11 +201,11 @@ export default function AppLayout() {
       onClick: () => navigate('/dashboard'),
     },
     {
-      id: 'plan',
-      label: 'Plan',
+      id: 'roadmap',
+      label: 'Roadmap',
       icon: <IconTodayPlan size={22} />,
-      active: location.pathname.startsWith('/today-plan') || location.pathname.startsWith('/roadmap'),
-      onClick: () => navigate('/today-plan'),
+      active: location.pathname.startsWith('/roadmap'),
+      onClick: () => navigate('/roadmap'),
     },
     {
       id: 'tutor',
@@ -431,7 +429,6 @@ export default function AppLayout() {
                   <Suspense fallback={<LoadingSpinner fullPage />}>
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/today-plan" element={<TodayPlanPage />} />
                       <Route path="/roadmap" element={<FullStudyRoadmapPage />} />
                       <Route path="/vocabulary" element={<NotebookPage />} />
                       <Route path="/review" element={<VocabularyReview />} />

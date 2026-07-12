@@ -326,9 +326,9 @@ export default function Dashboard() {
                 <Button
                   size="md"
                   className="w-full sm:w-auto"
-                  onClick={() => navigate('/today-plan')}
+                  onClick={() => navigate('/roadmap')}
                 >
-                  {tasks.length > 0 ? 'Continue Learning' : 'Plan Today'}
+                  {tasks.length > 0 ? 'Continue Learning' : 'View Roadmap'}
                 </Button>
                 <Button
                   variant="ghost"
