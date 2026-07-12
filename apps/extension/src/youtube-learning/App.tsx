@@ -33,6 +33,8 @@ export function YouTubeLearningApp() {
   })
   const eventBusRef = useRef(LearningEventBus.getInstance())
 
+  const userSettingsRef = useRef<{ nativeLanguage: string; autoTranslateTranscript: boolean }>({ nativeLanguage: '', autoTranslateTranscript: false })
+
   const sendToParent = useCallback((type: string, payload?: unknown) => {
     try {
       window.parent.postMessage(
@@ -51,6 +53,13 @@ export function YouTubeLearningApp() {
       if (!parsed.success) return
       const { type, payload } = parsed.data
       switch (type) {
+        case 'SETTINGS_DATA': {
+          const data = payload as { nativeLanguage?: string; autoTranslateTranscript?: boolean } | undefined
+          if (data?.nativeLanguage) {
+            userSettingsRef.current = { nativeLanguage: data.nativeLanguage, autoTranslateTranscript: !!data.autoTranslateTranscript }
+          }
+          break
+        }
         case 'VIDEO_INFO':
           if (payload && typeof payload === 'object' && 'videoId' in (payload as Record<string, unknown>)) {
             setState(prev => ({ ...prev, videoInfo: payload as VideoPageInfo }))
@@ -140,6 +149,7 @@ export function YouTubeLearningApp() {
               currentTime={state.currentTime}
               transcriptAvailable={state.transcriptAvailable}
               sendToParent={sendToParent}
+              userSettings={userSettingsRef.current}
             />
           </div>
         </>
@@ -216,18 +226,19 @@ const TABS: TabDefinition[] = [
   { id: 'practice', label: 'Practice' },
 ]
 
-function PanelContent({ activeTab, videoInfo, currentTime, transcriptAvailable, sendToParent }: {
+function PanelContent({ activeTab, videoInfo, currentTime, transcriptAvailable, sendToParent, userSettings }: {
   activeTab: PanelTab
   videoInfo: VideoPageInfo
   currentTime: number
   transcriptAvailable: boolean
   sendToParent: (type: string, payload?: unknown) => void
+  userSettings: { nativeLanguage: string; autoTranslateTranscript: boolean }
 }) {
   switch (activeTab) {
     case 'overview':
       return <OverviewPanel videoInfo={videoInfo} transcriptAvailable={transcriptAvailable} currentTime={currentTime} sendToParent={sendToParent} />
     case 'transcript':
-      return <TranscriptPanel videoId={videoInfo.videoId} currentTime={currentTime} sendToParent={sendToParent} />
+      return <TranscriptPanel videoId={videoInfo.videoId} currentTime={currentTime} sendToParent={sendToParent} userSettings={userSettings} />
     case 'practice':
       return <PracticePanel transcriptAvailable={transcriptAvailable} videoId={videoInfo.videoId} sendToParent={sendToParent} />
     default:
@@ -374,10 +385,11 @@ interface VocabWordState {
   startTime: number
 }
 
-function TranscriptPanel({ videoId, currentTime, sendToParent }: {
+function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
   videoId: string
   currentTime: number
   sendToParent: (type: string, payload?: unknown) => void
+  userSettings: { nativeLanguage: string; autoTranslateTranscript: boolean }
 }) {
   const [segments, setSegments] = useState<Array<{ id: string; start: number; end: number; text: string }> | null>(null)
   const [loading, setLoading] = useState(true)
@@ -388,8 +400,17 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
   const [translateEnabled, setTranslateEnabled] = useState(false)
   const [translations, setTranslations] = useState<Map<string, string>>(new Map())
   const [translating, setTranslating] = useState(false)
-  const translateLanguageRef = useRef('')
+  const translateLanguageRef = useRef(userSettings.nativeLanguage)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (userSettings.nativeLanguage) {
+      translateLanguageRef.current = userSettings.nativeLanguage
+    }
+    if (userSettings.autoTranslateTranscript && userSettings.nativeLanguage) {
+      setTranslateEnabled(true)
+    }
+  }, [userSettings.nativeLanguage, userSettings.autoTranslateTranscript])
 
   useEffect(() => {
     setLoading(true)
@@ -442,23 +463,6 @@ function TranscriptPanel({ videoId, currentTime, sendToParent }: {
       clearTimeout(timeoutId)
     }
   }, [videoId, sendToParent])
-
-  useEffect(() => {
-    const handler = (event: MessageEvent) => {
-      if (event.data?.source !== 'ielts-content-script') return
-      if (event.data?.type === 'SETTINGS_DATA') {
-        const payload = event.data.payload as { nativeLanguage?: string; autoTranslateTranscript?: boolean } | undefined
-        if (payload?.nativeLanguage) {
-          translateLanguageRef.current = payload.nativeLanguage
-        }
-        if (payload?.autoTranslateTranscript && payload?.nativeLanguage) {
-          setTranslateEnabled(true)
-        }
-      }
-    }
-    window.addEventListener('message', handler)
-    return () => window.removeEventListener('message', handler)
-  }, [])
 
   useEffect(() => {
     if (!translateEnabled || !segments || segments.length === 0 || !translateLanguageRef.current) return
