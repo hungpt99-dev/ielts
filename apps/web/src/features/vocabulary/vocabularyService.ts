@@ -416,6 +416,15 @@ export function parseWordForm(s: string): WordFormEntry | null {
         pos: parsed.pos,
         meaning: parsed.meaning || '',
         pronunciation: parsed.pronunciation || '',
+        verbConjugation: parsed.verbConjugation
+          ? {
+              base: parsed.verbConjugation.base || '',
+              pastSimple: parsed.verbConjugation.pastSimple || '',
+              pastParticiple: parsed.verbConjugation.pastParticiple || '',
+              presentParticiple: parsed.verbConjugation.presentParticiple || '',
+              thirdPersonSingular: parsed.verbConjugation.thirdPersonSingular || '',
+            }
+          : undefined,
       }
     }
   } catch { /* ignore */ }
@@ -428,40 +437,36 @@ export async function generateWordFamily(
 ): Promise<{ wordFamily: string[]; error: string | null }> {
   const { makeAIRequest } = await import('../../services/ai/AIService')
 
-  const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON.'
-  const prompt = `For the word "${word}" (${meaning}), generate detailed information about related word forms across different parts of speech.
+  const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
+  const prompt = `For the word "${word}" (${meaning}), generate ALL related word forms that exist in English.
 
-Include as many of these forms as exist for this word:
-- noun form
-- verb form
-- adjective form
-- adverb form
-
-For each form, provide:
+You MUST include every form that exists for this word. Do NOT skip any. For each form, provide:
 1. The word itself
-2. Its part of speech (noun, verb, adjective, adverb)
+2. Its part of speech (choose from: noun, verb, adjective, adverb)
 3. A clear English meaning/definition specific to this form
 4. IPA pronunciation
-
-If a form does not commonly exist for this word, omit it. Only include real, commonly used English words.
-For verb forms, additionally include verbConjugation with:
-- base: base form of the verb
-- pastSimple: past simple form
-- pastParticiple: past participle form
-- presentParticiple: present participle (-ing) form
-- thirdPersonSingular: third person singular (-s) form
+5. For verb forms ONLY: include verbConjugation with ALL of:
+   - "base": base form
+   - "pastSimple": past simple
+   - "pastParticiple": past participle
+   - "presentParticiple": -ing form
+   - "thirdPersonSingular": -s form
 
 Respond with valid JSON in this exact format:
 {
   "wordFamily": [
-    {"word": "ubiquity", "pos": "noun", "meaning": "The state of being found everywhere", "pronunciation": "/juːˈbɪk.wɪ.ti/"},
-    {"word": "ubiquitous", "pos": "adjective", "meaning": "Present, appearing, or found everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs/"}
+    {"word": "ubiquity", "pos": "noun", "meaning": "The state of being everywhere", "pronunciation": "/juːˈbɪk.wɪ.ti/"},
+    {"word": "ubiquitous", "pos": "adjective", "meaning": "Present everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs/"},
+    {"word": "ubiquitously", "pos": "adverb", "meaning": "In a way that is found everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs.li/"}
   ]
 }
 
+For verb forms, the object MUST also include a "verbConjugation" field. Example:
+{"word": "beautify", "pos": "verb", "meaning": "To make beautiful", "pronunciation": "/ˈbjuː.tɪ.faɪ/", "verbConjugation": {"base": "beautify", "pastSimple": "beautified", "pastParticiple": "beautified", "presentParticiple": "beautifying", "thirdPersonSingular": "beautifies"}}
+
 Do not include any text outside the JSON object.`
 
-  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 800 })
+  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 1200 })
 
   if (result.error) {
     return { wordFamily: [], error: result.error }
