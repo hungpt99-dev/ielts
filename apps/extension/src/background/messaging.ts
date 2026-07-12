@@ -404,9 +404,12 @@ export function initMessaging(): void {
       await saveEntry(entry)
 
       if (msg.payload.category === 'vocabulary') {
+        const rawWord = msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, '')
+        const { normalizeToLemma } = await import('../services/aiEnrichmentService')
+        const lemma = await normalizeToLemma(rawWord).catch(() => rawWord)
         await saveVocabularyEntry({
           id: crypto.randomUUID(),
-          word: msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+          word: lemma,
           sourceSentence: msg.payload.text,
           pageTitle: msg.payload.pageTitle || '',
           pageUrl: msg.payload.pageUrl || '',

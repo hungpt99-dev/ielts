@@ -49,13 +49,27 @@ export async function getVocabularyById(id: string): Promise<VocabularyEntry | u
   return DatabaseService.getById<VocabularyEntry>('vocabulary', id)
 }
 
+export async function normalizeToLemma(word: string): Promise<string> {
+  if (!word.trim()) return word
+  const clean = word.trim().toLowerCase()
+  const { makeAIRequest } = await import('../../services/ai/AIService')
+  const systemPrompt = 'You are a linguist. Respond with a single word only — the dictionary lemma form. No punctuation, no explanation.'
+  const prompt = `What is the dictionary lemma (base form) of the word "${clean}"? For example: running → run, better → good, mice → mouse, cars → car, studied → study, biggest → big, quickly → quick. Respond with only the lemma word, nothing else.`
+  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 50, temperature: 0 })
+  if (result.error || !result.content) return clean
+  const lemma = result.content.trim().toLowerCase().replace(/[^a-z\-]/g, '')
+  return lemma || clean
+}
+
 export async function addVocabulary(
   entry: Omit<VocabularyEntry, 'id' | 'createdAt' | 'updatedAt'>,
 ): Promise<VocabularyEntry> {
   const now = new Date().toISOString()
+  const word = await normalizeToLemma(entry.word).catch(() => entry.word)
   const full: VocabularyEntry = {
     ...entry,
     id: generateId(),
+    word,
     createdAt: now,
     updatedAt: now,
   }
