@@ -38,7 +38,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
       }
       return (
         <ErrorDisplay
-          variant="banner"
+          variant="page"
           error={this.state.error}
           onRetry={this.handleRetry}
           title="Something went wrong"
