@@ -491,3 +491,77 @@ Do not include any text outside the JSON object.`
     return { wordFamily: [], error: 'Failed to parse AI response.' }
   }
 }
+
+export interface EnrichResult {
+  meaning?: string
+  pronunciation?: string
+  partOfSpeech?: string
+  exampleSentence?: string
+  collocations?: string[]
+  synonyms?: string[]
+  antonyms?: string[]
+  wordFamily?: string[]
+  cefrLevel?: string
+  ieltsRelevance?: string
+}
+
+export async function enrichVocabulary(word: string, topic?: string): Promise<{ data: EnrichResult | null; error: string | null }> {
+  const { makeAIRequest } = await import('../../services/ai/AIService')
+
+  const topicHint = topic ? ` on the topic of "${topic}"` : ''
+  const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
+  const prompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a JSON object with ALL of these fields:
+
+- "meaning": clear English definition suitable for IELTS learners
+- "pronunciation": IPA pronunciation (e.g. "/juːˈbɪk.wɪ.təs/")
+- "partOfSpeech": one of: noun, verb, adjective, adverb, preposition, conjunction, pronoun, determiner, phrasal verb, idiom
+- "exampleSentence": natural IELTS-level example sentence using the word
+- "collocations": array of 2-3 common collocations (e.g. ["ubiquitous computing", "ubiquitous presence"])
+- "synonyms": array of 2-3 synonyms
+- "antonyms": array of 1-2 antonyms if they exist, empty array otherwise
+- "wordFamily": array of objects, each with "word" (string), "pos" (part of speech string), and "meaning" (string). Include ALL related word forms that exist: nouns, verbs, adjectives, adverbs. Do NOT skip any. For verb forms ONLY, also include a "verbConjugation" field with "base", "pastSimple", "pastParticiple", "presentParticiple", "thirdPersonSingular".
+- "cefrLevel": estimated CEFR level as one of: A1, A2, B1, B2, C1, C2
+- "ieltsRelevance": estimated IELTS relevance as one of: low, medium, high`
+
+  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 1500, temperature: 0.3 })
+
+  if (result.error) {
+    return { data: null, error: result.error }
+  }
+
+  try {
+    const jsonStart = result.content.indexOf('{')
+    const jsonEnd = result.content.lastIndexOf('}')
+    if (jsonStart === -1 || jsonEnd === -1) {
+      return { data: null, error: 'AI returned an unexpected format.' }
+    }
+
+    const parsed = JSON.parse(result.content.slice(jsonStart, jsonEnd + 1)) as Record<string, unknown>
+    const enriched: EnrichResult = {}
+
+    if (parsed.meaning && typeof parsed.meaning === 'string') enriched.meaning = parsed.meaning
+    if (parsed.pronunciation && typeof parsed.pronunciation === 'string') enriched.pronunciation = parsed.pronunciation
+    if (parsed.partOfSpeech && typeof parsed.partOfSpeech === 'string') enriched.partOfSpeech = parsed.partOfSpeech
+    if (parsed.exampleSentence && typeof parsed.exampleSentence === 'string') enriched.exampleSentence = parsed.exampleSentence
+    if (parsed.cefrLevel && typeof parsed.cefrLevel === 'string') enriched.cefrLevel = parsed.cefrLevel
+    if (parsed.ieltsRelevance && typeof parsed.ieltsRelevance === 'string') enriched.ieltsRelevance = parsed.ieltsRelevance
+
+    const asArray = (val: unknown): string[] => Array.isArray(val) ? val.filter((v): v is string => typeof v === 'string') : []
+    if (parsed.collocations) enriched.collocations = asArray(parsed.collocations)
+    if (parsed.synonyms) enriched.synonyms = asArray(parsed.synonyms)
+    if (parsed.antonyms) enriched.antonyms = asArray(parsed.antonyms)
+
+    if (Array.isArray(parsed.wordFamily)) {
+      enriched.wordFamily = parsed.wordFamily.map((f: unknown) => {
+        if (typeof f === 'string') return f
+        const form = f as Record<string, unknown>
+        if (form.word && form.pos) return encodeWordForm(form as WordFormEntry)
+        return String(form.word || '')
+      }).filter(Boolean)
+    }
+
+    return { data: enriched, error: null }
+  } catch {
+    return { data: null, error: 'Failed to parse AI response.' }
+  }
+}

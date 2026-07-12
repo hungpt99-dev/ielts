@@ -2,7 +2,7 @@ import { useCallback, useState, memo, type ReactNode } from 'react'
 import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../../models'
 import PronounceButton from '../ui/PronounceButton'
 import WordFamilyDisplay from '../../features/vocabulary/components/WordFamilyDisplay'
-import { generateWordFamily } from '../../features/vocabulary/vocabularyService'
+import { enrichVocabulary } from '../../features/vocabulary/vocabularyService'
 import { IconStar, IconCheckCircle, IconEdit, IconDelete, IconChevronRight } from '@ielts/ui'
 
 export type { VocabularyEntry }
@@ -39,28 +39,36 @@ function VocabularyListItem({
   onStatusChange,
   bottomContent,
 }: VocabularyListItemProps) {
-  const [generatingFamily, setGeneratingFamily] = useState(false)
+  const [enriching, setEnriching] = useState(false)
   const [localWordFamily, setLocalWordFamily] = useState<string[] | null>(null)
 
   const displayWordFamily = localWordFamily ?? entry.wordFamily
 
-  const handleGenerateFamily = useCallback(async () => {
-    setGeneratingFamily(true)
+  const handleEnrich = useCallback(async () => {
+    setEnriching(true)
     try {
-      const result = await generateWordFamily(entry.word, entry.meaning)
-      if (result.wordFamily.length > 0) {
-        const { DatabaseService } = await import('../../services/storage/Database')
-        const merged = [...new Set([...entry.wordFamily, ...result.wordFamily])]
-        const updated: VocabularyEntry = {
-          ...entry,
-          wordFamily: merged,
-          updatedAt: new Date().toISOString(),
-        }
-        await DatabaseService.put('vocabulary', updated)
-        setLocalWordFamily(merged)
+      const { DatabaseService } = await import('../../services/storage/Database')
+      const { data, error } = await enrichVocabulary(entry.word, entry.topic)
+      if (error || !data) return
+      const mergedWordFamily = [...new Set([...entry.wordFamily, ...(data.wordFamily || [])])]
+      const updated: VocabularyEntry = {
+        ...entry,
+        meaning: data.meaning || entry.meaning,
+        pronunciation: data.pronunciation || entry.pronunciation,
+        partOfSpeech: data.partOfSpeech || entry.partOfSpeech,
+        exampleSentence: data.exampleSentence || entry.exampleSentence,
+        collocations: [...new Set([...entry.collocations, ...(data.collocations || [])])],
+        synonyms: [...new Set([...entry.synonyms, ...(data.synonyms || [])])],
+        antonyms: [...new Set([...entry.antonyms, ...(data.antonyms || [])])],
+        wordFamily: mergedWordFamily,
+        cefrLevel: (data.cefrLevel || entry.cefrLevel) as VocabularyEntry['cefrLevel'],
+        ieltsRelevance: (data.ieltsRelevance || entry.ieltsRelevance) as VocabularyEntry['ieltsRelevance'],
+        updatedAt: new Date().toISOString(),
       }
+      await DatabaseService.put('vocabulary', updated)
+      if (data.wordFamily) setLocalWordFamily(mergedWordFamily)
     } finally {
-      setGeneratingFamily(false)
+      setEnriching(false)
     }
   }, [entry])
 
@@ -256,6 +264,35 @@ function VocabularyListItem({
 
         <div className="flex flex-row flex-wrap items-center gap-2 self-start sm:self-auto sm:flex-shrink-0">
           <button
+            onClick={handleEnrich}
+            disabled={enriching}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '44px',
+              height: '44px',
+              padding: 0,
+              background: enriching ? 'var(--color-primary-light)' : 'none',
+              border: '1px solid var(--color-primary)',
+              borderRadius: 'var(--radius-md)',
+              cursor: enriching ? 'not-allowed' : 'pointer',
+              color: 'var(--color-primary)',
+              opacity: enriching ? 0.6 : 1,
+              transition: 'all var(--transition-fast)',
+            }}
+            aria-label="AI Enrich"
+            title="AI Enrich — fill meaning, examples, word forms and more"
+          >
+            {enriching ? (
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            )}
+          </button>
+          <button
             onClick={() => onToggleFavorite(entry)}
             style={{
               display: 'inline-flex',
@@ -403,37 +440,6 @@ function VocabularyListItem({
               </span>
             )}
           </button>
-          {displayWordFamily.length === 0 && !showWordFamily && (
-            <button
-              onClick={handleGenerateFamily}
-              disabled={generatingFamily}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-2xs)',
-                padding: 'var(--spacing-2xs) var(--spacing-sm)',
-                fontSize: 'var(--text-xs)',
-                fontWeight: 'var(--weight-semibold)',
-                fontFamily: 'var(--font-sans)',
-                background: generatingFamily ? 'transparent' : 'var(--color-primary-light)',
-                color: 'var(--color-primary)',
-                border: '1px solid var(--color-primary)',
-                borderRadius: 'var(--radius-full)',
-                cursor: generatingFamily ? 'not-allowed' : 'pointer',
-                opacity: generatingFamily ? 0.6 : 1,
-                transition: 'all var(--transition-fast)',
-              }}
-            >
-              {generatingFamily ? (
-                <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
-              ) : (
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              )}
-              {generatingFamily ? 'Generating...' : 'Generate'}
-            </button>
-          )}
           <div style={{ marginLeft: 'auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
             {bottomContent}
           </div>
@@ -442,8 +448,8 @@ function VocabularyListItem({
           <div style={{ marginTop: 'var(--spacing-sm)', minWidth: 0, overflowWrap: 'break-word', wordBreak: 'break-word' }}>
             <WordFamilyDisplay
               wordFamily={displayWordFamily}
-              onGenerate={handleGenerateFamily}
-              generating={generatingFamily}
+              onGenerate={handleEnrich}
+              generating={enriching}
             />
           </div>
         )}
