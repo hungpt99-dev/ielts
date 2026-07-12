@@ -40,40 +40,41 @@ function VocabularyListItem({
   bottomContent,
 }: VocabularyListItemProps) {
   const [enriching, setEnriching] = useState(false)
-  const [localWordFamily, setLocalWordFamily] = useState<string[] | null>(null)
+  const [localEnriched, setLocalEnriched] = useState<VocabularyEntry | null>(null)
 
-  const displayWordFamily = localWordFamily ?? entry.wordFamily
+  const displayEntry = localEnriched ?? entry
+  const displayWordFamily = displayEntry.wordFamily
 
   const handleEnrich = useCallback(async () => {
     setEnriching(true)
     try {
       const { DatabaseService } = await import('../../services/storage/Database')
-      const { data, error } = await enrichVocabulary(entry.word, entry.topic)
+      const { data, error } = await enrichVocabulary(entry.word, displayEntry.topic)
       if (error || !data) return
       const mergedWordFamily = [...new Set([...entry.wordFamily, ...(data.wordFamily || [])])]
       const updated: VocabularyEntry = {
         ...entry,
-        meaning: data.meaning || entry.meaning,
-        pronunciation: data.pronunciation || entry.pronunciation,
-        partOfSpeech: data.partOfSpeech || entry.partOfSpeech,
-        exampleSentence: data.exampleSentence || entry.exampleSentence,
+        meaning: data.meaning || displayEntry.meaning,
+        pronunciation: data.pronunciation || displayEntry.pronunciation,
+        partOfSpeech: data.partOfSpeech || displayEntry.partOfSpeech,
+        exampleSentence: data.exampleSentence || displayEntry.exampleSentence,
         collocations: [...new Set([...entry.collocations, ...(data.collocations || [])])],
         synonyms: [...new Set([...entry.synonyms, ...(data.synonyms || [])])],
         antonyms: [...new Set([...entry.antonyms, ...(data.antonyms || [])])],
         wordFamily: mergedWordFamily,
-        cefrLevel: (data.cefrLevel || entry.cefrLevel) as VocabularyEntry['cefrLevel'],
-        ieltsRelevance: (data.ieltsRelevance || entry.ieltsRelevance) as VocabularyEntry['ieltsRelevance'],
+        cefrLevel: (data.cefrLevel || displayEntry.cefrLevel) as VocabularyEntry['cefrLevel'],
+        ieltsRelevance: (data.ieltsRelevance || displayEntry.ieltsRelevance) as VocabularyEntry['ieltsRelevance'],
         updatedAt: new Date().toISOString(),
       }
       await DatabaseService.put('vocabulary', updated)
-      if (data.wordFamily) setLocalWordFamily(mergedWordFamily)
+      setLocalEnriched(updated)
     } finally {
       setEnriching(false)
     }
   }, [entry])
 
   const [showWordFamily, setShowWordFamily] = useState(false)
-  const isFavorited = entry.tags.includes('favorite')
+  const isFavorited = displayEntry.tags.includes('favorite')
   const diffColors = difficultyVariant[entry.difficulty]
 
   return (
@@ -117,7 +118,7 @@ function VocabularyListItem({
                 cursor: 'pointer',
                 textAlign: 'left',
               }}
-              aria-label={`View details for ${entry.word}`}
+              aria-label={`View details for ${displayEntry.word}`}
             >
               <span
                 style={{
@@ -161,8 +162,8 @@ function VocabularyListItem({
                 fontSize: 'var(--text-xs)',
                 fontWeight: 'var(--weight-medium)',
                 fontFamily: 'var(--font-sans)',
-                background: entry.status === 'new' ? 'var(--color-primary-light)' : entry.status === 'learning' ? 'var(--color-warning-light)' : entry.status === 'reviewing' ? 'var(--color-skill-reading-light)' : 'var(--color-success-light)',
-                color: entry.status === 'new' ? 'var(--color-primary)' : entry.status === 'learning' ? 'var(--color-warning)' : entry.status === 'reviewing' ? 'var(--color-skill-reading)' : 'var(--color-success)',
+                background: displayEntry.status === 'new' ? 'var(--color-primary-light)' : displayEntry.status === 'learning' ? 'var(--color-warning-light)' : displayEntry.status === 'reviewing' ? 'var(--color-skill-reading-light)' : 'var(--color-success-light)',
+                color: displayEntry.status === 'new' ? 'var(--color-primary)' : displayEntry.status === 'learning' ? 'var(--color-warning)' : displayEntry.status === 'reviewing' ? 'var(--color-skill-reading)' : 'var(--color-success)',
                 borderRadius: 'var(--radius-full)',
                 lineHeight: 1.4,
                 textTransform: 'capitalize',
@@ -212,8 +213,8 @@ function VocabularyListItem({
                   fontSize: 'var(--text-xs)',
                   fontWeight: 'var(--weight-bold)',
                   fontFamily: 'var(--font-mono)',
-                  background: entry.cefrLevel >= 'B2' ? 'var(--color-success-light)' : entry.cefrLevel >= 'B1' ? 'var(--color-warning-light)' : 'var(--color-primary-light)',
-                  color: entry.cefrLevel >= 'B2' ? 'var(--color-success)' : entry.cefrLevel >= 'B1' ? 'var(--color-warning)' : 'var(--color-primary)',
+                  background: displayEntry.cefrLevel >= 'B2' ? 'var(--color-success-light)' : displayEntry.cefrLevel >= 'B1' ? 'var(--color-warning-light)' : 'var(--color-primary-light)',
+                  color: displayEntry.cefrLevel >= 'B2' ? 'var(--color-success)' : displayEntry.cefrLevel >= 'B1' ? 'var(--color-warning)' : 'var(--color-primary)',
                   borderRadius: 'var(--radius-full)',
                   lineHeight: 1.4,
                 }}
@@ -230,8 +231,8 @@ function VocabularyListItem({
                   fontSize: 'var(--text-xs)',
                   fontWeight: 'var(--weight-semibold)',
                   fontFamily: 'var(--font-sans)',
-                  background: entry.ieltsRelevance === 'high' ? 'var(--color-success-light)' : entry.ieltsRelevance === 'medium' ? 'var(--color-warning-light)' : 'var(--color-surface-alt)',
-                  color: entry.ieltsRelevance === 'high' ? 'var(--color-success)' : entry.ieltsRelevance === 'medium' ? 'var(--color-warning)' : 'var(--color-text-secondary)',
+                  background: displayEntry.ieltsRelevance === 'high' ? 'var(--color-success-light)' : displayEntry.ieltsRelevance === 'medium' ? 'var(--color-warning-light)' : 'var(--color-surface-alt)',
+                  color: displayEntry.ieltsRelevance === 'high' ? 'var(--color-success)' : displayEntry.ieltsRelevance === 'medium' ? 'var(--color-warning)' : 'var(--color-text-secondary)',
                   borderRadius: 'var(--radius-full)',
                   lineHeight: 1.4,
                 }}
