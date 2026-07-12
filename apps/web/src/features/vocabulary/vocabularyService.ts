@@ -449,7 +449,7 @@ export async function enrichVocabulary(word: string, topic?: string): Promise<{ 
 
   const topicHint = topic ? ` on the topic of "${topic}"` : ''
   const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
-  const prompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a JSON object with ALL of these fields:
+  const prompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a COMPLETE JSON object with EVERY field below — do not skip anything:
 
 - "meaning": clear English definition suitable for IELTS learners
 - "pronunciation": IPA pronunciation (e.g. "/juːˈbɪk.wɪ.təs/")
@@ -458,11 +458,11 @@ export async function enrichVocabulary(word: string, topic?: string): Promise<{ 
 - "collocations": array of 2-3 common collocations (e.g. ["ubiquitous computing", "ubiquitous presence"])
 - "synonyms": array of 2-3 synonyms
 - "antonyms": array of 1-2 antonyms if they exist, empty array otherwise
-- "wordFamily": array of objects, each with "word" (string), "pos" (part of speech string), and "meaning" (string). Include ALL related word forms that exist: nouns, verbs, adjectives, adverbs. Do NOT skip any. For verb forms ONLY, also include a "verbConjugation" field with "base", "pastSimple", "pastParticiple", "presentParticiple", "thirdPersonSingular".
+- "wordFamily": array of objects. Generate EVERY related word form that exists — nouns, verbs, adjectives, adverbs. Do NOT skip any. Each object MUST have "word" (string), "pos" (part of speech), "meaning" (clear definition for that form), and "pronunciation" (IPA). For verb forms, MUST also include "verbConjugation" with ALL of: base, pastSimple, pastParticiple, presentParticiple, thirdPersonSingular.
 - "cefrLevel": estimated CEFR level as one of: A1, A2, B1, B2, C1, C2
 - "ieltsRelevance": estimated IELTS relevance as one of: low, medium, high`
 
-  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 1500, temperature: 0.3 })
+  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 2000, temperature: 0.3 })
 
   if (result.error) {
     return { data: null, error: result.error }
