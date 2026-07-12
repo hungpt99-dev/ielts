@@ -183,7 +183,7 @@ export default function Dashboard() {
             variant="default"
             title="Your IELTS journey starts here"
             description="Complete your onboarding and let's build your first study plan."
-            action={{ label: 'Create My First Study Plan', onClick: () => navigate('/plan') }}
+            action={{ label: 'Create My First Study Plan', onClick: () => navigate('/roadmap') }}
           />
         </div>
       </PageContent>
@@ -423,7 +423,7 @@ export default function Dashboard() {
                   <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{getEmptyStateMessage('no-tasks').title}</p>
                   <p className="mt-1 text-xs" style={{ color: 'var(--color-text-secondary)' }}>{getEmptyStateMessage('no-tasks').description}</p>
                   <div className="mt-4 flex gap-2">
-                    <Button size="sm" onClick={() => navigate('/plan')}>Create Plan</Button>
+                    <Button size="sm" onClick={() => navigate('/roadmap')}>Create Plan</Button>
                     <Button variant="outline" size="sm" onClick={() => goToTutor({
                       prompt: `I have no tasks planned. I'm at band ${currentBand} targeting band ${targetBand}. My weak skills are ${weakSkills.join(', ')}. Suggest a study plan.`,
                       title: 'Study Plan Help',
@@ -498,7 +498,7 @@ export default function Dashboard() {
                   <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
                     {todayUnfinished.length} task{todayUnfinished.length > 1 ? 's' : ''} remaining
                   </p>
-                  <Button size="sm" variant="ghost" onClick={() => navigate('/plan')}>
+                  <Button size="sm" variant="ghost" onClick={() => navigate('/roadmap')}>
                     View Full Plan
                   </Button>
                 </div>

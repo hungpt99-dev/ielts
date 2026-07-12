@@ -269,7 +269,7 @@ export default function TodayPlanPage() {
       navigate('/dashboard')
       return
     }
-    navigate('/plan')
+    navigate('/roadmap')
   }
 
   if (loading) {
@@ -322,7 +322,7 @@ export default function TodayPlanPage() {
             You haven't created a study plan yet. Let's build one to guide your IELTS journey!
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Button onClick={() => navigate('/plan')}>
+            <Button onClick={() => navigate('/roadmap')}>
               Generate My Study Plan
             </Button>
             <Button variant="outline" onClick={() => goToTutor({ prompt: "I don't have a study plan yet. Can you help me create one?" })}>
@@ -354,7 +354,7 @@ export default function TodayPlanPage() {
             There are no tasks scheduled for today in your study plan. Enjoy your break!
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Button variant="outline" onClick={() => navigate('/plan')}>
+            <Button variant="outline" onClick={() => navigate('/roadmap')}>
               View Full Plan
             </Button>
             <Button variant="outline" onClick={() => goToTutor({ prompt: "It's a rest day in my study plan. Can you suggest some light IELTS activities to keep practicing?" })}>

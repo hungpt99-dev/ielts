@@ -143,8 +143,8 @@ export default function FullStudyRoadmapPage() {
   }, [])
 
   const handleAdjustPlan = useCallback(() => {
-    navigate('/plan')
-  }, [navigate])
+    loadData(false)
+  }, [loadData])
 
   const handlePhaseClick = useCallback((index: number) => {
     setExpandedPhases(prev => {
@@ -232,7 +232,7 @@ export default function FullStudyRoadmapPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <button
-              onClick={() => navigate('/plan')}
+              onClick={() => loadData(true)}
               className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
               style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}
             >

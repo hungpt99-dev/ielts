@@ -13,7 +13,6 @@ import PrivacyPage from '../pages/PrivacyPage'
 import { openAITutorChat } from '../features/ai-tutor/utils/openChat'
 
 const Dashboard = lazy(() => import('../features/dashboard/Dashboard'))
-const StudyPlan = lazy(() => import('../features/study-plan/StudyPlan'))
 const NotebookPage = lazy(() => import('../pages/vocabulary/NotebookPage'))
 const VocabularyReview = lazy(() => import('../pages/VocabularyReview'))
 const ReviewCenter = lazy(() => import('../pages/ReviewCenter'))
@@ -207,7 +206,7 @@ export default function AppLayout() {
       id: 'plan',
       label: 'Plan',
       icon: <IconTodayPlan size={22} />,
-      active: location.pathname.startsWith('/today-plan') || location.pathname.startsWith('/plan') || location.pathname.startsWith('/roadmap'),
+      active: location.pathname.startsWith('/today-plan') || location.pathname.startsWith('/roadmap'),
       onClick: () => navigate('/today-plan'),
     },
     {
@@ -432,7 +431,6 @@ export default function AppLayout() {
                   <Suspense fallback={<LoadingSpinner fullPage />}>
                     <Routes>
                       <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/plan" element={<StudyPlan />} />
                       <Route path="/today-plan" element={<TodayPlanPage />} />
                       <Route path="/roadmap" element={<FullStudyRoadmapPage />} />
                       <Route path="/vocabulary" element={<NotebookPage />} />
