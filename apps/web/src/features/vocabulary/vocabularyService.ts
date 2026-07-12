@@ -431,67 +431,6 @@ export function parseWordForm(s: string): WordFormEntry | null {
   return null
 }
 
-export async function generateWordFamily(
-  word: string,
-  meaning: string,
-): Promise<{ wordFamily: string[]; error: string | null }> {
-  const { makeAIRequest } = await import('../../services/ai/AIService')
-
-  const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
-  const prompt = `For the word "${word}" (${meaning}), generate ALL related word forms that exist in English.
-
-You MUST include every form that exists for this word. Do NOT skip any. For each form, provide:
-1. The word itself
-2. Its part of speech (choose from: noun, verb, adjective, adverb)
-3. A clear English meaning/definition specific to this form
-4. IPA pronunciation
-5. For verb forms ONLY: include verbConjugation with ALL of:
-   - "base": base form
-   - "pastSimple": past simple
-   - "pastParticiple": past participle
-   - "presentParticiple": -ing form
-   - "thirdPersonSingular": -s form
-
-Respond with valid JSON in this exact format:
-{
-  "wordFamily": [
-    {"word": "ubiquity", "pos": "noun", "meaning": "The state of being everywhere", "pronunciation": "/juːˈbɪk.wɪ.ti/"},
-    {"word": "ubiquitous", "pos": "adjective", "meaning": "Present everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs/"},
-    {"word": "ubiquitously", "pos": "adverb", "meaning": "In a way that is found everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs.li/"}
-  ]
-}
-
-For verb forms, the object MUST also include a "verbConjugation" field. Example:
-{"word": "beautify", "pos": "verb", "meaning": "To make beautiful", "pronunciation": "/ˈbjuː.tɪ.faɪ/", "verbConjugation": {"base": "beautify", "pastSimple": "beautified", "pastParticiple": "beautified", "presentParticiple": "beautifying", "thirdPersonSingular": "beautifies"}}
-
-Do not include any text outside the JSON object.`
-
-  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 1200 })
-
-  if (result.error) {
-    return { wordFamily: [], error: result.error }
-  }
-
-  try {
-    const jsonStart = result.content.indexOf('{')
-    const jsonEnd = result.content.lastIndexOf('}')
-    if (jsonStart >= 0 && jsonEnd >= 0) {
-      const parsed = JSON.parse(result.content.slice(jsonStart, jsonEnd + 1))
-      if (Array.isArray(parsed.wordFamily)) {
-        const encoded: string[] = parsed.wordFamily.map((f: Record<string, unknown>) => {
-          if (typeof f === 'string') return f
-          if (f.word && f.pos) return encodeWordForm(f as WordFormEntry)
-          return String(f.word || '')
-        }).filter(Boolean)
-        return { wordFamily: encoded, error: null }
-      }
-    }
-    return { wordFamily: [], error: 'Unexpected response format from AI.' }
-  } catch {
-    return { wordFamily: [], error: 'Failed to parse AI response.' }
-  }
-}
-
 export interface EnrichResult {
   meaning?: string
   pronunciation?: string

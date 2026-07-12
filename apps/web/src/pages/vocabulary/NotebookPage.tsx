@@ -19,7 +19,7 @@ import WordForm from '../../features/vocabulary/components/WordForm'
 import WordFamilyDisplay from '../../features/vocabulary/components/WordFamilyDisplay'
 import { onVocabularyChanged } from '../../features/vocabulary/vocabularyEvents'
 
-import { generateWordFamily } from '../../features/vocabulary/vocabularyService'
+import { enrichVocabulary } from '../../features/vocabulary/vocabularyService'
 import PageHeader from '../../components/layout/PageHeader'
 import PageContent from '../../components/layout/PageContent'
 import VocabularyListItem from '../../components/vocabulary/VocabularyListItem'
@@ -117,7 +117,7 @@ export default function NotebookPage() {
 
   const [detailEntry, setDetailEntry] = useState<VocabularyEntry | null>(null)
   const [detailOpen, setDetailOpen] = useState(false)
-  const [generatingFamily, setGeneratingFamily] = useState(false)
+  const [enriching, setEnriching] = useState(false)
   const navigate = useNavigate()
   const goToTutor = useTutorNavigation()
 
@@ -269,21 +269,30 @@ export default function NotebookPage() {
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  const handleGenerateFamily = useCallback(async () => {
+  const handleEnrich = useCallback(async () => {
     if (!detailEntry) return
-    setGeneratingFamily(true)
-    const result = await generateWordFamily(detailEntry.word, detailEntry.meaning)
-    if (result.wordFamily.length > 0) {
-      const updated: VocabularyEntry = {
-        ...detailEntry,
-        wordFamily: [...new Set([...detailEntry.wordFamily, ...result.wordFamily])],
-        updatedAt: new Date().toISOString(),
-      }
-      await DatabaseService.put('vocabulary', updated)
-      setDetailEntry(updated)
-      setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
+    setEnriching(true)
+    const { data, error } = await enrichVocabulary(detailEntry.word, detailEntry.topic)
+    if (error || !data) { setEnriching(false); return }
+    const mergedWordFamily = [...new Set([...detailEntry.wordFamily, ...(data.wordFamily || [])])]
+    const updated: VocabularyEntry = {
+      ...detailEntry,
+      meaning: data.meaning || detailEntry.meaning,
+      pronunciation: data.pronunciation || detailEntry.pronunciation,
+      partOfSpeech: data.partOfSpeech || detailEntry.partOfSpeech,
+      exampleSentence: data.exampleSentence || detailEntry.exampleSentence,
+      collocations: [...new Set([...detailEntry.collocations, ...(data.collocations || [])])],
+      synonyms: [...new Set([...detailEntry.synonyms, ...(data.synonyms || [])])],
+      antonyms: [...new Set([...detailEntry.antonyms, ...(data.antonyms || [])])],
+      wordFamily: mergedWordFamily,
+      cefrLevel: (data.cefrLevel || detailEntry.cefrLevel) as VocabularyEntry['cefrLevel'],
+      ieltsRelevance: (data.ieltsRelevance || detailEntry.ieltsRelevance) as VocabularyEntry['ieltsRelevance'],
+      updatedAt: new Date().toISOString(),
     }
-    setGeneratingFamily(false)
+    await DatabaseService.put('vocabulary', updated)
+    setDetailEntry(updated)
+    setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
+    setEnriching(false)
   }, [detailEntry])
 
   function handleClearFilters() {
@@ -864,8 +873,8 @@ export default function NotebookPage() {
 
             <WordFamilyDisplay
               wordFamily={detailEntry.wordFamily}
-              onGenerate={handleGenerateFamily}
-              generating={generatingFamily}
+              onGenerate={handleEnrich}
+              generating={enriching}
             />
 
             {detailEntry.personalNote && (
