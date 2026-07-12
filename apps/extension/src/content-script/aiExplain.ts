@@ -211,16 +211,21 @@ function closePanel(): void {
     document.removeEventListener('keydown', keyHandler)
     keyHandler = null
   }
-  if (panelEl) {
-    panelEl.style.opacity = '0'
-    setTimeout(() => panelEl?.remove(), 200)
-  }
-  if (overlayEl) {
-    overlayEl.style.opacity = '0'
-    setTimeout(() => overlayEl?.remove(), 200)
-  }
+
+  const pEl = panelEl
+  const oEl = overlayEl
   panelEl = null
   overlayEl = null
+
+  if (pEl) {
+    pEl.style.opacity = '0'
+    setTimeout(() => pEl.remove(), 200)
+  }
+  if (oEl) {
+    oEl.style.opacity = '0'
+    setTimeout(() => oEl.remove(), 200)
+  }
+
   if (onClose) onClose()
 }
 
