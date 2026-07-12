@@ -174,8 +174,22 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
     setAiError(null)
 
     try {
-      const systemPrompt = 'You are an IELTS vocabulary assistant. Always respond with valid JSON.'
-      const userPrompt = `Generate a natural example sentence for the word "${word}"${topic ? ` on the topic of "${topic}"` : ''}. Also provide 2-3 common collocations and 2-3 synonyms. Format the response as JSON with keys: "sentence", "collocations" (array), "synonyms" (array).`
+      const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
+
+      const topicHint = topic ? ` on the topic of "${topic}"` : ''
+      const userPrompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a JSON object with ALL of these fields:
+
+- "meaning": clear English definition suitable for IELTS learners
+- "pronunciation": IPA pronunciation (e.g. "/juːˈbɪk.wɪ.təs/")
+- "partOfSpeech": one of: noun, verb, adjective, adverb, preposition, conjunction, pronoun, determiner, phrasal verb, idiom
+- "exampleSentence": natural IELTS-level example sentence
+- "collocations": array of 2-3 common collocations (e.g. ["ubiquitous computing", "ubiquitous presence"])
+- "synonyms": array of 2-3 synonyms
+- "antonyms": array of 1-2 antonyms if they exist, empty array otherwise
+- "wordFamily": array of related word forms (e.g. ["ubiquity", "ubiquitously"])
+- "cefrLevel": estimated CEFR level as one of: A1, A2, B1, B2, C1, C2
+- "ieltsRelevance": estimated IELTS relevance as one of: low, medium, high
+- "meaningVi": Vietnamese translation of the meaning (or empty string if you don't know)`
 
       const { content, error } = await callAI(
         systemPrompt,
@@ -185,7 +199,7 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
           baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
           model: settings.aiModel || 'gpt-4o-mini',
         }),
-        { temperature: 0.7, maxTokens: 300 },
+        { temperature: 0.3, maxTokens: 800 },
       )
 
       if (error) {
@@ -196,28 +210,34 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
         throw new Error('Empty response from AI')
       }
 
-      let parsed
-      try {
-        const jsonStart = content.indexOf('{')
-        const jsonEnd = content.lastIndexOf('}')
-        if (jsonStart === -1 || jsonEnd === -1) throw new Error('No JSON found')
-        parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
-      } catch {
-        setValue('exampleSentence', content.trim())
+      const jsonStart = content.indexOf('{')
+      const jsonEnd = content.lastIndexOf('}')
+      if (jsonStart === -1 || jsonEnd === -1) {
+        setAiError('AI returned an unexpected format. Try again.')
         return
       }
 
-      if (parsed.sentence) setValue('exampleSentence', parsed.sentence)
-      if (parsed.collocations && Array.isArray(parsed.collocations)) {
-        const existing = watch('collocations')
-        const newColl = parsed.collocations.join(', ')
-        setValue('collocations', existing ? `${existing}, ${newColl}` : newColl)
+      let parsed: Record<string, unknown>
+      try {
+        parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
+      } catch {
+        setAiError('AI returned invalid JSON. Try again.')
+        return
       }
-      if (parsed.synonyms && Array.isArray(parsed.synonyms)) {
-        const existing = watch('synonyms')
-        const newSyn = parsed.synonyms.join(', ')
-        setValue('synonyms', existing ? `${existing}, ${newSyn}` : newSyn)
-      }
+
+      if (parsed.meaning && typeof parsed.meaning === 'string') setValue('meaning', parsed.meaning)
+      if (parsed.pronunciation && typeof parsed.pronunciation === 'string') setValue('pronunciation', parsed.pronunciation)
+      if (parsed.partOfSpeech && typeof parsed.partOfSpeech === 'string') setValue('partOfSpeech', parsed.partOfSpeech)
+      if (parsed.exampleSentence && typeof parsed.exampleSentence === 'string') setValue('exampleSentence', parsed.exampleSentence)
+      if (parsed.meaningVi && typeof parsed.meaningVi === 'string') setValue('meaningVi', parsed.meaningVi)
+      if (parsed.cefrLevel && typeof parsed.cefrLevel === 'string') setValue('cefrLevel', parsed.cefrLevel)
+      if (parsed.ieltsRelevance && typeof parsed.ieltsRelevance === 'string') setValue('ieltsRelevance', parsed.ieltsRelevance)
+
+      const joinArr = (val: unknown): string => Array.isArray(val) ? val.join(', ') : ''
+      if (parsed.collocations) setValue('collocations', joinArr(parsed.collocations))
+      if (parsed.synonyms) setValue('synonyms', joinArr(parsed.synonyms))
+      if (parsed.antonyms) setValue('antonyms', joinArr(parsed.antonyms))
+      if (parsed.wordFamily) setValue('wordFamily', joinArr(parsed.wordFamily))
     } catch (err) {
       setAiError(err instanceof Error ? err.message : 'Failed to generate example')
     } finally {
@@ -441,7 +461,7 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
-            AI Example
+            AI Enrich
           </Button>
         </div>
         {aiError && <p className="mt-1 text-xs text-red-500">{aiError}</p>}
