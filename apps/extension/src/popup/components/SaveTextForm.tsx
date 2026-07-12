@@ -137,12 +137,9 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
       await saveEntry(entry)
 
       if (form.category === 'vocabulary') {
-        const rawWord = form.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, '')
-        const { normalizeToLemma } = await import('../../services/aiEnrichmentService')
-        const lemma = await normalizeToLemma(rawWord).catch(() => rawWord)
         const vocabEntry: ExtensionVocabEntry = {
           id: sharedId,
-          word: lemma,
+          word: form.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
           sourceSentence: form.text,
           pageTitle: pageInfo.title,
           pageUrl: pageInfo.url,
