@@ -5,16 +5,10 @@ import { emitStudyRoadmapViewed } from '../../features/websiteActions/eventEmitt
 import {
   ensureRoadmap,
   toggleTask,
-  getRecommendations,
-  getTodayDay,
-  getNextIncompleteTask,
   getRoadmapUserProfile,
-  getExamCountdown,
 } from '../../features/roadmap/roadmapService'
 import type {
-  RoadmapData,
   RoadmapPhase,
-  RoadmapWeek,
   RoadmapDay,
   RoadmapUserProfile,
 } from '../../features/roadmap/roadmapService'
@@ -28,11 +22,6 @@ import AITutorRoadmapInsight from '../../features/roadmap/components/AITutorRoad
 import { IconAward, IconEdit, IconMap, IconProgress, IconRefresh, IconUndo, IconRedo } from '@ielts/ui'
 import PageContent from '../../components/layout/PageContent'
 
-function formatDate(dateStr: string): string {
-  const d = new Date(dateStr + 'T00:00:00')
-  return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-}
-
 function getGreeting(): string {
   const h = new Date().getHours()
   if (h < 12) return 'Good morning'
@@ -43,7 +32,7 @@ function getGreeting(): string {
 export default function FullStudyRoadmapPage() {
   const navigate = useNavigate()
   const todayRef = useRef<HTMLDivElement>(null)
-  const editor = useRoadmapEditor()
+  const { roadmap, loadRoadmap, isEditMode, toggleEditMode, applyCommand, undo, redo, canUndo, canRedo } = useRoadmapEditor()
   const [profile, setProfile] = useState<RoadmapUserProfile | null>(null)
   const [expandedPhases, setExpandedPhases] = useState<Set<number>>(new Set([0]))
   const [loading, setLoading] = useState(true)
@@ -51,14 +40,12 @@ export default function FullStudyRoadmapPage() {
   const [aiEnabled, setAiEnabled] = useState(false)
   const [regenerating, setRegenerating] = useState(false)
 
-  const roadmap = editor.roadmap
-
   const loadData = useCallback(async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true)
       setError(null)
       const data = await ensureRoadmap()
-      editor.loadRoadmap(data)
+      loadRoadmap(data)
       const userProfile = getRoadmapUserProfile()
       setProfile(userProfile)
 
@@ -81,7 +68,7 @@ export default function FullStudyRoadmapPage() {
     } finally {
       if (showLoading) setLoading(false)
     }
-  }, [editor])
+  }, [loadRoadmap])
 
   useEffect(() => {
     loadData()
@@ -101,18 +88,17 @@ export default function FullStudyRoadmapPage() {
   }, [loading, roadmap])
 
   const handleToggleTask = useCallback(async (phaseIndex: number, weekIndex: number, dayIndex: number) => {
-    const current = editor.roadmap
-    if (!current) return
+    if (!roadmap) return
     try {
-      const updated = await toggleTask(current, phaseIndex, weekIndex, dayIndex)
-      editor.loadRoadmap(updated)
+      const updated = await toggleTask(roadmap, phaseIndex, weekIndex, dayIndex)
+      loadRoadmap(updated)
     } catch {
       // Revert handled by toggleTask
     }
-  }, [editor])
+  }, [roadmap, loadRoadmap])
 
   const handleRegenerate = useCallback(async () => {
-    if (!editor.roadmap || regenerating) return
+    if (!roadmap || regenerating) return
     setRegenerating(true)
     try {
       localStorage.removeItem('ielts-roadmap')
@@ -120,7 +106,7 @@ export default function FullStudyRoadmapPage() {
     } finally {
       setRegenerating(false)
     }
-  }, [editor, loadData, regenerating])
+  }, [roadmap, loadData, regenerating])
 
   const handleScrollToToday = useCallback(() => {
     todayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -322,8 +308,6 @@ export default function FullStudyRoadmapPage() {
   }
 
   // ---- Normal Roadmap View ----
-  const { isEditMode, toggleEditMode, applyCommand, undo, redo, canUndo, canRedo } = editor
-
   return (
     <PageContent className={`space-y-6 ${isEditMode ? 'pb-24' : ''}`}>
       {/* Skip link for keyboard users */}
