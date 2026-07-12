@@ -5,8 +5,23 @@ import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Ca
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import SelfEvaluation, { type EvaluationResult } from './components/SelfEvaluation'
-import { SAMPLE_QUESTIONS, type SpeakingQuestion } from './data/questions'
-import { COMMON_PHRASES } from './data/phrases'
+interface SpeakingQuestion {
+  id: string
+  part: 1 | 2 | 3
+  question: string
+  topic: string
+  followUp?: string[]
+  cueCard?: {
+    topic: string
+    points: string[]
+    followUp: string[]
+  }
+}
+
+interface SpeakingPhrase {
+  category: string
+  phrases: string[]
+}
 import { generateId } from '../../utils'
 import { getSpeakingFeedback } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
@@ -142,7 +157,7 @@ export default function SpeakingPractice() {
   }, [])
 
   const filteredQuestions = useMemo(() => {
-    let filtered = SAMPLE_QUESTIONS
+    let filtered = [] as SpeakingQuestion[]
     if (search.trim()) {
       const query = search.toLowerCase()
       filtered = filtered.filter(
@@ -157,12 +172,7 @@ export default function SpeakingPractice() {
   }, [search, topicFilter, partFilter])
 
   const filteredPhrases = useMemo(() => {
-    if (!phrasesFilter.trim()) return COMMON_PHRASES
-    const query = phrasesFilter.toLowerCase()
-    return COMMON_PHRASES.map(cat => ({
-      ...cat,
-      phrases: cat.phrases.filter(p => p.toLowerCase().includes(query)),
-    })).filter(cat => cat.phrases.length > 0)
+    return [] as SpeakingPhrase[]
   }, [phrasesFilter])
 
   async function startRecording() {

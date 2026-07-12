@@ -38,7 +38,8 @@ const ArtifactsPage = lazy(() => import('../features/artifacts/ArtifactsPage'))
 const PublicTabPage = lazy(() => import('../components/PublicTabPage'))
 const TodayPlanPage = lazy(() => import('../pages/TodayPlanPage'))
 const AITutorPage = lazy(() => import('../features/ai-tutor/pages/AITutorPage'))
-import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconProgress, IconBack, IconMinimize, IconClose, IconSettings, IconChevronDown, IconFlame, IconSaved, IconInfo } from '@ielts/ui'
+const BooksPage = lazy(() => import('../pages/BooksPage'))
+import { IconHome, IconTodayPlan, IconStudyPlan, IconAITutor, IconVocabulary, IconReading, IconListening, IconWriting, IconSpeaking, IconGrammar, IconMistakes, IconProgress, IconBack, IconMinimize, IconClose, IconSettings, IconChevronDown, IconFlame, IconSaved, IconInfo, IconBookText } from '@ielts/ui'
 
 function RedirectWithHash({ to, hash }: { to: string; hash: string }) {
   return <Navigate to={`${to}#${hash}`} replace />
@@ -69,6 +70,7 @@ const tutorNavItem: NavItemDefinition = {
 const learningParentItems: NavItemDefinition[] = [
   { to: '/vocabulary', label: 'Vocabulary', icon: <IconVocabulary size={20} />, end: false },
   { to: '/artifacts', label: 'Saved Content', icon: <IconSaved size={20} />, end: false },
+  { to: '/books', label: 'Books', icon: <IconBookText size={20} />, end: false },
 ]
 
 const practiceSubItems: NavItemDefinition[] = [
@@ -449,6 +451,7 @@ export default function AppLayout() {
                       <Route path="/progress-review" element={<Navigate to="/progress" replace />} />
                       <Route path="/artifacts" element={<ArtifactsPage />} />
                       <Route path="/search" element={<SearchPage />} />
+                      <Route path="/books" element={<BooksPage />} />
                       <Route path="/public-api" element={<PublicApiImportPage />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/settings/ai" element={<AIProviderSettingsPage />} />

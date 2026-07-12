@@ -10,7 +10,7 @@ import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import AudioPlayer from './components/AudioPlayer'
 import LQuestion from './components/ListeningQuestion'
-import { SAMPLE_EXERCISES } from './data/exercises'
+
 import { generateId } from '../../utils'
 import { generateListeningExercise } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
@@ -149,7 +149,7 @@ export default function ListeningPractice() {
   }, [])
 
   const allExercises = useMemo(() => {
-    return [...SAMPLE_EXERCISES]
+    return [] as ListeningExercise[]
   }, [])
 
   const filteredExercises = useMemo(() => {

@@ -4,7 +4,14 @@ import { DatabaseService } from '../../services/storage/Database'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
-import { SAMPLE_PROMPTS } from './data/prompts'
+interface WritingPrompt {
+  id: string
+  taskType: WritingTaskType
+  question: string
+  topic: string
+  description: string
+  difficulty: 'easy' | 'medium' | 'hard'
+}
 import { generateId } from '../../utils'
 import { checkWriting } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
@@ -110,7 +117,7 @@ export default function WritingPractice() {
   }, [essayText])
 
   const filteredPrompts = useMemo(() => {
-    let filtered = SAMPLE_PROMPTS
+    let filtered = [] as WritingPrompt[]
     if (search.trim()) {
       const query = search.toLowerCase()
       filtered = filtered.filter(

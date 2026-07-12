@@ -10,7 +10,7 @@ import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import EmptyState from '../../components/ui/EmptyState'
 import Question from './components/Question'
-import { ensureSeedData, loadAllPassages } from './passageSeedService'
+import { loadAllPassages } from './passageSeedService'
 import { generateId } from '../../utils'
 import { generateReadingPassage, generateQuestionsForPassage } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
@@ -171,7 +171,6 @@ export default function ReadingPractice() {
 
   const loadPassages = useCallback(async () => {
     try {
-      await ensureSeedData()
       const passages = await loadAllPassages()
       setAllPassages(passages)
     } catch {}
