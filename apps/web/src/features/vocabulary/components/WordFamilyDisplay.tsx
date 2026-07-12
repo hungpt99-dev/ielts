@@ -94,10 +94,11 @@ export default function WordFamilyDisplay({ wordFamily, onGenerate, generating }
     const groups = new Map<string, ParsedWordForm[]>()
     for (const entry of wordFamily) {
       const parsed = parseEntry(entry, entry)
-      const key = parsed.pos || 'other'
-      if (!groups.has(key)) groups.set(key, [])
-      groups.get(key)!.push(parsed)
+      if (!parsed.pos) continue
+      if (!groups.has(parsed.pos)) groups.set(parsed.pos, [])
+      groups.get(parsed.pos)!.push(parsed)
     }
+    if (groups.size === 0) return null
 
     return Array.from(groups.entries())
       .sort(([a], [b]) => {
