@@ -16,8 +16,9 @@ import ReviewSession from './components/ReviewSession'
 import { emitExtensionPopupOpened } from '../background/eventEmitters'
 import ManualSyncPanel from './components/ManualSyncPanel'
 import SyncStatusPanel from './components/SyncStatusPanel'
+import QuickNoteCapture from './components/QuickNoteCapture'
 
-type ViewState = 'dashboard' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'savedItems' | 'pendingReviews' | 'reviewSession' | 'manualSync' | 'syncStatus'
+type ViewState = 'dashboard' | 'quickNoteCapture' | 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'savedItems' | 'pendingReviews' | 'reviewSession' | 'manualSync' | 'syncStatus'
 
 type NavFn = (view: ViewState) => void
 
@@ -156,6 +157,12 @@ function App() {
         return <ManualSyncPanel onBack={() => setView('dashboard')} />
       case 'syncStatus':
         return <SyncStatusPanel onBack={() => setView('dashboard')} />
+      case 'quickNoteCapture':
+        return (
+          <div style={sharedCardStyle}>
+            <QuickNoteCapture onSaved={handleSaved} onCancel={() => setView('dashboard')} />
+          </div>
+        )
       default:
         return <PopupDashboard key={key} onNavigate={setView as NavFn} />
     }

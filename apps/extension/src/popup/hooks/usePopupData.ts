@@ -7,6 +7,7 @@ export interface DailyProgress {
   wordsAdded: number
   notesAdded: number
   articlesSaved: number
+  notesSaved: number
   reviewDue: number
   streak: number
 }
@@ -39,6 +40,7 @@ const DEFAULT_PROGRESS: DailyProgress = {
   wordsAdded: 0,
   notesAdded: 0,
   articlesSaved: 0,
+  notesSaved: 0,
   reviewDue: 0,
   streak: 0,
 }

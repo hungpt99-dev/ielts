@@ -23,7 +23,7 @@ import { getSyncState, onSyncStateChange, getPendingItemsCount } from '../../ser
 import { saveCurrentPageAsArtifact } from '../../services/artifactService'
 
 interface PopupDashboardProps {
-  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'savedItems' | 'pendingReviews' | 'manualSync' | 'syncStatus') => void
+  onNavigate: (view: 'saveForm' | 'vocabularyCollector' | 'articleCollector' | 'videoHelper' | 'backupRestore' | 'importExport' | 'miniTutor' | 'savedWords' | 'savedItems' | 'pendingReviews' | 'manualSync' | 'syncStatus' | 'quickNoteCapture') => void
 }
 
 const StatCard = memo(function StatCard({ label, value, icon }: { label: string; value: number; icon: ReactNode }) {
@@ -299,7 +299,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
   }, [])
 
   const handleQuickAddNote = useCallback(() => {
-    onNavigate('saveForm')
+    onNavigate('quickNoteCapture')
   }, [onNavigate])
 
   const handleOpenSettings = useCallback(() => {
@@ -522,13 +522,14 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
+          gridTemplateColumns: 'repeat(5, 1fr)',
           gap: 'var(--spacing-xs)',
         }}
       >
         <StatCard label="Words" value={vocabCountLoading ? 0 : vocabCount} icon={<IconVocabulary />} />
         <StatCard label="Due" value={dueCount} icon={<IconRefresh />} />
         <StatCard label="Articles" value={progress.articlesSaved} icon={<IconArticle />} />
+        <StatCard label="Notes" value={progress.notesSaved} icon={<IconEdit />} />
         <StatCard label="Streak" value={progress.streak} icon={<IconStreak />} />
       </div>
 

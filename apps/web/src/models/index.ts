@@ -695,7 +695,7 @@ export interface SearchResult {
 }
 
 
-export type ArtifactCategory = 'article' | 'video' | 'reference' | 'tool' | 'other'
+export type ArtifactCategory = 'article' | 'video' | 'reference' | 'tool' | 'other' | 'note'
 
 export interface Artifact {
   id: string

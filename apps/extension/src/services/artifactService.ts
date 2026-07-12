@@ -12,7 +12,7 @@ export interface ExtensionArtifact {
   contentText: string
   tags: string[]
   isFavorite: boolean
-  category: 'article' | 'video' | 'reference' | 'tool' | 'other'
+  category: 'article' | 'video' | 'reference' | 'tool' | 'other' | 'note'
   contentType: string
   source: string
   wordCount: number
@@ -82,6 +82,46 @@ function crawlActiveTab(): Promise<ExtractResult> {
       })
     })
   })
+}
+
+export interface QuickNoteInput {
+  content: string
+  title?: string
+  pageUrl?: string
+  pageTitle?: string
+  topic?: string
+  skill?: string
+  tags?: string[]
+  difficulty?: string
+}
+
+export async function saveQuickNote(input: QuickNoteInput): Promise<ExtensionArtifact> {
+  const now = new Date().toISOString()
+  const lines = input.content.trim().split('\n')
+  const title = input.title || lines[0].slice(0, 120) || 'Quick Note'
+  const wordCount = input.content.split(/\s+/).filter(Boolean).length
+
+  const note: ExtensionArtifact = {
+    id: crypto.randomUUID(),
+    url: input.pageUrl || '',
+    title,
+    description: input.content.slice(0, 300),
+    favicon: '',
+    contentText: input.content,
+    tags: input.tags || [],
+    isFavorite: false,
+    category: 'note',
+    contentType: 'note',
+    source: 'extension',
+    wordCount,
+    readingStatus: 'unread',
+    createdAt: now,
+    updatedAt: now,
+  }
+
+  await saveArtifact(note)
+  await incrementDailyProgress('notesSaved', 1)
+  return note
 }
 
 export async function saveCurrentPageAsArtifact(): Promise<ExtensionArtifact> {

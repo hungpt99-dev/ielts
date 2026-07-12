@@ -49,7 +49,7 @@ export const contentTypeSchema = z.enum([
   'dictionary', 'vocabulary-list', 'reading', 'listening', 'article',
   'video', 'exercise', 'writing-prompt', 'speaking-topic', 'reference',
 ])
-export const artifactCategorySchema = z.enum(['article', 'video', 'reference', 'tool', 'other'])
+export const artifactCategorySchema = z.enum(['article', 'video', 'reference', 'tool', 'other', 'note'])
 
 export const artifactSchema = z.object({
   id: z.string().min(1),
@@ -63,7 +63,7 @@ export const artifactSchema = z.object({
   source: z.string().default('manual'),
   createdAt: isoStringSchema,
   updatedAt: isoStringSchema,
-})
+}).passthrough()
 
 export const sourceNameSchema = z.enum([
   'wiktionary', 'datamuse', 'tatoeba', 'oer-commons', 'wikipedia', 'gutendex', 'youtube',

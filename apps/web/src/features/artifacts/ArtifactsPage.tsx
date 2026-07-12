@@ -25,6 +25,7 @@ const CATEGORY_LABELS: Record<ArtifactCategory, string> = {
   reference: 'Reference',
   tool: 'Tool',
   other: 'Other',
+  note: 'Note',
 }
 
 const IELTS_TOPICS = [
@@ -148,7 +149,13 @@ export default function ArtifactsPage() {
 
   useEffect(() => {
     if (!openMenuId) return
-    const handler = () => setOpenMenuId(null)
+    const handler = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      const trigger = target.closest('[aria-label="More options"]')
+      const menu = target.closest('[role="menu"]')
+      if (trigger || menu) return
+      setOpenMenuId(null)
+    }
     document.addEventListener('click', handler)
     return () => document.removeEventListener('click', handler)
   }, [openMenuId])
@@ -776,6 +783,7 @@ export default function ArtifactsPage() {
                         </button>
                         {openMenuId === artifact.id && (
                           <div
+                            role="menu"
                             className="absolute right-0 top-full z-50 mt-1 w-36 overflow-hidden rounded-xl border py-1 shadow-lg"
                             style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
                           >
