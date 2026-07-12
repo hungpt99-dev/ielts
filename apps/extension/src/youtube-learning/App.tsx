@@ -586,8 +586,8 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
 
   return (
     <div style={{ position: 'relative', height: '100%' }}>
-      <div ref={containerRef} style={{ height: '100%', padding: 'var(--spacing-xs)', overflow: 'auto' }}>
-        <div style={{ position: 'sticky', top: 0, zIndex: 5, display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 6px 8px', borderBottom: '1px solid var(--color-border)', marginBottom: '6px', background: 'var(--color-background)' }}>
+      <div ref={containerRef} style={{ height: '100%', overflow: 'auto' }}>
+        <div style={{ position: 'sticky', top: 0, zIndex: 5, display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 6px 8px', borderBottom: '1px solid var(--color-border)', background: 'var(--color-background)' }}>
           <button onClick={handleToggleTranslate} style={translateBtnStyle} aria-label={translateEnabled ? 'Hide translation' : 'Show translation'}>
             {translateEnabled ? 'Translate: ON' : 'Translate'}
           </button>
@@ -598,6 +598,7 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
           )}
           {translating && <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Translating...</span>}
         </div>
+        <div style={{ padding: '0 var(--spacing-xs) var(--spacing-xs)' }}>
         {(tokenizedSegments || segments).map((seg: any, idx: number) => {
           const tokens = seg.tokens || []
           const translatedText = translations.get(seg.id)
@@ -678,6 +679,7 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
             </div>
           )
         })}
+      </div>
       </div>
       {vocabWord && (
         <VocabularyDetail
