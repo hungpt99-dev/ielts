@@ -62,3 +62,25 @@ export interface ExerciseTemplateInput {
   estimatedMinutes: number
   contextSnapshotHash: string
 }
+
+export interface GenerateExerciseRequest {
+  objective: import('./learning-objective').LearningObjective
+  skill: IELTSSection
+  requestedType?: ExerciseType
+  contextScope: string
+  sourceContent?: LearningContentPayload
+  constraints: {
+    availableMinutes: number
+    targetQuestionCount?: number
+    allowedQuestionTypes?: import('./exercise-question').ExerciseQuestionType[]
+    maximumContentLength?: number
+    offlineOnly: boolean
+  }
+  preferences?: {
+    difficulty?: ExerciseDifficulty
+    language?: string
+    useSavedVocabulary?: boolean
+    includeExplanations?: boolean
+  }
+  correlationId: string
+}

@@ -10,7 +10,7 @@ import { ToastProvider } from '../components/ui/Toast'
 import ErrorBoundary from '../components/ui/ErrorBoundary'
 import OfflineIndicator from '../components/ui/OfflineIndicator'
 import PwaUpdateBanner from '../components/ui/PwaUpdateBanner'
-import { initProactiveTutor } from '../services/proactiveTutorInit'
+import { initializeAITutorEngine, initializeLearningEngine } from '../services/engineBootstrap'
 import '../features/sync/bridge/webSyncBridge'
 import { APP_SCHEMA } from '@ielts/storage'
 import { initDb, getDb } from '@ielts/storage'
@@ -59,7 +59,10 @@ export default function App() {
       }
       window.dispatchEvent(new Event('app-db-ready'))
       try {
-        await initProactiveTutor()
+        await initializeAITutorEngine()
+      } catch { /* non-critical */ }
+      try {
+        await initializeLearningEngine()
       } catch { /* non-critical */ }
     }
 

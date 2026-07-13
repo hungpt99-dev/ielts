@@ -1,6 +1,6 @@
 import { callAI } from '../client'
 import type { ProviderConfig } from '../client/types'
-import { buildVocabularyDetailsPrompt, buildVocabularyQuizPrompt } from '../prompts'
+import { buildVocabularyDetailsPrompt, buildVocabularyQuizPrompt, VOCABULARY_DETAILS_SYSTEM_PROMPT, VOCABULARY_QUIZ_SYSTEM_PROMPT } from '../prompts'
 import { vocabularyDetailsSchema, vocabularyQuizSchema } from '../schemas'
 import type { VocabularyDetails, VocabularyQuiz } from '../schemas'
 import { AiGenerateResultCache, extractJSON } from '../utils'
@@ -27,7 +27,7 @@ export async function generateVocabularyDetails(
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
   }
 
-  const { systemPrompt, userPrompt } = buildVocabularyDetailsPrompt(word, sourceSentence, topic, nativeLanguage)
+  const userPrompt = buildVocabularyDetailsPrompt(word, sourceSentence, topic, nativeLanguage)
 
   const url = `${config.baseUrl.replace(/\/+$/, '')}/chat/completions`
 
@@ -41,7 +41,7 @@ export async function generateVocabularyDetails(
       body: JSON.stringify({
         model: config.model,
         messages: [
-          { role: 'system', content: systemPrompt },
+          { role: 'system', content: VOCABULARY_DETAILS_SYSTEM_PROMPT },
           { role: 'user', content: userPrompt },
         ],
         temperature: 0.5,
@@ -98,7 +98,7 @@ export async function generateVocabularyQuiz(
     return { data: null, error: 'API key not configured.' }
   }
 
-  const { systemPrompt, userPrompt } = buildVocabularyQuizPrompt(
+  const userPrompt = buildVocabularyQuizPrompt(
     word,
     details.meaning,
     details.exampleSentence,
@@ -107,7 +107,7 @@ export async function generateVocabularyQuiz(
   )
 
   try {
-    const { content, error } = await callAI(systemPrompt, userPrompt, getConfig)
+    const { content, error } = await callAI(VOCABULARY_QUIZ_SYSTEM_PROMPT, userPrompt, getConfig)
     if (error) return { data: null, error }
 
     const json = extractJSON(content!)

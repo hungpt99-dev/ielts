@@ -36,6 +36,7 @@ export type {
 export type {
   Exercise, ExerciseType, ExerciseSourceType, ExplanationPolicy,
   EvaluationPolicy, LearningContentPayload, ExerciseTemplate, ExerciseTemplateInput,
+  GenerateExerciseRequest,
 } from './domain/entities/exercise'
 export type {
   ExerciseQuestion, ExerciseQuestionType,
@@ -108,3 +109,24 @@ export {
 } from './daily-plan/PlanEngineIntegration';
 export type { SettingsSource, PersonalizationSource, BuildProfileParams } from './daily-plan/PlanEngineIntegration';
 export type * from './daily-plan/types';
+
+// ── Skill Modules (NEW — implemented) ─────────────────────────────────
+export { SkillRegistry, WritingSkillModule, SpeakingSkillModule, ReadingSkillModule, ListeningSkillModule, VocabularySkillModule, GrammarSkillModule, createDefaultSkillRegistry } from './skills'
+export type { LearningSkillModule, SkillActivityGenerationRequest, SkillActivityGenerationResult, SkillEvaluationRequest, SkillEvaluationResult, SkillReviewRequest, SkillReviewResult } from './skills'
+
+// ── Domain Services (NEW — implemented) ───────────────────────────────
+export { analyzeObjective, selectExerciseConfig, buildProgressEvidence, aggregateSkillProgress, buildMistakeEvidence, detectRecurrencePattern, buildSkillEvidence, aggregateSkillEvidence, getWeakestSkills } from './domain/services'
+export type { ObjectiveAnalysisInput, ExerciseSelectionInput, SelectedExerciseConfig, BuildProgressEvidenceInput, BuildMistakeEvidenceInput } from './domain/services'
+
+// ── Content System (NEW — implemented) ────────────────────────────────
+export { ContentSourceRegistry, ArticleContentAdapter, YouTubeTranscriptAdapter, SavedVocabularyAdapter, normalizeContent, estimateTokens, selectRelevantSegment } from './content'
+export type { ContentAdapter, ContentSourceType, ContentValidationResult } from './content'
+
+// ── Infrastructure Adapters (NEW — implemented) ───────────────────────
+export { InMemoryLearnerContextAdapter } from './infrastructure/adapters'
+export { OfflineTutorIntelligenceAdapter } from './infrastructure/ai'
+export { InMemoryCache, CachedActivityGenerator } from './infrastructure/cache'
+export type { CacheEntry } from './infrastructure/cache'
+export { MigrationRunner } from './infrastructure/migrations'
+export type { Migration, MigrationRecord } from './infrastructure/migrations'
+export { InMemorySessionRepository, InMemoryExerciseRepository, InMemoryAttemptRepository, InMemoryOutcomeRepository } from './infrastructure/persistence'

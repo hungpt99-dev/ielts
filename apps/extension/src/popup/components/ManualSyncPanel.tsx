@@ -11,7 +11,7 @@ function formatTime(iso: string | undefined): string {
 }
 
 export default function ManualSyncPanel({ onBack }: { onBack: () => void }) {
-  const { state, result, checkWebsite, startSync, openWebsite, reset } = useBidirectionalSync()
+  const { state, result, checkWebsite, startSync, openWebsite } = useBidirectionalSync()
 
   useEffect(() => { checkWebsite() }, [checkWebsite])
 

@@ -75,7 +75,21 @@ export async function submitAnswer(
     for (const eval_ of evaluations) {
       for (const m of eval_.mistakes) {
         if (m.originalResponse) {
-          try { await deps.mistakeRepository.save(m) } catch { /* continue */ }
+          try {
+            await deps.mistakeRepository.save(m)
+            deps.eventPublisher.publish({
+              id: crypto.randomUUID?.() ?? `${Date.now()}-mistake`,
+              type: 'mistake_detected',
+              occurredAt: new Date().toISOString(),
+              source: 'learning-engine',
+              sessionId: request.sessionId,
+              mistakeId: m.id,
+              skill: m.skill,
+              category: m.category,
+              recurrenceCount: m.recurrenceCount,
+              schemaVersion: '1.0',
+            })
+          } catch { /* continue */ }
         }
       }
     }

@@ -2,15 +2,15 @@ import type { PromptVersion } from './types'
 
 const ARTICLE_PROMPT_VERSION: PromptVersion = { version: 1, description: 'Initial article question prompts' }
 
+export const ARTICLE_QUESTION_SYSTEM_PROMPT = 'You are an IELTS exam question writer. Always respond with valid JSON only, no other text.'
+
 export function buildArticleQuestionPrompt(
   articleContent: string,
-  articleTitle: string,
-  topic: string,
-  questionCount: number,
-): { systemPrompt: string; userPrompt: string } {
-  const systemPrompt = 'You are an IELTS exam question writer. Always respond with valid JSON only, no other text.'
-
-  const userPrompt = `Generate ${questionCount} IELTS-style questions based on the following article.
+  articleTitle = '',
+  topic = '',
+  questionCount = 5,
+): string {
+  return `Generate ${questionCount} IELTS-style questions based on the following article.
 
 Article Title: "${articleTitle}"
 ${topic ? `Topic: ${topic}\n` : ''}
@@ -42,8 +42,6 @@ Requirements:
 - Realistic IELTS difficulty
 - Include the relevant passage reference when applicable
 - Clear explanations referencing the text`
-
-  return { systemPrompt, userPrompt }
 }
 
 export function getVersionInfo(): PromptVersion {

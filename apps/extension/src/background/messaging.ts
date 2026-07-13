@@ -451,7 +451,7 @@ export function initMessaging(): void {
 
   registerHandler('SAVE_YOUTUBE_VOCAB_TO_IDB', async (_msg) => {
     const msg = _msg as { type: string; payload: Record<string, unknown> }
-    const { word, sentence, videoTitle, videoUrl, timestamp } = msg.payload
+    const { word, sentence, videoTitle, videoUrl } = msg.payload
     const now = new Date().toISOString()
     await saveVocabularyEntry({
       id: crypto.randomUUID(),
@@ -575,7 +575,7 @@ export function initMessaging(): void {
   })
 
   registerHandler('FETCH_TRANSCRIPT_DIRECT', async (_msg) => {
-    const msg = _msg as { type: 'FETCH_TRANSCRIPT_DIRECT'; payload: { videoId: string; language: string } }
+    const msg = _msg as unknown as { type: 'FETCH_TRANSCRIPT_DIRECT'; payload: { videoId: string; language: string } }
     const { videoId, language } = msg.payload
     if (!videoId) return { success: false, error: 'INVALID_VIDEO_ID' }
 

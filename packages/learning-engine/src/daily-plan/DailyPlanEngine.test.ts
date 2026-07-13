@@ -4,7 +4,6 @@ import type {
   NormalizedProfile,
   WeeklyAvailability,
   DayAvailability,
-  StudyPlan,
 } from './types';
 
 function fullAvailability(minutes: number): DayAvailability {
@@ -29,7 +28,7 @@ function createWeeklyAvailability(
   };
   for (const [day, avail] of Object.entries(override)) {
     if (avail !== undefined) {
-      (defaults as Record<string, DayAvailability>)[day] = avail;
+      (defaults as unknown as Record<string, DayAvailability>)[day] = avail;
     }
   }
   return defaults;
@@ -131,7 +130,7 @@ describe('DailyPlanEngine', () => {
           const total = tasksByDate.get(task.date) ?? 0;
           tasksByDate.set(task.date, total + task.estimatedMinutes);
         }
-        for (const [date, total] of tasksByDate) {
+        for (const [, total] of tasksByDate) {
           expect(total).toBeLessThanOrEqual(60);
         }
       }
@@ -152,7 +151,7 @@ describe('DailyPlanEngine', () => {
         }),
       });
       const result = engine.generatePlan(profile);
-      expect(['insufficient-time', 'needs-profile-completion', 'requires-confirmation']).toContain(result.status);
+      expect(['failure', 'requires-confirmation']).toContain(result.status);
     });
 
     it('prioritizes weak skills in allocation', () => {
@@ -663,7 +662,7 @@ describe('DailyPlanEngine', () => {
       });
       const result = engine.generatePlan(profile);
 
-      expect(['success', 'requires-confirmation', 'insufficient-time', 'needs-profile-completion']).toContain(result.status);
+      expect(['success', 'requires-confirmation', 'failure']).toContain(result.status);
     });
 
     it('handles exam on start date (same-day)', () => {
@@ -772,7 +771,7 @@ describe('DailyPlanEngine', () => {
       });
       const result = engine.generatePlan(profile);
 
-      expect(['success', 'requires-confirmation', 'insufficient-time', 'needs-profile-completion']).toContain(result.status);
+      expect(['success', 'requires-confirmation', 'failure']).toContain(result.status);
     });
 
     it('generates plan with general-training exam type', () => {

@@ -1,5 +1,5 @@
 import type { FeedbackSummary } from '../types/aiTutor.types'
-import type { ProgressReview } from '../services/teacherProgressReviewService'
+import type { ProgressReview } from './TeacherProgressReviewCard'
 import { IconPlay, IconStreak, IconTimer, IconVocabulary, IconMistakes, IconTarget } from '@ielts/ui'
 
 interface TutorFeedbackSummaryCardProps {

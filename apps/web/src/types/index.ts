@@ -57,38 +57,6 @@ export type {
   AppExportData,
 } from '../models'
 
-export type {
-  AssistantMode,
-  QuickActionType,
-  MessageRole,
-  ChatMessageMetadata,
-  ChatMessage,
-  ChatSession,
-  MemoryWeakPoint,
-  MemoryMistakePattern,
-  MemoryFeedbackSummary,
-  MemoryGoal,
-  TutorMemory,
-  UserTutorPreferences,
-  ReminderType,
-  Reminder,
-  SuggestionType,
-  ProactiveSuggestion,
-  SavedNoteType,
-  SavedAiNote,
-  WritingFeedbackRecord,
-  ExerciseType,
-  ExerciseQuestion,
-  ExerciseResult,
-  TutorContext,
-  TutorExportData,
-} from '../models/aiTutorModels'
-
 export {
   DEFAULT_SETTINGS,
 } from '../models'
-export {
-  DEFAULT_TUTOR_PREFERENCES,
-  createDefaultTutorMemory,
-  REMINDER_TYPE_LABELS,
-} from '../models/aiTutorModels'

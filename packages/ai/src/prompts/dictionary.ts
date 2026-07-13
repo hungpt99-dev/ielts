@@ -6,15 +6,15 @@ function translationTarget(lang: string): string {
 
 const DICTIONARY_PROMPT_VERSION: PromptVersion = { version: 1, description: 'Initial dictionary prompts' }
 
+export const DICTIONARY_ENTRY_SYSTEM_PROMPT = 'You are an IELTS dictionary assistant. Respond with valid JSON only, no other text.'
+
 export function buildDictionaryEntryPrompt(
   selectedWord: string,
-  contextSentence: string,
+  contextSentence = '',
   nativeLanguage = '',
-): { systemPrompt: string; userPrompt: string } {
+): string {
   const lang = translationTarget(nativeLanguage)
-  const systemPrompt = 'You are an IELTS dictionary assistant. Respond with valid JSON only, no other text.'
-
-  const userPrompt = `Look up the word "${selectedWord}"${
+  return `Look up the word "${selectedWord}"${
     contextSentence ? ` from the sentence: "${contextSentence}"` : ''
   } and return detailed dictionary information.
 
@@ -39,8 +39,6 @@ Respond with valid JSON in this exact format:
 }
 
 IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, omit verbConjugation entirely.`
-
-  return { systemPrompt, userPrompt }
 }
 
 export function getVersionInfo(): PromptVersion {

@@ -31,5 +31,7 @@ export interface ListeningExerciseResult {
 
 export interface ListeningTutorModule {
   explainTranscript(request: ListeningExplanationRequest): Promise<ListeningExplanationResult>
+
+  /** @deprecated Use learning engine's `generateActivity()` via `@ielts/learning-engine` instead */
   generateExercises(request: ListeningExerciseRequest): Promise<ListeningExerciseResult>
 }

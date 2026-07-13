@@ -13,6 +13,7 @@ import type { MistakeRepository } from '../ports/mistake-repository'
 import type { VocabularyRepository } from '../ports/vocabulary-repository'
 import type { LearningEventPublisher } from '../ports/learning-event-publisher'
 import type { ClockPort } from '../ports/clock-port'
+import type { SkillRegistry } from '../skills/skill-registry'
 
 export interface LearningEngineDependencies {
   contextPort: LearnerContextPort
@@ -27,6 +28,7 @@ export interface LearningEngineDependencies {
   vocabularyRepository: VocabularyRepository
   eventPublisher: LearningEventPublisher
   clock: ClockPort
+  skillRegistry?: SkillRegistry
 }
 
 function metadata(aiUsed: boolean, cacheHit: boolean): LearningOperationMetadata {
@@ -38,6 +40,10 @@ export class LearningEngineImpl implements LearningEngine {
 
   constructor(deps: LearningEngineDependencies) {
     this.deps = deps
+  }
+
+  getSkillRegistry(): SkillRegistry | undefined {
+    return this.deps.skillRegistry
   }
 
   async createSession(
@@ -71,6 +77,8 @@ export class LearningEngineImpl implements LearningEngine {
         exerciseRepository: this.deps.exerciseRepository,
         tutorPort: this.deps.tutorPort,
         contextPort: this.deps.contextPort,
+        eventPublisher: this.deps.eventPublisher,
+        skillRegistry: this.deps.skillRegistry,
       })
       return { status: 'success', data: result, metadata: metadata(result.aiUsed, result.cacheHit) }
     } catch (err) {
@@ -117,6 +125,8 @@ export class LearningEngineImpl implements LearningEngine {
         sessionRepository: this.deps.sessionRepository,
         attemptRepository: this.deps.attemptRepository,
         outcomeRepository: this.deps.outcomeRepository,
+        progressRepository: this.deps.progressRepository,
+        studyPlanPort: this.deps.studyPlanPort,
         mistakeRepository: this.deps.mistakeRepository,
         vocabularyRepository: this.deps.vocabularyRepository,
         eventPublisher: this.deps.eventPublisher,
@@ -148,9 +158,55 @@ export class LearningEngineImpl implements LearningEngine {
   }
 
   async getRecommendedActivity(
-    _request: LearningRecommendationRequest,
+    request: LearningRecommendationRequest,
   ): Promise<LearningOperationResult<LearningRecommendationResult>> {
-    return { status: 'success', data: { recommendations: [] }, metadata: metadata(false, false) }
+    try {
+      const recommendations: import('../domain/entities/learning-recommendation').LearningRecommendation[] = []
+
+      if (request.skill) {
+        const recentMistakes = await this.deps.mistakeRepository.findRecent(request.skill, 3)
+        if (recentMistakes.length > 0) {
+          recommendations.push({
+            action: 'review-mistakes',
+            reason: `${recentMistakes.length} recent mistake${recentMistakes.length > 1 ? 's' : ''} in ${request.skill} need review`,
+            estimatedMinutes: 15,
+            sourceIds: recentMistakes.map(m => m.id),
+            priority: 0.9,
+          })
+        }
+      }
+
+      const activeSessions = await this.deps.sessionRepository.findActive()
+      if (activeSessions.length > 0) {
+        recommendations.push({
+          action: 'continue-session',
+          reason: `Continue your ${activeSessions[0].skill} session`,
+          estimatedMinutes: activeSessions[0].plannedDurationMinutes,
+          sourceIds: [activeSessions[0].id],
+          priority: 0.7,
+        })
+      }
+
+      if (this.deps.vocabularyRepository) {
+        const dueVocab = await this.deps.vocabularyRepository.getDueForReview(5)
+        if (dueVocab.length > 0) {
+          recommendations.push({
+            action: 'review-vocabulary',
+            reason: `${dueVocab.length} vocabulary item${dueVocab.length > 1 ? 's' : ''} due for review`,
+            estimatedMinutes: 10,
+            sourceIds: dueVocab.map(v => v.id),
+            priority: 0.8,
+          })
+        }
+      }
+
+      return { status: 'success', data: { recommendations }, metadata: metadata(false, false) }
+    } catch (err) {
+      return {
+        status: 'failure',
+        error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to get recommendations', recoverable: true },
+      }
+    }
   }
 
   async createSessionFromRoadmapTask(

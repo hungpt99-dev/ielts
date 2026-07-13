@@ -9,7 +9,7 @@ export class AiCache<T = unknown> {
   get(key: string): T | null {
     const entry = this.cache.get(key)
     if (!entry) return null
-    if (Date.now() - entry.timestamp > this.ttl) {
+    if (Date.now() - entry.timestamp >= this.ttl) {
       this.cache.delete(key)
       return null
     }

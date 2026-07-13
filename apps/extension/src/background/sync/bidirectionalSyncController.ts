@@ -184,7 +184,7 @@ export async function syncBidirectional(): Promise<SyncSummary> {
 
       function trySend(attempt: number) {
         chrome.tabs.sendMessage(
-          tab.tabId,
+          tab!.tabId,
           { type: 'EXTENSION_SYNC_DATA', data: extData },
           (response: { success: boolean; data?: Record<string, unknown> } | undefined) => {
             if (chrome.runtime.lastError) {
@@ -193,7 +193,7 @@ export async function syncBidirectional(): Promise<SyncSummary> {
                 if (attempt === 1) {
                   // Try injecting content script
                   chrome.scripting.executeScript({
-                    target: { tabId: tab.tabId },
+                    target: { tabId: tab!.tabId },
                     files: ['content.js'],
                   }).catch(() => {})
                 }

@@ -13,8 +13,6 @@ import {
   importPublicApiContentBatch,
 } from '../api/import'
 import {
-  classifyContent,
-  classifyAndSave,
   extractVocabulary,
   generateReadingQuestions,
   generateListeningExercise,
@@ -253,207 +251,6 @@ describe('importPublicApiContentBatch', () => {
   })
 })
 
-// ── AI Classification ──────────────────────────────────────────────
-
-describe('classifyContent', () => {
-  beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn())
-  })
-
-  afterEach(() => {
-    vi.unstubAllGlobals()
-  })
-
-  it('returns classified data on success', async () => {
-    const aiResponse: PublicApiAiClassifyResponse = {
-      topic: 'Environment',
-      skill: 'reading',
-      difficulty: 'medium',
-      tags: ['climate', 'pollution'],
-      vocabulary: ['emission', 'sustainable'],
-      summary: 'A text about environment',
-      keyPhrases: ['climate change'],
-      questions: ['What causes pollution?'],
-    }
-    vi.mocked(fetch).mockResolvedValueOnce(
-      createMockResponse(mockAiResponse(JSON.stringify(aiResponse))),
-    )
-
-    const result = await classifyContent(
-      { contentId: '1', title: 'Ecology', content: 'Some text', contentType: 'article' },
-      mockAiConfig,
-    )
-
-    expect(result.data).toEqual(aiResponse)
-    expect(result.error).toBeNull()
-  })
-
-  it('returns error on network failure', async () => {
-    vi.mocked(fetch).mockRejectedValueOnce(new Error('Network error'))
-
-    const result = await classifyContent(
-      { contentId: '1', title: 'Test', content: 'Content', contentType: 'article' },
-      mockAiConfig,
-    )
-
-    expect(result.data).toBeNull()
-    expect(result.error).toContain('Network error')
-  })
-
-  it('returns error on invalid JSON response', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce(
-      createMockResponse(mockAiResponse('not json at all')),
-    )
-
-    const result = await classifyContent(
-      { contentId: '1', title: 'Test', content: 'Content', contentType: 'article' },
-      mockAiConfig,
-    )
-
-    expect(result.data).toBeNull()
-    expect(result.error).toContain('valid JSON')
-  })
-
-  it('returns error when AI returns empty content', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce(
-      createMockResponse({ choices: [{ message: { content: '' } }] }),
-    )
-
-    const result = await classifyContent(
-      { contentId: '1', title: 'Test', content: 'Content', contentType: 'article' },
-      mockAiConfig,
-    )
-
-    expect(result.data).toBeNull()
-    expect(result.error).toContain('empty response')
-  })
-
-  it('returns error when no API key is configured', async () => {
-    const result = await classifyContent(
-      { contentId: '1', title: 'Test', content: 'Content', contentType: 'article' },
-      { ...mockAiConfig, apiKey: '' },
-    )
-
-    expect(result.data).toBeNull()
-    expect(result.error).toContain('API key not configured')
-  })
-
-  it('extracts JSON from markdown code blocks', async () => {
-    const aiResponse: PublicApiAiClassifyResponse = {
-      topic: 'Technology',
-      skill: 'vocabulary',
-      difficulty: 'medium',
-      tags: ['ai'],
-      vocabulary: ['algorithm'],
-      summary: 'AI text',
-      keyPhrases: ['machine learning'],
-      questions: ['What is AI?'],
-    }
-    vi.mocked(fetch).mockResolvedValueOnce(
-      createMockResponse(mockAiResponse('```json\n' + JSON.stringify(aiResponse) + '\n```')),
-    )
-
-    const result = await classifyContent(
-      { contentId: '1', title: 'AI', content: 'Content', contentType: 'article' },
-      mockAiConfig,
-    )
-
-    expect(result.data).toEqual(aiResponse)
-    expect(result.error).toBeNull()
-  })
-
-  it('handles 401 from AI API', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce(createMockResponse({ error: 'Unauthorized' }, 401, false))
-
-    const result = await classifyContent(
-      { contentId: '1', title: 'Test', content: 'Content', contentType: 'article' },
-      mockAiConfig,
-    )
-
-    expect(result.data).toBeNull()
-    expect(result.error).toContain('Invalid AI API key')
-  })
-
-  it('handles 429 from AI API', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce(createMockResponse({ error: 'Rate limited' }, 429, false))
-
-    const result = await classifyContent(
-      { contentId: '1', title: 'Test', content: 'Content', contentType: 'article' },
-      mockAiConfig,
-    )
-
-    expect(result.data).toBeNull()
-    expect(result.error).toContain('rate limit exceeded')
-  })
-})
-
-describe('classifyAndSave', () => {
-  beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn())
-  })
-
-  afterEach(() => {
-    vi.unstubAllGlobals()
-    vi.resetAllMocks()
-  })
-
-  it('classifies content and saves to database', async () => {
-    const aiResponse: PublicApiAiClassifyResponse = {
-      topic: 'Education',
-      skill: 'reading',
-      difficulty: 'medium',
-      tags: ['school'],
-      vocabulary: ['curriculum'],
-      summary: 'Education summary',
-      keyPhrases: ['learning'],
-      questions: ['What is education?'],
-    }
-    vi.mocked(fetch).mockResolvedValueOnce(
-      createMockResponse(mockAiResponse(JSON.stringify(aiResponse))),
-    )
-
-    const result = await classifyAndSave('content-1', 'Education', 'Some text', 'article', mockAiConfig)
-
-    expect(result.data).toEqual(aiResponse)
-    expect(result.error).toBeNull()
-    expect(mockDb.updatePublicApiContent).toHaveBeenCalledWith('content-1', expect.objectContaining({
-      topic: 'Education',
-      skill: 'reading',
-    }))
-  })
-
-  it('returns error when classification fails', async () => {
-    vi.mocked(fetch).mockRejectedValueOnce(new Error('API unreachable'))
-
-    const result = await classifyAndSave('content-1', 'Title', 'Content', 'article', mockAiConfig)
-
-    expect(result.data).toBeNull()
-    expect(result.error).toBeTruthy()
-  })
-
-  it('returns error when DB save fails', async () => {
-    const aiResponse: PublicApiAiClassifyResponse = {
-      topic: 'Technology',
-      skill: 'vocabulary',
-      difficulty: 'easy',
-      tags: [],
-      vocabulary: [],
-      summary: 'Test',
-      keyPhrases: [],
-      questions: [],
-    }
-    vi.mocked(fetch).mockResolvedValueOnce(
-      createMockResponse(mockAiResponse(JSON.stringify(aiResponse))),
-    )
-    mockDb.updatePublicApiContent.mockRejectedValueOnce(new Error('DB update failed'))
-
-    const result = await classifyAndSave('content-1', 'Title', 'Content', 'article', mockAiConfig)
-
-    expect(result.data).toBeNull()
-    expect(result.error).toContain('DB update failed')
-  })
-})
-
 // ── AI Exercise Generation ─────────────────────────────────────────
 
 describe('AI generation functions', () => {
@@ -466,34 +263,42 @@ describe('AI generation functions', () => {
   })
 
   describe('extractVocabulary', () => {
-    it('returns extracted vocabulary on success', async () => {
-      const vocabData = {
-        words: [{
-          word: 'sustainable',
-          meaning: 'able to be maintained over time',
-          partOfSpeech: 'adjective',
-          example: 'Sustainable energy is crucial.',
-          synonyms: ['renewable'],
-          collocations: ['sustainable development'],
-        }],
-      }
-      vi.mocked(fetch).mockResolvedValueOnce(createMockResponse(mockAiResponse(JSON.stringify(vocabData))))
-
-      const result = await extractVocabulary('Content about sustainability', mockAiConfig)
-
-      expect(result.data).toEqual(vocabData)
-      expect(result.error).toBeNull()
-    })
-
-    it('returns error when no words extracted', async () => {
-      vi.mocked(fetch).mockResolvedValueOnce(createMockResponse(mockAiResponse(JSON.stringify({ words: [] }))))
-
-      const result = await extractVocabulary('Content', mockAiConfig)
-
-      expect(result.data).toBeNull()
-      expect(result.error).toContain('No vocabulary words extracted')
-    })
+  beforeEach(() => {
+    vi.stubGlobal('fetch', vi.fn())
   })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('returns extracted vocabulary on success', async () => {
+    const vocabData = {
+      words: [{
+        word: 'sustainable',
+        meaning: 'able to be maintained over time',
+        partOfSpeech: 'adjective',
+        example: 'Sustainable energy is crucial.',
+        synonyms: ['renewable'],
+        collocations: ['sustainable development'],
+      }],
+    }
+    vi.mocked(fetch).mockResolvedValueOnce(createMockResponse(mockAiResponse(JSON.stringify(vocabData))))
+
+    const result = await extractVocabulary('Content about sustainability', mockAiConfig)
+
+    expect(result.data).toEqual(vocabData)
+    expect(result.error).toBeNull()
+  })
+
+  it('returns error when no words extracted', async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(createMockResponse(mockAiResponse(JSON.stringify({ words: [] }))))
+
+    const result = await extractVocabulary('Content', mockAiConfig)
+
+    expect(result.data).toBeNull()
+    expect(result.error).toContain('No vocabulary words extracted')
+  })
+})
 
   describe('generateReadingQuestions', () => {
     it('returns questions on success', async () => {
@@ -1024,34 +829,8 @@ describe('Integration: full import flow', () => {
     expect(mockDb.addPublicApiContent).not.toHaveBeenCalled()
   })
 
-  it('classifies imported content via AI after import', async () => {
-    const aiResponse: PublicApiAiClassifyResponse = {
-      topic: 'Environment',
-      skill: 'reading',
-      difficulty: 'medium',
-      tags: ['climate', 'weather'],
-      vocabulary: ['temperature', 'shift'],
-      summary: 'Article about climate change',
-      keyPhrases: ['climate change', 'long-term shifts'],
-      questions: ['What causes climate change?'],
-    }
-
-    vi.mocked(fetch).mockResolvedValueOnce(
-      createMockResponse(mockAiResponse(JSON.stringify(aiResponse))),
-    )
-
-    const result = await classifyAndSave(
-      'integration-test-uuid',
-      'Climate Change',
-      'Climate change refers to long-term shifts...',
-      'article',
-      mockAiConfig,
-    )
-
-    expect(result.data).toEqual(aiResponse)
-    expect(result.error).toBeNull()
-  })
 })
+
 
 // ── CORS / Error Handling Integration ──────────────────────────────
 
@@ -1104,13 +883,10 @@ describe('AI API HTTP error handling', () => {
   it('handles 401 from AI API', async () => {
     vi.mocked(fetch).mockResolvedValueOnce(createMockResponse({ error: 'Unauthorized' }, 401, false))
 
-    const result = await classifyContent(
-      { contentId: '1', title: 'Test', content: 'Content', contentType: 'article' },
-      mockAiConfig,
-    )
+    const result = await extractVocabulary('Some content', mockAiConfig)
 
     expect(result.data).toBeNull()
-    expect(result.error).toContain('Invalid AI API key')
+    expect(result.error).toContain('Invalid API key')
   })
 
   it('handles 429 from AI API', async () => {
@@ -1118,16 +894,13 @@ describe('AI API HTTP error handling', () => {
 
     const result = await extractVocabulary('Some content', mockAiConfig)
     expect(result.data).toBeNull()
-    expect(result.error).toContain('rate limit exceeded')
+    expect(result.error).toContain('Rate limit exceeded')
   })
 
   it('handles network errors in AI calls', async () => {
     vi.mocked(fetch).mockRejectedValueOnce(new TypeError('Failed to fetch'))
 
-    const result = await classifyContent(
-      { contentId: '1', title: 'Test', content: 'Content', contentType: 'article' },
-      mockAiConfig,
-    )
+    const result = await extractVocabulary('Some content', mockAiConfig)
 
     expect(result.data).toBeNull()
     expect(result.error).toContain('Network error')

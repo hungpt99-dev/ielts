@@ -19,7 +19,6 @@ import type {
   PlanWarning,
   PlanAdjustmentSuggestion,
   MissedTaskResolution,
-  MissedTaskAction,
   RegenerationMode,
   StudyPlanPreview,
   GenerateStudyPlanResult,
@@ -28,6 +27,8 @@ import type {
   PlanRepairAction,
   PlanProgress,
   PlanSummary,
+  PlanGenerationProgress,
+  PlanGenerationStage,
 } from './types';
 
 // ── Constants ──
@@ -36,7 +37,6 @@ const ALLOWED_DURATIONS = [10, 15, 20, 30, 45, 60, 90] as const;
 const DEFAULT_BUFFER_PERCENTAGE = 0.1;
 const REVIEW_INTERVALS = [1, 3, 7, 14] as const;
 const MIN_SESSION_MINUTES = 10;
-const MAX_PHASES = 6;
 const SKILL_NAMES: StudyTaskSkill[] = ['listening', 'reading', 'writing', 'speaking', 'vocabulary', 'grammar'];
 const CORE_SKILLS: StudyTaskSkill[] = ['listening', 'reading', 'writing', 'speaking'];
 const ALL_DAYS: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -66,6 +66,7 @@ export interface DailyPlanEngineConfig {
   maxRepairAttempts?: number;
   engineVersion?: string;
   schemaVersion?: string;
+  onProgress?: (progress: PlanGenerationProgress) => void;
 }
 
 // ── Date Utilities ──
@@ -122,28 +123,46 @@ export class DailyPlanEngine {
   private readonly maxRepairAttempts: number;
   private readonly engineVersion: string;
   private readonly schemaVersion: string;
+  private readonly onProgress?: (progress: PlanGenerationProgress) => void;
 
   constructor(config: DailyPlanEngineConfig = {}) {
     this.bufferPercentage = config.bufferPercentage ?? DEFAULT_BUFFER_PERCENTAGE;
     this.maxRepairAttempts = config.maxRepairAttempts ?? 3;
     this.engineVersion = config.engineVersion ?? '1.0.0';
     this.schemaVersion = config.schemaVersion ?? '1.0.0';
+    this.onProgress = config.onProgress;
   }
 
   // ── Public API ──
 
-  generatePlan(profile: NormalizedProfile): GenerateStudyPlanResult {
+  generatePlan(profile: NormalizedProfile, signal?: AbortSignal): GenerateStudyPlanResult {
+    const cancelled = () => signal?.aborted ?? false
+
+    this.reportProgress('normalizing-profile', 0, 12, 'Normalizing profile data');
+    this.reportProgress('validating-profile', 0, 12, 'Validating profile');
+
+    if (cancelled()) return { status: 'cancelled' }
     const window = this.calculatePlanningWindow(profile);
+    this.reportProgress('calculating-availability', 1, 12, 'Calculating available study time');
+
+    if (cancelled()) return { status: 'cancelled' }
     const dailyCapacities = this.calculateDailyCapacities(profile, window);
     const skillGaps = this.analyzeSkillGaps(profile);
     const skillAllocation = this.createSkillAllocation(skillGaps);
+    this.reportProgress('analyzing-skills', 2, 12, 'Analyzing skill gaps');
+
+    if (cancelled()) return { status: 'cancelled' }
     const feasibility = this.analyzeFeasibility(window, profile, skillGaps);
+    this.reportProgress('checking-feasibility', 3, 12, 'Checking plan feasibility');
+
+    if (cancelled()) return { status: 'cancelled' }
 
     if (feasibility.status === 'insufficient-time') {
       return {
-        status: 'needs-profile-completion',
-        missingFields: [],
-        message: feasibility.warnings.map(w => w.message).join(' '),
+        status: 'failure',
+        reason: { code: 'insufficient-time', message: feasibility.warnings.map(w => w.message).join(' '), recoverable: true, suggestedAction: 'Adjust your exam date, target score, or study availability' },
+        validationIssues: [],
+        suggestions: this.generateSuggestions(feasibility),
       };
     }
 
@@ -155,12 +174,22 @@ export class DailyPlanEngine {
       };
     }
 
+    this.reportProgress('planning-phases', 4, 12, 'Building learning phases');
+    if (cancelled()) return { status: 'cancelled' }
     const phases = this.planPhases(window, profile, skillGaps);
     const timeBudget = this.allocateTimeBudget(window, profile, feasibility);
+    this.reportProgress('scheduling-tasks', 5, 12, 'Scheduling study tasks');
+    if (cancelled()) return { status: 'cancelled' }
     const plan = this.buildPlan(profile, window, feasibility, timeBudget, skillAllocation, phases, dailyCapacities, skillGaps);
+    this.reportProgress('adding-reviews', 6, 12, 'Adding review tasks');
+    this.reportProgress('adding-mock-tests', 7, 12, 'Adding mock tests');
+    this.reportProgress('validating-plan', 8, 12, 'Validating your schedule');
+    if (cancelled()) return { status: 'cancelled' }
     const validationIssues = this.validatePlan(plan);
 
     if (validationIssues.some(i => i.severity === 'error')) {
+      this.reportProgress('repairing-plan', 10, 12, 'Repairing schedule conflicts');
+      if (cancelled()) return { status: 'cancelled' }
       const repaired = this.repairPlan(plan, validationIssues);
       if (repaired) {
         const finalIssues = this.validatePlan(repaired);
@@ -172,6 +201,7 @@ export class DailyPlanEngine {
             suggestions: this.generateSuggestions(feasibility),
           };
         }
+        this.reportProgress('completed', 12, 12, 'Plan generated successfully');
         return this.successResult(repaired, feasibility, validationIssues);
       }
       return {
@@ -182,6 +212,7 @@ export class DailyPlanEngine {
       };
     }
 
+    this.reportProgress('completed', 12, 12, 'Plan generated successfully');
     return this.successResult(plan, feasibility, validationIssues);
   }
 
@@ -460,7 +491,7 @@ export class DailyPlanEngine {
       const skillAllocation = this.createSkillAllocation(skillGaps);
       const feasibility = this.analyzeFeasibility(window, newProfile, skillGaps);
       const phases = this.planPhases(window, newProfile, skillGaps);
-      const timeBudget = this.allocateTimeBudget(window, newProfile, feasibility);
+      this.allocateTimeBudget(window, newProfile, feasibility);
       const dailyCapacities = this.calculateDailyCapacities(newProfile, window);
 
       const retainedTasks = mode === 'exam-date-change'
@@ -662,8 +693,9 @@ export class DailyPlanEngine {
 
   private analyzeSkillGaps(profile: NormalizedProfile): SkillGapScore[] {
     const scores: SkillGapScore[] = [];
+    const core = CORE_SKILLS as Array<'listening' | 'reading' | 'writing' | 'speaking'>;
 
-    for (const skill of CORE_SKILLS) {
+    for (const skill of core) {
       const current = profile.currentSkillBands[skill];
       const target = profile.targetSkillBands[skill] ?? profile.targetOverallBand;
       const bandGap = Math.max(0, target - current);
@@ -923,7 +955,6 @@ export class DailyPlanEngine {
     const weeks = this.createWeeks(phases, profile, window);
     const tasks = this.scheduleAllTasks(phases, weeks, dailyCapacities, skillAllocation, timeBudget, profile, window, skillGaps);
 
-    const scheduledMinutes = tasks.reduce((s, t) => s + t.estimatedMinutes, 0);
     for (const phase of phases) {
       const phaseTasks = tasks.filter(t => t.phaseId === phase.id);
       phase.scheduledMinutes = phaseTasks.reduce((s, t) => s + t.estimatedMinutes, 0);
@@ -959,7 +990,7 @@ export class DailyPlanEngine {
     };
   }
 
-  private createWeeks(phases: StudyPhase[], profile: NormalizedProfile, window: PlanningWindow): StudyWeek[] {
+  private createWeeks(phases: StudyPhase[], profile: NormalizedProfile, _window: PlanningWindow): StudyWeek[] {
     const weeks: StudyWeek[] = [];
     let weekNumber = 0;
 
@@ -1013,7 +1044,7 @@ export class DailyPlanEngine {
     weeks: StudyWeek[],
     dailyCapacities: DailyCapacity[],
     skillAllocation: SkillAllocation,
-    timeBudget: StudyTimeBudget,
+    _timeBudget: StudyTimeBudget,
     profile: NormalizedProfile,
     window: PlanningWindow,
     skillGaps: SkillGapScore[],
@@ -1034,8 +1065,9 @@ export class DailyPlanEngine {
 
     const skillMinutesRemaining: Record<string, number> = {};
     const totalSchedulable = window.schedulableMinutes;
+    const allocRecord = skillAllocation as unknown as Record<string, number>;
     for (const skill of SKILL_NAMES) {
-      const alloc = (skillAllocation as Record<string, number>)[skill] ?? 0;
+      const alloc = allocRecord[skill] ?? 0;
       skillMinutesRemaining[skill] = Math.round((alloc / 100) * totalSchedulable);
     }
 
@@ -1090,9 +1122,6 @@ export class DailyPlanEngine {
 
         sessionCounter++;
         currentSessionOrder++;
-
-        const weekIndex = weeks.indexOf(week);
-        const phaseIndex = phases.indexOf(phase);
 
         const task = this.createStudyTask(
           roadmapId,
@@ -1319,7 +1348,7 @@ export class DailyPlanEngine {
     usedByDate: Map<LocalDate, { minutes: number; sessions: number }>,
     window: PlanningWindow,
     roadmapId: string,
-    skillGaps: SkillGapScore[],
+    _skillGaps: SkillGapScore[],
   ): void {
     const mockPhases = phases.filter(p => p.type === 'mock-examination' || p.type === 'timed-practice');
     let mockCounter = 0;
@@ -1545,7 +1574,7 @@ export class DailyPlanEngine {
 
   // ── Repair ──
 
-  private repairPlan(plan: StudyPlan, issues: PlanValidationIssue[]): StudyPlan | null {
+  private repairPlan(plan: StudyPlan, _issues: PlanValidationIssue[]): StudyPlan | null {
     let current = { ...plan, tasks: [...plan.tasks], phases: [...plan.phases], weeks: [...plan.weeks] };
     const repairs: PlanRepairAction[] = [];
 
@@ -1804,8 +1833,8 @@ export class DailyPlanEngine {
     futureTasks: StudyTask[],
     window: PlanningWindow,
     dailyCapacities: DailyCapacity[],
-    skillAllocation: SkillAllocation,
-    phases: StudyPhase[],
+    _skillAllocation: SkillAllocation,
+    _phases: StudyPhase[],
     plan: StudyPlan,
   ): StudyPlan {
     const capacityByDate = new Map(dailyCapacities.map(c => [c.date, c]));
@@ -1948,7 +1977,7 @@ export class DailyPlanEngine {
     _profile: NormalizedProfile,
   ): StudyPlanPreview {
     const skills = Object.entries(skillAllocation) as [string, number][];
-    const sorted = skills.sort((a, b) => b[1] - a[1]);
+    skills.sort((a, b) => b[1] - a[1]);
     const avgMinutes = 25;
     const estimatedTasks = Math.floor(feasibility.schedulableMinutes / avgMinutes);
     const mockCount = Math.max(1, Math.floor(window.totalCalendarDays / 21));
@@ -2064,6 +2093,10 @@ export class DailyPlanEngine {
 
   private hashProfile(profile: NormalizedProfile): string {
     return `${profile.currentOverallBand}-${profile.targetOverallBand}-${profile.examDate}-${profile.planStartDate}`;
+  }
+
+  private reportProgress(stage: PlanGenerationStage, completedBatches: number, totalBatches: number, message: string): void {
+    this.onProgress?.({ stage, completedBatches, totalBatches, message });
   }
 
   private issue(

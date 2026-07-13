@@ -6,16 +6,16 @@ function translationTarget(lang: string): string {
 
 const VOCAB_PROMPT_VERSION: PromptVersion = { version: 1, description: 'Initial vocabulary prompts' }
 
+export const VOCABULARY_DETAILS_SYSTEM_PROMPT = 'You are an IELTS vocabulary expert assistant. Always respond with valid JSON only, no other text.'
+
 export function buildVocabularyDetailsPrompt(
   word: string,
-  sourceSentence: string,
-  topic: string,
+  sourceSentence = '',
+  topic = '',
   nativeLanguage = '',
-): { systemPrompt: string; userPrompt: string } {
+): string {
   const lang = translationTarget(nativeLanguage)
-  const systemPrompt = 'You are an IELTS vocabulary expert assistant. Always respond with valid JSON only, no other text.'
-
-  const userPrompt = `Generate detailed IELTS vocabulary information for the word "${word}".
+  return `Generate detailed IELTS vocabulary information for the word "${word}".
 
 ${sourceSentence ? `The word was found in this sentence: "${sourceSentence}"\n` : ''}
 ${topic ? `Topic: ${topic}\n` : ''}
@@ -41,25 +41,21 @@ Respond with valid JSON in this exact format:
 }
 
 IMPORTANT: Only include verbConjugation if the word is a verb. If the word is not a verb, omit verbConjugation entirely or set it to null.`
-
-  return { systemPrompt, userPrompt }
 }
 
+export const VOCABULARY_QUIZ_SYSTEM_PROMPT = 'You are an IELTS vocabulary quiz creator. Always respond with valid JSON only.'
+
 export function buildVocabularyQuizPrompt(
-  word: string,
-  meaning: string,
-  exampleSentence: string,
-  synonyms: string[],
-  collocations: string[],
-): { systemPrompt: string; userPrompt: string } {
-  const systemPrompt = 'You are an IELTS vocabulary quiz creator. Always respond with valid JSON only.'
-
-  const userPrompt = `Create 3 quiz questions for the IELTS vocabulary word "${word}".
-Meaning: ${meaning}
-Example: ${exampleSentence}
-Synonyms: ${synonyms.join(', ')}
-Collocations: ${collocations.join(', ')}
-
+  words: string | string[],
+  meaning = '',
+  exampleSentence = '',
+  synonyms: string[] = [],
+  collocations: string[] = [],
+): string {
+  const wordList = Array.isArray(words) ? words : [words]
+  const wordLabel = wordList.join(', ')
+  return `Create 3 quiz questions for the IELTS vocabulary word${wordList.length > 1 ? 's' : ''} "${wordLabel}".
+${meaning ? `Meaning: ${meaning}\n` : ''}${exampleSentence ? `Example: ${exampleSentence}\n` : ''}${synonyms.length ? `Synonyms: ${synonyms.join(', ')}\n` : ''}${collocations.length ? `Collocations: ${collocations.join(', ')}\n` : ''}
 Respond with valid JSON:
 {
   "questions": [
@@ -72,8 +68,6 @@ Respond with valid JSON:
     }
   ]
 }`
-
-  return { systemPrompt, userPrompt }
 }
 
 export function getVersionInfo(): PromptVersion {

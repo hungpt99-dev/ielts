@@ -1,6 +1,6 @@
 import { callAI } from '../client'
 import type { ProviderConfig } from '../client/types'
-import { buildDictionaryEntryPrompt } from '../prompts'
+import { buildDictionaryEntryPrompt, DICTIONARY_ENTRY_SYSTEM_PROMPT } from '../prompts'
 import { dictionaryEntrySchema } from '../schemas'
 import type { DictionaryEntry } from '../schemas'
 import { AiCache, parseAndValidate } from '../utils'
@@ -39,9 +39,9 @@ export async function generateDictionaryEntry(
     return { data: null, error: 'API key not configured.' }
   }
 
-  const { systemPrompt, userPrompt } = buildDictionaryEntryPrompt(selectedWord, contextSentence, nativeLanguage)
+  const userPrompt = buildDictionaryEntryPrompt(selectedWord, contextSentence, nativeLanguage)
 
-  const { content, error } = await callAI(systemPrompt, userPrompt, getConfig, {
+  const { content, error } = await callAI(DICTIONARY_ENTRY_SYSTEM_PROMPT, userPrompt, getConfig, {
     maxTokens: 800,
     temperature: 0.3,
   })

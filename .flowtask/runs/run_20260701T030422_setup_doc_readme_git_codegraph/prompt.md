@@ -1,1 +1,0 @@
-setup doc readme git, codegraph, ... alligne with software industry standard

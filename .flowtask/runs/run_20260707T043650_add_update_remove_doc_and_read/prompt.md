@@ -1,1 +1,0 @@
-add, update, remove doc and readme to align with software industry standdard and AI coding agent and introduce this product and guid new mem to join project

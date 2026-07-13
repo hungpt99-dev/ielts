@@ -14,6 +14,31 @@ export {
 export { AI_EXPLAIN_LABELS } from './prompts'
 export type { AiExplainType } from './prompts'
 
+// Prompt Registry
+export { PromptRegistry, getDefaultPromptRegistry, setDefaultPromptRegistry, registerDefaultPrompts } from './prompts'
+export type { RegisteredPrompt, PromptVersion } from './prompts'
+
+// Exercise generation prompts (shared between classify.ts and learning-engine)
+export {
+  READING_QUESTIONS_SYSTEM_PROMPT,
+  LISTENING_EXERCISE_SYSTEM_PROMPT,
+  SPEAKING_PROMPTS_SYSTEM_PROMPT,
+  WRITING_IDEAS_SYSTEM_PROMPT,
+  GRAMMAR_EXERCISES_SYSTEM_PROMPT,
+  MISTAKE_REVIEW_SYSTEM_PROMPT,
+  VOCABULARY_EXTRACTION_SYSTEM_PROMPT,
+  buildReadingQuestionsPrompt,
+  buildListeningExercisePrompt,
+  buildSpeakingPromptsPrompt,
+  buildWritingIdeasPrompt,
+  buildGrammarExercisesPrompt,
+  buildMistakeReviewPrompt,
+  buildVocabularyExtractionPrompt,
+  buildReadingPassagePrompt,
+  buildPracticeQuestionsPrompt,
+  buildPracticeQuestionsSystemPrompt,
+} from './prompts'
+
 // Schema types (used by extension)
 export type {
   AiExplainResult,
@@ -33,3 +58,7 @@ export type { ProviderConfig } from './client/types'
 // Client
 export { createAIClient, callAI } from './client'
 export type { AIClient, AICallResult } from './client/types'
+
+// Cache utilities
+export { AiGenerateResultCache } from './utils'
+export type { GenerateResultCacheOptions, GenerateResultCacheStats } from './utils'

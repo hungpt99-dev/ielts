@@ -6,6 +6,7 @@ export type TutorEventType =
   | 'proactive_message_dismissed'
   | 'proactive_message_clicked'
   | 'proactive_message_expired'
+  | 'proactive_intervention'
   | 'tutor_chat_started'
   | 'tutor_chat_message_sent'
   | 'tutor_memory_updated'
@@ -53,6 +54,11 @@ export interface TutorMemoryUpdatedEvent extends TutorEventBase {
   updatedFields: string[]
 }
 
+export interface ProactiveInterventionEvent extends TutorEventBase {
+  type: 'proactive_intervention'
+  interventions: Array<{ title: string; message: string; priority: string }>
+}
+
 export interface NextBestActionSelectedEvent extends TutorEventBase {
   type: 'next_best_action_selected'
   actionType: string
@@ -66,6 +72,7 @@ export type TutorEvent =
   | ProactiveMessageDismissedEvent
   | ProactiveMessageClickedEvent
   | ProactiveMessageExpiredEvent
+  | ProactiveInterventionEvent
   | TutorChatStartedEvent
   | TutorChatMessageSentEvent
   | TutorMemoryUpdatedEvent

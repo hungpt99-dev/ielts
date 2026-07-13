@@ -15,7 +15,7 @@ import {
   getSyncStatus,
   markItemsSynced,
 } from '../services/storage'
-import type { StorageGet, StorageSet } from '../services/storage'
+import type { StorageGet } from '../services/storage'
 
 function createMockChrome() {
   const store: Record<string, unknown> = {}
@@ -117,7 +117,7 @@ describe('getSavedItems / addSavedItem', () => {
     await addSavedItem({ id: '2', text: 'world' })
     const items = await getSavedItems()
     expect(items).toHaveLength(2)
-    expect(items[0].text).toBe('world')
+    expect((items[0] as Record<string, unknown>).text).toBe('world')
   })
 })
 
@@ -169,7 +169,7 @@ describe('clearAllExtensionData', () => {
 
 describe('getSyncStatus / markItemsSynced', () => {
   it('returns null when no status stored', async () => {
-    const storageGet: StorageGet<unknown> = () => Promise.resolve(null)
+    const storageGet: StorageGet<import('../services/storage').SyncStatus> = () => Promise.resolve(null)
     const result = await getSyncStatus(storageGet)
     expect(result).toBeNull()
   })

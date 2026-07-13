@@ -169,7 +169,7 @@ export class VocabularyService {
       : ''
     const userPrompt = `Analyze this word for IELTS learners: "${word}"\n${contextPart}Provide: meaning, translation, partOfSpeech, pronunciation, exampleSentence (string), collocations (array of strings), synonyms (array of strings), antonyms (array of strings), wordFamily (array of strings), difficulty (A1-C2 or IELTS band), topic. If the word is a verb, also provide verbConjugation with base, pastSimple, pastParticiple, presentParticiple, thirdPersonSingular fields.`
 
-    const result = await this.aiAdapter.request(systemPrompt, userPrompt, { temperature: 0.3 })
+    const result = await this.aiAdapter.request({ systemPrompt, userMessage: userPrompt, temperature: 0.3 })
     if (result.error || !result.content) return null
 
     try {

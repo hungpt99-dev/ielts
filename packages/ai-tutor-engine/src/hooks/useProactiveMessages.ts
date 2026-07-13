@@ -1,16 +1,115 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { ProactiveMessage, ProactiveMessageCategory, ProactiveMessageSettings, ContextSuggestion, ChatMessage } from '../types'
-import { generateProactiveMessages } from '../services/proactiveMessageEngine'
-import { ProactiveMessageService } from '../services/proactiveMessageService'
+import { generateProactiveMessages, generateContextSuggestions as generateContextCandidates } from '../services/proactiveMessageEngine'
+import type { ProactiveEngineInput } from '../services/proactiveMessageEngine'
 import { ProactiveEventBus } from '../services/proactiveEventBus'
-import { getContextSuggestions } from '../utils/contextSuggestions'
 import { generateId } from '../utils/id'
+
+const SETTINGS_KEY = 'ielts-proactive-message-settings'
+const STORAGE_KEY = 'ielts-proactive-messages'
+const MAX_STORED_MESSAGES = 100
+
+const DEFAULT_SETTINGS: ProactiveMessageSettings = {
+  enabled: true,
+  browserNotifications: false,
+  extensionNotifications: false,
+  aiEnhanced: false,
+  quietHoursStart: '22:00',
+  quietHoursEnd: '08:00',
+  reminderTime: '09:00',
+  maxMessagesPerDay: 5,
+  minIntervalMinutes: 60,
+  categories: {
+    'vocabulary-review': true,
+    'mistake-review': true,
+    'study-plan': true,
+    'speaking-practice': true,
+    'writing-practice': true,
+    'reading-practice': true,
+    'listening-practice': true,
+    'exam-countdown': true,
+    'motivation': true,
+    'saved-content': true,
+    'daily-tip': true,
+    'progress-report': true,
+    'suggestion': true,
+  },
+  examReminders: true,
+  inactivityReminders: true,
+  vocabularyReminders: true,
+  roadmapReminders: true,
+  motivationMessages: true,
+  preferredTone: 'friendly',
+  preferredMessageLength: 'medium',
+}
+
+function safeGet<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key)
+    if (!raw) return fallback
+    return JSON.parse(raw) as T
+  } catch {
+    return fallback
+  }
+}
+
+function safeSet(key: string, value: unknown): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value))
+  } catch { /* noop */ }
+}
+
+function loadSettings(): ProactiveMessageSettings {
+  const saved = safeGet<Partial<ProactiveMessageSettings>>(SETTINGS_KEY, {})
+  return { ...DEFAULT_SETTINGS, ...saved }
+}
+
+function saveSettings(s: ProactiveMessageSettings): void {
+  safeSet(SETTINGS_KEY, s)
+}
+
+function loadMessages(): ProactiveMessage[] {
+  const raw = safeGet<unknown>(STORAGE_KEY, null)
+  if (!Array.isArray(raw)) return []
+  return raw as ProactiveMessage[]
+}
+
+function saveMessages(msgs: ProactiveMessage[]): void {
+  safeSet(STORAGE_KEY, msgs.slice(-MAX_STORED_MESSAGES))
+}
+
+function clearMessages(): void {
+  try { localStorage.removeItem(STORAGE_KEY) } catch { /* noop */ }
+}
+
+function isInQuietHours(settings: ProactiveMessageSettings): boolean {
+  const now = new Date()
+  const currentMinutes = now.getHours() * 60 + now.getMinutes()
+  const startParts = settings.quietHoursStart.split(':').map(Number)
+  const endParts = settings.quietHoursEnd.split(':').map(Number)
+  const startMinutes = startParts[0] * 60 + startParts[1]
+  const endMinutes = endParts[0] * 60 + endParts[1]
+  if (startMinutes <= endMinutes) {
+    return currentMinutes >= startMinutes && currentMinutes <= endMinutes
+  }
+  return currentMinutes >= startMinutes || currentMinutes <= endMinutes
+}
+
+function canSendNow(settings: ProactiveMessageSettings): boolean {
+  if (!settings.enabled) return false
+  return !isInQuietHours(settings)
+}
+
+function getMessagesForToday(messages: ProactiveMessage[]): number {
+  const today = new Date().toDateString()
+  return messages.filter(m => new Date(m.createdAt).toDateString() === today).length
+}
 
 type ProactiveMessageCallback = (message: ProactiveMessage) => void
 
 export function useProactiveMessages() {
-  const [messages, setMessages] = useState<ProactiveMessage[]>(ProactiveMessageService.loadMessages)
-  const [settings, setSettingsState] = useState<ProactiveMessageSettings>(ProactiveMessageService.loadSettings)
+  const [messages, setMessages] = useState<ProactiveMessage[]>(loadMessages)
+  const [settings, setSettingsState] = useState<ProactiveMessageSettings>(loadSettings)
   const [unreadCount, setUnreadCount] = useState(0)
   const listenersRef = useRef<Set<ProactiveMessageCallback>>(new Set())
   const messagesRef = useRef(messages)
@@ -24,7 +123,7 @@ export function useProactiveMessages() {
     const unsub = ProactiveEventBus.onNewMessage((msg) => {
       setMessages(prev => {
         const next = [msg, ...prev]
-        ProactiveMessageService.saveMessages(next)
+        saveMessages(next)
         return next
       })
     })
@@ -34,13 +133,13 @@ export function useProactiveMessages() {
   const updateSettings = useCallback((patch: Partial<ProactiveMessageSettings>) => {
     setSettingsState(prev => {
       const next = { ...prev, ...patch }
-      ProactiveMessageService.saveSettings(next)
+      saveSettings(next)
       return next
     })
   }, [])
 
   const refreshMessages = useCallback(() => {
-    setMessages(ProactiveMessageService.loadMessages())
+    setMessages(loadMessages())
   }, [])
 
   const getPendingMessages = useCallback((): ProactiveMessage[] => {
@@ -63,51 +162,63 @@ export function useProactiveMessages() {
     }
     setMessages(prev => {
       const next = [newMsg, ...prev]
-      ProactiveMessageService.saveMessages(next)
+      saveMessages(next)
       return next
     })
     listenersRef.current.forEach(fn => fn(newMsg))
     return newMsg
   }, [])
 
-  const generateFromInput = useCallback((
+  const generateFromInput = useCallback(async (
     input: Parameters<typeof generateProactiveMessages>[0]
-  ): ProactiveMessage[] => {
-    const engineMessages = generateProactiveMessages(input)
+  ): Promise<ProactiveMessage[]> => {
+    const engineMessages = await generateProactiveMessages(input)
     if (engineMessages.length === 0) return []
     const now = new Date().toISOString()
     const currentMessages = messagesRef.current
-    const todayCount = ProactiveMessageService.getMessagesForToday(currentMessages)
+    const todayCount = getMessagesForToday(currentMessages)
     const maxAllowed = settings.maxMessagesPerDay - todayCount
     const toAdd = engineMessages.slice(0, Math.max(0, maxAllowed))
     if (toAdd.length === 0) return []
-    const newMsgs: ProactiveMessage[] = toAdd.map(msg => ({
-      ...msg,
-      id: generateId(),
-      createdAt: now,
-    }))
+    const newMsgs: ProactiveMessage[] = toAdd.map(msg => {
+      const m: ProactiveMessage = {
+        id: generateId(),
+        triggerType: msg.triggerType as ProactiveMessage['triggerType'],
+        category: msg.category as ProactiveMessage['category'],
+        title: msg.title,
+        message: msg.message,
+        reason: '',
+        priority: msg.priority as ProactiveMessage['priority'],
+        score: 0,
+        deduplicationKey: `${msg.triggerType}-${msg.category}`,
+        action: msg.action ? { type: msg.action.type, label: msg.action.label, payload: msg.action.payload } : undefined,
+        isRead: false,
+        isDismissed: false,
+        isSnoozed: false,
+        snoozedUntil: msg.snoozedUntil,
+        createdAt: now,
+      }
+      return m
+    })
     setMessages(prev => {
       const next = [...newMsgs, ...prev]
-      ProactiveMessageService.saveMessages(next)
+      saveMessages(next)
       return next
-    })
-    newMsgs.forEach(msg => {
-      listenersRef.current.forEach(fn => fn(msg))
     })
     return newMsgs
   }, [settings.maxMessagesPerDay])
 
   const getContextSuggestionsForInput = useCallback((
-    input: Parameters<typeof getContextSuggestions>[0],
+    input: ProactiveEngineInput,
     recentMessages: ChatMessage[],
   ): ContextSuggestion[] => {
-    return getContextSuggestions(input, recentMessages)
+    return generateContextCandidates(input, recentMessages)
   }, [])
 
   const updateMessage = useCallback((id: string, patch: Partial<ProactiveMessage>) => {
     setMessages(prev => {
       const next = prev.map(m => m.id === id ? { ...m, ...patch } : m)
-      ProactiveMessageService.saveMessages(next)
+      saveMessages(next)
       return next
     })
   }, [])
@@ -117,7 +228,7 @@ export function useProactiveMessages() {
   const markAllAsRead = useCallback(() => {
     setMessages(prev => {
       const next = prev.map(m => m.isRead ? m : { ...m, isRead: true })
-      ProactiveMessageService.saveMessages(next)
+      saveMessages(next)
       return next
     })
   }, [])
@@ -134,14 +245,14 @@ export function useProactiveMessages() {
   const deleteMessage = useCallback((id: string) => {
     setMessages(prev => {
       const next = prev.filter(m => m.id !== id)
-      ProactiveMessageService.saveMessages(next)
+      saveMessages(next)
       return next
     })
   }, [])
 
   const clearAllMessages = useCallback(() => {
     setMessages([])
-    ProactiveMessageService.clearMessages()
+    clearMessages()
     ProactiveEventBus.emitMessagesCleared()
   }, [])
 
@@ -160,10 +271,10 @@ export function useProactiveMessages() {
     return new Date(msg.snoozedUntil) > new Date()
   }, [messages])
 
-  const canSendNow = useMemo(() => ProactiveMessageService.canSendNow(settings), [settings])
+  const canSendNowVal = useMemo(() => canSendNow(settings), [settings])
 
   const messagesForToday = useMemo(
-    () => ProactiveMessageService.getMessagesForToday(messages),
+    () => getMessagesForToday(messages),
     [messages],
   )
 
@@ -171,7 +282,7 @@ export function useProactiveMessages() {
     messages,
     settings,
     unreadCount,
-    canSendNow,
+    canSendNow: canSendNowVal,
     messagesForToday,
     updateSettings,
     refreshMessages,

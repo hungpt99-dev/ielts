@@ -36,5 +36,7 @@ export interface SpeakingQuestionResult {
 
 export interface SpeakingTutorModule {
   reviewSpeaking(request: SpeakingReviewRequest): Promise<SpeakingFeedbackResult>
+
+  /** @deprecated Use learning engine's `generateActivity()` via `@ielts/learning-engine` instead */
   generateQuestion(request: SpeakingQuestionRequest): Promise<SpeakingQuestionResult>
 }

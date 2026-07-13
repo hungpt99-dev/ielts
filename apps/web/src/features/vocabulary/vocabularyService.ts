@@ -434,10 +434,10 @@ export function parseWordForm(s: string): WordFormEntry | null {
 export async function normalizeToLemma(word: string): Promise<string> {
   if (!word.trim()) return word
   const clean = word.trim().toLowerCase()
-  const { makeAIRequest } = await import('../../services/ai/AIService')
+  const { callAI } = await import('@ielts/ai')
   const systemPrompt = 'You are a linguist. Respond with a single word only — the dictionary lemma form.'
   const prompt = `What is the dictionary lemma of "${clean}"? Example: running→run, better→good, mice→mouse, studied→study. Respond with only the lemma.`
-  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 50, temperature: 0 })
+  const result = await callAI(systemPrompt, prompt, { maxTokens: 50, temperature: 0 })
   if (result.error || !result.content) return clean
   return result.content.trim().toLowerCase().replace(/[^a-z\-]/g, '') || clean
 }
@@ -457,7 +457,7 @@ export interface EnrichResult {
 }
 
 export async function enrichVocabulary(word: string, topic?: string): Promise<{ data: EnrichResult | null; error: string | null }> {
-  const { makeAIRequest } = await import('../../services/ai/AIService')
+  const { callAI } = await import('@ielts/ai')
 
   const topicHint = topic ? ` on the topic of "${topic}"` : ''
   const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
@@ -493,7 +493,7 @@ Now for "${word}" — generate EVERY field EXACTLY like the example above:
 - "cefrLevel": one of: A1, A2, B1, B2, C1, C2
 - "ieltsRelevance": one of: low, medium, high`
 
-  const result = await makeAIRequest(systemPrompt, prompt, { maxTokens: 2000, temperature: 0.3 })
+  const result = await callAI(systemPrompt, prompt, { maxTokens: 2000, temperature: 0.3 })
 
   if (result.error) {
     return { data: null, error: result.error }

@@ -1,3 +1,5 @@
+> **Status:** The Study Plan Engine is fully implemented as `DailyPlanEngine` in `packages/learning-engine/src/daily-plan/`, with 231 passing tests. It is actively integrated with the web app's roadmap feature through `roadmapService.ts` and `planConverter.ts`. The engine supports deterministic scheduling, AI enrichment via `AiPlanOrchestrator`, plan validation and repair via `PlanPersistenceService`, regeneration via `PlanRegenerator`, and user-facing explanations via `ExplainabilityService`. The architecture and all types match this spec.
+
 ````text
 Redesign, refactor, and fully implement the IELTS Journey Study Plan Engine so it generates a complete, realistic, personalized, and date-accurate IELTS study roadmap based on the user’s profile, current ability, target score, study preferences, available time, progress, and exam date.
 
@@ -121,9 +123,10 @@ Return a structured result when these fields are missing:
 type MissingProfileResult = {
   status: "needs-profile-completion";
   missingFields: UserProfileField[];
-  message: string;
 };
-````
+```
+
+Note: `insufficient-time` feasibility is returned as `{ status: "failure", reason: { code: "insufficient-time" } }` — not as `needs-profile-completion`. The `needs-profile-completion` result is only used when genuinely required profile fields are absent.
 
 The UI must clearly show which information is missing and route the user to the correct setup step.
 

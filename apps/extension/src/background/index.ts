@@ -1,7 +1,7 @@
 import type { SaveCategory, LearningEntry } from '../types'
 import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
-import { saveVocabularyEntry, getAllVocabulary } from '../storage/vocabularyStore'
+import { saveVocabularyEntry } from '../storage/vocabularyStore'
 import { safeStorageSet } from '../utils/safe-chrome'
 import { initMessaging } from './messaging'
 import { initAiService } from './ai-service'

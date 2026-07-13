@@ -1,74 +1,32 @@
 import type { ReactNode } from 'react'
 
-export type ProactiveMessageTriggerType =
-  | 'due_review'
-  | 'missed_task'
-  | 'weak_skill_warning'
-  | 'exam_countdown'
-  | 'new_content_saved'
-  | 'study_streak'
-  | 'low_activity'
-  | 'daily_plan_ready'
-  | 'mistake_pattern_detected'
-  | 'topic_practice_suggestion'
-  | 'lesson_completed'
-  | 'weekly_review'
-  | 'monthly_review'
-  | 'study_session_suggestion'
-  | 'progress_reminder'
-  | 'inactive_days'
-  | 'progress_celebration'
-  | 'daily_tip'
-  | 'exam_date_reminder'
-  | 'mock_test_ready'
-  | 'saved_word_exercise'
-  | 'unfinished_lesson'
-  | 'streak'
+import type {
+  ProactiveTriggerType as DomainTriggerType,
+  ProactiveMessage as DomainProactiveMessage,
+  ProactiveMessageAction as DomainProactiveMessageAction,
+  ProactiveMessageSettings as DomainProactiveMessageSettings,
+} from '../domain/entities/proactive-message'
+import type { ProactiveCategory as DomainProactiveCategory } from '../domain/entities/learner-context'
 
-export type ProactiveMessageCategory =
-  | 'vocabulary-review'
-  | 'mistake-review'
-  | 'study-plan'
-  | 'speaking-practice'
-  | 'writing-practice'
-  | 'reading-practice'
-  | 'listening-practice'
-  | 'exam-countdown'
-  | 'motivation'
-  | 'saved-content'
-  | 'daily-tip'
-  | 'progress-report'
-  | 'suggestion'
+export type ProactiveMessageTriggerType = DomainTriggerType | 'progress_reminder' | 'streak'
 
-export interface ProactiveMessageAction {
-  type: string
-  label: string
-  payload?: Record<string, unknown>
-}
+export type ProactiveMessageCategory = DomainProactiveCategory | 'suggestion'
 
-export interface ProactiveMessage {
-  id: string
+export interface ProactiveMessageAction extends DomainProactiveMessageAction {}
+
+export interface ProactiveMessage extends Omit<DomainProactiveMessage, 'priority' | 'category' | 'triggerType'> {
   triggerType: ProactiveMessageTriggerType
   category: ProactiveMessageCategory
-  title: string
-  message: string
   priority: 'high' | 'medium' | 'low'
-  action?: ProactiveMessageAction
   isRead: boolean
   isDismissed: boolean
   isSnoozed: boolean
   snoozedUntil?: string
-  createdAt: string
+  action?: ProactiveMessageAction
 }
 
-export interface ProactiveMessageSettings {
-  enabled: boolean
-  browserNotifications: boolean
-  aiEnhanced: boolean
-  quietHoursStart: string
-  quietHoursEnd: string
+export interface ProactiveMessageSettings extends DomainProactiveMessageSettings {
   reminderTime: string
-  maxMessagesPerDay: number
   categories: Record<ProactiveMessageCategory, boolean>
 }
 

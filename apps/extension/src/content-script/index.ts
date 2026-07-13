@@ -21,7 +21,7 @@ window.addEventListener('beforeunload', () => {
   }
 })
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, _sender) => {
   if (!message || typeof message !== 'object') return false
   const msg = message as Record<string, unknown>
   if (msg.type === 'TOGGLE_YOUTUBE_LEARNING') {

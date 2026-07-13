@@ -1,75 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { createDefaultConfiguration, saveConfiguration, loadConfiguration, clearConfiguration, migrateFromLegacySettings } from '../../src/features/configuration/storage'
-import { AITutorService } from '../../src/features/ai-tutor/aiTutorService'
-import type { PersonalizationContext } from '../../src/features/personalization/types'
 
-const mockCallAI = vi.hoisted(() =>
-  vi.fn((_systemPrompt: string, _userPrompt: string) =>
-    Promise.resolve({ content: 'AI response', error: null }),
-  ),
-)
-
-vi.mock('@ielts/ai', () => ({
-  callAI: mockCallAI,
-}))
-
-vi.mock('../../src/services/storage/Database', () => ({
-  DatabaseService: {
-    getAll: () => Promise.resolve([]),
-  },
-}))
-
-vi.mock('../../src/services/storage/SettingsStorage', () => ({
-  loadAppSettings: () => ({
-    targetBand: 6.0,
-    currentBand: 5.0,
-    examDate: '',
-    dailyStudyMinutes: 30,
-    weakSkills: [],
-    preferredTopics: [],
-    studyReminder: '',
-    studyGoal: 'academic' as const,
-    preferredSchedule: [],
-    aiApiKey: '',
-    aiProvider: 'openai' as const,
-    aiEndpoint: '',
-    aiModel: 'gpt-4o-mini',
-    darkMode: false,
-    aiEnabled: true,
-  }),
-}))
-
-vi.mock('../../src/features/roadmap/roadmapService', () => ({
-  loadRoadmap: () => ({
-    phases: [],
-    currentPhaseIndex: 0,
-    currentWeekIndex: 0,
-    overallProgress: 0,
-    totalTasks: 0,
-    completedTasks: 0,
-    generatedAt: '',
-    updatedAt: '',
-  }),
-  getTodayTask: () => null,
-}))
-
-vi.mock('../../src/features/personalization/personalizationService', () => ({
-  buildPersonalizationContext: () => null,
-  analyzeWeakSkills: vi.fn(),
-  generateRecommendations: vi.fn(),
-  getTodayRecommendation: vi.fn(),
-  getAITutorContext: vi.fn(),
-  getReasonLabel: vi.fn(),
-}))
-
-let service: AITutorService
-
-const STORAGE_KEY = 'ielts-configuration'
 const LEGACY_KEY = 'ielts-settings'
 
 beforeEach(() => {
   localStorage.clear()
-  service = new AITutorService()
   vi.useFakeTimers()
   vi.setSystemTime(new Date('2026-07-03T10:00:00Z'))
 })
@@ -78,41 +13,6 @@ afterEach(() => {
   vi.useRealTimers()
   localStorage.clear()
 })
-
-function createContext(overrides?: Partial<PersonalizationContext>): PersonalizationContext {
-  return {
-    profile: {
-      targetBand: 7.0,
-      currentBand: 5.5,
-      examDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
-      dailyStudyMinutes: 60,
-      weakSkills: ['Writing', 'Speaking'],
-      preferredTopics: ['Environment'],
-      studyGoal: 'academic',
-      preferredSchedule: ['mon', 'wed', 'fri'],
-    },
-    progress: {
-      studyStreak: 5,
-      todayUnfinished: 0,
-      weeklyActiveDays: 3,
-      tasksCompletedThisWeek: 10,
-    },
-    exam: {
-      examDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
-      countdownDays: 60,
-      isUrgent: false,
-    },
-    vocabulary: {
-      totalWords: 50,
-      dueForReview: 5,
-    },
-    mistakes: {
-      total: 3,
-      recent: [],
-    },
-    ...overrides,
-  }
-}
 
 describe('End-to-end: Configuration Persistence', () => {
   it('saves configuration and loads it back correctly', () => {
@@ -184,135 +84,7 @@ describe('End-to-end: Migration from Legacy Settings', () => {
   })
 })
 
-describe('End-to-end: Configuration and AI Tutor integration', () => {
-  it('buildProviderConfig returns config with API key', () => {
-    const config = createDefaultConfiguration()
-    config.advanced.providers['default-openai'].apiKey = 'sk-real-key'
-    config.advanced.providers['default-openai'].baseUrl = 'https://api.openai.com/v1'
-    config.advanced.providers['default-openai'].model = 'gpt-4o'
-    config.advanced.providers['default-openai'].temperature = 0.5
-    config.advanced.providers['default-openai'].maxTokens = 4096
-    saveConfiguration(config)
 
-    const providerConfig = service['buildProviderConfig']()
-    expect(providerConfig).not.toBeNull()
-    expect(providerConfig!.apiKey).toBe('sk-real-key')
-    expect(providerConfig!.baseUrl).toBe('https://api.openai.com/v1')
-    expect(providerConfig!.model).toBe('gpt-4o')
-    expect(providerConfig!.temperature).toBe(0.5)
-    expect(providerConfig!.maxTokens).toBe(4096)
-  })
-
-  it('buildProviderConfig returns null when no API key configured', () => {
-    saveConfiguration(createDefaultConfiguration())
-    const providerConfig = service['buildProviderConfig']()
-    expect(providerConfig).toBeNull()
-  })
-
-  it('buildProviderConfig falls back to second provider when first lacks API key', () => {
-    const config = createDefaultConfiguration()
-    config.advanced.providers['default-openai'].apiKey = ''
-    config.advanced.providers['default-openai'].fallbackProvider = null
-    config.advanced.providers['fallback-provider'] = {
-      providerId: 'fallback-provider',
-      provider: 'claude',
-      apiKey: 'sk-fallback',
-      baseUrl: 'https://api.anthropic.com/v1',
-      model: 'claude-3',
-      temperature: 0.3,
-      maxTokens: 2048,
-      systemPrompt: '',
-      costLimit: 10,
-      usageLimit: 1000,
-      fallbackProvider: null,
-    }
-    saveConfiguration(config)
-
-    const providerConfig = service['buildProviderConfig']()
-    expect(providerConfig).not.toBeNull()
-    expect(providerConfig!.apiKey).toBe('sk-fallback')
-  })
-
-  it('buildProviderConfig uses fallback provider when active has no key', () => {
-    const config = createDefaultConfiguration()
-    config.advanced.providers['default-openai'].apiKey = ''
-    config.advanced.providers['default-openai'].fallbackProvider = 'fallback'
-    config.advanced.providers['fallback'] = {
-      providerId: 'fallback',
-      provider: 'openai',
-      apiKey: 'sk-fallback-key',
-      baseUrl: 'https://api.openai.com/v1',
-      model: 'gpt-4',
-      temperature: 0.7,
-      maxTokens: 2048,
-      systemPrompt: '',
-      costLimit: 10,
-      usageLimit: 1000,
-      fallbackProvider: null,
-    }
-    saveConfiguration(config)
-
-    const providerConfig = service['buildProviderConfig']()
-    expect(providerConfig).not.toBeNull()
-    expect(providerConfig!.apiKey).toBe('sk-fallback-key')
-  })
-
-  it('buildTutorSystemPrompt includes tutor mode from config', () => {
-    const config = createDefaultConfiguration()
-    config.advanced.tutorConfig.mode = 'strict-examiner'
-    config.advanced.tutorConfig.explanationStyle = 'step-by-step'
-    config.advanced.tutorConfig.correctionStrictness = 'strict'
-    config.advanced.tutorConfig.feedbackDepth = 'thorough'
-    config.basic.responseLanguage = 'english'
-    saveConfiguration(config)
-
-    const context = createContext()
-    const prompt = service['buildTutorSystemPrompt'](context)
-    expect(prompt).toContain('strict IELTS examiner')
-    expect(prompt).toContain('clear, sequential steps')
-    expect(prompt).toContain('Be direct and precise')
-    expect(prompt).toContain('comprehensive, detailed feedback')
-    expect(prompt).toContain('Always respond in English')
-  })
-
-  it('buildTutorSystemPrompt includes custom system prompt', () => {
-    const config = createDefaultConfiguration()
-    config.advanced.tutorConfig.customSystemPrompt = 'Always provide band-9 examples'
-    saveConfiguration(config)
-
-    const context = createContext()
-    const prompt = service['buildTutorSystemPrompt'](context)
-    expect(prompt).toContain('Always provide band-9 examples')
-  })
-
-  it('buildTutorSystemPrompt includes weak skills from context', () => {
-    saveConfiguration(createDefaultConfiguration())
-    const context = createContext()
-    const prompt = service['buildTutorSystemPrompt'](context)
-    expect(prompt).toContain('Writing')
-    expect(prompt).toContain('Speaking')
-  })
-
-  it('buildTutorSystemPrompt respects Vietnamese response language', () => {
-    const config = createDefaultConfiguration()
-    config.basic.responseLanguage = 'vietnamese'
-    saveConfiguration(config)
-
-    const context = createContext()
-    const prompt = service['buildTutorSystemPrompt'](context)
-    expect(prompt).toContain('Always respond in Vietnamese')
-  })
-
-  it('buildTutorSystemPrompt respects bilingual response language', () => {
-    const config = createDefaultConfiguration()
-    config.basic.responseLanguage = 'both'
-    saveConfiguration(config)
-
-    const context = createContext()
-    const prompt = service['buildTutorSystemPrompt'](context)
-    expect(prompt).toContain('English and Vietnamese')
-  })
-})
 
 describe('End-to-end: Multiple config save/load cycles', () => {
   it('survives multiple save and load cycles', () => {

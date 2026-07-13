@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { PUBLIC_API_SOURCES } from "../types";
 import { useSettings } from "../../../context/SettingsContext";
-import { testConnection } from "../../../services/ai/AIService";
+import { testConnection } from "../../../services/ai/testConnection";
 import Card, {
   CardContent,
   CardHeader,
@@ -192,7 +192,7 @@ export default function ApiKeySettings() {
     }
     setAiTesting(true);
     setAiTestResult(null);
-    const result = await testConnection();
+    const result = await testConnection({ apiKey: aiKey, baseUrl: aiBaseUrl || 'https://api.openai.com/v1', model: aiModel || 'gpt-4o-mini' });
     setAiTestResult({ ok: result.ok, message: result.message });
     setAiTesting(false);
   }

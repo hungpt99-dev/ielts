@@ -19,8 +19,8 @@ export class OpenAIAdapter implements AIAdapter {
         body: JSON.stringify({
           model: request.model,
           messages: request.messages,
-          temperature: request.temperature ?? config.temperature ?? 0.5,
-          max_tokens: request.max_tokens ?? config.maxTokens ?? 1500,
+          ...(request.temperature !== undefined ? { temperature: request.temperature } : config.temperature !== undefined ? {} : { temperature: 0.5 }),
+          ...(request.max_tokens !== undefined ? { max_tokens: request.max_tokens } : config.maxTokens !== undefined ? {} : { max_tokens: 1500 }),
         }),
       })
     } catch (err: unknown) {

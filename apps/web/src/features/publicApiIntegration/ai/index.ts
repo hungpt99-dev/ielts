@@ -1,6 +1,4 @@
 export {
-  classifyContent,
-  classifyAndSave,
   extractVocabulary,
   generateReadingQuestions,
   generateListeningExercise,

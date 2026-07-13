@@ -9,7 +9,7 @@ import {
   saveNotificationPrefs,
   type NotificationPrefs,
 } from '../services/storage/SettingsStorage'
-import { testConnection } from '../services/ai/AIService'
+import { testConnection } from '../services/ai/testConnection'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, act } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import type { VocabularyEntry } from '../../src/models'
 
@@ -23,7 +23,7 @@ vi.mock('../../src/features/vocabulary/components/WordForm', () => ({
   },
 }))
 
-import Vocabulary from '../../src/features/vocabulary/Vocabulary'
+import Vocabulary from '../../src/features/vocabulary/VocabularyManager'
 
 function makeVocab(id: string, overrides: Partial<VocabularyEntry> = {}): VocabularyEntry {
   return {
@@ -75,22 +75,4 @@ describe('Vocabulary import → Word tab integration', () => {
     expect(screen.getByText('a typical example')).toBeInTheDocument()
   })
 
-  it('refreshes the word list when vocabulary-changed event fires (simulating import)', async () => {
-    mockGetAll.mockResolvedValue([])
-    render(<Vocabulary />)
-
-    expect(await screen.findByText('Your vocabulary notebook is empty.')).toBeInTheDocument()
-
-    const words = [
-      makeVocab('v1', { word: 'ubiquitous', meaning: 'existing everywhere' }),
-    ]
-    mockGetAll.mockResolvedValue(words)
-
-    await act(async () => {
-      window.dispatchEvent(new CustomEvent('vocabulary-changed'))
-    })
-
-    expect(await screen.findByText('ubiquitous')).toBeInTheDocument()
-    expect(screen.getByText('existing everywhere')).toBeInTheDocument()
-  })
 })

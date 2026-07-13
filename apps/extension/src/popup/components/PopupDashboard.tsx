@@ -11,15 +11,14 @@ import {
   IconVocabulary, IconBookText, IconArticle, IconRefresh, IconAITutor,
   IconSave, IconEdit, IconStreak, IconSun, IconMoon, IconWarning,
   IconExternalLink, IconMessageSquare, IconSpeaking,
-  IconSettings, IconDatabase, IconSearch, IconLoading, IconGlobe
+  IconSettings, IconDatabase, IconSearch, IconGlobe
 } from '@ielts/ui'
 import { usePopupData } from '../hooks/usePopupData'
-import type { DailyProgress } from '../hooks/usePopupData'
 import type { LearningEntry } from '../../types'
 import { loadVocabulary } from '../services/popupDataService'
 import { getDueCount } from '../services/reviewService'
 import { safeStorageGet, safeStorageSet } from '../../utils/safe-chrome'
-import { getSyncState, onSyncStateChange, getPendingItemsCount } from '../../services/storage-bridge'
+import { getSyncState, onSyncStateChange } from '../../services/storage-bridge'
 import { saveCurrentPageAsArtifact } from '../../services/artifactService'
 
 interface PopupDashboardProps {

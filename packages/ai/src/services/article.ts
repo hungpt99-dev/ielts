@@ -1,6 +1,6 @@
 import { callAI } from '../client'
 import type { ProviderConfig } from '../client/types'
-import { buildArticleQuestionPrompt } from '../prompts'
+import { buildArticleQuestionPrompt, ARTICLE_QUESTION_SYSTEM_PROMPT } from '../prompts'
 import { articleQuestionSchema } from '../schemas'
 import type { ArticleQuestionSet } from '../schemas'
 import { AiGenerateResultCache, extractJSON } from '../utils'
@@ -26,7 +26,7 @@ export async function generateArticleQuestions(
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
   }
 
-  const { systemPrompt, userPrompt } = buildArticleQuestionPrompt(
+  const userPrompt = buildArticleQuestionPrompt(
     articleContent,
     articleTitle,
     topic,
@@ -34,7 +34,7 @@ export async function generateArticleQuestions(
   )
 
   try {
-    const { content, error } = await callAI(systemPrompt, userPrompt, getConfig, {
+    const { content, error } = await callAI(ARTICLE_QUESTION_SYSTEM_PROMPT, userPrompt, getConfig, {
       maxTokens: 2000,
     })
     if (error) return { data: null, error }

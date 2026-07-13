@@ -1,30 +1,14 @@
 import { useState, useCallback, useEffect } from 'react'
+import type { ProactiveMessageSettings as EngineProactiveMessageSettings } from '@ielts/ai-tutor-engine'
 
 export type TutorTone = 'friendly' | 'strict' | 'motivational' | 'simple' | 'vietnamese'
-
 export type NotificationChannel = 'in-app' | 'browser' | 'extension'
-
 export type AutomationLevel = 'manual' | 'semi-automatic' | 'automatic'
-
 export type ReminderFrequency = 'daily' | 'every-other-day' | 'weekly' | 'smart'
 
-export type ProactiveMessageCategory =
-  | 'vocabulary-review'
-  | 'mistake-review'
-  | 'study-plan'
-  | 'speaking-practice'
-  | 'writing-practice'
-  | 'reading-practice'
-  | 'listening-practice'
-  | 'exam-countdown'
-  | 'motivation'
-  | 'saved-content'
-  | 'daily-tip'
-  | 'progress-report'
-  | 'suggestion'
+export type ProactiveMessageCategory = NonNullable<keyof EngineProactiveMessageSettings['categories']>
 
-export interface ProactiveMessageSettings {
-  enabled: boolean
+export interface ProactiveMessageSettings extends EngineProactiveMessageSettings {
   tone: TutorTone
   preferredStudyTime: string
   dailyReminderTime: string
@@ -34,10 +18,6 @@ export interface ProactiveMessageSettings {
   automationLevel: AutomationLevel
   autoSuggestExercises: boolean
   autoWeeklyReview: boolean
-  categories: Record<ProactiveMessageCategory, boolean>
-  quietHoursStart: string
-  quietHoursEnd: string
-  maxMessagesPerDay: number
   lastRemindedAt?: string
   updatedAt: string
 }

@@ -1,1 +1,0 @@
-Cannot read properties of undefined (reading 'slice') in http://localhost:5173/progress

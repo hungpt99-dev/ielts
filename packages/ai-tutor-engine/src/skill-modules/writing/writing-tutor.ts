@@ -37,7 +37,10 @@ export interface WritingExerciseResult {
 
 export interface WritingTutorModule {
   reviewWriting(request: WritingReviewRequest): Promise<WritingFeedbackResult>
+
+  /** @deprecated Use learning engine's `generateActivity()` via `@ielts/learning-engine` instead */
   generateExercise(request: WritingExerciseRequest): Promise<WritingExerciseResult>
+
   brainstormIdeas(topic: string, taskType: WritingTaskType, language?: string): Promise<string[]>
   generateOutline(topic: string, taskType: WritingTaskType, language?: string): Promise<string>
   improveThesis(thesis: string, topic: string, language?: string): Promise<string>

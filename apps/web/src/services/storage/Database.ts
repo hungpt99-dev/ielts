@@ -86,8 +86,6 @@ import {
   clearAllTables,
 } from '@ielts/storage'
 import { AppDatabase as StorageAppDatabase } from '@ielts/storage'
-import { LocalTutorStorage } from './LocalTutorStorage'
-
 export interface IDatabase {
   vocabulary: Table<VocabularyEntry, string>
   vocabularyReviews: Table<VocabReviewEntry, string>
@@ -884,7 +882,6 @@ export const DatabaseService = {
 
   async resetAll(): Promise<void> {
     await this.clearAll()
-    await LocalTutorStorage.clearAll()
     clearAllLocalStorage()
   },
 }

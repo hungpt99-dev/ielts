@@ -443,21 +443,15 @@ export async function ensureRoadmap(): Promise<RoadmapData> {
     }
   }
 
-  try {
-    const { generatePlanWithAI } = await import('./aiRoadmapGenerator')
-    const completedTaskCount = tasks.filter(t => t.isDone).length
-    const result = await generatePlanWithAI(settings, { completedTaskCount })
-    if (result.roadmap) {
-      saveRoadmap(result.roadmap)
-      return result.roadmap
-    }
-  } catch {
-    // AI generation failed; fall through to static generation
+  const roadmap = await generateRoadmapWithEngine(settings)
+  if (roadmap) {
+    saveRoadmap(roadmap)
+    return roadmap
   }
 
-  const roadmap = await generateRoadmap(settings, tasks)
-  saveRoadmap(roadmap)
-  return roadmap
+  const error = new Error('Engine failed to generate a valid roadmap')
+  console.error('[Roadmap]', error.message)
+  throw error
 }
 
 export async function generateRoadmapWithEngine(settings: AppSettings): Promise<RoadmapData> {
@@ -496,7 +490,10 @@ export async function generateRoadmapWithEngine(settings: AppSettings): Promise<
     console.warn('Learning engine: high-risk plan, proceeding anyway')
   }
 
-  throw new Error(result.status === 'failure' ? result.reason?.message : 'Learning engine plan generation failed')
+  if (result.status === 'failure') {
+    console.warn('[Roadmap] Engine failure:', result.reason?.message)
+  }
+  return null
 }
 
 async function enrichPlanWithAI(

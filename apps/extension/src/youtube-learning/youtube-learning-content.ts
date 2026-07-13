@@ -7,7 +7,6 @@ import { StorageAdapter } from './infrastructure/persistence/StorageAdapter'
 import { AIAdapter } from './infrastructure/ai/AIAdapter'
 import { LearningSessionService } from './application/services/LearningSessionService'
 import { VocabularyService } from './application/services/VocabularyService'
-import { AIAnalysisService } from './application/services/AIAnalysisService'
 import { TranscriptTranslationService } from './application/services/TranscriptTranslationService'
 import { clearTranscriptCache } from './infrastructure/youtube/YouTubeTranscriptProvider'
 import { safeStorageGet } from '../utils/safe-chrome'
@@ -32,7 +31,7 @@ let eventBus: LearningEventBus | null = null
 let aiAdapter: AIAdapter | null = null
 let sessionService: LearningSessionService | null = null
 let vocabService: VocabularyService | null = null
-let analysisService: AIAnalysisService | null = null
+
 let translationService: TranscriptTranslationService | null = null
 let panelMessageHandler: ((event: MessageEvent) => void) | null = null
 let ytNavigationInitialized = false
@@ -323,18 +322,7 @@ async function handleAnalyzeVideo(): Promise<void> {
       postToParent('ANALYSIS_DATA', { error: 'Transcript required' })
       return
     }
-    const analysis = await analysisService?.analyze(result.data)
-    if (analysis) {
-      postToParent('ANALYSIS_DATA', {
-        cefrLevel: analysis.cefrLevel,
-        speakingSpeed: analysis.speakingSpeed,
-        topics: analysis.topics,
-        wordCount: analysis.wordCount,
-        lexicalDiversity: analysis.lexicalDiversity,
-      })
-    } else {
-      postToParent('ANALYSIS_DATA', { error: 'Analysis failed' })
-    }
+    postToParent('ANALYSIS_DATA', { error: 'Analysis service not available' })
   } catch {
     postToParent('ANALYSIS_DATA', { error: 'Analysis failed' })
   }
@@ -368,7 +356,7 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
     const systemPrompt = 'You are an IELTS vocabulary expert. Return ONLY valid JSON, no markdown, no code fences.'
     const userPrompt = `Analyze this word for an IELTS learner:\n\nWord: "${word}"\nContext sentence: "${sentence}"\n\nReturn JSON with:\n- word: the original word\n- normalizedWord: lowercase lemma\n- lemma: base form\n- pronunciation: IPA pronunciation (optional)\n- partOfSpeech: e.g. noun, verb, adjective\n- contextualDefinition: definition matching this context\n- translation: translation in the user's preferred language (optional)\n- cefrLevel: "A1"|"A2"|"B1"|"B2"|"C1"|"C2"\n- ieltsRelevance: "low"|"medium"|"high"\n- collocations: array of {phrase: string, example?: string}\n- synonyms: array of strings\n- wordFamily: array of {word: string, partOfSpeech: string}\n- simpleExample: simple example sentence\n- ieltsExample: IELTS-style example sentence (optional)\n- verbConjugation: {base: string, pastSimple: string, pastParticiple: string, presentParticiple: string, thirdPersonSingular: string} (omit if not a verb)\n\nContextual definition must relate to the provided sentence. If the word has multiple meanings, explain the one used in the context sentence first.`
 
-    const result = await aiAdapter.request(systemPrompt, userPrompt, { temperature: 0.3 })
+    const result = await aiAdapter.request({ systemPrompt, userMessage: userPrompt, temperature: 0.3 })
 
     if (!result.error && result.content) {
       let parsed: Record<string, unknown>
@@ -516,7 +504,6 @@ async function handleExplainSentence(payload: Record<string, unknown>): Promise<
   const sentence = typeof payload.sentence === 'string' ? payload.sentence : ''
   const contextBefore = Array.isArray(payload.contextBefore) ? payload.contextBefore as string[] : []
   const contextAfter = Array.isArray(payload.contextAfter) ? payload.contextAfter as string[] : []
-  const startTime = typeof payload.startTime === 'number' ? payload.startTime : 0
 
   if (!sentence || !aiAdapter) {
     postToParent('SENTENCE_EXPLANATION', { error: 'Sentence or AI not available' })
@@ -528,7 +515,7 @@ async function handleExplainSentence(payload: Record<string, unknown>): Promise<
     const systemPrompt = 'You are an IELTS listening and grammar tutor. Analyze the given transcript sentence. Return ONLY valid JSON, no markdown, no code fences.'
     const userPrompt = `Analyze this transcript sentence for an IELTS learner:\n\nSentence: "${sentence}"\n\nContext: "${contextText}"\n\nReturn JSON with:\n- simpleMeaning: clear simple explanation\n- translation: translation in the user's preferred language (optional)\n- sentenceStructure: grammar structure explanation\n- grammarPoints: array of {name, explanation, sourceText?}\n- vocabulary: array of {word, meaningInContext}\n- listeningNotes: array of listening difficulty notes\n- simplifiedVersion: simpler English version\n- academicAlternative: more academic IELTS version (optional)\n- practiceQuestion: {prompt, answer} (optional)`
 
-    const result = await aiAdapter.request(systemPrompt, userPrompt, { temperature: 0.3 })
+    const result = await aiAdapter.request({ systemPrompt, userMessage: userPrompt, temperature: 0.3 })
 
     if (result.error || !result.content) {
       postToParent('SENTENCE_EXPLANATION', { error: result.error || 'AI returned empty response' })
@@ -588,7 +575,7 @@ async function handleGenerateQuiz(payload: Record<string, unknown>): Promise<voi
     const systemPrompt = 'You are an IELTS listening quiz generator. Create questions based ONLY on the provided transcript section. Return ONLY valid JSON, no markdown, no code fences.'
     const userPrompt = `Create ${questionCount} IELTS listening questions from this transcript section (${startMs}ms to ${endMs}ms):\n\n${sectionText}\n\nDifficulty: ${difficulty}\n\nReturn JSON with:\n- questions: array of {id: string, type: "multiple-choice"|"sentence-completion"|"short-answer"|"true-false-not-given"|"fill-blank", prompt: string, options?: string[], correctAnswer: string, points: number, sourceSegmentIds: string[], explanation: string, evidenceStartMs: number, evidenceEndMs: number}\n\nEvery answer must be directly supported by the transcript. No invented information.`
 
-    const result = await aiAdapter.request(systemPrompt, userPrompt, { temperature: 0.3, maxTokens: 4000 })
+    const result = await aiAdapter.request({ systemPrompt, userMessage: userPrompt, temperature: 0.3, maxTokens: 4000 })
     if (result.error || !result.content) {
       postToParent('QUIZ_DATA', { error: result.error || 'Quiz generation failed' })
       return
@@ -763,7 +750,7 @@ export async function initYouTubeLearning(): Promise<void> {
 
     sessionService = new LearningSessionService(storageAdapter, eventBus)
     vocabService = new VocabularyService(aiAdapter, storageAdapter)
-    analysisService = new AIAnalysisService(aiAdapter)
+
     translationService = new TranscriptTranslationService(aiAdapter)
 
     youtubeAdapter = new YouTubeAdapter({

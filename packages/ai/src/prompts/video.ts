@@ -6,14 +6,13 @@ function translationTarget(lang: string): string {
 
 const VIDEO_PROMPT_VERSION: PromptVersion = { version: 1, description: 'Initial video/transcript prompts' }
 
+export const TRANSCRIPT_VOCABULARY_SYSTEM_PROMPT = 'You are an IELTS vocabulary expert. Extract useful vocabulary from video transcripts for IELTS learners. Respond with valid JSON only.'
+
 export function buildVocabularyFromTranscriptPrompt(
   transcript: string,
-  videoTitle: string,
-  _nativeLanguage = '',
-): { systemPrompt: string; userPrompt: string } {
-  const systemPrompt = 'You are an IELTS vocabulary expert. Extract useful vocabulary from video transcripts for IELTS learners. Respond with valid JSON only.'
-
-  const userPrompt = `Extract IELTS-level vocabulary from the following video transcript.
+  videoTitle = '',
+): string {
+  return `Extract IELTS-level vocabulary from the following video transcript.
 
 Video Title: "${videoTitle}"
 
@@ -45,17 +44,15 @@ Respond with valid JSON in this exact format:
 }
 
 IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, omit it entirely.`
-
-  return { systemPrompt, userPrompt }
 }
+
+export const TRANSCRIPT_SUMMARY_SYSTEM_PROMPT = 'You are an IELTS tutor. Summarize video transcripts and extract key learning points. Respond with valid JSON only.'
 
 export function buildSummaryFromTranscriptPrompt(
   transcript: string,
-  videoTitle: string,
-): { systemPrompt: string; userPrompt: string } {
-  const systemPrompt = 'You are an IELTS tutor. Summarize video transcripts and extract key learning points. Respond with valid JSON only.'
-
-  const userPrompt = `Summarize the following video transcript for IELTS learning purposes.
+  videoTitle = '',
+): string {
+  return `Summarize the following video transcript for IELTS learning purposes.
 
 Video Title: "${videoTitle}"
 
@@ -68,17 +65,15 @@ Respond with valid JSON in this exact format:
   "keyPoints": ["key point 1", "key point 2", "key point 3"],
   "ieltsTopics": ["relevant IELTS topic like education, environment, technology"]
 }`
-
-  return { systemPrompt, userPrompt }
 }
+
+export const LISTENING_QUESTIONS_SYSTEM_PROMPT = 'You are an IELTS listening exam question writer. Create realistic listening comprehension questions. Respond with valid JSON only.'
 
 export function buildListeningQuestionsPrompt(
   transcript: string,
-  videoTitle: string,
-): { systemPrompt: string; userPrompt: string } {
-  const systemPrompt = 'You are an IELTS listening exam question writer. Create realistic listening comprehension questions. Respond with valid JSON only.'
-
-  const userPrompt = `Create 3-5 IELTS listening comprehension questions based on the following video transcript.
+  videoTitle = '',
+): string {
+  return `Create 3-5 IELTS listening comprehension questions based on the following video transcript.
 
 Video Title: "${videoTitle}"
 
@@ -106,18 +101,16 @@ Requirements:
 - Include at least one gap-fill or short-answer question
 - Options are only needed for multiple-choice questions
 - Provide clear explanations`
-
-  return { systemPrompt, userPrompt }
 }
+
+export const SHADOWING_SCRIPTS_SYSTEM_PROMPT = 'You are an IELTS speaking coach. Create shadowing practice scripts from video transcripts. Respond with valid JSON only.'
 
 export function buildShadowingScriptsPrompt(
   transcript: string,
   nativeLanguage = '',
-): { systemPrompt: string; userPrompt: string } {
+): string {
   const lang = translationTarget(nativeLanguage)
-  const systemPrompt = 'You are an IELTS speaking coach. Create shadowing practice scripts from video transcripts. Respond with valid JSON only.'
-
-  const userPrompt = `Create shadowing practice sentences from the following transcript. Select 5-8 sentences that are useful for IELTS speaking practice.
+  return `Create shadowing practice sentences from the following transcript. Select 5-8 sentences that are useful for IELTS speaking practice.
 
 Transcript:
 ${transcript}
@@ -139,8 +132,6 @@ Respond with valid JSON in this exact format:
     }
   ]
 }`
-
-  return { systemPrompt, userPrompt }
 }
 
 export function getVersionInfo(): PromptVersion {

@@ -5,8 +5,6 @@ import {
   handleMessage,
   initMessaging,
 } from '../background/messaging'
-import type { MessageHandler } from '../background/messaging'
-
 const SENDER: chrome.runtime.MessageSender = { tab: { id: 1 } as chrome.tabs.Tab } as chrome.runtime.MessageSender
 
 const MOCK_DAILY_PROGRESS = {

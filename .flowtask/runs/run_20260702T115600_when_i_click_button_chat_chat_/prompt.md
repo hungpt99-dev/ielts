@@ -1,1 +1,0 @@
-when i click button chat, chat popup is not open, and fix chat popup css bug

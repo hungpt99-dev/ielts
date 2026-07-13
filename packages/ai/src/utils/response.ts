@@ -3,11 +3,20 @@ import { AIError } from '../errors/types'
 
 export function extractJSON(content: string): string {
   const jsonStart = content.indexOf('{')
-  const jsonEnd = content.lastIndexOf('}')
-  if (jsonStart === -1 || jsonEnd === -1) {
+  if (jsonStart === -1) {
     throw new AIError('AI response was not valid JSON.', 'INVALID_JSON')
   }
-  return content.slice(jsonStart, jsonEnd + 1)
+  let depth = 0
+  for (let i = jsonStart; i < content.length; i++) {
+    if (content[i] === '{') depth++
+    else if (content[i] === '}') {
+      depth--
+      if (depth === 0) {
+        return content.slice(jsonStart, i + 1)
+      }
+    }
+  }
+  throw new AIError('AI response was not valid JSON.', 'INVALID_JSON')
 }
 
 export function parseAndValidate<T>(

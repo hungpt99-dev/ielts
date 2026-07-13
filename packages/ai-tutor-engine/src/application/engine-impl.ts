@@ -107,7 +107,11 @@ export class AITutorEngineImpl implements AITutorEngine {
   ): Promise<TutorOperationResult<ProactiveEvaluationResult>> {
     try {
       const settings = await this.deps.settingsRepository.getProactiveSettings()
-      const result = await generateProactiveMessages(request, settings, [])
+      const recentMessages = request.recentMessages ?? []
+      const cooldownState = recentMessages
+        .filter(m => m.createdAt)
+        .map(m => ({ triggerType: m.triggerType, lastFiredAt: m.createdAt }))
+      const result = await generateProactiveMessages(request, settings, cooldownState)
       return { status: 'success', data: result }
     } catch (err) {
       return {
@@ -158,9 +162,58 @@ export class AITutorEngineImpl implements AITutorEngine {
   }
 
   async handleLearningEvent(
-    _event: LearningEvent,
+    event: LearningEvent,
   ): Promise<TutorOperationResult<void>> {
-    return { status: 'success', data: undefined }
+    try {
+      this.deps.eventPublisher.publishLearningEvent(event)
+
+      const memoryUpdates: UpdateTutorMemoryRequest = {
+        learnerId: 'default',
+        weakPoints: event.type === 'writing_reviewed' || event.type === 'speaking_session_completed'
+          ? [{ description: `${event.type} completed`, detectedAt: event.occurredAt, skill: event.source, id: crypto.randomUUID?.() ?? `${Date.now()}-wp`, frequency: 1, lastObservedAt: event.occurredAt, evidenceCount: 1 }]
+          : undefined,
+        mistakePatterns: event.type === 'mistake_recorded'
+          ? [{ pattern: 'recorded_mistake', skill: 'entityId' in event ? `${event.entityId}` : 'general', firstDetectedAt: event.occurredAt, lastDetectedAt: event.occurredAt, frequency: 1, id: crypto.randomUUID?.() ?? `${Date.now()}-mp`, examples: [] }]
+          : undefined,
+        goals: event.type === 'task_completed' || event.type === 'progress_milestone'
+          ? [{ title: `Completed: ${'taskTitle' in event ? event.taskTitle : event.type}`, description: `${event.type} on ${event.occurredAt}`, isAchieved: true, createdAt: event.occurredAt, id: crypto.randomUUID?.() ?? `${Date.now()}-g` }]
+          : undefined,
+      }
+      await updateTutorMemory(memoryUpdates, this.memoryManager)
+
+      const settings = await this.deps.settingsRepository.getProactiveSettings()
+      if (settings.enabled) {
+        const learnerState = await this.deps.contextBuilder.build('proactive')
+        const result = await generateProactiveMessages(
+          { triggerEvent: event.type, learnerState, recentMessages: [] },
+          settings,
+          [],
+        )
+        if (result.selected.length > 0) {
+          this.deps.eventPublisher.publishTutorEvent({
+            id: crypto.randomUUID?.() ?? `${Date.now()}-evt`,
+            type: 'proactive_intervention',
+            occurredAt: new Date().toISOString(),
+            interventions: result.selected.map(i => ({
+              title: i.title,
+              message: i.message,
+              priority: 'medium',
+            })),
+          })
+        }
+      }
+
+      return { status: 'success', data: undefined }
+    } catch (err) {
+      return {
+        status: 'failure',
+        error: {
+          code: 'learning_event_failed',
+          message: err instanceof Error ? err.message : 'Unknown error',
+          recoverable: true,
+        },
+      }
+    }
   }
 
   async updateMemory(
@@ -182,13 +235,22 @@ export class AITutorEngineImpl implements AITutorEngine {
   }
 
   async getTutorState(): Promise<TutorStateSnapshot> {
+    let activeMessages = 0
+    let sessionCount = 0
+    let memoryVersion = 1
+    try {
+      const state = await this.deps.contextBuilder.build('proactive')
+      memoryVersion = state.activitySummary?.tasksCompletedToday ?? 1
+    } catch {
+      /* use defaults */
+    }
     return {
       initialized: this.initialized,
       aiConfigured: !!this.deps.aiClient,
       proactiveEnabled: true,
-      currentSessionsCount: 0,
-      activeProactiveMessages: 0,
-      memoryVersion: 1,
+      currentSessionsCount: sessionCount,
+      activeProactiveMessages: activeMessages,
+      memoryVersion,
     }
   }
 }

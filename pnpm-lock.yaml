@@ -238,6 +238,12 @@ importers:
 
   packages/ai-tutor-engine:
     dependencies:
+      '@ielts/ai':
+        specifier: workspace:*
+        version: link:../ai
+      '@ielts/shared':
+        specifier: workspace:*
+        version: link:../shared
       lucide-react:
         specifier: ^1.23.0
         version: 1.23.0(react@19.2.7)
@@ -272,6 +278,12 @@ importers:
 
   packages/learning-engine:
     dependencies:
+      '@ielts/ai':
+        specifier: workspace:*
+        version: link:../ai
+      '@ielts/shared':
+        specifier: workspace:*
+        version: link:../shared
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -288,6 +300,15 @@ importers:
       zod:
         specifier: ^4.4.3
         version: 4.4.3
+    devDependencies:
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.1.1
+        version: 3.2.6(@types/node@26.0.1)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(terser@5.48.0)
+
+  packages/shared:
     devDependencies:
       typescript:
         specifier: ~5.8.3

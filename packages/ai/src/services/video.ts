@@ -5,6 +5,10 @@ import {
   buildSummaryFromTranscriptPrompt,
   buildListeningQuestionsPrompt,
   buildShadowingScriptsPrompt,
+  TRANSCRIPT_VOCABULARY_SYSTEM_PROMPT,
+  TRANSCRIPT_SUMMARY_SYSTEM_PROMPT,
+  LISTENING_QUESTIONS_SYSTEM_PROMPT,
+  SHADOWING_SCRIPTS_SYSTEM_PROMPT,
 } from '../prompts'
 import {
   transcriptVocabularySchema,
@@ -46,9 +50,9 @@ export async function generateVocabularyFromTranscript(
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
   }
 
-  const { systemPrompt, userPrompt } = buildVocabularyFromTranscriptPrompt(transcript, videoTitle)
+  const userPrompt = buildVocabularyFromTranscriptPrompt(transcript, videoTitle)
 
-  const { content, error } = await callAI(systemPrompt, userPrompt, getConfig, {
+  const { content, error } = await callAI(TRANSCRIPT_VOCABULARY_SYSTEM_PROMPT, userPrompt, getConfig, {
     maxTokens: 2000,
     temperature: 0.4,
   })
@@ -73,9 +77,9 @@ export async function generateSummaryFromTranscript(
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
   }
 
-  const { systemPrompt, userPrompt } = buildSummaryFromTranscriptPrompt(transcript, videoTitle)
+  const userPrompt = buildSummaryFromTranscriptPrompt(transcript, videoTitle)
 
-  const { content, error } = await callAI(systemPrompt, userPrompt, getConfig, {
+  const { content, error } = await callAI(TRANSCRIPT_SUMMARY_SYSTEM_PROMPT, userPrompt, getConfig, {
     maxTokens: 2000,
     temperature: 0.4,
   })
@@ -100,9 +104,9 @@ export async function generateListeningQuestions(
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
   }
 
-  const { systemPrompt, userPrompt } = buildListeningQuestionsPrompt(transcript, videoTitle)
+  const userPrompt = buildListeningQuestionsPrompt(transcript, videoTitle)
 
-  const { content, error } = await callAI(systemPrompt, userPrompt, getConfig, {
+  const { content, error } = await callAI(LISTENING_QUESTIONS_SYSTEM_PROMPT, userPrompt, getConfig, {
     maxTokens: 2000,
     temperature: 0.4,
   })
@@ -127,9 +131,9 @@ export async function generateShadowingScripts(
     return { data: null, error: 'API key not configured. Add your AI API key in Settings.' }
   }
 
-  const { systemPrompt, userPrompt } = buildShadowingScriptsPrompt(transcript, nativeLanguage)
+  const userPrompt = buildShadowingScriptsPrompt(transcript, nativeLanguage)
 
-  const { content, error } = await callAI(systemPrompt, userPrompt, getConfig, {
+  const { content, error } = await callAI(SHADOWING_SCRIPTS_SYSTEM_PROMPT, userPrompt, getConfig, {
     maxTokens: 2000,
     temperature: 0.4,
   })

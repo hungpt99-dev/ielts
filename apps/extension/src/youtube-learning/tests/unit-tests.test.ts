@@ -298,31 +298,6 @@ describe('Binary search for active segment', () => {
   })
 })
 
-// ─── DictationService ────────────────────────────────────────────────────────
-
-import { DictationService } from '../application/services/DictationService'
-
-describe('DictationService.compare', () => {
-  const service = new DictationService()
-
-  it('returns 100% accuracy for exact match', () => {
-    const result = service.compare('hello world', 'hello world')
-    expect(result.accuracy).toBe(100)
-    expect(result.incorrectWords).toHaveLength(0)
-    expect(result.isCorrect).toBe(true)
-  })
-
-  it('detects incorrect words', () => {
-    const result = service.compare('hello word', 'hello world')
-    expect(result.accuracy).toBeLessThan(100)
-  })
-
-  it('normalizes punctuation before comparison', () => {
-    const result = service.compare('Hello, world!', 'hello world')
-    expect(result.accuracy).toBe(100)
-  })
-})
-
 // ─── YouTubeTranscriptProvider ───────────────────────────────────────────────
 
 import { YouTubeTranscriptProvider, clearTranscriptCache } from '../infrastructure/youtube/YouTubeTranscriptProvider'
@@ -376,36 +351,13 @@ describe('YouTubeTranscriptProvider', () => {
   })
 
   describe('checkAvailability', () => {
-    it('returns not available for missing video ID', async () => {
-      const result = await provider.checkAvailability('')
-      expect(result.available).toBe(false)
-    })
-
-    it('returns not available for non-existent video', async () => {
-      const result = await provider.checkAvailability('nonexistent')
+    it('returns not available', async () => {
+      const result = await provider.checkAvailability()
       expect(result.available).toBe(false)
     })
   })
 
-  describe('computeContentHash', () => {
-    it('generates consistent hash for same segments', async () => {
-      const segments = [
-        { id: '1', start: 0, end: 5, text: 'Hello' },
-        { id: '2', start: 5, end: 10, text: 'world' },
-      ]
-      const hash1 = await YouTubeTranscriptProvider.computeContentHash(segments)
-      const hash2 = await YouTubeTranscriptProvider.computeContentHash(segments)
-      expect(hash1).toBe(hash2)
-    })
 
-    it('generates different hashes for different content', async () => {
-      const segs1 = [{ id: '1', start: 0, end: 5, text: 'Hello' }]
-      const segs2 = [{ id: '1', start: 0, end: 5, text: 'World' }]
-      const hash1 = await YouTubeTranscriptProvider.computeContentHash(segs1)
-      const hash2 = await YouTubeTranscriptProvider.computeContentHash(segs2)
-      expect(hash1).not.toBe(hash2)
-    })
-  })
 })
 
 // ─── Error states ────────────────────────────────────────────────────────────

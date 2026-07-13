@@ -10,6 +10,7 @@ import { QuizPanel } from './presentation/components/QuizPanel'
 import { FillInBlankPanel } from './presentation/components/FillInBlank'
 import { IconHeadphones } from '@ielts/ui'
 import { tokenizeSegment, normalizeWord, formatTime } from './presentation/utils/tokenizeTranscript'
+import type { TokenizedWord } from './presentation/utils/tokenizeTranscript'
 
 export type PanelTab = 'overview' | 'transcript' | 'practice'
 
@@ -293,7 +294,7 @@ function OverviewPanel({ videoInfo, transcriptAvailable, currentTime, sendToPare
 
   const sectionTitle: React.CSSProperties = { fontSize: '11px', fontWeight: 600, color: 'var(--color-text)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }
   const cardStyle: React.CSSProperties = { padding: '10px 12px', borderRadius: '8px', background: 'rgba(255,255,255,0.03)', marginBottom: '10px' }
-  const badge = (bg: string, color: string, label: string): React.CSSProperties => ({
+  const badge = (bg: string, color: string): React.CSSProperties => ({
     display: 'inline-block', padding: '2px 8px', borderRadius: '4px', background: bg, color, fontSize: '11px', fontWeight: 500,
   })
   const row: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0', fontSize: '12px' }
@@ -303,12 +304,12 @@ function OverviewPanel({ videoInfo, transcriptAvailable, currentTime, sendToPare
       <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-text)', marginBottom: '2px', lineHeight: 1.3 }}>
         {videoInfo.videoTitle || 'Untitled Video'}
       </div>
-      {videoInfo.channelName && (
+      {videoInfo.channelName ? (
         <div style={{ color: 'var(--color-muted)', fontSize: '11px', marginBottom: '12px' }}>{videoInfo.channelName}</div>
-      )}
+      ) : null}
 
       {/* IELTS Suitability Card */}
-      {analysis && (
+      {analysis ? (
         <div style={cardStyle}>
           <div style={sectionTitle}>IELTS Suitability</div>
           <div style={row}>
@@ -328,25 +329,21 @@ function OverviewPanel({ videoInfo, transcriptAvailable, currentTime, sendToPare
             <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>{analysis.lexicalDiversity ? `${(analysis.lexicalDiversity as number).toFixed(2)}` : '—'}</span>
           </div>
         </div>
-      )}
+      ) : null}
 
-      {analysisLoading && (
-        <div style={{ ...cardStyle, textAlign: 'center', color: 'var(--color-muted)', fontSize: '11px' }}>
-          Analysing transcript...
-        </div>
-      )}
+      {analysisLoading ? <div style={{ padding: '10px 12px', borderRadius: '8px', background: 'rgba(255,255,255,0.03)', marginBottom: '10px', textAlign: 'center', color: 'var(--color-muted)', fontSize: '11px' }}>Analysing transcript...</div> : null}
 
       {/* Topics */}
-      {analysis?.topics && Array.isArray(analysis.topics) && (analysis.topics as string[]).length > 0 && (
+      {analysis?.topics && Array.isArray(analysis.topics) && (analysis.topics as string[]).length > 0 ? (
         <div style={cardStyle}>
           <div style={sectionTitle}>Topics</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
             {(analysis.topics as string[]).map((t: string, i: number) => (
-              <span key={i} style={badge('rgba(59,130,246,0.15)', 'var(--color-primary-hover)', t)}>{t}</span>
+              <span key={i} style={badge('rgba(59,130,246,0.15)', 'var(--color-primary-hover)')}>{t}</span>
             ))}
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* Transcript Status */}
       <div style={cardStyle}>
@@ -640,7 +637,7 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
                 style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text)', lineHeight: 'var(--leading-normal)' }}
                 onClick={(e) => handleSentenceTextClick(e, seg)}
               >
-                {tokens.map((token, ti) => {
+                {tokens.map((token: TokenizedWord, ti: number) => {
                   if (token.isPunctuation || !token.isMeaningful) {
                     return <span key={ti}>{token.text}</span>
                   }

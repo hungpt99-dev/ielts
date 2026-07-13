@@ -80,11 +80,10 @@ export default function SavedItemDetailView({ item: initialItem, onBack, onDelet
         explain: explainText,
         'ielts-vocab': analyzeIeltsVocab,
         examples: generateExamples,
-      }[action]
+      }[action] as ((text: string) => Promise<VocabEnrichResult | ExplainResult | IeltsVocabResult | ExampleSentencesResult>)
       const r = await handler(text)
-      if (r.error) { setEnrich({ type: 'error', message: r.error }); return }
-      const key = { vocab: 'vocab', explain: 'explain', 'ielts-vocab': 'ielts-vocab', examples: 'examples' }[action]
-      setEnrich({ type: key as any, data: r.data! })
+      const key = { vocab: 'vocab', explain: 'explain', 'ielts-vocab': 'ielts-vocab', examples: 'examples' }[action] as 'vocab' | 'explain' | 'ielts-vocab' | 'examples'
+      setEnrich({ type: key, data: r } as EnrichmentState)
     } catch (err) {
       setEnrich({ type: 'error', message: err instanceof Error ? err.message : 'AI enrichment failed' })
     }

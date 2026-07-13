@@ -122,7 +122,7 @@ describe('safeStorageSet', () => {
     await safeStorageSet({ testKey: 'testValue' })
 
     const result = await new Promise<Record<string, unknown>>((resolve) => {
-      chrome.storage.local.get('testKey', resolve)
+      chrome.storage.local.get('testKey', (items: Record<string, unknown>) => resolve(items))
     })
     expect(result.testKey).toBe('testValue')
   })
@@ -131,7 +131,7 @@ describe('safeStorageSet', () => {
     await safeStorageSet({ a: '1', b: '2' })
 
     const result = await new Promise<Record<string, unknown>>((resolve) => {
-      chrome.storage.local.get(['a', 'b'], resolve)
+      chrome.storage.local.get(['a', 'b'], (items: Record<string, unknown>) => resolve(items))
     })
     expect(result.a).toBe('1')
     expect(result.b).toBe('2')

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../../context/SettingsContext'
-import { testConnection } from '../../services/ai/AIService'
+import { testConnection } from '../../services/ai/testConnection'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { emitAIProviderConfigured, emitSettingsChanged } from '../../features/websiteActions/eventEmitters'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'

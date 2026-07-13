@@ -77,12 +77,19 @@ The central orchestrator. Responsible for the entire generation pipeline:
 
 ```typescript
 interface DailyPlanEngineConfig {
-  bufferPercentage?: number;   // default 0.1 (10%)
-  maxRepairAttempts?: number;  // default 3
-  engineVersion?: string;      // default '1.0.0'
-  schemaVersion?: string;      // default '1.0.0'
+  bufferPercentage?: number;               // default 0.1 (10%)
+  maxRepairAttempts?: number;              // default 3
+  engineVersion?: string;                  // default '1.0.0'
+  schemaVersion?: string;                  // default '1.0.0'
+  onProgress?: (progress: PlanGenerationProgress) => void  // progress callback during generation
 }
 ```
+
+The `onProgress` callback is called at each stage of the generation pipeline with the current `PlanGenerationStage`, completed batch count, total batches, and a human-readable message. Stages include: `normalizing-profile`, `validating-profile`, `calculating-availability`, `analyzing-skills`, `checking-feasibility`, `planning-phases`, `scheduling-tasks`, `adding-reviews`, `adding-mock-tests`, `validating-plan`, `repairing-plan`, `persisting-plan`, and `completed`.
+
+### GenerateStudyPlanResult
+
+When feasibility is `insufficient-time`, the engine returns `{ status: "failure" }` with a `reason.code` of `"insufficient-time"` and actionable suggestions. It does not return `needs-profile-completion`, which is reserved for genuinely missing critical input fields.
 
 ### PlanRegenerator.ts — Regeneration & Adaptation
 

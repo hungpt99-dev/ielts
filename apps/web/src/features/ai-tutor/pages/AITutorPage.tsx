@@ -10,19 +10,10 @@ import AskTutorCompactCard from '../components/AskTutorCompactCard'
 import LearningProfileCard from '../components/LearningProfileCard'
 import TutorFeedbackSummaryCard from '../components/TutorFeedbackSummaryCard'
 import RecentTeacherActivityCard from '../components/RecentTeacherActivityCard'
-import { useAITutorPage } from '../hooks/useAITutorPage'
-import { emitAITutorEvent } from '../services/aiTutorEventService'
+import { useAITutorEnginePage } from '../hooks/useAITutorEnginePage'
 
 export default function AITutorPage() {
-  const state = useAITutorPage()
-
-  useEffect(() => {
-    emitAITutorEvent({
-      eventType: 'AI_TUTOR_PAGE_VIEWED',
-      targetBand: state.profile.targetBand,
-      todayFocus: state.session.focus,
-    })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const state = useAITutorEnginePage()
 
   if (state.loading) {
     return (

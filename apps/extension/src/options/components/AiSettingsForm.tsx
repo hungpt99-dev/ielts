@@ -44,7 +44,7 @@ export default function AiSettingsForm({ settings, onChange, errors, setErrors }
 
   const handleTextChange = (field: 'aiBaseUrl' | 'aiApiKey' | 'aiModel', value: string) => {
     setLocal((prev) => ({ ...prev, [field]: value }))
-    setErrors((prev) => ({ ...prev, [field]: undefined }))
+    setErrors({ ...errors, [field]: '' })
     onChange({ [field]: value })
   }
 

@@ -1,5 +1,18 @@
 import { IconAITutor, IconTarget, IconStreak, IconTimer, IconVocabulary, IconMistakes } from '@ielts/ui'
-import type { ProgressReview, SkillBreakdown } from '../services/teacherProgressReviewService'
+
+export interface SkillBreakdown {
+  skill: string; accuracy: number; mistakeCount: number; trend: 'improving' | 'declining' | 'stable'; daysSincePractice: number; taskCount: number; isWeak: boolean
+}
+
+export interface ProgressReview {
+  summary: string; improvements: string[]; struggles: string[]; focusAreas: string[]; streak: number;
+  weeklyCompletion: number; totalStudyHours: number; mistakesReviewed: number; vocabLearned: number;
+  weakSkills: string[]; examCountdown: number; skillBreakdown: SkillBreakdown[];
+  weeklyTasksDone: number; weeklyTasksTotal: number; vocabDueReview: number; vocabMastered: number;
+  mistakesUnresolved: number; mistakesRecent: number; todayUnfinished: number; isExamUrgent: boolean;
+  skillProgress: { skill: string; status: string; sessions: number; accuracy: number; trend: string; analysis: string }[];
+  studyPlanAdherence: string; tutorFeedback: string; generatedAt: string | null;
+}
 
 interface TeacherProgressReviewCardProps {
   review: ProgressReview

@@ -60,36 +60,36 @@ export async function loadVocabulary(): Promise<{
   return { entries, stats }
 }
 
-function toPopupEntry(raw: Record<string, unknown>): PopupVocabEntry {
+function toPopupEntry(raw: Record<string, unknown> | ExtensionVocabEntry): PopupVocabEntry {
   if (isExtensionVocabEntry(raw)) {
     return {
-      id: raw.id ?? crypto.randomUUID(),
-      word: raw.word ?? '',
-      meaning: raw.meaning ?? '',
-      pronunciation: raw.pronunciation ?? '',
-      partOfSpeech: raw.partOfSpeech ?? '',
-      topic: raw.topic ?? '',
-      difficulty: raw.difficulty ?? '',
-      status: raw.status ?? 'new',
-      createdAt: raw.createdAt ?? new Date().toISOString(),
+      id: String(raw.id ?? crypto.randomUUID()),
+      word: String(raw.word ?? ''),
+      meaning: String(raw.meaning ?? ''),
+      pronunciation: String(raw.pronunciation ?? ''),
+      partOfSpeech: String(raw.partOfSpeech ?? ''),
+      topic: String(raw.topic ?? ''),
+      difficulty: String(raw.difficulty ?? ''),
+      status: String(raw.status ?? 'new'),
+      createdAt: String(raw.createdAt ?? new Date().toISOString()),
     }
   }
-  // VocabEntry from chrome.storage.local (VocabularyService format)
+  const r = raw as Record<string, unknown>
   return {
-    id: (raw.id as string) ?? crypto.randomUUID(),
-    word: (raw.word as string) ?? '',
-    meaning: (raw.meaning as string) ?? (raw.translation as string) ?? '',
-    pronunciation: (raw.pronunciation as string) ?? '',
-    partOfSpeech: (raw.partOfSpeech as string) ?? '',
-    topic: (raw.topic as string) ?? '',
-    difficulty: (raw.difficulty as string) ?? '',
+    id: String(r.id ?? crypto.randomUUID()),
+    word: String(r.word ?? ''),
+    meaning: String(r.meaning ?? r.translation ?? ''),
+    pronunciation: String(r.pronunciation ?? ''),
+    partOfSpeech: String(r.partOfSpeech ?? ''),
+    topic: String(r.topic ?? ''),
+    difficulty: String(r.difficulty ?? ''),
     status: 'new',
-    createdAt: (raw.savedAt as string) ?? (raw.createdAt as string) ?? new Date().toISOString(),
+    createdAt: String(r.savedAt ?? r.createdAt ?? new Date().toISOString()),
   }
 }
 
-function isExtensionVocabEntry(raw: Record<string, unknown>): raw is ExtensionVocabEntry {
-  return 'status' in raw || 'createdAt' in raw
+function isExtensionVocabEntry(raw: unknown): raw is ExtensionVocabEntry {
+  return typeof raw === 'object' && raw !== null && ('status' in raw || 'createdAt' in raw)
 }
 
 export async function findWord(word: string): Promise<PopupVocabEntry | undefined> {

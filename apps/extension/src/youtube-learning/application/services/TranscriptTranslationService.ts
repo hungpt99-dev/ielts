@@ -73,7 +73,9 @@ export class TranscriptTranslationService {
 
     const userPrompt = `Translate these English segments to ${targetLanguage}. Return a JSON array of objects, each with keys "id" and "translatedText", one per segment.\n\nSegments:\n${JSON.stringify(batch.map(s => ({ id: s.id, text: s.text })))}`
 
-    const result = await this.aiAdapter.request(systemPrompt, userPrompt, {
+    const result = await this.aiAdapter.request({
+      systemPrompt,
+      userMessage: userPrompt,
       temperature: 0.2,
       maxTokens: MAX_TOKENS_PER_BATCH,
     })

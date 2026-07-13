@@ -64,14 +64,14 @@ export type { MistakeAnalysisInput } from './domain/services/mistake-pattern-ana
 export { analyzeLearnerProgress } from './domain/services/progress-analyzer'
 
 // ── Context System ────────────────────────────────────────────────────
-export { LearnerContextBuilder, ContextSourceRegistry, selectContextForScope, evaluateFreshness, summarizeForPrompt, summarizeState } from './context'
+export { LearnerContextBuilder, ContextSourceRegistry, selectContextForScope, evaluateFreshness, summarizeForPrompt, summarizeState, toSharedLearnerContext, CachedContextBuilder } from './context'
 export type { LearnerContextDependencies, ContextSource, ContextSummary } from './context'
 
 // ── Memory System ─────────────────────────────────────────────────────
 export { TutorMemoryManager, MemoryDeduplicator, MemoryCompactor, MemoryExtractor } from './memory'
 
 // ── Proactive System ──────────────────────────────────────────────────
-export { TriggerRegistry, MessageGeneratorRegistry, ProactiveTutorOrchestrator, createDefaultGenerators } from './proactive'
+export { TriggerRegistry, MessageGeneratorRegistry, ProactiveTutorOrchestrator, createDefaultGenerators, CachedProactiveEvaluator } from './proactive'
 export type { TriggerHandler, MessageGenerator } from './proactive'
 
 // ── AI Layer ──────────────────────────────────────────────────────────
@@ -110,20 +110,20 @@ export type { ListeningTutorModule, ListeningExplanationRequest, ListeningExplan
 export type { VocabularyTutorModule, VocabularyExplanationRequest, VocabularyExplanationResult } from './skill-modules/vocabulary'
 export type { GrammarTutorModule, GrammarExplanationRequest, GrammarExplanationResult } from './skill-modules/grammar'
 
-// ── Storage ──────────────────────────────────────────────────────────
-export { MessageStorage } from './services/messageStorage'
+// ── Prompt Builders ───────────────────────────────────────────────────
+export { buildLearningProgressReviewPrompt } from './prompts/learningProgressReview'
+export type { ProgressReviewData, SkillProgress, WeaknessReport, WeakSkill, VocabularyStatus, ReviewSummary, StudyConsistency, AIProgressReviewResponse } from './prompts/learningProgressReview'
 
-// ── Legacy exports (preserved for backward compatibility) ─────────────
-// Components
+// ── Backward Compatibility ────────────────────────────────────────────
+// Legacy component kept for existing consumers
 export { default as ChatPopup } from './components/ChatPopup'
 
-// Services
-export { ProactiveEventBus } from './services/proactiveEventBus'
-
-// Controllers
-export { AIProgressReviewController } from './controllers/AIProgressReviewController'
-export type { AICallFn, ProgressReviewSuccess, ProgressReviewFailure, ProgressReviewResult as LegacyProgressReviewResult } from './controllers/AIProgressReviewController'
-
-// Legacy types
-export type { ContextSuggestion as LegacyContextSuggestion } from './types'
-export type { ProactiveMessage as LegacyProactiveMessage, ProactiveMessageSettings as LegacyProactiveMessageSettings } from './types'
+// Legacy types kept for backward compatibility
+export type {
+  ProactiveMessage as LegacyProactiveMessage,
+  ProactiveMessageSettings as LegacyProactiveMessageSettings,
+  ChatMessage,
+  ChatWidgetProps,
+  ContextSuggestion as LegacyContextSuggestion,
+  QuickAction,
+} from './types'

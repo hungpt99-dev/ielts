@@ -1,1 +1,0 @@
-check this bug Database is closed. Call getDb() to open a connection first., check again css bug related to color, theme
