@@ -127,6 +127,7 @@ export class LearningEngineImpl implements LearningEngine {
         outcomeRepository: this.deps.outcomeRepository,
         progressRepository: this.deps.progressRepository,
         studyPlanPort: this.deps.studyPlanPort,
+        tutorPort: this.deps.tutorPort,
         mistakeRepository: this.deps.mistakeRepository,
         vocabularyRepository: this.deps.vocabularyRepository,
         eventPublisher: this.deps.eventPublisher,

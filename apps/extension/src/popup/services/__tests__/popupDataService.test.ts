@@ -73,7 +73,7 @@ describe('loadVocabulary', () => {
   })
 
   it('loads vocabulary from chrome.storage.local as fallback', async () => {
-    mockStore.store['vocabulary'] = [
+    mockStore.store['yt-learning-vocabulary'] = [
       {
         id: '2',
         word: 'world',
@@ -108,7 +108,7 @@ describe('loadVocabulary', () => {
       },
     ])
 
-    mockStore.store['vocabulary'] = [
+    mockStore.store['yt-learning-vocabulary'] = [
       {
         id: '2',
         word: 'hello',
@@ -120,7 +120,7 @@ describe('loadVocabulary', () => {
 
     const result = await loadVocabulary()
     expect(result.entries).toHaveLength(1)
-    expect(result.entries[0].meaning).toBe('from storage')
+    expect(result.entries[0].meaning).toBe('from IDB')
   })
 
   it('calculates stats correctly', async () => {
@@ -221,7 +221,7 @@ describe('loadVocabulary', () => {
   })
 
   it('filters out storage entries without a word field', async () => {
-    mockStore.store['vocabulary'] = [
+    mockStore.store['yt-learning-vocabulary'] = [
       { id: '1', word: 'valid', createdAt: '2025-06-01T00:00:00.000Z' },
       { id: '2', word: '', createdAt: '2025-06-01T00:00:00.000Z' },
     ]

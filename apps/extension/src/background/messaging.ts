@@ -290,6 +290,7 @@ export function initMessaging(): void {
         wordsAdded: 0,
         notesAdded: 0,
         articlesSaved: 0,
+        notesSaved: 0,
         reviewDue: 0,
         streak: 0,
       }

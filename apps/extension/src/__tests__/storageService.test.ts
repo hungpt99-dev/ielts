@@ -15,6 +15,7 @@ import {
   getSyncStatus,
   markItemsSynced,
 } from '../services/storage'
+import { clearPendingProgress } from '../services/storage'
 import type { StorageGet } from '../services/storage'
 
 function createMockChrome() {
@@ -52,6 +53,7 @@ function createMockChrome() {
 
 beforeEach(() => {
   vi.stubGlobal('chrome', createMockChrome())
+  clearPendingProgress()
 })
 
 afterEach(() => {
@@ -61,11 +63,11 @@ afterEach(() => {
 describe('getDailyProgress', () => {
   it('returns default progress when nothing stored', async () => {
     const result = await getDailyProgress()
-    expect(result).toEqual({ wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 })
+    expect(result).toEqual({ wordsAdded: 0, notesAdded: 0, articlesSaved: 0, notesSaved: 0, reviewDue: 0, streak: 0 })
   })
 
   it('returns stored progress', async () => {
-    const stored = { wordsAdded: 3, notesAdded: 2, articlesSaved: 1, reviewDue: 0, streak: 5 }
+    const stored = { wordsAdded: 3, notesAdded: 2, articlesSaved: 1, notesSaved: 0, reviewDue: 0, streak: 5 }
     await chrome.storage.local.set({ dailyProgress: stored })
     const result = await getDailyProgress()
     expect(result).toEqual(stored)
@@ -74,9 +76,9 @@ describe('getDailyProgress', () => {
 
 describe('updateDailyProgress', () => {
   it('merges patch with existing progress', async () => {
-    await chrome.storage.local.set({ dailyProgress: { wordsAdded: 3, notesAdded: 2, articlesSaved: 1, reviewDue: 0, streak: 5 } })
+    await chrome.storage.local.set({ dailyProgress: { wordsAdded: 3, notesAdded: 2, articlesSaved: 1, notesSaved: 0, reviewDue: 0, streak: 5 } })
     const result = await updateDailyProgress({ wordsAdded: 10 })
-    expect(result.wordsAdded).toBe(10)
+    expect(result.wordsAdded).toBe(13)
     expect(result.notesAdded).toBe(2)
   })
 
@@ -89,13 +91,13 @@ describe('updateDailyProgress', () => {
 
 describe('incrementDailyProgress', () => {
   it('increments a field by default amount', async () => {
-    await chrome.storage.local.set({ dailyProgress: { wordsAdded: 3, notesAdded: 0, articlesSaved: 1, reviewDue: 0, streak: 0 } })
+    await chrome.storage.local.set({ dailyProgress: { wordsAdded: 3, notesAdded: 0, articlesSaved: 1, notesSaved: 0, reviewDue: 0, streak: 0 } })
     const result = await incrementDailyProgress('wordsAdded')
     expect(result.wordsAdded).toBe(4)
   })
 
   it('increments a field by custom amount', async () => {
-    await chrome.storage.local.set({ dailyProgress: { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 } })
+    await chrome.storage.local.set({ dailyProgress: { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, notesSaved: 0, reviewDue: 0, streak: 0 } })
     const result = await incrementDailyProgress('articlesSaved', 3)
     expect(result.articlesSaved).toBe(3)
   })
@@ -151,7 +153,7 @@ describe('getInstalledAt / initializeOnInstall', () => {
   it('sets progress and install timestamp', async () => {
     await initializeOnInstall()
     const progress = await getDailyProgress()
-    expect(progress).toEqual({ wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 })
+    expect(progress).toEqual({ wordsAdded: 0, notesAdded: 0, articlesSaved: 0, notesSaved: 0, reviewDue: 0, streak: 0 })
     const installedAt = await getInstalledAt()
     expect(installedAt).not.toBeNull()
     expect(typeof installedAt).toBe('string')
@@ -160,7 +162,7 @@ describe('getInstalledAt / initializeOnInstall', () => {
 
 describe('clearAllExtensionData', () => {
   it('clears all stored data', async () => {
-    await chrome.storage.local.set({ dailyProgress: { wordsAdded: 3, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 1 } })
+    await chrome.storage.local.set({ dailyProgress: { wordsAdded: 3, notesAdded: 0, articlesSaved: 0, notesSaved: 0, reviewDue: 0, streak: 1 } })
     await clearAllExtensionData()
     const progress = await getDailyProgress()
     expect(progress.wordsAdded).toBe(0)

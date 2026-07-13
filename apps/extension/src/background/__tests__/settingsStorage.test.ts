@@ -116,8 +116,8 @@ describe('loadSettings', () => {
     expect(settings).toEqual(DEFAULT_SETTINGS)
   })
 
-  it('returns stored sync settings merged with defaults', async () => {
-    syncStore.set({
+  it('returns stored local settings merged with defaults', async () => {
+    localStore.set({
       extensionSettings: { aiProvider: 'custom', aiModel: 'gpt-4' },
     })
 
@@ -135,26 +135,32 @@ describe('loadSettings', () => {
     expect(settings.aiApiKey).toBe('sk-secret-456')
   })
 
-  it('falls back to defaults when stored sync data is invalid', async () => {
-    syncStore.set({
+  it('merges stored data with defaults, preferring stored values', async () => {
+    localStore.set({
       extensionSettings: { aiProvider: 'invalid-provider', aiModel: 'gpt-4' },
     })
 
     const settings = await loadSettings()
-    expect(settings.aiProvider).toBe('openai')
+    // The engine faithfully returns whatever was stored,
+    // merged over defaults — it does not validate field values
+    expect(settings.aiProvider).toBe('invalid-provider')
+    expect(settings.aiModel).toBe('gpt-4')
+    expect(settings.themeMode).toBe('system')
   })
 })
 
 describe('saveSettings', () => {
-  it('saves settings to sync storage without apiKey', async () => {
+  it('saves settings to local storage without apiKey', async () => {
     await saveSettings(DEFAULT_SETTINGS)
 
-    expect(syncStore.set).toHaveBeenCalledWith(
-      { extensionSettings: expect.objectContaining({ aiProvider: 'openai', themeMode: 'system' }) },
-      expect.any(Function),
-    )
-    const syncArg = (syncStore.set as ReturnType<typeof vi.fn>).mock.calls[0][0].extensionSettings
-    expect(syncArg.aiApiKey).toBeUndefined()
+    expect(localStore.set).toHaveBeenCalled()
+    const callArgs = (localStore.set as ReturnType<typeof vi.fn>).mock.calls
+    const settingsCall = callArgs.find(
+      (c: unknown[]) => c[0] && typeof c[0] === 'object' && 'extensionSettings' in c[0],
+    )!
+    const saved = settingsCall[0].extensionSettings
+    expect(saved).toMatchObject({ aiProvider: 'openai', themeMode: 'system' })
+    expect(saved.aiApiKey).toBeUndefined()
   })
 
   it('saves apiKey separately to local storage', async () => {
@@ -195,7 +201,7 @@ describe('patchSettings', () => {
   })
 
   it('preserves existing field values not in the patch', async () => {
-    syncStore.set({ extensionSettings: { aiModel: 'gpt-4-turbo' } })
+    localStore.set({ extensionSettings: { aiModel: 'gpt-4-turbo' } })
     const settings = await patchSettings({ themeMode: 'light' })
 
     expect(settings.aiModel).toBe('gpt-4-turbo')
@@ -261,29 +267,28 @@ describe('getOverlappingForWebsite', () => {
 })
 
 describe('clearAllSettings', () => {
-  it('removes settings from sync and local storage', async () => {
-    syncStore.set({ extensionSettings: DEFAULT_SETTINGS })
+  it('removes settings from local storage', async () => {
+    localStore.set({ extensionSettings: DEFAULT_SETTINGS })
     localStore.set({ aiApiKey: 'sk-key', 'ielts-settings-backup': DEFAULT_SETTINGS })
 
     await clearAllSettings()
 
-    expect(syncStore.remove).toHaveBeenCalledWith(['extensionSettings'], expect.any(Function))
     expect(localStore.remove).toHaveBeenCalledWith(
-      ['aiApiKey', 'ielts-settings-backup'],
+      ['extensionSettings', 'aiApiKey', 'ielts-settings-backup'],
       expect.any(Function),
     )
   })
 
   it('clears stored values', async () => {
-    syncStore.set({ extensionSettings: DEFAULT_SETTINGS })
+    localStore.set({ extensionSettings: DEFAULT_SETTINGS })
     localStore.set({ aiApiKey: 'sk-key', 'ielts-settings-backup': DEFAULT_SETTINGS })
 
     await clearAllSettings()
 
-    const syncResult = await new Promise<Record<string, unknown>>((resolve) => {
-      syncStore.get('extensionSettings', resolve)
+    const localResult = await new Promise<Record<string, unknown>>((resolve) => {
+      localStore.get('extensionSettings', resolve)
     })
-    expect(syncResult.extensionSettings).toBeUndefined()
+    expect(localResult.extensionSettings).toBeUndefined()
   })
 })
 

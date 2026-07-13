@@ -1,7 +1,4 @@
-import { loadAppSettings } from '../../../services/storage/SettingsStorage'
 import { DatabaseService } from '../../../services/storage/Database'
-import { callAI } from '@ielts/ai'
-import type { ProviderConfig } from '@ielts/ai'
 import type {
   TaskEntry,
   ReadingPracticeSession,
@@ -15,9 +12,8 @@ import type {
 } from '../../../models'
 import type { ProgressReviewReport } from '../components/ProgressReviewPanel'
 import type { DateRange } from '../components/DateRangeSelector'
-
-const OPENAI_BASE_URL = 'https://api.openai.com/v1'
-const DEFAULT_MODEL = 'gpt-4o-mini'
+import { getAITutorEngine } from '../../../services/engineBootstrap'
+import type { LearnerStateSnapshot, IELTSSection } from '@ielts/ai-tutor-engine'
 
 interface SkillStats {
   skill: string
@@ -269,160 +265,182 @@ function buildReportFromData(input: BuildReportInput): ProgressReviewReport {
   }
 }
 
-function getAiConfig(): ProviderConfig | null {
-  const settings = loadAppSettings()
-  if (!settings.aiApiKey) return null
-  return {
-    apiKey: settings.aiApiKey,
-    baseUrl: settings.aiEndpoint || OPENAI_BASE_URL,
-    model: settings.aiModel || DEFAULT_MODEL,
-  }
-}
-
-function buildAiPrompt(input: BuildReportInput): { systemPrompt: string; userPrompt: string } {
-  const { dateRange, tasks, mistakes, vocabulary, vocabReviews, readingPractices, listeningPractices, writingSessions, speakingSessions, progressRecords } = input
-
-  const skillStats = computeSkillStats(readingPractices, listeningPractices, writingSessions, speakingSessions, progressRecords)
-  const streak = computeStreak([
-    ...readingPractices.map(p => p.createdAt),
-    ...listeningPractices.map(p => p.createdAt),
-    ...writingSessions.map(w => w.createdAt),
-    ...speakingSessions.map(sp => sp.createdAt),
-    ...tasks.filter(t => t.isDone && t.completedAt).map(t => t.completedAt!),
-  ])
-
-  const skillLines = skillStats
-    .filter(s => s.sessions > 0)
-    .map(s => {
-      const icon = s.trend === 'improving' ? '↑' : s.trend === 'declining' ? '↓' : '→'
-      return `  - ${s.skill.charAt(0).toUpperCase() + s.skill.slice(1)}: ${s.sessions} session(s), ${s.totalMinutes} min, ${s.accuracy}% accuracy (${icon} ${s.trend})`
-    })
-    .join('\n')
-
-  const mistakeLines = mistakes
-    .filter(m => m.status !== 'resolved')
-    .slice(0, 10)
-    .map(m => `  - "${m.mistake}" (skill: ${m.skill}, frequency: ${m.repetitionCount || 1}x)`)
-    .join('\n')
-
-  const vocabMastered = vocabReviews.filter(r => r.interval >= 21 && r.repetitions >= 5).length
-  const vocabLearning = vocabulary.filter(v => v.status === 'learning').length
-  const vocabReviewing = vocabulary.filter(v => v.status === 'reviewing').length
-
-  const start = new Date(dateRange.start)
-  const end = new Date(dateRange.end)
+function buildLearnerState(input: BuildReportInput): LearnerStateSnapshot {
+  const skillStats = computeSkillStats(input.readingPractices, input.listeningPractices, input.writingSessions, input.speakingSessions, input.progressRecords)
+  const allDates = [
+    ...input.readingPractices.map(p => p.createdAt),
+    ...input.listeningPractices.map(p => p.createdAt),
+    ...input.writingSessions.map(w => w.createdAt),
+    ...input.speakingSessions.map(sp => sp.createdAt),
+    ...input.tasks.filter(t => t.isDone && t.completedAt).map(t => t.completedAt!),
+  ]
+  const uniqueDays = [...new Set(allDates.map(d => d.slice(0, 10)))]
+  const streak = computeStreak(allDates)
+  const start = new Date(input.dateRange.start)
+  const end = new Date(input.dateRange.end)
   const totalDays = Math.max(1, Math.round((end.getTime() - start.getTime()) / 86400000) + 1)
+  const activeDays = uniqueDays.length
+  const consistency = computeConsistencyPercent(activeDays, totalDays)
 
   const totalMin = Math.round(
-    readingPractices.reduce((s, p) => s + (p.timeSpentSeconds || 0) / 60, 0) +
-    listeningPractices.reduce((s, p) => s + (p.timeSpentSeconds || 0) / 60, 0) +
-    writingSessions.reduce((s, w) => s + (w.timeSpentMinutes || 0), 0) +
-    speakingSessions.reduce((s, sp) => s + (sp.durationSeconds || 0) / 60, 0),
+    input.readingPractices.reduce((s, p) => s + (p.timeSpentSeconds || 0) / 60, 0) +
+    input.listeningPractices.reduce((s, p) => s + (p.timeSpentSeconds || 0) / 60, 0) +
+    input.writingSessions.reduce((s, w) => s + (w.timeSpentMinutes || 0), 0) +
+    input.speakingSessions.reduce((s, sp) => s + (sp.durationSeconds || 0) / 60, 0),
   )
-  const activeDays = [...new Set([
-    ...readingPractices.map(p => p.createdAt.slice(0, 10)),
-    ...listeningPractices.map(p => p.createdAt.slice(0, 10)),
-    ...writingSessions.map(w => w.createdAt.slice(0, 10)),
-    ...speakingSessions.map(sp => sp.createdAt.slice(0, 10)),
-    ...tasks.filter(t => t.isDone && t.completedAt).map(t => t.completedAt!.slice(0, 10)),
-  ])].length
-  const totalSessionsCount = readingPractices.length + listeningPractices.length + writingSessions.length + speakingSessions.length
-  const totalTasksDone = tasks.filter(t => t.isDone).length
-  const unresolvedCount = mistakes.filter(m => m.status !== 'resolved').length
 
-  const userPrompt = `Generate a detailed AI Learning Progress Review report for the student based on their study data below.
+  const allSections: IELTSSection[] = ['listening', 'reading', 'writing', 'speaking', 'grammar', 'vocabulary']
+  const skillStates = {} as Record<IELTSSection, any>
+  for (const section of allSections) {
+    const ss = skillStats.find(s => s.skill === section)
+    skillStates[section] = {
+      skill: section,
+      currentBand: undefined,
+      targetBand: undefined,
+      trend: ss?.trend ?? 'unknown',
+      confidence: 1,
+      priorityScore: 0,
+      frequentWeaknesses: [],
+      recentStrengths: [],
+      lastPracticedAt: ss ? new Date().toISOString() : undefined,
+    }
+  }
 
-## Study Period
-From: ${dateRange.start}
-To: ${dateRange.end}
-
-## Learning Summary
-  Active days: ${activeDays} out of review period
-  Total study time: ${totalMin} minutes
-  Sessions completed: ${totalSessionsCount}
-  Tasks completed: ${totalTasksDone}
-  Study streak: ${streak.current} days (longest: ${streak.longest})
-  Consistency: ${computeConsistencyPercent(activeDays, totalDays)}%
-  Total mistakes recorded: ${mistakes.length} (unresolved: ${unresolvedCount})
-  Sessions completed: ${readingPractices.length + listeningPractices.length + writingSessions.length + speakingSessions.length}
-  Tasks completed: ${tasks.filter(t => t.isDone).length}
-  Study streak: ${streak.current} days (longest: ${streak.longest})
-  Consistency: ${computeConsistencyPercent(tasks.filter(t => t.isDone).length, totalDays)}%
-  Total mistakes recorded: ${mistakes.length} (resolved: ${mistakes.filter(m => m.status === 'resolved').length})
-
-## Skill-by-Skill Progress
-${skillLines || '  No skill practice data recorded in this period.'}
-
-## Mistake Analysis
-${mistakeLines || '  No unresolved mistakes.'}
-
-## Vocabulary Status
-  Total vocabulary saved: ${vocabulary.length}
-  New: ${vocabulary.filter(v => v.status === 'new').length}
-  Learning: ${vocabLearning}
-  Reviewing: ${vocabReviewing}
-  Mastered: ${vocabMastered}
-
----
-Now, acting as the student's personal IELTS tutor, generate a comprehensive progress report covering ALL of the following sections:
-
-1. **Overall Summary** — A clear, concise paragraph summarizing the student's learning during this period.
-2. **What Improved** — Specific skills, habits, or areas where the student made progress.
-3. **What Still Needs Work** — Areas where the student continues to struggle or has not practiced enough.
-4. **Repeated Mistakes** — Review each repeated mistake pattern, explain why it matters, and how to overcome it.
-5. **Vocabulary Review Status** — Assess the student's vocabulary journey.
-6. **Skill-by-Skill Progress** — For each of Listening, Reading, Writing, and Speaking that has data: assess performance, accuracy, trend, and give specific advice.
-7. **Study Plan Adherence** — Based on consistency, active days, and streak, evaluate whether the student is sticking to their plan.
-8. **Recommended Focus for Next Period** — Prioritized list of 3-5 specific actions or areas to focus on.
-9. **Tutor Feedback** — A warm, personalized, encouraging message from the tutor.
-
-Respond with valid JSON only, in this exact format:
-{
-  "overallSummary": "string",
-  "improvements": ["string"],
-  "struggles": ["string"],
-  "repeatedMistakes": [{"pattern": "string", "skill": "string", "frequency": number, "analysis": "string"}],
-  "vocabularyReviewStatus": {"summary": "string", "totalSaved": number, "mastered": number, "stillLearning": number, "recommendation": "string"},
-  "skillProgress": [{"skill": "string", "status": "string", "sessions": number, "accuracy": number, "trend": "string", "analysis": "string"}],
-  "studyPlanAdherence": "string",
-  "recommendedFocus": ["string"],
-  "tutorFeedback": "string"
-}`
+  const unresolvedMistakes = input.mistakes.filter(m => m.status !== 'resolved')
 
   return {
-    systemPrompt: `You are an experienced IELTS tutor reviewing a student's learning progress. Your role is to analyze their study data thoroughly and provide honest, constructive, and encouraging feedback — just like a real tutor would.
-
-Guidelines:
-- Be specific and reference actual numbers and trends from the data.
-- Be encouraging but honest — if the student is slacking, say so constructively.
-- Write in a warm, professional tutor tone (use "you").
-- Provide actionable, specific advice for the next study period.
-- Do NOT repeat the raw data back as-is — interpret and analyze it.
-
-You must respond with valid JSON only, matching the exact format specified. No other text outside the JSON.`,
-    userPrompt,
+    generatedAt: new Date().toISOString(),
+    profile: {
+      currentOverallBand: null,
+      targetOverallBand: null,
+      currentSkillBands: null,
+      targetSkillBands: null,
+      examType: null,
+      examDate: null,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      preferredLanguage: 'en',
+      studyIntensity: 'moderate',
+      weakSkills: skillStats.filter(s => s.trend === 'declining' || (s.sessions > 0 && s.accuracy < 50)).map(s => s.skill as IELTSSection),
+      strongSkills: skillStats.filter(s => s.trend === 'improving' && s.sessions > 0).map(s => s.skill as IELTSSection),
+    },
+    exam: {
+      examDate: null,
+      daysUntilExam: null,
+      isUrgent: false,
+      isFinalWeek: false,
+    },
+    progress: {
+      overallCompletionPercent: Math.round(input.tasks.filter(t => t.isDone).length / Math.max(input.tasks.length, 1) * 100),
+      weeklyCompletionPercent: consistency,
+      skillProgress: skillStats.reduce((acc, s) => {
+        acc[s.skill] = { currentBand: null, targetBand: null, trend: s.trend, exercisesCompleted: s.sessions, accuracy: s.accuracy }
+        return acc
+      }, {} as Record<string, any>),
+      studyStreak: streak.current,
+      inactiveDays: 0,
+      consistency,
+      recentStudyMinutes: totalMin,
+      trendBySkill: skillStats.reduce((acc, s) => { acc[s.skill] = s.trend; return acc }, {} as Record<string, string>),
+    },
+    skillStates,
+    mistakeSummary: {
+      total: input.mistakes.length,
+      unreviewed: unresolvedMistakes.length,
+      recentCount: unresolvedMistakes.length,
+      recurringPatterns: unresolvedMistakes.slice(0, 5).map(m => ({
+        pattern: m.mistake,
+        skill: m.skill as IELTSSection,
+        frequency: m.repetitionCount || 1,
+        examples: [],
+      })),
+      bySkill: unresolvedMistakes.reduce((acc, m) => {
+        const sk = m.skill as IELTSSection
+        acc[sk] = (acc[sk] || 0) + 1
+        return acc
+      }, {} as Partial<Record<IELTSSection, number>>),
+    },
+    vocabularySummary: {
+      totalSaved: input.vocabulary.length,
+      dueForReview: input.vocabReviews.filter(r => new Date(r.nextReviewDate) <= new Date()).length,
+      mastered: input.vocabReviews.filter(r => r.interval >= 21 && r.repetitions >= 5).length,
+      byTopic: {},
+      items: [],
+    },
+    activitySummary: {
+      lastActiveAt: uniqueDays.length > 0 ? uniqueDays[uniqueDays.length - 1] : null,
+      todayStudyMinutes: 0,
+      weeklyStudyMinutes: totalMin,
+      tasksCompletedToday: 0,
+    },
+    preferences: {
+      preferredMode: undefined,
+      language: 'en',
+      explanationLevel: undefined,
+      correctionStyle: undefined,
+      proactiveEnabled: undefined,
+      maxProactiveMessagesPerDay: undefined,
+      allowedCategories: undefined,
+      preferredLearningMethods: [],
+      preferredTaskTypes: [],
+    },
+    currentConstraints: [],
+    contextQuality: {
+      status: 'partial',
+      missingSources: ['learner-profile', 'exam', 'roadmap'],
+      warnings: [],
+    },
   }
 }
 
-function parseAiResponse(content: string): ProgressReviewReport | null {
-  try {
-    const jsonMatch = content.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) return null
-    const parsed = JSON.parse(jsonMatch[0])
+function mapEngineResultToReport(
+  engineResult: import('@ielts/ai-tutor-engine').ProgressReviewResult,
+  input: BuildReportInput,
+): ProgressReviewReport {
+  const vocabMastered = input.vocabReviews.filter(r => r.interval >= 21 && r.repetitions >= 5).length
+  const vocabLearning = input.vocabulary.filter(v => v.status === 'learning').length
+  const vocabReviewing = input.vocabulary.filter(v => v.status === 'reviewing').length
 
-    const required: (keyof ProgressReviewReport)[] = [
-      'overallSummary', 'improvements', 'struggles', 'repeatedMistakes',
-      'vocabularyReviewStatus', 'skillProgress', 'studyPlanAdherence',
-      'recommendedFocus', 'tutorFeedback',
-    ]
+  const skillProgress = engineResult.skillPriorityChanges.map(spc => ({
+    skill: spc.skill.charAt(0).toUpperCase() + spc.skill.slice(1),
+    status: spc.reason.includes('gap') ? 'needs work' : 'stable',
+    sessions: 0,
+    accuracy: 0,
+    trend: spc.reason.includes('improving') ? 'improving' : 'declining',
+    analysis: spc.reason,
+  }))
 
-    for (const key of required) {
-      if (!(key in parsed)) return null
-    }
-
-    return parsed as ProgressReviewReport
-  } catch {
-    return null
+  return {
+    overallSummary: engineResult.summary,
+    improvements: engineResult.improvements.map(i => `${i.area}: ${i.evidence}`),
+    struggles: engineResult.weaknesses.map(w => `${w.area}: ${w.evidence}`),
+    repeatedMistakes: engineResult.repeatedMistakes.map(m => ({
+      pattern: m.pattern,
+      skill: m.skill,
+      frequency: m.frequency,
+      analysis: `Repeated ${m.frequency} time${m.frequency > 1 ? 's' : ''}`,
+    })),
+    vocabularyReviewStatus: {
+      summary: `You saved ${input.vocabulary.length} word${input.vocabulary.length !== 1 ? 's' : ''} (${vocabMastered} mastered, ${vocabLearning + vocabReviewing} still learning).`,
+      totalSaved: input.vocabulary.length,
+      mastered: vocabMastered,
+      stillLearning: vocabLearning + vocabReviewing,
+      recommendation: input.vocabulary.length > 0
+        ? 'Continue reviewing vocabulary daily using spaced repetition.'
+        : 'Start saving new vocabulary to build your word bank.',
+    },
+    skillProgress: skillProgress.length > 0 ? skillProgress : input.readingPractices.length > 0 || input.listeningPractices.length > 0 || input.writingSessions.length > 0 || input.speakingSessions.length > 0 ? [
+      { skill: 'Reading', status: 'stable', sessions: input.readingPractices.length, accuracy: 0, trend: 'stable', analysis: `${input.readingPractices.length} sessions completed.` },
+      { skill: 'Listening', status: 'stable', sessions: input.listeningPractices.length, accuracy: 0, trend: 'stable', analysis: `${input.listeningPractices.length} sessions completed.` },
+      { skill: 'Writing', status: 'stable', sessions: input.writingSessions.length, accuracy: 0, trend: 'stable', analysis: `${input.writingSessions.length} sessions completed.` },
+      { skill: 'Speaking', status: 'stable', sessions: input.speakingSessions.length, accuracy: 0, trend: 'stable', analysis: `${input.speakingSessions.length} sessions completed.` },
+    ].filter(s => s.sessions > 0) : [],
+    studyPlanAdherence: `Study consistency: ${engineResult.studyConsistency.weeklyCompletionRate}% — ${engineResult.studyConsistency.streakDays > 0 ? `${engineResult.studyConsistency.streakDays}-day streak.` : 'No active streak.'}`,
+    recommendedFocus: engineResult.realisticNextActions.length > 0
+      ? engineResult.realisticNextActions
+      : [engineResult.recommendedFocus].filter(Boolean),
+    tutorFeedback: engineResult.examRisk
+      ? `${engineResult.examRisk} Keep up your consistent practice!`
+      : 'Keep up your consistent practice! Every session brings you closer to your target band score.',
   }
 }
 
@@ -455,22 +473,18 @@ export async function generateProgressReview(
       progressRecords: progressRecords.filter(r => inRange(r.date, dateRange.start, dateRange.end)),
     }
 
-    const config = getAiConfig()
-    if (config) {
-      const { systemPrompt, userPrompt } = buildAiPrompt(input)
-      const { content, error } = await callAI(systemPrompt, userPrompt, () => config, { temperature: 0.7, maxTokens: 2000 })
+    const engine = getAITutorEngine()
+    if (engine) {
+      try {
+        const learnerState = buildLearnerState(input)
+        const result = await engine.generateProgressReview({ learnerState })
 
-      if (!error && content) {
-        const parsed = parseAiResponse(content)
-        if (parsed) {
-          return { report: parsed, error: null }
+        if (result.status === 'success') {
+          const report = mapEngineResultToReport(result.data, input)
+          return { report, error: null }
         }
-      }
-
-      const fallback = buildReportFromData(input)
-      return {
-        report: fallback,
-        error: error || 'AI response could not be parsed. Showing data-driven report instead.',
+      } catch {
+        // engine failed — fall through to data-driven report
       }
     }
 

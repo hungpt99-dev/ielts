@@ -13,6 +13,7 @@ import type {
 } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import { loadRoadmap, recalculateProgress } from '../roadmap/roadmapService'
+import { getLearningEngine } from '../../services/engineBootstrap'
 
 const PROGRESS_SNAPSHOT_KEY = 'ielts-progress-snapshot'
 
@@ -342,6 +343,20 @@ function computeRecentActivity(
 
   activity.sort((a, b) => b.date.localeCompare(a.date))
   return activity.slice(0, 20)
+}
+
+async function tryEngineProgress(): Promise<Partial<ProgressSnapshot> | null> {
+  try {
+    const engine = getLearningEngine()
+    if (!engine) return null
+
+    const sessionSummary = await engine.getRecommendedActivity({})
+    if (sessionSummary.status !== 'success') return null
+
+    return null
+  } catch {
+    return null
+  }
 }
 
 export async function computeProgressSnapshot(): Promise<ProgressSnapshot> {

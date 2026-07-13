@@ -12,6 +12,7 @@ export interface LearningAttempt {
   timeSpentMs: number
   hintsUsed: number
   version: number
+  evaluations?: import('./evaluation').AnswerEvaluation[]
 }
 
 export interface LearningAnswer {

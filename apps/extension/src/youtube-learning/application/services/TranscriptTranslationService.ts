@@ -1,4 +1,5 @@
-import { AIAdapter } from '../../infrastructure/ai/AIAdapter'
+import { callAI } from '@ielts/ai'
+import { safeFetchProviderConfig } from '../../../utils/safe-chrome'
 import type { TranscriptSegmentData } from '../../domain/types'
 
 interface TranslatedSegment {
@@ -22,12 +23,7 @@ export interface TranslationResult {
 }
 
 export class TranscriptTranslationService {
-  private aiAdapter: AIAdapter
   private cache = new Map<string, TranslationCacheEntry>()
-
-  constructor(aiAdapter: AIAdapter) {
-    this.aiAdapter = aiAdapter
-  }
 
   private segmentCacheKey(segments: TranscriptSegmentData[], language: string): string {
     const hash = segments
@@ -73,12 +69,13 @@ export class TranscriptTranslationService {
 
     const userPrompt = `Translate these English segments to ${targetLanguage}. Return a JSON array of objects, each with keys "id" and "translatedText", one per segment.\n\nSegments:\n${JSON.stringify(batch.map(s => ({ id: s.id, text: s.text })))}`
 
-    const result = await this.aiAdapter.request({
+    const providerConfig = await safeFetchProviderConfig()
+    const result = await callAI(
       systemPrompt,
-      userMessage: userPrompt,
-      temperature: 0.2,
-      maxTokens: MAX_TOKENS_PER_BATCH,
-    })
+      userPrompt,
+      () => providerConfig,
+      { temperature: 0.2, maxTokens: MAX_TOKENS_PER_BATCH },
+    )
 
     if (result.error || !result.content) {
       throw new Error(result.error || 'Translation failed')

@@ -1,6 +1,25 @@
-import { callAI, READING_QUESTIONS_SYSTEM_PROMPT, LISTENING_EXERCISE_SYSTEM_PROMPT, SPEAKING_PROMPTS_SYSTEM_PROMPT, WRITING_IDEAS_SYSTEM_PROMPT, GRAMMAR_EXERCISES_SYSTEM_PROMPT, MISTAKE_REVIEW_SYSTEM_PROMPT, VOCABULARY_EXTRACTION_SYSTEM_PROMPT, buildReadingQuestionsPrompt, buildListeningExercisePrompt, buildSpeakingPromptsPrompt, buildWritingIdeasPrompt, buildGrammarExercisesPrompt, buildMistakeReviewPrompt, buildVocabularyExtractionPrompt } from '@ielts/ai'
+import { callAI } from '@ielts/ai'
 import type { ProviderConfig } from '@ielts/ai'
+import {
+  readingQuestionsSchema,
+  listeningExerciseSchema,
+  speakingPromptsSchema,
+  writingIdeasSchema,
+  grammarExercisesSchema,
+  mistakeReviewSchema,
+  vocabularyExtractionSchema,
+} from '@ielts/ai'
+import type {
+  ReadingQuestions,
+  ListeningExercise,
+  SpeakingPrompts,
+  WritingIdeas,
+  GrammarExercises,
+  MistakeReview,
+  VocabularyExtraction,
+} from '@ielts/ai'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
+import { getLearningEngine } from '../../../services/engineBootstrap'
 
 export interface AiProviderConfig {
   apiKey: string
@@ -89,6 +108,13 @@ export interface MistakeReviewResult {
 }
 
 const APP_SETTINGS_KEY = 'ielts-settings'
+const READING_SYSTEM_PROMPT = 'You are an IELTS reading examiner. Create reading questions. Return JSON: { "questions": [{ "question": string, "type": string, "options"?: string[], "answer": string, "explanation": string }] }'
+const LISTENING_SYSTEM_PROMPT = 'You are an IELTS listening examiner. Return JSON: { "gaps": [{ "sentence": string, "answer": string, "hint": string }] }'
+const SPEAKING_SYSTEM_PROMPT = 'You are an IELTS speaking examiner. Return JSON: { "prompts": [{ "part": 1|2|3, "question": string, "followUp"?: string }] }'
+const WRITING_SYSTEM_PROMPT = 'You are an IELTS writing examiner. Return JSON: { "ideas": [{ "task": 1|2, "prompt": string, "instruction": string }] }'
+const GRAMMAR_SYSTEM_PROMPT = 'You are an IELTS grammar expert. Return JSON: { "exercises": [{ "sentence": string, "error": string, "correction": string, "explanation": string }] }'
+const MISTAKE_REVIEW_SYSTEM_PROMPT = 'You are an IELTS tutor. Return JSON: { "tasks": [{ "type": string, "question": string, "answer": string, "explanation": string }] }'
+const VOCABULARY_EXTRACTION_SYSTEM_PROMPT = 'You are an IELTS vocabulary expert. Extract IELTS-level vocabulary from the given content.\nReturn JSON: { "words": [{ "word": string, "meaning": string, "partOfSpeech": string, "example": string, "synonyms": string[], "collocations": string[] }] }'
 
 function readAppSettings(): Record<string, unknown> | null {
   try {
@@ -152,57 +178,112 @@ function extractJson(content: string): string {
   return content.slice(jsonStart, jsonEnd + 1)
 }
 
-function parseJsonSafe<T>(content: string): { data: T | null; error: string | null } {
+export async function extractVocabulary(content: string, config: AiProviderConfig): Promise<AiResult<ExtractedVocabulary>> {
+  const engine = getLearningEngine()
+  if (engine) {
+    try {
+      const result = await engine.createSessionFromContent({
+        content: { id: crypto.randomUUID(), type: 'article', text: content },
+        skill: 'vocabulary' as any,
+        availableMinutes: 10,
+      })
+      if (result.status === 'success') {
+        return { data: { words: [] }, error: null }
+      }
+    } catch {}
+  }
+
+  const { content: result, error } = await callAi(VOCABULARY_EXTRACTION_SYSTEM_PROMPT, `Extract IELTS vocabulary from this content:\n\n${content}`, config)
+  if (error) return { data: null, error }
   try {
-    const json = extractJson(content)
-    const parsed = JSON.parse(json)
-    return { data: parsed as T, error: null }
-  } catch {
-    return { data: null, error: 'AI response was not valid JSON.' }
+    const json = extractJson(result!)
+    const parsed = vocabularyExtractionSchema.parse(JSON.parse(json))
+    return {
+      data: {
+        words: parsed.words.map(w => ({
+          word: w.word,
+          meaning: w.meaning,
+          partOfSpeech: w.partOfSpeech,
+          example: w.example,
+          synonyms: w.synonyms,
+          collocations: w.collocations,
+        })),
+      },
+      error: null,
+    }
+  } catch (e) {
+    return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
   }
 }
 
-export async function extractVocabulary(content: string, config: AiProviderConfig): Promise<AiResult<ExtractedVocabulary>> {
-  const { content: result, error } = await callAi(VOCABULARY_EXTRACTION_SYSTEM_PROMPT, buildVocabularyExtractionPrompt(content), config)
-  if (error) return { data: null, error }
-  const { data, error: parseError } = parseJsonSafe<ExtractedVocabulary>(result!)
-  if (parseError) return { data: null, error: parseError }
-  if (!data?.words || data.words.length === 0) return { data: null, error: 'No vocabulary words extracted.' }
-  return { data, error: null }
-}
-
 export async function generateReadingQuestions(content: string, title: string, config: AiProviderConfig): Promise<AiResult<ReadingQuestionsResult>> {
-  const result = await callAi(READING_QUESTIONS_SYSTEM_PROMPT, buildReadingQuestionsPrompt(title, content, 5), config)
-  if (result.error) return { data: null, error: result.error }
-  return parseJsonSafe<ReadingQuestionsResult>(result.content!)
+  const { content: result, error } = await callAi(READING_SYSTEM_PROMPT, `Title: ${title}\n\nContent:\n${content}\n\nCreate 5 IELTS reading questions.`, config)
+  if (error) return { data: null, error }
+  try {
+    const json = extractJson(result!)
+    const parsed = readingQuestionsSchema.parse(JSON.parse(json))
+    return { data: { questions: parsed.questions as ReadingQuestionsResult['questions'] }, error: null }
+  } catch (e) {
+    return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
+  }
 }
 
 export async function generateListeningExercise(content: string, config: AiProviderConfig): Promise<AiResult<ListeningExerciseResult>> {
-  const result = await callAi(LISTENING_EXERCISE_SYSTEM_PROMPT, buildListeningExercisePrompt(content), config)
-  if (result.error) return { data: null, error: result.error }
-  return parseJsonSafe<ListeningExerciseResult>(result.content!)
+  const { content: result, error } = await callAi(LISTENING_SYSTEM_PROMPT, `Create a listening gap-fill exercise from:\n\n${content}`, config)
+  if (error) return { data: null, error }
+  try {
+    const json = extractJson(result!)
+    const parsed = listeningExerciseSchema.parse(JSON.parse(json))
+    return { data: { gaps: parsed.gaps }, error: null }
+  } catch (e) {
+    return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
+  }
 }
 
 export async function generateSpeakingPrompts(content: string, config: AiProviderConfig): Promise<AiResult<SpeakingPromptsResult>> {
-  const result = await callAi(SPEAKING_PROMPTS_SYSTEM_PROMPT, buildSpeakingPromptsPrompt(content), config)
-  if (result.error) return { data: null, error: result.error }
-  return parseJsonSafe<SpeakingPromptsResult>(result.content!)
+  const { content: result, error } = await callAi(SPEAKING_SYSTEM_PROMPT, `Create IELTS speaking prompts based on:\n\n${content}`, config)
+  if (error) return { data: null, error }
+  try {
+    const json = extractJson(result!)
+    const parsed = speakingPromptsSchema.parse(JSON.parse(json))
+    return { data: { prompts: parsed.prompts }, error: null }
+  } catch (e) {
+    return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
+  }
 }
 
 export async function generateWritingIdeas(content: string, config: AiProviderConfig): Promise<AiResult<WritingIdeasResult>> {
-  const result = await callAi(WRITING_IDEAS_SYSTEM_PROMPT, buildWritingIdeasPrompt(content), config)
-  if (result.error) return { data: null, error: result.error }
-  return parseJsonSafe<WritingIdeasResult>(result.content!)
+  const { content: result, error } = await callAi(WRITING_SYSTEM_PROMPT, `Create IELTS writing task ideas based on:\n\n${content}`, config)
+  if (error) return { data: null, error }
+  try {
+    const json = extractJson(result!)
+    const parsed = writingIdeasSchema.parse(JSON.parse(json))
+    return { data: { ideas: parsed.ideas }, error: null }
+  } catch (e) {
+    return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
+  }
 }
 
 export async function generateGrammarExercises(content: string, config: AiProviderConfig): Promise<AiResult<GrammarExercisesResult>> {
-  const result = await callAi(GRAMMAR_EXERCISES_SYSTEM_PROMPT, buildGrammarExercisesPrompt(content), config)
-  if (result.error) return { data: null, error: result.error }
-  return parseJsonSafe<GrammarExercisesResult>(result.content!)
+  const { content: result, error } = await callAi(GRAMMAR_SYSTEM_PROMPT, `Create grammar exercises based on:\n\n${content}`, config)
+  if (error) return { data: null, error }
+  try {
+    const json = extractJson(result!)
+    const parsed = grammarExercisesSchema.parse(JSON.parse(json))
+    return { data: { exercises: parsed.exercises }, error: null }
+  } catch (e) {
+    return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
+  }
 }
 
 export async function generateMistakeReviewTasks(content: string, config: AiProviderConfig): Promise<AiResult<MistakeReviewResult>> {
-  const result = await callAi(MISTAKE_REVIEW_SYSTEM_PROMPT, buildMistakeReviewPrompt(content), config)
-  if (result.error) return { data: null, error: result.error }
-  return parseJsonSafe<MistakeReviewResult>(result.content!)
+  const { content: result, error } = await callAi(MISTAKE_REVIEW_SYSTEM_PROMPT, `Create mistake review tasks based on:\n\n${content}`, config)
+  if (error) return { data: null, error }
+  try {
+    const json = extractJson(result!)
+    const parsed = mistakeReviewSchema.parse(JSON.parse(json))
+    return { data: { tasks: parsed.tasks as MistakeReviewResult['tasks'] }, error: null }
+  } catch (e) {
+    return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
+  }
 }

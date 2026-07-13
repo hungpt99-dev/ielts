@@ -31,7 +31,7 @@ export const AI_EXPLAIN_PROMPTS: Record<AiExplainType, string> = {
   quiz: 'Create 3 quiz questions based on this text to test understanding:',
 }
 
-const SYSTEM_PROMPTS: Record<AiExplainType, string> = {
+export const SYSTEM_PROMPTS: Record<AiExplainType, string> = {
   simple: 'You are an IELTS tutor. Explain text in simple English for learners. Respond with valid JSON only.',
   translate: 'You are an IELTS tutor. Translate the text and add vocabulary notes. Respond with valid JSON only.',
   'ielts-vocab': 'You are an IELTS vocabulary expert. Extract vocabulary with verb conjugations and grammar analysis. Respond with valid JSON only.',

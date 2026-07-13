@@ -112,7 +112,7 @@ describe('Extension SaveSelectedText', () => {
     sel?.removeAllRanges()
   })
 
-  it('sends SAVE_SELECTION_FULL message to background on SAVE_SELECTION_FULL', () => {
+  it('handles SAVE_SELECTION_FULL locally and shows toast', () => {
     const payload = {
       text: 'selected text content',
       category: 'vocabulary' as const,
@@ -127,19 +127,7 @@ describe('Extension SaveSelectedText', () => {
     const sendResponse = vi.fn()
     listener!({ type: 'SAVE_SELECTION_FULL', payload }, {}, sendResponse)
 
-    expect(mockSendMessage).toHaveBeenCalledWith({
-      type: 'SAVE_SELECTION_FULL',
-      payload: {
-        text: 'selected text content',
-        category: 'vocabulary',
-        pageTitle: 'Test Page',
-        pageUrl: 'https://example.com',
-        topic: 'education',
-        difficulty: 'easy',
-        note: 'a note',
-        tags: ['test'],
-      },
-    })
+    expect(mockSendMessage).not.toHaveBeenCalled()
 
     expect(sendResponse).toHaveBeenCalledWith({ success: true })
     const toast = document.querySelector('#ielts-toast')

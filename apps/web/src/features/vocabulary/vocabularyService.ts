@@ -2,10 +2,7 @@ import type { VocabularyEntry, VocabReviewEntry, ReviewRating, VocabDifficulty, 
 import { DatabaseService } from '../../services/storage/Database'
 import { generateId } from '../../utils'
 import { getInitialReviewEntry, calculateNextReview } from '../../utils/spaced-repetition'
-import { loadAppSettings } from '../../services/storage/SettingsStorage'
-import { callAI } from '@ielts/ai'
-import type { ProviderConfig } from '@ielts/ai'
-import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
+import { enrichVocabulary, normalizeToLemma } from '../../services/ai/vocabularyEnrichmentService'
 
 export interface VocabStats {
   total: number
@@ -269,12 +266,10 @@ export async function rateWord(
   return updatedReview
 }
 
-export async function generateExercisesFromVocabulary(
+export function generateExercisesFromVocabulary(
   entries: VocabularyEntry[],
   count: number = 3,
-): Promise<VocabExercisePrompt[]> {
-  const prompts: VocabExercisePrompt[] = []
-
+): VocabExercisePrompt[] {
   if (entries.length === 0) {
     return [{
       skill: 'Vocabulary',
@@ -286,15 +281,7 @@ export async function generateExercisesFromVocabulary(
     }]
   }
 
-  const settings = loadAppSettings()
-  const config: ProviderConfig | null = settings.aiApiKey
-    ? {
-        apiKey: settings.aiApiKey,
-        baseUrl: settings.aiEndpoint || OPENAI_BASE_URL,
-        model: settings.aiModel || DEFAULT_MODEL,
-      }
-    : null
-
+  const prompts: VocabExercisePrompt[] = []
   const chunkSize = Math.ceil(entries.length / count)
   for (let i = 0; i < count; i++) {
     const chunk = entries.slice(i * chunkSize, (i + 1) * chunkSize)
@@ -303,50 +290,6 @@ export async function generateExercisesFromVocabulary(
     const words = chunk.map(v => v.word)
     const meanings = chunk.map(v => v.meaning).filter(Boolean)
     const topics = [...new Set(chunk.map(v => v.topic))].filter(Boolean)
-
-    if (config) {
-      const wordDetails = chunk.map(v =>
-        `- "${v.word}": ${v.meaning}${v.exampleSentence ? ` (e.g., ${v.exampleSentence})` : ''}`
-      ).join('\n')
-
-      const aiPrompt = `You are an IELTS tutor. Create an IELTS-style writing exercise using these vocabulary words.
-
-Words to use:
-${wordDetails}
-
-Return a JSON object with these fields:
-- "topic": a specific IELTS topic
-- "prompt": a writing prompt that incorporates these words naturally
-- "instructions": clear step-by-step instructions
-- "estimatedMinutes": estimated time in minutes (integer)`
-
-      const { content, error } = await callAI(
-        aiPrompt,
-        'Generate an IELTS writing exercise using the provided vocabulary words. Return valid JSON only.',
-        () => config,
-        { temperature: 0.7, maxTokens: 300 },
-      )
-
-      if (!error && content) {
-        try {
-          const jsonMatch = content.match(/\{[\s\S]*\}/)
-          if (jsonMatch) {
-            const parsed = JSON.parse(jsonMatch[0])
-            prompts.push({
-              skill: 'Vocabulary',
-              topic: parsed.topic || (topics.length > 0 ? topics.join(', ') : `Saved Words ${i + 1}`),
-              prompt: parsed.prompt || `Practice using these words in context: ${words.join(', ')}`,
-              instructions: parsed.instructions || `Write sentences using: ${words.join(', ')}`,
-              wordsToUse: words,
-              estimatedMinutes: parsed.estimatedMinutes || Math.max(5, words.length * 2),
-            })
-            continue
-          }
-        } catch {
-          // fall through to template fallback
-        }
-      }
-    }
 
     prompts.push({
       skill: 'Vocabulary',
@@ -431,16 +374,7 @@ export function parseWordForm(s: string): WordFormEntry | null {
   return null
 }
 
-export async function normalizeToLemma(word: string): Promise<string> {
-  if (!word.trim()) return word
-  const clean = word.trim().toLowerCase()
-  const { callAI } = await import('@ielts/ai')
-  const systemPrompt = 'You are a linguist. Respond with a single word only — the dictionary lemma form.'
-  const prompt = `What is the dictionary lemma of "${clean}"? Example: running→run, better→good, mice→mouse, studied→study. Respond with only the lemma.`
-  const result = await callAI(systemPrompt, prompt, { maxTokens: 50, temperature: 0 })
-  if (result.error || !result.content) return clean
-  return result.content.trim().toLowerCase().replace(/[^a-z\-]/g, '') || clean
-}
+export { normalizeToLemma } from '../../services/ai/vocabularyEnrichmentService'
 
 export interface EnrichResult {
   lemma?: string
@@ -456,83 +390,4 @@ export interface EnrichResult {
   ieltsRelevance?: string
 }
 
-export async function enrichVocabulary(word: string, topic?: string): Promise<{ data: EnrichResult | null; error: string | null }> {
-  const { callAI } = await import('@ielts/ai')
-
-  const topicHint = topic ? ` on the topic of "${topic}"` : ''
-  const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
-  const prompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a COMPLETE JSON object — you MUST fill EVERY field listed below. Do not omit any field, even if the value is an empty array.
-
-Example output for word "ubiquitous":
-{
-  "meaning": "Present, appearing, or found everywhere",
-  "pronunciation": "/juːˈbɪk.wɪ.təs/",
-  "partOfSpeech": "adjective",
-  "exampleSentence": "Smartphones have become ubiquitous in modern society.",
-  "collocations": ["ubiquitous computing", "ubiquitous presence", "ubiquitous technology"],
-  "synonyms": ["widespread", "pervasive", "omnipresent"],
-  "antonyms": ["rare", "scarce"],
-  "wordFamily": [
-    {"word": "ubiquity", "pos": "noun", "meaning": "The state of being everywhere", "pronunciation": "/juːˈbɪk.wɪ.ti/"},
-    {"word": "ubiquitous", "pos": "adjective", "meaning": "Present everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs/"},
-    {"word": "ubiquitously", "pos": "adverb", "meaning": "In a way that is found everywhere", "pronunciation": "/juːˈbɪk.wɪ.təs.li/"}
-  ],
-  "cefrLevel": "C1",
-  "ieltsRelevance": "high"
-}
-
-Now for "${word}" — generate EVERY field EXACTLY like the example above:
-- "meaning": clear English definition
-- "pronunciation": IPA pronunciation string
-- "partOfSpeech": one of: noun, verb, adjective, adverb, preposition, conjunction, pronoun, determiner, phrasal verb, idiom
-- "exampleSentence": natural IELTS-level example sentence using the word
-- "collocations": array of 2-3 common collocations
-- "synonyms": array of 2-3 synonyms
-- "antonyms": array of 1-2 antonyms (empty array if none exist)
-- "wordFamily": array of objects. Generate EVERY related word form that exists — nouns, verbs, adjectives, adverbs. Do NOT skip any. Each object MUST have "word" (string), "pos" (part of speech), "meaning" (clear definition for that form), and "pronunciation" (IPA string). For verb forms, MUST also include "verbConjugation" with ALL of: base, pastSimple, pastParticiple, presentParticiple, thirdPersonSingular.
-- "cefrLevel": one of: A1, A2, B1, B2, C1, C2
-- "ieltsRelevance": one of: low, medium, high`
-
-  const result = await callAI(systemPrompt, prompt, { maxTokens: 2000, temperature: 0.3 })
-
-  if (result.error) {
-    return { data: null, error: result.error }
-  }
-
-  try {
-    const jsonStart = result.content.indexOf('{')
-    const jsonEnd = result.content.lastIndexOf('}')
-    if (jsonStart === -1 || jsonEnd === -1) {
-      return { data: null, error: 'AI returned an unexpected format.' }
-    }
-
-    const lemma = await normalizeToLemma(word).catch(() => word)
-    const parsed = JSON.parse(result.content.slice(jsonStart, jsonEnd + 1)) as Record<string, unknown>
-    const enriched: EnrichResult = { lemma }
-
-    if (parsed.meaning && typeof parsed.meaning === 'string') enriched.meaning = parsed.meaning
-    if (parsed.pronunciation && typeof parsed.pronunciation === 'string') enriched.pronunciation = parsed.pronunciation
-    if (parsed.partOfSpeech && typeof parsed.partOfSpeech === 'string') enriched.partOfSpeech = parsed.partOfSpeech
-    if (parsed.exampleSentence && typeof parsed.exampleSentence === 'string') enriched.exampleSentence = parsed.exampleSentence
-    if (parsed.cefrLevel && typeof parsed.cefrLevel === 'string') enriched.cefrLevel = parsed.cefrLevel
-    if (parsed.ieltsRelevance && typeof parsed.ieltsRelevance === 'string') enriched.ieltsRelevance = parsed.ieltsRelevance
-
-    const asArray = (val: unknown): string[] => Array.isArray(val) ? val.filter((v): v is string => typeof v === 'string') : []
-    if (parsed.collocations) enriched.collocations = asArray(parsed.collocations)
-    if (parsed.synonyms) enriched.synonyms = asArray(parsed.synonyms)
-    if (parsed.antonyms) enriched.antonyms = asArray(parsed.antonyms)
-
-    if (Array.isArray(parsed.wordFamily)) {
-      enriched.wordFamily = parsed.wordFamily.map((f: unknown) => {
-        if (typeof f === 'string') return f
-        const form = f as Record<string, unknown>
-        if (form.word && form.pos) return encodeWordForm(form as WordFormEntry)
-        return String(form.word || '')
-      }).filter(Boolean)
-    }
-
-    return { data: enriched, error: null }
-  } catch {
-    return { data: null, error: 'Failed to parse AI response.' }
-  }
-}
+export { enrichVocabulary } from '../../services/ai/vocabularyEnrichmentService'

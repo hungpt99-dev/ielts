@@ -11,6 +11,7 @@ const MOCK_DAILY_PROGRESS = {
   wordsAdded: 5,
   notesAdded: 3,
   articlesSaved: 1,
+  notesSaved: 0,
   reviewDue: 2,
   streak: 7,
 }
@@ -91,7 +92,7 @@ describe('registerHandler / unregisterHandler', () => {
     handleMessage({ type: 'TEST_ACTION', payload: undefined }, SENDER, sendResponse)
 
     expect(handler).not.toHaveBeenCalled()
-    expect(sendResponse).toHaveBeenCalledWith({ success: false, error: 'UNKNOWN_MESSAGE_TYPE' })
+    expect(sendResponse).not.toHaveBeenCalled()
   })
 })
 
@@ -101,7 +102,7 @@ describe('handleMessage', () => {
     const result = handleMessage({ type: 'UNKNOWN', payload: undefined }, SENDER, sendResponse)
 
     expect(result).toBe(false)
-    expect(sendResponse).toHaveBeenCalledWith({ success: false, error: 'UNKNOWN_MESSAGE_TYPE' })
+    expect(sendResponse).not.toHaveBeenCalled()
   })
 
   it('handles null/undefined message', () => {
@@ -109,7 +110,7 @@ describe('handleMessage', () => {
     const result = handleMessage(null, SENDER, sendResponse)
 
     expect(result).toBe(false)
-    expect(sendResponse).toHaveBeenCalledWith({ success: false, error: 'UNKNOWN_MESSAGE_TYPE' })
+    expect(sendResponse).not.toHaveBeenCalled()
   })
 
   it('handles non-object message', () => {
@@ -117,7 +118,7 @@ describe('handleMessage', () => {
     const result = handleMessage('string', SENDER, sendResponse)
 
     expect(result).toBe(false)
-    expect(sendResponse).toHaveBeenCalledWith({ success: false, error: 'UNKNOWN_MESSAGE_TYPE' })
+    expect(sendResponse).not.toHaveBeenCalled()
   })
 
   it('handles sync handler returning data', () => {
@@ -208,7 +209,7 @@ describe('initMessaging', () => {
     await vi.waitFor(() => {
       expect(sendResponse).toHaveBeenCalledWith({
         success: true,
-        data: { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, reviewDue: 0, streak: 0 },
+        data: { wordsAdded: 0, notesAdded: 0, articlesSaved: 0, notesSaved: 0, reviewDue: 0, streak: 0 },
       })
     })
   })
@@ -239,17 +240,16 @@ describe('initMessaging', () => {
     expect(sendResponse).toHaveBeenCalledWith({ success: true, data: undefined })
   })
 
-  it('VIDEO_HELPER_OPEN stores pending video info', async () => {
+  it('VIDEO_HELPER_OPEN sends toggle message to tab', async () => {
     initMessaging()
 
     const sendResponse = vi.fn()
     const listener = (chrome.runtime.onMessage.addListener as ReturnType<typeof vi.fn>).mock.calls[0][0]
-    const setSpy = vi.spyOn(mockStorage, 'set')
     const payload = { isVideoPage: true, platform: 'youtube', videoTitle: 'Test', videoUrl: 'https://youtube.com/watch?v=123', videoId: '123' }
     listener({ type: 'VIDEO_HELPER_OPEN', payload }, SENDER, sendResponse)
 
     await vi.waitFor(() => {
-      expect(setSpy).toHaveBeenCalled()
+      expect(chrome.tabs.sendMessage).toHaveBeenCalledWith(1, { type: 'TOGGLE_YOUTUBE_LEARNING', payload: true })
     })
 
     await vi.waitFor(() => {

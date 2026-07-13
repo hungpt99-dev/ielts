@@ -4,8 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import type { VocabularyEntry, VerbConjugation, VocabDifficulty, VocabStatus } from '../../../models'
 import Button from '../../../components/ui/Button'
-import { useSettings } from '../../../context/SettingsContext'
-import { callAI } from '@ielts/ai'
+import { generateExample } from '../../../services/ai/vocabularyEnrichmentService'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -69,7 +68,6 @@ const CONJUGATION_FIELDS: Array<{ key: keyof VerbConjugation; label: string; pla
 ]
 
 export default function WordForm({ initialValues, onSave, onCancel, saving }: WordFormProps) {
-  const { settings } = useSettings()
   const [generating, setGenerating] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
   const [verbConjugation, setVerbConjugation] = useState<VerbConjugation>(
@@ -160,13 +158,9 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
     setVerbConjugation(prev => ({ ...prev, [field]: value }))
   }, [])
 
-  async function generateExample() {
+  async function handleGenerateExample() {
     if (!word.trim()) {
       setAiError('Enter a word first')
-      return
-    }
-    if (!settings.aiApiKey) {
-      setAiError('Set your AI API key in Settings first')
       return
     }
 
@@ -174,70 +168,25 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
     setAiError(null)
 
     try {
-      const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
-
-      const topicHint = topic ? ` on the topic of "${topic}"` : ''
-      const userPrompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a JSON object with ALL of these fields:
-
-- "meaning": clear English definition suitable for IELTS learners
-- "pronunciation": IPA pronunciation (e.g. "/juːˈbɪk.wɪ.təs/")
-- "partOfSpeech": one of: noun, verb, adjective, adverb, preposition, conjunction, pronoun, determiner, phrasal verb, idiom
-- "exampleSentence": natural IELTS-level example sentence
-- "collocations": array of 2-3 common collocations (e.g. ["ubiquitous computing", "ubiquitous presence"])
-- "synonyms": array of 2-3 synonyms
-- "antonyms": array of 1-2 antonyms if they exist, empty array otherwise
-- "wordFamily": array of related word forms (e.g. ["ubiquity", "ubiquitously"])
-- "cefrLevel": estimated CEFR level as one of: A1, A2, B1, B2, C1, C2
-- "ieltsRelevance": estimated IELTS relevance as one of: low, medium, high
-- "meaningVi": Vietnamese translation of the meaning (or empty string if you don't know)`
-
-      const { content, error } = await callAI(
-        systemPrompt,
-        userPrompt,
-        () => ({
-          apiKey: settings.aiApiKey,
-          baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
-          model: settings.aiModel || 'gpt-4o-mini',
-        }),
-        { temperature: 0.3, maxTokens: 800 },
-      )
+      const { data, error } = await generateExample(word, topic)
 
       if (error) {
-        throw new Error(error)
-      }
-
-      if (!content) {
-        throw new Error('Empty response from AI')
-      }
-
-      const jsonStart = content.indexOf('{')
-      const jsonEnd = content.lastIndexOf('}')
-      if (jsonStart === -1 || jsonEnd === -1) {
-        setAiError('AI returned an unexpected format. Try again.')
+        setAiError(error)
         return
       }
 
-      let parsed: Record<string, unknown>
-      try {
-        parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
-      } catch {
-        setAiError('AI returned invalid JSON. Try again.')
+      if (!data) {
+        setAiError('No data returned from AI')
         return
       }
 
-      if (parsed.meaning && typeof parsed.meaning === 'string') setValue('meaning', parsed.meaning)
-      if (parsed.pronunciation && typeof parsed.pronunciation === 'string') setValue('pronunciation', parsed.pronunciation)
-      if (parsed.partOfSpeech && typeof parsed.partOfSpeech === 'string') setValue('partOfSpeech', parsed.partOfSpeech)
-      if (parsed.exampleSentence && typeof parsed.exampleSentence === 'string') setValue('exampleSentence', parsed.exampleSentence)
-      if (parsed.meaningVi && typeof parsed.meaningVi === 'string') setValue('meaningVi', parsed.meaningVi)
-      if (parsed.cefrLevel && typeof parsed.cefrLevel === 'string') setValue('cefrLevel', parsed.cefrLevel)
-      if (parsed.ieltsRelevance && typeof parsed.ieltsRelevance === 'string') setValue('ieltsRelevance', parsed.ieltsRelevance)
-
-      const joinArr = (val: unknown): string => Array.isArray(val) ? val.join(', ') : ''
-      if (parsed.collocations) setValue('collocations', joinArr(parsed.collocations))
-      if (parsed.synonyms) setValue('synonyms', joinArr(parsed.synonyms))
-      if (parsed.antonyms) setValue('antonyms', joinArr(parsed.antonyms))
-      if (parsed.wordFamily) setValue('wordFamily', joinArr(parsed.wordFamily))
+      if (data.meaning) setValue('meaning', data.meaning)
+      if (data.pronunciation) setValue('pronunciation', data.pronunciation)
+      if (data.partOfSpeech) setValue('partOfSpeech', data.partOfSpeech)
+      if (data.exampleSentence) setValue('exampleSentence', data.exampleSentence)
+      setValue('collocations', data.collocations.join(', '))
+      setValue('synonyms', data.synonyms.join(', '))
+      setValue('antonyms', data.antonyms.join(', '))
     } catch (err) {
       setAiError(err instanceof Error ? err.message : 'Failed to generate example')
     } finally {
@@ -495,7 +444,7 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
             type="button"
             variant="primary"
             size="sm"
-            onClick={generateExample}
+            onClick={handleGenerateExample}
             disabled={generating || !word.trim()}
             loading={generating}
             className="shrink-0"

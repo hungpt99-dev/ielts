@@ -107,13 +107,23 @@ export async function updateDailyProgress(patch: Partial<DailyProgress>): Promis
     }
   }
   scheduleFlush()
-  return getDailyProgress()
+  const current = await getDailyProgress()
+  const merged = { ...current }
+  for (const [key, value] of Object.entries(pendingProgress) as [keyof DailyProgress, number][]) {
+    merged[key] = (merged[key] || 0) + value
+  }
+  return merged
 }
 
 export async function incrementDailyProgress(field: keyof DailyProgress, amount = 1): Promise<DailyProgress> {
   pendingProgress[field] = (pendingProgress[field] || 0) + amount
   scheduleFlush()
-  return getDailyProgress()
+  const current = await getDailyProgress()
+  const merged = { ...current }
+  for (const [key, value] of Object.entries(pendingProgress) as [keyof DailyProgress, number][]) {
+    merged[key] = (merged[key] || 0) + value
+  }
+  return merged
 }
 
 export async function getSavedItems<T>(): Promise<T[]> {
@@ -177,3 +187,10 @@ export async function markItemsSynced(
 }
 
 export { STORAGE_KEYS, DEFAULT_PROGRESS }
+
+/** Reset pending progress (used in tests) */
+export function clearPendingProgress(): void {
+  for (const key of Object.keys(pendingProgress) as (keyof DailyProgress)[]) {
+    delete pendingProgress[key]
+  }
+}

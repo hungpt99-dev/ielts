@@ -42,3 +42,26 @@ export type { DictionaryEntry } from './dictionary'
 
 export { verbConjugationSchema, verbAnalysisSchema } from './verb'
 export type { VerbConjugation, VerbAnalysis } from './verb'
+
+export {
+  readingQuestionsSchema,
+  listeningExerciseSchema,
+  speakingPromptsSchema,
+  writingIdeasSchema,
+  grammarExercisesSchema,
+  mistakeReviewSchema,
+  vocabularyExtractionSchema,
+  readingPassageSchema,
+  practiceQuestionsSchema,
+} from './exercise-generation'
+export type {
+  ReadingQuestions,
+  ListeningExercise,
+  SpeakingPrompts,
+  WritingIdeas,
+  GrammarExercises,
+  MistakeReview,
+  VocabularyExtraction,
+  ReadingPassage,
+  PracticeQuestions,
+} from './exercise-generation'

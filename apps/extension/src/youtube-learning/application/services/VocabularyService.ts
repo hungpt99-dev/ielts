@@ -1,6 +1,6 @@
-import { AIAdapter } from '../../infrastructure/ai/AIAdapter'
+import { callAI } from '@ielts/ai'
+import { safeFetchProviderConfig, safeStorageGet, safeStorageSet } from '../../../utils/safe-chrome'
 import { StorageAdapter } from '../../infrastructure/persistence/StorageAdapter'
-import { safeStorageGet, safeStorageSet } from '../../../utils/safe-chrome'
 
 export interface VerbConjugation {
   base: string
@@ -50,11 +50,9 @@ export interface WordDetails {
 const VOCABULARY_STORAGE_KEY = 'yt-learning-vocabulary'
 
 export class VocabularyService {
-  private aiAdapter: AIAdapter
   private storageAdapter: StorageAdapter
 
-  constructor(aiAdapter: AIAdapter, storageAdapter: StorageAdapter) {
-    this.aiAdapter = aiAdapter
+  constructor(storageAdapter: StorageAdapter) {
     this.storageAdapter = storageAdapter
   }
 
@@ -169,7 +167,8 @@ export class VocabularyService {
       : ''
     const userPrompt = `Analyze this word for IELTS learners: "${word}"\n${contextPart}Provide: meaning, translation, partOfSpeech, pronunciation, exampleSentence (string), collocations (array of strings), synonyms (array of strings), antonyms (array of strings), wordFamily (array of strings), difficulty (A1-C2 or IELTS band), topic. If the word is a verb, also provide verbConjugation with base, pastSimple, pastParticiple, presentParticiple, thirdPersonSingular fields.`
 
-    const result = await this.aiAdapter.request({ systemPrompt, userMessage: userPrompt, temperature: 0.3 })
+    const providerConfig = await safeFetchProviderConfig()
+    const result = await callAI(systemPrompt, userPrompt, () => providerConfig, { temperature: 0.3 })
     if (result.error || !result.content) return null
 
     try {

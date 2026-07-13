@@ -29,34 +29,21 @@ export async function generateVocabularyDetails(
 
   const userPrompt = buildVocabularyDetailsPrompt(word, sourceSentence, topic, nativeLanguage)
 
-  const url = `${config.baseUrl.replace(/\/+$/, '')}/chat/completions`
-
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: [
-          { role: 'system', content: VOCABULARY_DETAILS_SYSTEM_PROMPT },
-          { role: 'user', content: userPrompt },
-        ],
-        temperature: 0.5,
-        max_tokens: 1000,
-      }),
+    const { content, error } = await callAI(VOCABULARY_DETAILS_SYSTEM_PROMPT, userPrompt, getConfig, {
+      temperature: 0.5,
+      maxTokens: 1000,
     })
 
-    if (!response.ok) {
-      if (response.status === 401) return { data: null, error: 'Invalid API key. Check your key in Settings.' }
-      if (response.status === 429) return { data: null, error: 'Rate limit exceeded. Wait a moment and try again.' }
-      return { data: null, error: `AI API error (${response.status})` }
+    if (error) {
+      if (error.includes('API key')) return { data: null, error }
+      if (error.includes('401') || error.includes('Unauthorized')) {
+        return { data: null, error: 'Invalid API key. Check your key in Settings.' }
+      }
+      return { data: null, error: error.includes('429') || error.includes('Rate limit')
+        ? 'Rate limit exceeded. Wait a moment and try again.'
+        : `AI request failed: ${error}` }
     }
-
-    const data = await response.json()
-    const content: string = data.choices?.[0]?.message?.content || ''
 
     if (!content) return { data: null, error: 'AI returned an empty response.' }
 
@@ -76,10 +63,9 @@ export async function generateVocabularyDetails(
     return { data: result.data, error: null }
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown error'
-    if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
-      return { data: null, error: 'Network error. Check your internet connection and API endpoint.' }
-    }
-    return { data: null, error: `AI request failed: ${message}` }
+    return { data: null, error: message.includes('Failed to fetch') || message.includes('NetworkError')
+      ? 'Network error. Check your internet connection and API endpoint.'
+      : `AI request failed: ${message}` }
   }
 }
 

@@ -1,5 +1,7 @@
 import type { CompleteLearningSessionRequest, CompleteLearningSessionResult } from '../../domain/entities/learning-session'
-import type { LearningOutcome } from '../../domain/entities/learning-outcome'
+import type { LearningOutcome, VocabularyEvidence } from '../../domain/entities/learning-outcome'
+import type { MistakeEvidence } from '../../domain/entities/mistake-evidence'
+import type { SkillEvidence } from '../../domain/entities/skill-evidence'
 import type { LearningRecommendation } from '../../domain/entities/learning-recommendation'
 import type { LearningSessionRepository, LearningAttemptRepository, LearningOutcomeRepository } from '../../ports/session-repository'
 import type { ProgressRepository } from '../../ports/progress-repository'
@@ -7,6 +9,7 @@ import type { StudyPlanPort } from '../../ports/study-plan-port'
 import type { MistakeRepository } from '../../ports/mistake-repository'
 import type { VocabularyRepository } from '../../ports/vocabulary-repository'
 import type { LearningEventPublisher } from '../../ports/learning-event-publisher'
+import type { TutorIntelligencePort } from '../../ports/tutor-intelligence-port'
 import type { ClockPort } from '../../ports/clock-port'
 import { buildProgressEvidence, aggregateSkillProgress } from '../../domain/services/progress-evidence-builder'
 
@@ -16,6 +19,7 @@ export interface CompleteSessionDependencies {
   outcomeRepository: LearningOutcomeRepository
   progressRepository?: ProgressRepository
   studyPlanPort?: StudyPlanPort
+  tutorPort?: TutorIntelligencePort
   mistakeRepository: MistakeRepository
   vocabularyRepository: VocabularyRepository
   eventPublisher: LearningEventPublisher
@@ -38,11 +42,84 @@ export async function completeLearningSession(
 
   const attempts = await deps.attemptRepository.findBySession(request.sessionId)
   const outcomes: LearningOutcome[] = []
+  const allMistakes: MistakeEvidence[] = []
+  const allSkillEvidence: SkillEvidence[] = []
   let totalScore = 0
   let totalMaxScore = 0
 
   for (const attempt of attempts) {
     if (attempt.status !== 'evaluated') continue
+
+    const evaluations = attempt.evaluations ?? []
+    const attemptScore = evaluations.reduce((s, e) => s + e.score, 0)
+    const attemptMaxScore = evaluations.reduce((s, e) => s + e.maximumScore, 0)
+    totalScore += attemptScore
+    totalMaxScore += attemptMaxScore
+
+    const mistakes: MistakeEvidence[] = []
+    for (const eval_ of evaluations) {
+      for (const m of eval_.mistakes) {
+        mistakes.push(m)
+        allMistakes.push(m)
+      }
+      if (eval_.status === 'incorrect' || eval_.status === 'partially-correct') {
+        const m: MistakeEvidence = {
+          id: `complete-mistake-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          skill: session.skill,
+          category: 'incorrect',
+          originalResponse: '',
+          correctedResponse: '',
+          explanation: eval_.explanation ?? '',
+          sourceExerciseId: attempt.exerciseId,
+          sourceQuestionId: eval_.questionId ?? attempt.exerciseId,
+          occurredAt: deps.clock.toISOString(),
+          recurrenceCount: 0,
+          severity: 'minor',
+          confidence: eval_.confidence,
+          reviewStatus: 'unreviewed',
+        }
+        mistakes.push(m)
+        allMistakes.push(m)
+      }
+    }
+
+    const skillEvidence: SkillEvidence[] = []
+    for (const eval_ of evaluations) {
+      for (const se of eval_.skillEvidence) {
+        skillEvidence.push(se)
+        allSkillEvidence.push(se)
+      }
+    }
+
+    if (evaluations.length > 0 && skillEvidence.length === 0) {
+      const correctCount = evaluations.filter(e => e.status === 'correct').length
+      const totalEvalCount = evaluations.length
+      skillEvidence.push({
+        skill: session.skill,
+        type: correctCount / totalEvalCount >= 0.8 ? 'strength' : correctCount / totalEvalCount >= 0.5 ? 'improvement' : 'weakness',
+        description: `Session accuracy: ${correctCount}/${totalEvalCount} correct`,
+        score: correctCount,
+        maximumScore: totalEvalCount,
+        accuracy: totalEvalCount > 0 ? Math.round((correctCount / totalEvalCount) * 100) : 0,
+        sourceExerciseId: attempt.exerciseId,
+        sourceSessionId: request.sessionId,
+        occurredAt: deps.clock.toISOString(),
+        confidence: 0.9,
+      })
+      allSkillEvidence.push(skillEvidence[skillEvidence.length - 1])
+    }
+
+    const vocabularyEvidence: VocabularyEvidence[] = []
+    for (const se of skillEvidence) {
+      if (se.skill === 'vocabulary') {
+        vocabularyEvidence.push({
+          wordId: se.sourceExerciseId,
+          word: se.description,
+          correct: se.type !== 'weakness',
+          context: se.description,
+        })
+      }
+    }
 
     const outcome: LearningOutcome = {
       sessionId: request.sessionId,
@@ -50,20 +127,18 @@ export async function completeLearningSession(
       attemptId: attempt.id,
       skill: session.skill,
       objectiveId: session.objective.id,
-      score: 0,
-      maximumScore: 0,
-      difficulty: 'medium' as any,
+      score: attemptScore,
+      maximumScore: attemptMaxScore,
+      difficulty: session.difficulty ?? 'medium',
       actualMinutes: Math.floor(attempt.timeSpentMs / 60000),
       hintsUsed: attempt.hintsUsed,
-      strengths: [],
-      weaknesses: [],
-      mistakes: [],
-      vocabularyEvidence: [],
+      strengths: skillEvidence.filter(s => s.type === 'strength' || s.type === 'improvement'),
+      weaknesses: skillEvidence.filter(s => s.type === 'weakness' || s.type === 'plateau'),
+      mistakes,
+      vocabularyEvidence,
       completedAt: deps.clock.toISOString(),
     }
     outcomes.push(outcome)
-    totalScore += outcome.score
-    totalMaxScore += outcome.maximumScore
   }
 
   for (const o of outcomes) {
@@ -72,7 +147,7 @@ export async function completeLearningSession(
 
   const accuracy = totalMaxScore > 0 ? totalScore / totalMaxScore : 0
 
-  deps.eventPublisher.publish({
+  await deps.eventPublisher.publish({
     id: crypto.randomUUID?.() ?? `${Date.now()}-evt`,
     type: 'learning_session_completed',
     occurredAt: deps.clock.toISOString(),
@@ -86,6 +161,8 @@ export async function completeLearningSession(
     accuracy,
     roadmapTaskId: session.roadmapTaskId,
   })
+
+  await Promise.all(allMistakes.map(m => deps.mistakeRepository.save(m).catch(() => {})))
 
   if (deps.vocabularyRepository) {
     for (const o of outcomes) {
@@ -119,7 +196,7 @@ export async function completeLearningSession(
   if (deps.studyPlanPort && session.roadmapTaskId) {
     try {
       await deps.studyPlanPort.markTaskFulfilled(session.roadmapTaskId, accuracy)
-      deps.eventPublisher.publish({
+      await deps.eventPublisher.publish({
         id: crypto.randomUUID?.() ?? `${Date.now()}-evt`,
         type: 'roadmap_task_fulfilled',
         occurredAt: deps.clock.toISOString(),
@@ -128,6 +205,20 @@ export async function completeLearningSession(
         schemaVersion: '1.0',
         roadmapTaskId: session.roadmapTaskId,
         accuracy,
+      })
+    } catch { /* continue */ }
+  }
+
+  if (deps.tutorPort) {
+    try {
+      await deps.tutorPort.recordLearningOutcome({
+        sessionId: request.sessionId,
+        skill: session.skill,
+        score: totalScore,
+        maximumScore: totalMaxScore,
+        accuracy,
+        mistakes: allMistakes.map(m => ({ category: m.category, text: m.originalResponse })),
+        strengths: allSkillEvidence.filter(s => s.type === 'strength' || s.type === 'improvement').map(s => s.description),
       })
     } catch { /* continue */ }
   }

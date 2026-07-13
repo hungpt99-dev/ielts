@@ -41,10 +41,12 @@ export async function loadVocabulary(): Promise<{
 
   // Merge: prefer IndexedDB entries (richer data), dedup by word
   const byWord = new Map<string, PopupVocabEntry>()
-  for (const e of idbEntries) byWord.set(e.word.toLowerCase(), e)
+  for (const e of idbEntries) {
+    if (e.word) byWord.set(e.word.toLowerCase(), e)
+  }
   for (const e of storageEntries) {
     const key = e.word.toLowerCase()
-    if (!byWord.has(key)) byWord.set(key, e)
+    if (key && !byWord.has(key)) byWord.set(key, e)
   }
 
   const entries = [...byWord.values()]

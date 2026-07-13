@@ -8,7 +8,7 @@ import {
   MISTAKE_REVIEW_SYSTEM_PROMPT,
   VOCABULARY_EXTRACTION_SYSTEM_PROMPT,
 } from './exercise-generation'
-import { AI_EXPLAIN_LABELS } from './explain'
+import { AI_EXPLAIN_LABELS, SYSTEM_PROMPTS as EXPLAIN_SYSTEM_PROMPTS } from './explain'
 import type { AiExplainType } from './explain'
 import {
   VOCABULARY_DETAILS_SYSTEM_PROMPT,
@@ -46,16 +46,6 @@ const SYSTEM_PROMPT_ENTRIES: Array<Pick<RegisteredPrompt, 'id' | 'systemPrompt'>
   { id: 'shadowing-scripts', systemPrompt: SHADOWING_SCRIPTS_SYSTEM_PROMPT, description: 'Generate shadowing practice scripts from transcript' },
   { id: 'dictionary-entry', systemPrompt: DICTIONARY_ENTRY_SYSTEM_PROMPT, description: 'Generate dictionary-style entry for vocabulary word' },
 ]
-
-const EXPLAIN_SYSTEM_PROMPTS: Record<AiExplainType, string> = {
-  simple: 'You are an IELTS tutor. Explain text in simple English for learners. Respond with valid JSON only.',
-  translate: 'You are an IELTS tutor. Translate the text and add vocabulary notes. Respond with valid JSON only.',
-  'ielts-vocab': 'You are an IELTS vocabulary expert. Extract vocabulary with verb conjugations and grammar analysis. Respond with valid JSON only.',
-  grammar: 'You are an IELTS grammar expert. Analyze grammar including verb tense, aspect, voice, and mood. Respond with valid JSON only.',
-  rewrite: 'You are an IELTS writing tutor. Rewrite text naturally. Respond with valid JSON only.',
-  'example-sentences': 'You are an IELTS teacher. Create example sentences. Respond with valid JSON only.',
-  quiz: 'You are an IELTS examiner. Create quiz questions. Respond with valid JSON only.',
-}
 
 const explainTypes: AiExplainType[] = ['simple', 'translate', 'ielts-vocab', 'grammar', 'rewrite', 'example-sentences', 'quiz']
 for (const label of explainTypes) {

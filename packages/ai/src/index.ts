@@ -39,7 +39,7 @@ export {
   buildPracticeQuestionsSystemPrompt,
 } from './prompts'
 
-// Schema types (used by extension)
+// Schema types and runtimes (used by extension and vocabulary enrichment)
 export type {
   AiExplainResult,
   SimpleExplain,
@@ -50,6 +50,30 @@ export type {
   ExampleSentencesResult,
   QuizResult,
   DictionaryEntry,
+  VocabularyDetails,
+  VocabularyQuiz,
+} from './schemas'
+
+export {
+  vocabularyDetailsSchema,
+  vocabularyQuizSchema,
+  readingQuestionsSchema,
+  listeningExerciseSchema,
+  speakingPromptsSchema,
+  writingIdeasSchema,
+  grammarExercisesSchema,
+  mistakeReviewSchema,
+  vocabularyExtractionSchema,
+} from './schemas'
+
+export type {
+  ReadingQuestions,
+  ListeningExercise,
+  SpeakingPrompts,
+  WritingIdeas,
+  GrammarExercises,
+  MistakeReview,
+  VocabularyExtraction,
 } from './schemas'
 
 // Client types

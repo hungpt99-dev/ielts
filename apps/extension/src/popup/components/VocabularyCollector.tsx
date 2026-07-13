@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react'
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { findWord } from '../services/popupDataService'
-import { safeStorageGet } from '../../utils/safe-chrome'
 import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
 import { MESSAGE_TYPES, PROGRESS_KEYS } from '../../storage/db'
@@ -51,57 +50,31 @@ interface AIDetails {
   verbConjugation?: VerbConjugation
 }
 
-async function getAIProviderConfig(): Promise<{
-  apiKey: string
-  baseUrl: string
-  model: string
-}> {
-  const [syncResult, localResult] = await Promise.all([
-    new Promise<any>(r => chrome.storage.local.get(['extensionSettings'], r)),
-    new Promise<any>(r => chrome.storage.local.get(['aiApiKey'], r)),
-  ])
-  const settings = syncResult.extensionSettings || {}
-  return {
-    apiKey: localResult.aiApiKey || '',
-    baseUrl: settings.aiBaseUrl || 'https://api.openai.com/v1',
-    model: settings.aiModel || 'gpt-4o-mini',
-  }
-}
-
-function translationTarget(lang: string): string {
-  return lang.trim() || 'your language'
-}
+import { callAI } from '@ielts/ai'
+import { safeFetchProviderConfig } from '../../utils/safe-chrome'
 
 async function generateVocabularyDetails(
   word: string,
   sourceSentence: string,
-  topic: string,
-  nativeLanguage = '',
+  _topic: string,
 ): Promise<{ data: AIDetails | null; error: string | null }> {
-  const lang = translationTarget(nativeLanguage)
-  const config = await getAIProviderConfig()
-
-  if (!config.apiKey) {
+  const providerConfig = await safeFetchProviderConfig()
+  if (!providerConfig.apiKey) {
     return { data: null, error: 'API key not configured. Go to Settings to add your AI API key.' }
   }
 
   const systemPrompt = 'You are an IELTS vocabulary expert assistant. Always respond with valid JSON only, no other text.'
-
   const userPrompt = `Generate detailed IELTS vocabulary information for the word "${word}".
-
 ${sourceSentence ? `The word was found in this sentence: "${sourceSentence}"\n` : ''}
-${topic ? `Topic: ${topic}\n` : ''}
-
 Respond with valid JSON in this exact format:
 {
   "meaning": "Clear English definition suitable for IELTS",
-  "translation": "translation in ${lang}",
   "partOfSpeech": "e.g. noun, verb, adjective, adverb",
   "pronunciation": "IPA pronunciation like /ˈeksəmpl/",
   "exampleSentence": "An IELTS-style example sentence using the word",
   "synonyms": ["synonym1", "synonym2", "synonym3"],
   "antonyms": ["antonym1", "antonym2"],
-  "collocations": ["collocation1 — example", "collocation2 — example"],
+  "collocations": ["collocation1", "collocation2"],
   "wordFamily": ["noun form", "verb form", "adjective form"],
   "verbConjugation": {
     "base": "base form (omit if not a verb)",
@@ -111,46 +84,22 @@ Respond with valid JSON in this exact format:
     "thirdPersonSingular": "-s form"
   }
 }
-
 IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, omit verbConjugation entirely.`
 
-  const url = `${config.baseUrl.replace(/\/+$/, '')}/chat/completions`
+  const result = await callAI(systemPrompt, userPrompt, () => providerConfig, { temperature: 0.5, maxTokens: 1000 })
+
+  if (result.error || !result.content) {
+    return { data: null, error: result.error || 'AI returned an empty response.' }
+  }
 
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
-        ],
-        temperature: 0.5,
-        max_tokens: 1000,
-      }),
-    })
-
-    if (!response.ok) {
-      if (response.status === 401) return { data: null, error: 'Invalid API key. Check your key in Settings.' }
-      if (response.status === 429) return { data: null, error: 'Rate limit exceeded. Wait a moment and try again.' }
-      return { data: null, error: `AI API error (${response.status})` }
-    }
-
-    const json = await response.json()
-    const content: string = json.choices?.[0]?.message?.content || ''
-    if (!content) return { data: null, error: 'AI returned an empty response.' }
-
-    const jsonStart = content.indexOf('{')
-    const jsonEnd = content.lastIndexOf('}')
+    const jsonStart = result.content.indexOf('{')
+    const jsonEnd = result.content.lastIndexOf('}')
     if (jsonStart === -1 || jsonEnd === -1) {
       return { data: null, error: 'AI response was not valid JSON.' }
     }
 
-    const parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
+    const parsed = JSON.parse(result.content.slice(jsonStart, jsonEnd + 1))
 
     const rawVc = parsed.verbConjugation
     const verbConjugation = rawVc && typeof rawVc === 'object' && !Array.isArray(rawVc)
@@ -177,12 +126,8 @@ IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, om
     }
 
     return { data: details, error: null }
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
-    if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
-      return { data: null, error: 'Network error. Check your internet connection and API endpoint.' }
-    }
-    return { data: null, error: `AI request failed: ${message}` }
+  } catch {
+    return { data: null, error: 'Failed to parse AI response.' }
   }
 }
 
@@ -268,9 +213,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
     setAiError(null)
     setAiDetails(null)
 
-    const settingsResult = await safeStorageGet<Record<string, unknown>>('extensionSettings')
-    const nativeLang = ((settingsResult['extensionSettings'] as { nativeLanguage?: string })?.nativeLanguage) || ''
-    const result = await generateVocabularyDetails(wordToEnrich, sourceSentence.trim(), topic.trim(), nativeLang)
+    const result = await generateVocabularyDetails(wordToEnrich, sourceSentence.trim(), topic.trim())
     if (result.error) {
       setAiError(result.error)
     } else if (result.data) {

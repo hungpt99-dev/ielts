@@ -1,10 +1,12 @@
+import { callAI } from '@ielts/ai'
+import { safeFetchProviderConfig } from '../utils/safe-chrome'
+import { initializeExtensionEngine, getExtensionEngine } from '../storage/engine-adapters'
 import { YouTubeAdapter } from './infrastructure/youtube/YouTubeAdapter'
 import { YouTubeLayoutManager, PANEL_IFRAME_ID } from './infrastructure/youtube/YouTubeLayoutManager'
 import { FocusMode } from './infrastructure/youtube/FocusMode'
 import { detectVideoPage, type VideoPageInfo } from './infrastructure/youtube/YouTubePageDetector'
 import { LearningEventBus } from './domain/events/LearningEventBus'
 import { StorageAdapter } from './infrastructure/persistence/StorageAdapter'
-import { AIAdapter } from './infrastructure/ai/AIAdapter'
 import { LearningSessionService } from './application/services/LearningSessionService'
 import { VocabularyService } from './application/services/VocabularyService'
 import { TranscriptTranslationService } from './application/services/TranscriptTranslationService'
@@ -28,7 +30,6 @@ let layoutManager: YouTubeLayoutManager | null = null
 let focusMode: FocusMode | null = null
 let storageAdapter: StorageAdapter | null = null
 let eventBus: LearningEventBus | null = null
-let aiAdapter: AIAdapter | null = null
 let sessionService: LearningSessionService | null = null
 let vocabService: VocabularyService | null = null
 
@@ -346,17 +347,17 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
   const sentence = typeof payload.sentence === 'string' ? payload.sentence : ''
   const startTime = typeof payload.startTime === 'number' ? payload.startTime : 0
 
-  if (!word || !aiAdapter) {
-    postToParent('VOCAB_EXPLANATION', { error: 'Word explanation not available' })
-    return
-  }
-
   try {
-    // First try: AI-powered rich explanation with full schema
+    const providerConfig = await safeFetchProviderConfig()
+    if (!providerConfig.apiKey) {
+      postToParent('VOCAB_EXPLANATION', { error: 'AI not configured' })
+      return
+    }
+
     const systemPrompt = 'You are an IELTS vocabulary expert. Return ONLY valid JSON, no markdown, no code fences.'
     const userPrompt = `Analyze this word for an IELTS learner:\n\nWord: "${word}"\nContext sentence: "${sentence}"\n\nReturn JSON with:\n- word: the original word\n- normalizedWord: lowercase lemma\n- lemma: base form\n- pronunciation: IPA pronunciation (optional)\n- partOfSpeech: e.g. noun, verb, adjective\n- contextualDefinition: definition matching this context\n- translation: translation in the user's preferred language (optional)\n- cefrLevel: "A1"|"A2"|"B1"|"B2"|"C1"|"C2"\n- ieltsRelevance: "low"|"medium"|"high"\n- collocations: array of {phrase: string, example?: string}\n- synonyms: array of strings\n- wordFamily: array of {word: string, partOfSpeech: string}\n- simpleExample: simple example sentence\n- ieltsExample: IELTS-style example sentence (optional)\n- verbConjugation: {base: string, pastSimple: string, pastParticiple: string, presentParticiple: string, thirdPersonSingular: string} (omit if not a verb)\n\nContextual definition must relate to the provided sentence. If the word has multiple meanings, explain the one used in the context sentence first.`
 
-    const result = await aiAdapter.request({ systemPrompt, userMessage: userPrompt, temperature: 0.3 })
+    const result = await callAI(systemPrompt, userPrompt, () => providerConfig, { temperature: 0.3 })
 
     if (!result.error && result.content) {
       let parsed: Record<string, unknown>
@@ -505,17 +506,17 @@ async function handleExplainSentence(payload: Record<string, unknown>): Promise<
   const contextBefore = Array.isArray(payload.contextBefore) ? payload.contextBefore as string[] : []
   const contextAfter = Array.isArray(payload.contextAfter) ? payload.contextAfter as string[] : []
 
-  if (!sentence || !aiAdapter) {
-    postToParent('SENTENCE_EXPLANATION', { error: 'Sentence or AI not available' })
-    return
-  }
-
   try {
+    const providerConfig = await safeFetchProviderConfig()
+    if (!providerConfig.apiKey) {
+      postToParent('SENTENCE_EXPLANATION', { error: 'AI not configured' })
+      return
+    }
     const contextText = [...contextBefore, sentence, ...contextAfter].join(' ')
     const systemPrompt = 'You are an IELTS listening and grammar tutor. Analyze the given transcript sentence. Return ONLY valid JSON, no markdown, no code fences.'
     const userPrompt = `Analyze this transcript sentence for an IELTS learner:\n\nSentence: "${sentence}"\n\nContext: "${contextText}"\n\nReturn JSON with:\n- simpleMeaning: clear simple explanation\n- translation: translation in the user's preferred language (optional)\n- sentenceStructure: grammar structure explanation\n- grammarPoints: array of {name, explanation, sourceText?}\n- vocabulary: array of {word, meaningInContext}\n- listeningNotes: array of listening difficulty notes\n- simplifiedVersion: simpler English version\n- academicAlternative: more academic IELTS version (optional)\n- practiceQuestion: {prompt, answer} (optional)`
 
-    const result = await aiAdapter.request({ systemPrompt, userMessage: userPrompt, temperature: 0.3 })
+    const result = await callAI(systemPrompt, userPrompt, () => providerConfig, { temperature: 0.3 })
 
     if (result.error || !result.content) {
       postToParent('SENTENCE_EXPLANATION', { error: result.error || 'AI returned empty response' })
@@ -551,7 +552,7 @@ async function handleGenerateQuiz(payload: Record<string, unknown>): Promise<voi
   const difficulty = typeof payload.difficulty === 'string' ? payload.difficulty : 'medium'
   const questionCount = typeof payload.questionCount === 'number' ? payload.questionCount : 5
 
-  if (!videoId || !aiAdapter || typeof startMs !== 'number' || startMs < 0 || typeof endMs !== 'number' || endMs <= startMs) {
+  if (!videoId || typeof startMs !== 'number' || startMs < 0 || typeof endMs !== 'number' || endMs <= startMs) {
     postToParent('QUIZ_DATA', { error: 'Invalid quiz parameters' })
     return
   }
@@ -572,62 +573,76 @@ async function handleGenerateQuiz(payload: Record<string, unknown>): Promise<voi
     }
 
     const sectionText = selectedSegments.map(s => s.text).join(' ')
-    const systemPrompt = 'You are an IELTS listening quiz generator. Create questions based ONLY on the provided transcript section. Return ONLY valid JSON, no markdown, no code fences.'
-    const userPrompt = `Create ${questionCount} IELTS listening questions from this transcript section (${startMs}ms to ${endMs}ms):\n\n${sectionText}\n\nDifficulty: ${difficulty}\n\nReturn JSON with:\n- questions: array of {id: string, type: "multiple-choice"|"sentence-completion"|"short-answer"|"true-false-not-given"|"fill-blank", prompt: string, options?: string[], correctAnswer: string, points: number, sourceSegmentIds: string[], explanation: string, evidenceStartMs: number, evidenceEndMs: number}\n\nEvery answer must be directly supported by the transcript. No invented information.`
 
-    const result = await aiAdapter.request({ systemPrompt, userMessage: userPrompt, temperature: 0.3, maxTokens: 4000 })
-    if (result.error || !result.content) {
-      postToParent('QUIZ_DATA', { error: result.error || 'Quiz generation failed' })
-      return
+    const engine = getExtensionEngine()
+    if (!engine) await initializeExtensionEngine()
+
+    const engine2 = getExtensionEngine()
+    if (engine2) {
+      try {
+        const sessionResult = await engine2.createSessionFromContent({
+          content: { id: videoId, type: 'youtube-transcript', text: sectionText, title: 'Listening Quiz' },
+          skill: 'listening',
+          availableMinutes: 15,
+        })
+
+        if (sessionResult.status === 'success') {
+          const activityResult = await engine2.generateActivity({
+            sessionId: sessionResult.data.session.id,
+            objectiveId: sessionResult.data.session.objective.id,
+            skill: 'listening',
+            activityType: 'guided-exercise',
+            availableMinutes: 10,
+            difficulty: difficulty as any,
+            contextScope: 'youtube',
+            correlationId: crypto.randomUUID?.() ?? `${Date.now()}-corr`,
+          })
+
+          if (activityResult.status === 'success' && activityResult.data.activity?.exercise) {
+            const ex = activityResult.data.activity.exercise
+            const questions = ex.questions.slice(0, questionCount).map((q: any, i: number) => ({
+              id: `q-${i}`,
+              type: q.type === 'gap-fill' ? 'fill-blank' : q.type === 'multiple-choice' ? 'multiple-choice' : 'short-answer',
+              prompt: q.question || q.prompt || '',
+              options: Array.isArray(q.options) ? q.options : undefined,
+              correctAnswer: q.answer ?? q.correctAnswer ?? '',
+              points: 1,
+              sourceSegmentIds: [],
+              explanation: q.explanation || '',
+              evidenceStartMs: startMs,
+              evidenceEndMs: endMs,
+            }))
+
+            if (questions.length > 0) {
+              postToParent('QUIZ_DATA', {
+                success: true,
+                quiz: {
+                  id: crypto.randomUUID(),
+                  videoId,
+                  title: 'Listening Quiz',
+                  startMs,
+                  endMs,
+                  questions,
+                  totalPoints: questions.length,
+                  onePlay: true,
+                  hideSubtitles: true,
+                  createdAt: new Date().toISOString(),
+                },
+              })
+              return
+            }
+          }
+        }
+      } catch {
+        postToParent('QUIZ_DATA', { error: 'Quiz generation unavailable' })
+        return
+      }
     }
 
-    let parsed: { questions?: unknown[] }
-    try { parsed = JSON.parse(result.content) } catch {
-      postToParent('QUIZ_DATA', { error: 'AI returned invalid JSON' })
-      return
-    }
-
-    if (!Array.isArray(parsed.questions) || parsed.questions.length === 0) {
-      postToParent('QUIZ_DATA', { error: 'No questions generated' })
-      return
-    }
-
-    const questions = parsed.questions.slice(0, questionCount).map((q: any, i: number) => ({
-      id: q.id || `q-${i}`,
-      type: validateQuestionType(q.type),
-      prompt: q.prompt || '',
-      options: Array.isArray(q.options) ? q.options : undefined,
-      correctAnswer: q.correctAnswer || '',
-      points: typeof q.points === 'number' ? q.points : 1,
-      sourceSegmentIds: Array.isArray(q.sourceSegmentIds) ? q.sourceSegmentIds : [],
-      explanation: q.explanation || '',
-      evidenceStartMs: typeof q.evidenceStartMs === 'number' ? q.evidenceStartMs : startMs,
-      evidenceEndMs: typeof q.evidenceEndMs === 'number' ? q.evidenceEndMs : endMs,
-    }))
-
-    postToParent('QUIZ_DATA', {
-      success: true,
-      quiz: {
-        id: crypto.randomUUID(),
-        videoId,
-        title: 'Listening Quiz',
-        startMs,
-        endMs,
-        questions,
-        totalPoints: questions.reduce((sum: number, q: any) => sum + q.points, 0),
-        onePlay: true,
-        hideSubtitles: true,
-        createdAt: new Date().toISOString(),
-      },
-    })
+    postToParent('QUIZ_DATA', { error: 'Learning engine not available' })
   } catch {
     postToParent('QUIZ_DATA', { error: 'Quiz generation failed' })
   }
-}
-
-function validateQuestionType(type: string): string {
-  const valid = ['multiple-choice', 'sentence-completion', 'short-answer', 'true-false-not-given', 'matching', 'summary-completion', 'fill-blank']
-  return valid.includes(type) ? type : 'short-answer'
 }
 
 async function handleSubmitQuiz(payload: Record<string, unknown>): Promise<void> {
@@ -746,12 +761,11 @@ export async function initYouTubeLearning(): Promise<void> {
     eventBus = LearningEventBus.getInstance()
     storageAdapter = new StorageAdapter()
     focusMode = new FocusMode()
-    aiAdapter = new AIAdapter()
 
     sessionService = new LearningSessionService(storageAdapter, eventBus)
-    vocabService = new VocabularyService(aiAdapter, storageAdapter)
+    vocabService = new VocabularyService(storageAdapter)
 
-    translationService = new TranscriptTranslationService(aiAdapter)
+    translationService = new TranscriptTranslationService()
 
     youtubeAdapter = new YouTubeAdapter({
       onVideoChange,

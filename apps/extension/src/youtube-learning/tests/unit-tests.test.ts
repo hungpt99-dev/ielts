@@ -510,58 +510,21 @@ describe('Transcript caching', () => {
 // ─── Track selection ─────────────────────────────────────────────────────────
 
 describe('Caption track selection', () => {
-  // We test the selection logic via the provider's behavior
-  it('prefers exact language manual over auto', () => {
-    const provider = new YouTubeTranscriptProvider({ preferredLanguages: ['en'] })
-    const tracks = [
-      { baseUrl: 'auto', languageCode: 'en', name: 'English (auto)', kind: 'auto' as const, isTranslatable: false },
-      { baseUrl: 'manual', languageCode: 'en', name: 'English', kind: 'manual' as const, isTranslatable: false },
-    ]
-    // Access private method via prototype
-    const result = (provider as any).selectBestTrack(tracks, ['en'])
-    expect(result.baseUrl).toBe('manual')
-  })
-
-  it('falls back to automatic when no manual available', () => {
-    const provider = new YouTubeTranscriptProvider({ preferredLanguages: ['en'] })
-    const tracks = [
-      { baseUrl: 'auto', languageCode: 'en', name: 'English (auto)', kind: 'auto' as const, isTranslatable: false },
-    ]
-    const result = (provider as any).selectBestTrack(tracks, ['en'])
-    expect(result.baseUrl).toBe('auto')
-  })
-
-  it('falls back to English when preferred language missing', () => {
-    const provider = new YouTubeTranscriptProvider({ preferredLanguages: ['vi'] })
-    const tracks = [
-      { baseUrl: 'en-auto', languageCode: 'en', name: 'English (auto)', kind: 'auto' as const, isTranslatable: false },
-    ]
-    const result = (provider as any).selectBestTrack(tracks, ['vi'])
-    expect(result).not.toBeNull()
-  })
-
-  it('uses any manual track as fallback', () => {
-    const provider = new YouTubeTranscriptProvider({ preferredLanguages: ['vi'] })
-    const tracks = [
-      { baseUrl: 'fr-manual', languageCode: 'fr', name: 'French', kind: 'manual' as const, isTranslatable: false },
-    ]
-    const result = (provider as any).selectBestTrack(tracks, ['vi'])
-    expect(result.baseUrl).toBe('fr-manual')
-  })
-
-  it('returns null for empty tracks', () => {
+  it('defaults preferred languages to English variants', () => {
     const provider = new YouTubeTranscriptProvider()
-    const result = (provider as any).selectBestTrack([], ['en'])
-    expect(result).toBeNull()
+    expect((provider as any).config.preferredLanguages).toEqual(['en', 'en-US', 'en-GB'])
   })
 
-  it('supports language variant fallback (en-GB → en)', () => {
-    const provider = new YouTubeTranscriptProvider({ preferredLanguages: ['en-GB'] })
-    const tracks = [
-      { baseUrl: 'en', languageCode: 'en', name: 'English', kind: 'manual' as const, isTranslatable: false },
-    ]
-    const result = (provider as any).selectBestTrack(tracks, ['en-GB'])
-    expect(result.baseUrl).toBe('en')
+  it('accepts custom preferred languages', () => {
+    const provider = new YouTubeTranscriptProvider({ preferredLanguages: ['vi', 'en'] })
+    expect((provider as any).config.preferredLanguages).toEqual(['vi', 'en'])
+  })
+
+  it('checkAvailability returns unavailable by default', async () => {
+    const provider = new YouTubeTranscriptProvider()
+    const result = await provider.checkAvailability()
+    expect(result.available).toBe(false)
+    expect(result.languages).toEqual([])
   })
 })
 

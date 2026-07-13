@@ -66,6 +66,7 @@ export async function submitAnswer(
     }
   }
 
+  attempt.evaluations = evaluations
   attempt.status = allComplete ? 'evaluated' : 'submitted'
   attempt.evaluatedAt = new Date().toISOString()
   await deps.attemptRepository.save(attempt)
@@ -95,7 +96,7 @@ export async function submitAnswer(
     }
   }
 
-  deps.eventPublisher.publish({
+  await deps.eventPublisher.publish({
     id: crypto.randomUUID?.() ?? `${Date.now()}-evt`,
     type: 'answer_evaluated',
     occurredAt: new Date().toISOString(),

@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { ChatPopup } from '@ielts/ai-tutor-engine'
 import type { ContextSuggestion } from '@ielts/ai-tutor-engine'
 import { loadAppSettings } from '../../../services/storage/SettingsStorage'
-import { callAI } from '@ielts/ai'
 import { DatabaseService } from '../../../services/storage/Database'
 import type { TaskEntry, VocabularyEntry, MistakeEntry } from '../../../models'
+import { getAITutorEngine } from '../../../services/engineBootstrap'
 
 interface AITutorPopupProps {
   isOpen: boolean
@@ -210,15 +210,21 @@ export default function AITutorPopup({
 
   const handleSendMessage = useCallback(async (text: string): Promise<string> => {
     try {
-      const settings = loadAppSettings()
-      if (!settings?.aiApiKey) return "I am here to help with your IELTS journey! Ask me about what to study today, your weak skills, or anything IELTS-related."
+      const engine = getAITutorEngine()
+      if (!engine) return "I am here to help with your IELTS journey! Ask me about what to study today, your weak skills, or anything IELTS-related."
 
-      const { content, error } = await callAI(
-        'You are an expert IELTS tutor assistant. Keep responses under 150 words. Be practical, actionable, and friendly.',
-        text,
-        { temperature: 0.7, maxTokens: 300 },
-      )
-      if (!error && content) return content
+      const result = await engine.chat({
+        message: text,
+        mode: 'general-teacher',
+        contextScope: 'chat',
+        source: 'web-app',
+      })
+
+      if (result.status === 'success' || result.status === 'partial') {
+        const messages = result.data?.messages ?? []
+        const lastAssistant = [...messages].reverse().find(m => m.role === 'assistant')
+        if (lastAssistant?.content) return lastAssistant.content
+      }
     } catch {}
     return "I am here to help with your IELTS journey! Ask me about what to study today, your weak skills, exam countdown, mistake review, vocabulary exercises, or anything else. What can I help with?"
   }, [])
