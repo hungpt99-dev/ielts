@@ -110,6 +110,9 @@ export type { ListeningTutorModule, ListeningExplanationRequest, ListeningExplan
 export type { VocabularyTutorModule, VocabularyExplanationRequest, VocabularyExplanationResult } from './skill-modules/vocabulary'
 export type { GrammarTutorModule, GrammarExplanationRequest, GrammarExplanationResult } from './skill-modules/grammar'
 
+// ── Storage ──────────────────────────────────────────────────────────
+export { MessageStorage } from './services/messageStorage'
+
 // ── Legacy exports (preserved for backward compatibility) ─────────────
 // Components
 export { default as ChatPopup } from './components/ChatPopup'

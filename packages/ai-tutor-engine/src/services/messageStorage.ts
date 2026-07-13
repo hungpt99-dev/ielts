@@ -146,6 +146,42 @@ export const MessageStorage = {
   getTotalInteractions(): number {
     return getOrCreateSnapshot().meta.totalInteractions
   },
+
+  dismissRecommendation(id: string): void {
+    const snapshot = getOrCreateSnapshot()
+    if (!snapshot.meta.dismissedRecommendationIds.includes(id)) {
+      snapshot.meta.dismissedRecommendationIds = [...snapshot.meta.dismissedRecommendationIds, id]
+    }
+    saveSnapshot(snapshot)
+  },
+
+  isRecommendationDismissed(id: string): boolean {
+    return getOrCreateSnapshot().meta.dismissedRecommendationIds.includes(id)
+  },
+
+  snoozeRecommendation(id: string, until?: string): void {
+    const snapshot = getOrCreateSnapshot()
+    const existing = snapshot.meta.snoozedRecommendations.find(r => r.id === id)
+    if (existing) {
+      existing.until = until ?? new Date(Date.now() + 3600_000).toISOString()
+    } else {
+      snapshot.meta.snoozedRecommendations = [
+        ...snapshot.meta.snoozedRecommendations,
+        { id, until: until ?? new Date(Date.now() + 3600_000).toISOString() },
+      ]
+    }
+    saveSnapshot(snapshot)
+  },
+
+  isRecommendationSnoozed(id: string): boolean {
+    const found = getOrCreateSnapshot().meta.snoozedRecommendations.find(r => r.id === id)
+    if (!found) return false
+    return new Date(found.until) > new Date()
+  },
+
+  getAcceptedRecommendations(): string[] {
+    return [...getOrCreateSnapshot().meta.acceptedRecommendations]
+  },
 }
 
 export default MessageStorage

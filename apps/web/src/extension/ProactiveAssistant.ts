@@ -27,7 +27,7 @@ import type {
   ProactiveMessageTriggerType,
   ProactiveMessageAction,
 } from '../services/ProactiveTutorAdapter'
-import { LocalChatMemory } from '../services/LocalChatMemory'
+import { MessageStorage } from '@ielts/ai-tutor-engine'
 import { generateId } from '../utils'
 
 // ── Extension-Specific Trigger Types ────────────────────────
@@ -388,7 +388,7 @@ export class ExtensionProactiveAssistant {
     return null
   }
 
-  // ── Integration with ProactiveMessageEngine ─────────────────
+  // ── Integration with ProactiveTutorAdapter ──────────────────
 
   private storeAsProactiveMessage(suggestion: ExtensionProactiveSuggestion): void {
     const msg: ProactiveMessage = {
@@ -408,10 +408,10 @@ export class ExtensionProactiveAssistant {
     proactiveMessageEngine.addExternalMessage(msg)
   }
 
-  // ── Dismissal tracking via LocalChatMemory ────────────────────
+  // ── Dismissal tracking via shared MessageStorage ──────────────
 
   isRecentlyDismissed(suggestionKey: string): boolean {
-    return LocalChatMemory.isRecommendationDismissed(suggestionKey)
+    return MessageStorage.isRecommendationDismissed(suggestionKey)
   }
 
   markSuggestionSeen(suggestion: ExtensionProactiveSuggestion): void {
@@ -420,7 +420,7 @@ export class ExtensionProactiveAssistant {
 
   dismissSuggestion(suggestion: ExtensionProactiveSuggestion): void {
     this.seenSuggestions.add(suggestion.id)
-    LocalChatMemory.dismissRecommendation(suggestion.id)
+    MessageStorage.dismissRecommendation(suggestion.id)
   }
 
   // ── Privacy: Clear metadata ──────────────────────────────────

@@ -24,7 +24,7 @@ export default defineConfig({
       'tests/**/*.{test,spec}.{ts,tsx}',
       '../../packages/storage/src/**/*.{test,spec}.{ts,tsx}',
       '../../packages/ai/src/**/*.{test,spec}.{ts,tsx}',
-      '../../packages/ai-tutor/src/**/*.{test,spec}.{ts,tsx}',
+      '../../packages/ai-tutor-engine/src/**/*.{test,spec}.{ts,tsx}',
       '../../apps/extension/src/**/*.{test,spec}.{ts,tsx}',
     ],
 
