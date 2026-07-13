@@ -1,5 +1,5 @@
-import { ProactiveEventBus } from '@ielts/ai-tutor'
-import { proactiveMessageEngine } from './ProactiveMessageEngine'
+import { ProactiveEventBus } from '@ielts/ai-tutor-engine'
+import { proactiveMessageEngine } from './ProactiveTutorAdapter'
 import { proactiveTutorSettingsRepository } from '../features/proactiveTutor/ProactiveTutorSettingsRepository'
 
 let initialized = false

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { ChatPopup } from '@ielts/ai-tutor'
-import type { ContextSuggestion } from '@ielts/ai-tutor'
+import { ChatPopup } from '@ielts/ai-tutor-engine'
+import type { ContextSuggestion } from '@ielts/ai-tutor-engine'
 import { aiTutorService } from '../aiTutorService'
 import type { PersonalizationContext } from '../../personalization/types'
 import type { TutorDailyBriefing } from '../aiTutorService'

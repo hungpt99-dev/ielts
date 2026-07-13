@@ -1,0 +1,6 @@
+export { TriggerRegistry } from './trigger-registry'
+export type { TriggerHandler } from './trigger-registry'
+export { MessageGeneratorRegistry } from './message-generator-registry'
+export type { MessageGenerator } from './message-generator-registry'
+export { ProactiveTutorOrchestrator } from './proactive-tutor-orchestrator'
+export { createDefaultGenerators } from './default-generators'

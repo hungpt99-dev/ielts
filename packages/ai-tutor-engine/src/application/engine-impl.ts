@@ -1,0 +1,202 @@
+import type { AITutorEngine, TutorRequestOptions, TutorOperationResult, ContextSuggestionRequest } from './ai-tutor-engine'
+import type { TutorChatRequest, TutorChatResult } from '../domain/entities/tutor-message'
+import type { NextBestActionRequest, NextBestActionResult } from '../domain/entities/tutor-recommendation'
+import type { ProactiveEvaluationRequest, ProactiveEvaluationResult } from '../domain/entities/proactive-message'
+import type { ProgressReviewRequest, ProgressReviewResult } from '../domain/entities/progress-review'
+import type { LearningEvent } from '../domain/events/learning-event'
+import type { UpdateTutorMemoryRequest, UpdateTutorMemoryResult } from '../domain/entities/tutor-memory'
+import type { AITutorInitializationResult, TutorStateSnapshot } from '../domain/results/tutor-result'
+import type { ContextSuggestion } from './recommendations/generate-context-suggestions'
+import type { TutorAIClient } from '../ai/tutor-ai-client'
+import type { LearnerContextBuilder } from '../context/learner-context-builder'
+import type { TutorMessageRepository } from '../ports/tutor-message-repository'
+import type { TutorMemoryRepository } from '../ports/tutor-memory-repository'
+import type { TutorSettingsRepository } from '../ports/tutor-settings-repository'
+import type { TutorEventPublisher } from '../ports/tutor-event-publisher'
+import type { ClockPort } from '../ports/clock-port'
+
+import { sendTutorMessage, type SendTutorMessageDependencies } from './chat/send-tutor-message'
+import { getNextBestAction } from './recommendations/get-next-best-action'
+import { generateProactiveMessages } from './proactive/generate-proactive-messages'
+import { generateProgressReview } from './progress/generate-progress-review'
+import { generateContextSuggestions } from './recommendations/generate-context-suggestions'
+import { updateTutorMemory } from './memory/update-tutor-memory'
+import { TutorMemoryManager } from '../memory/tutor-memory-manager'
+import { SystemClock } from '../ports/clock-port'
+
+export interface AITutorEngineDependencies {
+  aiClient?: TutorAIClient
+  contextBuilder: LearnerContextBuilder
+  messageRepository: TutorMessageRepository
+  memoryRepository: TutorMemoryRepository
+  settingsRepository: TutorSettingsRepository
+  eventPublisher: TutorEventPublisher
+  clock?: ClockPort
+}
+
+export class AITutorEngineImpl implements AITutorEngine {
+  private deps: AITutorEngineDependencies
+  private memoryManager: TutorMemoryManager
+  private initialized = false
+
+  constructor(deps: AITutorEngineDependencies) {
+    this.deps = deps
+    this.memoryManager = new TutorMemoryManager(deps.memoryRepository)
+  }
+
+  async initialize(): Promise<AITutorInitializationResult> {
+    this.initialized = true
+    return {
+      initialized: true,
+      aiAvailable: !!this.deps.aiClient,
+      storageAvailable: true,
+      errors: [],
+    }
+  }
+
+  async chat(
+    request: TutorChatRequest,
+    _options?: TutorRequestOptions,
+  ): Promise<TutorOperationResult<TutorChatResult>> {
+    if (!this.initialized) {
+      return { status: 'failure', error: { code: 'not_initialized', message: 'Engine not initialized', recoverable: true } }
+    }
+
+    const chatDeps: SendTutorMessageDependencies = {
+      aiClient: this.deps.aiClient ?? createFallbackClient(),
+      messageRepository: this.deps.messageRepository,
+      eventPublisher: this.deps.eventPublisher,
+      contextBuilder: this.deps.contextBuilder,
+      clock: this.deps.clock ?? new SystemClock(),
+    }
+
+    const result = await sendTutorMessage(request, chatDeps)
+
+    if (result.status === 'success' && result.data) {
+      return { status: 'success', data: result.data }
+    }
+    if (result.status === 'partial' && result.data) {
+      return { status: 'partial', data: result.data, warnings: result.warnings }
+    }
+    if (result.status === 'failure') {
+      return { status: 'failure', error: { code: 'chat_failed', message: result.error?.message ?? 'Unknown error', recoverable: true } }
+    }
+    return { status: 'failure', error: { code: 'chat_failed', message: 'Failed to process chat message', recoverable: true } }
+  }
+
+  async getNextBestAction(
+    request: NextBestActionRequest,
+  ): Promise<TutorOperationResult<NextBestActionResult>> {
+    try {
+      const result = getNextBestAction(request)
+      return { status: 'success', data: result }
+    } catch (err) {
+      return {
+        status: 'failure',
+        error: {
+          code: 'action_failed',
+          message: err instanceof Error ? err.message : 'Unknown error',
+          recoverable: true,
+        },
+      }
+    }
+  }
+
+  async evaluateProactiveSupport(
+    request: ProactiveEvaluationRequest,
+  ): Promise<TutorOperationResult<ProactiveEvaluationResult>> {
+    try {
+      const settings = await this.deps.settingsRepository.getProactiveSettings()
+      const result = await generateProactiveMessages(request, settings, [])
+      return { status: 'success', data: result }
+    } catch (err) {
+      return {
+        status: 'failure',
+        error: {
+          code: 'proactive_failed',
+          message: err instanceof Error ? err.message : 'Unknown error',
+          recoverable: true,
+        },
+      }
+    }
+  }
+
+  async generateProgressReview(
+    request: ProgressReviewRequest,
+  ): Promise<TutorOperationResult<ProgressReviewResult>> {
+    try {
+      const result = await generateProgressReview(request, { aiClient: this.deps.aiClient })
+      return { status: 'success', data: result }
+    } catch (err) {
+      return {
+        status: 'failure',
+        error: {
+          code: 'progress_failed',
+          message: err instanceof Error ? err.message : 'Unknown error',
+          recoverable: true,
+        },
+      }
+    }
+  }
+
+  async generateContextSuggestions(
+    request: ContextSuggestionRequest,
+  ): Promise<TutorOperationResult<ContextSuggestion[]>> {
+    try {
+      const suggestions = generateContextSuggestions(request.learnerState)
+      return { status: 'success', data: suggestions }
+    } catch (err) {
+      return {
+        status: 'failure',
+        error: {
+          code: 'suggestions_failed',
+          message: err instanceof Error ? err.message : 'Unknown error',
+          recoverable: true,
+        },
+      }
+    }
+  }
+
+  async handleLearningEvent(
+    _event: LearningEvent,
+  ): Promise<TutorOperationResult<void>> {
+    return { status: 'success', data: undefined }
+  }
+
+  async updateMemory(
+    request: UpdateTutorMemoryRequest,
+  ): Promise<TutorOperationResult<UpdateTutorMemoryResult>> {
+    try {
+      const result = await updateTutorMemory(request, this.memoryManager)
+      return { status: 'success', data: result }
+    } catch (err) {
+      return {
+        status: 'failure',
+        error: {
+          code: 'memory_failed',
+          message: err instanceof Error ? err.message : 'Unknown error',
+          recoverable: true,
+        },
+      }
+    }
+  }
+
+  async getTutorState(): Promise<TutorStateSnapshot> {
+    return {
+      initialized: this.initialized,
+      aiConfigured: !!this.deps.aiClient,
+      proactiveEnabled: true,
+      currentSessionsCount: 0,
+      activeProactiveMessages: 0,
+      memoryVersion: 1,
+    }
+  }
+}
+
+function createFallbackClient(): TutorAIClient {
+  return {
+    async generateStructured() {
+      return { success: false, error: { code: 'ai_not_configured', message: 'No AI provider', recoverable: true } }
+    },
+  }
+}

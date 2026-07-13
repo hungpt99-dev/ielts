@@ -20,13 +20,13 @@
 //   local to the user's browser.
 // - Proactive suggestions can be fully disabled by the user.
 
-import { proactiveMessageEngine } from '../services/ProactiveMessageEngine'
+import { proactiveMessageEngine } from '../services/ProactiveTutorAdapter'
 import type {
   ProactiveMessage,
   ProactiveMessageCategory,
   ProactiveMessageTriggerType,
   ProactiveMessageAction,
-} from '../services/ProactiveMessageEngine'
+} from '../services/ProactiveTutorAdapter'
 import { LocalChatMemory } from '../services/LocalChatMemory'
 import { generateId } from '../utils'
 

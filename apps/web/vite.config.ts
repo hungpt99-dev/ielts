@@ -67,7 +67,7 @@ export default defineConfig({
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-charts': ['recharts'],
           'vendor-ui': ['lucide-react', 'react-hook-form', '@hookform/resolvers'],
-          'vendor-ai': ['@ielts/ai', '@ielts/ai-tutor'],
+          'vendor-ai': ['@ielts/ai', '@ielts/ai-tutor-engine'],
         },
       },
     },
@@ -79,7 +79,7 @@ export default defineConfig({
     alias: {
       'zod/v4/core': resolve(__dirname, '../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/index.js'),
       '@ielts/ai': resolve(__dirname, '../../packages/ai/src'),
-      '@ielts/ai-tutor': resolve(__dirname, '../../packages/ai-tutor/src'),
+      '@ielts/ai-tutor-engine': resolve(__dirname, '../../packages/ai-tutor-engine/src'),
       '@ielts/storage': resolve(__dirname, '../../packages/storage/src'),
       '@ielts/theme': resolve(__dirname, '../../packages/theme/src'),
       '@ielts/ui': resolve(__dirname, '../../packages/ui/src'),

@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import type { ProactiveMessage } from '../../../services/ProactiveMessageEngine'
+import type { ProactiveMessage } from '../../../services/ProactiveTutorAdapter'
 
 const CATEGORY_LABELS: Record<string, string> = {
   'vocabulary-review': 'Vocabulary',

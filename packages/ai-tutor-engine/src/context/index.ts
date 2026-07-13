@@ -1,0 +1,8 @@
+export { LearnerContextBuilder } from './learner-context-builder'
+export type { LearnerContextDependencies } from './learner-context-builder'
+export { ContextSourceRegistry } from './context-source-registry'
+export type { ContextSource } from './context-source-registry'
+export { selectContextForScope } from './context-selector'
+export { evaluateFreshness } from './context-freshness-evaluator'
+export { summarizeForPrompt, summarizeState } from './context-summarizer'
+export type { ContextSummary } from './context-summarizer'

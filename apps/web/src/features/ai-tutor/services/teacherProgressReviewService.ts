@@ -1,5 +1,5 @@
-import { AIProgressReviewController } from '@ielts/ai-tutor'
-import type { ProgressReviewData, SkillProgress, WeaknessReport, WeakSkill, RepeatedMistake, VocabularyStatus, ReviewSummary, StudyConsistency } from '@ielts/ai-tutor'
+import { AIProgressReviewController } from '@ielts/ai-tutor-engine'
+import type { ProgressReviewData, SkillProgress, WeaknessReport, WeakSkill, RepeatedMistake, VocabularyStatus, ReviewSummary, StudyConsistency } from '@ielts/ai-tutor-engine'
 import { callAI } from '@ielts/ai'
 import { buildPersonalizationContext, analyzeWeakSkills } from '../../personalization/personalizationService'
 import type { PersonalizationContext, SkillType } from '../../personalization/types'

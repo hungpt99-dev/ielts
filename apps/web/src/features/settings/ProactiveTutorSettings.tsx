@@ -6,7 +6,7 @@ import Input from '../../components/ui/Input'
 import { proactiveTutorSettingsRepository } from '../proactiveTutor/ProactiveTutorSettingsRepository'
 import type { ProactiveTutorSettings } from '../proactiveTutor/ProactiveTutorSettingsRepository'
 import type { TutorTone, ReminderFrequency } from '../aiTutor/hooks/useProactiveSettings'
-import { proactiveMessageEngine } from '../../services/ProactiveMessageEngine'
+import { proactiveMessageEngine } from '../../services/ProactiveTutorAdapter'
 
 const TONE_OPTIONS: { value: TutorTone; label: string }[] = [
   { value: 'friendly', label: 'Friendly' },
