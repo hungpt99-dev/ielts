@@ -1,7 +1,8 @@
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { callAI } from '@ielts/ai'
 import type { ProviderConfig, AICallResult } from '@ielts/ai'
-import type { AppSettings } from '../../models'
+import type { AppSettings, TaskEntry } from '../../models'
+import { DatabaseService } from '../../services/storage/Database'
 import {
   extractAiPlanInput,
   enrichWithLearningData,
@@ -14,6 +15,7 @@ import {
   saveRoadmap,
 } from './roadmapService'
 import type { RoadmapData, RoadmapPhase, RoadmapWeek, RoadmapDay } from './roadmapService'
+import { SKILL_TO_CATEGORY } from './constants'
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
@@ -67,36 +69,52 @@ function tryParseAiResponse(content: string): AiRoadmapResult | null {
   }
 }
 
-function aiDayToRoadmapDay(
+async function aiDayToRoadmapDay(
   aiDay: AiRoadmapDay,
   dateStr: string,
-): RoadmapDay {
+): Promise<RoadmapDay> {
+  const entry = await DatabaseService.addTask({
+    title: aiDay.objective,
+    description: `Skill: ${aiDay.skillFocus}. ${aiDay.task.description}`,
+    category: SKILL_TO_CATEGORY[aiDay.skillFocus] ?? 'Vocabulary',
+    date: dateStr + 'T00:00:00.000Z',
+    isDone: false,
+    isRecurring: false,
+    recurringDays: [],
+    notes: '',
+    timeMinutes: aiDay.task.estimatedMinutes,
+    completedAt: null,
+  })
   return {
     id: generateId(),
     date: dateStr,
     dayNumber: aiDay.dayNumber,
-    skillFocus: aiDay.skillFocus,
-    taskId: null,
-    isComplete: false,
-    objective: aiDay.objective,
+    taskIds: [entry.id],
   }
 }
 
-function aiPhaseToRoadmapPhase(
+async function aiPhaseToRoadmapPhase(
   aiPhase: AiRoadmapPhase,
   startDate: Date,
   phaseOffset: number,
-): RoadmapPhase {
+): Promise<RoadmapPhase> {
   const weeks: RoadmapWeek[] = []
   let weekOffset = 0
 
   for (const aiWeek of aiPhase.weeks) {
     const dates = getWeekDates(startDate, phaseOffset + weekOffset)
-    const days: RoadmapDay[] = aiWeek.days.map((aiDay, i) =>
-      aiDayToRoadmapDay(aiDay, dates[i] ?? dates[dates.length - 1]),
+    const days: RoadmapDay[] = await Promise.all(
+      aiWeek.days.map((aiDay, i) =>
+        aiDayToRoadmapDay(aiDay, dates[i] ?? dates[dates.length - 1]),
+      )
     )
 
-    const completedTasks = days.filter(d => d.isComplete).length
+    const allTaskIds = days.flatMap(d => d.taskIds)
+    const allTasks = await DatabaseService.getAll<TaskEntry>('tasks')
+    const taskMap = new Map(allTasks.map(t => [t.id, t]))
+    const dayTasks = allTaskIds.map(id => taskMap.get(id)).filter((t): t is TaskEntry => !!t)
+    const completedTasks = dayTasks.filter(t => t.isDone).length
+    const totalTasks = dayTasks.length
     weeks.push({
       id: generateId(),
       weekNumber: phaseOffset + weekOffset + 1,
@@ -104,9 +122,9 @@ function aiPhaseToRoadmapPhase(
       focus: aiWeek.focus,
       goal: aiWeek.goal,
       days,
-      isComplete: days.every(d => d.isComplete),
+      isComplete: totalTasks > 0 && dayTasks.every(t => t.isDone),
       completedTasks,
-      totalTasks: days.length,
+      totalTasks,
     })
     weekOffset++
   }
@@ -128,13 +146,13 @@ function aiPhaseToRoadmapPhase(
   }
 }
 
-function aiRoadmapResultToRoadmapData(result: AiRoadmapResult): RoadmapData {
+async function aiRoadmapResultToRoadmapData(result: AiRoadmapResult): Promise<RoadmapData> {
   const today = new Date()
   const phases: RoadmapPhase[] = []
   let phaseOffset = 0
 
   for (const aiPhase of result.phases) {
-    phases.push(aiPhaseToRoadmapPhase(aiPhase, today, phaseOffset))
+    phases.push(await aiPhaseToRoadmapPhase(aiPhase, today, phaseOffset))
     phaseOffset += aiPhase.weeks.length
   }
 
@@ -178,7 +196,7 @@ export async function generatePlanWithAI(
   try {
     const config = getAiConfig(settings)
     if (!config) {
-      const roadmap = generateFallbackRoadmap(settings)
+      const roadmap = await generateFallbackRoadmap(settings)
       return {
         roadmap,
         usedAi: false,
@@ -210,7 +228,7 @@ export async function generatePlanWithAI(
     )
 
     if (result.error || !result.content) {
-      const roadmap = generateFallbackRoadmap(settings)
+      const roadmap = await generateFallbackRoadmap(settings)
       return {
         roadmap,
         usedAi: false,
@@ -221,7 +239,7 @@ export async function generatePlanWithAI(
 
     const parsed = tryParseAiResponse(result.content)
     if (!parsed) {
-      const roadmap = generateFallbackRoadmap(settings)
+      const roadmap = await generateFallbackRoadmap(settings)
       return {
         roadmap,
         usedAi: true,
@@ -230,7 +248,7 @@ export async function generatePlanWithAI(
       }
     }
 
-    const roadmap = aiRoadmapResultToRoadmapData(parsed)
+    const roadmap = await aiRoadmapResultToRoadmapData(parsed)
     saveRoadmap(roadmap)
 
     return {
@@ -240,7 +258,7 @@ export async function generatePlanWithAI(
       rawResponse: result.content,
     }
   } catch (err) {
-    const roadmap = generateFallbackRoadmap(settings)
+    const roadmap = await generateFallbackRoadmap(settings)
     return {
       roadmap,
       usedAi: false,
@@ -250,6 +268,6 @@ export async function generatePlanWithAI(
   }
 }
 
-function generateFallbackRoadmap(settings: AppSettings): RoadmapData {
+async function generateFallbackRoadmap(settings: AppSettings): Promise<RoadmapData> {
   return generateRoadmap(settings, [])
 }

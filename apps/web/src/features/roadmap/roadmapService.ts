@@ -1,6 +1,7 @@
 import type { TaskEntry, AppSettings, StudyGoal } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import { loadAppSettings } from '../../services/storage/SettingsStorage'
+import { SKILL_TO_CATEGORY } from './constants'
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
@@ -10,10 +11,7 @@ export interface RoadmapDay {
   id: string
   date: string
   dayNumber: number
-  skillFocus: string
-  taskId: string | null
-  isComplete: boolean
-  objective: string
+  taskIds: string[]
 }
 
 export interface RoadmapWeek {
@@ -51,72 +49,28 @@ export interface RoadmapData {
   updatedAt: string
 }
 
-export interface RoadmapRecommendation {
-  type: 'next_task' | 'weak_skill' | 'review' | 'milestone'
-  message: string
-  action: string
-  route?: string
-}
-
 const ROADMAP_STORAGE_KEY = 'ielts-roadmap'
 
-function getWeekDates(startDate: Date, weekIndex: number): string[] {
-  const dates: string[] = []
-  const start = new Date(startDate)
-  start.setDate(start.getDate() + weekIndex * 7)
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(start)
-    d.setDate(d.getDate() + i)
-    dates.push(d.toISOString().split('T')[0])
-  }
-  return dates
-}
+const PHASE_META = [
+  { name: 'Foundation Building', desc: 'Build essential vocabulary, grammar, and basic IELTS skills', range: 'Band 4.0-5.5' },
+  { name: 'Skill Development', desc: 'Develop core strategies for each IELTS skill section', range: 'Band 5.5-6.5' },
+  { name: 'Advanced Practice', desc: 'Practice with complex materials and timed exercises', range: 'Band 6.5-7.5' },
+  { name: 'Test Readiness', desc: 'Simulate full tests and refine weak areas before exam day', range: 'Band 7.5+' },
+]
 
-function getPhaseName(order: number, targetBand: number): string {
-  if (order === 0) return 'Foundation Building'
-  if (order === 1) return 'Skill Development'
-  if (order === 2) return 'Advanced Practice'
-  if (order === 3) return 'Test Readiness'
-  return `Phase ${order + 1}`
-}
+const WEEK_FOCUS_TEMPLATES = [
+  (s: string) => `${s} Fundamentals`,
+  (s: string) => `${s} Practice & Application`,
+  (s: string) => `${s} Advanced Techniques`,
+  (s: string) => `${s} Review & Assessment`,
+]
 
-function getPhaseDescription(order: number, targetBand: number): string {
-  if (order === 0) return 'Build essential vocabulary, grammar, and basic IELTS skills'
-  if (order === 1) return 'Develop core strategies for each IELTS skill section'
-  if (order === 2) return 'Practice with complex materials and timed exercises'
-  if (order === 3) return 'Simulate full tests and refine weak areas before exam day'
-  return ''
-}
-
-function getPhaseTargetRange(order: number): string {
-  if (order === 0) return 'Band 4.0-5.5'
-  if (order === 1) return 'Band 5.5-6.5'
-  if (order === 2) return 'Band 6.5-7.5'
-  if (order === 3) return 'Band 7.5+'
-  return ''
-}
-
-function getWeekFocus(phaseOrder: number, weekNumber: number, weakSkills: string[]): string {
-  const primarySkills = weakSkills.length > 0 ? weakSkills : ['Vocabulary', 'Reading', 'Writing', 'Listening', 'Speaking', 'Grammar']
-  const skill = primarySkills[(phaseOrder * 4 + weekNumber) % primarySkills.length]
-  const weekFoci = [
-    `${skill} Fundamentals`,
-    `${skill} Practice & Application`,
-    `${skill} Advanced Techniques`,
-    `${skill} Review & Assessment`,
-  ]
-  return weekFoci[weekNumber % 4]
-}
-
-function getWeekGoal(phaseOrder: number, weekNumber: number, focus: string): string {
-  const goals = [
-    `Master the basics of ${focus.toLowerCase()} with daily exercises`,
-    `Apply ${focus.toLowerCase()} strategies in timed practice sessions`,
-    `Refine ${focus.toLowerCase()} techniques with advanced materials`,
-    `Consolidate ${focus.toLowerCase()} skills and identify remaining gaps`,
-  ]
-  return goals[weekNumber % 4]
-}
+const WEEK_GOAL_TEMPLATES = [
+  (s: string) => `Master the basics of ${s.toLowerCase()} with daily exercises`,
+  (s: string) => `Apply ${s.toLowerCase()} strategies in timed practice sessions`,
+  (s: string) => `Refine ${s.toLowerCase()} techniques with advanced materials`,
+  (s: string) => `Consolidate ${s.toLowerCase()} skills and identify remaining gaps`,
+]
 
 function getDayObjective(skillFocus: string, dayNumber: number): string {
   const objectives: Record<string, string[]> = {
@@ -189,170 +143,200 @@ function getDayObjective(skillFocus: string, dayNumber: number): string {
   return skillObjectives[dayNumber % 7]
 }
 
-function getTaskTitle(skillFocus: string, dayNumber: number, objective: string): string {
-  const titles: Record<string, string[]> = {
-    Vocabulary: [
-      'Learn 10 new IELTS vocabulary words',
-      'Practice using vocabulary in sentences',
-      'Review word families and collocations',
-      'Complete vocabulary exercise',
-      'Learn 10 more topic-specific words',
-      'Weekly vocabulary review quiz',
-      'Self-test on saved vocabulary',
-    ],
-    Reading: [
-      'Skim a passage for main ideas',
-      'Scan for specific information',
-      'Match headings to paragraphs',
-      'Answer True/False/Not Given questions',
-      'Complete a summary with words from the passage',
-      'Timed reading practice (20 min)',
-      'Review reading test strategies',
-    ],
-    Writing: [
-      'Study Task 2 essay structure',
-      'Write an introduction paragraph',
-      'Develop a body paragraph with examples',
-      'Practice complex sentence structures',
-      'Write a full Task 2 opinion essay',
-      'Practice Task 1 data description',
-      'Review and improve yesterday\'s essay',
-    ],
-    Listening: [
-      'Listen to Section 1 conversation',
-      'Listen to Section 2 monologue',
-      'Listen to Section 3 group discussion',
-      'Listen to Section 4 lecture',
-      'Answer multiple-choice listening questions',
-      'Practice form and note completion',
-      'Review listening tips and strategies',
-    ],
-    Speaking: [
-      'Practice Part 1: personal questions',
-      'Describe a person or place you know',
-      'Practice a Part 2 cue card topic',
-      'Express opinions on familiar topics',
-      'Practice Part 3: abstract discussion',
-      'Record yourself speaking for 3 minutes',
-      'Review speaking band descriptors',
-    ],
-    Grammar: [
-      'Review articles and tenses',
-      'Practice conditionals and modals',
-      'Master passive voice constructions',
-      'Practice relative clauses',
-      'Review reported speech rules',
-      'Practice sentence transformation exercises',
-      'Review common grammar mistakes from your notes',
-    ],
-  }
-
-  const skillTitles = titles[skillFocus] ?? [
-    `Practice ${skillFocus.toLowerCase()} - session ${dayNumber + 1}`,
-  ]
-  return skillTitles[dayNumber % skillTitles.length]
+const TASK_TITLES: Record<string, string[]> = {
+  Vocabulary: [
+    'Learn 10 new IELTS vocabulary words',
+    'Practice using vocabulary in sentences',
+    'Review word families and collocations',
+    'Complete vocabulary exercise',
+    'Learn 10 more topic-specific words',
+    'Weekly vocabulary review quiz',
+    'Self-test on saved vocabulary',
+  ],
+  Reading: [
+    'Skim a passage for main ideas',
+    'Scan for specific information',
+    'Match headings to paragraphs',
+    'Answer True/False/Not Given questions',
+    'Complete a summary with words from the passage',
+    'Timed reading practice (20 min)',
+    'Review reading test strategies',
+  ],
+  Writing: [
+    'Study Task 2 essay structure',
+    'Write an introduction paragraph',
+    'Develop a body paragraph with examples',
+    'Practice complex sentence structures',
+    'Write a full Task 2 opinion essay',
+    'Practice Task 1 data description',
+    'Review and improve yesterday\'s essay',
+  ],
+  Listening: [
+    'Listen to Section 1 conversation',
+    'Listen to Section 2 monologue',
+    'Listen to Section 3 group discussion',
+    'Listen to Section 4 lecture',
+    'Answer multiple-choice listening questions',
+    'Practice form and note completion',
+    'Review listening tips and strategies',
+  ],
+  Speaking: [
+    'Practice Part 1: personal questions',
+    'Describe a person or place you know',
+    'Practice a Part 2 cue card topic',
+    'Express opinions on familiar topics',
+    'Practice Part 3: abstract discussion',
+    'Record yourself speaking for 3 minutes',
+    'Review speaking band descriptors',
+  ],
+  Grammar: [
+    'Review articles and tenses',
+    'Practice conditionals and modals',
+    'Master passive voice constructions',
+    'Practice relative clauses',
+    'Review reported speech rules',
+    'Practice sentence transformation exercises',
+    'Review common grammar mistakes from your notes',
+  ],
 }
 
-function getTaskDescription(skillFocus: string, objective: string): string {
-  return `Focus: ${skillFocus}. ${objective}. This task helps strengthen your ${skillFocus.toLowerCase()} skills for IELTS.`
-}
+const SKILL_NAMES = ['Vocabulary', 'Reading', 'Writing', 'Listening', 'Speaking', 'Grammar']
 
-function getTaskMinutes(skillFocus: string, dailyMinutes: number): number {
-  const estimates: Record<string, number> = {
-    Vocabulary: 15,
-    Reading: 25,
-    Writing: 30,
-    Listening: 25,
-    Speaking: 15,
-    Grammar: 15,
-  }
-  return Math.min(estimates[skillFocus] ?? 20, dailyMinutes)
-}
-
-export function generateRoadmap(settings: AppSettings, existingTasks: TaskEntry[]): RoadmapData {
+function getStudyDates(settings: AppSettings): string[] {
   const today = new Date()
-  const numberOfPhases = 4
-  const weeksPerPhase = 4
-  const totalWeeks = numberOfPhases * weeksPerPhase
+  const scheduleSet = new Set(settings.preferredSchedule.map(d => d.toLowerCase()))
+  const hasSchedule = scheduleSet.size > 0 && !settings.preferredSchedule.every(d => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].includes(d))
 
-  const weakSkills = settings.weakSkills.length > 0
-    ? settings.weakSkills
-    : ['Vocabulary', 'Reading', 'Writing', 'Listening', 'Speaking', 'Grammar']
+  const endDate = settings.examDate ? new Date(settings.examDate.slice(0, 10) + 'T00:00:00') : new Date(today)
+  if (!settings.examDate || endDate <= today) {
+    endDate.setDate(endDate.getDate() + 84)
+  }
+  const maxDays = Math.min(Math.ceil((endDate.getTime() - today.getTime()) / 86400000), 365)
+  const dates: string[] = []
+  for (let i = 0; i < maxDays; i++) {
+    const d = new Date(today)
+    d.setDate(d.getDate() + i)
+    const dayKey = d.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase().slice(0, 3)
+    if (!hasSchedule || scheduleSet.has(dayKey)) {
+      dates.push(d.toISOString().split('T')[0])
+    }
+  }
+  return dates
+}
 
-  const doneTaskIds = new Set(existingTasks.filter(t => t.isDone).map(t => t.id))
+function getPhaseCount(totalStudyDays: number): number {
+  if (totalStudyDays <= 7) return 1
+  if (totalStudyDays <= 21) return 2
+  if (totalStudyDays <= 49) return 3
+  return 4
+}
+
+function getTaskTitle(skillFocus: string, dayOffset: number): string {
+  const titles = TASK_TITLES[skillFocus]
+  if (!titles) return `Practice ${skillFocus.toLowerCase()} - session ${dayOffset + 1}`
+  return titles[dayOffset % titles.length]
+}
+
+export async function generateRoadmap(settings: AppSettings, existingTasks: TaskEntry[]): Promise<RoadmapData> {
+  const weakSkills = settings.weakSkills.length > 0 ? settings.weakSkills : [...SKILL_NAMES]
+  const studyDates = getStudyDates(settings)
+  const numberOfPhases = getPhaseCount(studyDates.length)
+  const daysPerPhase = Math.ceil(studyDates.length / numberOfPhases)
+
   const doneDates = new Set(existingTasks.filter(t => t.isDone).map(t => t.date.slice(0, 10)))
+  const existingByKey = new Map(existingTasks.map(t => [t.date.slice(0, 10) + '|' + t.title, t]))
 
   const phases: RoadmapPhase[] = []
 
   for (let p = 0; p < numberOfPhases; p++) {
+    const phaseStart = p * daysPerPhase
+    const phaseEnd = Math.min(phaseStart + daysPerPhase, studyDates.length)
+    const phaseDates = studyDates.slice(phaseStart, phaseEnd)
     const weeks: RoadmapWeek[] = []
+    const skillsInPhase = weakSkills.slice(p % weakSkills.length).concat(weakSkills.slice(0, p % weakSkills.length))
 
-    for (let w = 0; w < weeksPerPhase; w++) {
-      const weekIndex = p * weeksPerPhase + w
-      const focus = getWeekFocus(p, w, weakSkills)
-      const dates = getWeekDates(today, weekIndex)
+    for (let w = 0; w < Math.ceil(phaseDates.length / 7); w++) {
+      const weekStart = w * 7
+      const weekEnd = Math.min(weekStart + 7, phaseDates.length)
+      const weekDates = phaseDates.slice(weekStart, weekEnd)
+      const skillForWeek = skillsInPhase[w % skillsInPhase.length]
+      const focus = WEEK_FOCUS_TEMPLATES[w % 4](skillForWeek)
       const days: RoadmapDay[] = []
+      let weekDone = 0
 
-      for (let d = 0; d < 7; d++) {
-        const dateStr = dates[d]
-        const skillFocus = weakSkills[(weekIndex * 7 + d) % weakSkills.length]
-        const objective = getDayObjective(skillFocus, d)
-        const taskTitle = getTaskTitle(skillFocus, d, objective)
+      const tasksPerDay = Math.max(1, Math.min(4, Math.round(settings.dailyStudyMinutes / 22)))
 
-        const existingTask = existingTasks.find(
-          t => t.date.slice(0, 10) === dateStr && t.title === taskTitle
-        )
-        const taskId = existingTask?.id ?? null
-        const isComplete = existingTask ? existingTask.isDone : doneDates.has(dateStr)
+      for (let d = 0; d < weekDates.length; d++) {
+        const dateStr = weekDates[d]
+        const dayOffset = studyDates.indexOf(dateStr)
+        const taskIds: string[] = []
 
-        days.push({
-          id: generateId(),
-          date: dateStr,
-          dayNumber: d + 1,
-          skillFocus,
-          taskId,
-          isComplete,
-          objective,
-        })
+        for (let t = 0; t < tasksPerDay; t++) {
+          const globalTaskIdx = dayOffset * tasksPerDay + t
+          const skillFocus = skillsInPhase[globalTaskIdx % skillsInPhase.length]
+          const objective = getDayObjective(skillFocus, globalTaskIdx)
+          const taskTitle = getTaskTitle(skillFocus, globalTaskIdx)
+          const timeMinutes = Math.min(Math.round(settings.dailyStudyMinutes / tasksPerDay), 30)
+
+          const existing = existingByKey.get(dateStr + '|' + taskTitle)
+          if (existing) {
+            taskIds.push(existing.id)
+            if (existing.isDone) weekDone++
+          } else {
+            const isDone = doneDates.has(dateStr)
+            const entry = await DatabaseService.addTask({
+              title: taskTitle,
+              description: `Skill: ${skillFocus}. ${objective}`,
+              category: SKILL_TO_CATEGORY[skillFocus] ?? 'Vocabulary',
+              date: dateStr + 'T00:00:00.000Z',
+              isDone,
+              isRecurring: false,
+              recurringDays: [],
+              notes: '',
+              timeMinutes,
+              completedAt: isDone ? new Date().toISOString() : null,
+            })
+            taskIds.push(entry.id)
+            if (isDone) weekDone++
+          }
+        }
+
+        days.push({ id: generateId(), date: dateStr, dayNumber: d + 1, taskIds })
       }
 
-      const completedTasks = days.filter(d => d.isComplete).length
+      const total = days.length
       weeks.push({
         id: generateId(),
-        weekNumber: weekIndex + 1,
-        label: `Week ${weekIndex + 1}`,
+        weekNumber: weeks.length + 1,
+        label: `Week ${weeks.length + 1}`,
         focus,
-        goal: getWeekGoal(p, w, focus),
+        goal: WEEK_GOAL_TEMPLATES[w % 4](focus),
         days,
-        isComplete: days.every(d => d.isComplete),
-        completedTasks,
-        totalTasks: days.length,
+        isComplete: total > 0 && weekDone === total,
+        completedTasks: weekDone,
+        totalTasks: total,
       })
     }
 
-    const phaseCompleted = weeks.every(w => w.isComplete)
-    const phaseDone = weeks.reduce((s, w) => s + w.completedTasks, 0)
-    const phaseTotal = weeks.reduce((s, w) => s + w.totalTasks, 0)
+    const meta = PHASE_META[p] ?? PHASE_META[PHASE_META.length - 1]
     phases.push({
       id: generateId(),
-      name: getPhaseName(p, settings.targetBand),
-      description: getPhaseDescription(p, settings.targetBand),
+      name: meta.name,
+      description: meta.desc,
       order: p,
-      targetRange: getPhaseTargetRange(p),
+      targetRange: meta.range,
       weeks,
-      isComplete: phaseCompleted,
-      completedTasks: phaseDone,
-      totalTasks: phaseTotal,
+      isComplete: weeks.every(w => w.isComplete),
+      completedTasks: weeks.reduce((s, w) => s + w.completedTasks, 0),
+      totalTasks: weeks.reduce((s, w) => s + w.totalTasks, 0),
     })
   }
 
   const totalTasks = phases.reduce((s, p) => s + p.totalTasks, 0)
   const completedTasks = phases.reduce((s, p) => s + p.completedTasks, 0)
-  const overallProgress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0
 
   let currentPhaseIndex = 0
   let currentWeekIndex = 0
-
   for (let p = 0; p < phases.length; p++) {
     if (!phases[p].isComplete) {
       currentPhaseIndex = p
@@ -370,7 +354,7 @@ export function generateRoadmap(settings: AppSettings, existingTasks: TaskEntry[
     phases,
     currentPhaseIndex,
     currentWeekIndex,
-    overallProgress,
+    overallProgress: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
     totalTasks,
     completedTasks,
     generatedAt: new Date().toISOString(),
@@ -390,13 +374,36 @@ export function loadRoadmap(): RoadmapData | null {
   try {
     const raw = localStorage.getItem(ROADMAP_STORAGE_KEY)
     if (!raw) return null
-    return JSON.parse(raw) as RoadmapData
+    const data = JSON.parse(raw) as RoadmapData & { phases: Array<{ weeks: Array<{ days: Array<{ tasks?: Array<{ taskId?: string | null }>; taskId?: string | null }> }> }> }
+
+    for (const phase of data.phases) {
+      for (const week of phase.weeks) {
+        for (const day of week.days) {
+          if (!day.taskIds) {
+            if (day.tasks) {
+              day.taskIds = day.tasks.map(t => t.taskId).filter((id): id is string => !!id)
+              delete day.tasks
+            } else if (day.taskId) {
+              day.taskIds = day.taskId ? [day.taskId] : []
+              delete day.taskId
+            } else {
+              day.taskIds = []
+            }
+            delete (day as any).skillFocus
+            delete (day as any).objective
+            delete (day as any).isComplete
+          }
+        }
+      }
+    }
+
+    return data as RoadmapData
   } catch {
     return null
   }
 }
 
-export function loadUserSettings(): AppSettings | null {
+async function loadUserSettings(): Promise<AppSettings | null> {
   try {
     return loadAppSettings()
   } catch {
@@ -406,7 +413,7 @@ export function loadUserSettings(): AppSettings | null {
 
 export async function ensureRoadmap(): Promise<RoadmapData> {
   const existing = loadRoadmap()
-  const settings = loadUserSettings()
+  const settings = await loadUserSettings()
   if (!settings) {
     throw new Error('User settings not found. Please complete onboarding first.')
   }
@@ -420,6 +427,19 @@ export async function ensureRoadmap(): Promise<RoadmapData> {
       const updated = recalculateProgress(existing, tasks)
       saveRoadmap(updated)
       return updated
+    }
+    // Clean up all tasks in the roadmap's date range before regenerating
+    const dateSet = new Set<string>()
+    for (const phase of existing.phases) {
+      for (const week of phase.weeks) {
+        for (const day of week.days) dateSet.add(day.date)
+      }
+    }
+    const allDbTasks = await DatabaseService.getAll<TaskEntry>('tasks')
+    for (const t of allDbTasks) {
+      if (dateSet.has(t.date.slice(0, 10))) {
+        try { await DatabaseService.remove('tasks', t.id) } catch {}
+      }
     }
   }
 
@@ -435,32 +455,169 @@ export async function ensureRoadmap(): Promise<RoadmapData> {
     // AI generation failed; fall through to static generation
   }
 
-  const roadmap = generateRoadmap(settings, tasks)
+  const roadmap = await generateRoadmap(settings, tasks)
   saveRoadmap(roadmap)
   return roadmap
 }
 
+export async function generateRoadmapWithEngine(settings: AppSettings): Promise<RoadmapData> {
+  const { DailyPlanEngine, AiPlanOrchestrator, buildNormalizedProfile } = await import('@ielts/learning-engine')
+  const { studyPlanToRoadmapData } = await import('./planConverter')
+
+  const today = new Date().toISOString().split('T')[0]
+  const engine = new DailyPlanEngine()
+  const defaultedExamDate = settings.examDate || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
+  const profile = buildNormalizedProfile({
+    settings: {
+      targetBand: settings.targetBand,
+      currentBand: settings.currentBand,
+      examDate: defaultedExamDate,
+      dailyStudyMinutes: settings.dailyStudyMinutes,
+      weakSkills: settings.weakSkills,
+      studyGoal: settings.studyGoal,
+      preferredSchedule: settings.preferredSchedule,
+      aiEnabled: settings.aiEnabled,
+      aiProvider: settings.aiProvider,
+      aiApiKey: settings.aiApiKey,
+    },
+    overrides: { planStartDate: today },
+  })
+
+  const result = engine.generatePlan(profile)
+
+  if (result.status === 'success') {
+    const enriched = await enrichPlanWithAI(result.plan, profile, settings)
+    const roadmap = await studyPlanToRoadmapData(enriched, settings.currentBand, settings.targetBand)
+    saveRoadmap(roadmap)
+    return roadmap
+  }
+
+  if (result.status === 'requires-confirmation') {
+    console.warn('Learning engine: high-risk plan, proceeding anyway')
+  }
+
+  throw new Error(result.status === 'failure' ? result.reason?.message : 'Learning engine plan generation failed')
+}
+
+async function enrichPlanWithAI(
+  plan: import('@ielts/learning-engine').StudyPlan,
+  profile: import('@ielts/learning-engine').NormalizedProfile,
+  settings: AppSettings,
+): Promise<import('@ielts/learning-engine').StudyPlan> {
+  const hasAI = settings.aiEnabled && !!settings.aiApiKey
+  if (!hasAI || plan.weeks.length === 0) return plan
+
+  try {
+    const { callAI } = await import('@ielts/ai')
+    const { AiPlanOrchestrator } = await import('@ielts/learning-engine')
+
+    const config = {
+      apiKey: settings.aiApiKey!,
+      baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
+      model: settings.aiModel || 'gpt-4o-mini',
+    }
+
+    const aiCallFn: import('@ielts/learning-engine').AICallFn = async (systemPrompt, userPrompt) => {
+      const result = await callAI(systemPrompt, userPrompt, () => config, {
+        temperature: 0.7,
+        maxTokens: 2048,
+      })
+      return result.content
+    }
+
+    const orchestrator = new AiPlanOrchestrator(aiCallFn)
+    const enrichment = await orchestrator.enrichPlan({
+      profile,
+      planningWindow: plan.planningWindow,
+      phases: plan.phases,
+      weeks: plan.weeks,
+      feasibility: plan.feasibility,
+      skillGaps: computeSkillGaps(profile),
+    })
+
+    if (enrichment.taskCandidates.length === 0) return plan
+
+    const planTasks = [...plan.tasks]
+    for (const candidate of enrichment.taskCandidates) {
+      const match = planTasks.find(
+        t => t.weekId === candidate.targetWeekId && t.skill === candidate.skill && t.sourceType === 'built-in',
+      )
+      if (match) {
+        match.title = candidate.title
+        match.description = candidate.description
+        match.objective = candidate.objective
+        match.reason = candidate.reason
+        match.estimatedMinutes = candidate.recommendedMinutes
+        match.sourceType = 'ai-generated'
+        match.metadata = {
+          ...match.metadata,
+          aiCandidateId: candidate.candidateId,
+          generationReason: candidate.reason,
+        }
+      }
+    }
+
+    return { ...plan, tasks: planTasks }
+  } catch (err) {
+    console.warn('AI enrichment failed, using deterministic plan:', err)
+    return plan
+  }
+}
+
+function computeSkillGaps(profile: import('@ielts/learning-engine').NormalizedProfile): import('@ielts/learning-engine').SkillGapScore[] {
+  const skillNames = ['listening', 'reading', 'writing', 'speaking', 'vocabulary', 'grammar'] as const
+  const scores: import('@ielts/learning-engine').SkillGapScore[] = []
+
+  for (const skill of skillNames) {
+    const current = (profile.currentSkillBands as Record<string, number>)[skill] ?? profile.currentOverallBand
+    const target = (profile.targetSkillBands as Record<string, number>)[skill] ?? profile.targetOverallBand
+    const bandGap = Math.max(0, target - current)
+
+    const isWeak = profile.weakSkills.includes(skill as any)
+    const priorityScore = (bandGap / 9) * 0.5 + (isWeak ? 0.3 : 0) + 0.2
+
+    scores.push({
+      skill: skill as any,
+      bandGap,
+      priorityScore: Math.round(priorityScore * 100) / 100,
+      normalizedWeight: 0,
+      reasons: [
+        ...(bandGap > 0 ? [`Band gap of ${bandGap.toFixed(1)}`] : []),
+        ...(isWeak ? ['User-declared weak skill'] : []),
+      ],
+    })
+  }
+
+  const total = scores.reduce((s, sc) => s + sc.priorityScore, 0) || 1
+  for (const sc of scores) {
+    sc.normalizedWeight = Math.round((sc.priorityScore / total) * 100) / 100
+  }
+
+  return scores
+}
+
 export function recalculateProgress(roadmap: RoadmapData, tasks: TaskEntry[]): RoadmapData {
-  const doneDates = new Set(tasks.filter(t => t.isDone).map(t => t.date.slice(0, 10)))
-  const doneMap = new Map(tasks.filter(t => t.isDone).map(t => [t.id, true]))
+  const taskMap = new Map(tasks.map(t => [t.id, t]))
 
   let totalCompleted = 0
   let totalAll = 0
 
   for (const phase of roadmap.phases) {
     for (const week of phase.weeks) {
+      let weekDone = 0
+      let weekTotal = 0
       for (const day of week.days) {
-        if (day.taskId && doneMap.has(day.taskId)) {
-          day.isComplete = true
-        } else if (!day.taskId && doneDates.has(day.date)) {
-          day.isComplete = true
+        for (const taskId of day.taskIds) {
+          const dbTask = taskMap.get(taskId)
+          if (dbTask?.isDone) totalCompleted++
+          totalAll++
+          if (dbTask?.isDone) weekDone++
+          weekTotal++
         }
-        if (day.isComplete) totalCompleted++
-        totalAll++
       }
-      week.completedTasks = week.days.filter(d => d.isComplete).length
-      week.totalTasks = week.days.length
-      week.isComplete = week.days.every(d => d.isComplete)
+      week.completedTasks = weekDone
+      week.totalTasks = weekTotal
+      week.isComplete = weekTotal > 0 && weekDone === weekTotal
     }
     phase.completedTasks = phase.weeks.reduce((s, w) => s + w.completedTasks, 0)
     phase.totalTasks = phase.weeks.reduce((s, w) => s + w.totalTasks, 0)
@@ -493,131 +650,26 @@ export function recalculateProgress(roadmap: RoadmapData, tasks: TaskEntry[]): R
   }
 }
 
-export async function toggleTask(roadmap: RoadmapData, phaseIndex: number, weekIndex: number, dayIndex: number): Promise<RoadmapData> {
+export async function toggleTask(roadmap: RoadmapData, phaseIndex: number, weekIndex: number, dayIndex: number, taskIndex: number): Promise<RoadmapData> {
   const day = roadmap.phases[phaseIndex].weeks[weekIndex].days[dayIndex]
-  day.isComplete = !day.isComplete
+  const taskId = day.taskIds[taskIndex]
 
-  if (day.taskId) {
-    try {
-      const task = await DatabaseService.get<TaskEntry>('tasks', day.taskId)
-      if (task) {
-        if (day.isComplete) {
-          await DatabaseService.update('tasks', day.taskId, {
-            isDone: true,
-            completedAt: new Date().toISOString(),
-          } as Partial<TaskEntry>)
-        } else {
-          await DatabaseService.update('tasks', day.taskId, {
-            isDone: false,
-            completedAt: null,
-          } as Partial<TaskEntry>)
-        }
-      }
-    } catch (err) {
-      day.isComplete = !day.isComplete
-      throw err
+  try {
+    const dbTask = await DatabaseService.getById<TaskEntry>('tasks', taskId)
+    if (dbTask) {
+      await DatabaseService.update('tasks', taskId, {
+        isDone: !dbTask.isDone,
+        completedAt: dbTask.isDone ? null : new Date().toISOString(),
+      } as Partial<TaskEntry>)
     }
+  } catch (err) {
+    throw err
   }
 
-  const updated = recalculateProgress(roadmap, [])
+  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  const updated = recalculateProgress(roadmap, tasks)
   saveRoadmap(updated)
   return updated
-}
-
-export function getCurrentWeek(roadmap: RoadmapData): { phase: RoadmapPhase; week: RoadmapWeek } | null {
-  const phase = roadmap.phases[roadmap.currentPhaseIndex]
-  if (!phase) return null
-  const week = phase.weeks[roadmap.currentWeekIndex]
-  if (!week) return null
-  return { phase, week }
-}
-
-export function getTodayDay(roadmap: RoadmapData): { phase: RoadmapPhase; week: RoadmapWeek; day: RoadmapDay } | null {
-  const todayStr = new Date().toISOString().split('T')[0]
-  for (const phase of roadmap.phases) {
-    for (const week of phase.weeks) {
-      for (const day of week.days) {
-        if (day.date === todayStr) {
-          return { phase, week, day }
-        }
-      }
-    }
-  }
-
-  const current = getCurrentWeek(roadmap)
-  if (!current) return null
-  const todayDay = current.week.days.find(d => d.date === new Date().toISOString().split('T')[0])
-  if (todayDay) {
-    return { ...current, day: todayDay }
-  }
-  const firstIncomplete = current.week.days.find(d => !d.isComplete)
-  if (firstIncomplete) {
-    return { ...current, day: firstIncomplete }
-  }
-  return { ...current, day: current.week.days[0] }
-}
-
-export function getRecommendations(roadmap: RoadmapData): RoadmapRecommendation[] {
-  const recs: RoadmapRecommendation[] = []
-  const current = getCurrentWeek(roadmap)
-
-  if (!current) {
-    if (roadmap.phases.length > 0 && roadmap.phases.every(p => p.isComplete)) {
-      recs.push({
-        type: 'milestone',
-        message: 'Congratulations! You have completed all phases of your IELTS roadmap.',
-        action: 'Take a mock test to assess your level',
-        route: '/mock-tests',
-      })
-    }
-    return recs
-  }
-
-  const incomplete = current.week.days.filter(d => !d.isComplete)
-  if (incomplete.length > 0) {
-    const next = incomplete[0]
-    recs.push({
-      type: 'next_task',
-      message: `Continue with ${next.skillFocus}: ${next.objective}`,
-      action: 'Start task',
-    })
-  }
-
-  const weakSkillDays = current.week.days.filter(d => !d.isComplete)
-  if (weakSkillDays.length > 2) {
-    const skillCounts = new Map<string, number>()
-    for (const d of weakSkillDays) {
-      skillCounts.set(d.skillFocus, (skillCounts.get(d.skillFocus) ?? 0) + 1)
-    }
-    const mostNeeded = [...skillCounts.entries()].sort((a, b) => b[1] - a[1])[0]
-    if (mostNeeded) {
-      recs.push({
-        type: 'weak_skill',
-        message: `You have ${weakSkillDays.length} incomplete tasks. Focus on ${mostNeeded[0]} to stay on track.`,
-        action: `Practice ${mostNeeded[0]}`,
-      })
-    }
-  }
-
-  if (roadmap.completedTasks > 0 && roadmap.completedTasks % 7 === 0) {
-    recs.push({
-      type: 'milestone',
-      message: `You have completed ${roadmap.completedTasks} tasks! Keep up the great work.`,
-      action: 'View progress',
-      route: '/progress',
-    })
-  }
-
-  return recs
-}
-
-export function getNextIncompleteTask(roadmap: RoadmapData): RoadmapDay | null {
-  const current = getCurrentWeek(roadmap)
-  if (!current) return null
-  const todayStr = new Date().toISOString().split('T')[0]
-  const todayTask = current.week.days.find(d => d.date === todayStr && !d.isComplete)
-  if (todayTask) return todayTask
-  return current.week.days.find(d => !d.isComplete) ?? null
 }
 
 export interface RoadmapUserProfile {
@@ -644,13 +696,16 @@ export function getRoadmapUserProfile(): RoadmapUserProfile | null {
   }
 }
 
-export function getTodayTask(roadmap: RoadmapData): RoadmapDay | null {
+export function getTodayTask(roadmap: RoadmapData, tasks: TaskEntry[]): { day: RoadmapDay; task: TaskEntry } | null {
+  const taskMap = new Map(tasks.map(t => [t.id, t]))
   const todayStr = new Date().toISOString().split('T')[0]
   for (const phase of roadmap.phases) {
     for (const week of phase.weeks) {
       for (const day of week.days) {
         if (day.date === todayStr) {
-          return day
+          const dayTasks = day.taskIds.map(id => taskMap.get(id)).filter((t): t is TaskEntry => !!t)
+          const firstIncomplete = dayTasks.find(t => !t.isDone)
+          return { day, task: firstIncomplete ?? dayTasks[0] }
         }
       }
     }

@@ -1,5 +1,8 @@
+import type { TaskEntry } from '../../models'
+import { DatabaseService } from '../../services/storage/Database'
 import type { RoadmapData, RoadmapPhase, RoadmapWeek, RoadmapDay } from './roadmapService'
 import { recalculateProgress } from './roadmapService'
+import { SKILL_TO_CATEGORY } from './constants'
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
@@ -9,50 +12,120 @@ function deepClone<T>(obj: T): T {
   return JSON.parse(JSON.stringify(obj))
 }
 
-export function updateDay(
+export async function addTask(
   roadmap: RoadmapData,
   phaseIndex: number,
   weekIndex: number,
   dayIndex: number,
-  fields: Partial<Pick<RoadmapDay, 'objective' | 'skillFocus' | 'date'>>,
-): RoadmapData {
+): Promise<RoadmapData> {
   const cloned = deepClone(roadmap)
-  Object.assign(cloned.phases[phaseIndex].weeks[weekIndex].days[dayIndex], fields)
-  return recalculateProgress(cloned, [])
+  const day = cloned.phases[phaseIndex].weeks[weekIndex].days[dayIndex]
+  const entry = await DatabaseService.addTask({
+    title: 'New task',
+    description: '',
+    category: 'Vocabulary',
+    date: day.date + 'T00:00:00.000Z',
+    isDone: false,
+    isRecurring: false,
+    recurringDays: [],
+    notes: '',
+    timeMinutes: 25,
+    completedAt: null,
+  })
+  day.taskIds.push(entry.id)
+  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  return recalculateProgress(cloned, tasks)
 }
 
-export function updateDayNumber(
+export async function removeTask(
   roadmap: RoadmapData,
   phaseIndex: number,
   weekIndex: number,
+  dayIndex: number,
+  taskIndex: number,
+): Promise<RoadmapData> {
+  const cloned = deepClone(roadmap)
+  const day = cloned.phases[phaseIndex].weeks[weekIndex].days[dayIndex]
+  const taskId = day.taskIds[taskIndex]
+  day.taskIds.splice(taskIndex, 1)
+  try {
+    await DatabaseService.remove('tasks', taskId)
+  } catch {
+    // ignore if already deleted
+  }
+  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  return recalculateProgress(cloned, tasks)
+}
+
+export async function updateTask(
+  roadmap: RoadmapData,
+  phaseIndex: number,
+  weekIndex: number,
+  dayIndex: number,
+  taskIndex: number,
+  fields: { title?: string; category?: string },
+): Promise<RoadmapData> {
+  const taskId = roadmap.phases[phaseIndex].weeks[weekIndex].days[dayIndex].taskIds[taskIndex]
+  const updates: Partial<TaskEntry> = {}
+  if (fields.title !== undefined) updates.title = fields.title
+  if (fields.category !== undefined) updates.category = SKILL_TO_CATEGORY[fields.category] ?? fields.category as TaskCategory
+  if (Object.keys(updates).length > 0) {
+    try {
+      await DatabaseService.update('tasks', taskId, updates)
+    } catch {
+      // ignore update failures
+    }
+  }
+  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  return recalculateProgress(deepClone(roadmap), tasks)
+}
+
+export function moveTask(
+  roadmap: RoadmapData,
+  phaseIndex: number,
+  weekIndex: number,
+  dayIndex: number,
+  fromIndex: number,
+  toIndex: number,
 ): RoadmapData {
   const cloned = deepClone(roadmap)
-  const days = cloned.phases[phaseIndex].weeks[weekIndex].days
-  days.forEach((day, idx) => { day.dayNumber = idx + 1 })
+  const tasks = cloned.phases[phaseIndex].weeks[weekIndex].days[dayIndex].taskIds
+  const [task] = tasks.splice(fromIndex, 1)
+  tasks.splice(toIndex, 0, task)
   return recalculateProgress(cloned, [])
 }
 
-export function addDay(
+export async function addDay(
   roadmap: RoadmapData,
   phaseIndex: number,
   weekIndex: number,
   afterIndex?: number,
-): RoadmapData {
+): Promise<RoadmapData> {
   const cloned = deepClone(roadmap)
   const days = cloned.phases[phaseIndex].weeks[weekIndex].days
   const insertAt = afterIndex !== undefined ? afterIndex + 1 : days.length
+  const entry = await DatabaseService.addTask({
+    title: 'New task',
+    description: '',
+    category: 'Vocabulary',
+    date: new Date().toISOString().split('T')[0] + 'T00:00:00.000Z',
+    isDone: false,
+    isRecurring: false,
+    recurringDays: [],
+    notes: '',
+    timeMinutes: 25,
+    completedAt: null,
+  })
   const newDay: RoadmapDay = {
     id: generateId(),
     date: new Date().toISOString().split('T')[0],
     dayNumber: days.length + 1,
-    skillFocus: 'general',
-    taskId: null,
-    isComplete: false,
-    objective: 'New task',
+    taskIds: [entry.id],
   }
   days.splice(insertAt, 0, newDay)
   days.forEach((day, idx) => { day.dayNumber = idx + 1 })
-  return recalculateProgress(cloned, [])
+  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  return recalculateProgress(cloned, tasks)
 }
 
 export function removeDay(

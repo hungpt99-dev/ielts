@@ -6,6 +6,7 @@ import {
   ensureRoadmap,
   toggleTask,
   getRoadmapUserProfile,
+  generateRoadmapWithEngine,
 } from '../../features/roadmap/roadmapService'
 import type {
   RoadmapPhase,
@@ -19,7 +20,7 @@ import PhaseMilestoneTimeline from '../../features/roadmap/components/PhaseMiles
 import PhaseSection from '../../features/roadmap/components/PhaseSection'
 import RoadmapSummary from '../../features/roadmap/components/RoadmapSummary'
 import AITutorRoadmapInsight from '../../features/roadmap/components/AITutorRoadmapInsight'
-import { IconAward, IconEdit, IconMap, IconProgress, IconRefresh, IconUndo, IconRedo } from '@ielts/ui'
+import { IconAward, IconEdit, IconMap, IconProgress, IconRefresh } from '@ielts/ui'
 import PageContent from '../../components/layout/PageContent'
 
 function getGreeting(): string {
@@ -32,13 +33,16 @@ function getGreeting(): string {
 export default function FullStudyRoadmapPage() {
   const navigate = useNavigate()
   const todayRef = useRef<HTMLDivElement>(null)
-  const { roadmap, loadRoadmap, isEditMode, toggleEditMode, applyCommand, undo, redo, canUndo, canRedo } = useRoadmapEditor()
+  const { roadmap, loadRoadmap, isEditMode, toggleEditMode, applyCommand } = useRoadmapEditor()
+  const roadmapRef = useRef(roadmap)
+  roadmapRef.current = roadmap
   const [profile, setProfile] = useState<RoadmapUserProfile | null>(null)
   const [expandedPhases, setExpandedPhases] = useState<Set<number>>(new Set([0]))
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [aiEnabled, setAiEnabled] = useState(false)
   const [regenerating, setRegenerating] = useState(false)
+  const [taskRefreshKey, setTaskRefreshKey] = useState(0)
 
   const loadData = useCallback(async (showLoading = true) => {
     try {
@@ -87,26 +91,50 @@ export default function FullStudyRoadmapPage() {
     }
   }, [loading, roadmap])
 
-  const handleToggleTask = useCallback(async (phaseIndex: number, weekIndex: number, dayIndex: number) => {
-    if (!roadmap) return
+  const handleToggleTask = useCallback(async (phaseIndex: number, weekIndex: number, dayIndex: number, taskIndex: number) => {
+    const r = roadmapRef.current
+    if (!r) return
     try {
-      const updated = await toggleTask(roadmap, phaseIndex, weekIndex, dayIndex)
+      const updated = await toggleTask(r, phaseIndex, weekIndex, dayIndex, taskIndex)
       loadRoadmap(updated)
-    } catch {
-      // Revert handled by toggleTask
+      setTaskRefreshKey(k => k + 1)
+    } catch (err) {
+      console.error('toggleTask failed:', err)
     }
-  }, [roadmap, loadRoadmap])
+  }, [loadRoadmap])
 
   const handleRegenerate = useCallback(async () => {
     if (!roadmap || regenerating) return
     setRegenerating(true)
     try {
+      const { loadAppSettings } = await import('../../services/storage/SettingsStorage')
+      const settings = loadAppSettings()
+      if (!settings) throw new Error('Settings not found')
+      const { DatabaseService } = await import('../../services/storage/Database')
+      const dates = new Set<string>()
+      for (const phase of roadmap.phases) {
+        for (const week of phase.weeks) {
+          for (const day of week.days) {
+            dates.add(day.date)
+          }
+        }
+      }
+      const allTasks = await DatabaseService.getAll<import('../../models').TaskEntry>('tasks')
+      for (const t of allTasks) {
+        if (dates.has(t.date.slice(0, 10))) {
+          try { await DatabaseService.remove('tasks', t.id) } catch {}
+        }
+      }
+      const newRoadmap = await generateRoadmapWithEngine(settings)
+      loadRoadmap(newRoadmap)
+    } catch (err) {
+      console.error('Engine generation failed, falling back:', err)
       localStorage.removeItem('ielts-roadmap')
       await loadData(false)
     } finally {
       setRegenerating(false)
     }
-  }, [roadmap, loadData, regenerating])
+  }, [roadmap, loadRoadmap, loadData, regenerating])
 
   const handleScrollToToday = useCallback(() => {
     todayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -121,7 +149,7 @@ export default function FullStudyRoadmapPage() {
   }, [])
 
   const handleAskAIDay = useCallback((day: RoadmapDay) => {
-    openAITutorChat(`Help me with my study day: ${day.objective || `Day ${day.id}`}. What should I prioritize?`)
+    openAITutorChat(`Help me with my study day (Day ${day.dayNumber}, ${day.date}). What should I prioritize?`)
   }, [])
 
   const handleAskFollowUp = useCallback(() => {
@@ -307,7 +335,7 @@ export default function FullStudyRoadmapPage() {
 
   // ---- Normal Roadmap View ----
   return (
-    <PageContent className={`space-y-6 ${isEditMode ? 'pb-24' : ''}`}>
+    <PageContent className="space-y-6">
       {/* Skip link for keyboard users */}
       <a
         href="#today-section"
@@ -388,6 +416,7 @@ export default function FullStudyRoadmapPage() {
                 onAskAI={handleAskAIDay}
                 onAskAIPhase={handleAskAIPhase}
                 isEditMode={isEditMode}
+                taskRefreshKey={taskRefreshKey}
                 applyCommand={applyCommand}
                 onMoveUp={isEditMode && pIdx > 0
                   ? () => applyCommand(r => movePhase(r, pIdx, pIdx - 1))
@@ -444,60 +473,6 @@ export default function FullStudyRoadmapPage() {
         )}
       </div>
 
-      {/* Floating edit toolbar */}
-      {isEditMode && (
-        <div
-          className="fixed bottom-0 left-0 right-0 z-50 border-t px-4 py-3"
-          style={{
-            backgroundColor: 'var(--color-surface)',
-            borderColor: 'var(--color-border)',
-            boxShadow: '0 -4px 12px rgba(0,0,0,0.08)',
-          }}
-        >
-          <div className="mx-auto flex max-w-2xl items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <button
-                onClick={undo}
-                disabled={!canUndo}
-                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:brightness-95 disabled:opacity-40"
-                style={{
-                  backgroundColor: 'var(--color-surface-alt)',
-                  color: canUndo ? 'var(--color-text)' : 'var(--color-muted)',
-                }}
-              >
-                <IconUndo size={14} /> Undo
-              </button>
-              <button
-                onClick={redo}
-                disabled={!canRedo}
-                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:brightness-95 disabled:opacity-40"
-                style={{
-                  backgroundColor: 'var(--color-surface-alt)',
-                  color: canRedo ? 'var(--color-text)' : 'var(--color-muted)',
-                }}
-              >
-                <IconRedo size={14} /> Redo
-              </button>
-            </div>
-            <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
-              Changes save automatically
-            </span>
-            <button
-              onClick={toggleEditMode}
-              className="inline-flex items-center gap-1.5 rounded-xl px-5 py-2 text-sm font-bold transition-all hover:brightness-95 active:scale-[0.98]"
-              style={{
-                backgroundColor: 'var(--color-primary)',
-                color: 'var(--color-on-primary)',
-              }}
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              Done Editing
-            </button>
-          </div>
-        </div>
-      )}
     </PageContent>
   )
 }

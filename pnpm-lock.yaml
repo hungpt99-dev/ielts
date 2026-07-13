@@ -98,6 +98,9 @@ importers:
       '@ielts/ai-tutor':
         specifier: workspace:*
         version: link:../../packages/ai-tutor
+      '@ielts/learning-engine':
+        specifier: workspace:*
+        version: link:../../packages/learning-engine
       '@ielts/settings':
         specifier: workspace:*
         version: link:../../packages/settings
@@ -260,6 +263,19 @@ importers:
       '@types/react-dom':
         specifier: ^19.1.2
         version: 19.2.3(@types/react@19.2.17)
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.1.1
+        version: 3.2.6(@types/node@26.0.1)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)(terser@5.48.0)
+
+  packages/learning-engine:
+    dependencies:
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+    devDependencies:
       typescript:
         specifier: ~5.8.3
         version: 5.8.3

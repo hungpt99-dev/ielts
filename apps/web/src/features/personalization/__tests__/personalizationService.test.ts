@@ -117,13 +117,25 @@ vi.mock('../../roadmap/roadmapService', () => ({
     updatedAt: new Date().toISOString(),
   }),
   getTodayTask: () => ({
-    id: 'day-1',
-    date: new Date().toISOString().slice(0, 10),
-    dayNumber: 1,
-    skillFocus: 'Vocabulary',
-    taskId: 'task-1',
-    isComplete: false,
-    objective: 'Learn 10 environment vocabulary words',
+    day: {
+      id: 'day-1',
+      date: new Date().toISOString().slice(0, 10),
+      dayNumber: 1,
+      tasks: [{
+        id: 'task-1',
+        taskId: null,
+        skillFocus: 'Vocabulary',
+        objective: 'Learn 10 environment vocabulary words',
+        isComplete: false,
+      }],
+    },
+    task: {
+      id: 'task-1',
+      taskId: null,
+      skillFocus: 'Vocabulary',
+      objective: 'Learn 10 environment vocabulary words',
+      isComplete: false,
+    },
   }),
 }))
 

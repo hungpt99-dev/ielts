@@ -3,6 +3,8 @@ import { IconCheck, IconProgress, IconRefresh, IconAITutor, IconDownload } from 
 import Modal from '../../../components/ui/Modal'
 import Button from '../../../components/ui/Button'
 import type { RoadmapData } from '../roadmapService'
+import type { TaskEntry } from '../../../models'
+import { DatabaseService } from '../../../services/storage/Database'
 
 interface RoadmapSummaryProps {
   roadmap: RoadmapData
@@ -31,26 +33,6 @@ function getTotalStudyHours(roadmap: RoadmapData, avgMinutesPerTask: number = 25
   return Math.round((roadmap.totalTasks * avgMinutesPerTask) / 60)
 }
 
-function getSkillDistribution(roadmap: RoadmapData): Record<string, number> {
-  const counts: Record<string, number> = {}
-  let total = 0
-  for (const phase of roadmap.phases) {
-    for (const week of phase.weeks) {
-      for (const day of week.days) {
-        const skill = day.skillFocus
-        counts[skill] = (counts[skill] || 0) + 1
-        total++
-      }
-    }
-  }
-  if (total === 0) return {}
-  const result: Record<string, number> = {}
-  for (const [skill, count] of Object.entries(counts)) {
-    result[skill] = Math.round((count / total) * 100)
-  }
-  return result
-}
-
 const SKILL_COLORS: Record<string, string> = {
   Vocabulary: 'var(--color-info)',
   Reading: 'var(--color-skill-reading)',
@@ -60,16 +42,15 @@ const SKILL_COLORS: Record<string, string> = {
   Grammar: 'var(--color-success)',
 }
 
-export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAIReview, regenerating }: RoadmapSummaryProps) {
+export default function RoadmapSummary({ roadmap, onRegenerate, onAskAIReview, regenerating }: RoadmapSummaryProps) {
   const [showConfirm, setShowConfirm] = useState(false)
+  const [distribution, setDistribution] = useState<Record<string, number>>({})
   const totalDays = getTotalDays(roadmap)
   const totalWeeks = getTotalWeeks(roadmap)
   const totalHours = getTotalStudyHours(roadmap)
-  const distribution = getSkillDistribution(roadmap)
   const restDays = totalDays > 0 ? Math.round(totalDays * 0.2) : 0
   const studyDays = totalDays - restDays
   const isComplete = roadmap.overallProgress >= 100
-  const currentPhase = roadmap.phases[roadmap.currentPhaseIndex]
 
   const bandProgression = roadmap.phases
     .filter(p => p.targetRange)
@@ -79,6 +60,34 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
       isCurrent: i === roadmap.currentPhaseIndex,
       isComplete: p.isComplete,
     }))
+
+  useEffect(() => {
+    DatabaseService.getAll<TaskEntry>('tasks').then(allTasks => {
+      const taskMap = new Map(allTasks.map(t => [t.id, t]))
+      const counts: Record<string, number> = {}
+      let total = 0
+      for (const phase of roadmap.phases) {
+        for (const week of phase.weeks) {
+          for (const day of week.days) {
+            for (const taskId of day.taskIds) {
+              const task = taskMap.get(taskId)
+              if (task) {
+                counts[task.category] = (counts[task.category] || 0) + 1
+                total++
+              }
+            }
+          }
+        }
+      }
+      if (total > 0) {
+        const result: Record<string, number> = {}
+        for (const [skill, count] of Object.entries(counts)) {
+          result[skill] = Math.round((count / total) * 100)
+        }
+        setDistribution(result)
+      }
+    })
+  }, [roadmap])
 
   useEffect(() => {
     if (!regenerating) setShowConfirm(false)
@@ -254,7 +263,7 @@ export default function RoadmapSummary({ roadmap, profile, onRegenerate, onAskAI
         </div>
       </div>
 
-      <Modal open={showConfirm || regenerating} onClose={() => regenerating ? null : setShowConfirm(false)} title="Regenerate Study Plan" size="sm">
+      <Modal open={!!(showConfirm || regenerating)} onClose={() => regenerating ? null : setShowConfirm(false)} title="Regenerate Study Plan" size="sm">
         {regenerating ? (
           <div className="flex flex-col items-center gap-4 py-6">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: 'var(--color-primary-light)' }}>

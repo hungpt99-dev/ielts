@@ -9,14 +9,21 @@ export default function OfflineIndicator() {
 
     async function checkDbHealth() {
       try {
-        const { getDb, isDbOpen } = await import('@ielts/storage')
+        if (!window.indexedDB) {
+          setDbHealthy(false)
+          return
+        }
+        const { isDbOpen } = await import('@ielts/storage')
         if (isDbOpen()) {
-          const db = getDb()
-          await db.open()
           setDbHealthy(true)
           return
         }
-        setDbHealthy(false)
+        const req = window.indexedDB.open('__ielts_health__')
+        await new Promise<void>((resolve, reject) => {
+          req.onsuccess = () => { req.result.close(); window.indexedDB.deleteDatabase('__ielts_health__'); resolve() }
+          req.onerror = () => reject(req.error)
+        })
+        setDbHealthy(true)
       } catch {
         setDbHealthy(false)
       }

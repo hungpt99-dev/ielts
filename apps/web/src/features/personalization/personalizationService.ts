@@ -5,6 +5,7 @@ import type { TaskEntry, VocabularyEntry, VocabReviewEntry, MistakeEntry } from 
 import type {
   PersonalizationContext,
   Recommendation,
+  RecommendationPriority,
   WeakSkillAnalysis,
   SkillType,
   RecommendationReason,
@@ -128,7 +129,7 @@ export async function buildPersonalizationContext(): Promise<PersonalizationCont
   const countdownDays = getExamCountdown(examDate)
 
   const roadmap = loadRoadmap()
-  const todayRoadmapTask = roadmap ? getTodayTask(roadmap) : null
+  const todayRoadmapTask = roadmap ? getTodayTask(roadmap, tasks) : null
   const currentPhase = roadmap?.phases[roadmap.currentPhaseIndex]
 
   return {
@@ -182,9 +183,9 @@ export async function buildPersonalizationContext(): Promise<PersonalizationCont
       exists: roadmap !== null,
       currentPhaseName: currentPhase?.name ?? '',
       phaseProgress: roadmap?.overallProgress ?? 0,
-      currentSkillFocus: todayRoadmapTask?.skillFocus ?? null,
-      nextTaskTitle: todayRoadmapTask?.objective ?? null,
-      nextTaskSkill: (todayRoadmapTask?.skillFocus as SkillType) ?? null,
+      currentSkillFocus: todayRoadmapTask?.task.category ?? null,
+      nextTaskTitle: todayRoadmapTask?.task.title ?? null,
+      nextTaskSkill: (todayRoadmapTask?.task.category as SkillType) ?? null,
     },
   }
 }
@@ -442,7 +443,7 @@ export async function getAITutorContext(ctx?: PersonalizationContext): Promise<s
     lines.push(`Weak skills: ${topWeak.map(w => `${w.skill} (${w.mistakeCount} mistakes)`).join(', ')}`)
   }
 
-  if (context.tasks.todayUnfinished > 0) {
+  if (context.progress.todayUnfinished > 0) {
     const categories = [...new Set(context.tasks.today.map(t => t.category))]
     lines.push(`Today's unfinished tasks: ${categories.join(', ')}`)
   }

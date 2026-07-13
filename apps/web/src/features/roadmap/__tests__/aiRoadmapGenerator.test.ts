@@ -36,11 +36,15 @@ vi.mock('../../../services/storage/SettingsStorage', () => ({
   loadAppSettings: vi.fn(() => mockSettings.value),
 }))
 
+let taskIdCounter = 0
 vi.mock('../../../services/storage/Database', () => ({
   DatabaseService: {
     getAll: vi.fn(() => Promise.resolve([])),
     get: vi.fn(),
     update: vi.fn(),
+    addTask: vi.fn((item: any) => Promise.resolve({ ...item, id: `mock-task-${++taskIdCounter}`, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() })),
+    remove: vi.fn(),
+    add: vi.fn(),
   },
 }))
 
@@ -52,11 +56,13 @@ function makeSettings(overrides: Partial<AppSettings> = {}): AppSettings {
     dailyStudyMinutes: 60,
     weakSkills: ['Writing', 'Speaking'],
     preferredTopics: ['Environment', 'Education'],
+    nativeLanguage: '',
     studyReminder: 'Time to study!',
     studyGoal: 'academic' as const,
     preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri'],
     aiApiKey: 'sk-test-key',
     aiProvider: 'openai' as const,
+    aiBaseUrl: '',
     aiEndpoint: '',
     aiModel: 'gpt-4o-mini',
     darkMode: false,
@@ -523,7 +529,7 @@ describe('roadmapService integration with AI generator', () => {
     mockCallAI.mockResolvedValue({ content: makeValidAiResponse(), error: null })
 
     const { ensureRoadmap, saveRoadmap, generateRoadmap } = await import('../roadmapService')
-    const staticRoadmap = generateRoadmap(makeSettings(), [])
+    const staticRoadmap = await generateRoadmap(makeSettings(), [])
     saveRoadmap(staticRoadmap)
 
     const roadmap = await ensureRoadmap()
@@ -534,7 +540,7 @@ describe('roadmapService integration with AI generator', () => {
 
   it('should recalculate progress on existing roadmap', async () => {
     const { ensureRoadmap, saveRoadmap, generateRoadmap } = await import('../roadmapService')
-    const staticRoadmap = generateRoadmap(makeSettings(), [])
+    const staticRoadmap = await generateRoadmap(makeSettings(), [])
     staticRoadmap.updatedAt = new Date(Date.now() - 86400000).toISOString()
     saveRoadmap(staticRoadmap)
 

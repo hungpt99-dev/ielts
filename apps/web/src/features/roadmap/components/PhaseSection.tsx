@@ -14,11 +14,12 @@ interface PhaseSectionProps {
   isCurrentPhase: boolean
   defaultExpanded: boolean
   currentWeekIndex: number
-  onToggleTask: (phaseIndex: number, weekIndex: number, dayIndex: number) => void
+  taskRefreshKey?: number
+  onToggleTask: (phaseIndex: number, weekIndex: number, dayIndex: number, taskIndex: number) => void
   onAskAI: (day: RoadmapDay) => void
   onAskAIPhase: (phase: RoadmapPhase) => void
   isEditMode?: boolean
-  applyCommand?: (command: (r: RoadmapData) => RoadmapData) => void
+  applyCommand?: (command: (r: RoadmapData) => RoadmapData | Promise<RoadmapData>) => void
   onMoveUp?: () => void
   onMoveDown?: () => void
   canMoveUp?: boolean
@@ -41,12 +42,13 @@ function getPhaseDateRange(phase: RoadmapPhase): string {
 
 export default function PhaseSection({
   phase, phaseIndex, isCurrentPhase, defaultExpanded,
-  currentWeekIndex, onToggleTask, onAskAI, onAskAIPhase,
+  currentWeekIndex, taskRefreshKey, onToggleTask, onAskAI, onAskAIPhase,
   isEditMode = false, applyCommand,
   onMoveUp, onMoveDown, canMoveUp = false, canMoveDown = false,
   onRemovePhase,
 }: PhaseSectionProps) {
   const [expanded, setExpanded] = useState(defaultExpanded || isEditMode)
+  const [focusedWeekIdx, setFocusedWeekIdx] = useState<number | null>(null)
   const phaseProgress = phase.totalTasks > 0 ? Math.round((phase.completedTasks / phase.totalTasks) * 100) : 0
 
   useEffect(() => {
@@ -218,20 +220,31 @@ export default function PhaseSection({
       {!expanded && !isUpcoming && !isEditMode && (
         <div className="border-t px-4 sm:px-5 py-3" style={{ borderColor: 'var(--color-border)' }}>
           <div className="flex flex-wrap gap-2">
-            {phase.weeks.map((week) => {
+            {phase.weeks.map((week, wIdx) => {
               const wp = week.totalTasks > 0 ? Math.round((week.completedTasks / week.totalTasks) * 100) : 0
               return (
-                <div
+                <button
                   key={week.id}
-                  className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs"
+                  type="button"
+                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-xs transition-all hover:brightness-95 active:scale-[0.97]"
                   style={{
                     backgroundColor: 'var(--color-surface-alt)',
                     color: 'var(--color-text-secondary)',
+                    cursor: 'pointer',
                   }}
-                  title={`${week.label}: ${wp}% complete`}
+                  title={`${week.label}: ${wp}% complete — click to expand`}
+                  onClick={() => {
+                    setExpanded(true)
+                    setFocusedWeekIdx(wIdx)
+                    requestAnimationFrame(() => {
+                      requestAnimationFrame(() => {
+                        document.getElementById(`week-${week.id}-content`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      })
+                    })
+                  }}
                 >
                   <span className="font-medium">{week.label}</span>
-                  <div className="h-1.5 w-10 overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-border)' }}>
+                  <div className="h-2 w-12 overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-border)' }}>
                     <div
                       className="h-full rounded-full transition-all"
                       style={{
@@ -240,7 +253,7 @@ export default function PhaseSection({
                       }}
                     />
                   </div>
-                </div>
+                </button>
               )
             })}
           </div>
@@ -260,6 +273,8 @@ export default function PhaseSection({
               weekIndex={wIdx}
               phaseIndex={phaseIndex}
               isCurrentWeek={isCurrentPhase && wIdx === currentWeekIndex}
+              focusedWeekIdx={focusedWeekIdx}
+              taskRefreshKey={taskRefreshKey}
               onToggleTask={onToggleTask}
               onAskAI={onAskAI}
               isEditMode={isEditMode}
