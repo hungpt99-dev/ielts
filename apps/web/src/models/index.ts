@@ -98,13 +98,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
 }
 
 
-export interface VerbConjugation {
-  base: string
-  pastSimple: string
-  pastParticiple: string
-  presentParticiple: string
-  thirdPersonSingular: string
-}
+import type { VerbConjugation } from '@ielts/shared'
+export type { VerbConjugation }
 
 export interface VocabularyEntry {
   id: string

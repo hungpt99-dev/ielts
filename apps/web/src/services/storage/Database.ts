@@ -28,7 +28,7 @@ import type {
   PublicApiImportedContent,
   AppExportData,
 } from '../../models'
-import { saveAppSettings, removeAppSettings, clearAllLocalStorage } from './SettingsStorage'
+import { saveAppSettings, clearAllLocalStorage } from './SettingsStorage'
 
 import { ValidationError } from '@ielts/storage'
 export { ValidationError } from '@ielts/storage'

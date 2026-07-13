@@ -12,7 +12,8 @@ import AudioPlayer from './components/AudioPlayer'
 import LQuestion from './components/ListeningQuestion'
 
 import { generateId } from '../../utils'
-import { generateListeningExercise } from '../../services/ai/AIService'
+import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
+import type { SessionInfo } from '../../services/learning/ai-exercise-session'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconListening } from '@ielts/ui'
 
@@ -34,12 +35,12 @@ function formatTime(seconds: number): string {
   return s > 0 ? `${minutes}m ${s}s` : `${minutes}m`
 }
 
-function computeAccuracy(correct: number, total: number): number {
+export function computeAccuracy(correct: number, total: number): number {
   if (total <= 0) return 0
   return Math.round((correct / total) * 100)
 }
 
-function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | string[]): boolean {
+export function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | string[]): boolean {
   if (userAnswer === undefined || userAnswer === null) return false
   if (typeof userAnswer === 'string' && typeof correctAnswer === 'string') {
     return userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()
@@ -55,7 +56,7 @@ function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | s
   return String(userAnswer).toLowerCase().trim() === String(correctAnswer).toLowerCase().trim()
 }
 
-function checkAnswer(question: ListeningQuestion, answer: unknown): boolean {
+export function checkAnswer(question: ListeningQuestion, answer: unknown): boolean {
   if (question.type === 'gap-fill') {
     const blanks = question.blanks || []
     const userBlanks = (answer as string[]) || []
@@ -125,6 +126,7 @@ export default function ListeningPractice() {
 
   const [showTranscript, setShowTranscript] = useState(false)
   const [historyDetail, setHistoryDetail] = useState<ListeningPracticeSession | null>(null)
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
 
   const loadHistory = useCallback(async () => {
     try {
@@ -265,6 +267,20 @@ export default function ListeningPractice() {
     }
 
     DatabaseService.add('listeningPracticeSessions', session).catch(() => {})
+
+    if (sessionInfo) {
+      submitAndComplete(
+        sessionInfo,
+        currentExercise.questions.map(q => ({
+          questionId: q.id,
+          answer: answers[q.id],
+          answeredAt: new Date().toISOString(),
+          timeSpentMs: timerSeconds * 1000,
+        })),
+        timerSeconds,
+      ).catch(() => {})
+    }
+
     setHistory(prev => [session, ...prev])
   }
 
@@ -274,6 +290,7 @@ export default function ListeningPractice() {
     setAnswers({})
     setNotes('')
     setResults(null)
+    setSessionInfo(null)
     setTimerSeconds(0)
     setView('browse')
   }
@@ -293,18 +310,17 @@ export default function ListeningPractice() {
     setAiError(null)
 
     try {
-      const { content, error } = await generateListeningExercise({
-        topic: aiTopic.trim(),
-        difficulty: aiDifficulty,
-      })
+      const { content, error, sessionInfo: si } = await startEngineSession(
+        'listening',
+        `Listening: ${aiTopic.trim()}`,
+        aiDifficulty,
+        20,
+      )
 
-      if (error) {
-        throw new Error(error)
-      }
+      if (error) throw new Error(error)
+      if (!content) throw new Error('AI returned an empty response. Try again.')
 
-      if (!content) {
-        throw new Error('AI returned an empty response. Try again.')
-      }
+      setSessionInfo(si)
 
       let parsed: Record<string, unknown>
       try {

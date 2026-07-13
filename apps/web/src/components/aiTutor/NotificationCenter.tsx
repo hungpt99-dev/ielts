@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react'
-import type { ProactiveMessage, ProactiveMessageCategory } from '../types'
-import { PROACTIVE_CATEGORY_LABELS, PROACTIVE_PRIORITY_LABELS, formatMessageTime } from '../hooks/useProactiveMessages'
-import { IconBell, IconClose, IconClock, IconDelete } from '../../../ui/src/icons/IconMap'
+import type { ProactiveMessage, ProactiveMessageCategory } from '@ielts/ai-tutor-engine'
+import { PROACTIVE_CATEGORY_LABELS, PROACTIVE_PRIORITY_LABELS, formatMessageTime } from '../../hooks/useProactiveMessages'
+import { IconBell, IconClose, IconClock, IconDelete } from '@ielts/ui'
 
 interface NotificationCenterProps {
   isOpen: boolean

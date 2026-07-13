@@ -13,7 +13,8 @@ interface WritingPrompt {
   difficulty: 'easy' | 'medium' | 'hard'
 }
 import { generateId } from '../../utils'
-import { checkWriting } from '../../services/ai/AIService'
+import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
+import type { SessionInfo } from '../../services/learning/ai-exercise-session'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconWriting } from '@ielts/ui'
 import FeedbackPanel, { type WritingFeedback } from './components/FeedbackPanel'
@@ -89,6 +90,7 @@ export default function WritingPractice() {
   const [historyDetail, setHistoryDetail] = useState<WritingSession | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const [draftSaved, setDraftSaved] = useState(false)
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
 
   const loadHistory = useCallback(async () => {
     try {
@@ -224,15 +226,16 @@ export default function WritingPractice() {
     try {
       const taskType = (selectedPrompt?.taskType || 'task2') as 'task1' | 'task2'
 
-      const { content, error } = await checkWriting(essayText, questionText, taskType)
+      const { content, error, sessionInfo: si } = await startEngineSession(
+        'writing',
+        `Writing ${questionText}`,
+        'medium',
+        30,
+      )
 
-      if (error) {
-        throw new Error(error)
-      }
-
-      if (!content) {
-        throw new Error('AI returned an empty response. Try again.')
-      }
+      if (error) throw new Error(error)
+      if (!content) throw new Error('AI returned an empty response. Try again.')
+      setSessionInfo(si)
 
       let parsed
       try {
@@ -268,6 +271,15 @@ export default function WritingPractice() {
       stopTimer()
 
       saveDraft()
+
+      if (si) {
+        submitAndComplete(
+          si,
+          [{ questionId: 'writing', answer: essayText, answeredAt: new Date().toISOString(), timeSpentMs: timerSeconds * 1000 }],
+          timerSeconds,
+        ).catch(() => {})
+      }
+
       setView('results')
     } catch (err) {
       setAiError(err instanceof Error ? err.message : 'Failed to get AI feedback')
@@ -288,6 +300,7 @@ export default function WritingPractice() {
     setQuestionText('')
     setFeedback(emptyFeedback)
     setSessionId(null)
+    setSessionInfo(null)
     setTimerSeconds(0)
     setAiError(null)
     setDraftSaved(false)

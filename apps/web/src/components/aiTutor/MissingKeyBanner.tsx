@@ -1,4 +1,4 @@
-import { IconSettings } from '../../../ui/src/icons/IconMap'
+import { IconSettings } from '@ielts/ui'
 
 interface MissingKeyBannerProps {
   onOpenSettings?: () => void

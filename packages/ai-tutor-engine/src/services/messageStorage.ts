@@ -1,4 +1,5 @@
 import type { ChatMessage, ChatSnapshot } from '../types'
+import type { MessageRepositoryPort } from '../ports/message-repository'
 import { chatSnapshotSchema } from '../schemas/chat'
 import { generateId } from '../utils/id'
 
@@ -48,10 +49,10 @@ function saveSnapshot(snapshot: ChatSnapshot): void {
   } catch {}
 }
 
-export const MessageStorage = {
+export class LocalStorageMessageRepository implements MessageRepositoryPort {
   getMessages(): ChatMessage[] {
     return getOrCreateSnapshot().messages
-  },
+  }
 
   addMessage(message: Omit<ChatMessage, 'id' | 'createdAt'>): ChatMessage {
     const snapshot = getOrCreateSnapshot()
@@ -65,19 +66,19 @@ export const MessageStorage = {
     snapshot.meta.totalInteractions++
     saveSnapshot(snapshot)
     return msg
-  },
+  }
 
   setMessages(messages: ChatMessage[]): void {
     const snapshot = getOrCreateSnapshot()
     snapshot.messages = messages.slice(-MAX_MESSAGES)
     saveSnapshot(snapshot)
-  },
+  }
 
   clearMessages(): void {
     const snapshot = getOrCreateSnapshot()
     snapshot.messages = []
     saveSnapshot(snapshot)
-  },
+  }
 
   addMessagesBulk(newMessages: Omit<ChatMessage, 'id' | 'createdAt'>[]): ChatMessage[] {
     const snapshot = getOrCreateSnapshot()
@@ -94,11 +95,11 @@ export const MessageStorage = {
     }
     saveSnapshot(snapshot)
     return added
-  },
+  }
 
   getLastInteractionTime(): string | undefined {
     return getOrCreateSnapshot().meta.lastInteractionTime
-  },
+  }
 
   recordInteraction(): void {
     const now = new Date().toISOString()
@@ -106,28 +107,28 @@ export const MessageStorage = {
     snapshot.meta.lastInteractionTime = now
     snapshot.meta.totalInteractions++
     saveSnapshot(snapshot)
-  },
+  }
 
   recordOpen(): void {
     const snapshot = getOrCreateSnapshot()
     snapshot.meta.lastOpenedAt = new Date().toISOString()
     saveSnapshot(snapshot)
-  },
+  }
 
   getSnapshot(): ChatSnapshot | null {
     return loadSnapshot()
-  },
+  }
 
   clearAll(): void {
     try {
       localStorage.removeItem(STORAGE_KEY)
     } catch {}
-  },
+  }
 
   exportToJson(): string {
     const snapshot = getOrCreateSnapshot()
     return JSON.stringify(snapshot, null, 2)
-  },
+  }
 
   importFromJson(json: string): { success: boolean; error?: string } {
     try {
@@ -141,11 +142,11 @@ export const MessageStorage = {
     } catch {
       return { success: false, error: 'Invalid JSON format' }
     }
-  },
+  }
 
   getTotalInteractions(): number {
     return getOrCreateSnapshot().meta.totalInteractions
-  },
+  }
 
   dismissRecommendation(id: string): void {
     const snapshot = getOrCreateSnapshot()
@@ -153,11 +154,11 @@ export const MessageStorage = {
       snapshot.meta.dismissedRecommendationIds = [...snapshot.meta.dismissedRecommendationIds, id]
     }
     saveSnapshot(snapshot)
-  },
+  }
 
   isRecommendationDismissed(id: string): boolean {
     return getOrCreateSnapshot().meta.dismissedRecommendationIds.includes(id)
-  },
+  }
 
   snoozeRecommendation(id: string, until?: string): void {
     const snapshot = getOrCreateSnapshot()
@@ -171,17 +172,19 @@ export const MessageStorage = {
       ]
     }
     saveSnapshot(snapshot)
-  },
+  }
 
   isRecommendationSnoozed(id: string): boolean {
     const found = getOrCreateSnapshot().meta.snoozedRecommendations.find(r => r.id === id)
     if (!found) return false
     return new Date(found.until) > new Date()
-  },
+  }
 
   getAcceptedRecommendations(): string[] {
     return [...getOrCreateSnapshot().meta.acceptedRecommendations]
-  },
+  }
 }
+
+export const MessageStorage: MessageRepositoryPort = new LocalStorageMessageRepository()
 
 export default MessageStorage

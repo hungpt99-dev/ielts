@@ -6,7 +6,7 @@ import {
   formatMessageTime,
   DEFAULT_QUICK_ACTIONS,
   ACTION_LABELS,
-} from '../hooks/useProactiveMessages'
+} from '../utils/chatHelpers'
 
 beforeEach(() => {
   localStorage.clear()

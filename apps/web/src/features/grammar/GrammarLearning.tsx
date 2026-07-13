@@ -7,7 +7,8 @@ import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import Exercise, { type GrammarExerciseItem } from './components/Exercise'
 import { generateId } from '../../utils'
-import { generateGrammarExercises } from '../../services/ai/AIService'
+import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
+import type { SessionInfo } from '../../services/learning/ai-exercise-session'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconGrammar } from '@ielts/ui'
 
@@ -370,6 +371,7 @@ export default function GrammarLearning() {
   const [selectedTopic, setSelectedTopic] = useState<string>('')
   const [exercises, setExercises] = useState<GrammarExerciseItem[]>([])
   const [exerciseMode, setExerciseMode] = useState(false)
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
 
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
@@ -569,9 +571,21 @@ export default function GrammarLearning() {
     setExerciseMode(true)
   }
 
-  function handleExerciseComplete(_results: { total: number; correct: number }) {
+  function handleExerciseComplete(results: { total: number; correct: number; mistakes?: Array<{ id: string; mistake: string; correction: string; explanation: string; source: string }> }) {
     setExerciseMode(false)
     loadMistakes()
+    if (sessionInfo && results.mistakes) {
+      submitAndComplete(
+        sessionInfo,
+        results.mistakes.map(m => ({
+          questionId: m.id,
+          answer: m.mistake,
+          answeredAt: new Date().toISOString(),
+          timeSpentMs: 0,
+        })),
+        results.total * 30,
+      ).catch(() => {})
+    }
   }
 
   async function generateAiExercises(topic: string) {
@@ -588,15 +602,16 @@ export default function GrammarLearning() {
     setAiError(null)
 
     try {
-      const { content, error } = await generateGrammarExercises(topic, 5)
+      const { content, error, sessionInfo: si } = await startEngineSession(
+        'grammar',
+        `Grammar: ${topic}`,
+        'medium',
+        15,
+      )
 
-      if (error) {
-        throw new Error(error)
-      }
-
-      if (!content) {
-        throw new Error('AI returned an empty response. Try again.')
-      }
+      if (error) throw new Error(error)
+      if (!content) throw new Error('AI returned an empty response. Try again.')
+      setSessionInfo(si)
 
       let parsed
       try {

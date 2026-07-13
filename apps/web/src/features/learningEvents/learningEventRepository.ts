@@ -76,7 +76,7 @@ function fromTable(row: Record<string, unknown>): LearningEvent {
   } as LearningEvent
 }
 
-async function useIndexedDB(): Promise<boolean> {
+async function checkIndexedDBAvailable(): Promise<boolean> {
   try {
     if (!isDbOpen()) return false
     getDb()
@@ -87,7 +87,7 @@ async function useIndexedDB(): Promise<boolean> {
 }
 
 async function persist<T>(dbFn: () => Promise<T>, memFn: () => T): Promise<T> {
-  if (await useIndexedDB()) {
+  if (await checkIndexedDBAvailable()) {
     try {
       return await safeDb(dbFn)
     } catch {

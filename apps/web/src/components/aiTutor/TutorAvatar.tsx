@@ -1,4 +1,4 @@
-import { IconExplain, IconSpeaking } from '../../../ui/src/icons/IconMap'
+import { IconExplain, IconSpeaking } from '@ielts/ui'
 
 interface TutorAvatarProps {
   size?: number

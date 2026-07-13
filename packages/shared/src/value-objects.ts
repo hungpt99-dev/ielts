@@ -17,3 +17,11 @@ export interface SkillBandScores {
   writing: BandScore
   speaking: BandScore
 }
+
+export interface VerbConjugation {
+  base: string
+  pastSimple: string
+  pastParticiple: string
+  presentParticiple: string
+  thirdPersonSingular: string
+}

@@ -1,5 +1,5 @@
 import { useCallback, type ReactNode } from 'react'
-import { IconAlertCircle, IconClose } from '../../../ui/src/icons/IconMap'
+import { IconAlertCircle, IconClose } from '@ielts/ui'
 
 interface ErrorConfig {
   title: string

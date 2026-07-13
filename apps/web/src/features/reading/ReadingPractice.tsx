@@ -12,7 +12,9 @@ import EmptyState from '../../components/ui/EmptyState'
 import Question from './components/Question'
 import { loadAllPassages } from './passageSeedService'
 import { generateId } from '../../utils'
-import { generateReadingPassage, generateQuestionsForPassage } from '../../services/ai/AIService'
+import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
+import type { SessionInfo } from '../../services/learning/ai-exercise-session'
+import { generateQuestionsForPassage } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconReading } from '@ielts/ui'
 
@@ -25,7 +27,7 @@ const TOPICS = [
 
 const DIFFICULTIES = ['easy', 'medium', 'hard'] as const
 
-function formatDate(dateStr: string): string {
+export function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
@@ -36,12 +38,12 @@ function formatTime(seconds: number): string {
   return s > 0 ? `${minutes}m ${s}s` : `${minutes}m`
 }
 
-function computeAccuracy(correct: number, total: number): number {
+export function computeAccuracy(correct: number, total: number): number {
   if (total <= 0) return 0
   return Math.round((correct / total) * 100)
 }
 
-function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | string[]): boolean {
+export function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | string[]): boolean {
   if (userAnswer === undefined || userAnswer === null) return false
   if (typeof userAnswer === 'string' && typeof correctAnswer === 'string') {
     return userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()
@@ -58,7 +60,7 @@ function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | s
   return String(userAnswer).toLowerCase().trim() === String(correctAnswer).toLowerCase().trim()
 }
 
-function checkAnswer(question: ReadingQuestion, answer: unknown): boolean {
+export function checkAnswer(question: ReadingQuestion, answer: unknown): boolean {
   if (question.type === 'matching-headings') {
     const correctMatches = question.correctMatches || {}
     const userMatches = (answer as Record<string, number>) || {}
@@ -156,6 +158,7 @@ export default function ReadingPractice() {
   const [historyDetail, setHistoryDetail] = useState<ReadingPracticeSession | null>(null)
   const [generatingQuestions, setGeneratingQuestions] = useState<Record<string, boolean>>({})
   const [generateError, setGenerateError] = useState<string | null>(null)
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
 
   const loadHistory = useCallback(async () => {
     try {
@@ -300,6 +303,20 @@ export default function ReadingPractice() {
     }
 
     DatabaseService.add('readingPracticeSessions', session).catch(() => {})
+
+    if (sessionInfo) {
+      submitAndComplete(
+        sessionInfo,
+        currentPassage.questions.map(q => ({
+          questionId: q.id,
+          answer: answers[q.id],
+          answeredAt: new Date().toISOString(),
+          timeSpentMs: timerSeconds * 1000,
+        })),
+        timerSeconds,
+      ).catch(() => {})
+    }
+
     setHistory(prev => [session, ...prev])
   }
 
@@ -309,6 +326,7 @@ export default function ReadingPractice() {
     setAnswers({})
     setResults(null)
     setTimerSeconds(0)
+    setSessionInfo(null)
     setView('browse')
   }
 
@@ -327,18 +345,17 @@ export default function ReadingPractice() {
     setAiError(null)
 
     try {
-      const { content, error } = await generateReadingPassage({
-        topic: aiTopic.trim(),
-        difficulty: aiDifficulty,
-      })
+      const { content, error, sessionInfo: si } = await startEngineSession(
+        'reading',
+        `Reading: ${aiTopic.trim()}`,
+        aiDifficulty,
+        20,
+      )
 
-      if (error) {
-        throw new Error(error)
-      }
+      if (error) throw new Error(error)
+      if (!content) throw new Error('AI returned an empty response. Try again.')
 
-      if (!content) {
-        throw new Error('AI returned an empty response. Try again.')
-      }
+      setSessionInfo(si)
 
       let parsed: Record<string, unknown>
       try {

@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
-import type { QuickAction } from '../types'
-import { IconVocabulary, IconTarget, IconWriting, IconExplain, IconTimer } from '../../../ui/src/icons/IconMap'
+import type { QuickAction } from '@ielts/ai-tutor-engine'
+import { IconVocabulary, IconTarget, IconWriting, IconExplain, IconTimer } from '@ielts/ui'
 
 const ACTION_ICONS: Record<string, ReactNode> = {
   '📚': <IconVocabulary size={12} />,

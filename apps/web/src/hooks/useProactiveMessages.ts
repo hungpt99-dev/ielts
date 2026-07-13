@@ -1,115 +1,15 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
-import type { ProactiveMessage, ProactiveMessageCategory, ProactiveMessageSettings, ContextSuggestion, ChatMessage } from '../types'
-import { generateProactiveMessages, generateContextSuggestions as generateContextCandidates } from '../services/proactiveMessageEngine'
-import type { ProactiveEngineInput } from '../services/proactiveMessageEngine'
-import { ProactiveEventBus } from '../services/proactiveEventBus'
-import { generateId } from '../utils/id'
+import type { ProactiveMessage, ProactiveMessageCategory, ProactiveMessageSettings, ContextSuggestion, ChatMessage } from '@ielts/ai-tutor-engine'
+import { generateProactiveMessages, generateContextCandidates, ProactiveEventBus, generateId, checkQuietHours, canSendNow as canSendNowFn, getMessagesForToday as getMessagesCountForToday, LocalStorageProactiveMessageRepository } from '@ielts/ai-tutor-engine'
+import type { ProactiveEngineInput } from '@ielts/ai-tutor-engine'
 
-const SETTINGS_KEY = 'ielts-proactive-message-settings'
-const STORAGE_KEY = 'ielts-proactive-messages'
-const MAX_STORED_MESSAGES = 100
-
-const DEFAULT_SETTINGS: ProactiveMessageSettings = {
-  enabled: true,
-  browserNotifications: false,
-  extensionNotifications: false,
-  aiEnhanced: false,
-  quietHoursStart: '22:00',
-  quietHoursEnd: '08:00',
-  reminderTime: '09:00',
-  maxMessagesPerDay: 5,
-  minIntervalMinutes: 60,
-  categories: {
-    'vocabulary-review': true,
-    'mistake-review': true,
-    'study-plan': true,
-    'speaking-practice': true,
-    'writing-practice': true,
-    'reading-practice': true,
-    'listening-practice': true,
-    'exam-countdown': true,
-    'motivation': true,
-    'saved-content': true,
-    'daily-tip': true,
-    'progress-report': true,
-    'suggestion': true,
-  },
-  examReminders: true,
-  inactivityReminders: true,
-  vocabularyReminders: true,
-  roadmapReminders: true,
-  motivationMessages: true,
-  preferredTone: 'friendly',
-  preferredMessageLength: 'medium',
-}
-
-function safeGet<T>(key: string, fallback: T): T {
-  try {
-    const raw = localStorage.getItem(key)
-    if (!raw) return fallback
-    return JSON.parse(raw) as T
-  } catch {
-    return fallback
-  }
-}
-
-function safeSet(key: string, value: unknown): void {
-  try {
-    localStorage.setItem(key, JSON.stringify(value))
-  } catch { /* noop */ }
-}
-
-function loadSettings(): ProactiveMessageSettings {
-  const saved = safeGet<Partial<ProactiveMessageSettings>>(SETTINGS_KEY, {})
-  return { ...DEFAULT_SETTINGS, ...saved }
-}
-
-function saveSettings(s: ProactiveMessageSettings): void {
-  safeSet(SETTINGS_KEY, s)
-}
-
-function loadMessages(): ProactiveMessage[] {
-  const raw = safeGet<unknown>(STORAGE_KEY, null)
-  if (!Array.isArray(raw)) return []
-  return raw as ProactiveMessage[]
-}
-
-function saveMessages(msgs: ProactiveMessage[]): void {
-  safeSet(STORAGE_KEY, msgs.slice(-MAX_STORED_MESSAGES))
-}
-
-function clearMessages(): void {
-  try { localStorage.removeItem(STORAGE_KEY) } catch { /* noop */ }
-}
-
-function isInQuietHours(settings: ProactiveMessageSettings): boolean {
-  const now = new Date()
-  const currentMinutes = now.getHours() * 60 + now.getMinutes()
-  const startParts = settings.quietHoursStart.split(':').map(Number)
-  const endParts = settings.quietHoursEnd.split(':').map(Number)
-  const startMinutes = startParts[0] * 60 + startParts[1]
-  const endMinutes = endParts[0] * 60 + endParts[1]
-  if (startMinutes <= endMinutes) {
-    return currentMinutes >= startMinutes && currentMinutes <= endMinutes
-  }
-  return currentMinutes >= startMinutes || currentMinutes <= endMinutes
-}
-
-function canSendNow(settings: ProactiveMessageSettings): boolean {
-  if (!settings.enabled) return false
-  return !isInQuietHours(settings)
-}
-
-function getMessagesForToday(messages: ProactiveMessage[]): number {
-  const today = new Date().toDateString()
-  return messages.filter(m => new Date(m.createdAt).toDateString() === today).length
-}
+const repository = new LocalStorageProactiveMessageRepository()
 
 type ProactiveMessageCallback = (message: ProactiveMessage) => void
 
 export function useProactiveMessages() {
-  const [messages, setMessages] = useState<ProactiveMessage[]>(loadMessages)
-  const [settings, setSettingsState] = useState<ProactiveMessageSettings>(loadSettings)
+  const [messages, setMessages] = useState<ProactiveMessage[]>(repository.loadMessages)
+  const [settings, setSettingsState] = useState<ProactiveMessageSettings>(repository.loadSettings)
   const [unreadCount, setUnreadCount] = useState(0)
   const listenersRef = useRef<Set<ProactiveMessageCallback>>(new Set())
   const messagesRef = useRef(messages)
@@ -123,7 +23,7 @@ export function useProactiveMessages() {
     const unsub = ProactiveEventBus.onNewMessage((msg) => {
       setMessages(prev => {
         const next = [msg, ...prev]
-        saveMessages(next)
+        repository.saveMessages(next)
         return next
       })
     })
@@ -133,13 +33,13 @@ export function useProactiveMessages() {
   const updateSettings = useCallback((patch: Partial<ProactiveMessageSettings>) => {
     setSettingsState(prev => {
       const next = { ...prev, ...patch }
-      saveSettings(next)
+      repository.saveSettings(next)
       return next
     })
   }, [])
 
   const refreshMessages = useCallback(() => {
-    setMessages(loadMessages())
+    setMessages(repository.loadMessages())
   }, [])
 
   const getPendingMessages = useCallback((): ProactiveMessage[] => {
@@ -162,7 +62,7 @@ export function useProactiveMessages() {
     }
     setMessages(prev => {
       const next = [newMsg, ...prev]
-      saveMessages(next)
+      repository.saveMessages(next)
       return next
     })
     listenersRef.current.forEach(fn => fn(newMsg))
@@ -176,7 +76,7 @@ export function useProactiveMessages() {
     if (engineMessages.length === 0) return []
     const now = new Date().toISOString()
     const currentMessages = messagesRef.current
-    const todayCount = getMessagesForToday(currentMessages)
+    const todayCount = getMessagesCountForToday(currentMessages)
     const maxAllowed = settings.maxMessagesPerDay - todayCount
     const toAdd = engineMessages.slice(0, Math.max(0, maxAllowed))
     if (toAdd.length === 0) return []
@@ -202,7 +102,7 @@ export function useProactiveMessages() {
     })
     setMessages(prev => {
       const next = [...newMsgs, ...prev]
-      saveMessages(next)
+      repository.saveMessages(next)
       return next
     })
     return newMsgs
@@ -218,7 +118,7 @@ export function useProactiveMessages() {
   const updateMessage = useCallback((id: string, patch: Partial<ProactiveMessage>) => {
     setMessages(prev => {
       const next = prev.map(m => m.id === id ? { ...m, ...patch } : m)
-      saveMessages(next)
+      repository.saveMessages(next)
       return next
     })
   }, [])
@@ -228,7 +128,7 @@ export function useProactiveMessages() {
   const markAllAsRead = useCallback(() => {
     setMessages(prev => {
       const next = prev.map(m => m.isRead ? m : { ...m, isRead: true })
-      saveMessages(next)
+      repository.saveMessages(next)
       return next
     })
   }, [])
@@ -245,14 +145,14 @@ export function useProactiveMessages() {
   const deleteMessage = useCallback((id: string) => {
     setMessages(prev => {
       const next = prev.filter(m => m.id !== id)
-      saveMessages(next)
+      repository.saveMessages(next)
       return next
     })
   }, [])
 
   const clearAllMessages = useCallback(() => {
     setMessages([])
-    clearMessages()
+    repository.clearMessages()
     ProactiveEventBus.emitMessagesCleared()
   }, [])
 
@@ -271,10 +171,10 @@ export function useProactiveMessages() {
     return new Date(msg.snoozedUntil) > new Date()
   }, [messages])
 
-  const canSendNowVal = useMemo(() => canSendNow(settings), [settings])
+  const canSendNowVal = useMemo(() => canSendNowFn(settings.enabled, settings.quietHoursStart, settings.quietHoursEnd), [settings])
 
   const messagesForToday = useMemo(
-    () => getMessagesForToday(messages),
+    () => getMessagesCountForToday(messages),
     [messages],
   )
 
@@ -310,7 +210,7 @@ export {
   formatMessageTime,
   DEFAULT_QUICK_ACTIONS,
   ACTION_LABELS,
-} from '../utils/chatHelpers'
+} from '@ielts/ai-tutor-engine'
 
 export const PROACTIVE_CATEGORY_LABELS: Record<ProactiveMessageCategory | 'all', string> = {
   all: 'All',

@@ -191,11 +191,27 @@ function createDependencyRepos() {
     },
     eventPublisher: {
       async publish(event: any) {
-        try { await DatabaseService.safePut('aiContents', event) } catch {}
+        try {
+          await DatabaseService.safePut('aiContents', event)
+          if (event.type === 'learning_session_completed' || event.type === 'roadmap_task_fulfilled') {
+            await DatabaseService.safePut('progressRecords', {
+              id: `event-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+              type: event.type as any,
+              value: event.accuracy ?? event.score ?? 0,
+              date: new Date().toISOString().slice(0, 10),
+              category: event.skill ?? 'general',
+              label: event.type,
+              createdAt: new Date().toISOString(),
+              metadata: JSON.stringify(event),
+            })
+          }
+        } catch {}
       },
       async publishMany(events: any[]) {
         for (const event of events) {
-          try { await DatabaseService.safePut('aiContents', event) } catch {}
+          try {
+            await this.publish(event)
+          } catch {}
         }
       },
     },
@@ -275,14 +291,115 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
     const contextBuilder = new LearnerContextBuilder({
       registry,
       getProfile: () => profileRepo.get(),
-      getExamContext: () => Promise.resolve({}),
-      getRoadmapContext: () => Promise.resolve(null),
-      getProgress: () => Promise.resolve({}),
-      getSkillStates: () => Promise.resolve({}),
-      getMistakes: () => Promise.resolve({ totalCount: 0, categories: [] }),
-      getVocabulary: () => Promise.resolve({ totalCount: 0, dueCount: 0 }),
-      getActivity: () => Promise.resolve({}),
-      getPreferences: () => Promise.resolve({}),
+      getExamContext: async () => {
+        try {
+          const settings = JSON.parse(localStorage.getItem('ielts-settings') ?? '{}')
+          const examDate = settings.examDate ?? null
+          if (!examDate) return {}
+          const daysUntil = Math.ceil((new Date(examDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+          return { examDate, daysUntilExam: Math.max(0, daysUntil), isUrgent: daysUntil <= 30, isFinalWeek: daysUntil <= 7 }
+        } catch { return {} }
+      },
+      getRoadmapContext: async () => {
+        try {
+          const tasks = await DatabaseService.getAll<any>('tasks')
+          const todayStr = new Date().toISOString().slice(0, 10)
+          const todayTasks = tasks.filter(t => t.date?.slice(0, 10) === todayStr)
+          return {
+            active: tasks.length > 0,
+            currentPhase: null,
+            currentWeek: null,
+            todayTasks: todayTasks.map(t => ({ id: t.id, title: t.title ?? '', skill: t.category ?? 'reading', estimatedMinutes: t.estimatedMinutes ?? 20, isCompleted: !!t.isDone, isMissed: false, dueDate: t.date })),
+            nextTasks: [],
+            completedTasks: tasks.filter(t => t.isDone).length,
+            missedTasks: 0,
+            weeklyStudyMinutesTarget: 300,
+            weeklyStudyMinutesCompleted: 0,
+          }
+        } catch { return null }
+      },
+      getProgress: async () => {
+        try {
+          const records = await DatabaseService.getAll<any>('progressRecords')
+          const recent = records.filter(r => r.type === 'learning-outcome')
+          const overall = recent.length > 0 ? Math.round(recent.reduce((s: number, r: any) => s + (r.value ?? 0), 0) / recent.length * 100) : 0
+          return { overallCompletionPercent: overall, skillProgress: {}, weeklyCompletionPercent: 0, studyStreak: 0, inactiveDays: 0, consistency: 0 }
+        } catch { return {} }
+      },
+      getSkillStates: async () => {
+        try {
+          const records = await DatabaseService.getAll<any>('progressRecords')
+          const outcomes = records.filter(r => r.type === 'learning-outcome' || r.type === 'learning_session_completed')
+          const bySkill: any = {}
+          for (const skill of ['listening', 'reading', 'writing', 'speaking'] as const) {
+            const skillOutcomes = outcomes.filter((o: any) => o.category === skill || o.metadata?.includes(skill))
+            bySkill[skill] = {
+              skill,
+              currentBand: undefined,
+              targetBand: undefined,
+              gap: undefined,
+              recentPerformance: skillOutcomes.length > 0 ? Math.round(skillOutcomes.reduce((s: number, o: any) => s + (o.value ?? 0), 0) / skillOutcomes.length) : undefined,
+              trend: 'unknown' as const,
+              confidence: 0.5,
+              priorityScore: 0,
+              frequentWeaknesses: [],
+              recentStrengths: [],
+            }
+          }
+          return bySkill
+        } catch { return {} }
+      },
+      getMistakes: async () => {
+        try {
+          const all = await DatabaseService.getAll<any>('mistakes')
+          return {
+            total: all.length,
+            unreviewed: all.filter(m => m.status === 'new').length,
+            recentCount: all.filter(m => new Date(m.createdAt) > new Date(Date.now() - 7 * 86400000)).length,
+            recurringPatterns: [],
+            bySkill: {},
+          }
+        } catch { return { total: 0, unreviewed: 0, recentCount: 0, recurringPatterns: [], bySkill: {} } }
+      },
+      getVocabulary: async () => {
+        try {
+          const all = await DatabaseService.getAll<any>('vocabulary')
+          return {
+            totalSaved: all.length,
+            dueForReview: all.filter((v: any) => v.nextReviewAt && v.nextReviewAt <= new Date().toISOString()).length,
+            mastered: all.filter((v: any) => v.status === 'mastered').length,
+            byTopic: {},
+          }
+        } catch { return { totalSaved: 0, dueForReview: 0, mastered: 0, byTopic: {} } }
+      },
+      getActivity: async () => {
+        try {
+          const tasks = await DatabaseService.getAll<any>('tasks')
+          const todayStr = new Date().toISOString().slice(0, 10)
+          return {
+            lastActiveAt: new Date().toISOString(),
+            todayStudyMinutes: 0,
+            weeklyStudyMinutes: 0,
+            tasksCompletedToday: tasks.filter(t => t.isDone && t.completedAt?.slice(0, 10) === todayStr).length,
+          }
+        } catch { return { lastActiveAt: null, todayStudyMinutes: 0, weeklyStudyMinutes: 0, tasksCompletedToday: 0 } }
+      },
+      getPreferences: async () => {
+        try {
+          const settings = JSON.parse(localStorage.getItem('ielts-settings') ?? '{}')
+          return {
+            preferredMode: 'general-teacher' as const,
+            language: settings.nativeLanguage === 'vi' ? 'vietnamese' as const : 'english' as const,
+            explanationLevel: 'detailed' as const,
+            correctionStyle: 'gentle' as const,
+            proactiveEnabled: true,
+            maxProactiveMessagesPerDay: 5,
+            quietHoursStart: '22:00',
+            quietHoursEnd: '08:00',
+            allowedCategories: [],
+          }
+        } catch { return {} }
+      },
     })
 
     const deps: AITutorEngineDependencies = {
@@ -373,12 +490,45 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
           } catch { return { success: false, error: { code: 'ai_unavailable', message: 'AI unavailable', recoverable: true } } }
         },
         async explainFeedback() { return { explanation: '', suggestions: [] } },
-        async recordLearningOutcome() { return { success: true } },
+        async recordLearningOutcome(outcome: any) {
+          try {
+            await DatabaseService.safePut('progressRecords', {
+              id: `outcome-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+              type: 'learning-outcome' as const,
+              value: outcome.accuracy ?? 0,
+              date: new Date().toISOString().slice(0, 10),
+              category: outcome.skill,
+              label: `${outcome.skill} session`,
+              createdAt: new Date().toISOString(),
+              metadata: JSON.stringify(outcome),
+            })
+          } catch {}
+          try {
+            const existing = localStorage.getItem('tutor-memory-learning')
+            const mem = existing ? JSON.parse(existing) : { sessions: [], mistakes: [], strengths: [] }
+            mem.sessions.push({ skill: outcome.skill, score: outcome.score, maxScore: outcome.maximumScore, accuracy: outcome.accuracy, timestamp: new Date().toISOString() })
+            if (outcome.mistakes?.length) mem.mistakes.push(...outcome.mistakes)
+            if (outcome.strengths?.length) mem.strengths.push(...outcome.strengths)
+            localStorage.setItem('tutor-memory-learning', JSON.stringify(mem))
+          } catch {}
+          return { success: true }
+        },
       },
       studyPlanPort: {
         async getCurrentTask() { return null },
         async getTaskById() { return null },
-        async markTaskFulfilled() {},
+        async markTaskFulfilled(taskId: string, accuracy?: number) {
+          try {
+            const tasks = await DatabaseService.safeGetAll('tasks')
+            const task = tasks.find((t: any) => t.id === taskId)
+            if (task) {
+              task.isDone = true
+              task.completedAt = new Date().toISOString()
+              task.accuracy = accuracy
+              await DatabaseService.safePut('tasks', task)
+            }
+          } catch {}
+        },
       },
       ...repos,
       clock: systemClock,

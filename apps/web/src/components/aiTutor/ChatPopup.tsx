@@ -1,5 +1,5 @@
 import { ChatWidget } from './ChatWidget'
-import type { ChatWidgetProps } from '../types'
+import type { ChatWidgetProps } from '@ielts/ai-tutor-engine'
 import { useState, useEffect } from 'react'
 
 interface ChatPopupProps extends ChatWidgetProps {

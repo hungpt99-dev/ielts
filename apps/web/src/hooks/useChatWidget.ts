@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import type { ChatMessage, ContextSuggestion } from '../types'
-import { MessageStorage } from '../services/messageStorage'
+import type { ChatMessage, ContextSuggestion } from '@ielts/ai-tutor-engine'
+import { MessageStorage, generateId } from '@ielts/ai-tutor-engine'
 import { useProactiveMessages, getWelcomeMessage, generateQuickResponse, ACTION_LABELS, DEFAULT_QUICK_ACTIONS } from './useProactiveMessages'
-import { generateId } from '../utils/id'
 
 interface UseChatWidgetOptions {
   onSendMessage?: (text: string) => Promise<string>

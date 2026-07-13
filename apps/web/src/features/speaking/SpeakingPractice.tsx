@@ -23,7 +23,8 @@ interface SpeakingPhrase {
   phrases: string[]
 }
 import { generateId } from '../../utils'
-import { getSpeakingFeedback } from '../../services/ai/AIService'
+import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
+import type { SessionInfo } from '../../services/learning/ai-exercise-session'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconSpeaking } from '@ielts/ui'
 import TimerCard from '../../components/TimerCard'
@@ -92,6 +93,7 @@ export default function SpeakingPractice() {
   const [selectedQuestion, setSelectedQuestion] = useState<SpeakingQuestion | null>(null)
   const [answerNotes, setAnswerNotes] = useState('')
   const [sessionId, setSessionId] = useState<string | null>(null)
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
   const [evaluation, setEvaluation] = useState<EvaluationResult>(emptyEvaluation)
   const [fluencyNotes, setFluencyNotes] = useState('')
   const [vocabularyNotes, setVocabularyNotes] = useState('')
@@ -339,10 +341,16 @@ export default function SpeakingPractice() {
       const questionText = selectedQuestion?.question || 'Custom practice'
       const part = (selectedQuestion?.part || 1) as 1 | 2 | 3
 
-      const { content, error } = await getSpeakingFeedback(textForFeedback, questionText, part)
+      const { content, error, sessionInfo: si } = await startEngineSession(
+        'speaking',
+        `Speaking Part ${part}: ${questionText}`,
+        'medium',
+        15,
+      )
 
       if (error) throw new Error(error)
       if (!content) throw new Error('AI returned an empty response. Try again.')
+      setSessionInfo(si)
 
       aiContent = content
 
@@ -385,6 +393,14 @@ export default function SpeakingPractice() {
       const bandMsg = typeof bandScore === 'number' ? `\n\nEstimated Band: ${bandScore.toFixed(1)}` : ''
       setAiFeedback(content + bandMsg)
       saveSession()
+      if (sessionInfo) {
+        const dur = timer.mode === 'countdown' ? timer.total - timer.seconds : timer.seconds
+        submitAndComplete(
+          sessionInfo,
+          [{ questionId: `part-${part}`, answer: textForFeedback, answeredAt: new Date().toISOString(), timeSpentMs: dur * 1000 }],
+          dur,
+        ).catch(() => {})
+      }
     } catch (err) {
       if (err instanceof SyntaxError && aiContent) {
         setAiFeedback(aiContent)
@@ -401,6 +417,14 @@ export default function SpeakingPractice() {
     timer.stop()
     if (recording) stopRecording()
     saveSession()
+    if (sessionInfo && answerNotes.trim()) {
+      const dur = timer.mode === 'countdown' ? timer.total - timer.seconds : timer.seconds
+      submitAndComplete(
+        sessionInfo,
+        [{ questionId: `part-${selectedQuestion?.part || 1}`, answer: answerNotes, answeredAt: new Date().toISOString(), timeSpentMs: dur * 1000 }],
+        dur,
+      ).catch(() => {})
+    }
     setView('results')
   }
 
@@ -416,6 +440,7 @@ export default function SpeakingPractice() {
     setAnswerNotes('')
     setEvaluation(emptyEvaluation)
     setSessionId(null)
+    setSessionInfo(null)
     setAiError(null)
     setAiFeedback(null)
     setView('browse')

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { ChatPopup } from '@ielts/ai-tutor-engine'
+import ChatPopup from '../../../components/aiTutor/ChatPopup'
 import type { ContextSuggestion } from '@ielts/ai-tutor-engine'
 import { loadAppSettings } from '../../../services/storage/SettingsStorage'
 import { DatabaseService } from '../../../services/storage/Database'

@@ -312,6 +312,24 @@ export default function DayCard({
                     <button onClick={() => onToggleTask(task.id)} className="rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors hover:brightness-90 active:scale-[0.97]" style={{ color: task.isDone ? 'var(--color-text-secondary)' : 'white', backgroundColor: task.isDone ? 'var(--color-surface-alt)' : 'var(--color-primary)' }}>
                       {task.isDone ? '↩ Undo' : 'Mark done'}
                     </button>
+                    {!task.isDone && (
+                      <button onClick={() => {
+                        const route: Record<string, string> = {
+                          Vocabulary: '/vocabulary',
+                          Reading: '/reading',
+                          Listening: '/listening',
+                          'Writing Task 1': '/writing',
+                          'Writing Task 2': '/writing',
+                          'Speaking Part 1': '/speaking',
+                          'Speaking Part 2': '/speaking',
+                          'Speaking Part 3': '/speaking',
+                          Grammar: '/grammar',
+                        }
+                        navigate(route[task.category] ?? '/reading')
+                      }} className="rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors hover:brightness-90 active:scale-[0.97]" style={{ color: 'var(--color-primary)', backgroundColor: 'var(--color-primary-light)' }}>
+                        Practice
+                      </button>
+                    )}
                     <button onClick={() => onAskAI(day)} className="rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors hover:brightness-90 active:scale-[0.97]" style={{ color: 'var(--color-tutor-accent)', backgroundColor: 'var(--color-tutor-accent-light)' }}>
                       Ask AI
                     </button>

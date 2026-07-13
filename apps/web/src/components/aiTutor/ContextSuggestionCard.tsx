@@ -1,5 +1,5 @@
-import type { ContextSuggestion } from '../types'
-import { IconExplain, IconClose } from '../../../ui/src/icons/IconMap'
+import type { ContextSuggestion } from '@ielts/ai-tutor-engine'
+import { IconExplain, IconClose } from '@ielts/ui'
 
 interface ContextSuggestionCardProps {
   suggestion: ContextSuggestion

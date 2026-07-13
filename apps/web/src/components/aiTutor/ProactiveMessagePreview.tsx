@@ -1,5 +1,5 @@
-import type { ProactiveMessage } from '../types'
-import { IconClock, IconClose } from '../../../ui/src/icons/IconMap'
+import type { ProactiveMessage } from '@ielts/ai-tutor-engine'
+import { IconClock, IconClose } from '@ielts/ui'
 
 interface ProactiveMessagePreviewProps {
   message: ProactiveMessage

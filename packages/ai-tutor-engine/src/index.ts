@@ -17,7 +17,7 @@ export type { SessionSummary } from './application/chat/summarize-chat-session'
 export { getNextBestAction } from './application/recommendations/get-next-best-action'
 export { getDailyRecommendation } from './application/recommendations/get-daily-recommendation'
 export { generateContextSuggestions } from './application/recommendations/generate-context-suggestions'
-export type { ContextSuggestion } from './application/recommendations/generate-context-suggestions'
+export type { ContextSuggestion as ApplicationContextSuggestion } from './application/recommendations/generate-context-suggestions'
 
 export { generateProgressReview } from './application/progress/generate-progress-review'
 export type { GenerateProgressReviewDeps } from './application/progress/generate-progress-review'
@@ -35,7 +35,8 @@ export type { LearnerProfile, LearnerProfileUpdate, IELTSExamType } from './doma
 export type { LearnerStateSnapshot, SkillState, ExamContext, RoadmapContext, ProgressContext, MistakeSummary, VocabularySummary, ActivitySummary, TutorPreferences, TutorMode, TutorContextScope, TutorContextSource, TutorInteractionSource, TutorContextItem, ContextQuality, LearnerConstraint, ProactiveCategory, RoadmapTask } from './domain/entities/learner-context'
 export type { TutorChatRequest, TutorChatResult, TutorChatMessage, TutorChatSession, TutorAction, TutorRecommendation, TutorTeachingStrategy, TutorPageContext, TutorMemoryCandidate } from './domain/entities/tutor-message'
 export type { TutorMemory, UpdateTutorMemoryRequest, UpdateTutorMemoryResult, TutorWeakPointMemory, TutorMistakeMemory, TutorPreferenceMemory, TutorGoalMemory } from './domain/entities/tutor-memory'
-export type { ProactiveMessage, ProactiveMessageSettings, ProactiveTriggerType, ProactiveInterventionCandidate, ProactiveEvaluationRequest, ProactiveEvaluationResult, ProactiveMessageAction } from './domain/entities/proactive-message'
+export type { ProactiveTriggerType, ProactiveInterventionCandidate, ProactiveEvaluationRequest, ProactiveEvaluationResult, ProactiveMessageAction } from './domain/entities/proactive-message'
+export type { ProactiveMessage as DomainProactiveMessage, ProactiveMessageSettings as DomainProactiveMessageSettings } from './domain/entities/proactive-message'
 export type { NextBestAction, NextBestActionRequest, NextBestActionResult, DailyRecommendation, TaskRecommendation, WeeklyRecommendation } from './domain/entities/tutor-recommendation'
 export type { ProgressReviewRequest, ProgressReviewResult, LearnerProgressAnalysis, ProgressInsight, RepeatedMistake, ProgressRisk } from './domain/entities/progress-review'
 
@@ -114,16 +115,34 @@ export type { GrammarTutorModule, GrammarExplanationRequest, GrammarExplanationR
 export { buildLearningProgressReviewPrompt } from './prompts/learningProgressReview'
 export type { ProgressReviewData, SkillProgress, WeaknessReport, WeakSkill, VocabularyStatus, ReviewSummary, StudyConsistency, AIProgressReviewResponse } from './prompts/learningProgressReview'
 
-// ── Backward Compatibility ────────────────────────────────────────────
-// Legacy component kept for existing consumers
-export { default as ChatPopup } from './components/ChatPopup'
+// ── Services (shared with moved hooks) ────────────────────────────────
+export { MessageStorage } from './services/messageStorage'
+export { ProactiveEventBus } from './services/proactiveEventBus'
+export { generateProactiveMessages, generateContextSuggestions as generateContextCandidates } from './services/proactiveMessageEngine'
+export type { ProactiveEngineInput } from './services/proactiveMessageEngine'
 
-// Legacy types kept for backward compatibility
+// ── Infrastructure Adapters ───────────────────────────────────────────
+export { LocalStorageProactiveMessageRepository, proactiveMessageDefaults, isInQuietHours as checkQuietHours, canSendNow, getMessagesForToday } from './infrastructure/proactive-message-storage'
+export type { ProactiveMessageRepositoryPort } from './ports/proactive-message-repository'
+
+// ── Utilities ─────────────────────────────────────────────────────────
+export { generateId } from './utils/id'
+export {
+  getTimeBasedGreeting,
+  getWelcomeMessage,
+  formatMessageTime,
+  generateQuickResponse,
+  DEFAULT_QUICK_ACTIONS,
+  ACTION_LABELS,
+} from './utils/chatHelpers'
+
+// ── UI Types (for backward compatibility with moved components) ───────
 export type {
-  ProactiveMessage as LegacyProactiveMessage,
-  ProactiveMessageSettings as LegacyProactiveMessageSettings,
+  ProactiveMessage,
+  ProactiveMessageCategory,
+  ProactiveMessageSettings,
   ChatMessage,
   ChatWidgetProps,
-  ContextSuggestion as LegacyContextSuggestion,
+  ContextSuggestion,
   QuickAction,
 } from './types'

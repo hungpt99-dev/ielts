@@ -128,7 +128,7 @@ export async function normalizeToLemma(word: string): Promise<string> {
   })
 
   if (result.error || !result.content) return clean
-  return result.content.trim().toLowerCase().replace(/[^a-z\-]/g, '') || clean
+  return result.content.trim().toLowerCase().replace(/[^a-z-]/g, '') || clean
 }
 
 export async function generateExample(word: string, topic?: string): Promise<{ data: VocabularyDetails | null; error: string | null }> {

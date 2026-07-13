@@ -1,8 +1,8 @@
 import React, { useEffect, useCallback, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import type { ChatWidgetProps, ChatMessage, ContextSuggestion } from '../types'
-import { MessageStorage } from '../services/messageStorage'
-import { useChatWidget } from '../hooks/useChatWidget'
+import type { ChatWidgetProps, ChatMessage, ContextSuggestion } from '@ielts/ai-tutor-engine'
+import { MessageStorage } from '@ielts/ai-tutor-engine'
+import { useChatWidget } from '../../hooks/useChatWidget'
 import { ChatBubble } from './ChatBubble'
 import { QuickActions } from './QuickActions'
 import { NotificationCenter } from './NotificationCenter'
@@ -11,9 +11,9 @@ import { MissingKeyBanner } from './MissingKeyBanner'
 import { TypingIndicator } from './TypingIndicator'
 import { WelcomeState } from './WelcomeState'
 import { ChatStyles } from './ChatStyles'
-import { useExitAnimation } from './useExitAnimation'
+import { useExitAnimation } from '../../hooks/useExitAnimation'
 import { ContextSuggestionCard } from './ContextSuggestionCard'
-import { IconBell, IconDelete, IconClose, IconSend } from '../../../ui/src/icons/IconMap'
+import { IconBell, IconDelete, IconClose, IconSend } from '@ielts/ui'
 
 const DEFAULT_QUICK_PROMPTS = [
   { label: 'Quiz me', action: 'quiz-me' },
@@ -33,7 +33,7 @@ export { MissingKeyBanner } from './MissingKeyBanner'
 export { TypingIndicator } from './TypingIndicator'
 export { WelcomeState } from './WelcomeState'
 export { ChatStyles } from './ChatStyles'
-export { useExitAnimation } from './useExitAnimation'
+export { useExitAnimation } from '../../hooks/useExitAnimation'
 export { ContextSuggestionCard } from './ContextSuggestionCard'
 
 export function ChatWidget({

@@ -1,7 +1,7 @@
-import type { ChatMessage } from '../types'
-import { formatMessageTime } from '../hooks/useProactiveMessages'
+import type { ChatMessage } from '@ielts/ai-tutor-engine'
+import { formatMessageTime } from '../../hooks/useProactiveMessages'
 import { TutorAvatar } from './TutorAvatar'
-import { IconEdit, IconCopy, IconThumbsUp, IconThumbsDown, IconUser } from '../../../ui/src/icons/IconMap'
+import { IconEdit, IconCopy, IconThumbsUp, IconThumbsDown, IconUser } from '@ielts/ui'
 
 interface ChatBubbleProps {
   message: ChatMessage

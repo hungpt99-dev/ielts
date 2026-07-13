@@ -1,12 +1,5 @@
+import type { VerbConjugation } from '@ielts/shared'
 import { openDB, STORE_NAMES } from './db'
-
-export interface VerbConjugation {
-  base: string
-  pastSimple: string
-  pastParticiple: string
-  presentParticiple: string
-  thirdPersonSingular: string
-}
 
 export interface ExtensionVocabEntry {
   id: string

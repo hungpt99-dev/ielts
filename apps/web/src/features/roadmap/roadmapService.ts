@@ -2,6 +2,21 @@ import type { TaskEntry, AppSettings, StudyGoal } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import { loadAppSettings } from '../../services/storage/SettingsStorage'
 import { SKILL_TO_CATEGORY } from './constants'
+import { getLearningEngine } from '../../services/engineBootstrap'
+import type { RoadmapLearningTask } from '@ielts/learning-engine'
+
+const CATEGORY_TO_SKILL: Record<string, 'listening' | 'reading' | 'writing' | 'speaking' | 'grammar' | 'vocabulary'> = {
+  Vocabulary: 'vocabulary',
+  Reading: 'reading',
+  Listening: 'listening',
+  'Writing Task 1': 'writing',
+  'Writing Task 2': 'writing',
+  'Speaking Part 1': 'speaking',
+  'Speaking Part 2': 'speaking',
+  'Speaking Part 3': 'speaking',
+  Grammar: 'grammar',
+  'Mock Test': 'reading',
+}
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
@@ -651,16 +666,46 @@ export async function toggleTask(roadmap: RoadmapData, phaseIndex: number, weekI
   const day = roadmap.phases[phaseIndex].weeks[weekIndex].days[dayIndex]
   const taskId = day.taskIds[taskIndex]
 
-  try {
-    const dbTask = await DatabaseService.getById<TaskEntry>('tasks', taskId)
-    if (dbTask) {
-      await DatabaseService.update('tasks', taskId, {
-        isDone: !dbTask.isDone,
-        completedAt: dbTask.isDone ? null : new Date().toISOString(),
-      } as Partial<TaskEntry>)
+  const dbTask = await DatabaseService.getById<TaskEntry>('tasks', taskId)
+  if (!dbTask) throw new Error('Task not found')
+
+  const nowDone = !dbTask.isDone
+
+  await DatabaseService.update('tasks', taskId, {
+    isDone: nowDone,
+    completedAt: nowDone ? new Date().toISOString() : null,
+  } as Partial<TaskEntry>)
+
+  if (nowDone) {
+    const engine = getLearningEngine()
+    if (engine) {
+      const skill = CATEGORY_TO_SKILL[dbTask.category] ?? 'reading'
+      const roadmapTask: RoadmapLearningTask = {
+        roadmapId: roadmap.phases[phaseIndex]?.id ?? '',
+        phaseId: roadmap.phases[phaseIndex]?.id ?? '',
+        weekId: roadmap.phases[phaseIndex]?.weeks[weekIndex]?.id ?? '',
+        taskId,
+        skill: skill as any,
+        taskType: dbTask.category.toLowerCase(),
+        objective: dbTask.title,
+        reason: `Roadmap task: ${dbTask.title}`,
+        scheduledDate: dbTask.date,
+        estimatedMinutes: dbTask.timeMinutes || 20,
+        priority: 'normal',
+        sourceType: 'roadmap',
+      }
+      try {
+        const sessionResult = await engine.createSessionFromRoadmapTask(roadmapTask)
+        if (sessionResult.status === 'success') {
+          await engine.completeSession({
+            sessionId: sessionResult.data.session.id,
+            actualMinutes: 0,
+            hintCount: 0,
+            correlationId: taskId,
+          })
+        }
+      } catch { /* engine recording is best-effort */ }
     }
-  } catch (err) {
-    throw err
   }
 
   const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
