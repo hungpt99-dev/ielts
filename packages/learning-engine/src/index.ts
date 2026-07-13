@@ -6,6 +6,17 @@
 // ── Learning Engine Facade (NEW) ─────────────────────────────────────
 export { createLearningEngine } from './orchestration/create-engine'
 export type { LearningEngine, LearningEngineDependencies } from './orchestration'
+export type { AdaptDifficultyRequest, AdaptDifficultyResult, GenerateReviewRequest, GenerateReviewResult, CreateContentSessionRequest } from './orchestration/learning-engine-facade'
+
+// ── Application Use Cases (NEW) ──────────────────────────────────────
+export { createLearningSession } from './application/sessions/create-learning-session'
+export { resumeLearningSession } from './application/sessions/resume-learning-session'
+export { completeLearningSession } from './application/sessions/complete-learning-session'
+export { generateLearningActivity } from './application/activities/generate-learning-activity'
+export { startAttempt } from './application/attempts/start-attempt'
+export { submitAnswer } from './application/attempts/submit-answer'
+export { adaptDifficulty } from './application/adaptation/adapt-difficulty'
+export { generateMistakeReview } from './application/review/generate-mistake-review'
 
 // ── Domain Entities (NEW) ────────────────────────────────────────────
 export type {
