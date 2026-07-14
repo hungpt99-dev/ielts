@@ -598,11 +598,14 @@ async function enrichPlanWithAI(
     }
 
     const planTasks = [...plan.tasks]
+    console.log('[AIEnrich] Enriching... candidates:', enrichment.taskCandidates.length, 'planTasks:', planTasks.length)
+    let matched = 0
     for (const candidate of enrichment.taskCandidates) {
       const match = planTasks.find(
         t => t.weekId === candidate.targetWeekId && t.skill === candidate.skill && t.sourceType === 'built-in',
       )
       if (match) {
+        matched++
         match.title = candidate.title
         match.description = candidate.description
         match.objective = candidate.objective
@@ -616,6 +619,7 @@ async function enrichPlanWithAI(
         }
       }
     }
+    console.log('[AIEnrich] Matched', matched, 'of', enrichment.taskCandidates.length, 'candidates')
 
     return { ...plan, tasks: planTasks }
   } catch (err) {
