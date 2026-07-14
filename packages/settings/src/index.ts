@@ -26,6 +26,6 @@ export {
   translationTarget,
 } from './utils'
 
-export { UserSettingsRepository } from './repository'
+export type { UserSettingsRepository } from './repository'
 
 export { migrateFromLegacySettings } from './migration'
