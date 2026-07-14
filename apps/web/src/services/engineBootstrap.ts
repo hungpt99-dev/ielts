@@ -275,7 +275,23 @@ function createDependencyRepos() {
  return null }
       },
       async save(attempt: any) {
-        try { await DatabaseService.safePut('readingPracticeSessions', attempt) } catch (error) {
+        try {
+          await DatabaseService.safePut('readingPracticeSessions', {
+            id: attempt.id,
+            passageId: attempt.passageId ?? attempt.exerciseId ?? '',
+            title: attempt.title ?? 'Practice Session',
+            topic: attempt.topic ?? 'general',
+            passageText: attempt.passageText ?? '',
+            questions: attempt.questions ?? [],
+            answers: Array.isArray(attempt.answers) ? Object.fromEntries(attempt.answers.map((a: any, i: number) => [`${i}`, a])) : (attempt.answers ?? {}),
+            score: attempt.score ?? 0,
+            totalQuestions: attempt.totalQuestions ?? 0,
+            accuracy: attempt.accuracy ?? 0,
+            timeSpentSeconds: attempt.timeSpentSeconds ?? 0,
+            mistakes: attempt.mistakes ?? [],
+            createdAt: attempt.createdAt ?? new Date().toISOString(),
+          })
+        } catch (error) {
       console.error('apps/web/src/services/engineBootstrap.ts error:', error);
         }
       },
