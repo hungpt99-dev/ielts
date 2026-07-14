@@ -521,8 +521,8 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
     overrides: { planStartDate: today },
   })
 
-  console.log('[RoadmapGen] Engine plan result status:', result.status)
   const result = engine.generatePlan(profile)
+  console.log('[RoadmapGen] Engine plan result status:', result.status)
 
   if (result.status === 'success') {
     console.log('[RoadmapGen] Plan generated, enriching with AI...')
