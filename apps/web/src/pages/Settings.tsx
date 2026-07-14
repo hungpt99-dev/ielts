@@ -155,7 +155,18 @@ export default function Settings() {
   const { mode: themeMode, accentColor, setMode: setThemeMode, setAccentColor } = useTheme()
 
   const [activeSection, setActiveSection] = useState('goal')
-  const [form, setForm] = useState({ ...settings })
+  const initialForm = {
+    ...settings,
+    targetBand: settings.study?.targetBand,
+    currentBand: settings.study?.currentBand,
+    examDate: settings.study?.examDate,
+    dailyStudyMinutes: settings.study?.dailyStudyMinutes,
+    weakSkills: settings.study?.weakSkills ?? [],
+    studyGoal: settings.study?.studyGoal,
+    preferredSchedule: settings.study?.preferredSchedule,
+    studyReminder: 'Time to study IELTS!',
+  }
+  const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState<FormErrors>({})
   const [dirty, setDirty] = useState(false)
   const [notifications, setNotifications] = useState<NotificationPrefs>(loadNotificationPrefs)
