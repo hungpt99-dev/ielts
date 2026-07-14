@@ -316,7 +316,29 @@ function createDependencyRepos() {
  return null }
       },
       async save(exercise: any) {
-        try { await DatabaseService.safePut('readingExercises', exercise) } catch (error) {
+        try {
+          await DatabaseService.safePut('readingExercises', {
+            id: exercise.id,
+            title: exercise.title ?? 'Exercise',
+            description: exercise.description ?? '',
+            skill: exercise.skill ?? 'reading',
+            topic: exercise.topic ?? 'general',
+            source: exercise.source ?? 'ai-generated',
+            difficulty: exercise.difficulty ?? 'intermediate',
+            content: typeof exercise.content === 'string' ? exercise.content : JSON.stringify(exercise.content ?? ''),
+            questions: Array.isArray(exercise.questions) ? JSON.stringify(exercise.questions) : (exercise.questions ?? '[]'),
+            totalPoints: exercise.totalPoints ?? 0,
+            estimatedMinutes: exercise.estimatedMinutes ?? 0,
+            status: exercise.status ?? 'published',
+            tags: exercise.tags ?? [],
+            sourceId: exercise.sourceId,
+            contentVersion: exercise.contentVersion,
+            metadata: typeof exercise.metadata === 'string' ? exercise.metadata : JSON.stringify(exercise.metadata ?? {}),
+            isFavorite: exercise.isFavorite ?? false,
+            createdAt: exercise.createdAt ?? new Date().toISOString(),
+            updatedAt: exercise.updatedAt ?? new Date().toISOString(),
+          })
+        } catch (error) {
       console.error('apps/web/src/services/engineBootstrap.ts error:', error);
         }
       },
