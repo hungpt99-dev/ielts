@@ -113,7 +113,7 @@ export default function ProactiveTutorSettings() {
         <CardContent className="space-y-6">
           <ToggleSwitch
             label="Enable Proactive Tutor"
-            checked={settings.enabled}
+            enabled={settings.enabled}
             onChange={(v: boolean) => handleChange({ enabled: v })}
           />
 
@@ -123,7 +123,7 @@ export default function ProactiveTutorSettings() {
               <ToggleSwitch
                 key={cat}
                 label={CATEGORY_LABELS[cat] ?? cat}
-                checked={settings.categories[cat] ?? true}
+                enabled={settings.categories[cat] ?? true}
                 onChange={(v: boolean) => handleChange({
                   categories: { ...settings.categories, [cat]: v },
                 })}
@@ -155,11 +155,11 @@ export default function ProactiveTutorSettings() {
 
           <div className="space-y-3">
             <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Reminders</p>
-            <ToggleSwitch label="Exam reminders" checked={settings.examReminders} onChange={(v: boolean) => handleChange({ examReminders: v })} />
-            <ToggleSwitch label="Inactivity reminders" checked={settings.inactivityReminders} onChange={(v: boolean) => handleChange({ inactivityReminders: v })} />
-            <ToggleSwitch label="Vocabulary reminders" checked={settings.vocabularyReminders} onChange={(v: boolean) => handleChange({ vocabularyReminders: v })} />
-            <ToggleSwitch label="Roadmap reminders" checked={settings.roadmapReminders} onChange={(v: boolean) => handleChange({ roadmapReminders: v })} />
-            <ToggleSwitch label="Motivation messages" checked={settings.motivationMessages} onChange={(v: boolean) => handleChange({ motivationMessages: v })} />
+            <ToggleSwitch label="Exam reminders" enabled={settings.examReminders} onChange={(v: boolean) => handleChange({ examReminders: v })} />
+            <ToggleSwitch label="Inactivity reminders" enabled={settings.inactivityReminders} onChange={(v: boolean) => handleChange({ inactivityReminders: v })} />
+            <ToggleSwitch label="Vocabulary reminders" enabled={settings.vocabularyReminders} onChange={(v: boolean) => handleChange({ vocabularyReminders: v })} />
+            <ToggleSwitch label="Roadmap reminders" enabled={settings.roadmapReminders} onChange={(v: boolean) => handleChange({ roadmapReminders: v })} />
+            <ToggleSwitch label="Motivation messages" enabled={settings.motivationMessages} onChange={(v: boolean) => handleChange({ motivationMessages: v })} />
           </div>
 
           <div className="flex flex-wrap gap-3 pt-2">
