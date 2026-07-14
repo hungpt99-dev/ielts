@@ -16,6 +16,8 @@ export const STORAGE_KEYS = {
     roadmap: 'ielts-roadmap' as const,
     tutorMemoryPrefix: 'tutor-memory-' as const,
     apiKeyPrefix: 'ielts-api-key-' as const,
+    proactiveSettings: 'ielts-proactive-settings' as const,
+    proactiveSettingsV3: 'ielts-proactive-settings-v3' as const,
   },
   extensionLocal: {
     extensionSettings: 'extensionSettings' as const,

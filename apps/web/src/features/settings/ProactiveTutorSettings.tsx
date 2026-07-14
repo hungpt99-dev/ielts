@@ -5,8 +5,8 @@ import Select from '../../components/ui/Select'
 import Input from '../../components/ui/Input'
 import type { ProactiveMessageSettings } from '@ielts/ai-tutor-engine'
 import type { TutorTone, ReminderFrequency } from '../aiTutor/hooks/useProactiveSettings'
-
-const SETTINGS_KEY = 'ielts-proactive-settings'
+import { STORAGE_KEYS } from '@ielts/config'
+const SETTINGS_KEY = STORAGE_KEYS.localStorage.proactiveSettings
 
 const DEFAULT_SETTINGS: ProactiveMessageSettings = {
   enabled: true,

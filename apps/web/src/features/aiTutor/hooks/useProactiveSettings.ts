@@ -22,7 +22,8 @@ export interface ProactiveMessageSettings extends EngineProactiveMessageSettings
   updatedAt: string
 }
 
-export const SETTINGS_KEY = 'ielts-proactive-settings-v3'
+import { STORAGE_KEYS } from '@ielts/config'
+export const SETTINGS_KEY = STORAGE_KEYS.localStorage.proactiveSettingsV3
 
 export const CATEGORY_LABELS: Record<ProactiveMessageCategory, string> = {
   'vocabulary-review': 'Vocabulary Review',
