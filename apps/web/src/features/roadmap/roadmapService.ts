@@ -1,7 +1,17 @@
 import type { TaskEntry, StudyGoal } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 
-import { STORAGE_KEYS, DEFAULT_APP_CONFIG, AI_PROVIDER_DEFINITIONS } from '@ielts/config'
+import {
+  STORAGE_KEYS,
+  DEFAULT_APP_CONFIG,
+  AI_PROVIDER_DEFINITIONS,
+  DEFAULT_AI_API_URL,
+  DEFAULT_TARGET_BAND,
+  DEFAULT_CURRENT_BAND,
+  DEFAULT_DAILY_STUDY_MINUTES,
+  DEFAULT_STUDY_GOAL,
+  DEFAULT_SCHEDULE,
+} from '@ielts/config'
 import { SKILL_TO_CATEGORY } from './constants'
 import { getLearningEngine } from '../../services/engineBootstrap'
 import type { RoadmapLearningTask } from '@ielts/learning-engine'
@@ -494,13 +504,13 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
   const defaultedExamDate = (study?.examDate as string) || (s.examDate as string) || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
   const profile = buildNormalizedProfile({
     settings: {
-      targetBand: (study?.targetBand as number) ?? (s.targetBand as number) ?? 7.0,
-      currentBand: (study?.currentBand as number) ?? (s.currentBand as number) ?? 5.5,
+      targetBand: (study?.targetBand as number) ?? (s.targetBand as number) ?? DEFAULT_TARGET_BAND,
+      currentBand: (study?.currentBand as number) ?? (s.currentBand as number) ?? DEFAULT_CURRENT_BAND,
       examDate: defaultedExamDate,
-      dailyStudyMinutes: (study?.dailyStudyMinutes as number) ?? (s.dailyStudyMinutes as number) ?? 60,
-      weakSkills: (study?.weakSkills as string[]) ?? (s.weakSkills as string[]) ?? [],
-      studyGoal: (study?.studyGoal as string) ?? (s.studyGoal as string) ?? 'academic',
-      preferredSchedule: (study?.preferredSchedule as string[]) ?? (s.preferredSchedule as string[]) ?? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+      dailyStudyMinutes: (study?.dailyStudyMinutes as number) ?? (s.dailyStudyMinutes as number) ?? DEFAULT_DAILY_STUDY_MINUTES,
+      weakSkills: (study?.weakSkills as string[]) ?? (s.weakSkills as string[]) ?? [...DEFAULT_WEAK_SKILLS],
+      studyGoal: (study?.studyGoal as string) ?? (s.studyGoal as string) ?? DEFAULT_STUDY_GOAL,
+      preferredSchedule: (study?.preferredSchedule as string[]) ?? (s.preferredSchedule as string[]) ?? [...DEFAULT_SCHEDULE],
       aiEnabled: (s.aiEnabled as boolean) ?? !!(s.aiApiKey || (s.ai as Record<string, unknown>)?.apiKey),
       aiProvider: (s.aiProvider as string) ?? (s.ai as Record<string, unknown>)?.providerId as string ?? 'openai',
       aiApiKey: (s.aiApiKey as string) ?? (s.ai as Record<string, unknown>)?.apiKey as string ?? '',
@@ -512,8 +522,8 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
 
   if (result.status === 'success') {
     const enriched = await enrichPlanWithAI(result.plan, profile, settings)
-    const resolvedCurrentBand = (study?.currentBand as number) ?? (s.currentBand as number) ?? 5.5
-    const resolvedTargetBand = (study?.targetBand as number) ?? (s.targetBand as number) ?? 7.0
+    const resolvedCurrentBand = (study?.currentBand as number) ?? (s.currentBand as number) ?? DEFAULT_CURRENT_BAND
+    const resolvedTargetBand = (study?.targetBand as number) ?? (s.targetBand as number) ?? DEFAULT_TARGET_BAND
     const roadmap = await studyPlanToRoadmapData(enriched, resolvedCurrentBand, resolvedTargetBand)
     saveRoadmap(roadmap)
     return roadmap
@@ -548,7 +558,7 @@ async function enrichPlanWithAI(
 
     const config = {
       apiKey,
-      baseUrl: (ai.customApiUrl as string) || (settings.aiBaseUrl as string) || AI_PROVIDER_DEFINITIONS[providerId as keyof typeof AI_PROVIDER_DEFINITIONS]?.defaultApiUrl || 'https://api.openai.com/v1',
+      baseUrl: (ai.customApiUrl as string) || (settings.aiBaseUrl as string) || AI_PROVIDER_DEFINITIONS[providerId as keyof typeof AI_PROVIDER_DEFINITIONS]?.defaultApiUrl || DEFAULT_AI_API_URL,
       model: (ai.model as string) || (settings.aiModel as string) || DEFAULT_APP_CONFIG.ai.defaultModel,
     }
 

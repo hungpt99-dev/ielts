@@ -15,7 +15,16 @@ export {
   DEFAULT_AI_MAX_RETRIES,
   DEFAULT_AI_TEMPERATURE,
   DEFAULT_AI_MODEL,
+  DEFAULT_AI_API_URL,
   AI_PROVIDER_IDS,
 } from './ai'
 export { type YouTubeInfrastructureConfig, YOUTUBE_INFRA_CONFIG } from './youtube'
 export { CORS_PROXY_URL, INFRASTRUCTURE_URLS } from './infrastructure'
+export {
+  DEFAULT_TARGET_BAND,
+  DEFAULT_CURRENT_BAND,
+  DEFAULT_DAILY_STUDY_MINUTES,
+  DEFAULT_STUDY_GOAL,
+  DEFAULT_WEAK_SKILLS,
+  DEFAULT_SCHEDULE,
+} from './study-defaults'

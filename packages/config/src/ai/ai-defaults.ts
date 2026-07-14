@@ -7,3 +7,5 @@ export const AI_PROVIDER_IDS = [
   'openai', 'claude', 'gemini', 'deepseek',
   'openrouter', 'groq', 'local', 'custom',
 ] as const
+
+export const DEFAULT_AI_API_URL = 'https://api.openai.com/v1'
