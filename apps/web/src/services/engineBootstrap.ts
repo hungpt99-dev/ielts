@@ -57,19 +57,18 @@ function mapNativeLanguage(lang: string | undefined): string {
 
 function createAiCredentialProvider(): AiCredentialProvider {
   return {
-    async getCredential(providerId) {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
-        if (!raw) return undefined
-        const config = JSON.parse(raw)
-        if (providerId !== 'openai') {
+      async getCredential(providerId) {
+        try {
           const key = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${providerId}`)
-          return key ? { apiKey: key } : undefined
-        }
-        const key = config?.aiApiKey || config?.ai?.apiKey
-        return key ? { apiKey: key } : undefined
-      } catch { return undefined }
-    },
+          if (key) return { apiKey: key }
+          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+          if (!raw) return undefined
+          const config = JSON.parse(raw)
+          const flatKey = config?.aiApiKey
+          if (flatKey) return { apiKey: flatKey }
+          return undefined
+        } catch { return undefined }
+      },
     async storeCredential() {},
     async clearCredential() {},
   }
