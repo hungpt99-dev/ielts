@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useConfiguration } from '../configSlice'
+import { AI_PROVIDER_DEFINITIONS, getVisibleProviders } from '@ielts/config'
+import type { AiProviderId } from '@ielts/config'
 import type {
   AiProviderConfig,
-  AiProviderType,
   AiTutorConfig,
   ExplanationStyle,
   CorrectionStrictness,
@@ -21,17 +22,6 @@ import Textarea from '../../../components/ui/Textarea'
 import Select from '../../../components/ui/Select'
 import ToggleSwitch from '../../../components/ui/ToggleSwitch'
 import Button from '../../../components/ui/Button'
-
-const PROVIDER_TYPE_OPTIONS: { value: AiProviderType; label: string }[] = [
-  { value: 'openai', label: 'OpenAI' },
-  { value: 'claude', label: 'Claude (Anthropic)' },
-  { value: 'gemini', label: 'Google Gemini' },
-  { value: 'deepseek', label: 'DeepSeek' },
-  { value: 'openrouter', label: 'OpenRouter' },
-  { value: 'groq', label: 'Groq' },
-  { value: 'local', label: 'Local AI' },
-  { value: 'custom', label: 'Custom API Compatible' },
-]
 
 const EXPLANATION_STYLE_OPTIONS: { value: ExplanationStyle; label: string }[] = [
   { value: 'simple', label: 'Simple' },
@@ -78,24 +68,14 @@ const PRIVACY_LEVEL_OPTIONS: { value: PrivacyLevel; label: string }[] = [
   { value: 'local-with-analytics', label: 'Local with Anonymous Analytics' },
 ]
 
-function createDefaultProvider(type: AiProviderType = 'openai'): AiProviderConfig {
-  const defaults: Record<AiProviderType, { baseUrl: string; model: string }> = {
-    openai: { baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini' },
-    claude: { baseUrl: 'https://api.anthropic.com/v1', model: 'claude-sonnet-4-20250514' },
-    gemini: { baseUrl: 'https://generativelanguage.googleapis.com/v1beta', model: 'gemini-2.0-flash' },
-    deepseek: { baseUrl: 'https://api.deepseek.com', model: 'deepseek-chat' },
-    openrouter: { baseUrl: 'https://openrouter.ai/api/v1', model: 'openai/gpt-4o-mini' },
-    groq: { baseUrl: 'https://api.groq.com/openai/v1', model: 'llama-3.3-70b-versatile' },
-    local: { baseUrl: 'http://localhost:11434/v1', model: 'llama3' },
-    custom: { baseUrl: '', model: '' },
-  }
-  const preset = defaults[type]
+function createDefaultProvider(type: AiProviderId = 'openai'): AiProviderConfig {
+  const def = AI_PROVIDER_DEFINITIONS[type]
   return {
     providerId: `provider-${type}-${Date.now()}`,
     provider: type,
     apiKey: '',
-    baseUrl: preset.baseUrl,
-    model: preset.model,
+    baseUrl: def.defaultApiUrl ?? '',
+    model: def.defaultModel ?? '',
     temperature: 0.7,
     maxTokens: 2048,
     systemPrompt: '',
@@ -272,6 +252,8 @@ export default function AdvancedSettingsForm() {
     [providerIds, activeProviderId, config.advanced.providers],
   )
 
+  const availableProviders = useMemo(() => getVisibleProviders(), [])
+
   const providerSelectOptions = useMemo(
     () =>
       providerIds.map(id => ({
@@ -320,9 +302,12 @@ export default function AdvancedSettingsForm() {
               label="Provider Type"
               value={providerForm.provider}
               onChange={e =>
-                updateProviderField('provider', e.target.value as AiProviderType)
+                updateProviderField('provider', e.target.value as AiProviderId)
               }
-              options={PROVIDER_TYPE_OPTIONS}
+              options={availableProviders.map(p => ({
+                value: p.id,
+                label: p.displayName,
+              }))}
             />
             <Input
               label="Model"
