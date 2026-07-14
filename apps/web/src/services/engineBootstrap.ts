@@ -2,6 +2,7 @@ import { createAITutorEngine } from '@ielts/ai-tutor-engine'
 import type { AITutorEngine, AITutorEngineDependencies } from '@ielts/ai-tutor-engine'
 import type { TutorAIClient } from '@ielts/ai-tutor-engine'
 import { callAI, AiConfigurationResolver } from '@ielts/ai'
+import type { AiCredentialProvider, ResolvedAiConnectionConfig } from '@ielts/ai'
 import type { AiUserSettings } from '@ielts/settings'
 import { DEFAULT_APP_CONFIG, AI_PROVIDER_DEFINITIONS, STORAGE_KEYS } from '@ielts/config'
 import { LearnerContextBuilder } from '@ielts/ai-tutor-engine'
@@ -18,50 +19,57 @@ let learningEngineInstance: LearningEngine | null = null
 
 const systemClock = new SystemClock()
 
-function createAIClient(): TutorAIClient {
-  const resolver = new AiConfigurationResolver(
-    {
-      async getCredential() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
-          if (!raw) return undefined
-          const config = JSON.parse(raw)
-          if (config?.ai?.providerId && config.ai.providerId !== 'openai') {
-            const key = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${config.ai.providerId}`)
-            return key ? { apiKey: key } : undefined
-          }
-          const parsed = JSON.parse(raw)
-          const key = parsed?.aiApiKey || parsed?.ai?.apiKey
+function createAiCredentialProvider(): AiCredentialProvider {
+  return {
+    async getCredential(providerId) {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+        if (!raw) return undefined
+        const config = JSON.parse(raw)
+        if (providerId !== 'openai') {
+          const key = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${providerId}`)
           return key ? { apiKey: key } : undefined
-        } catch { return undefined }
-      },
-      async storeCredential() {},
-      async clearCredential() {},
+        }
+        const key = config?.aiApiKey || config?.ai?.apiKey
+        return key ? { apiKey: key } : undefined
+      } catch { return undefined }
     },
+    async storeCredential() {},
+    async clearCredential() {},
+  }
+}
+
+async function resolveAiConfig(): Promise<ResolvedAiConnectionConfig> {
+  const resolver = new AiConfigurationResolver(
+    createAiCredentialProvider(),
     DEFAULT_APP_CONFIG.ai,
   )
 
-  let resolvedConfigCache: import('@ielts/ai').ResolvedAiConnectionConfig | null = null
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+    const userSettings: AiUserSettings = raw
+      ? { providerId: 'openai', ...JSON.parse(raw)?.ai }
+      : { providerId: 'openai' }
+    return await resolver.resolve(userSettings)
+  } catch {
+    return {
+      providerId: 'openai',
+      adapterType: 'openai-compatible',
+      apiUrl: AI_PROVIDER_DEFINITIONS.openai.defaultApiUrl ?? '',
+      model: DEFAULT_APP_CONFIG.ai.defaultModel,
+      timeoutMs: DEFAULT_APP_CONFIG.ai.timeoutMs,
+      maxRetries: DEFAULT_APP_CONFIG.ai.maxRetries,
+      temperature: DEFAULT_APP_CONFIG.ai.temperature,
+    }
+  }
+}
+
+function createAIClient(): TutorAIClient {
+  let resolvedConfigCache: ResolvedAiConnectionConfig | null = null
 
   async function getResolvedConfig() {
     if (resolvedConfigCache) return resolvedConfigCache
-    try {
-      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
-      const userSettings: AiUserSettings = raw
-        ? { providerId: 'openai', ...JSON.parse(raw)?.ai }
-        : { providerId: 'openai' }
-      resolvedConfigCache = await resolver.resolve(userSettings)
-    } catch {
-      resolvedConfigCache = {
-        providerId: 'openai',
-        adapterType: 'openai-compatible',
-        apiUrl: 'https://api.openai.com/v1',
-        model: DEFAULT_APP_CONFIG.ai.defaultModel,
-        timeoutMs: DEFAULT_APP_CONFIG.ai.timeoutMs,
-        maxRetries: DEFAULT_APP_CONFIG.ai.maxRetries,
-        temperature: DEFAULT_APP_CONFIG.ai.temperature,
-      }
-    }
+    resolvedConfigCache = await resolveAiConfig()
     return resolvedConfigCache
   }
 
@@ -561,27 +569,16 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
   try {
     const repos = createDependencyRepos()
 
-    function readConfigFromSettings() {
+    async function readConfigFromSettings() {
       try {
-        const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
-        if (!raw) return { apiKey: '', baseUrl: 'https://api.openai.com/v1', model: DEFAULT_APP_CONFIG.ai.defaultModel }
-        const config = JSON.parse(raw)
-        const aiSettings = config?.ai || {}
-        const providerId = aiSettings.providerId || 'openai'
-        let apiKey = ''
-        if (providerId !== 'openai') {
-          apiKey = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${providerId}`) || ''
-        } else {
-          apiKey = config.aiApiKey || ''
-        }
-        const providerDef = AI_PROVIDER_DEFINITIONS.find((p: any) => p.id === providerId)
+        const config = await resolveAiConfig()
         return {
-          apiKey,
-          baseUrl: aiSettings.customApiUrl || providerDef?.defaultApiUrl || 'https://api.openai.com/v1',
-          model: aiSettings.model || providerDef?.defaultModel || DEFAULT_APP_CONFIG.ai.defaultModel,
+          apiKey: config.apiKey ?? '',
+          baseUrl: config.apiUrl,
+          model: config.model,
         }
       } catch {
-        return { apiKey: '', baseUrl: 'https://api.openai.com/v1', model: DEFAULT_APP_CONFIG.ai.defaultModel }
+        return { apiKey: '', baseUrl: AI_PROVIDER_DEFINITIONS.openai.defaultApiUrl ?? '', model: DEFAULT_APP_CONFIG.ai.defaultModel }
       }
     }
 
@@ -591,7 +588,7 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
     learningEngineInstance = createLearningEngine({
       contextPort: {
         async buildLearningContext() {
-          const aiAvailable = !!readConfigFromSettings().apiKey
+          const aiAvailable = !!(await readConfigFromSettings()).apiKey
           return {
             generatedAt: new Date().toISOString(),
             learner: {
@@ -617,7 +614,7 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
         async getLearnerContext() { return null as any },
         async selectTeachingStrategy() { return { strategy: 'explain', reason: 'default' } },
         async generateEducationalContent(request: any) {
-          const cfg = readConfigFromSettings()
+          const cfg = await readConfigFromSettings()
           if (!cfg.apiKey) return { success: false, error: { code: 'ai_not_configured', message: 'No AI API key', recoverable: true } }
           try {
             const { callAI } = await import('@ielts/ai')
@@ -632,7 +629,7 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
  return { success: false, error: { code: 'ai_unavailable', message: 'AI unavailable', recoverable: true } } }
         },
         async evaluateOpenResponse(request: any) {
-          const cfg = readConfigFromSettings()
+          const cfg = await readConfigFromSettings()
           if (!cfg.apiKey) return { success: false, error: { code: 'ai_not_configured', message: 'No AI API key', recoverable: true } }
           try {
             const { callAI } = await import('@ielts/ai')
