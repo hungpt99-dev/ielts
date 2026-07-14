@@ -28,7 +28,6 @@ import type {
   PublicApiImportedContent,
   AppExportData,
 } from '../../models'
-import { clearAllLocalStorage } from './SettingsStorage'
 import { STORAGE_KEYS } from '@ielts/config'
 
 import { ValidationError } from '@ielts/storage'
@@ -141,6 +140,22 @@ export function getDb(): ReturnType<typeof getStorageDb> {
 export function destroyDb(): void {
   destroyStorageDb()
   dbInitialized = false
+}
+
+export function clearAllLocalStorage(): void {
+  const APP_PREFIX = 'ielts-'
+  const toRemove: string[] = []
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key && key.startsWith(APP_PREFIX)) {
+      toRemove.push(key)
+    }
+  }
+  for (const key of toRemove) {
+    try {
+      localStorage.removeItem(key)
+    } catch { /* ignore */ }
+  }
 }
 
 const repo = {

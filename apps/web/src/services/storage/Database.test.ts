@@ -7,7 +7,7 @@ import {
   getDb,
 } from './Database'
 import { isDbOpen } from '@ielts/storage'
-import { removeAppSettings } from './SettingsStorage'
+import { STORAGE_KEYS } from '@ielts/config'
 import type { TopicProgress } from '../../models'
 
 function makeTopicProgress(overrides: Partial<TopicProgress> = {}): TopicProgress {
@@ -36,7 +36,7 @@ function asRecord(item: TopicProgress): Record<string, unknown> {
 
 beforeEach(async () => {
   destroyDb()
-  removeAppSettings()
+  localStorage.removeItem(STORAGE_KEYS.localStorage.appSettings)
   const { getDb } = await import('./Database')
   const db = getDb()
   await db.open()
@@ -46,7 +46,7 @@ beforeEach(async () => {
 
 afterEach(() => {
   destroyDb()
-  removeAppSettings()
+  localStorage.removeItem(STORAGE_KEYS.localStorage.appSettings)
 })
 
 describe('TopicProgress data model validation', () => {

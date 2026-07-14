@@ -2,7 +2,7 @@ import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { DatabaseService } from '../../../services/storage/Database'
 import { STORAGE_KEYS } from '@ielts/config'
 import { getClient } from '../bridge/ExtensionBridgeClient'
-import type { VocabularyEntry, MistakeEntry, AppSettings, Artifact, ArtifactCategory } from '../../../models'
+import type { VocabularyEntry, MistakeEntry, Artifact, ArtifactCategory } from '../../../models'
 
 export interface SyncResult {
   success: boolean
@@ -38,7 +38,7 @@ function applySharedSettingsToWeb(ext: Record<string, unknown>): void {
   const darkMode = ext.themeMode === 'dark'
   const merged = {
     ...current,
-    aiProvider: (ext.aiProvider as AppSettings['aiProvider']) || current.aiProvider,
+    aiProvider: (ext.aiProvider as string) || current.aiProvider,
     aiModel: (ext.aiModel as string) || current.aiModel,
     aiBaseUrl: (ext.aiBaseUrl as string) || current.aiBaseUrl,
     aiEndpoint: (ext.aiBaseUrl as string) || current.aiEndpoint,

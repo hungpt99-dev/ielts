@@ -9,7 +9,6 @@ import type {
   MistakeEntry,
   MockTestEntry,
   ProgressRecord,
-  AppSettings,
 } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import { loadRoadmap, recalculateProgress } from '../roadmap/roadmapService'
@@ -444,7 +443,7 @@ export function loadProgressSnapshot(): ProgressSnapshot | null {
   }
 }
 
-export function getProgressForDashboard(snapshot: ProgressSnapshot, settings: AppSettings) {
+export function getProgressForDashboard(snapshot: ProgressSnapshot, settings: Record<string, unknown>) {
   const whatToStudy: string[] = []
 
   if (snapshot.weakSkills.length > 0) {

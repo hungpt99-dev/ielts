@@ -10,10 +10,6 @@ import {
   getDb,
   destroyDb,
 } from '../../services/storage/Database'
-import {
-  removeAppSettings,
-  saveAppSettings,
-} from '../../services/storage/SettingsStorage'
 
 const V1_TABLES = [
   'vocabulary', 'vocabularyReviews', 'tasks',
@@ -121,12 +117,12 @@ function createBackupData(overrides: Record<string, unknown> = {}): Record<strin
 
 beforeEach(() => {
   destroyDb()
-  removeAppSettings()
+  localStorage.removeItem(STORAGE_KEYS.localStorage.appSettings)
 })
 
 afterEach(() => {
   destroyDb()
-  removeAppSettings()
+  localStorage.removeItem(STORAGE_KEYS.localStorage.appSettings)
 })
 
 // ──────────────────────────────────────────────────
@@ -437,7 +433,7 @@ describe('Import partial failure recovery', () => {
 
 describe('Reset and clear operations', () => {
   it('resetAll clears all tables and settings', async () => {
-    saveAppSettings({} as never)
+    localStorage.setItem(STORAGE_KEYS.localStorage.appSettings, '{}')
     await DatabaseService.safeAdd('vocabulary', makeItem('vocabulary') as never)
     await DatabaseService.safeAdd('tasks', makeItem('tasks') as never)
     await DatabaseService.safeAdd('ieltsTopics', makeItem('ieltsTopics') as never)
@@ -453,7 +449,7 @@ describe('Reset and clear operations', () => {
   })
 
   it('clearAll clears all tables but leaves settings intact', async () => {
-    saveAppSettings({ targetBand: 9 } as never)
+    localStorage.setItem(STORAGE_KEYS.localStorage.appSettings, JSON.stringify({ targetBand: 9 }))
     await DatabaseService.safeAdd('vocabulary', makeItem('vocabulary') as never)
     await DatabaseService.safeAdd('writingPrompts', makeItem('writingPrompts') as never)
 

@@ -8,7 +8,7 @@ import {
   loadNotificationPrefs,
   saveNotificationPrefs,
   type NotificationPrefs,
-} from '../services/storage/SettingsStorage'
+} from '../services/storage/notificationPrefs'
 import { testConnection } from '../services/ai/testConnection'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'

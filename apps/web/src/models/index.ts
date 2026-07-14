@@ -52,50 +52,7 @@ export type QuestionType =
   | 'Matching Information'
 
 
-import type { AISettings } from '@ielts/settings'
-import { DEFAULT_AI_SETTINGS } from '@ielts/settings'
-
 export type StudyGoal = 'academic' | 'general'
-
-export interface AppSettings {
-  targetBand: number
-  currentBand: number
-  examDate: string
-  nativeLanguage: string
-  dailyStudyMinutes: number
-  weakSkills: string[]
-  preferredTopics: string[]
-  studyReminder: string
-  studyGoal: StudyGoal
-  preferredSchedule: ('mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')[]
-  aiApiKey: AISettings['aiApiKey']
-  aiProvider: AISettings['aiProvider']
-  aiBaseUrl: AISettings['aiBaseUrl']
-  aiEndpoint: string
-  aiModel: AISettings['aiModel']
-  darkMode: boolean
-  aiEnabled: boolean
-}
-
-export const DEFAULT_SETTINGS: AppSettings = {
-  targetBand: 7.0,
-  currentBand: 5.5,
-  examDate: '',
-  nativeLanguage: '',
-  dailyStudyMinutes: 60,
-  weakSkills: [],
-  preferredTopics: [],
-  studyReminder: 'Time to study IELTS!',
-  studyGoal: 'academic',
-  preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
-  aiApiKey: DEFAULT_AI_SETTINGS.aiApiKey,
-  aiProvider: DEFAULT_AI_SETTINGS.aiProvider,
-  aiBaseUrl: DEFAULT_AI_SETTINGS.aiBaseUrl,
-  aiEndpoint: '',
-  aiModel: DEFAULT_AI_SETTINGS.aiModel,
-  darkMode: false,
-  aiEnabled: false,
-}
 
 
 import type { VerbConjugation } from '@ielts/shared'
@@ -742,7 +699,7 @@ export interface MonthlyOverview {
 export interface AppExportData {
   version: number
   exportedAt: ISOString
-  settings: AppSettings
+  settings: Record<string, unknown>
   vocabulary: VocabularyEntry[]
   vocabularyReviews: VocabReviewEntry[]
   tasks: TaskEntry[]

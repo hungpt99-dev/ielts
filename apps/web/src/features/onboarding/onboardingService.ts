@@ -1,4 +1,4 @@
-import type { AppSettings, StudyGoal } from '../../models'
+import type { StudyGoal } from '../../models'
 
 import { DatabaseService } from '../../services/storage/Database'
 import { STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
@@ -40,7 +40,7 @@ export function isOnboardingComplete(): boolean {
   }
 }
 
-function generateRoadmapTasks(settings: AppSettings): Array<{
+function generateRoadmapTasks(settings: Record<string, unknown>): Array<{
   id: string
   title: string
   description: string
@@ -56,8 +56,9 @@ function generateRoadmapTasks(settings: AppSettings): Array<{
 }> {
   const tasks: ReturnType<typeof generateRoadmapTasks> = []
   const today = new Date()
-  const weakSkills = settings.weakSkills
-  const dailyMin = settings.dailyStudyMinutes
+  const s = settings as { weakSkills?: string[]; dailyStudyMinutes?: number }
+  const weakSkills = s.weakSkills ?? []
+  const dailyMin = s.dailyStudyMinutes ?? 60
   const needsWriting = weakSkills.some(s => s.toLowerCase().includes('writing'))
   const needsSpeaking = weakSkills.some(s => s.toLowerCase().includes('speaking'))
   const needsReading = weakSkills.some(s => s.toLowerCase().includes('reading'))
@@ -141,7 +142,7 @@ function generateRoadmapTasks(settings: AppSettings): Array<{
 }
 
 export async function completeOnboarding(data: OnboardingData): Promise<void> {
-  const settings: AppSettings = {
+  const settings: Record<string, unknown> = {
     targetBand: data.targetBand,
     currentBand: data.currentBand,
     examDate: data.examDate,

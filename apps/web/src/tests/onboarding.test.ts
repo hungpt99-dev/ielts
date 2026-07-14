@@ -46,28 +46,6 @@ vi.mock('../services/storage/Database', () => ({
   },
 }))
 
-vi.mock('../services/storage/SettingsStorage', () => ({
-  saveAppSettings: vi.fn(),
-  loadAppSettings: vi.fn(() => ({
-    targetBand: 7.0,
-    currentBand: 5.5,
-    examDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
-    dailyStudyMinutes: 60,
-    weakSkills: [],
-    preferredTopics: [],
-    studyReminder: 'Time to study IELTS!',
-    studyGoal: 'academic' as const,
-    preferredSchedule: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
-    aiApiKey: '',
-    aiProvider: 'openai' as const,
-    aiEndpoint: '',
-    aiModel: 'gpt-4o-mini',
-    darkMode: false,
-    aiEnabled: false,
-  })),
-  removeAppSettings: vi.fn(),
-}))
-
 beforeEach(() => {
   localStorageMock.clear()
   mockDbData.tasks = []

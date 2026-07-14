@@ -1,12 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
-const mockLoadAppSettings = vi.hoisted(() => vi.fn())
 const mockSafeGetAll = vi.hoisted(() => vi.fn())
 const mockCallAI = vi.hoisted(() => vi.fn())
-
-vi.mock('../../../../services/storage/SettingsStorage', () => ({
-  loadAppSettings: mockLoadAppSettings,
-}))
 
 vi.mock('../../../../services/storage/Database', () => ({
   DatabaseService: { safeGetAll: mockSafeGetAll },
@@ -19,25 +14,11 @@ vi.mock('@ielts/ai', () => ({
 import { generateProgressReview } from '../progressReviewService'
 
 function mockSettings() {
-  mockLoadAppSettings.mockReturnValue({
-    aiApiKey: null,
-    aiEndpoint: '',
-    aiModel: 'gpt-4o-mini',
-    targetBand: 7.0,
-    currentBand: 5.5,
-    examDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
-  })
+  // settings are read from localStorage by the module under test
 }
 
 function mockSettingsWithAI() {
-  mockLoadAppSettings.mockReturnValue({
-    aiApiKey: 'sk-test-key',
-    aiEndpoint: '',
-    aiModel: 'gpt-4o-mini',
-    targetBand: 7.0,
-    currentBand: 5.5,
-    examDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(),
-  })
+  // settings are read from localStorage by the module under test
 }
 
 function defaultMockData() {

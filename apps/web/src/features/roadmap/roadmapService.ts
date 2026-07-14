@@ -1,4 +1,4 @@
-import type { TaskEntry, AppSettings, StudyGoal } from '../../models'
+import type { TaskEntry, StudyGoal } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 
 import { STORAGE_KEYS, DEFAULT_APP_CONFIG } from '@ielts/config'
@@ -218,13 +218,14 @@ const TASK_TITLES: Record<string, string[]> = {
 
 const SKILL_NAMES = ['Vocabulary', 'Reading', 'Writing', 'Listening', 'Speaking', 'Grammar']
 
-function getStudyDates(settings: AppSettings): string[] {
+function getStudyDates(settings: Record<string, unknown>): string[] {
   const today = new Date()
-  const scheduleSet = new Set(settings.preferredSchedule.map(d => d.toLowerCase()))
-  const hasSchedule = scheduleSet.size > 0 && !settings.preferredSchedule.every(d => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].includes(d))
+  const s = settings as { preferredSchedule?: string[]; examDate?: string }
+  const scheduleSet = new Set((s.preferredSchedule ?? []).map(d => d.toLowerCase()))
+  const hasSchedule = scheduleSet.size > 0 && !(s.preferredSchedule ?? []).every(d => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].includes(d))
 
-  const endDate = settings.examDate ? new Date(settings.examDate.slice(0, 10) + 'T00:00:00') : new Date(today)
-  if (!settings.examDate || endDate <= today) {
+  const endDate = s.examDate ? new Date(s.examDate.slice(0, 10) + 'T00:00:00') : new Date(today)
+  if (!s.examDate || endDate <= today) {
     endDate.setDate(endDate.getDate() + 84)
   }
   const maxDays = Math.min(Math.ceil((endDate.getTime() - today.getTime()) / 86400000), 365)
@@ -253,8 +254,9 @@ function getTaskTitle(skillFocus: string, dayOffset: number): string {
   return titles[dayOffset % titles.length]
 }
 
-export async function generateRoadmap(settings: AppSettings, existingTasks: TaskEntry[]): Promise<RoadmapData> {
-  const weakSkills = settings.weakSkills.length > 0 ? settings.weakSkills : [...SKILL_NAMES]
+export async function generateRoadmap(settings: Record<string, unknown>, existingTasks: TaskEntry[]): Promise<RoadmapData> {
+  const s = settings as { weakSkills?: string[]; dailyStudyMinutes?: number }
+  const weakSkills = (s.weakSkills ?? []).length > 0 ? (s.weakSkills ?? []) : [...SKILL_NAMES]
   const studyDates = getStudyDates(settings)
   const numberOfPhases = getPhaseCount(studyDates.length)
   const daysPerPhase = Math.ceil(studyDates.length / numberOfPhases)
@@ -280,7 +282,7 @@ export async function generateRoadmap(settings: AppSettings, existingTasks: Task
       const days: RoadmapDay[] = []
       let weekDone = 0
 
-      const tasksPerDay = Math.max(1, Math.min(4, Math.round(settings.dailyStudyMinutes / 22)))
+      const tasksPerDay = Math.max(1, Math.min(4, Math.round((s.dailyStudyMinutes ?? 60) / 22)))
 
       for (let d = 0; d < weekDates.length; d++) {
         const dateStr = weekDates[d]
@@ -292,7 +294,7 @@ export async function generateRoadmap(settings: AppSettings, existingTasks: Task
           const skillFocus = skillsInPhase[globalTaskIdx % skillsInPhase.length]
           const objective = getDayObjective(skillFocus, globalTaskIdx)
           const taskTitle = getTaskTitle(skillFocus, globalTaskIdx)
-          const timeMinutes = Math.min(Math.round(settings.dailyStudyMinutes / tasksPerDay), 30)
+          const timeMinutes = Math.min(Math.round((s.dailyStudyMinutes ?? 60) / tasksPerDay), 30)
 
           const existing = existingByKey.get(dateStr + '|' + taskTitle)
           if (existing) {
@@ -420,7 +422,7 @@ export function loadRoadmap(): RoadmapData | null {
   }
 }
 
-async function loadUserSettings(): Promise<AppSettings | null> {
+async function loadUserSettings(): Promise<Record<string, unknown> | null> {
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
     return raw ? JSON.parse(raw) : null
@@ -475,25 +477,26 @@ export async function ensureRoadmap(): Promise<RoadmapData> {
   throw error
 }
 
-export async function generateRoadmapWithEngine(settings: AppSettings): Promise<RoadmapData> {
+export async function generateRoadmapWithEngine(settings: Record<string, unknown>): Promise<RoadmapData> {
   const { DailyPlanEngine, AiPlanOrchestrator, buildNormalizedProfile } = await import('@ielts/learning-engine')
   const { studyPlanToRoadmapData } = await import('./planConverter')
+  const s = settings as Record<string, unknown>
 
   const today = new Date().toISOString().split('T')[0]
   const engine = new DailyPlanEngine()
-  const defaultedExamDate = settings.examDate || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
+  const defaultedExamDate = (s.examDate as string) || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
   const profile = buildNormalizedProfile({
     settings: {
-      targetBand: settings.targetBand,
-      currentBand: settings.currentBand,
+      targetBand: s.targetBand as number,
+      currentBand: s.currentBand as number,
       examDate: defaultedExamDate,
-      dailyStudyMinutes: settings.dailyStudyMinutes,
-      weakSkills: settings.weakSkills,
-      studyGoal: settings.studyGoal,
-      preferredSchedule: settings.preferredSchedule,
-      aiEnabled: settings.aiEnabled,
-      aiProvider: settings.aiProvider,
-      aiApiKey: settings.aiApiKey,
+      dailyStudyMinutes: s.dailyStudyMinutes as number,
+      weakSkills: s.weakSkills as string[],
+      studyGoal: s.studyGoal as string,
+      preferredSchedule: s.preferredSchedule as string[],
+      aiEnabled: s.aiEnabled as boolean,
+      aiProvider: s.aiProvider as string,
+      aiApiKey: s.aiApiKey as string,
     },
     overrides: { planStartDate: today },
   })
@@ -502,7 +505,7 @@ export async function generateRoadmapWithEngine(settings: AppSettings): Promise<
 
   if (result.status === 'success') {
     const enriched = await enrichPlanWithAI(result.plan, profile, settings)
-    const roadmap = await studyPlanToRoadmapData(enriched, settings.currentBand, settings.targetBand)
+    const roadmap = await studyPlanToRoadmapData(enriched, s.currentBand as number, s.targetBand as number)
     saveRoadmap(roadmap)
     return roadmap
   }
@@ -520,13 +523,13 @@ export async function generateRoadmapWithEngine(settings: AppSettings): Promise<
 async function enrichPlanWithAI(
   plan: import('@ielts/learning-engine').StudyPlan,
   profile: import('@ielts/learning-engine').NormalizedProfile,
-  settings: AppSettings,
+  settings: Record<string, unknown>,
 ): Promise<import('@ielts/learning-engine').StudyPlan> {
   const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
   const userCfg = raw ? JSON.parse(raw) : {}
   const ai = (userCfg?.ai as Record<string, unknown>) ?? {}
-  const apiKey = (ai?.apiKey as string) ?? (userCfg?.aiApiKey as string) ?? ''
-  const hasAI = !!(settings.aiEnabled && apiKey)
+  const apiKey = (ai.apiKey as string) || ''
+  const hasAI = !!((settings.aiEnabled as boolean) && apiKey)
   if (!hasAI || plan.weeks.length === 0) return plan
 
   try {
@@ -738,20 +741,21 @@ export interface RoadmapUserProfile {
 }
 
 export function getRoadmapUserProfile(): RoadmapUserProfile | null {
-  let settings: AppSettings | null = null
+  let settings: Record<string, unknown> | null = null
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
     settings = raw ? JSON.parse(raw) : null
   } catch { settings = null }
   if (!settings) return null
+  const s = settings as Record<string, unknown>
   return {
-    targetBand: settings.targetBand,
-    currentBand: settings.currentBand,
-    examDate: settings.examDate,
-    dailyStudyMinutes: settings.dailyStudyMinutes,
-    weakSkills: settings.weakSkills,
-    studyGoal: settings.studyGoal,
-    preferredSchedule: settings.preferredSchedule,
+    targetBand: s.targetBand as number,
+    currentBand: s.currentBand as number,
+    examDate: s.examDate as string,
+    dailyStudyMinutes: s.dailyStudyMinutes as number,
+    weakSkills: s.weakSkills as string[],
+    studyGoal: s.studyGoal as string,
+    preferredSchedule: s.preferredSchedule as string[],
   }
 }
 

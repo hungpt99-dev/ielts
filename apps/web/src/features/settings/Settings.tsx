@@ -6,7 +6,7 @@ import {
   loadNotificationPrefs,
   saveNotificationPrefs,
   type NotificationPrefs,
-} from '../../services/storage/SettingsStorage'
+} from '../../services/storage/notificationPrefs'
 import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'
 import { DEFAULT_AI_MODEL } from '@ielts/config'
 import type { AppExportData } from '../../models'

@@ -14,7 +14,6 @@ export type {
   QuestionType,
   ReadingQuestionType,
   ListeningQuestionType,
-  AppSettings,
   VocabularyEntry,
   VocabReviewEntry,
   TaskEntry,
@@ -57,6 +56,4 @@ export type {
   AppExportData,
 } from '../models'
 
-export {
-  DEFAULT_SETTINGS,
-} from '../models'
+
