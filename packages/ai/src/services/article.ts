@@ -49,7 +49,7 @@ export async function generateArticleQuestions(
     articleCache.set(cacheKey, result.data)
     return { data: result.data, error: null }
   } catch (err: unknown) {
-    console.error('packages/ai/src/services/article.ts error:', err: unknown);
+    console.error('packages/ai/src/services/article.ts error:', err);
     const message = err instanceof Error ? err.message : 'Unknown error'
     if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
       return { data: null, error: 'Network error. Check your internet connection and API endpoint.' }

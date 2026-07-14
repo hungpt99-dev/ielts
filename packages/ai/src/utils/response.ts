@@ -32,7 +32,7 @@ export function parseAndValidate<T>(
     }
     return { data: result.data, error: null }
   } catch (err: unknown) {
-    console.error('packages/ai/src/utils/response.ts error:', err: unknown);
+    console.error('packages/ai/src/utils/response.ts error:', err);
     if (err instanceof AIError) {
       return { data: null, error: err.message }
     }

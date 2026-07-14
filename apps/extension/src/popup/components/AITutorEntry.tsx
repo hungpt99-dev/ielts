@@ -73,7 +73,7 @@ export default function AITutorEntry({ onBack }: AITutorEntryProps) {
           }
         }
       } catch (err: any) {
-        console.error('apps/extension/src/popup/components/AITutorEntry.tsx error:', err: any);
+        console.error('apps/extension/src/popup/components/AITutorEntry.tsx error:', err);
         if (!cancelled) {
           setFetchError(err.message || 'Could not access page context')
         }
