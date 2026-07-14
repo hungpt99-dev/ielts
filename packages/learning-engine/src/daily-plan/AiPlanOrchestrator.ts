@@ -194,7 +194,9 @@ export class AiPlanOrchestrator {
     const aiAvailable = profile.aiProviderAvailable && !profile.offlineOnlyMode;
     const generationPlan = this.buildAiGenerationPlan(weeks, phases);
 
+    console.log('[AiOrchestrator] aiAvailable:', aiAvailable, 'useAI:', generationPlan.useAI, 'batches:', generationPlan.taskCandidateBatches.length, 'profile.aiProviderAvailable:', profile.aiProviderAvailable, 'offlineOnly:', profile.offlineOnlyMode)
     if (!generationPlan.useAI || !aiAvailable) {
+      console.log('[AiOrchestrator] Early return - useAI:', generationPlan.useAI, 'aiAvailable:', aiAvailable)
       return this.emptyResult(0, true);
     }
 
@@ -267,6 +269,7 @@ export class AiPlanOrchestrator {
         this.cache.set(cacheKey, JSON.stringify(objectives));
         previousBatchSummary = this.buildBatchSummary(objectives);
       } else {
+        console.log('[AiOrchestrator] Weekly objectives failed for batch:', batch.batchIndex)
         callStats.failedCalls++;
         fallbackUsed = true;
       }
@@ -307,6 +310,7 @@ export class AiPlanOrchestrator {
         callStats.successfulCalls++;
         this.cache.set(cacheKey, JSON.stringify(candidates));
       } else {
+        console.log('[AiOrchestrator] Task candidates failed for batch:', batch.batchIndex, 'required:', batch.requiredCount, 'weeks:', batch.weekIds.length)
         callStats.failedCalls++;
         fallbackUsed = true;
       }
