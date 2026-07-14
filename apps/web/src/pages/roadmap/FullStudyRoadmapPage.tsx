@@ -112,8 +112,10 @@ export default function FullStudyRoadmapPage() {
     if (!roadmap || regenerating) return
     setRegenerating(true)
     try {
+      console.log('[Regenerate] Starting regeneration...')
       const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
       const settings = raw ? JSON.parse(raw) : null
+      console.log('[Regenerate] Settings loaded:', settings ? 'yes' : 'no')
       if (!settings) throw new Error('Settings not found')
       const { DatabaseService } = await import('../../services/storage/Database')
       const dates = new Set<string>()
@@ -124,6 +126,7 @@ export default function FullStudyRoadmapPage() {
           }
         }
       }
+      console.log('[Regenerate] Deleting', dates.size, 'dates of old tasks...')
       const allTasks = await DatabaseService.getAll<import('../../models').TaskEntry>('tasks')
       for (const t of allTasks) {
         if (dates.has(t.date.slice(0, 10))) {
@@ -132,10 +135,13 @@ export default function FullStudyRoadmapPage() {
           }
         }
       }
+      console.log('[Regenerate] Calling generateRoadmapWithEngine...')
       const newRoadmap = await generateRoadmapWithEngine(settings)
+      console.log('[Regenerate] New roadmap generated, saving...')
       loadRoadmap(newRoadmap)
+      console.log('[Regenerate] Done!')
     } catch (err) {
-      console.error('Engine generation failed, falling back:', err)
+      console.error('[Regenerate] Engine generation failed, falling back:', err)
       localStorage.removeItem(STORAGE_KEYS.localStorage.roadmap)
       await loadData(false)
     } finally {

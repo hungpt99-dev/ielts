@@ -495,6 +495,7 @@ export async function ensureRoadmap(): Promise<RoadmapData> {
 }
 
 export async function generateRoadmapWithEngine(settings: Record<string, unknown>): Promise<RoadmapData> {
+  console.log('[RoadmapGen] Starting generateRoadmapWithEngine...')
   const { DailyPlanEngine, AiPlanOrchestrator, buildNormalizedProfile } = await import('@ielts/learning-engine')
   const { studyPlanToRoadmapData } = await import('./planConverter')
   const s = settings as Record<string, unknown>
@@ -503,6 +504,7 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
   const engine = new DailyPlanEngine()
   const study = s.study as Record<string, unknown> | undefined
   const defaultedExamDate = (study?.examDate as string) || (s.examDate as string) || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
+  console.log('[RoadmapGen] Building profile...', { targetBand: study?.targetBand ?? s.targetBand, currentBand: study?.currentBand ?? s.currentBand })
   const profile = buildNormalizedProfile({
     settings: {
       targetBand: (study?.targetBand as number) ?? (s.targetBand as number) ?? DEFAULT_TARGET_BAND,
@@ -519,9 +521,11 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
     overrides: { planStartDate: today },
   })
 
+  console.log('[RoadmapGen] Engine plan result status:', result.status)
   const result = engine.generatePlan(profile)
 
   if (result.status === 'success') {
+    console.log('[RoadmapGen] Plan generated, enriching with AI...')
     const enriched = await enrichPlanWithAI(result.plan, profile, settings)
     const resolvedCurrentBand = (study?.currentBand as number) ?? (s.currentBand as number) ?? DEFAULT_CURRENT_BAND
     const resolvedTargetBand = (study?.targetBand as number) ?? (s.targetBand as number) ?? DEFAULT_TARGET_BAND
@@ -545,13 +549,19 @@ async function enrichPlanWithAI(
   profile: import('@ielts/learning-engine').NormalizedProfile,
   settings: Record<string, unknown>,
 ): Promise<import('@ielts/learning-engine').StudyPlan> {
+  console.log('[AIEnrich] Starting AI enrichment...')
   const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
   const userCfg = raw ? JSON.parse(raw) : {}
   const ai = (userCfg?.ai as Record<string, unknown>) ?? {}
   const providerId = (ai.providerId as string) ?? 'openai'
-  const apiKey = (ai.apiKey as string) || (settings.aiApiKey as string) || localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${providerId}`) || ''
+  const storedKey = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${providerId}`)
+  const apiKey = (ai.apiKey as string) || (settings.aiApiKey as string) || storedKey || ''
   const hasAI = !!((settings.aiEnabled as boolean) ?? !!apiKey) && !!apiKey
-  if (!hasAI || plan.weeks.length === 0) return plan
+  console.log('[AIEnrich] hasAI:', hasAI, 'providerId:', providerId, 'keyFound:', !!apiKey, 'planWeeks:', plan.weeks.length)
+  if (!hasAI || plan.weeks.length === 0) {
+    console.log('[AIEnrich] Skipping AI enrichment:', !hasAI ? 'no AI configured' : 'no weeks in plan')
+    return plan
+  }
 
   try {
     const { callAI } = await import('@ielts/ai')
