@@ -240,6 +240,16 @@ export default function RoadmapSummary({ roadmap, onRegenerate, onAskAIReview, r
 <IconRefresh size={16} /> Regenerate Plan
           </button>
           <button
+            type="button"
+            onClick={() => {
+              const blob = new Blob([JSON.stringify(roadmap, null, 2)], { type: 'application/json' })
+              const url = URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url
+              a.download = `ielts-roadmap-${new Date().toISOString().slice(0, 10)}.json`
+              a.click()
+              URL.revokeObjectURL(url)
+            }}
             className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2 text-sm font-medium transition-all hover:brightness-95 active:scale-[0.98]"
             style={{
               borderColor: 'var(--color-border)',
