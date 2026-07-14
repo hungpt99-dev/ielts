@@ -164,6 +164,8 @@ export default function Settings() {
     weakSkills: settings.study?.weakSkills ?? [],
     studyGoal: settings.study?.studyGoal,
     preferredSchedule: settings.study?.preferredSchedule,
+    nativeLanguage: settings.study?.nativeLanguage ?? '',
+    preferredTopics: [],
     studyReminder: 'Time to study IELTS!',
   }
   const [form, setForm] = useState(initialForm)
