@@ -149,13 +149,42 @@ function createDbMessageRepository() {
  return null }
     },
     async saveSession(session: any) {
-      try { await DatabaseService.safePut('aiContents', session) } catch (error) {
+      try {
+        await DatabaseService.safePut('aiContents', {
+          id: session.id,
+          type: 'general',
+          prompt: 'chat-session',
+          content: JSON.stringify(session),
+          title: 'Chat Session',
+          topic: 'general',
+          model: 'engine',
+          tokens: 0,
+          tags: [],
+          isFavorite: false,
+          createdAt: new Date().toISOString(),
+        })
+      } catch (error) {
     console.error('apps/web/src/services/engineBootstrap.ts error:', error);
       }
     },
     async appendMessages(sessionId: string, messages: any[]) {
       for (const msg of messages) {
-        try { await DatabaseService.safePut('aiContents', { ...msg, sessionId }) } catch (error) {
+        try {
+          await DatabaseService.safePut('aiContents', {
+            id: msg.id,
+            type: msg.type ?? 'general',
+            prompt: msg.prompt ?? 'chat-message',
+            content: msg.content ?? '',
+            title: msg.title ?? '',
+            topic: msg.topic ?? 'general',
+            model: msg.model ?? '',
+            tokens: msg.tokens ?? 0,
+            tags: msg.tags ?? [],
+            isFavorite: msg.isFavorite ?? false,
+            createdAt: msg.createdAt ?? new Date().toISOString(),
+            sessionId,
+          })
+        } catch (error) {
     console.error('apps/web/src/services/engineBootstrap.ts error:', error);
         }
       }
@@ -334,7 +363,19 @@ function createDependencyRepos() {
     eventPublisher: {
       async publish(event: any) {
         try {
-          await DatabaseService.safePut('aiContents', event)
+          await DatabaseService.safePut('aiContents', {
+            id: event.id ?? `evt-${Date.now()}`,
+            type: event.type === 'learning_session_completed' || event.type === 'roadmap_task_fulfilled' ? 'general' : 'general',
+            prompt: event.type ?? 'learning-event',
+            content: JSON.stringify(event),
+            title: event.type ?? 'Event',
+            topic: event.skill ?? 'general',
+            model: 'engine',
+            tokens: 0,
+            tags: [],
+            isFavorite: false,
+            createdAt: event.occurredAt ?? new Date().toISOString(),
+          })
           if (event.type === 'learning_session_completed' || event.type === 'roadmap_task_fulfilled') {
             await DatabaseService.safePut('progressRecords', {
               id: `event-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
