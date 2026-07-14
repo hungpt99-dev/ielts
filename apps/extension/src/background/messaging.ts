@@ -70,12 +70,20 @@ export interface FetchTranscriptResponse {
   error?: string
 }
 
-const YT_PLAYER_API_KEY = 'AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8'
+let ytPlayerApiKey: string | undefined
+
+export function setYouTubePlayerApiKey(key: string | undefined) {
+  ytPlayerApiKey = key
+}
+
+export function getYouTubePlayerApiKey(): string | undefined {
+  return ytPlayerApiKey
+}
 
 async function fetchYoutubePlayerResponse(videoId: string): Promise<Record<string, unknown> | null> {
   try {
     // Try the internal YouTube API first (no API key needed, uses session)
-    const url = `https://www.youtube.com/youtubei/v1/player?key=${YT_PLAYER_API_KEY}`
+    const url = `https://www.youtube.com/youtubei/v1/player?key=${getYouTubePlayerApiKey() ?? ''}`
     const response = await fetch(url, {
       method: 'POST',
       credentials: 'include',

@@ -1,5 +1,5 @@
 import { safeStorageGet, safeStorageSet } from '../utils/safe-chrome'
-import { STORAGE_KEYS } from '@ielts/config'
+import { STORAGE_KEYS, CORS_PROXY_URL } from '@ielts/config'
 
 export type ApiSourceName = 'wiktionary' | 'datamuse' | 'tatoeba' | 'wikipedia' | 'gutendex'
 
@@ -25,7 +25,7 @@ export interface ApiPreview {
 }
 
 const CORS_PROXY_KEY = STORAGE_KEYS.localStorage.corsProxy
-const DEFAULT_CORS_PROXY = 'https://corsproxy.io/?'
+const DEFAULT_CORS_PROXY = CORS_PROXY_URL
 
 interface CorsProxyConfig {
   enabled: boolean
