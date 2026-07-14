@@ -111,8 +111,8 @@ export default function FullStudyRoadmapPage() {
     if (!roadmap || regenerating) return
     setRegenerating(true)
     try {
-      const { loadAppSettings } = await import('../../services/storage/SettingsStorage')
-      const settings = loadAppSettings()
+      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+      const settings = raw ? JSON.parse(raw) : null
       if (!settings) throw new Error('Settings not found')
       const { DatabaseService } = await import('../../services/storage/Database')
       const dates = new Set<string>()

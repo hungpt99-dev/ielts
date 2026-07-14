@@ -1,6 +1,6 @@
 import type { TaskEntry, AppSettings, StudyGoal } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
-import { loadAppSettings } from '../../services/storage/SettingsStorage'
+
 import { STORAGE_KEYS, DEFAULT_APP_CONFIG } from '@ielts/config'
 import { SKILL_TO_CATEGORY } from './constants'
 import { getLearningEngine } from '../../services/engineBootstrap'
@@ -422,7 +422,8 @@ export function loadRoadmap(): RoadmapData | null {
 
 async function loadUserSettings(): Promise<AppSettings | null> {
   try {
-    return loadAppSettings()
+    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+    return raw ? JSON.parse(raw) : null
   } catch (error) {
     console.error('apps/web/src/features/roadmap/roadmapService.ts error:', error);
     return null
@@ -737,7 +738,11 @@ export interface RoadmapUserProfile {
 }
 
 export function getRoadmapUserProfile(): RoadmapUserProfile | null {
-  const settings = loadAppSettings()
+  let settings: AppSettings | null = null
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+    settings = raw ? JSON.parse(raw) : null
+  } catch { settings = null }
   if (!settings) return null
   return {
     targetBand: settings.targetBand,

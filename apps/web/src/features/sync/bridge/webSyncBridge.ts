@@ -1,7 +1,7 @@
 import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { BRIDGE_NAMESPACE } from './extensionBridge.types'
 import { DatabaseService } from '../../../services/storage/Database'
-import { loadAppSettings } from '../../../services/storage/SettingsStorage'
+import { STORAGE_KEYS } from '@ielts/config'
 
 let initialized = false
 function init(): void {
@@ -189,7 +189,12 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
         DatabaseService.getAll<Record<string, unknown>>('artifacts').catch(() => []),
       ])
 
-      const settings = loadAppSettings()
+      const settings = (() => {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+          return raw ? JSON.parse(raw) : {}
+        } catch { return {} }
+      })()
 
       window.postMessage(
         {

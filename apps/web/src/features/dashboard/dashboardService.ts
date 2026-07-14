@@ -11,7 +11,7 @@ import type {
   WeeklyStudyDay,
 } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
-import { loadAppSettings } from '../../services/storage/SettingsStorage'
+import { STORAGE_KEYS } from '@ielts/config'
 import { loadRoadmap } from '../roadmap/roadmapService'
 
 function getToday(): string {
@@ -198,7 +198,12 @@ export async function loadDashboardData(): Promise<{
   const recentMistakes = countRecentMistakes(mistakes)
   const savedVocabularyCount = vocabulary.length
 
-  const settings = loadAppSettings()
+  const settings = (() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+      return raw ? JSON.parse(raw) : {}
+    } catch { return {} }
+  })()
   const targetBand = settings.targetBand
   const currentBand = settings.currentBand
   const weakSkills = settings.weakSkills

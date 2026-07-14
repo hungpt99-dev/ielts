@@ -28,7 +28,8 @@ import type {
   PublicApiImportedContent,
   AppExportData,
 } from '../../models'
-import { saveAppSettings, clearAllLocalStorage } from './SettingsStorage'
+import { clearAllLocalStorage } from './SettingsStorage'
+import { STORAGE_KEYS } from '@ielts/config'
 
 import { ValidationError } from '@ielts/storage'
 export { ValidationError } from '@ielts/storage'
@@ -809,7 +810,9 @@ export const DatabaseService = {
       }
       const result = await importBackup(data as never, mode)
       if (data.settings) {
-        saveAppSettings(data.settings as never)
+        try {
+          localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(data.settings))
+        } catch { /* ignore */ }
       }
       return result
     })

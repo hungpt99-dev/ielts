@@ -1,6 +1,6 @@
 import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { DatabaseService } from '../../../services/storage/Database'
-import { loadAppSettings, saveAppSettings } from '../../../services/storage/SettingsStorage'
+import { STORAGE_KEYS } from '@ielts/config'
 import { getClient } from '../bridge/ExtensionBridgeClient'
 import type { VocabularyEntry, MistakeEntry, AppSettings, Artifact, ArtifactCategory } from '../../../models'
 
@@ -13,7 +13,12 @@ export interface SyncResult {
 }
 
 function mapWebSettingsToShared(): Record<string, unknown> {
-  const s = loadAppSettings()
+  const s = (() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+      return raw ? JSON.parse(raw) : {}
+    } catch { return {} }
+  })()
   return {
     aiProvider: s.aiProvider || 'openai',
     aiModel: s.aiModel || DEFAULT_AI_MODEL,
@@ -24,9 +29,14 @@ function mapWebSettingsToShared(): Record<string, unknown> {
 }
 
 function applySharedSettingsToWeb(ext: Record<string, unknown>): void {
-  const current = loadAppSettings()
+  const current = (() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+      return raw ? JSON.parse(raw) : {}
+    } catch { return {} }
+  })()
   const darkMode = ext.themeMode === 'dark'
-  saveAppSettings({
+  const merged = {
     ...current,
     aiProvider: (ext.aiProvider as AppSettings['aiProvider']) || current.aiProvider,
     aiModel: (ext.aiModel as string) || current.aiModel,
@@ -35,7 +45,10 @@ function applySharedSettingsToWeb(ext: Record<string, unknown>): void {
     aiApiKey: (ext.aiApiKey as string) || current.aiApiKey,
     darkMode,
     aiEnabled: true,
-  })
+  }
+  try {
+    localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(merged))
+  } catch { /* ignore */ }
   try { window.dispatchEvent(new CustomEvent('ielts-settings-updated')) } catch (error) {
 console.error('apps/web/src/features/sync/services/SyncService.ts error:', error);
   }

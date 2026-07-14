@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getAITutorEngine } from '../../../services/engineBootstrap'
 import { DatabaseService } from '../../../services/storage/Database'
 import { ROUTES, STORAGE_KEYS } from '@ielts/config'
-import { loadAppSettings } from '../../../services/storage/SettingsStorage'
+
 import type { TaskEntry, VocabularyEntry, MistakeEntry } from '../../../models'
 import type { ProgressReview } from '../components/TeacherProgressReviewCard'
 import type { TutorSession, LearningProfile, FeedbackSummary, TeacherAdviceItem, ActivityItem } from '../types/aiTutor.types'
@@ -107,7 +107,12 @@ export function useAITutorEnginePage(): AITutorPageState {
 
   const loadData = useCallback(async () => {
     try {
-      const settings = loadAppSettings()
+      const settings = (() => {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+          return raw ? JSON.parse(raw) : {}
+        } catch { return {} }
+      })()
       const [tasks, vocabulary, mistakes] = await Promise.all([
         DatabaseService.getAll<TaskEntry>('tasks'),
         DatabaseService.getAll<VocabularyEntry>('vocabulary'),

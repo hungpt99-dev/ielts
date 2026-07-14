@@ -1,5 +1,5 @@
 import type { AppSettings, StudyGoal } from '../../models'
-import { saveAppSettings } from '../../services/storage/SettingsStorage'
+
 import { DatabaseService } from '../../services/storage/Database'
 import { STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
 
@@ -159,7 +159,7 @@ export async function completeOnboarding(data: OnboardingData): Promise<void> {
     aiEnabled: false,
   }
 
-  saveAppSettings(settings)
+  localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(settings))
   localStorage.setItem(STORAGE_KEYS.localStorage.onboardingComplete, 'true')
   localStorage.setItem('ielts-preferred-language', data.preferredLanguage || 'en')
   localStorage.setItem('ielts-tutor-style', data.tutorStyle || 'encouraging')

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import ChatPopup from '../../../components/aiTutor/ChatPopup'
 import type { ContextSuggestion } from '@ielts/ai-tutor-engine'
-import { loadAppSettings } from '../../../services/storage/SettingsStorage'
+import { STORAGE_KEYS } from '@ielts/config'
 import { DatabaseService } from '../../../services/storage/Database'
 import type { TaskEntry, VocabularyEntry, MistakeEntry } from '../../../models'
 import { getAITutorEngine } from '../../../services/engineBootstrap'
@@ -89,7 +89,12 @@ export default function AITutorPopup({
 
     ;(async () => {
       try {
-        const settings = loadAppSettings()
+        const settings = (() => {
+          try {
+            const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+            return raw ? JSON.parse(raw) : {}
+          } catch { return {} }
+        })()
         const [tasks, vocabulary, mistakes] = await Promise.all([
           DatabaseService.getAll<TaskEntry>('tasks'),
           DatabaseService.getAll<VocabularyEntry>('vocabulary'),
