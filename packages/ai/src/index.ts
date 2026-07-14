@@ -86,3 +86,7 @@ export type { AIClient, AICallResult } from './client/types'
 // Cache utilities
 export { AiGenerateResultCache } from './utils'
 export type { GenerateResultCacheOptions, GenerateResultCacheStats } from './utils'
+
+// Config resolver
+export { AiConfigurationResolver, AiAdapterFactory } from './config'
+export type { AiCredentialProvider, AiUserSettings, ResolvedAiConnectionConfig } from './config'
