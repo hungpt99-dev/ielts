@@ -514,9 +514,9 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
       weakSkills: (study?.weakSkills as string[]) ?? (s.weakSkills as string[]) ?? [...DEFAULT_WEAK_SKILLS],
       studyGoal: (study?.studyGoal as string) ?? (s.studyGoal as string) ?? DEFAULT_STUDY_GOAL,
       preferredSchedule: (study?.preferredSchedule as string[]) ?? (s.preferredSchedule as string[]) ?? [...DEFAULT_SCHEDULE],
-      aiEnabled: (s.aiEnabled as boolean) ?? !!(s.aiApiKey || (s.ai as Record<string, unknown>)?.apiKey),
+      aiEnabled: (s.aiEnabled as boolean) ?? !!((s.ai as Record<string, unknown>)?.apiKey || s.aiApiKey || localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}openai`)),
       aiProvider: (s.aiProvider as string) ?? (s.ai as Record<string, unknown>)?.providerId as string ?? 'openai',
-      aiApiKey: (s.aiApiKey as string) ?? (s.ai as Record<string, unknown>)?.apiKey as string ?? '',
+      aiApiKey: (s.aiApiKey as string) ?? (s.ai as Record<string, unknown>)?.apiKey as string ?? localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}openai`) ?? '',
     },
     overrides: { planStartDate: today },
   })
