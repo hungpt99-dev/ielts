@@ -8,14 +8,9 @@ export const SETTINGS_STORAGE_KEY = STORAGE_KEYS.localStorage.userSettings
 export function loadUserConfiguration(): UserConfiguration {
   try {
     const raw = localStorage.getItem(SETTINGS_STORAGE_KEY)
-    console.log('[loadUserConfig] Raw from storage:', raw)
     const data = raw ? JSON.parse(raw) : {}
-    console.log('[loadUserConfig] Parsed JSON:', JSON.stringify(data))
-    const parsed = userConfigurationSchema.parse(data)
-    console.log('[loadUserConfig] After Zod parse, study:', JSON.stringify(parsed.study))
-    return parsed
-  } catch (err) {
-    console.error('[loadUserConfig] Fallback to defaults due to:', err)
+    return userConfigurationSchema.parse(data)
+  } catch {
     return userConfigurationSchema.parse({})
   }
 }

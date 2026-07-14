@@ -181,7 +181,9 @@ export default function Settings() {
 
   const [aiTesting, setAiTesting] = useState(false)
   const [aiTestResult, setAiTestResult] = useState<{ ok: boolean; message: string } | null>(null)
-  const [aiApiKeyInput, setAiApiKeyInput] = useState('')
+  const [aiApiKeyInput, setAiApiKeyInput] = useState(() => {
+    try { return localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}openai`) ?? '' } catch { return '' }
+  })
   const [aiProviderInput, setAiProviderInput] = useState(settings.ai?.providerId ?? AI_PROVIDER_DEFINITIONS.openai.id)
   const [aiBaseUrlInput, setAiBaseUrlInput] = useState(settings.ai?.customApiUrl ?? AI_PROVIDER_DEFINITIONS.openai.defaultApiUrl ?? '')
   const [aiModelInput, setAiModelInput] = useState(settings.ai?.model ?? AI_PROVIDER_DEFINITIONS.openai.defaultModel ?? '')

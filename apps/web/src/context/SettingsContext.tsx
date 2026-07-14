@@ -5,10 +5,8 @@ import { STORAGE_KEYS } from '@ielts/config'
 
 function saveUserConfig(config: UserConfiguration): void {
   try {
-    const json = JSON.stringify(config)
-    console.log('[SettingsContext] Saving config:', json)
-    localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, json)
-  } catch (e) { console.error('[SettingsContext] Save failed:', e) }
+    localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(config))
+  } catch { /* ignore */ }
 }
 
 interface SettingsContextValue {
