@@ -53,12 +53,13 @@ export default function App() {
     async function bootstrap() {
       await initNativePlatform()
       const ok = await ensureDbReady()
-      if (cancelled) return
       if (!ok) {
-        setInitError(true)
+        if (!cancelled) setInitError(true)
         return
       }
-      window.dispatchEvent(new Event('app-db-ready'))
+      if (!cancelled) {
+        window.dispatchEvent(new Event('app-db-ready'))
+      }
       try {
         await initializeAITutorEngine()
       } catch (error) {

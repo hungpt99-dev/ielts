@@ -19,7 +19,11 @@ const systemClock = new SystemClock()
 function createAIClient(): TutorAIClient {
   return {
     async generateStructured(request: any) {
-      const result = await callAI(request.systemPrompt ?? '', request.userMessage ?? '', {
+      const cfg = readAiConfig()
+      if (!cfg.apiKey) {
+        return { success: false as const, error: { code: 'ai_not_configured', message: 'No AI API key', recoverable: true } }
+      }
+      const result = await callAI(request.systemPrompt ?? '', request.userMessage ?? '', () => cfg, {
         temperature: request.temperature ?? 0.3,
         maxTokens: request.maxTokens ?? 2048,
       })
@@ -268,10 +272,10 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       async get() {
         try {
           const raw = localStorage.getItem('ielts-settings')
-          return raw ? JSON.parse(raw) : null
+          return raw ? JSON.parse(raw) : {}
         } catch (error) {
  console.error('apps/web/src/services/engineBootstrap.ts error:', error);
- return null }
+ return {} }
       },
       async save(profile: any) {
         try { localStorage.setItem('ielts-settings', JSON.stringify(profile)) } catch (error) {
@@ -340,6 +344,7 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       register(name: string, source: any) { this.sources.set(name, source) },
       get(name: string) { return this.sources.get(name) },
       getAll() { return Array.from(this.sources.values()) },
+      async collectAll() { return Array.from(this.sources.values()) },
     }
 
     const contextBuilder = new LearnerContextBuilder({
@@ -498,7 +503,7 @@ export function getAITutorEngine(): AITutorEngine | null {
 function readAiConfig() {
   try {
     const s = JSON.parse(localStorage.getItem('ielts-settings') ?? '{}')
-    return { apiKey: s.aiApiKey ?? '', baseUrl: s.aiBaseUrl ?? 'https://api.openai.com/v1', model: s.aiModel ?? 'gpt-4o-mini' }
+    return { apiKey: s.aiApiKey ?? '', baseUrl: s.aiBaseUrl || 'https://api.openai.com/v1', model: s.aiModel || 'gpt-4o-mini' }
   } catch (error) {
  console.error('apps/web/src/services/engineBootstrap.ts error:', error);
  return { apiKey: '', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini' } }

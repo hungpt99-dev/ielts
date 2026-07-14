@@ -88,7 +88,12 @@ export class AITutorEngineImpl implements AITutorEngine {
     request: NextBestActionRequest,
   ): Promise<TutorOperationResult<NextBestActionResult>> {
     try {
-      const result = getNextBestAction(request)
+      const learnerState = request.learnerState ?? await this.deps.contextBuilder.build('proactive')
+      const enrichedRequest: NextBestActionRequest = {
+        ...request,
+        learnerState,
+      }
+      const result = getNextBestAction(enrichedRequest)
       return { status: 'success', data: result }
     } catch (err) {
       console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
@@ -131,15 +136,25 @@ export class AITutorEngineImpl implements AITutorEngine {
     request: ProgressReviewRequest,
   ): Promise<TutorOperationResult<ProgressReviewResult>> {
     try {
-      const result = await generateProgressReview(request, { aiClient: this.deps.aiClient })
+      const learnerState = request.learnerState ?? await this.deps.contextBuilder.build('proactive')
+      console.log('[AITutorDebug] context built, profile:', JSON.stringify(learnerState.profile))
+      const enrichedRequest: ProgressReviewRequest = {
+        ...request,
+        learnerState,
+      }
+      const result = await generateProgressReview(enrichedRequest, { aiClient: this.deps.aiClient })
+      console.log('[AITutorDebug] progress review generated, summary:', result.summary?.slice(0, 100))
       return { status: 'success', data: result }
     } catch (err) {
       console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      const stack = err instanceof Error ? err.stack : ''
+      console.error('[AITutorDebug] generateProgressReview FAILED:', message, stack)
       return {
         status: 'failure',
         error: {
           code: 'progress_failed',
-          message: err instanceof Error ? err.message : 'Unknown error',
+          message,
           recoverable: true,
         },
       }

@@ -193,14 +193,59 @@ export function useAITutorEnginePage(): AITutorPageState {
       }))
 
       const engine = getAITutorEngine()
+      console.log('[AITutorDebug] engine available:', !!engine)
       if (engine) {
         try {
-          const nextAction = await engine.getNextBestAction({})
-          if (nextAction.status === 'success' && nextAction.data && mountedRef.current) {
-            setProgressReview(prev => ({
-              ...prev,
-              focusAreas: [nextAction.data!.reason || prev.focusAreas[0]],
-            }))
+          const [nextAction, progressResult] = await Promise.all([
+            engine.getNextBestAction({}),
+            engine.generateProgressReview({}),
+          ])
+
+          console.log('[AITutorDebug] nextAction status:', nextAction.status)
+          console.log('[AITutorDebug] progressResult status:', progressResult.status)
+          if (progressResult.status === 'success') {
+            console.log('[AITutorDebug] progressResult data keys:', Object.keys(progressResult.data ?? {}))
+          } else {
+            console.log('[AITutorDebug] progressResult error:', progressResult.error)
+          }
+
+          if (mountedRef.current) {
+            setProgressReview(prev => {
+              const updates: Partial<ProgressReview> = {}
+
+              if (nextAction.status === 'success' && nextAction.data) {
+                updates.focusAreas = [nextAction.data.reason]
+              }
+
+              if (progressResult.status === 'success' && progressResult.data) {
+                const d = progressResult.data
+                updates.summary = d.summary
+                updates.improvements = d.improvements.map(i => `${i.area}: ${i.evidence}`)
+                updates.struggles = d.weaknesses.map(w => `${w.area}: ${w.evidence}`)
+                if (!updates.focusAreas) {
+                  updates.focusAreas = [d.recommendedFocus]
+                }
+                updates.skillProgress = d.skillPriorityChanges.map(spc => ({
+                  skill: spc.skill.charAt(0).toUpperCase() + spc.skill.slice(1),
+                  status: spc.reason.includes('gap') ? 'needs work' : 'stable',
+                  sessions: 0,
+                  accuracy: 0,
+                  trend: spc.reason.includes('improving') ? 'improving' : 'declining',
+                  analysis: spc.reason,
+                }))
+                updates.studyPlanAdherence =
+                  `Weekly completion: ${d.studyConsistency.weeklyCompletionRate}% | ` +
+                  `Streak: ${d.studyConsistency.streakDays}d | ` +
+                  `Inactive: ${d.studyConsistency.inactiveDays}d`
+                if (d.examRisk) {
+                  updates.tutorFeedback = d.examRisk
+                }
+                updates.generatedAt = d.generatedAt
+              }
+
+              console.log('[AITutorDebug] progressReview updates:', updates)
+              return { ...prev, ...updates }
+            })
           }
         } catch (error) {
     console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
@@ -215,6 +260,7 @@ export function useAITutorEnginePage(): AITutorPageState {
   }, [])
 
   useEffect(() => {
+    mountedRef.current = true
     loadData()
     return () => { mountedRef.current = false }
   }, [loadData])
