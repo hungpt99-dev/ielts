@@ -590,8 +590,12 @@ async function enrichPlanWithAI(
       feasibility: plan.feasibility,
       skillGaps: computeSkillGaps(profile),
     })
+    console.log('[AIEnrich] enrichment candidates:', enrichment.taskCandidates?.length, 'plan tasks:', plan.tasks.length)
 
-    if (enrichment.taskCandidates.length === 0) return plan
+    if (!enrichment.taskCandidates || enrichment.taskCandidates.length === 0) {
+      console.log('[AIEnrich] No task candidates returned from AI, using original plan')
+      return plan
+    }
 
     const planTasks = [...plan.tasks]
     for (const candidate of enrichment.taskCandidates) {
