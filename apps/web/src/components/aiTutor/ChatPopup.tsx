@@ -25,20 +25,10 @@ export default function ChatPopup({
 }: ChatPopupProps) {
   const [hasAiKey, setHasAiKey] = useState(hasAiKeyProp ?? false)
 
+  // TODO: replace with a proper settings hook
   useEffect(() => {
     if (hasAiKeyProp !== undefined) {
       setHasAiKey(hasAiKeyProp)
-      return
-    }
-    try {
-      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
-      if (raw) {
-        const settings = JSON.parse(raw)
-        setHasAiKey(!!settings.aiApiKey)
-      }
-    } catch (error) {
-      console.error('apps/web/src/components/aiTutor/ChatPopup.tsx error:', error);
-      /* ignore */
     }
   }, [hasAiKeyProp])
 

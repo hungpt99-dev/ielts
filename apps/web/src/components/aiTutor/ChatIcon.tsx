@@ -7,6 +7,7 @@ interface ChatIconState {
   unreadCount: number
 }
 
+// TODO: move to a proper storage repository instead of using localStorage directly in the component
 function loadChatState(): ChatIconState {
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.localStorage.aiTutorChatState)

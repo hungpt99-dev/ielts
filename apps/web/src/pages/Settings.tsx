@@ -1276,35 +1276,29 @@ export default function Settings() {
   )
 }
 
+// TODO: move to a proper storage repository
+function loadCorsProxy(): { enabled: boolean; proxyUrl: string } {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.corsProxy)
+    if (raw) return JSON.parse(raw)
+  } catch { /* ignore */ }
+  return { enabled: false, proxyUrl: 'https://corsproxy.io/?' }
+}
+function saveCorsProxy(val: { enabled: boolean; proxyUrl: string }): void {
+  try { localStorage.setItem(STORAGE_KEYS.localStorage.corsProxy, JSON.stringify(val)) } catch { /* ignore */ }
+}
+
 function CorsProxySection() {
-  const [corsEnabled, setCorsEnabled] = useState(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.corsProxy)
-      if (raw) {
-        const parsed = JSON.parse(raw)
-        return parsed.enabled ?? false
-      }
-    } catch (error) {
-    console.error('apps/web/src/pages/Settings.tsx error:', error);
-    }
-    return false
-  })
-  const [corsUrl, setCorsUrl] = useState(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.corsProxy)
-      if (raw) {
-        const parsed = JSON.parse(raw)
-        return parsed.proxyUrl || 'https://corsproxy.io/?'
-      }
-    } catch (error) {
-    console.error('apps/web/src/pages/Settings.tsx error:', error);
-    }
-    return 'https://corsproxy.io/?'
-  })
+  const [corsConfig, setCorsConfig] = useState(loadCorsProxy)
+  const corsEnabled = corsConfig.enabled
+  const corsUrl = corsConfig.proxyUrl
+
+  const setCorsEnabled = (val: boolean) => setCorsConfig(prev => ({ ...prev, enabled: val }))
+  const setCorsUrl = (val: string) => setCorsConfig(prev => ({ ...prev, proxyUrl: val }))
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEYS.localStorage.corsProxy, JSON.stringify({ enabled: corsEnabled, proxyUrl: corsUrl }))
-  }, [corsEnabled, corsUrl])
+    saveCorsProxy(corsConfig)
+  }, [corsConfig])
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>

@@ -16,6 +16,14 @@ import { ContextSuggestionCard } from './ContextSuggestionCard'
 import { STORAGE_KEYS } from '@ielts/config'
 import { IconBell, IconDelete, IconClose, IconSend } from '@ielts/ui'
 
+// TODO: move to a proper storage repository
+function getSavedAiNotes(): Array<{ id: string; content: string; createdAt: string }> {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.localStorage.savedAiNotes) || '[]') } catch { return [] }
+}
+function setSavedAiNotes(notes: Array<{ id: string; content: string; createdAt: string }>): void {
+  try { localStorage.setItem(STORAGE_KEYS.localStorage.savedAiNotes, JSON.stringify(notes)) } catch { /* ignore */ }
+}
+
 const DEFAULT_QUICK_PROMPTS = [
   { label: 'Quiz me', action: 'quiz-me' },
   { label: 'Teach me', action: 'teach-me' },
@@ -160,13 +168,9 @@ export function ChatWidget({
   )
 
   const handleSaveNote = useCallback((content: string) => {
-    try {
-      const notes = JSON.parse(localStorage.getItem(STORAGE_KEYS.localStorage.savedAiNotes) || '[]')
-      notes.push({ id: Date.now().toString(), content, createdAt: new Date().toISOString() })
-      localStorage.setItem(STORAGE_KEYS.localStorage.savedAiNotes, JSON.stringify(notes))
-    } catch (error) {
- console.error('apps/web/src/components/aiTutor/ChatWidget.tsx error:', error);
- /* ignore */ }
+    const notes = getSavedAiNotes()
+    notes.push({ id: Date.now().toString(), content, createdAt: new Date().toISOString() })
+    setSavedAiNotes(notes)
   }, [])
 
   const handleCopy = useCallback((content: string) => {

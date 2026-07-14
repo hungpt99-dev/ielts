@@ -61,7 +61,7 @@ export default function FullStudyRoadmapPage() {
       if (initialExpand.size === 0) initialExpand.add(0)
       setExpandedPhases(initialExpand)
 
-      const settingsStr = localStorage.getItem('ielts-app-settings')
+      const settingsStr = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
       if (settingsStr) {
         try {
           const settings = JSON.parse(settingsStr)

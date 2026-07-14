@@ -17,6 +17,17 @@ const EDGE_EXTENSION_URL = 'https://microsoftedge.microsoft.com/addons/detail/ie
 type ConnectionStatus = 'checking' | 'connected' | 'disconnected' | 'error'
 type SyncStatus = 'idle' | 'syncing' | 'error'
 
+// TODO: move to a proper storage repository
+function getExtensionConnected(): boolean {
+  try { return localStorage.getItem(STORAGE_KEYS.localStorage.extensionConnected) === 'true' } catch { return false }
+}
+function setExtensionConnected(val: boolean): void {
+  try { localStorage.setItem(STORAGE_KEYS.localStorage.extensionConnected, val ? 'true' : 'false') } catch { /* ignore */ }
+}
+function removeExtensionConnected(): void {
+  try { localStorage.removeItem(STORAGE_KEYS.localStorage.extensionConnected) } catch { /* ignore */ }
+}
+
 interface ExtensionInfo {
   browser: string
   version: string
@@ -178,8 +189,7 @@ export default function ExtensionConnectionPage() {
     setPageError(null)
 
     const timeout = setTimeout(() => {
-      const stored = localStorage.getItem(STORAGE_KEYS.localStorage.extensionConnected)
-      if (stored === 'true') {
+      if (getExtensionConnected()) {
         setConnectionStatus('disconnected')
       } else {
         setConnectionStatus('disconnected')
@@ -198,7 +208,7 @@ export default function ExtensionConnectionPage() {
           version: e.data?.version || '',
           browser: e.data?.browser || getBrowserName(),
         }))
-        localStorage.setItem(STORAGE_KEYS.localStorage.extensionConnected, 'true')
+        setExtensionConnected(true)
         setPageLoading(false)
       }
     }
@@ -394,7 +404,7 @@ export default function ExtensionConnectionPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    localStorage.removeItem(STORAGE_KEYS.localStorage.extensionConnected)
+                    removeExtensionConnected()
                     setConnectionStatus('disconnected')
                     showToast('info', 'Extension disconnected')
                   }}
