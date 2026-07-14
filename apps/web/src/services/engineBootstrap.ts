@@ -76,8 +76,9 @@ function createAiCredentialProvider(): AiCredentialProvider {
 }
 
 async function resolveAiConfig(): Promise<ResolvedAiConnectionConfig> {
+  const credentialProvider = createAiCredentialProvider()
   const resolver = new AiConfigurationResolver(
-    createAiCredentialProvider(),
+    credentialProvider,
     DEFAULT_APP_CONFIG.ai,
   )
 
@@ -86,8 +87,13 @@ async function resolveAiConfig(): Promise<ResolvedAiConnectionConfig> {
     const userSettings: AiUserSettings = raw
       ? { providerId: 'openai', ...JSON.parse(raw)?.ai }
       : { providerId: 'openai' }
-    return await resolver.resolve(userSettings)
-  } catch {
+    const cred = await credentialProvider.getCredential(userSettings.providerId)
+    console.log('[AiConfig] settings key found:', !!raw, 'provider:', userSettings.providerId, 'credential found:', !!cred)
+    const resolved = await resolver.resolve(userSettings)
+    console.log('[AiConfig] resolved apiKey present:', !!resolved.apiKey)
+    return resolved
+  } catch (err) {
+    console.error('[AiConfig] fallback due to:', err)
     return {
       providerId: 'openai',
       adapterType: 'openai-compatible',
@@ -756,6 +762,7 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
         async selectTeachingStrategy() { return { strategy: 'explain', reason: 'default' } },
         async generateEducationalContent(request: any) {
           const cfg = await readConfigFromSettings()
+          console.log('[AiTutorPort] generateEducationalContent apiKey:', !!cfg.apiKey, 'baseUrl:', cfg.baseUrl)
           if (!cfg.apiKey) return { success: false, error: { code: 'ai_not_configured', message: 'No AI API key', recoverable: true } }
           try {
             const { callAI } = await import('@ielts/ai')

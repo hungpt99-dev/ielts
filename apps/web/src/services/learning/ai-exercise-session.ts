@@ -165,8 +165,10 @@ export async function startEngineSession(
       correlationId: id(),
     })
     if (activityResult.status === 'failure' || !activityResult.data?.activity?.exercise?.questions?.length) {
+      console.log('[EngineSession] generateActivity failed:', activityResult.status, activityResult.error, activityResult.data ? 'no exercise questions' : 'no data')
       return { content: null, sessionInfo: null, error: (activityResult as any)?.error?.message ?? null }
     }
+    console.log('[EngineSession] generateActivity success, questions:', activityResult.data?.activity?.exercise?.questions?.length)
 
     const exerciseId = activityResult.data.activity.exercise.id
 
