@@ -204,12 +204,12 @@ export async function loadDashboardData(): Promise<{
       return raw ? JSON.parse(raw) : {}
     } catch { return {} }
   })()
-  const targetBand = settings.study?.targetBand ?? settings.targetBand
-  const currentBand = settings.study?.currentBand ?? settings.currentBand
+  const targetBand = settings.study?.targetBand ?? settings.targetBand ?? 7.0
+  const currentBand = settings.study?.currentBand ?? settings.currentBand ?? 5.5
   const weakSkills = settings.study?.weakSkills ?? settings.weakSkills ?? []
-  const examDate = settings.study?.examDate ?? settings.examDate
-  const studyGoal = settings.study?.studyGoal ?? settings.studyGoal
-  const dailyStudyMinutes = settings.study?.dailyStudyMinutes ?? settings.dailyStudyMinutes
+  const examDate = settings.study?.examDate ?? settings.examDate ?? ''
+  const studyGoal = settings.study?.studyGoal ?? settings.studyGoal ?? 'academic'
+  const dailyStudyMinutes = settings.study?.dailyStudyMinutes ?? settings.dailyStudyMinutes ?? 60
   const examCountdown = getExamCountdown(examDate)
 
   const todayUnfinished = todayTasks.filter(t => !t.isDone)

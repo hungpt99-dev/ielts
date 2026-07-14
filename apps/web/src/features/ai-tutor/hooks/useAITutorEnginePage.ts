@@ -130,13 +130,13 @@ export function useAITutorEnginePage(): AITutorPageState {
         return d >= weekStart
       }).length
       const streak = computeStreak(tasks)
-      const examDate = settings?.examDate || ''
+      const examDate = settings?.study?.examDate || settings?.examDate || ''
       const examCountdown = getExamCountdown(examDate)
       const isExamUrgent = examCountdown > 0 && examCountdown <= 14
-      const weakSkillsList = (settings?.weakSkills || []) as string[]
+      const weakSkillsList = (settings?.study?.weakSkills || settings?.weakSkills || []) as string[]
       const weakSkills = weakSkillsList.join(', ') || 'None identified'
-      const currentBand = settings?.currentBand || 0
-      const targetBandNum = settings?.targetBand || 0
+      const currentBand = settings?.study?.currentBand || settings?.currentBand || 0
+      const targetBandNum = settings?.study?.targetBand || settings?.targetBand || 0
       const monthlyMinutes = tasks.reduce((s, t) => s + (t.timeMinutes || 0), 0)
       const dueReviews = vocabulary.filter(v => v.nextReviewAt && v.nextReviewAt <= todayStr).length
       const mistakesUnresolved = mistakes.filter(m => m.status !== 'resolved').length
@@ -152,7 +152,7 @@ export function useAITutorEnginePage(): AITutorPageState {
         studyStreak: streak, weeklyTasksDone, weeklyTasksTotal: tasks.length,
         totalStudyHours: Math.round(monthlyMinutes / 60),
         roadmapProgress: tasks.length > 0 ? Math.round((completedTasks.length / tasks.length) * 100) : 0,
-        dailyStudyMinutes: settings?.dailyStudyMinutes || 30,
+        dailyStudyMinutes: settings?.study?.dailyStudyMinutes || settings?.dailyStudyMinutes || 30,
         vocabMastered: vocabulary.filter(v => v.status === 'mastered').length,
         vocabDueReview: dueReviews, loading: false,
       })

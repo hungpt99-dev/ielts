@@ -23,16 +23,17 @@ export interface OnboardingData {
 
 export function isOnboardingComplete(): boolean {
   try {
-    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
+    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
     if (!raw) return false
     const settings = JSON.parse(raw)
+    const study = settings.study
     return (
-      typeof settings.targetBand === 'number' &&
-      typeof settings.currentBand === 'number' &&
-      typeof settings.examDate === 'string' &&
-      typeof settings.dailyStudyMinutes === 'number' &&
-      Array.isArray(settings.weakSkills) &&
-      typeof settings.studyGoal !== 'undefined'
+      typeof (study?.targetBand ?? settings.targetBand) === 'number' &&
+      typeof (study?.currentBand ?? settings.currentBand) === 'number' &&
+      typeof (study?.examDate ?? settings.examDate) === 'string' &&
+      typeof (study?.dailyStudyMinutes ?? settings.dailyStudyMinutes) === 'number' &&
+      Array.isArray(study?.weakSkills ?? settings.weakSkills) &&
+      typeof (study?.studyGoal ?? settings.studyGoal) !== 'undefined'
     )
   } catch (error) {
     console.error('apps/web/src/features/onboarding/onboardingService.ts error:', error);
@@ -56,9 +57,10 @@ function generateRoadmapTasks(settings: Record<string, unknown>): Array<{
 }> {
   const tasks: ReturnType<typeof generateRoadmapTasks> = []
   const today = new Date()
-  const s = settings as { weakSkills?: string[]; dailyStudyMinutes?: number }
-  const weakSkills = s.weakSkills ?? []
-  const dailyMin = s.dailyStudyMinutes ?? 60
+  const s = settings as { study?: Record<string, unknown>; weakSkills?: string[]; dailyStudyMinutes?: number }
+  const study = s.study
+  const weakSkills = (study?.weakSkills as string[]) ?? s.weakSkills ?? []
+  const dailyMin = (study?.dailyStudyMinutes as number) ?? s.dailyStudyMinutes ?? 60
   const needsWriting = weakSkills.some(s => s.toLowerCase().includes('writing'))
   const needsSpeaking = weakSkills.some(s => s.toLowerCase().includes('speaking'))
   const needsReading = weakSkills.some(s => s.toLowerCase().includes('reading'))
@@ -94,7 +96,7 @@ function generateRoadmapTasks(settings: Record<string, unknown>): Array<{
   }
 
   function pickTaskForDay(dayOffset: number): typeof baseTasks[0] {
-    const preferred = settings.preferredSchedule
+    const preferred = (study?.preferredSchedule as string[]) ?? settings.preferredSchedule
     const dayName = weekDays[((mondayOffset + dayOffset + 7) % 7)] as typeof weekDays[number]
     const prefersToday = preferred.includes(dayName)
     const index = (dayOffset + (prefersToday ? 0 : 2)) % baseTasks.length
@@ -143,6 +145,15 @@ function generateRoadmapTasks(settings: Record<string, unknown>): Array<{
 
 export async function completeOnboarding(data: OnboardingData): Promise<void> {
   const settings: Record<string, unknown> = {
+    study: {
+      targetBand: data.targetBand,
+      currentBand: data.currentBand,
+      examDate: data.examDate,
+      dailyStudyMinutes: data.dailyStudyMinutes,
+      weakSkills: data.weakSkills,
+      studyGoal: data.studyGoal,
+      preferredSchedule: data.preferredSchedule,
+    },
     targetBand: data.targetBand,
     currentBand: data.currentBand,
     examDate: data.examDate,

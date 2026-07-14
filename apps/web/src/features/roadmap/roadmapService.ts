@@ -220,12 +220,15 @@ const SKILL_NAMES = ['Vocabulary', 'Reading', 'Writing', 'Listening', 'Speaking'
 
 function getStudyDates(settings: Record<string, unknown>): string[] {
   const today = new Date()
-  const s = settings as { preferredSchedule?: string[]; examDate?: string }
-  const scheduleSet = new Set((s.preferredSchedule ?? []).map(d => d.toLowerCase()))
-  const hasSchedule = scheduleSet.size > 0 && !(s.preferredSchedule ?? []).every(d => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].includes(d))
+  const s = settings as { study?: Record<string, unknown>; preferredSchedule?: string[]; examDate?: string }
+  const study = s.study
+  const preferredSchedule = (study?.preferredSchedule as string[]) ?? (s.preferredSchedule ?? [])
+  const examDate = (study?.examDate as string) ?? s.examDate
+  const scheduleSet = new Set(preferredSchedule.map(d => d.toLowerCase()))
+  const hasSchedule = scheduleSet.size > 0 && !preferredSchedule.every(d => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].includes(d))
 
-  const endDate = s.examDate ? new Date(s.examDate.slice(0, 10) + 'T00:00:00') : new Date(today)
-  if (!s.examDate || endDate <= today) {
+  const endDate = examDate ? new Date(examDate.slice(0, 10) + 'T00:00:00') : new Date(today)
+  if (!examDate || endDate <= today) {
     endDate.setDate(endDate.getDate() + 84)
   }
   const maxDays = Math.min(Math.ceil((endDate.getTime() - today.getTime()) / 86400000), 365)
@@ -255,8 +258,10 @@ function getTaskTitle(skillFocus: string, dayOffset: number): string {
 }
 
 export async function generateRoadmap(settings: Record<string, unknown>, existingTasks: TaskEntry[]): Promise<RoadmapData> {
-  const s = settings as { weakSkills?: string[]; dailyStudyMinutes?: number }
-  const weakSkills = (s.weakSkills ?? []).length > 0 ? (s.weakSkills ?? []) : [...SKILL_NAMES]
+  const s = settings as { study?: Record<string, unknown>; weakSkills?: string[]; dailyStudyMinutes?: number }
+  const study = s.study
+  const weakSkillsRaw = (study?.weakSkills as string[]) ?? (s.weakSkills ?? [])
+  const weakSkills = weakSkillsRaw.length > 0 ? weakSkillsRaw : [...SKILL_NAMES]
   const studyDates = getStudyDates(settings)
   const numberOfPhases = getPhaseCount(studyDates.length)
   const daysPerPhase = Math.ceil(studyDates.length / numberOfPhases)
@@ -282,7 +287,8 @@ export async function generateRoadmap(settings: Record<string, unknown>, existin
       const days: RoadmapDay[] = []
       let weekDone = 0
 
-      const tasksPerDay = Math.max(1, Math.min(4, Math.round((s.dailyStudyMinutes ?? 60) / 22)))
+      const dailyStudyMinutesVal = (study?.dailyStudyMinutes as number) ?? s.dailyStudyMinutes ?? 60
+      const tasksPerDay = Math.max(1, Math.min(4, Math.round(dailyStudyMinutesVal / 22)))
 
       for (let d = 0; d < weekDates.length; d++) {
         const dateStr = weekDates[d]
@@ -294,7 +300,7 @@ export async function generateRoadmap(settings: Record<string, unknown>, existin
           const skillFocus = skillsInPhase[globalTaskIdx % skillsInPhase.length]
           const objective = getDayObjective(skillFocus, globalTaskIdx)
           const taskTitle = getTaskTitle(skillFocus, globalTaskIdx)
-          const timeMinutes = Math.min(Math.round((s.dailyStudyMinutes ?? 60) / tasksPerDay), 30)
+          const timeMinutes = Math.min(Math.round(dailyStudyMinutesVal / tasksPerDay), 30)
 
           const existing = existingByKey.get(dateStr + '|' + taskTitle)
           if (existing) {
@@ -484,16 +490,17 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
 
   const today = new Date().toISOString().split('T')[0]
   const engine = new DailyPlanEngine()
-  const defaultedExamDate = (s.examDate as string) || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
+  const study = s.study as Record<string, unknown> | undefined
+  const defaultedExamDate = (study?.examDate as string) || (s.examDate as string) || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
   const profile = buildNormalizedProfile({
     settings: {
-      targetBand: s.targetBand as number,
-      currentBand: s.currentBand as number,
+      targetBand: (study?.targetBand as number) ?? (s.targetBand as number),
+      currentBand: (study?.currentBand as number) ?? (s.currentBand as number),
       examDate: defaultedExamDate,
-      dailyStudyMinutes: s.dailyStudyMinutes as number,
-      weakSkills: s.weakSkills as string[],
-      studyGoal: s.studyGoal as string,
-      preferredSchedule: s.preferredSchedule as string[],
+      dailyStudyMinutes: (study?.dailyStudyMinutes as number) ?? (s.dailyStudyMinutes as number),
+      weakSkills: (study?.weakSkills as string[]) ?? (s.weakSkills as string[]) ?? [],
+      studyGoal: (study?.studyGoal as string) ?? (s.studyGoal as string),
+      preferredSchedule: (study?.preferredSchedule as string[]) ?? (s.preferredSchedule as string[]) ?? [],
       aiEnabled: s.aiEnabled as boolean,
       aiProvider: s.aiProvider as string,
       aiApiKey: s.aiApiKey as string,
@@ -748,14 +755,15 @@ export function getRoadmapUserProfile(): RoadmapUserProfile | null {
   } catch { settings = null }
   if (!settings) return null
   const s = settings as Record<string, unknown>
+  const study = s.study as Record<string, unknown> | undefined
   return {
-    targetBand: s.targetBand as number,
-    currentBand: s.currentBand as number,
-    examDate: s.examDate as string,
-    dailyStudyMinutes: s.dailyStudyMinutes as number,
-    weakSkills: s.weakSkills as string[],
-    studyGoal: s.studyGoal as string,
-    preferredSchedule: s.preferredSchedule as string[],
+    targetBand: (study?.targetBand as number) ?? (s.targetBand as number),
+    currentBand: (study?.currentBand as number) ?? (s.currentBand as number),
+    examDate: (study?.examDate as string) ?? (s.examDate as string),
+    dailyStudyMinutes: (study?.dailyStudyMinutes as number) ?? (s.dailyStudyMinutes as number),
+    weakSkills: (study?.weakSkills as string[]) ?? (s.weakSkills as string[]),
+    studyGoal: (study?.studyGoal as string) ?? (s.studyGoal as string),
+    preferredSchedule: (study?.preferredSchedule as string[]) ?? (s.preferredSchedule as string[]),
   }
 }
 
