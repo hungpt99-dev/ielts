@@ -26,3 +26,5 @@ export {
 } from './utils'
 
 export { UserSettingsRepository } from './repository'
+
+export { migrateFromLegacySettings } from './migration'
