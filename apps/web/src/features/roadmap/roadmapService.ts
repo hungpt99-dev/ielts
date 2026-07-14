@@ -634,6 +634,8 @@ async function enrichPlanWithAI(
           aiCandidateId: candidate.candidateId,
           generationReason: candidate.reason,
         }
+      } else {
+        console.log('[AIEnrich] UNMATCHED candidate:', JSON.stringify({ skill: candidate.skill, targetWeekId: candidate.targetWeekId, title: candidate.title?.slice(0, 60) }))
       }
     }
     console.log('[AIEnrich] Matched', matched, 'of', enrichment.taskCandidates.length, 'candidates')
