@@ -4,6 +4,6 @@ export interface LoggingConfig {
   readonly level: LogLevel
 }
 
-export const DEFAULT_LOGGING_CONFIG: LoggingConfig = {
+export const DEFAULT_LOGGING_CONFIG: LoggingConfig = Object.freeze({
   level: 'info',
-}
+})

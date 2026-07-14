@@ -15,6 +15,7 @@ export {
   DEFAULT_AI_MAX_RETRIES,
   DEFAULT_AI_TEMPERATURE,
   DEFAULT_AI_MODEL,
+  AI_PROVIDER_IDS,
 } from './ai'
 export { YouTubeInfrastructureConfig, YOUTUBE_INFRA_CONFIG } from './youtube'
 export { CORS_PROXY_URL, INFRASTRUCTURE_URLS } from './infrastructure'

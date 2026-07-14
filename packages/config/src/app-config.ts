@@ -22,24 +22,24 @@ export interface AppConfig {
   readonly youtube: YouTubeInfrastructureConfig
 }
 
-export const DEFAULT_APP_CONFIG: AppConfig = {
+export const DEFAULT_APP_CONFIG: AppConfig = Object.freeze({
   appName: 'IELTS Journey',
   appVersion: 'local',
   publicWebUrl: 'http://localhost:5173',
   logging: DEFAULT_LOGGING_CONFIG,
-  ai: {
+  ai: Object.freeze({
     timeoutMs: DEFAULT_AI_TIMEOUT_MS,
     maxRetries: DEFAULT_AI_MAX_RETRIES,
     temperature: DEFAULT_AI_TEMPERATURE,
     defaultModel: DEFAULT_AI_MODEL,
-  },
+  }),
   features: DEFAULT_FEATURE_FLAGS,
-  youtube: {
+  youtube: Object.freeze({
     apiBaseUrl: 'https://www.googleapis.com/youtube/v3',
     corsProxyBaseUrl: undefined,
     timeoutMs: 20_000,
-  },
-}
+  }),
+})
 
 export function createAppConfig(overrides?: Partial<AppConfig>): AppConfig {
   return { ...DEFAULT_APP_CONFIG, ...overrides }

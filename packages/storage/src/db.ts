@@ -1,8 +1,9 @@
 import Dexie, { type DexieOptions, type Table } from 'dexie'
 import type { AppDatabaseSchema } from './migrations'
 import { StorageError, DatabaseClosedError } from './errors'
+import { STORAGE_KEYS } from '@ielts/config'
 
-export const DB_NAME = 'ielts-journey'
+export const DB_NAME = STORAGE_KEYS.indexedDB.databaseName
 
 export interface IDatabase {
   vocabulary: Table<Record<string, unknown>, string>

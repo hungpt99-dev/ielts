@@ -7,11 +7,11 @@ export interface FeatureFlags {
   readonly progressReview: boolean
 }
 
-export const DEFAULT_FEATURE_FLAGS: FeatureFlags = {
+export const DEFAULT_FEATURE_FLAGS: FeatureFlags = Object.freeze({
   aiTutor: true,
   learningEngine: true,
   planEngine: true,
   youtubeLearning: true,
   proactiveTutor: true,
   progressReview: true,
-}
+})

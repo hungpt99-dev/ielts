@@ -1,7 +1,8 @@
+import { STORAGE_KEYS } from '@ielts/config'
 import { DEFAULT_SHARED_SETTINGS } from './defaults'
 import type { SharedSettings } from './types'
 
-export const SETTINGS_STORAGE_KEY = 'ielts-settings'
+export const SETTINGS_STORAGE_KEY = STORAGE_KEYS.localStorage.userSettings
 
 export async function getSettings(key?: string): Promise<SharedSettings> {
   const storageKey = key ?? SETTINGS_STORAGE_KEY

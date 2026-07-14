@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { AI_PROVIDER_IDS } from '@ielts/config'
 
 export const OPENAI_BASE_URL = 'https://api.openai.com/v1'
 export const DEFAULT_MODEL = 'gpt-4.1-mini'
@@ -6,11 +7,6 @@ export const DEFAULT_MODEL = 'gpt-4.1-mini'
 export const AI_PROVIDERS = ['openai', 'custom'] as const
 
 export const aiProviderSchema = z.enum(AI_PROVIDERS)
-
-export const AI_PROVIDER_IDS = [
-  'openai', 'claude', 'gemini', 'deepseek',
-  'openrouter', 'groq', 'local', 'custom',
-] as const
 
 export const aiUserSettingsSchema = z.object({
   providerId: z.enum(AI_PROVIDER_IDS).default('openai'),

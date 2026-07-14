@@ -1,6 +1,7 @@
 import type { IDatabase } from './db'
 import { getDb, safeDb } from './db'
 import { MigrationError } from './errors'
+import { STORAGE_KEYS } from '@ielts/config'
 
 export interface StorageVersion {
   number: number
@@ -306,7 +307,7 @@ export const APP_SCHEMA: AppDatabaseSchema = {
   ],
 }
 
-const STORED_VERSION_KEY = 'schema_version'
+const STORED_VERSION_KEY = STORAGE_KEYS.indexedDB.schemaVersionKey
 
 export function getSchemaForVersion(version: number): StorageVersion | undefined {
   return APP_SCHEMA.versions.find(v => v.number === version)

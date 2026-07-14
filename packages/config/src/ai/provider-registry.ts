@@ -1,6 +1,6 @@
 import type { AiProviderId, AiProviderDefinition } from './ai-types'
 
-export const AI_PROVIDER_DEFINITIONS: Record<AiProviderId, AiProviderDefinition> = {
+export const AI_PROVIDER_DEFINITIONS = {
   openai: {
     id: 'openai',
     displayName: 'OpenAI',
@@ -87,7 +87,7 @@ export const AI_PROVIDER_DEFINITIONS: Record<AiProviderId, AiProviderDefinition>
     allowsCustomModel: true,
     visibleInProviderPicker: true,
   },
-}
+} as const satisfies Record<AiProviderId, AiProviderDefinition>
 
 export function getVisibleProviders(): AiProviderDefinition[] {
   return Object.values(AI_PROVIDER_DEFINITIONS).filter(p => p.visibleInProviderPicker)
