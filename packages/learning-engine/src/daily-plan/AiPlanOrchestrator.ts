@@ -667,12 +667,16 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
     }
   }
 
+  private repairJSON(raw: string): string {
+    return raw.replace(/,\s*([}\]])/g, '$1')
+  }
+
   private parseAndValidate<T>(
     content: string,
     schema: z.ZodType<T>,
   ): T | null {
     try {
-      const cleaned = this.extractJSON(content);
+      const cleaned = this.repairJSON(this.extractJSON(content));
       const parsed = JSON.parse(cleaned) as unknown;
       const result = schema.safeParse(parsed);
       return result.success ? result.data : null;
@@ -687,7 +691,7 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
     schema: z.ZodType<T>,
   ): T[] | null {
     try {
-      const cleaned = this.extractJSON(content);
+      const cleaned = this.repairJSON(this.extractJSON(content));
       const parsed = JSON.parse(cleaned);
       const items: unknown[] = Array.isArray(parsed)
         ? parsed
