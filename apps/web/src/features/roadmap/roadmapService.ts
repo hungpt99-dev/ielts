@@ -581,7 +581,9 @@ async function enrichPlanWithAI(
       return result.content
     }
 
-    const orchestrator = new AiPlanOrchestrator(aiCallFn)
+    const orchestrator = new AiPlanOrchestrator(aiCallFn, {
+      callLimits: { maximumCallsPerGeneration: 10 },
+    })
     const enrichment = await orchestrator.enrichPlan({
       profile,
       planningWindow: plan.planningWindow,
@@ -601,9 +603,14 @@ async function enrichPlanWithAI(
     console.log('[AIEnrich] Enriching... candidates:', enrichment.taskCandidates.length, 'planTasks:', planTasks.length)
     let matched = 0
     for (const candidate of enrichment.taskCandidates) {
-      const match = planTasks.find(
+      let match = planTasks.find(
         t => t.weekId === candidate.targetWeekId && t.skill === candidate.skill && t.sourceType === 'built-in',
       )
+      if (!match) {
+        match = planTasks.find(
+          t => t.weekId === candidate.targetWeekId && t.skill === candidate.skill,
+        )
+      }
       if (match) {
         matched++
         match.title = candidate.title
