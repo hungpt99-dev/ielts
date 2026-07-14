@@ -309,8 +309,9 @@ export class AiPlanOrchestrator {
         taskCandidates.push(...candidates);
         callStats.successfulCalls++;
         this.cache.set(cacheKey, JSON.stringify(candidates));
+        console.log('[AiOrchestrator] Batch', batch.batchIndex, 'got', candidates.length, 'candidates (required:', batch.requiredCount, ')')
       } else {
-        console.log('[AiOrchestrator] Task candidates failed for batch:', batch.batchIndex, 'required:', batch.requiredCount, 'weeks:', batch.weekIds.length)
+        console.log('[AiOrchestrator] Task candidates FAILED for batch:', batch.batchIndex, 'required:', batch.requiredCount, 'weeks:', batch.weekIds.length)
         callStats.failedCalls++;
         fallbackUsed = true;
       }
