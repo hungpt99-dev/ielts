@@ -264,6 +264,9 @@ export default function Settings() {
           nativeLanguage: form.nativeLanguage,
         },
       })
+      if (aiApiKeyInput) {
+        try { localStorage.setItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${aiProviderInput || 'openai'}`, aiApiKeyInput) } catch {}
+      }
       if (notifications.enabled && 'Notification' in window) {
         Notification.requestPermission()
       }
