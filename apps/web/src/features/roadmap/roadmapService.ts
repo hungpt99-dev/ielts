@@ -1,7 +1,7 @@
 import type { TaskEntry, StudyGoal } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 
-import { STORAGE_KEYS, DEFAULT_APP_CONFIG } from '@ielts/config'
+import { STORAGE_KEYS, DEFAULT_APP_CONFIG, AI_PROVIDER_DEFINITIONS } from '@ielts/config'
 import { SKILL_TO_CATEGORY } from './constants'
 import { getLearningEngine } from '../../services/engineBootstrap'
 import type { RoadmapLearningTask } from '@ielts/learning-engine'
@@ -501,9 +501,9 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
       weakSkills: (study?.weakSkills as string[]) ?? (s.weakSkills as string[]) ?? [],
       studyGoal: (study?.studyGoal as string) ?? (s.studyGoal as string) ?? 'academic',
       preferredSchedule: (study?.preferredSchedule as string[]) ?? (s.preferredSchedule as string[]) ?? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
-      aiEnabled: s.aiEnabled as boolean,
-      aiProvider: s.aiProvider as string,
-      aiApiKey: s.aiApiKey as string,
+      aiEnabled: (s.aiEnabled as boolean) ?? !!(s.aiApiKey || (s.ai as Record<string, unknown>)?.apiKey),
+      aiProvider: (s.aiProvider as string) ?? (s.ai as Record<string, unknown>)?.providerId as string ?? 'openai',
+      aiApiKey: (s.aiApiKey as string) ?? (s.ai as Record<string, unknown>)?.apiKey as string ?? '',
     },
     overrides: { planStartDate: today },
   })
@@ -537,8 +537,9 @@ async function enrichPlanWithAI(
   const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
   const userCfg = raw ? JSON.parse(raw) : {}
   const ai = (userCfg?.ai as Record<string, unknown>) ?? {}
-  const apiKey = (ai.apiKey as string) || ''
-  const hasAI = !!((settings.aiEnabled as boolean) && apiKey)
+  const providerId = (ai.providerId as string) ?? 'openai'
+  const apiKey = (ai.apiKey as string) || (settings.aiApiKey as string) || localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${providerId}`) || ''
+  const hasAI = !!((settings.aiEnabled as boolean) ?? !!apiKey) && !!apiKey
   if (!hasAI || plan.weeks.length === 0) return plan
 
   try {
@@ -547,8 +548,8 @@ async function enrichPlanWithAI(
 
     const config = {
       apiKey,
-      baseUrl: (ai?.customApiUrl as string) || 'https://api.openai.com/v1',
-      model: (ai?.model as string) || DEFAULT_APP_CONFIG.ai.defaultModel,
+      baseUrl: (ai.customApiUrl as string) || (settings.aiBaseUrl as string) || AI_PROVIDER_DEFINITIONS[providerId as keyof typeof AI_PROVIDER_DEFINITIONS]?.defaultApiUrl || 'https://api.openai.com/v1',
+      model: (ai.model as string) || (settings.aiModel as string) || DEFAULT_APP_CONFIG.ai.defaultModel,
     }
 
     const aiCallFn: import('@ielts/learning-engine').AICallFn = async (systemPrompt, userPrompt) => {
