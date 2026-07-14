@@ -1,15 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import type { UserConfiguration } from '@ielts/settings'
+import { loadUserConfiguration } from '@ielts/settings'
 import { STORAGE_KEYS } from '@ielts/config'
-
-function loadUserConfig(): UserConfiguration {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
-    return raw ? JSON.parse(raw) : { version: 1 }
-  } catch {
-    return { version: 1 }
-  }
-}
 
 function saveUserConfig(config: UserConfiguration): void {
   try {
@@ -23,12 +15,12 @@ interface SettingsContextValue {
 }
 
 const SettingsContext = createContext<SettingsContextValue>({
-  settings: loadUserConfig(),
+  settings: loadUserConfiguration(),
   updateSettings: () => {},
 })
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<UserConfiguration>(loadUserConfig)
+  const [settings, setSettings] = useState<UserConfiguration>(loadUserConfiguration)
 
   useEffect(() => {
     saveUserConfig(settings)
@@ -40,7 +32,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       if (detail) {
         setSettings((prev) => ({ ...prev, ...detail }))
       } else {
-        setSettings(loadUserConfig())
+        setSettings(loadUserConfiguration())
       }
     }
     window.addEventListener('ielts-settings-updated', handleSettingsUpdate)

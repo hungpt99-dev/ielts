@@ -29,3 +29,4 @@ export {
 export type { UserSettingsRepository } from './repository'
 
 export { migrateFromLegacySettings } from './migration'
+export { loadUserConfiguration } from './settings-service'
