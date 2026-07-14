@@ -20,6 +20,41 @@ let learningEngineInstance: LearningEngine | null = null
 
 const systemClock = new SystemClock()
 
+function mapNativeLanguage(lang: string | undefined): string {
+  if (!lang || lang === '' || lang.toLowerCase() === 'auto') return 'english'
+  const lower = lang.toLowerCase()
+  const map: Record<string, string> = {
+    vi: 'vietnamese', vietnamese: 'vietnamese',
+    en: 'english', english: 'english',
+    ar: 'arabic', arabic: 'arabic',
+    bn: 'bengali', bengali: 'bengali',
+    nl: 'dutch', dutch: 'dutch',
+    fr: 'french', french: 'french',
+    de: 'german', german: 'german',
+    el: 'greek', greek: 'greek',
+    hi: 'hindi', hindi: 'hindi',
+    id: 'indonesian', indonesian: 'indonesian',
+    it: 'italian', italian: 'italian',
+    ja: 'japanese', japanese: 'japanese',
+    ko: 'korean', korean: 'korean',
+    ms: 'malay', malay: 'malay',
+    fa: 'persian', persian: 'persian',
+    pl: 'polish', polish: 'polish',
+    pt: 'portuguese', portuguese: 'portuguese',
+    ru: 'russian', russian: 'russian',
+    es: 'spanish', spanish: 'spanish',
+    sw: 'swahili', swahili: 'swahili',
+    tl: 'tagalog', tagalog: 'tagalog',
+    ta: 'tamil', tamil: 'tamil',
+    th: 'thai', thai: 'thai',
+    tr: 'turkish', turkish: 'turkish',
+    ur: 'urdu', urdu: 'urdu',
+    'chinese': 'chinese', 'chinese (simplified)': 'chinese',
+    'chinese (traditional)': 'chinese',
+  }
+  return map[lower] ?? 'english'
+}
+
 function createAiCredentialProvider(): AiCredentialProvider {
   return {
     async getCredential(providerId) {
@@ -438,8 +473,10 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       getProfile: () => profileRepo.get(),
       getExamContext: async () => {
         try {
-          const settings = JSON.parse(localStorage.getItem(STORAGE_KEYS.localStorage.appSettings) ?? '{}')
-          const examDate = settings.examDate ?? null
+          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+          const settings = raw ? JSON.parse(raw) : {}
+          const study = settings.study ?? {}
+          const examDate = study.examDate ?? null
           if (!examDate) return {}
           const daysUntil = Math.ceil((new Date(examDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
           return { examDate, daysUntilExam: Math.max(0, daysUntil), isUrgent: daysUntil <= 30, isFinalWeek: daysUntil <= 7 }
@@ -545,10 +582,12 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       },
       getPreferences: async () => {
         try {
-          const settings = JSON.parse(localStorage.getItem(STORAGE_KEYS.localStorage.appSettings) ?? '{}')
+          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+          const settings = raw ? JSON.parse(raw) : {}
+          const study = settings.study ?? {}
           return {
             preferredMode: 'general-teacher' as const,
-            language: settings.nativeLanguage === 'vi' ? 'vietnamese' as const : 'english' as const,
+            language: mapNativeLanguage(study.nativeLanguage as string),
             explanationLevel: 'detailed' as const,
             correctionStyle: 'gentle' as const,
             proactiveEnabled: true,

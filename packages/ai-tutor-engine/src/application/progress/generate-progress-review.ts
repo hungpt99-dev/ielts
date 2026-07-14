@@ -48,23 +48,17 @@ export async function generateProgressReview(
   }
 
   if (deps?.aiClient) {
-    console.log('[ProgressReview] AI client exists, calling generateStructured...')
-    console.log('[ProgressReview] summary before AI:', result.summary)
     const aiResult = await deps.aiClient.generateStructured<{ enrichedSummary: string }>({
       systemPrompt: 'You are an IELTS tutor generating a progress review. Use the provided data to create a personalized summary.',
       userMessage: JSON.stringify(result),
       schema: { enrichedSummary: '' },
     })
-    console.log('[ProgressReview] aiResult:', JSON.stringify(aiResult))
 
     if (aiResult.success && aiResult.data) {
       const enriched = (aiResult.data as Record<string, unknown>).enrichedSummary ?? (aiResult.data as Record<string, unknown>).text
       if (enriched && typeof enriched === 'string') {
         result.summary = enriched
       }
-      console.log('[ProgressReview] summary after AI enrichment:', result.summary)
-    } else {
-      console.log('[ProgressReview] AI enrichment skipped or failed')
     }
   }
 
@@ -73,12 +67,7 @@ export async function generateProgressReview(
 
 function buildSummary(state: LearnerStateSnapshot, _progress: ReturnType<typeof analyzeLearnerProgress>): string {
   const parts: string[] = []
-  const currentBand = state.profile.currentOverallBand
-  const targetBand = state.profile.targetOverallBand
-  console.log('[buildSummary] profile:', JSON.stringify(state.profile))
-  console.log('[buildSummary] progress:', JSON.stringify(state.progress))
-  console.log('[buildSummary] exam:', JSON.stringify(state.exam))
-  parts.push(`You are currently at band ${currentBand ?? '?'}, targeting band ${targetBand ?? '?'}.`)
+  parts.push(`You are currently at band ${state.profile.currentOverallBand ?? '?'}, targeting band ${state.profile.targetOverallBand ?? '?'}.`)
 
   if (state.progress.studyStreak > 0) {
     parts.push(`You have a ${state.progress.studyStreak}-day study streak.`)
@@ -88,9 +77,7 @@ function buildSummary(state: LearnerStateSnapshot, _progress: ReturnType<typeof 
     parts.push(`${state.exam.daysUntilExam} days until your exam.`)
   }
 
-  const result = parts.join(' ')
-  console.log('[buildSummary] result:', JSON.stringify(result))
-  return result
+  return parts.join(' ')
 }
 
 function mapRepeatedMistakes(state: LearnerStateSnapshot) {
