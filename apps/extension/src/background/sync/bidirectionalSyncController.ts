@@ -1,3 +1,4 @@
+import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { getAllVocabulary, saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { getAllMistakes, saveMistakeEntry } from '../../storage/mistakeStore'
 import { getAllEntries, saveEntry } from '../../storage/indexedDB'
@@ -54,7 +55,7 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
       await saveSettings({
         ...(current as any),
         aiProvider: (webSettings.aiProvider as string) || (current as any).aiProvider || 'openai',
-        aiModel: (webSettings.aiModel as string) || (current as any).aiModel || 'gpt-4o-mini',
+        aiModel: (webSettings.aiModel as string) || (current as any).aiModel || DEFAULT_AI_MODEL,
         aiBaseUrl: (webSettings.aiBaseUrl as string) || (current as any).aiBaseUrl || '',
         themeMode: (webSettings.themeMode as string) || (current as any).themeMode || 'light',
       } as any)

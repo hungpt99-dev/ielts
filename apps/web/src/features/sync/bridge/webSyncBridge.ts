@@ -1,3 +1,4 @@
+import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { BRIDGE_NAMESPACE } from './extensionBridge.types'
 import { DatabaseService } from '../../../services/storage/Database'
 import { loadAppSettings } from '../../../services/storage/SettingsStorage'
@@ -206,7 +207,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
             artifacts: artifactEntries,
             settings: {
               aiProvider: settings.aiProvider || 'openai',
-              aiModel: settings.aiModel || 'gpt-4o-mini',
+              aiModel: settings.aiModel || DEFAULT_AI_MODEL,
               aiBaseUrl: settings.aiBaseUrl || settings.aiEndpoint || '',
               aiApiKey: settings.aiApiKey || '',
               themeMode: settings.darkMode ? 'dark' : 'light',

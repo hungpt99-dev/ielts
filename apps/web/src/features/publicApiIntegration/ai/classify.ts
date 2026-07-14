@@ -18,7 +18,7 @@ import type {
   MistakeReview,
   VocabularyExtraction,
 } from '@ielts/ai'
-import { DEFAULT_APP_CONFIG, STORAGE_KEYS } from '@ielts/config'
+import { DEFAULT_APP_CONFIG, STORAGE_KEYS, AI_PROVIDER_DEFINITIONS, DEFAULT_AI_MODEL } from '@ielts/config'
 import { getLearningEngine } from '../../../services/engineBootstrap'
 
 export interface AiProviderConfig {
@@ -152,10 +152,12 @@ export function getStoredAiConfig(): AiProviderConfig {
     const config = readUserConfig()
     const ai = (config?.ai as Record<string, unknown>) ?? {}
     const defaultProvider = DEFAULT_APP_CONFIG.ai
+    const providerId = (ai?.providerId as string) || 'openai'
+    const providerDef = Object.values(AI_PROVIDER_DEFINITIONS).find(p => p.id === providerId)
     return {
       apiKey: (ai?.apiKey as string) ?? (config?.aiApiKey as string) ?? '',
-      baseUrl: (ai?.customApiUrl as string) ?? defaultProvider.defaultBaseUrl ?? 'https://api.openai.com/v1',
-      model: (ai?.model as string) ?? defaultProvider.defaultModel ?? 'gpt-4o-mini',
+      baseUrl: (ai?.customApiUrl as string) ?? providerDef?.defaultApiUrl ?? 'https://api.openai.com/v1',
+      model: (ai?.model as string) ?? defaultProvider.defaultModel ?? DEFAULT_AI_MODEL,
     }
   } catch (error) {
     console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);

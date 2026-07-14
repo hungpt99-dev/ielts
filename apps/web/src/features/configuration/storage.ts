@@ -15,7 +15,7 @@ import type {
   StudyReminderFrequency,
   PrivacyLevel,
 } from './models'
-import { STORAGE_KEYS } from '@ielts/config'
+import { STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
 
 const STORAGE_KEY = STORAGE_KEYS.localStorage.userSettings
 const LEGACY_STORAGE_KEY = STORAGE_KEYS.localStorage.appSettings
@@ -33,7 +33,7 @@ export function createDefaultProvider(): AiProviderConfig {
     provider: 'openai' as AiProviderType,
     apiKey: '',
     baseUrl: 'https://api.openai.com/v1',
-    model: 'gpt-4o-mini',
+    model: DEFAULT_AI_MODEL,
     temperature: 0.7,
     maxTokens: 2048,
     systemPrompt: '',

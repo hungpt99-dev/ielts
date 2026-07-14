@@ -5,6 +5,7 @@ import {
   generateListeningQuestions,
   generateShadowingScripts,
 } from '@ielts/ai'
+import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { saveVocabularyEntry, type ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import { safeStorageGet } from '../../utils/safe-chrome'
 import {
@@ -47,7 +48,7 @@ async function getAIProviderConfig(): Promise<{ apiKey: string; baseUrl: string;
   return {
     apiKey: localResult.aiApiKey || '',
     baseUrl: settings.aiBaseUrl || 'https://api.openai.com/v1',
-    model: settings.aiModel || 'gpt-4o-mini',
+    model: settings.aiModel || DEFAULT_AI_MODEL,
   }
 }
 

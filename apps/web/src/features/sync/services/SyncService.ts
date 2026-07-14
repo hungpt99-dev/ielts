@@ -1,3 +1,4 @@
+import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { DatabaseService } from '../../../services/storage/Database'
 import { loadAppSettings, saveAppSettings } from '../../../services/storage/SettingsStorage'
 import { getClient } from '../bridge/ExtensionBridgeClient'
@@ -15,7 +16,7 @@ function mapWebSettingsToShared(): Record<string, unknown> {
   const s = loadAppSettings()
   return {
     aiProvider: s.aiProvider || 'openai',
-    aiModel: s.aiModel || 'gpt-4o-mini',
+    aiModel: s.aiModel || DEFAULT_AI_MODEL,
     aiBaseUrl: s.aiBaseUrl || s.aiEndpoint || '',
     aiApiKey: s.aiApiKey || '',
     themeMode: s.darkMode ? 'dark' : 'light',

@@ -12,7 +12,7 @@ import {
 import { testConnection } from '../services/ai/testConnection'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'
-import { ROUTES, STORAGE_KEYS } from '@ielts/config'
+import { ROUTES, STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
@@ -281,7 +281,7 @@ export default function Settings() {
           aiProvider: 'openai' as const,
           aiBaseUrl: '',
           aiEndpoint: '',
-          aiModel: 'gpt-4o-mini',
+          aiModel: DEFAULT_AI_MODEL,
           aiEnabled: false,
           darkMode: false,
         }
@@ -289,7 +289,7 @@ export default function Settings() {
         setAiApiKeyInput('')
         setAiProviderInput('openai')
         setAiBaseUrlInput('')
-        setAiModelInput('gpt-4o-mini')
+        setAiModelInput(DEFAULT_AI_MODEL)
         setAiEnabledInput(false)
         updateSettings(defaults)
         setThemeMode('system')
@@ -757,7 +757,7 @@ export default function Settings() {
                             setAiProviderInput(val as 'openai' | 'custom')
                             if (val === 'openai') {
                               setAiBaseUrlInput('')
-                              setAiModelInput('gpt-4o-mini')
+                              setAiModelInput(DEFAULT_AI_MODEL)
                             }
                             setAiTestResult(null)
                             setDirty(true)

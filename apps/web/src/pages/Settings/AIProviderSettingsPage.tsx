@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../../context/SettingsContext'
 import { testConnection } from '../../services/ai/testConnection'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
+import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { ROUTES } from '@ielts/config'
 import { emitAIProviderConfigured, emitSettingsChanged } from '../../features/websiteActions/eventEmitters'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
@@ -79,7 +80,7 @@ export default function AIProviderSettingsPage() {
     setProvider('openai')
     setApiKey('')
     setBaseUrl('')
-    setModel('gpt-4o-mini')
+    setModel(DEFAULT_AI_MODEL)
     setTestResult(null)
     setDirty(true)
     updateSettings({
@@ -87,7 +88,7 @@ export default function AIProviderSettingsPage() {
       aiProvider: 'openai',
       aiBaseUrl: '',
       aiEndpoint: '',
-      aiModel: 'gpt-4o-mini',
+      aiModel: DEFAULT_AI_MODEL,
       aiEnabled: false,
     })
     showFeedback('success', 'AI settings reset to defaults.')
@@ -273,7 +274,7 @@ export default function AIProviderSettingsPage() {
                     setProvider(val as 'openai' | 'custom')
                     if (val === 'openai') {
                       setBaseUrl('')
-                      setModel('gpt-4o-mini')
+                      setModel(DEFAULT_AI_MODEL)
                     }
                     setTestResult(null)
                     setDirty(true)

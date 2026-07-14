@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { PUBLIC_API_SOURCES } from "../types";
 import { useSettings } from "../../../context/SettingsContext";
 import { testConnection } from "../../../services/ai/testConnection";
-import { STORAGE_KEYS } from "@ielts/config";
+import { STORAGE_KEYS, DEFAULT_AI_MODEL } from "@ielts/config";
 import Card, {
   CardContent,
   CardHeader,
@@ -172,7 +172,7 @@ export default function ApiKeySettings() {
     setAiKey("");
     setAiProvider("openai");
     setAiBaseUrl("");
-    setAiModel("gpt-4o-mini");
+    setAiModel(DEFAULT_AI_MODEL);
     setAiEnabled(false);
     setAiTestResult(null);
     updateSettings({
@@ -180,7 +180,7 @@ export default function ApiKeySettings() {
       aiProvider: "openai",
       aiBaseUrl: "",
       aiEndpoint: "",
-      aiModel: "gpt-4o-mini",
+      aiModel: DEFAULT_AI_MODEL,
       aiEnabled: false,
     });
     setAiSaved(true);
@@ -197,7 +197,7 @@ export default function ApiKeySettings() {
     }
     setAiTesting(true);
     setAiTestResult(null);
-    const result = await testConnection({ apiKey: aiKey, baseUrl: aiBaseUrl || 'https://api.openai.com/v1', model: aiModel || 'gpt-4o-mini' });
+    const result = await testConnection({ apiKey: aiKey, baseUrl: aiBaseUrl || 'https://api.openai.com/v1', model: aiModel || DEFAULT_AI_MODEL });
     setAiTestResult({ ok: result.ok, message: result.message });
     setAiTesting(false);
   }
@@ -495,7 +495,7 @@ export default function ApiKeySettings() {
                     setAiProvider(val);
                     if (val === "openai") {
                       setAiEndpoint("");
-                      setAiModel("gpt-4o-mini");
+                      setAiModel(DEFAULT_AI_MODEL);
                     }
                     setAiTestResult(null);
                   }}

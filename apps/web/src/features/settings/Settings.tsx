@@ -8,6 +8,7 @@ import {
   type NotificationPrefs,
 } from '../../services/storage/SettingsStorage'
 import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'
+import { DEFAULT_AI_MODEL } from '@ielts/config'
 import type { AppExportData } from '../../models'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
@@ -174,7 +175,7 @@ export default function Settings() {
           aiProvider: 'openai' as const,
           aiBaseUrl: '',
           aiEndpoint: '',
-          aiModel: 'gpt-4o-mini',
+          aiModel: DEFAULT_AI_MODEL,
           aiEnabled: false,
           darkMode: false,
         }

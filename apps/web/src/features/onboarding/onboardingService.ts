@@ -1,7 +1,7 @@
 import type { AppSettings, StudyGoal } from '../../models'
 import { saveAppSettings } from '../../services/storage/SettingsStorage'
 import { DatabaseService } from '../../services/storage/Database'
-import { STORAGE_KEYS } from '@ielts/config'
+import { STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
@@ -154,7 +154,7 @@ export async function completeOnboarding(data: OnboardingData): Promise<void> {
     aiApiKey: '',
     aiProvider: 'openai',
     aiEndpoint: '',
-    aiModel: 'gpt-4o-mini',
+    aiModel: DEFAULT_AI_MODEL,
     darkMode: false,
     aiEnabled: false,
   }

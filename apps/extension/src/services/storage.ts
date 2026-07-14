@@ -31,7 +31,7 @@ const LOCAL_KEYS = {
   LAST_VIDEO_PAGE: 'lastVideoPage',
   PENDING_VIDEO_INFO: 'pendingVideoInfo',
   INSTALLED_AT: 'installedAt',
-  SETTINGS_BACKUP: EXT_LOCAL_KEYS.extensionLocal.settingsBackup,
+  SETTINGS_BACKUP: EXT_STORAGE_KEYS.extensionLocal.settingsBackup,
 } as const
 
 const DEFAULT_PROGRESS: DailyProgress = {

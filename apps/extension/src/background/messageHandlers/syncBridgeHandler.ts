@@ -1,3 +1,4 @@
+import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { getAllVocabulary, saveVocabularyEntry } from '../../storage/vocabularyStore'
 import { getAllMistakes, saveMistakeEntry } from '../../storage/mistakeStore'
 import { loadSettings, saveSettings, setApiKey } from '../settingsStorage'
@@ -65,7 +66,7 @@ export async function handleExportData(): Promise<{
         mistakes: mistakes as unknown as Record<string, unknown>[],
         settings: {
           aiProvider: extSettings?.aiProvider || 'openai',
-          aiModel: extSettings?.aiModel || 'gpt-4o-mini',
+          aiModel: extSettings?.aiModel || DEFAULT_AI_MODEL,
           aiBaseUrl: extSettings?.aiBaseUrl || '',
           aiApiKey: extSettings?.aiApiKey || '',
           themeMode: extSettings?.themeMode || 'light',
@@ -98,7 +99,7 @@ export async function handleImportData(payload: unknown): Promise<{
       await saveSettings({
         ...current as any,
         aiProvider: (s.aiProvider as string) || current.aiProvider || 'openai',
-        aiModel: (s.aiModel as string) || current.aiModel || 'gpt-4o-mini',
+        aiModel: (s.aiModel as string) || current.aiModel || DEFAULT_AI_MODEL,
         aiBaseUrl: (s.aiBaseUrl as string) || current.aiBaseUrl || '',
         aiApiKey: (s.aiApiKey as string) || current.aiApiKey || '',
         themeMode: (s.themeMode as string) || current.themeMode || 'light',
