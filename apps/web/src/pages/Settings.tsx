@@ -12,6 +12,7 @@ import {
 import { testConnection } from '../services/ai/testConnection'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'
+import { ROUTES } from '@ielts/config'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
@@ -1226,7 +1227,7 @@ export default function Settings() {
                         <Button
                           size="sm"
                           variant="primary"
-                          onClick={() => navigate('/settings/extension')}
+                          onClick={() => navigate(ROUTES.settingsExtension)}
                         >
                           Manage Extension
                         </Button>

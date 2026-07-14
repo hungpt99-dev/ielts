@@ -4,6 +4,7 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell,
 } from 'recharts'
 import Button from '../../components/ui/Button'
+import { ROUTES } from '@ielts/config'
 import ErrorDisplay from '../../components/ui/ErrorDisplay'
 import Card from '../../components/ui/Card'
 import { openAITutorChat } from '../ai-tutor/utils/openChat'
@@ -751,7 +752,7 @@ export default function ProgressTracker({ snapshot, loading, error, onRetry, onN
       {/* Zone 4: Vocabulary + Mistakes */}
       <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         <div>
-          <SectionHeader title="Vocabulary" action={{ label: 'View all words', onClick: () => navigate('/vocabulary') }} />
+          <SectionHeader title="Vocabulary" action={{ label: 'View all words', onClick: () => navigate(ROUTES.vocabulary) }} />
           <div style={{ marginTop: 'var(--spacing-sm)' }}>
             <div style={{
               padding: 'var(--spacing-md)',
@@ -798,7 +799,7 @@ export default function ProgressTracker({ snapshot, loading, error, onRetry, onN
           </div>
         </div>
         <div>
-          <SectionHeader title="Mistakes" action={{ label: 'View details', onClick: () => navigate('/mistakes') }} />
+          <SectionHeader title="Mistakes" action={{ label: 'View details', onClick: () => navigate(ROUTES.mistakes) }} />
           <div style={{ marginTop: 'var(--spacing-sm)' }}>
             <WeakSkillsCard weakSkills={snapshot.weakSkills} />
           </div>
@@ -808,7 +809,7 @@ export default function ProgressTracker({ snapshot, loading, error, onRetry, onN
       {/* Zone 5: Plan Adherence + Recent Activity */}
       <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         <div>
-          <SectionHeader title="Study Plan" action={{ label: 'Adjust plan', onClick: () => navigate('/roadmap') }} />
+          <SectionHeader title="Study Plan" action={{ label: 'Adjust plan', onClick: () => navigate(ROUTES.roadmap) }} />
           <div style={{ marginTop: 'var(--spacing-sm)' }}>
             <RoadmapProgressBar progress={snapshot.roadmapProgress} />
           </div>

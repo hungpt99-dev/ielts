@@ -8,6 +8,7 @@ import {
   type LearningEventSubscriber,
 } from '../LearningEventBus'
 import { resetInMemoryStore } from '../learningEventRepository'
+import { ROUTES } from '@ielts/config'
 import type { CreateLearningEventInput, LearningEvent } from '../types'
 
 function setupDb() {
@@ -29,7 +30,7 @@ function makeInput(overrides: Partial<CreateLearningEventInput> = {}): CreateLea
       lastActiveAt: null,
       isReturnVisit: false,
     },
-    page: '/dashboard',
+    page: ROUTES.dashboard,
     ...overrides,
   }
 }
@@ -78,7 +79,7 @@ describe('LearningEventBus', () => {
       expect(event.eventType).toBe('app_opened')
       expect(event.source).toBe('website')
       expect(event.timestamp).toBeTruthy()
-      expect(event.page).toBe('/dashboard')
+      expect(event.page).toBe(ROUTES.dashboard)
       expect(event.payload.eventType).toBe('app_opened')
       expect(event.sessionId).toBeTruthy()
       expect(event.syncStatus).toBe('local_only')
@@ -292,7 +293,7 @@ describe('LearningEventBus', () => {
       destroyDb()
 
       const input = makeInput({
-        page: '/vocabulary',
+        page: ROUTES.vocabulary,
         entityType: 'vocabulary',
         entityId: 'v-1',
         metadata: { source: 'test' },
@@ -304,7 +305,7 @@ describe('LearningEventBus', () => {
       expect(event.eventType).toBe('app_opened')
       expect(event.source).toBe('website')
       expect(event.timestamp).toBeTruthy()
-      expect(event.page).toBe('/vocabulary')
+      expect(event.page).toBe(ROUTES.vocabulary)
       expect(event.entityType).toBe('vocabulary')
       expect(event.entityId).toBe('v-1')
       expect(event.payload.eventType).toBe('app_opened')

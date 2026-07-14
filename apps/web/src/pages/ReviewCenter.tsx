@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { ROUTES } from '@ielts/config'
 import { DatabaseService } from '../services/storage/Database'
 import { getDailyReviewQueue } from '../utils/spaced-repetition'
 import type {
@@ -123,7 +124,7 @@ export default function ReviewCenter() {
           description: 'Words scheduled for review by spaced repetition',
           count: dueVocab.length,
           items: dueVocab,
-          linkTo: '/review',
+          linkTo: ROUTES.review,
           icon: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15',
           color: 'border-l-purple-500',
         },
@@ -133,7 +134,7 @@ export default function ReviewCenter() {
           description: 'Words marked as hard or still in new/learning status',
           count: difficultItems.length,
           items: difficultItems,
-          linkTo: '/vocabulary',
+          linkTo: ROUTES.vocabulary,
           icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z',
           color: 'border-l-red-500',
         },
@@ -143,7 +144,7 @@ export default function ReviewCenter() {
           description: 'Grammar topics marked as weak and needing review',
           count: grammarItems.length,
           items: grammarItems,
-          linkTo: '/grammar',
+          linkTo: ROUTES.grammar,
           icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
           color: 'border-l-orange-500',
         },
@@ -153,7 +154,7 @@ export default function ReviewCenter() {
           description: 'Common mistakes sorted by frequency',
           count: mistakeItems.length,
           items: mistakeItems,
-          linkTo: '/mistakes',
+          linkTo: ROUTES.mistakes,
           icon: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z',
           color: 'border-l-yellow-500',
         },
@@ -163,7 +164,7 @@ export default function ReviewCenter() {
           description: 'Writing sessions older than 7 days without an improved version',
           count: essayItems.length,
           items: essayItems,
-          linkTo: '/writing',
+          linkTo: ROUTES.writing,
           icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z',
           color: 'border-l-blue-500',
         },
@@ -173,7 +174,7 @@ export default function ReviewCenter() {
           description: 'Speaking sessions older than 7 days without an improved answer',
           count: speakingItems.length,
           items: speakingItems,
-          linkTo: '/speaking',
+          linkTo: ROUTES.speaking,
           icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z',
           color: 'border-l-green-500',
         },

@@ -13,6 +13,7 @@ import { EmptyState } from '@ielts/ui/components/EmptyState'
 import { LoadingSkeleton } from '@ielts/ui/components/LoadingSkeleton'
 import { ErrorState } from '@ielts/ui/components/ErrorState'
 import { Modal } from '@ielts/ui/components/Modal'
+import { ROUTES } from '@ielts/config'
 import { Drawer } from '@ielts/ui/components/Drawer'
 import PronounceButton from '../../components/ui/PronounceButton'
 import WordForm from '../../features/vocabulary/components/WordForm'
@@ -387,7 +388,7 @@ export default function NotebookPage() {
           description="Build your IELTS vocabulary with words, meanings, and examples"
           actions={
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
-              <Button variant="secondary" size="sm" onClick={() => navigate('/review')}>
+              <Button variant="secondary" size="sm" onClick={() => navigate(ROUTES.review)}>
                 <IconRefresh size={16} style={{ marginRight: 'var(--spacing-2xs)' }} />
                 Review
               </Button>

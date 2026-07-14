@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import type { RoadmapDay } from '../roadmapService'
 import type { TaskEntry } from '../../../models'
 import EditableText from './EditableText'
+import { ROUTES } from '@ielts/config'
 
 interface DayCardProps {
   day: RoadmapDay
@@ -315,17 +316,17 @@ export default function DayCard({
                     {!task.isDone && (
                       <button onClick={() => {
                         const route: Record<string, string> = {
-                          Vocabulary: '/vocabulary',
-                          Reading: '/reading',
-                          Listening: '/listening',
-                          'Writing Task 1': '/writing',
-                          'Writing Task 2': '/writing',
-                          'Speaking Part 1': '/speaking',
-                          'Speaking Part 2': '/speaking',
-                          'Speaking Part 3': '/speaking',
-                          Grammar: '/grammar',
+                          Vocabulary: ROUTES.vocabulary,
+                          Reading: ROUTES.reading,
+                          Listening: ROUTES.listening,
+                          'Writing Task 1': ROUTES.writing,
+                          'Writing Task 2': ROUTES.writing,
+                          'Speaking Part 1': ROUTES.speaking,
+                          'Speaking Part 2': ROUTES.speaking,
+                          'Speaking Part 3': ROUTES.speaking,
+                          Grammar: ROUTES.grammar,
                         }
-                        navigate(route[task.category] ?? '/reading')
+                        navigate(route[task.category] ?? ROUTES.reading)
                       }} className="rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors hover:brightness-90 active:scale-[0.97]" style={{ color: 'var(--color-primary)', backgroundColor: 'var(--color-primary-light)' }}>
                         Practice
                       </button>
@@ -350,7 +351,7 @@ export default function DayCard({
                 Ask AI for help
               </button>
               {isToday && (
-                <button onClick={() => navigate('/roadmap')} className="text-xs font-medium transition-colors hover:brightness-95 px-2 py-1 rounded-lg" style={{ color: 'var(--color-primary)' }}>
+                <button onClick={() => navigate(ROUTES.roadmap)} className="text-xs font-medium transition-colors hover:brightness-95 px-2 py-1 rounded-lg" style={{ color: 'var(--color-primary)' }}>
                   View roadmap →
                 </button>
               )}

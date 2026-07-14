@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { ROUTES } from '@ielts/config'
 import PageContent from '../components/layout/PageContent'
 import Button from '../components/ui/Button'
 
@@ -18,7 +19,7 @@ export default function NotFoundPage() {
           The page you're looking for doesn't exist or has been moved.
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <Button variant="primary" onClick={() => navigate('/dashboard')}>
+          <Button variant="primary" onClick={() => navigate(ROUTES.dashboard)}>
             Go to Dashboard
           </Button>
           <Button variant="ghost" onClick={() => navigate(-1)}>

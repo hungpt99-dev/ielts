@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import 'fake-indexeddb/auto'
 import { initDb, destroyDb, getDb, APP_SCHEMA } from '@ielts/storage'
 import { LearningEventRepository, resetInMemoryStore } from '../learningEventRepository'
+import { ROUTES } from '@ielts/config'
 import type { CreateLearningEventInput, LearningEvent } from '../types'
 
 function setupDb() {
@@ -23,7 +24,7 @@ function makeInput(overrides: Partial<CreateLearningEventInput> = {}): CreateLea
       lastActiveAt: null,
       isReturnVisit: false,
     },
-    page: '/dashboard',
+    page: ROUTES.dashboard,
     ...overrides,
   }
 }
@@ -62,14 +63,14 @@ describe('LearningEventRepository', () => {
 
     it('uses provided optional fields', async () => {
       const input = makeInput({
-        page: '/progress',
+        page: ROUTES.progress,
         entityType: 'progress',
         entityId: 'progress-1',
         metadata: { source: 'test' },
         correlationId: 'corr-1',
       })
       const event = await repo.save(input)
-      expect(event.page).toBe('/progress')
+      expect(event.page).toBe(ROUTES.progress)
       expect(event.entityType).toBe('progress')
       expect(event.entityId).toBe('progress-1')
       expect(event.metadata).toEqual({ source: 'test' })

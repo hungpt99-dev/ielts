@@ -13,6 +13,7 @@ import PageHeader from '../../components/layout/PageHeader'
 import PageContent from '../../components/layout/PageContent'
 import { IconMistakeReview, IconAdd } from '@ielts/ui'
 import { generateId } from '../../utils'
+import { ROUTES } from '@ielts/config'
 
 const MISTAKE_SKILLS: { value: MistakeSkill; label: string; color: string }[] = [
   { value: 'vocabulary', label: 'Vocabulary', color: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300' },
@@ -1120,12 +1121,12 @@ export default function MistakeNotebook() {
                 </Button>
                 <Button size="xs" variant="ghost" onClick={() => {
                   const skill = (detailEntry as MistakeEntry).skill
-                  const route = skill === 'reading' ? '/reading'
-                    : skill === 'listening' ? '/listening'
-                    : skill === 'writing' ? '/writing'
-                    : skill === 'speaking' ? '/speaking'
-                    : skill === 'grammar' ? '/grammar'
-                    : '/reading'
+                  const route = skill === 'reading' ? ROUTES.reading
+                    : skill === 'listening' ? ROUTES.listening
+                    : skill === 'writing' ? ROUTES.writing
+                    : skill === 'speaking' ? ROUTES.speaking
+                    : skill === 'grammar' ? ROUTES.grammar
+                    : ROUTES.reading
                   navigate(route)
                 }}>
                   Generate Practice

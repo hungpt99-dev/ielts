@@ -1,3 +1,4 @@
+import { ROUTES } from '@ielts/config'
 import { emitLearningEvent } from '../learningEvents/LearningEventBus'
 import type {
   AppOpenedPayload,
@@ -41,7 +42,7 @@ export function emitDashboardOpened(activeTasks: number): void {
     emitLearningEvent({
       eventType: 'dashboard_opened',
       source: 'website',
-      page: '/dashboard',
+      page: ROUTES.dashboard,
       entityType: 'dashboard',
       payload: { eventType: 'dashboard_opened', activeTasks } satisfies DashboardOpenedPayload,
     })
@@ -69,7 +70,7 @@ export function emitStudyRoadmapViewed(roadmapId: string, weeksPlanned: number):
     emitLearningEvent({
       eventType: 'study_roadmap_viewed',
       source: 'website',
-      page: '/roadmap',
+      page: ROUTES.roadmap,
       entityType: 'roadmap',
       payload: { eventType: 'study_roadmap_viewed', roadmapId, weeksPlanned } satisfies StudyRoadmapViewedPayload,
     })
@@ -83,7 +84,7 @@ export function emitVocabularySaved(vocabularyId: string, word: string, topic: s
     emitLearningEvent({
       eventType: 'vocabulary_saved',
       source: 'vocabulary',
-      page: '/vocabulary',
+      page: ROUTES.vocabulary,
       entityType: 'vocabulary',
       entityId: vocabularyId,
       payload: { eventType: 'vocabulary_saved', vocabularyId, word, topic, sessionWordCount } satisfies VocabularySavedPayload,
@@ -98,7 +99,7 @@ export function emitVocabularyReviewed(vocabularyId: string, word: string, ratin
     emitLearningEvent({
       eventType: 'vocabulary_reviewed',
       source: 'vocabulary',
-      page: '/vocabulary',
+      page: ROUTES.vocabulary,
       entityType: 'vocabulary',
       entityId: vocabularyId,
       payload: { eventType: 'vocabulary_reviewed', vocabularyId, word, rating, sessionReviewCount } satisfies VocabularyReviewedPayload,
@@ -113,7 +114,7 @@ export function emitVocabularyForgotten(vocabularyId: string, word: string, time
     emitLearningEvent({
       eventType: 'vocabulary_forgotten',
       source: 'vocabulary',
-      page: '/vocabulary',
+      page: ROUTES.vocabulary,
       entityType: 'vocabulary',
       entityId: vocabularyId,
       payload: { eventType: 'vocabulary_forgotten', vocabularyId, word, timesForgotten } satisfies VocabularyForgottenPayload,
@@ -128,7 +129,7 @@ export function emitVocabularyMastered(vocabularyId: string, word: string, total
     emitLearningEvent({
       eventType: 'vocabulary_mastered',
       source: 'vocabulary',
-      page: '/vocabulary',
+      page: ROUTES.vocabulary,
       entityType: 'vocabulary',
       entityId: vocabularyId,
       payload: { eventType: 'vocabulary_mastered', vocabularyId, word, totalMastered } satisfies VocabularyMasteredPayload,
@@ -158,7 +159,7 @@ export function emitReadingPracticeCompleted(sessionId: string, title: string, a
     emitLearningEvent({
       eventType: 'reading_practice_completed',
       source: 'practice',
-      page: '/reading',
+      page: ROUTES.reading,
       entityType: 'reading',
       entityId: sessionId,
       payload: { eventType: 'reading_practice_completed', sessionId, title, accuracy, totalQuestions, correctAnswers, timeSpentSeconds } satisfies ReadingPracticeCompletedPayload,
@@ -173,7 +174,7 @@ export function emitListeningPracticeCompleted(sessionId: string, title: string,
     emitLearningEvent({
       eventType: 'listening_practice_completed',
       source: 'practice',
-      page: '/listening',
+      page: ROUTES.listening,
       entityType: 'listening',
       entityId: sessionId,
       payload: { eventType: 'listening_practice_completed', sessionId, title, accuracy, totalQuestions, correctAnswers, timeSpentSeconds } satisfies ListeningPracticeCompletedPayload,
@@ -188,7 +189,7 @@ export function emitWritingSubmitted(sessionId: string, taskType: 'task1' | 'tas
     emitLearningEvent({
       eventType: 'writing_submitted',
       source: 'practice',
-      page: '/writing',
+      page: ROUTES.writing,
       entityType: 'writing',
       entityId: sessionId,
       payload: { eventType: 'writing_submitted', sessionId, taskType, wordCount, estimatedBand } satisfies WritingSubmittedPayload,
@@ -203,7 +204,7 @@ export function emitSpeakingPracticed(sessionId: string, part: 1 | 2 | 3, durati
     emitLearningEvent({
       eventType: 'speaking_practiced',
       source: 'practice',
-      page: '/speaking',
+      page: ROUTES.speaking,
       entityType: 'speaking',
       entityId: sessionId,
       payload: { eventType: 'speaking_practiced', sessionId, part, durationSeconds } satisfies SpeakingPracticedPayload,
@@ -218,7 +219,7 @@ export function emitMistakeSaved(mistakeId: string, mistake: string, skill: stri
     emitLearningEvent({
       eventType: 'mistake_saved',
       source: 'website',
-      page: '/mistakes',
+      page: ROUTES.mistakes,
       entityType: 'mistake',
       entityId: mistakeId,
       payload: { eventType: 'mistake_saved', mistakeId, mistake, skill, sessionMistakeCount } satisfies MistakeSavedPayload,
@@ -233,7 +234,7 @@ export function emitRepeatedMistakeDetected(mistakeId: string, mistake: string, 
     emitLearningEvent({
       eventType: 'repeated_mistake_detected',
       source: 'website',
-      page: '/mistakes',
+      page: ROUTES.mistakes,
       entityType: 'mistake',
       entityId: mistakeId,
       payload: { eventType: 'repeated_mistake_detected', mistakeId, mistake, skill, repetitionCount } satisfies RepeatedMistakeDetectedPayload,
@@ -248,7 +249,7 @@ export function emitProgressViewed(timeRange: string): void {
     emitLearningEvent({
       eventType: 'progress_viewed',
       source: 'progress',
-      page: '/progress',
+      page: ROUTES.progress,
       entityType: 'progress',
       payload: { eventType: 'progress_viewed', timeRange } satisfies ProgressViewedPayload,
     })
@@ -262,7 +263,7 @@ export function emitAIProgressReviewGenerated(reviewId: string, periodStart: str
     emitLearningEvent({
       eventType: 'ai_progress_review_generated',
       source: 'progress',
-      page: '/progress',
+      page: ROUTES.progress,
       entityType: 'progress',
       entityId: reviewId,
       payload: { eventType: 'ai_progress_review_generated', reviewId, periodStart, periodEnd } satisfies AIProgressReviewGeneratedPayload,
@@ -277,7 +278,7 @@ export function emitSettingsChanged(changedKeys: string[]): void {
     emitLearningEvent({
       eventType: 'settings_changed',
       source: 'settings',
-      page: '/settings',
+      page: ROUTES.settings,
       entityType: 'settings',
       payload: { eventType: 'settings_changed', changedKeys } satisfies SettingsChangedPayload,
     })

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { ROUTES } from '@ielts/config'
 import Button from '../../../../components/ui/Button'
 
 interface WelcomeStepProps {
@@ -42,7 +43,7 @@ export default function WelcomeStep({ onStart }: WelcomeStepProps) {
         <Button variant="primary" size="lg" onClick={onStart} style={{ minWidth: '200px' }}>
           Start Setup
         </Button>
-        <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard', { replace: true })}>
+        <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.dashboard, { replace: true })}>
           I&apos;ll do this later
         </Button>
       </div>

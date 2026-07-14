@@ -1,4 +1,6 @@
 export const EXTENSION_URL =
   'https://chromewebstore.google.com/detail/ielts-journey'
 
-export const APP_URL = '/onboarding'
+import { ROUTES } from '@ielts/config'
+
+export const APP_URL = ROUTES.onboarding

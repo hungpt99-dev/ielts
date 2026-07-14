@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../../context/SettingsContext'
 import { testConnection } from '../../services/ai/testConnection'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
+import { ROUTES } from '@ielts/config'
 import { emitAIProviderConfigured, emitSettingsChanged } from '../../features/websiteActions/eventEmitters'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
@@ -166,7 +167,7 @@ export default function AIProviderSettingsPage() {
       >
         <button
           type="button"
-          onClick={() => navigate('/settings')}
+          onClick={() => navigate(ROUTES.settings)}
           style={{
             display: 'inline-flex',
             alignItems: 'center',

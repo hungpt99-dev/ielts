@@ -11,6 +11,7 @@ import LoadingSpinner from './ui/LoadingSpinner'
 import NotFoundPage from '../pages/NotFoundPage'
 import PrivacyPage from '../pages/PrivacyPage'
 import { openAITutorChat } from '../features/ai-tutor/utils/openChat'
+import { ROUTES } from '@ielts/config'
 
 const Dashboard = lazy(() => import('../features/dashboard/Dashboard'))
 const NotebookPage = lazy(() => import('../pages/vocabulary/NotebookPage'))
@@ -53,36 +54,36 @@ interface NavItemDefinition {
 }
 
 const mainNavItems: NavItemDefinition[] = [
-  { to: '/dashboard', label: 'Dashboard', icon: <IconHome size={20} />, end: true },
-  { to: '/roadmap', label: 'Study Roadmap', icon: <IconStudyPlan size={20} />, end: false },
+  { to: ROUTES.dashboard, label: 'Dashboard', icon: <IconHome size={20} />, end: true },
+  { to: ROUTES.roadmap, label: 'Study Roadmap', icon: <IconStudyPlan size={20} />, end: false },
 ]
 
 const tutorNavItem: NavItemDefinition = {
-  to: '/tutor',
+  to: ROUTES.tutor,
   label: 'AI Tutor',
   icon: <IconAITutor size={20} />,
   end: false,
 }
 
 const learningParentItems: NavItemDefinition[] = [
-  { to: '/vocabulary', label: 'Vocabulary', icon: <IconVocabulary size={20} />, end: false },
-  { to: '/artifacts', label: 'Saved Content', icon: <IconSaved size={20} />, end: false },
-  { to: '/books', label: 'Books', icon: <IconBookText size={20} />, end: false },
+  { to: ROUTES.vocabulary, label: 'Vocabulary', icon: <IconVocabulary size={20} />, end: false },
+  { to: ROUTES.artifacts, label: 'Saved Content', icon: <IconSaved size={20} />, end: false },
+  { to: ROUTES.books, label: 'Books', icon: <IconBookText size={20} />, end: false },
 ]
 
 const practiceSubItems: NavItemDefinition[] = [
-  { to: '/reading', label: 'Reading', icon: <IconReading size={20} /> },
-  { to: '/listening', label: 'Listening', icon: <IconListening size={20} /> },
-  { to: '/writing', label: 'Writing', icon: <IconWriting size={20} /> },
-  { to: '/speaking', label: 'Speaking', icon: <IconSpeaking size={20} /> },
-  { to: '/grammar', label: 'Grammar', icon: <IconGrammar size={20} /> },
-  { to: '/mistakes', label: 'Mistakes', icon: <IconMistakes size={20} /> },
+  { to: ROUTES.reading, label: 'Reading', icon: <IconReading size={20} /> },
+  { to: ROUTES.listening, label: 'Listening', icon: <IconListening size={20} /> },
+  { to: ROUTES.writing, label: 'Writing', icon: <IconWriting size={20} /> },
+  { to: ROUTES.speaking, label: 'Speaking', icon: <IconSpeaking size={20} /> },
+  { to: ROUTES.grammar, label: 'Grammar', icon: <IconGrammar size={20} /> },
+  { to: ROUTES.mistakes, label: 'Mistakes', icon: <IconMistakes size={20} /> },
 ]
 
 const progressSubItems: NavItemDefinition[] = [
-  { to: '/progress', label: 'Progress', icon: <IconProgress size={20} /> },
-  { to: '/mock-tests', label: 'Mock Tests', icon: <IconProgress size={20} /> },
-  { to: '/topics', label: 'Topics', icon: <IconStudyPlan size={20} /> },
+  { to: ROUTES.progress, label: 'Progress', icon: <IconProgress size={20} /> },
+  { to: ROUTES.mockTests, label: 'Mock Tests', icon: <IconProgress size={20} /> },
+  { to: ROUTES.topics, label: 'Topics', icon: <IconStudyPlan size={20} /> },
 ]
 
 function NavLinkItem({
@@ -182,8 +183,8 @@ export default function AppLayout() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const practicePaths = ['/reading', '/listening', '/writing', '/speaking', '/grammar', '/mistakes']
-    const progressPaths = ['/progress', '/mock-tests', '/topics']
+    const practicePaths = [ROUTES.reading, ROUTES.listening, ROUTES.writing, ROUTES.speaking, ROUTES.grammar, ROUTES.mistakes]
+    const progressPaths = [ROUTES.progress, ROUTES.mockTests, ROUTES.topics]
     if (practicePaths.some((p) => location.pathname.startsWith(p))) {
       setPracticeExpanded(true)
     }
@@ -197,36 +198,36 @@ export default function AppLayout() {
       id: 'home',
       label: 'Home',
       icon: <IconHome size={22} />,
-      active: location.pathname === '/dashboard',
-      onClick: () => navigate('/dashboard'),
+      active: location.pathname === ROUTES.dashboard,
+      onClick: () => navigate(ROUTES.dashboard),
     },
     {
       id: 'roadmap',
       label: 'Roadmap',
       icon: <IconTodayPlan size={22} />,
-      active: location.pathname.startsWith('/roadmap'),
-      onClick: () => navigate('/roadmap'),
+      active: location.pathname.startsWith(ROUTES.roadmap),
+      onClick: () => navigate(ROUTES.roadmap),
     },
     {
       id: 'tutor',
       label: 'AI',
       icon: <IconAITutor size={22} />,
-      active: location.pathname.startsWith('/tutor'),
-      onClick: () => navigate('/tutor'),
+      active: location.pathname.startsWith(ROUTES.tutor),
+      onClick: () => navigate(ROUTES.tutor),
     },
     {
       id: 'vocab',
       label: 'Vocab',
       icon: <IconVocabulary size={22} />,
-      active: location.pathname.startsWith('/vocabulary') || location.pathname.startsWith('/review'),
-      onClick: () => navigate('/vocabulary'),
+      active: location.pathname.startsWith(ROUTES.vocabulary) || location.pathname.startsWith(ROUTES.review),
+      onClick: () => navigate(ROUTES.vocabulary),
     },
     {
       id: 'progress',
       label: 'Progress',
       icon: <IconProgress size={22} />,
-      active: location.pathname.startsWith('/progress') || location.pathname.startsWith('/mock-tests') || location.pathname.startsWith('/topics'),
-      onClick: () => navigate('/progress'),
+      active: location.pathname.startsWith(ROUTES.progress) || location.pathname.startsWith(ROUTES.mockTests) || location.pathname.startsWith(ROUTES.topics),
+      onClick: () => navigate(ROUTES.progress),
     },
   ]
 
@@ -466,7 +467,7 @@ export default function AppLayout() {
                 </PageContainer>
               } />
             </Routes>
-            <ChatIcon hideButton={location.pathname === '/tutor'} />
+            <ChatIcon hideButton={location.pathname === ROUTES.tutor} />
           </main>
         </SafeAreaContainer>
 

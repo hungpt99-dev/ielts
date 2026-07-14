@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
+import { ROUTES } from '@ielts/config'
 import FinalCTASection from '../FinalCTASection'
 
 describe('FinalCTASection', () => {
@@ -14,7 +15,7 @@ describe('FinalCTASection', () => {
     render(<FinalCTASection />)
     const cta = screen.getByText('Start Learning Free')
     expect(cta).toBeInTheDocument()
-    expect(cta.closest('a')).toHaveAttribute('href', '/onboarding')
+    expect(cta.closest('a')).toHaveAttribute('href', ROUTES.onboarding)
   })
 
   it('renders trust badges', () => {

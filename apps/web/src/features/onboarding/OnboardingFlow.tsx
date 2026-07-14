@@ -6,6 +6,7 @@ import { onboardingRepository } from './OnboardingRepository'
 import { stepValidators } from './validation'
 import type { StepErrors } from './validation'
 import { completeOnboarding } from './onboardingService'
+import { ROUTES } from '@ielts/config'
 import OnboardingLayout from './components/OnboardingLayout'
 import Button from '../../components/ui/Button'
 import WelcomeStep from './components/steps/WelcomeStep'
@@ -99,7 +100,7 @@ export default function OnboardingFlow() {
         preferredLanguage: completed.preferredLanguage,
         tutorStyle: completed.tutorStyle,
       })
-      navigate('/dashboard', { replace: true })
+      navigate(ROUTES.dashboard, { replace: true })
     } catch (error) {
       console.error('apps/web/src/features/onboarding/OnboardingFlow.tsx error:', error);
       setSaveError(true)

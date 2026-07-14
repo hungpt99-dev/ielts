@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { openAITutorChat } from '../../features/ai-tutor/utils/openChat'
 import { emitStudyRoadmapViewed } from '../../features/websiteActions/eventEmitters'
+import { ROUTES } from '@ielts/config'
 import {
   ensureRoadmap,
   toggleTask,
@@ -218,14 +219,14 @@ export default function FullStudyRoadmapPage() {
               Try Again
             </button>
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate(ROUTES.dashboard)}
               className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
               style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
             >
               Go to Dashboard
             </button>
             <button
-              onClick={() => navigate('/onboarding')}
+              onClick={() => navigate(ROUTES.onboarding)}
               className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
               style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}
             >
@@ -294,14 +295,14 @@ export default function FullStudyRoadmapPage() {
 
           <div className="mx-auto mt-6 flex max-w-sm flex-col gap-3">
             <button
-              onClick={() => navigate('/mock-tests')}
+              onClick={() => navigate(ROUTES.mockTests)}
               className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-bold text-white transition-all hover:brightness-95"
               style={{ backgroundColor: 'var(--color-primary)' }}
             >
 <IconEdit size={16} /> Take a Mock Test
             </button>
             <button
-              onClick={() => navigate('/progress')}
+              onClick={() => navigate(ROUTES.progress)}
               className="inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-3 text-sm font-medium transition-all hover:brightness-95"
               style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
             >

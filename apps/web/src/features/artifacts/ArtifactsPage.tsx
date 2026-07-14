@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTutorNavigation } from '../../hooks/useTutorNavigation'
+import { ROUTES } from '@ielts/config'
 import type { Artifact, ArtifactCategory, VocabularyEntry } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import Card, { CardContent } from '../../components/ui/Card'
@@ -466,7 +467,7 @@ export default function ArtifactsPage() {
       updatedAt: now,
     } as never)
     setDetailItem(null)
-    navigate('/reading')
+    navigate(ROUTES.reading)
   }, [detailItem, navigate, showToast])
 
   const [savingVocab, setSavingVocab] = useState(false)
@@ -476,19 +477,19 @@ export default function ArtifactsPage() {
     const a = detailItem as ArtifactWithDetails
     const text = a.contentText || ''
     if (!text) {
-      navigate('/vocabulary')
+      navigate(ROUTES.vocabulary)
       return
     }
     setSavingVocab(true)
     try {
       const config = getStoredAiConfig()
       if (!config.apiKey) {
-        navigate('/vocabulary', { state: { contentText: text, source: detailItem.title } })
+        navigate(ROUTES.vocabulary, { state: { contentText: text, source: detailItem.title } })
         return
       }
       const { data, error } = await extractVocabulary(text, config)
       if (error || !data) {
-        navigate('/vocabulary', { state: { contentText: text, source: detailItem.title } })
+        navigate(ROUTES.vocabulary, { state: { contentText: text, source: detailItem.title } })
         return
       }
       const saved: VocabularyEntry[] = []
@@ -513,10 +514,10 @@ export default function ArtifactsPage() {
         saved.push(entry)
       }
       showToast(`Saved ${saved.length} vocabulary words from "${detailItem.title}"`)
-      navigate('/vocabulary')
+      navigate(ROUTES.vocabulary)
     } catch (error) {
       console.error('apps/web/src/features/artifacts/ArtifactsPage.tsx error:', error);
-      navigate('/vocabulary', { state: { contentText: a.contentText, source: detailItem.title } })
+      navigate(ROUTES.vocabulary, { state: { contentText: a.contentText, source: detailItem.title } })
     } finally {
       setSavingVocab(false)
     }
@@ -585,7 +586,7 @@ export default function ArtifactsPage() {
         className="!mb-4 sm:!mb-6"
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/settings/extension')}>
+            <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.settingsExtension)}>
               Extension Guide
             </Button>
             <Button onClick={openCreate}>

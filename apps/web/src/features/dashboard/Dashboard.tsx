@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTutorNavigation } from '../../hooks/useTutorNavigation'
 import { useDashboard } from '../../hooks/useDashboard'
+import { ROUTES } from '@ielts/config'
 import PageContent from '../../components/layout/PageContent'
 import { useDataRefresh } from '../../hooks/useDataRefresh'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
@@ -103,12 +104,12 @@ const skillIcons: Record<string, React.ReactNode> = {
 }
 
 const quickPracticeSkills = [
-  { label: 'Reading', path: '/reading', color: 'var(--color-skill-reading)', lightColor: 'var(--color-skill-reading-light)', icon: IconReading },
-  { label: 'Listening', path: '/listening', color: 'var(--color-skill-listening)', lightColor: 'var(--color-skill-listening-light)', icon: IconListening },
-  { label: 'Writing', path: '/writing', color: 'var(--color-skill-writing)', lightColor: 'var(--color-skill-writing-light)', icon: IconWriting },
-  { label: 'Speaking', path: '/speaking', color: 'var(--color-skill-speaking)', lightColor: 'var(--color-skill-speaking-light)', icon: IconSpeaking },
-  { label: 'Grammar', path: '/grammar', color: 'var(--color-info)', lightColor: 'var(--color-info-light)', icon: IconGrammar },
-  { label: 'Vocabulary', path: '/vocabulary', color: 'var(--color-primary)', lightColor: 'var(--color-primary-light)', icon: IconVocabulary },
+  { label: 'Reading', path: ROUTES.reading, color: 'var(--color-skill-reading)', lightColor: 'var(--color-skill-reading-light)', icon: IconReading },
+  { label: 'Listening', path: ROUTES.listening, color: 'var(--color-skill-listening)', lightColor: 'var(--color-skill-listening-light)', icon: IconListening },
+  { label: 'Writing', path: ROUTES.writing, color: 'var(--color-skill-writing)', lightColor: 'var(--color-skill-writing-light)', icon: IconWriting },
+  { label: 'Speaking', path: ROUTES.speaking, color: 'var(--color-skill-speaking)', lightColor: 'var(--color-skill-speaking-light)', icon: IconSpeaking },
+  { label: 'Grammar', path: ROUTES.grammar, color: 'var(--color-info)', lightColor: 'var(--color-info-light)', icon: IconGrammar },
+  { label: 'Vocabulary', path: ROUTES.vocabulary, color: 'var(--color-primary)', lightColor: 'var(--color-primary-light)', icon: IconVocabulary },
 ]
 
 export default function Dashboard() {
@@ -183,7 +184,7 @@ export default function Dashboard() {
             variant="default"
             title="Your IELTS journey starts here"
             description="Complete your onboarding and let's build your first study plan."
-            action={{ label: 'Create My First Study Plan', onClick: () => navigate('/roadmap') }}
+            action={{ label: 'Create My First Study Plan', onClick: () => navigate(ROUTES.roadmap) }}
           />
         </div>
       </PageContent>
@@ -326,7 +327,7 @@ export default function Dashboard() {
                 <Button
                   size="md"
                   className="w-full sm:w-auto"
-                  onClick={() => navigate('/roadmap')}
+                  onClick={() => navigate(ROUTES.roadmap)}
                 >
                   {tasks.length > 0 ? 'Continue Learning' : 'View Roadmap'}
                 </Button>
@@ -423,7 +424,7 @@ export default function Dashboard() {
                   <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{getEmptyStateMessage('no-tasks').title}</p>
                   <p className="mt-1 text-xs" style={{ color: 'var(--color-text-secondary)' }}>{getEmptyStateMessage('no-tasks').description}</p>
                   <div className="mt-4 flex gap-2">
-                    <Button size="sm" onClick={() => navigate('/roadmap')}>Create Plan</Button>
+                    <Button size="sm" onClick={() => navigate(ROUTES.roadmap)}>Create Plan</Button>
                     <Button variant="outline" size="sm" onClick={() => goToTutor({
                       prompt: `I have no tasks planned. I'm at band ${currentBand} targeting band ${targetBand}. My weak skills are ${weakSkills.join(', ')}. Suggest a study plan.`,
                       title: 'Study Plan Help',
@@ -498,7 +499,7 @@ export default function Dashboard() {
                   <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
                     {todayUnfinished.length} task{todayUnfinished.length > 1 ? 's' : ''} remaining
                   </p>
-                  <Button size="sm" variant="ghost" onClick={() => navigate('/roadmap')}>
+                  <Button size="sm" variant="ghost" onClick={() => navigate(ROUTES.roadmap)}>
                     View Full Plan
                   </Button>
                 </div>
@@ -567,11 +568,11 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="mt-3 flex flex-col sm:flex-row gap-2">
-                  <Button size="md" className="w-full sm:w-auto" variant={dueReviews > 0 ? 'primary' : 'outline'} onClick={() => navigate('/vocabulary')}>
+                  <Button size="md" className="w-full sm:w-auto" variant={dueReviews > 0 ? 'primary' : 'outline'} onClick={() => navigate(ROUTES.vocabulary)}>
                     {dueReviews > 0 ? `Review (${dueReviews})` : 'Vocabulary'}
                   </Button>
                   {recentMistakes > 0 && (
-                    <Button size="md" className="w-full sm:w-auto" variant="outline" onClick={() => navigate('/mistakes')}>
+                    <Button size="md" className="w-full sm:w-auto" variant="outline" onClick={() => navigate(ROUTES.mistakes)}>
                       View Mistakes
                     </Button>
                   )}
@@ -609,13 +610,13 @@ export default function Dashboard() {
                 <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                   <Button size="md" className="w-full sm:w-auto" onClick={() => {
                     const skillPathMap: Record<string, string> = {
-                      reading: '/reading',
-                      listening: '/listening',
-                      writing: '/writing',
-                      speaking: '/speaking',
-                      grammar: '/grammar',
-                      vocabulary: '/vocabulary',
-                      pronunciation: '/speaking',
+                      reading: ROUTES.reading,
+                      listening: ROUTES.listening,
+                      writing: ROUTES.writing,
+                      speaking: ROUTES.speaking,
+                      grammar: ROUTES.grammar,
+                      vocabulary: ROUTES.vocabulary,
+                      pronunciation: ROUTES.speaking,
                     }
                     const path = skillPathMap[weakSkills[0].toLowerCase()]
                     if (path) {
@@ -654,7 +655,7 @@ export default function Dashboard() {
           <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
             Skill Progress
           </h2>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/progress')}>
+          <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.progress)}>
             View Details
           </Button>
         </div>

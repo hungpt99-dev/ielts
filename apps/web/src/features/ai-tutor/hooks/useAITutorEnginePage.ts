@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAITutorEngine } from '../../../services/engineBootstrap'
 import { DatabaseService } from '../../../services/storage/Database'
+import { ROUTES } from '@ielts/config'
 import { loadAppSettings } from '../../../services/storage/SettingsStorage'
 import type { TaskEntry, VocabularyEntry, MistakeEntry } from '../../../models'
 import type { ProgressReview } from '../components/TeacherProgressReviewCard'
@@ -34,14 +35,14 @@ function getExamCountdown(examDate: string): number {
 
 function getRouteForSkill(skill: string): string {
   const map: Record<string, string> = {
-    reading: '/reading',
-    listening: '/listening',
-    writing: '/writing',
-    speaking: '/speaking',
-    vocabulary: '/vocabulary',
-    grammar: '/grammar',
+    reading: ROUTES.reading,
+    listening: ROUTES.listening,
+    writing: ROUTES.writing,
+    speaking: ROUTES.speaking,
+    vocabulary: ROUTES.vocabulary,
+    grammar: ROUTES.grammar,
   }
-  return map[skill.toLowerCase()] ?? '/dashboard'
+  return map[skill.toLowerCase()] ?? ROUTES.dashboard
 }
 
 const SKILL_NAMES = ['Reading', 'Listening', 'Writing', 'Speaking', 'Vocabulary', 'Grammar'] as const
@@ -290,14 +291,14 @@ export function useAITutorEnginePage(): AITutorPageState {
     onStartSession: useCallback(() => recordAndNavigate(getRouteForSkill(session.skill)), [session.skill, recordAndNavigate]),
     onViewDetails: useCallback(() => navigate('/today-plan'), [navigate]),
     onStartLesson: useCallback(() => recordAndNavigate(getRouteForSkill(session.skill)), [session.skill, recordAndNavigate]),
-    onReviewMistakes: useCallback(() => recordAndNavigate('/mistakes'), [recordAndNavigate]),
-    onPracticeVocabulary: useCallback(() => recordAndNavigate('/vocabulary'), [recordAndNavigate]),
-    onUpdateStudyPlan: useCallback(() => recordAndNavigate('/roadmap'), [recordAndNavigate]),
+    onReviewMistakes: useCallback(() => recordAndNavigate(ROUTES.mistakes), [recordAndNavigate]),
+    onPracticeVocabulary: useCallback(() => recordAndNavigate(ROUTES.vocabulary), [recordAndNavigate]),
+    onUpdateStudyPlan: useCallback(() => recordAndNavigate(ROUTES.roadmap), [recordAndNavigate]),
     onAdviceAction: useCallback((key: string) => {
       const actionMap: Record<string, string> = {
-        'complete-tasks': '/today-plan', 'review-grammar': '/grammar', 'vocabulary-review': '/vocabulary',
-        'practice-vocabulary': '/vocabulary', 'speaking-warmup': '/speaking', speaking: '/speaking',
-        'mock-test-prep': '/mock-tests', 'start-learning': '/dashboard', 'review-mistakes': '/mistakes',
+        'complete-tasks': '/today-plan', 'review-grammar': ROUTES.grammar, 'vocabulary-review': ROUTES.vocabulary,
+        'practice-vocabulary': ROUTES.vocabulary, 'speaking-warmup': ROUTES.speaking, speaking: ROUTES.speaking,
+        'mock-test-prep': ROUTES.mockTests, 'start-learning': ROUTES.dashboard, 'review-mistakes': ROUTES.mistakes,
       }
       navigate(actionMap[key] ?? '/today-plan')
     }, [navigate]),
@@ -308,7 +309,7 @@ export function useAITutorEnginePage(): AITutorPageState {
       }
       window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
     }, [isAiConfigured]),
-    onConfigureAi: useCallback(() => navigate('/settings/ai'), [navigate]),
+    onConfigureAi: useCallback(() => navigate(ROUTES.settingsAi), [navigate]),
     onSetTargetBand: useCallback(() => {
       window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
       try { sessionStorage.setItem('ai-tutor-pending-message', 'I want to set my IELTS target band.') } catch (error) {

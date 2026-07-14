@@ -6,6 +6,7 @@ import Button from '../../components/ui/Button'
 import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton'
 import { ErrorState, EmptyStateIllustrated } from '../../components/ui/EmptyState'
 import { EXTENSION_URL } from '../landing/config'
+import { ROUTES } from '@ielts/config'
 import PageHeader from '../../components/layout/PageHeader'
 import PageContent from '../../components/layout/PageContent'
 import { IconExtension } from '@ielts/ui'
@@ -305,7 +306,7 @@ export default function ExtensionConnectionPage() {
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
         <button
-          onClick={() => navigate('/settings')}
+          onClick={() => navigate(ROUTES.settings)}
           style={{
             display: 'flex',
             alignItems: 'center',
