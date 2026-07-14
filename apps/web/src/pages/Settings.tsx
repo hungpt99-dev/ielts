@@ -12,7 +12,7 @@ import {
 import { testConnection } from '../services/ai/testConnection'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'
-import { ROUTES, STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
+import { ROUTES, STORAGE_KEYS, AI_PROVIDER_DEFINITIONS } from '@ielts/config'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
@@ -182,9 +182,9 @@ export default function Settings() {
   const [aiTesting, setAiTesting] = useState(false)
   const [aiTestResult, setAiTestResult] = useState<{ ok: boolean; message: string } | null>(null)
   const [aiApiKeyInput, setAiApiKeyInput] = useState('')
-  const [aiProviderInput, setAiProviderInput] = useState(settings.ai?.providerId ?? 'openai')
-  const [aiBaseUrlInput, setAiBaseUrlInput] = useState(settings.ai?.customApiUrl ?? '')
-  const [aiModelInput, setAiModelInput] = useState(settings.ai?.model ?? '')
+  const [aiProviderInput, setAiProviderInput] = useState(settings.ai?.providerId ?? AI_PROVIDER_DEFINITIONS.openai.id)
+  const [aiBaseUrlInput, setAiBaseUrlInput] = useState(settings.ai?.customApiUrl ?? AI_PROVIDER_DEFINITIONS.openai.defaultApiUrl ?? '')
+  const [aiModelInput, setAiModelInput] = useState(settings.ai?.model ?? AI_PROVIDER_DEFINITIONS.openai.defaultModel ?? '')
   const [aiEnabledInput, setAiEnabledInput] = useState(true)
 
   const [confirmAction, setConfirmAction] = useState<{
