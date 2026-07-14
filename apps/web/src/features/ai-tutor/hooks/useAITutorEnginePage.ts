@@ -99,8 +99,12 @@ export function useAITutorEnginePage(): AITutorPageState {
 
   const isAiConfigured = (() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
-      return raw ? !!JSON.parse(raw).aiApiKey : false
+      const storedKey = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}openai`)
+      if (storedKey) return true
+      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+      if (!raw) return false
+      const cfg = JSON.parse(raw)
+      return !!(cfg.aiApiKey || cfg.ai?.apiKey)
     } catch (error) {
  console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
  return false }
