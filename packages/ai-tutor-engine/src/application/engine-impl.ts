@@ -23,6 +23,7 @@ import { generateContextSuggestions } from './recommendations/generate-context-s
 import { updateTutorMemory } from './memory/update-tutor-memory'
 import { TutorMemoryManager } from '../memory/tutor-memory-manager'
 import { SystemClock } from '../ports/clock-port'
+import { AiGenerateResultCache } from '@ielts/ai'
 
 export interface AITutorEngineDependencies {
   aiClient?: TutorAIClient
@@ -38,10 +39,12 @@ export class AITutorEngineImpl implements AITutorEngine {
   private deps: AITutorEngineDependencies
   private memoryManager: TutorMemoryManager
   private initialized = false
+  private progressCache: AiGenerateResultCache<ProgressReviewResult>
 
   constructor(deps: AITutorEngineDependencies) {
     this.deps = deps
     this.memoryManager = new TutorMemoryManager(deps.memoryRepository)
+    this.progressCache = new AiGenerateResultCache<ProgressReviewResult>({ ttlMs: 3_600_000 })
   }
 
   async initialize(): Promise<AITutorInitializationResult> {
@@ -135,26 +138,27 @@ export class AITutorEngineImpl implements AITutorEngine {
   async generateProgressReview(
     request: ProgressReviewRequest,
   ): Promise<TutorOperationResult<ProgressReviewResult>> {
+    const cacheKey = request.forceRegenerate ? '' : AiGenerateResultCache.generateKey('progress-review')
+    if (cacheKey) {
+      const cached = this.progressCache.get(cacheKey)
+      if (cached) return { status: 'success', data: cached }
+    }
     try {
       const learnerState = request.learnerState ?? await this.deps.contextBuilder.build('proactive')
-      console.log('[AITutorDebug] context built, profile:', JSON.stringify(learnerState.profile))
       const enrichedRequest: ProgressReviewRequest = {
         ...request,
         learnerState,
       }
       const result = await generateProgressReview(enrichedRequest, { aiClient: this.deps.aiClient })
-      console.log('[AITutorDebug] progress review generated, summary:', result.summary?.slice(0, 100))
+      if (cacheKey) this.progressCache.set(cacheKey, result)
       return { status: 'success', data: result }
     } catch (err) {
       console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
-      const message = err instanceof Error ? err.message : 'Unknown error'
-      const stack = err instanceof Error ? err.stack : ''
-      console.error('[AITutorDebug] generateProgressReview FAILED:', message, stack)
       return {
         status: 'failure',
         error: {
           code: 'progress_failed',
-          message,
+          message: err instanceof Error ? err.message : 'Unknown error',
           recoverable: true,
         },
       }

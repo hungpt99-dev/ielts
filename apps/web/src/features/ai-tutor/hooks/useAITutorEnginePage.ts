@@ -68,6 +68,7 @@ function determineFocus(weakSkills: string[], todayUnfinished: number, dueReview
 export function useAITutorEnginePage(): AITutorPageState {
   const navigate = useNavigate()
   const mountedRef = useRef(true)
+  const forceRefreshRef = useRef(false)
 
   const [profile, setProfile] = useState<LearningProfile>({
     targetBand: '', currentBand: 0, targetBandNum: 0, examDate: '', examCountdown: 0,
@@ -199,21 +200,13 @@ export function useAITutorEnginePage(): AITutorPageState {
       }))
 
       const engine = getAITutorEngine()
-      console.log('[AITutorDebug] engine available:', !!engine)
       if (engine) {
         try {
           const [nextAction, progressResult] = await Promise.all([
             engine.getNextBestAction({}),
-            engine.generateProgressReview({}),
+            engine.generateProgressReview({ forceRegenerate: forceRefreshRef.current }),
           ])
-
-          console.log('[AITutorDebug] nextAction status:', nextAction.status)
-          console.log('[AITutorDebug] progressResult status:', progressResult.status)
-          if (progressResult.status === 'success') {
-            console.log('[AITutorDebug] progressResult data keys:', Object.keys(progressResult.data ?? {}))
-          } else {
-            console.log('[AITutorDebug] progressResult error:', progressResult.error)
-          }
+          forceRefreshRef.current = false
 
           if (mountedRef.current) {
             setProgressReview(prev => {
@@ -249,7 +242,6 @@ export function useAITutorEnginePage(): AITutorPageState {
                 updates.generatedAt = d.generatedAt
               }
 
-              console.log('[AITutorDebug] progressReview updates:', updates)
               return { ...prev, ...updates }
             })
           }
@@ -272,6 +264,7 @@ export function useAITutorEnginePage(): AITutorPageState {
   }, [loadData])
 
   const onRefresh = useCallback(() => {
+    forceRefreshRef.current = true
     setRefreshing(true)
     loadData().finally(() => {
       if (mountedRef.current) setRefreshing(false)
