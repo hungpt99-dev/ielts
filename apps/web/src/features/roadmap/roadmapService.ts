@@ -616,6 +616,11 @@ async function enrichPlanWithAI(
           t => t.weekId === candidate.targetWeekId && t.skill === candidate.skill,
         )
       }
+      if (!match) {
+        match = planTasks.find(
+          t => t.skill === candidate.skill && t.sourceType === 'built-in' && !t.title.startsWith('[AI]'),
+        )
+      }
       if (match) {
         matched++
         match.title = candidate.title

@@ -502,9 +502,11 @@ Use this exact schema:
 
 Rules:
 - Skills must be one of: listening, reading, writing, speaking, vocabulary, grammar
-- primaryWeaknesses must have 1-4 entries
+- primaryWeaknesses must have 1-4 entries with specific, actionable reasons
 - secondaryWeaknesses must be an array of skills
-- learnerSummary must be under 500 characters
+- learnerSummary must be under 500 characters and personalized to the learner's band gap
+- recommendedSequence should order skills from highest to lowest priority
+- Be specific about why each weakness matters for IELTS
 - Do NOT include dates, schedules, or time allocations
 - Do NOT guarantee score improvements`;
 
@@ -535,7 +537,7 @@ Strong skills declared: ${profile.strongSkills.join(', ') || 'none'}`;
     previousSummary?: string,
     signal?: AbortSignal,
   ): Promise<AIWeeklyObjective[] | null> {
-    const systemPrompt = `You are an expert IELTS tutor creating weekly learning objectives.
+    const systemPrompt = `You are an expert IELTS tutor creating detailed weekly learning objectives.
 You must respond with valid JSON array only — no markdown, no explanation outside the JSON.
 Each entry must follow:
 {
@@ -550,7 +552,9 @@ Each entry must follow:
 Rules:
 - Return an array of objects, one per week
 - weekId must match the provided week IDs exactly
-- Objectives should show progression
+- Objectives should show clear progression from basic to advanced skills
+- Each objective should be specific and measurable
+- focus should describe the week's main theme (e.g., "Building academic vocabulary for Task 2 essays")
 - Do NOT include dates, time allocation, or scheduling
 - Do NOT guarantee score improvements`;
 
@@ -587,7 +591,7 @@ Learner profile:
     const batchWeeks = weeks.filter(w => batch.weekIds.includes(w.id));
     if (batchWeeks.length === 0) return [];
 
-    const systemPrompt = `You are an expert IELTS tutor creating task suggestions.
+    const systemPrompt = `You are an expert IELTS tutor creating personalized, detailed task suggestions for a study plan.
 You must respond with valid JSON array only — no markdown, no explanation outside the JSON.
 Each entry must follow:
 {
@@ -605,7 +609,14 @@ Each entry must follow:
   "prerequisites": [string] (optional, max 5)
 }
 
-Rules:
+Title quality rules (MOST IMPORTANT):
+- Each title must be specific and descriptive, NOT generic like "Writing Practice" or "Listening Practice"
+- Include the skill, task type, and focus area in the title
+- Example GOOD titles: "Academic Writing Task 1: Describe a Graph with Trends", "Skimming and Scanning Practice with Academic Passages"
+- Example BAD titles: "Writing Practice", "Reading Practice", "Listening Exercise"
+- Use IELTS-specific terminology (Task 1, Task 2, Part 1, multiple-choice, gap-fill, True/False/Not Given)
+
+Other rules:
 - recommendMinutes must be one of: ${ALLOWED_DURATIONS.join(', ')}
 - candidateId should be unique and contain the week reference
 - Generate at most ${batch.requiredCount} candidates
