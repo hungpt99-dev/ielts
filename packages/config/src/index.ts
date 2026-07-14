@@ -16,6 +16,8 @@ export {
   DEFAULT_AI_TEMPERATURE,
   DEFAULT_AI_MODEL,
   DEFAULT_AI_API_URL,
+  DEFAULT_AI_MAX_TOKENS,
+  DEFAULT_PLAN_ENRICH_MAX_CALLS,
   AI_PROVIDER_IDS,
 } from './ai'
 export { type YouTubeInfrastructureConfig, YOUTUBE_INFRA_CONFIG } from './youtube'

@@ -12,6 +12,8 @@ import {
   DEFAULT_STUDY_GOAL,
   DEFAULT_SCHEDULE,
   DEFAULT_WEAK_SKILLS,
+  DEFAULT_AI_MAX_TOKENS,
+  DEFAULT_PLAN_ENRICH_MAX_CALLS,
 } from '@ielts/config'
 import { SKILL_TO_CATEGORY } from './constants'
 import { getLearningEngine } from '../../services/engineBootstrap'
@@ -576,13 +578,13 @@ async function enrichPlanWithAI(
     const aiCallFn: import('@ielts/learning-engine').AICallFn = async (systemPrompt, userPrompt) => {
       const result = await callAI(systemPrompt, userPrompt, () => config, {
         temperature: 0.7,
-        maxTokens: 8192,
+        maxTokens: DEFAULT_AI_MAX_TOKENS,
       })
       return result.content
     }
 
     const orchestrator = new AiPlanOrchestrator(aiCallFn, {
-      callLimits: { maximumCallsPerGeneration: 10 },
+      callLimits: { maximumCallsPerGeneration: DEFAULT_PLAN_ENRICH_MAX_CALLS },
       onProgress: (phase, current, total) => {
         window.dispatchEvent(new CustomEvent('plan-enrich-progress', { detail: { phase, current, total } }))
       },
