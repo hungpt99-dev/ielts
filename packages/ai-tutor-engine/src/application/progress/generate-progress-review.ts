@@ -58,7 +58,10 @@ export async function generateProgressReview(
     console.log('[ProgressReview] aiResult:', JSON.stringify(aiResult))
 
     if (aiResult.success && aiResult.data) {
-      result.summary = aiResult.data.enrichedSummary
+      const enriched = (aiResult.data as Record<string, unknown>).enrichedSummary ?? (aiResult.data as Record<string, unknown>).text
+      if (enriched && typeof enriched === 'string') {
+        result.summary = enriched
+      }
       console.log('[ProgressReview] summary after AI enrichment:', result.summary)
     } else {
       console.log('[ProgressReview] AI enrichment skipped or failed')
