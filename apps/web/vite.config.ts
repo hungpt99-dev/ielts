@@ -80,6 +80,8 @@ export default defineConfig({
       'zod/v4/core': resolve(__dirname, '../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/index.js'),
       '@ielts/ai': resolve(__dirname, '../../packages/ai/src'),
       '@ielts/ai-tutor-engine': resolve(__dirname, '../../packages/ai-tutor-engine/src'),
+      '@ielts/config': resolve(__dirname, '../../packages/config/src'),
+      '@ielts/settings': resolve(__dirname, '../../packages/settings/src'),
       '@ielts/storage': resolve(__dirname, '../../packages/storage/src'),
       '@ielts/theme': resolve(__dirname, '../../packages/theme/src'),
       '@ielts/ui': resolve(__dirname, '../../packages/ui/src'),
