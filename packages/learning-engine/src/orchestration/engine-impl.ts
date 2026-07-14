@@ -1,7 +1,8 @@
 import type { LearningEngine, AdaptDifficultyRequest, AdaptDifficultyResult, GenerateReviewRequest, GenerateReviewResult, CreateContentSessionRequest } from './learning-engine-facade'
 import type { CreateLearningSessionRequest, CreateLearningSessionResult, CompleteLearningSessionRequest, CompleteLearningSessionResult, ResumeLearningSessionResult, LearningSessionSummaryResult } from '../domain/entities/learning-session'
 import type { GenerateLearningActivityRequest, GenerateLearningActivityResult } from '../domain/entities/learning-activity'
-import type { SubmitLearningAnswerRequest, SubmitLearningAnswerResult } from '../domain/entities/learning-attempt'
+import type { StartAttemptRequest, SubmitLearningAnswerRequest, SubmitLearningAnswerResult, LearningAttempt } from '../domain/entities/learning-attempt'
+import { startAttempt as startAttemptFn } from '../application/attempts/start-attempt'
 import type { LearningRecommendationRequest, LearningRecommendationResult } from '../domain/entities/learning-recommendation'
 import type { LearningOperationOptions, LearningOperationResult, LearningOperationMetadata } from '../domain/results/learning-operation-result'
 import type { LearnerContextPort } from '../ports/learner-context-port'
@@ -63,6 +64,22 @@ export class LearningEngineImpl implements LearningEngine {
       return {
         status: 'failure',
         error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to create session', recoverable: true },
+      }
+    }
+  }
+
+  async startAttempt(
+    request: StartAttemptRequest,
+    _options?: LearningOperationOptions,
+  ): Promise<LearningOperationResult<{ attempt: LearningAttempt }>> {
+    try {
+      const attempt = await startAttemptFn(request, { attemptRepository: this.deps.attemptRepository })
+      return { status: 'success', data: { attempt }, metadata: metadata(false, false) }
+    } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
+      return {
+        status: 'failure',
+        error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to start attempt', recoverable: true },
       }
     }
   }

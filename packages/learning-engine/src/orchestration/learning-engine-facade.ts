@@ -1,6 +1,6 @@
 import type { CreateLearningSessionRequest, CreateLearningSessionResult, CompleteLearningSessionRequest, CompleteLearningSessionResult, ResumeLearningSessionResult, LearningSessionSummaryResult } from '../domain/entities/learning-session'
 import type { GenerateLearningActivityRequest, GenerateLearningActivityResult } from '../domain/entities/learning-activity'
-import type { SubmitLearningAnswerRequest, SubmitLearningAnswerResult } from '../domain/entities/learning-attempt'
+import type { StartAttemptRequest, SubmitLearningAnswerRequest, SubmitLearningAnswerResult, LearningAttempt } from '../domain/entities/learning-attempt'
 import type { LearningRecommendationRequest, LearningRecommendationResult } from '../domain/entities/learning-recommendation'
 import type { LearningOperationOptions, LearningOperationResult } from '../domain/results/learning-operation-result'
 import type { RoadmapLearningTask } from '../ports/study-plan-port'
@@ -42,6 +42,11 @@ export interface LearningEngine {
     request: CreateLearningSessionRequest,
     options?: LearningOperationOptions,
   ): Promise<LearningOperationResult<CreateLearningSessionResult>>
+
+  startAttempt(
+    request: StartAttemptRequest,
+    options?: LearningOperationOptions,
+  ): Promise<LearningOperationResult<{ attempt: LearningAttempt }>>
 
   generateActivity(
     request: GenerateLearningActivityRequest,
