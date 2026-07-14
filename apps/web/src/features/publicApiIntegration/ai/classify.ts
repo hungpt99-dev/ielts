@@ -1,4 +1,4 @@
-import { callAI } from '@ielts/ai'
+import { callAI, AiConfigurationResolver } from '@ielts/ai'
 import type { ProviderConfig } from '@ielts/ai'
 import {
   readingQuestionsSchema,
@@ -18,7 +18,7 @@ import type {
   MistakeReview,
   VocabularyExtraction,
 } from '@ielts/ai'
-import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
+import { DEFAULT_APP_CONFIG, STORAGE_KEYS } from '@ielts/config'
 import { getLearningEngine } from '../../../services/engineBootstrap'
 
 export interface AiProviderConfig {
@@ -107,7 +107,6 @@ export interface MistakeReviewResult {
   tasks: MistakeReviewTask[]
 }
 
-const APP_SETTINGS_KEY = 'ielts-settings'
 const READING_SYSTEM_PROMPT = 'You are an IELTS reading examiner. Create reading questions. Return JSON: { "questions": [{ "question": string, "type": string, "options"?: string[], "answer": string, "explanation": string }] }'
 const LISTENING_SYSTEM_PROMPT = 'You are an IELTS listening examiner. Return JSON: { "gaps": [{ "sentence": string, "answer": string, "hint": string }] }'
 const SPEAKING_SYSTEM_PROMPT = 'You are an IELTS speaking examiner. Return JSON: { "prompts": [{ "part": 1|2|3, "question": string, "followUp"?: string }] }'
@@ -116,9 +115,31 @@ const GRAMMAR_SYSTEM_PROMPT = 'You are an IELTS grammar expert. Return JSON: { "
 const MISTAKE_REVIEW_SYSTEM_PROMPT = 'You are an IELTS tutor. Return JSON: { "tasks": [{ "type": string, "question": string, "answer": string, "explanation": string }] }'
 const VOCABULARY_EXTRACTION_SYSTEM_PROMPT = 'You are an IELTS vocabulary expert. Extract IELTS-level vocabulary from the given content.\nReturn JSON: { "words": [{ "word": string, "meaning": string, "partOfSpeech": string, "example": string, "synonyms": string[], "collocations": string[] }] }'
 
-function readAppSettings(): Record<string, unknown> | null {
+const _aiResolver = new AiConfigurationResolver(
+  {
+    async getCredential() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+        if (!raw) return undefined
+        const config = JSON.parse(raw)
+        if (config?.ai?.providerId && config.ai.providerId !== 'openai') {
+          const key = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${config.ai.providerId}`)
+          return key ? { apiKey: key } : undefined
+        }
+        const parsed = JSON.parse(raw)
+        const key = parsed?.aiApiKey || parsed?.ai?.apiKey
+        return key ? { apiKey: key } : undefined
+      } catch { return undefined }
+    },
+    async storeCredential() {},
+    async clearCredential() {},
+  },
+  DEFAULT_APP_CONFIG.ai,
+)
+
+function readUserConfig(): Record<string, unknown> | null {
   try {
-    const raw = localStorage.getItem(APP_SETTINGS_KEY)
+    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
     if (raw) return JSON.parse(raw)
   } catch (error) {
   console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);
@@ -128,25 +149,29 @@ function readAppSettings(): Record<string, unknown> | null {
 
 export function getStoredAiConfig(): AiProviderConfig {
   try {
-    const settings = readAppSettings()
+    const config = readUserConfig()
+    const ai = (config?.ai as Record<string, unknown>) ?? {}
+    const defaultProvider = DEFAULT_APP_CONFIG.ai
     return {
-      apiKey: (settings?.aiApiKey as string) ?? '',
-      baseUrl: (settings?.aiEndpoint as string) || OPENAI_BASE_URL,
-      model: (settings?.aiModel as string) || DEFAULT_MODEL,
+      apiKey: (ai?.apiKey as string) ?? (config?.aiApiKey as string) ?? '',
+      baseUrl: (ai?.customApiUrl as string) ?? defaultProvider.defaultBaseUrl ?? 'https://api.openai.com/v1',
+      model: (ai?.model as string) ?? defaultProvider.defaultModel ?? 'gpt-4o-mini',
     }
   } catch (error) {
     console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);
-    return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_MODEL }
+    return { apiKey: '', baseUrl: 'https://api.openai.com/v1', model: DEFAULT_APP_CONFIG.ai.defaultModel }
   }
 }
 
 export function storeAiConfig(config: Partial<AiProviderConfig>): void {
   try {
-    const current = readAppSettings() ?? {}
-    if (config.apiKey !== undefined) current.aiApiKey = config.apiKey
-    if (config.baseUrl !== undefined) current.aiEndpoint = config.baseUrl
-    if (config.model !== undefined) current.aiModel = config.model
-    localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(current))
+    const current = readUserConfig() ?? {}
+    const ai = (current.ai as Record<string, unknown>) ?? {}
+    if (config.apiKey !== undefined) ai.apiKey = config.apiKey
+    if (config.baseUrl !== undefined) ai.customApiUrl = config.baseUrl
+    if (config.model !== undefined) ai.model = config.model
+    current.ai = ai
+    localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(current))
   } catch (error) {
 console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);
   }
@@ -154,11 +179,13 @@ console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:'
 
 export function clearStoredAiConfig(): void {
   try {
-    const current = readAppSettings() ?? {}
-    delete current.aiApiKey
-    delete current.aiEndpoint
-    delete current.aiModel
-    localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(current))
+    const current = readUserConfig() ?? {}
+    const ai = (current.ai as Record<string, unknown>) ?? {}
+    delete ai.apiKey
+    delete ai.customApiUrl
+    delete ai.model
+    current.ai = ai
+    localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(current))
   } catch (error) {
 console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);
   }

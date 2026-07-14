@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAITutorEngine } from '../../../services/engineBootstrap'
 import { DatabaseService } from '../../../services/storage/Database'
-import { ROUTES } from '@ielts/config'
+import { ROUTES, STORAGE_KEYS } from '@ielts/config'
 import { loadAppSettings } from '../../../services/storage/SettingsStorage'
 import type { TaskEntry, VocabularyEntry, MistakeEntry } from '../../../models'
 import type { ProgressReview } from '../components/TeacherProgressReviewCard'
@@ -98,7 +98,7 @@ export function useAITutorEnginePage(): AITutorPageState {
 
   const isAiConfigured = (() => {
     try {
-      const raw = localStorage.getItem('ielts-settings')
+      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
       return raw ? !!JSON.parse(raw).aiApiKey : false
     } catch (error) {
  console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);

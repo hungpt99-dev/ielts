@@ -5,6 +5,7 @@ import {
   THEME_MODES,
   AI_PROVIDERS,
 } from '@ielts/settings'
+import { STORAGE_KEYS } from '@ielts/config'
 
 export { THEME_MODES, AI_PROVIDERS }
 
@@ -82,9 +83,9 @@ interface SyncSettings {
   nativeLanguage: string
 }
 
-const SYNC_KEY = 'extensionSettings'
-const LOCAL_API_KEY = 'aiApiKey'
-const LOCAL_SETTINGS_BACKUP = 'ielts-settings-backup'
+const SYNC_KEY = STORAGE_KEYS.extensionLocal.extensionSettings
+const LOCAL_API_KEY = STORAGE_KEYS.extensionLocal.aiApiKey
+const LOCAL_SETTINGS_BACKUP = STORAGE_KEYS.extensionLocal.settingsBackup
 
 function toSyncSettings(s: ExtensionSettings): SyncSettings {
   return {

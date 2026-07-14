@@ -1,4 +1,5 @@
 import { safeStorageSet } from '../utils/safe-chrome'
+import { STORAGE_KEYS as EXT_STORAGE_KEYS } from '@ielts/config'
 
 export interface DailyProgress {
   wordsAdded: number
@@ -23,14 +24,14 @@ export interface SyncStatus {
   lastSyncResult: 'success' | 'failed' | null
 }
 
-const STORAGE_KEYS = {
+const LOCAL_KEYS = {
   DAILY_PROGRESS: 'dailyProgress',
   AI_API_KEY: 'aiApiKey',
   SAVED_ITEMS: 'savedItems',
   LAST_VIDEO_PAGE: 'lastVideoPage',
   PENDING_VIDEO_INFO: 'pendingVideoInfo',
   INSTALLED_AT: 'installedAt',
-  SETTINGS_BACKUP: 'ielts-settings-backup',
+  SETTINGS_BACKUP: EXT_LOCAL_KEYS.extensionLocal.settingsBackup,
 } as const
 
 const DEFAULT_PROGRESS: DailyProgress = {
@@ -64,7 +65,7 @@ export const storageSet: StorageSet = (key: string, value: unknown) =>
   safeStorageSet({ [key]: value })
 
 export async function getDailyProgress(): Promise<DailyProgress> {
-  const progress = await promisifyChromeStorage<DailyProgress>(STORAGE_KEYS.DAILY_PROGRESS)
+  const progress = await promisifyChromeStorage<DailyProgress>(LOCAL_KEYS.DAILY_PROGRESS)
   return progress ?? { ...DEFAULT_PROGRESS }
 }
 
@@ -86,7 +87,7 @@ async function flushProgress(): Promise<void> {
     for (const [key, value] of Object.entries(patch) as [keyof DailyProgress, number][]) {
       updated[key] = (updated[key] || 0) + value
     }
-    await storageSet(STORAGE_KEYS.DAILY_PROGRESS, updated)
+    await storageSet(LOCAL_KEYS.DAILY_PROGRESS, updated)
   } catch (error) {
     console.error('apps/extension/src/services/storage.ts error:', error);
     // write failed — re-queue
@@ -128,39 +129,39 @@ export async function incrementDailyProgress(field: keyof DailyProgress, amount 
 }
 
 export async function getSavedItems<T>(): Promise<T[]> {
-  const items = await promisifyChromeStorage<T[]>(STORAGE_KEYS.SAVED_ITEMS)
+  const items = await promisifyChromeStorage<T[]>(LOCAL_KEYS.SAVED_ITEMS)
   return items ?? []
 }
 
 export async function addSavedItem<T extends Record<string, unknown>>(item: T): Promise<void> {
   const items = await getSavedItems<T>()
   items.unshift(item)
-  await storageSet(STORAGE_KEYS.SAVED_ITEMS, items)
+  await storageSet(LOCAL_KEYS.SAVED_ITEMS, items)
 }
 
 export async function getVideoPageInfo(): Promise<VideoPageInfo | null> {
-  return promisifyChromeStorage<VideoPageInfo>(STORAGE_KEYS.LAST_VIDEO_PAGE)
+  return promisifyChromeStorage<VideoPageInfo>(LOCAL_KEYS.LAST_VIDEO_PAGE)
 }
 
 export async function setVideoPageInfo(info: VideoPageInfo): Promise<void> {
-  await storageSet(STORAGE_KEYS.LAST_VIDEO_PAGE, info)
+  await storageSet(LOCAL_KEYS.LAST_VIDEO_PAGE, info)
 }
 
 export async function getPendingVideoInfo(): Promise<VideoPageInfo | null> {
-  return promisifyChromeStorage<VideoPageInfo>(STORAGE_KEYS.PENDING_VIDEO_INFO)
+  return promisifyChromeStorage<VideoPageInfo>(LOCAL_KEYS.PENDING_VIDEO_INFO)
 }
 
 export async function setPendingVideoInfo(info: VideoPageInfo): Promise<void> {
-  await storageSet(STORAGE_KEYS.PENDING_VIDEO_INFO, info)
+  await storageSet(LOCAL_KEYS.PENDING_VIDEO_INFO, info)
 }
 
 export async function getInstalledAt(): Promise<string | null> {
-  return promisifyChromeStorage<string>(STORAGE_KEYS.INSTALLED_AT)
+  return promisifyChromeStorage<string>(LOCAL_KEYS.INSTALLED_AT)
 }
 
 export async function initializeOnInstall(): Promise<void> {
-  await storageSet(STORAGE_KEYS.DAILY_PROGRESS, { ...DEFAULT_PROGRESS })
-  await storageSet(STORAGE_KEYS.INSTALLED_AT, new Date().toISOString())
+  await storageSet(LOCAL_KEYS.DAILY_PROGRESS, { ...DEFAULT_PROGRESS })
+  await storageSet(LOCAL_KEYS.INSTALLED_AT, new Date().toISOString())
 }
 
 export async function clearAllExtensionData(): Promise<void> {
@@ -187,7 +188,7 @@ export async function markItemsSynced(
   }
 }
 
-export { STORAGE_KEYS, DEFAULT_PROGRESS }
+export { LOCAL_KEYS as STORAGE_KEYS, DEFAULT_PROGRESS }
 
 /** Reset pending progress (used in tests) */
 export function clearPendingProgress(): void {

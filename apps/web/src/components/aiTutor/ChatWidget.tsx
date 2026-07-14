@@ -13,6 +13,7 @@ import { WelcomeState } from './WelcomeState'
 import { ChatStyles } from './ChatStyles'
 import { useExitAnimation } from '../../hooks/useExitAnimation'
 import { ContextSuggestionCard } from './ContextSuggestionCard'
+import { STORAGE_KEYS } from '@ielts/config'
 import { IconBell, IconDelete, IconClose, IconSend } from '@ielts/ui'
 
 const DEFAULT_QUICK_PROMPTS = [
@@ -160,9 +161,9 @@ export function ChatWidget({
 
   const handleSaveNote = useCallback((content: string) => {
     try {
-      const notes = JSON.parse(localStorage.getItem('savedAiNotes') || '[]')
+      const notes = JSON.parse(localStorage.getItem(STORAGE_KEYS.localStorage.savedAiNotes) || '[]')
       notes.push({ id: Date.now().toString(), content, createdAt: new Date().toISOString() })
-      localStorage.setItem('savedAiNotes', JSON.stringify(notes))
+      localStorage.setItem(STORAGE_KEYS.localStorage.savedAiNotes, JSON.stringify(notes))
     } catch (error) {
  console.error('apps/web/src/components/aiTutor/ChatWidget.tsx error:', error);
  /* ignore */ }

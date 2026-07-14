@@ -6,7 +6,7 @@ import Button from '../../components/ui/Button'
 import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton'
 import { ErrorState, EmptyStateIllustrated } from '../../components/ui/EmptyState'
 import { EXTENSION_URL } from '../landing/config'
-import { ROUTES } from '@ielts/config'
+import { ROUTES, STORAGE_KEYS } from '@ielts/config'
 import PageHeader from '../../components/layout/PageHeader'
 import PageContent from '../../components/layout/PageContent'
 import { IconExtension } from '@ielts/ui'
@@ -178,7 +178,7 @@ export default function ExtensionConnectionPage() {
     setPageError(null)
 
     const timeout = setTimeout(() => {
-      const stored = localStorage.getItem('extension-connected')
+      const stored = localStorage.getItem(STORAGE_KEYS.localStorage.extensionConnected)
       if (stored === 'true') {
         setConnectionStatus('disconnected')
       } else {
@@ -198,7 +198,7 @@ export default function ExtensionConnectionPage() {
           version: e.data?.version || '',
           browser: e.data?.browser || getBrowserName(),
         }))
-        localStorage.setItem('extension-connected', 'true')
+        localStorage.setItem(STORAGE_KEYS.localStorage.extensionConnected, 'true')
         setPageLoading(false)
       }
     }
@@ -394,7 +394,7 @@ export default function ExtensionConnectionPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    localStorage.removeItem('extension-connected')
+                    localStorage.removeItem(STORAGE_KEYS.localStorage.extensionConnected)
                     setConnectionStatus('disconnected')
                     showToast('info', 'Extension disconnected')
                   }}

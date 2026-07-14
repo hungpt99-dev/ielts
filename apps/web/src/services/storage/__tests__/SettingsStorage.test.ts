@@ -17,11 +17,12 @@ import {
   setDarkMode,
 } from '../SettingsStorage'
 import { DEFAULT_SETTINGS } from '../../../models'
+import { STORAGE_KEYS } from '@ielts/config'
 
-const APP_SETTINGS_KEY = 'ielts-settings'
-const THEME_MODE_KEY = 'ielts-theme-mode'
-const ACCENT_COLOR_KEY = 'ielts-accent-color'
-const NOTIFICATION_PREFS_KEY = 'ielts-notification-prefs'
+const APP_SETTINGS_KEY = STORAGE_KEYS.localStorage.appSettings
+const THEME_MODE_KEY = STORAGE_KEYS.localStorage.themeMode
+const ACCENT_COLOR_KEY = STORAGE_KEYS.localStorage.accentColor
+const NOTIFICATION_PREFS_KEY = STORAGE_KEYS.localStorage.notificationPrefs
 const DARK_MODE_KEY = 'ielts-dark-mode'
 
 function mockStorage(data: Record<string, string>) {

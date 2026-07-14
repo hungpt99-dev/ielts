@@ -15,10 +15,11 @@ import type {
   StudyReminderFrequency,
   PrivacyLevel,
 } from './models'
+import { STORAGE_KEYS } from '@ielts/config'
 
-const STORAGE_KEY = 'ielts-configuration'
-const LEGACY_STORAGE_KEY = 'ielts-settings'
-const STORAGE_VERSION_KEY = 'ielts-configuration-version'
+const STORAGE_KEY = STORAGE_KEYS.localStorage.userSettings
+const LEGACY_STORAGE_KEY = STORAGE_KEYS.localStorage.appSettings
+const STORAGE_VERSION_KEY = STORAGE_KEYS.localStorage.configurationVersion
 const CURRENT_VERSION = 1
 
 export interface StorageMeta {
@@ -136,7 +137,7 @@ function setStoredMeta(meta: StorageMeta): void {
 }
 
 function migrateV0toV1(raw: Record<string, unknown>): boolean {
-  const legacyKey = 'ielts-settings'
+  const legacyKey = STORAGE_KEYS.localStorage.appSettings
   const legacyRaw = localStorage.getItem(legacyKey)
   if (!legacyRaw) return false
 

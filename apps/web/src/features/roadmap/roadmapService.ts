@@ -1,6 +1,7 @@
 import type { TaskEntry, AppSettings, StudyGoal } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import { loadAppSettings } from '../../services/storage/SettingsStorage'
+import { STORAGE_KEYS, DEFAULT_APP_CONFIG } from '@ielts/config'
 import { SKILL_TO_CATEGORY } from './constants'
 import { getLearningEngine } from '../../services/engineBootstrap'
 import type { RoadmapLearningTask } from '@ielts/learning-engine'
@@ -64,7 +65,7 @@ export interface RoadmapData {
   updatedAt: string
 }
 
-const ROADMAP_STORAGE_KEY = 'ielts-roadmap'
+const ROADMAP_STORAGE_KEY = STORAGE_KEYS.localStorage.roadmap
 
 const PHASE_META = [
   { name: 'Foundation Building', desc: 'Build essential vocabulary, grammar, and basic IELTS skills', range: 'Band 4.0-5.5' },
@@ -520,7 +521,11 @@ async function enrichPlanWithAI(
   profile: import('@ielts/learning-engine').NormalizedProfile,
   settings: AppSettings,
 ): Promise<import('@ielts/learning-engine').StudyPlan> {
-  const hasAI = settings.aiEnabled && !!settings.aiApiKey
+  const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+  const userCfg = raw ? JSON.parse(raw) : {}
+  const ai = (userCfg?.ai as Record<string, unknown>) ?? {}
+  const apiKey = (ai?.apiKey as string) ?? (userCfg?.aiApiKey as string) ?? ''
+  const hasAI = !!(settings.aiEnabled && apiKey)
   if (!hasAI || plan.weeks.length === 0) return plan
 
   try {
@@ -528,9 +533,9 @@ async function enrichPlanWithAI(
     const { AiPlanOrchestrator } = await import('@ielts/learning-engine')
 
     const config = {
-      apiKey: settings.aiApiKey!,
-      baseUrl: settings.aiEndpoint || 'https://api.openai.com/v1',
-      model: settings.aiModel || 'gpt-4o-mini',
+      apiKey,
+      baseUrl: (ai?.customApiUrl as string) || 'https://api.openai.com/v1',
+      model: (ai?.model as string) || DEFAULT_APP_CONFIG.ai.defaultModel,
     }
 
     const aiCallFn: import('@ielts/learning-engine').AICallFn = async (systemPrompt, userPrompt) => {

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import AITutorPopup from '../../features/ai-tutor/components/AITutorPopup'
+import { STORAGE_KEYS } from '@ielts/config'
 
 interface ChatIconState {
   isOpen: boolean
@@ -8,7 +9,7 @@ interface ChatIconState {
 
 function loadChatState(): ChatIconState {
   try {
-    const stored = localStorage.getItem('ai-tutor-chat-state')
+    const stored = localStorage.getItem(STORAGE_KEYS.localStorage.aiTutorChatState)
     if (stored) {
       const parsed = JSON.parse(stored)
       return {
@@ -24,7 +25,7 @@ function loadChatState(): ChatIconState {
 
 function saveChatState(state: ChatIconState) {
   try {
-    localStorage.setItem('ai-tutor-chat-state', JSON.stringify(state))
+    localStorage.setItem(STORAGE_KEYS.localStorage.aiTutorChatState, JSON.stringify(state))
   } catch (error) {
 console.error('apps/web/src/components/aiTutor/ChatIcon.tsx error:', error);
   }

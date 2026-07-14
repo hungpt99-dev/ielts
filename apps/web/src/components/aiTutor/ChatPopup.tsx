@@ -1,6 +1,7 @@
 import { ChatWidget } from './ChatWidget'
 import type { ChatWidgetProps } from '@ielts/ai-tutor-engine'
 import { useState, useEffect } from 'react'
+import { STORAGE_KEYS } from '@ielts/config'
 
 interface ChatPopupProps extends ChatWidgetProps {
   onOpenSettings?: () => void
@@ -30,7 +31,7 @@ export default function ChatPopup({
       return
     }
     try {
-      const raw = localStorage.getItem('ielts-settings')
+      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
       if (raw) {
         const settings = JSON.parse(raw)
         setHasAiKey(!!settings.aiApiKey)

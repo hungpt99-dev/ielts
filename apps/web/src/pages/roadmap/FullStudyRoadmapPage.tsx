@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { openAITutorChat } from '../../features/ai-tutor/utils/openChat'
 import { emitStudyRoadmapViewed } from '../../features/websiteActions/eventEmitters'
-import { ROUTES } from '@ielts/config'
+import { ROUTES, STORAGE_KEYS } from '@ielts/config'
 import {
   ensureRoadmap,
   toggleTask,
@@ -135,7 +135,7 @@ export default function FullStudyRoadmapPage() {
       loadRoadmap(newRoadmap)
     } catch (err) {
       console.error('Engine generation failed, falling back:', err)
-      localStorage.removeItem('ielts-roadmap')
+      localStorage.removeItem(STORAGE_KEYS.localStorage.roadmap)
       await loadData(false)
     } finally {
       setRegenerating(false)

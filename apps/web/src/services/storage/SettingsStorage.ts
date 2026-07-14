@@ -1,13 +1,12 @@
 import type { AppSettings } from '../../models'
 import { DEFAULT_SETTINGS } from '../../models'
-
-
+import { STORAGE_KEYS } from '@ielts/config'
 
 const KEYS = {
-  APP_SETTINGS: 'ielts-settings',
-  THEME_MODE: 'ielts-theme-mode',
-  ACCENT_COLOR: 'ielts-accent-color',
-  NOTIFICATION_PREFS: 'ielts-notification-prefs',
+  APP_SETTINGS: STORAGE_KEYS.localStorage.appSettings,
+  THEME_MODE: STORAGE_KEYS.localStorage.themeMode,
+  ACCENT_COLOR: STORAGE_KEYS.localStorage.accentColor,
+  NOTIFICATION_PREFS: STORAGE_KEYS.localStorage.notificationPrefs,
   DARK_MODE: 'ielts-dark-mode',
 } as const
 

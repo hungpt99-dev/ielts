@@ -1,8 +1,9 @@
 import type { OnboardingProfile } from './types'
 import { getDefaultProfile } from './types'
+import { STORAGE_KEYS } from '@ielts/config'
 
 const STORAGE_KEY = 'ielts-onboarding-profile'
-const COMPLETED_KEY = 'ielts-onboarding-complete'
+const COMPLETED_KEY = STORAGE_KEYS.localStorage.onboardingComplete
 
 export class OnboardingRepository {
   load(): OnboardingProfile {

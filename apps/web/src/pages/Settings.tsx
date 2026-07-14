@@ -12,7 +12,7 @@ import {
 import { testConnection } from '../services/ai/testConnection'
 import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
 import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'
-import { ROUTES } from '@ielts/config'
+import { ROUTES, STORAGE_KEYS } from '@ielts/config'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
@@ -1279,7 +1279,7 @@ export default function Settings() {
 function CorsProxySection() {
   const [corsEnabled, setCorsEnabled] = useState(() => {
     try {
-      const raw = localStorage.getItem('ielts-cors-proxy')
+      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.corsProxy)
       if (raw) {
         const parsed = JSON.parse(raw)
         return parsed.enabled ?? false
@@ -1291,7 +1291,7 @@ function CorsProxySection() {
   })
   const [corsUrl, setCorsUrl] = useState(() => {
     try {
-      const raw = localStorage.getItem('ielts-cors-proxy')
+      const raw = localStorage.getItem(STORAGE_KEYS.localStorage.corsProxy)
       if (raw) {
         const parsed = JSON.parse(raw)
         return parsed.proxyUrl || 'https://corsproxy.io/?'
@@ -1303,7 +1303,7 @@ function CorsProxySection() {
   })
 
   useEffect(() => {
-    localStorage.setItem('ielts-cors-proxy', JSON.stringify({ enabled: corsEnabled, proxyUrl: corsUrl }))
+    localStorage.setItem(STORAGE_KEYS.localStorage.corsProxy, JSON.stringify({ enabled: corsEnabled, proxyUrl: corsUrl }))
   }, [corsEnabled, corsUrl])
 
   return (

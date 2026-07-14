@@ -3,6 +3,7 @@
 // ============================================================
 
 import type { VocabDifficulty, PublicApiImportedContent } from '../../models'
+import { STORAGE_KEYS } from '@ielts/config'
 
 // ── Source & Content Type Enums ─────────────────────────────
 
@@ -205,7 +206,7 @@ export interface CorsProxyConfig {
 }
 
 export const DEFAULT_CORS_PROXY = 'https://corsproxy.io/?'
-export const CORS_PROXY_STORAGE_KEY = 'ielts-cors-proxy'
+export const CORS_PROXY_STORAGE_KEY = STORAGE_KEYS.localStorage.corsProxy
 
 // ── Import Result ──────────────────────────────────────────
 

@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { STORAGE_KEYS } from '@ielts/config'
 import {
   DEFAULT_SETTINGS,
   SAVE_CATEGORIES,
@@ -177,7 +178,7 @@ describe('saveSettings', () => {
     await saveSettings(DEFAULT_SETTINGS)
 
     const backupCall = (localStore.set as ReturnType<typeof vi.fn>).mock.calls.find(
-      (c: unknown[]) => c[0] && typeof c[0] === 'object' && 'ielts-settings-backup' in c[0],
+      (c: unknown[]) => c[0] && typeof c[0] === 'object' && STORAGE_KEYS.extensionLocal.settingsBackup in c[0],
     )
     expect(backupCall).toBeDefined()
   })
@@ -269,19 +270,19 @@ describe('getOverlappingForWebsite', () => {
 describe('clearAllSettings', () => {
   it('removes settings from local storage', async () => {
     localStore.set({ extensionSettings: DEFAULT_SETTINGS })
-    localStore.set({ aiApiKey: 'sk-key', 'ielts-settings-backup': DEFAULT_SETTINGS })
+    localStore.set({ aiApiKey: 'sk-key', [STORAGE_KEYS.extensionLocal.settingsBackup]: DEFAULT_SETTINGS })
 
     await clearAllSettings()
 
     expect(localStore.remove).toHaveBeenCalledWith(
-      ['extensionSettings', 'aiApiKey', 'ielts-settings-backup'],
+      [STORAGE_KEYS.extensionLocal.extensionSettings, STORAGE_KEYS.extensionLocal.aiApiKey, STORAGE_KEYS.extensionLocal.settingsBackup],
       expect.any(Function),
     )
   })
 
   it('clears stored values', async () => {
     localStore.set({ extensionSettings: DEFAULT_SETTINGS })
-    localStore.set({ aiApiKey: 'sk-key', 'ielts-settings-backup': DEFAULT_SETTINGS })
+    localStore.set({ aiApiKey: 'sk-key', [STORAGE_KEYS.extensionLocal.settingsBackup]: DEFAULT_SETTINGS })
 
     await clearAllSettings()
 

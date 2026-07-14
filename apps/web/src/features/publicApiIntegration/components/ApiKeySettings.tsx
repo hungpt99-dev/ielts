@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { PUBLIC_API_SOURCES } from "../types";
 import { useSettings } from "../../../context/SettingsContext";
 import { testConnection } from "../../../services/ai/testConnection";
+import { STORAGE_KEYS } from "@ielts/config";
 import Card, {
   CardContent,
   CardHeader,
@@ -11,7 +12,7 @@ import Button from "../../../components/ui/Button";
 import Input from "../../../components/ui/Input";
 import ToggleSwitch from "../../../components/ui/ToggleSwitch";
 
-const API_KEY_PREFIX = "ielts-api-key-";
+const API_KEY_PREFIX = STORAGE_KEYS.localStorage.apiKeyPrefix;
 
 function encodeKey(key: string): string {
   try {

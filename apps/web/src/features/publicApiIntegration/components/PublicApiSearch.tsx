@@ -11,6 +11,7 @@ import { PUBLIC_API_SOURCES } from "../types";
 import { importPublicApiContent } from "../api/import";
 import { buildErrorMessage } from "../utils/errorHandling";
 import { fetchWithCorsProxy } from "../utils/corsProxy";
+import { STORAGE_KEYS } from "@ielts/config";
 import Card, {
   CardContent,
   CardHeader,
@@ -23,7 +24,7 @@ import { generateId } from "../../../utils";
 
 // ── Helpers ──────────────────────────────────────────────────
 
-const API_KEY_PREFIX = "ielts-api-key-";
+const API_KEY_PREFIX = STORAGE_KEYS.localStorage.apiKeyPrefix;
 
 function getStoredApiKey(source: PublicApiSourceName): string {
   try {

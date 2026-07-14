@@ -3,6 +3,7 @@ import {
   isOnboardingComplete,
   completeOnboarding,
 } from '../features/onboarding/onboardingService'
+import { STORAGE_KEYS } from '@ielts/config'
 
 const mockId = 'test-uuid-00000000'
 vi.stubGlobal('crypto', {
@@ -85,37 +86,37 @@ describe('isOnboardingComplete', () => {
   })
 
   it('returns false when settings is empty JSON', () => {
-    localStorageMock.setItem('ielts-settings', '{}')
+    localStorageMock.setItem(STORAGE_KEYS.localStorage.appSettings, '{}')
     expect(isOnboardingComplete()).toBe(false)
   })
 
   it('returns false when targetBand is missing', () => {
-    localStorageMock.setItem('ielts-settings', JSON.stringify({ currentBand: 5.5 }))
+    localStorageMock.setItem(STORAGE_KEYS.localStorage.appSettings, JSON.stringify({ currentBand: 5.5 }))
     expect(isOnboardingComplete()).toBe(false)
   })
 
   it('returns false when currentBand is missing', () => {
-    localStorageMock.setItem('ielts-settings', JSON.stringify({ targetBand: 7.0 }))
+    localStorageMock.setItem(STORAGE_KEYS.localStorage.appSettings, JSON.stringify({ targetBand: 7.0 }))
     expect(isOnboardingComplete()).toBe(false)
   })
 
   it('returns false when examDate is missing', () => {
-    localStorageMock.setItem('ielts-settings', JSON.stringify({ targetBand: 7.0, currentBand: 5.5 }))
+    localStorageMock.setItem(STORAGE_KEYS.localStorage.appSettings, JSON.stringify({ targetBand: 7.0, currentBand: 5.5 }))
     expect(isOnboardingComplete()).toBe(false)
   })
 
   it('returns false when dailyStudyMinutes is missing', () => {
-    localStorageMock.setItem('ielts-settings', JSON.stringify({ targetBand: 7.0, currentBand: 5.5, examDate: '2026-09-01' }))
+    localStorageMock.setItem(STORAGE_KEYS.localStorage.appSettings, JSON.stringify({ targetBand: 7.0, currentBand: 5.5, examDate: '2026-09-01' }))
     expect(isOnboardingComplete()).toBe(false)
   })
 
   it('returns false when weakSkills is not an array', () => {
-    localStorageMock.setItem('ielts-settings', JSON.stringify({ targetBand: 7.0, currentBand: 5.5, examDate: '2026-09-01', dailyStudyMinutes: 60, weakSkills: 'writing' }))
+    localStorageMock.setItem(STORAGE_KEYS.localStorage.appSettings, JSON.stringify({ targetBand: 7.0, currentBand: 5.5, examDate: '2026-09-01', dailyStudyMinutes: 60, weakSkills: 'writing' }))
     expect(isOnboardingComplete()).toBe(false)
   })
 
   it('returns true when all required fields are present', () => {
-    localStorageMock.setItem('ielts-settings', JSON.stringify({
+    localStorageMock.setItem(STORAGE_KEYS.localStorage.appSettings, JSON.stringify({
       targetBand: 7.0,
       currentBand: 5.5,
       examDate: '2026-09-01',
@@ -127,7 +128,7 @@ describe('isOnboardingComplete', () => {
   })
 
   it('returns false when localStorage data is corrupted JSON', () => {
-    localStorageMock.setItem('ielts-settings', '{broken json')
+    localStorageMock.setItem(STORAGE_KEYS.localStorage.appSettings, '{broken json')
     expect(isOnboardingComplete()).toBe(false)
   })
 })
@@ -150,7 +151,7 @@ describe('completeOnboarding', () => {
   it('saves app settings and marks onboarding as complete', async () => {
     await completeOnboarding(validData)
     expect(localStorageMock.setItem).toHaveBeenCalledWith(
-      'ielts-onboarding-complete',
+      STORAGE_KEYS.localStorage.onboardingComplete,
       'true',
     )
   })

@@ -1,6 +1,7 @@
 import 'fake-indexeddb/auto'
 import Dexie from 'dexie'
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { STORAGE_KEYS } from '@ielts/config'
 import {
   AppDatabase,
   DatabaseService,
@@ -162,7 +163,7 @@ describe('AppDatabase versioning and schema', () => {
   })
 
   it('upgrades from version 1 to version 2 preserving v1 data', async () => {
-    const v1Db = new Dexie('ielts-journey')
+    const v1Db = new Dexie(STORAGE_KEYS.indexedDB.databaseName)
     v1Db.version(1).stores({
       vocabulary: 'id, topic, status, difficulty, createdAt',
       tasks: 'id, date, category, isDone, createdAt',

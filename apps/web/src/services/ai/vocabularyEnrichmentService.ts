@@ -1,6 +1,7 @@
-import { callAI, vocabularyDetailsSchema } from '@ielts/ai'
+import { callAI, vocabularyDetailsSchema, AiConfigurationResolver } from '@ielts/ai'
 import type { VocabularyDetails } from '@ielts/ai'
-import { loadAppSettings } from '../storage/SettingsStorage'
+import type { AiUserSettings } from '@ielts/settings'
+import { DEFAULT_APP_CONFIG, STORAGE_KEYS } from '@ielts/config'
 
 export interface EnrichResult {
   lemma?: string
@@ -34,13 +35,43 @@ function encodeWordForm(form: VocabWordForm): string {
   return JSON.stringify(form)
 }
 
-function getAiConfig() {
-  const s = loadAppSettings()
-  if (!s.aiApiKey) return null
-  return {
-    apiKey: s.aiApiKey,
-    baseUrl: s.aiEndpoint || 'https://api.openai.com/v1',
-    model: s.aiModel || 'gpt-4o-mini',
+const _vocabAiResolver = new AiConfigurationResolver(
+  {
+    async getCredential() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+        if (!raw) return undefined
+        const config = JSON.parse(raw)
+        if (config?.ai?.providerId && config.ai.providerId !== 'openai') {
+          const key = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${config.ai.providerId}`)
+          return key ? { apiKey: key } : undefined
+        }
+        const parsed = JSON.parse(raw)
+        const key = parsed?.aiApiKey || parsed?.ai?.apiKey
+        return key ? { apiKey: key } : undefined
+      } catch { return undefined }
+    },
+    async storeCredential() {},
+    async clearCredential() {},
+  },
+  DEFAULT_APP_CONFIG.ai,
+)
+
+function getAiConfig(): { apiKey: string; baseUrl: string; model: string } | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+    if (!raw) return null
+    const config = JSON.parse(raw)
+    const ai = (config?.ai as Record<string, unknown>) ?? {}
+    const apiKey = (ai?.apiKey as string) ?? (config?.aiApiKey as string) ?? ''
+    if (!apiKey) return null
+    return {
+      apiKey,
+      baseUrl: (ai?.customApiUrl as string) ?? 'https://api.openai.com/v1',
+      model: (ai?.model as string) ?? DEFAULT_APP_CONFIG.ai.defaultModel,
+    }
+  } catch {
+    return null
   }
 }
 

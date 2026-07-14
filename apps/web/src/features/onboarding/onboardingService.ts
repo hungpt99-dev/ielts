@@ -1,6 +1,7 @@
 import type { AppSettings, StudyGoal } from '../../models'
 import { saveAppSettings } from '../../services/storage/SettingsStorage'
 import { DatabaseService } from '../../services/storage/Database'
+import { STORAGE_KEYS } from '@ielts/config'
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
@@ -22,7 +23,7 @@ export interface OnboardingData {
 
 export function isOnboardingComplete(): boolean {
   try {
-    const raw = localStorage.getItem('ielts-settings')
+    const raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
     if (!raw) return false
     const settings = JSON.parse(raw)
     return (
@@ -159,7 +160,7 @@ export async function completeOnboarding(data: OnboardingData): Promise<void> {
   }
 
   saveAppSettings(settings)
-  localStorage.setItem('ielts-onboarding-complete', 'true')
+  localStorage.setItem(STORAGE_KEYS.localStorage.onboardingComplete, 'true')
   localStorage.setItem('ielts-preferred-language', data.preferredLanguage || 'en')
   localStorage.setItem('ielts-tutor-style', data.tutorStyle || 'encouraging')
   localStorage.setItem('ielts-strong-skills', JSON.stringify(data.strongSkills || []))

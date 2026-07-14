@@ -125,7 +125,7 @@ function createDbMemoryRepository() {
     async get(learnerId: string) {
       if (store.has(learnerId)) return store.get(learnerId)
       try {
-        const raw = localStorage.getItem(`tutor-memory-${learnerId}`)
+        const raw = localStorage.getItem(`${STORAGE_KEYS.localStorage.tutorMemoryPrefix}${learnerId}`)
         if (raw) {
           const parsed = JSON.parse(raw)
           store.set(learnerId, parsed)
@@ -138,7 +138,7 @@ function createDbMemoryRepository() {
     },
     async save(memory: any) {
       store.set(memory.learnerId, memory)
-      try { localStorage.setItem(`tutor-memory-${memory.learnerId}`, JSON.stringify(memory)) } catch (error) {
+      try { localStorage.setItem(`${STORAGE_KEYS.localStorage.tutorMemoryPrefix}${memory.learnerId}`, JSON.stringify(memory)) } catch (error) {
     console.error('apps/web/src/services/engineBootstrap.ts error:', error);
       }
     },
@@ -327,14 +327,14 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
     const profileRepo = {
       async get() {
         try {
-          const raw = localStorage.getItem('ielts-settings')
+          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
           return raw ? JSON.parse(raw) : {}
         } catch (error) {
  console.error('apps/web/src/services/engineBootstrap.ts error:', error);
  return {} }
       },
       async save(profile: any) {
-        try { localStorage.setItem('ielts-settings', JSON.stringify(profile)) } catch (error) {
+        try { localStorage.setItem(STORAGE_KEYS.localStorage.appSettings, JSON.stringify(profile)) } catch (error) {
       console.error('apps/web/src/services/engineBootstrap.ts error:', error);
         }
       },
@@ -408,7 +408,7 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       getProfile: () => profileRepo.get(),
       getExamContext: async () => {
         try {
-          const settings = JSON.parse(localStorage.getItem('ielts-settings') ?? '{}')
+          const settings = JSON.parse(localStorage.getItem(STORAGE_KEYS.localStorage.appSettings) ?? '{}')
           const examDate = settings.examDate ?? null
           if (!examDate) return {}
           const daysUntil = Math.ceil((new Date(examDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
@@ -515,7 +515,7 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       },
       getPreferences: async () => {
         try {
-          const settings = JSON.parse(localStorage.getItem('ielts-settings') ?? '{}')
+          const settings = JSON.parse(localStorage.getItem(STORAGE_KEYS.localStorage.appSettings) ?? '{}')
           return {
             preferredMode: 'general-teacher' as const,
             language: settings.nativeLanguage === 'vi' ? 'vietnamese' as const : 'english' as const,
@@ -663,12 +663,12 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
           console.error('apps/web/src/services/engineBootstrap.ts error:', error);
           }
           try {
-            const existing = localStorage.getItem('tutor-memory-learning')
+            const existing = localStorage.getItem(`${STORAGE_KEYS.localStorage.tutorMemoryPrefix}learning`)
             const mem = existing ? JSON.parse(existing) : { sessions: [], mistakes: [], strengths: [] }
             mem.sessions.push({ skill: outcome.skill, score: outcome.score, maxScore: outcome.maximumScore, accuracy: outcome.accuracy, timestamp: new Date().toISOString() })
             if (outcome.mistakes?.length) mem.mistakes.push(...outcome.mistakes)
             if (outcome.strengths?.length) mem.strengths.push(...outcome.strengths)
-            localStorage.setItem('tutor-memory-learning', JSON.stringify(mem))
+            localStorage.setItem(`${STORAGE_KEYS.localStorage.tutorMemoryPrefix}learning`, JSON.stringify(mem))
           } catch (error) {
           console.error('apps/web/src/services/engineBootstrap.ts error:', error);
           }
