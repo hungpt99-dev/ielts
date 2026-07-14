@@ -181,11 +181,11 @@ export default function Settings() {
 
   const [aiTesting, setAiTesting] = useState(false)
   const [aiTestResult, setAiTestResult] = useState<{ ok: boolean; message: string } | null>(null)
-  const [aiApiKeyInput, setAiApiKeyInput] = useState(settings.aiApiKey)
-  const [aiProviderInput, setAiProviderInput] = useState(settings.aiProvider)
-  const [aiBaseUrlInput, setAiBaseUrlInput] = useState(settings.aiBaseUrl || settings.aiEndpoint || '')
-  const [aiModelInput, setAiModelInput] = useState(settings.aiModel)
-  const [aiEnabledInput, setAiEnabledInput] = useState(settings.aiEnabled)
+  const [aiApiKeyInput, setAiApiKeyInput] = useState('')
+  const [aiProviderInput, setAiProviderInput] = useState(settings.ai?.providerId ?? 'openai')
+  const [aiBaseUrlInput, setAiBaseUrlInput] = useState(settings.ai?.customApiUrl ?? '')
+  const [aiModelInput, setAiModelInput] = useState(settings.ai?.model ?? '')
+  const [aiEnabledInput, setAiEnabledInput] = useState(true)
 
   const [confirmAction, setConfirmAction] = useState<{
     title: string
