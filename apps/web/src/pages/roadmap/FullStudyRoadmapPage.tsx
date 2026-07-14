@@ -61,11 +61,12 @@ export default function FullStudyRoadmapPage() {
       if (initialExpand.size === 0) initialExpand.add(0)
       setExpandedPhases(initialExpand)
 
-      const settingsStr = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
+      const settingsStr = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
       if (settingsStr) {
         try {
           const settings = JSON.parse(settingsStr)
-          setAiEnabled(!!(settings.aiApiKey && settings.aiEnabled !== false))
+          const hasKey = !!(settings.aiApiKey || settings.ai?.apiKey)
+          setAiEnabled(hasKey)
         } catch (error) {
  console.error('apps/web/src/pages/roadmap/FullStudyRoadmapPage.tsx error:', error);
  /* ignore */ }

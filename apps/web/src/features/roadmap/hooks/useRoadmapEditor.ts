@@ -15,6 +15,7 @@ export function useRoadmapEditor(): RoadmapEditor {
   const [isEditMode, setIsEditMode] = useState(false)
 
   const loadRoadmap = useCallback((data: RoadmapData) => {
+    saveRoadmap(data)
     setRoadmap(data)
     setIsEditMode(false)
   }, [])

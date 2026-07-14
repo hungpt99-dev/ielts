@@ -512,7 +512,9 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
 
   if (result.status === 'success') {
     const enriched = await enrichPlanWithAI(result.plan, profile, settings)
-    const roadmap = await studyPlanToRoadmapData(enriched, s.currentBand as number, s.targetBand as number)
+    const resolvedCurrentBand = (study?.currentBand as number) ?? (s.currentBand as number) ?? 5.5
+    const resolvedTargetBand = (study?.targetBand as number) ?? (s.targetBand as number) ?? 7.0
+    const roadmap = await studyPlanToRoadmapData(enriched, resolvedCurrentBand, resolvedTargetBand)
     saveRoadmap(roadmap)
     return roadmap
   }
