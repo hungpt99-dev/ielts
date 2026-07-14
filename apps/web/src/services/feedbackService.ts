@@ -39,7 +39,8 @@ class LocalStorageDelivery implements DeliveryStrategy {
       )
       existing.push(data)
       localStorage.setItem(this.storageKey, JSON.stringify(existing))
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/services/feedbackService.ts error:', error);
       // Silently fail — primary channel handles notification
     }
   }
@@ -72,7 +73,8 @@ export class FeedbackDeliveryService {
       try {
         strategy.deliver(submission)
         delivered = true
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/services/feedbackService.ts error:', error);
         continue
       }
     }

@@ -123,7 +123,8 @@ export async function generateFromEngine(
 
     const result = parseExerciseFromActivity(activityResult)
     return { content: JSON.stringify(result), error: null }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/learning/ai-exercise-session.ts error:', error);
     return { content: null, error: null }
   }
 }
@@ -180,6 +181,7 @@ export async function startEngineSession(
       error: null,
     }
   } catch (err) {
+    console.error('apps/web/src/services/learning/ai-exercise-session.ts error:', err);
     return { content: null, sessionInfo: null, error: err instanceof Error ? err.message : 'Unknown error' }
   }
 }
@@ -211,6 +213,7 @@ export async function submitAndComplete(
 
     return { success: true }
   } catch (err) {
+    console.error('apps/web/src/services/learning/ai-exercise-session.ts error:', err);
     return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
   }
 }

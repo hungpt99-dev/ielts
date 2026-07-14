@@ -242,7 +242,9 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
       chrome.storage.local.get('yt-learning-auto-open', (result) => {
         setAutoOpenEnabled(result['yt-learning-auto-open'] === true)
       })
-    } catch {}
+    } catch (error) {
+  console.error('apps/extension/src/popup/components/PopupDashboard.tsx error:', error);
+    }
   }, [])
 
   useEffect(() => {
@@ -278,6 +280,7 @@ export default function PopupDashboard({ onNavigate }: PopupDashboardProps) {
       refreshProgress()
       refreshRecent()
     } catch (err) {
+      console.error('apps/extension/src/popup/components/PopupDashboard.tsx error:', err);
       const message = err instanceof Error ? err.message : 'Failed to save page'
       if (message === 'No active page to save') {
         showToast('warning', message)

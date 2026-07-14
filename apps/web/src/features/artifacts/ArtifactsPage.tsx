@@ -60,7 +60,8 @@ function extractFavicon(url: string): string {
   try {
     const u = new URL(url)
     return `${u.protocol}//${u.hostname}/favicon.ico`
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/artifacts/ArtifactsPage.tsx error:', error);
     return ''
   }
 }
@@ -172,6 +173,7 @@ export default function ArtifactsPage() {
       const all = await DatabaseService.getAll<Artifact>('artifacts')
       setArtifacts(all)
     } catch (err) {
+      console.error('apps/web/src/features/artifacts/ArtifactsPage.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load saved content')
     } finally {
       setLoading(false)
@@ -355,6 +357,7 @@ export default function ArtifactsPage() {
 
       setShowForm(false)
     } catch (err) {
+      console.error('apps/web/src/features/artifacts/ArtifactsPage.tsx error:', err);
       setFormError(err instanceof Error ? err.message : 'Failed to save')
     } finally {
       setSaving(false)
@@ -431,6 +434,7 @@ export default function ArtifactsPage() {
       setDetailItem(null)
       showToast('Exercise generated! Find it in Reading Practice')
     } catch (err) {
+      console.error('apps/web/src/features/artifacts/ArtifactsPage.tsx error:', err);
       showToast(err instanceof Error ? err.message : 'Failed to generate exercise', 'error')
     } finally {
       setGeneratingExercise(false)
@@ -510,7 +514,8 @@ export default function ArtifactsPage() {
       }
       showToast(`Saved ${saved.length} vocabulary words from "${detailItem.title}"`)
       navigate('/vocabulary')
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/artifacts/ArtifactsPage.tsx error:', error);
       navigate('/vocabulary', { state: { contentText: a.contentText, source: detailItem.title } })
     } finally {
       setSavingVocab(false)

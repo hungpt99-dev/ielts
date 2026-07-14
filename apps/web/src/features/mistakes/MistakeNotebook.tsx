@@ -145,6 +145,7 @@ export default function MistakeNotebook() {
       const all = await DatabaseService.getAll<MistakeEntry>('mistakes')
       setEntries(all)
     } catch (err) {
+      console.error('apps/web/src/features/mistakes/MistakeNotebook.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load mistakes')
     } finally {
       setLoading(false)
@@ -371,6 +372,7 @@ export default function MistakeNotebook() {
       setModalOpen(false)
       setEditingEntry(null)
     } catch (err) {
+      console.error('apps/web/src/features/mistakes/MistakeNotebook.tsx error:', err);
       setFormError(err instanceof Error ? err.message : 'Failed to save mistake')
     } finally {
       setSaving(false)

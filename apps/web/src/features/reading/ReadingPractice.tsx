@@ -166,6 +166,7 @@ export default function ReadingPractice() {
       const all = await DatabaseService.getAll<ReadingPracticeSession>('readingPracticeSessions')
       setHistory(all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     } catch (err) {
+      console.error('apps/web/src/features/reading/ReadingPractice.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load reading history')
     } finally {
       setLoading(false)
@@ -176,7 +177,9 @@ export default function ReadingPractice() {
     try {
       const passages = await loadAllPassages()
       setAllPassages(passages)
-    } catch {}
+    } catch (error) {
+  console.error('apps/web/src/features/reading/ReadingPractice.tsx error:', error);
+    }
   }, [])
 
   useEffect(() => {
@@ -363,7 +366,8 @@ export default function ReadingPractice() {
         const jsonEnd = content.lastIndexOf('}')
         const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
         parsed = JSON.parse(jsonStr) as Record<string, unknown>
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/features/reading/ReadingPractice.tsx error:', error);
         throw new Error('Failed to parse AI response. The response was not valid JSON.')
       }
 
@@ -398,6 +402,7 @@ export default function ReadingPractice() {
       setAiModalOpen(false)
       startPassage(passage)
     } catch (err) {
+      console.error('apps/web/src/features/reading/ReadingPractice.tsx error:', err);
       setAiError(err instanceof Error ? err.message : 'Failed to generate reading passage')
     } finally {
       setAiGenerating(false)
@@ -453,6 +458,7 @@ export default function ReadingPractice() {
         setCurrentPassage(prev => prev ? { ...prev, questions: newQuestions } : null)
       }
     } catch (err) {
+      console.error('apps/web/src/features/reading/ReadingPractice.tsx error:', err);
       setGenerateError(err instanceof Error ? err.message : 'Failed to generate questions')
     } finally {
       setGeneratingQuestions(prev => ({ ...prev, [passage.id]: false }))

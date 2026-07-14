@@ -81,7 +81,8 @@ async function checkIndexedDBAvailable(): Promise<boolean> {
     if (!isDbOpen()) return false
     getDb()
     return true
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/learningEvents/learningEventRepository.ts error:', error);
     return false
   }
 }
@@ -90,7 +91,8 @@ async function persist<T>(dbFn: () => Promise<T>, memFn: () => T): Promise<T> {
   if (await checkIndexedDBAvailable()) {
     try {
       return await safeDb(dbFn)
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/learningEvents/learningEventRepository.ts error:', error);
       return memFn()
     }
   }

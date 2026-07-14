@@ -30,7 +30,8 @@ function extractYoutubeVideoId(url: string): string {
     if (id) return id
     const match = urlObj.pathname.match(/^\/embed\/([^/?]+)/)
     return match?.[1] || ''
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
     return ''
   }
 }
@@ -193,7 +194,8 @@ async function extractYoutubeTranscriptFromPage(): Promise<string> {
           captionTracks = tracks
           break
         }
-      } catch {
+      } catch (error) {
+        console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
         continue
       }
     }
@@ -212,7 +214,9 @@ async function extractYoutubeTranscriptFromPage(): Promise<string> {
               if (tracks?.length) {
                 captionTracks = tracks
               }
-            } catch { /* continue */ }
+            } catch (error) {
+ console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
+ /* continue */ }
           }
         }
       }
@@ -235,7 +239,8 @@ async function extractYoutubeTranscriptFromPage(): Promise<string> {
       .filter((t): t is string => !!t)
 
     return segments.join(' ')
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
     return ''
   }
 }
@@ -376,13 +381,17 @@ document.addEventListener('yt-navigate-finish', () => {
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === 'GET_VIDEO_PAGE_INFO') {
     const info = detectVideoPage()
-    try { sendResponse(info) } catch { /* ignore */ }
+    try { sendResponse(info) } catch (error) {
+ console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
+ /* ignore */ }
     return true
   }
 
   if (message.type === 'FETCH_YOUTUBE_TRANSCRIPT') {
     instance.getTranscript().then((transcript) => {
-      try { sendResponse({ transcript }) } catch { /* ignore */ }
+      try { sendResponse({ transcript }) } catch (error) {
+ console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
+ /* ignore */ }
     })
     return true
   }

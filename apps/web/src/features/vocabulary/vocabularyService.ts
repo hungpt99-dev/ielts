@@ -370,7 +370,9 @@ export function parseWordForm(s: string): WordFormEntry | null {
           : undefined,
       }
     }
-  } catch { /* ignore */ }
+  } catch (error) {
+ console.error('apps/web/src/features/vocabulary/vocabularyService.ts error:', error);
+ /* ignore */ }
   return null
 }
 

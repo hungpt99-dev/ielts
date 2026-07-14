@@ -162,7 +162,9 @@ async function fetchDirect(videoId: string, language: string, signal?: AbortSign
               segments, fullText: segments.map(s => s.text).join(' '),
             }
           }
-        } catch { continue }
+        } catch (error) {
+ console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubeTranscriptProvider.ts error:', error);
+ continue }
       }
 
       try {
@@ -180,8 +182,12 @@ async function fetchDirect(videoId: string, language: string, signal?: AbortSign
           const detectedLang = (json as any).language || language
           return { videoId, language: detectedLang, source: 'auto-generated', segments, fullText: segments.map((s: TranscriptSegmentData) => s.text).join(' ') }
         }
-      } catch { continue }
-    } catch { continue }
+      } catch (error) {
+ console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubeTranscriptProvider.ts error:', error);
+ continue }
+    } catch (error) {
+ console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubeTranscriptProvider.ts error:', error);
+ continue }
   }
 
   // Fallback: fetch via background script (bypasses CORS restrictions)
@@ -196,7 +202,9 @@ async function fetchDirect(videoId: string, language: string, signal?: AbortSign
     if (result?.success && result.data) {
       return result.data as TranscriptData
     }
-  } catch { /* background fetch failed */ }
+  } catch (error) {
+ console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubeTranscriptProvider.ts error:', error);
+ /* background fetch failed */ }
   return null
 }
 
@@ -268,6 +276,7 @@ export class YouTubeTranscriptProvider {
         error: makeError('CAPTION_FETCH_FAILED', 'Captions were found, but IELTS Journey could not download them. Try again.', true),
       }
     } catch (e) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubeTranscriptProvider.ts error:', e);
       log('getTranscript UNCAUGHT error:', e)
       return {
         ok: false,

@@ -190,6 +190,7 @@ export default function MiniTutor({ onBack, initialText, initialPageInfo }: Mini
               },
             )
           } catch (err: any) {
+            console.error('apps/extension/src/popup/components/MiniTutor.tsx error:', err: any);
             resolve({ success: false, message: err.message })
           }
         })
@@ -215,6 +216,7 @@ export default function MiniTutor({ onBack, initialText, initialPageInfo }: Mini
               },
             )
           } catch (err: any) {
+            console.error('apps/extension/src/popup/components/MiniTutor.tsx error:', err: any);
             resolve({ success: false, message: err.message })
           }
         })
@@ -232,6 +234,7 @@ export default function MiniTutor({ onBack, initialText, initialPageInfo }: Mini
         }
       }
     } catch (err: any) {
+      console.error('apps/extension/src/popup/components/MiniTutor.tsx error:', err: any);
       setError(err.message || 'An error occurred')
     }
 

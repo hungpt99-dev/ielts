@@ -11,7 +11,8 @@ export class OnboardingRepository {
       if (!raw) return getDefaultProfile()
       const parsed = JSON.parse(raw)
       return { ...getDefaultProfile(), ...parsed, createdAt: parsed.createdAt || new Date().toISOString() }
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/onboarding/OnboardingRepository.ts error:', error);
       return getDefaultProfile()
     }
   }
@@ -36,7 +37,8 @@ export class OnboardingRepository {
   isCompleted(): boolean {
     try {
       return localStorage.getItem(COMPLETED_KEY) === 'true'
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/onboarding/OnboardingRepository.ts error:', error);
       return false
     }
   }

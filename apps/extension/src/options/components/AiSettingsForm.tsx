@@ -83,6 +83,7 @@ export default function AiSettingsForm({ settings, onChange, errors, setErrors }
       }
       showToast('success', 'Connection successful')
     } catch (err) {
+      console.error('apps/extension/src/options/components/AiSettingsForm.tsx error:', err);
       const msg = err instanceof Error ? err.message : 'Connection failed'
       showToast('error', `Connection failed: ${msg}`)
     } finally {

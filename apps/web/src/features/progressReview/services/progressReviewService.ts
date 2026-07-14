@@ -483,7 +483,8 @@ export async function generateProgressReview(
           const report = mapEngineResultToReport(result.data, input)
           return { report, error: null }
         }
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/features/progressReview/services/progressReviewService.ts error:', error);
         // engine failed — fall through to data-driven report
       }
     }
@@ -491,6 +492,7 @@ export async function generateProgressReview(
     const fallback = buildReportFromData(input)
     return { report: fallback, error: null }
   } catch (err) {
+    console.error('apps/web/src/features/progressReview/services/progressReviewService.ts error:', err);
     return { report: null, error: err instanceof Error ? err.message : 'Failed to generate progress review' }
   }
 }

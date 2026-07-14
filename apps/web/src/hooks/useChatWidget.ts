@@ -136,6 +136,7 @@ export function useChatWidget(options: UseChatWidgetOptions): UseChatWidgetRetur
         addMessage('assistant', response)
         setShowActions(true)
       } catch (err) {
+        console.error('apps/web/src/hooks/useChatWidget.ts error:', err);
         setIsTyping(false)
         setSendError(err instanceof Error ? err.message : 'Failed to get response')
         addMessage('assistant', "I'm sorry, I couldn't process your message right now. Please try again or use one of the quick actions above.")

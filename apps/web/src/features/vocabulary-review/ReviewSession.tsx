@@ -95,6 +95,7 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
       setMcAnswered(false)
       setMcSelected(null)
     } catch (err) {
+      console.error('apps/web/src/features/vocabulary-review/ReviewSession.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load review queue')
     } finally {
       setLoading(false)
@@ -121,6 +122,7 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
         setCompleted(true)
       }
     } catch (err) {
+      console.error('apps/web/src/features/vocabulary-review/ReviewSession.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save review')
     } finally {
       setSaving(false)

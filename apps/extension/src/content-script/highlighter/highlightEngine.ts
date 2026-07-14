@@ -67,7 +67,8 @@ function getHighlightWord(el: HTMLElement): HighlightWord | null {
   if (!data) return null
   try {
     return JSON.parse(data) as HighlightWord
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/content-script/highlighter/highlightEngine.ts error:', error);
     return null
   }
 }

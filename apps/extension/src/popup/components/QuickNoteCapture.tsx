@@ -67,7 +67,8 @@ export default function QuickNoteCapture({ onSaved, onCancel }: QuickNoteCapture
 
       setSaved(true)
       setTimeout(() => onSaved(), 1200)
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/popup/components/QuickNoteCapture.tsx error:', error);
       setError('Failed to save note. Please try again.')
     } finally {
       setSaving(false)

@@ -27,6 +27,7 @@ async function ensureDbReady(retries = DB_INIT_RETRIES): Promise<boolean> {
       await db.open()
       return true
     } catch (err) {
+      console.error('apps/web/src/app/App.tsx error:', err);
       console.warn(`[App] DB init attempt ${attempt + 1}/${retries + 1} failed:`, err)
       if (attempt < retries) {
         await new Promise(r => setTimeout(r, DB_INIT_RETRY_DELAY))
@@ -60,10 +61,14 @@ export default function App() {
       window.dispatchEvent(new Event('app-db-ready'))
       try {
         await initializeAITutorEngine()
-      } catch { /* non-critical */ }
+      } catch (error) {
+ console.error('apps/web/src/app/App.tsx error:', error);
+ /* non-critical */ }
       try {
         await initializeLearningEngine()
-      } catch { /* non-critical */ }
+      } catch (error) {
+ console.error('apps/web/src/app/App.tsx error:', error);
+ /* non-critical */ }
     }
 
     bootstrap()

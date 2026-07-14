@@ -27,7 +27,8 @@ export class StorageAdapter {
       const result = await safeStorageGet<StudySessionData>(SESSION_STORAGE_KEY)
       const data = result?.[SESSION_STORAGE_KEY]
       return data && typeof data === 'object' ? data : null
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       return null
     }
   }
@@ -35,7 +36,8 @@ export class StorageAdapter {
   async saveSession(session: StudySessionData): Promise<void> {
     try {
       await safeStorageSet({ [SESSION_STORAGE_KEY]: session })
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       console.warn('[IELTS] Failed to save study session')
     }
   }
@@ -43,7 +45,8 @@ export class StorageAdapter {
   async clearSession(): Promise<void> {
     try {
       await safeStorageSet({ [SESSION_STORAGE_KEY]: null })
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       console.warn('[IELTS] Failed to clear study session')
     }
   }
@@ -51,7 +54,8 @@ export class StorageAdapter {
   async savePanelState(state: { collapsed: boolean; width: number; activeTab: string }): Promise<void> {
     try {
       await safeStorageSet({ [PANEL_STATE_KEY]: state })
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       console.warn('[IELTS] Failed to save panel state')
     }
   }
@@ -61,7 +65,8 @@ export class StorageAdapter {
       const result = await safeStorageGet<{ collapsed: boolean; width: number; activeTab: string }>(PANEL_STATE_KEY)
       const data = result?.[PANEL_STATE_KEY]
       return data && typeof data === 'object' ? data : null
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       return null
     }
   }
@@ -78,7 +83,8 @@ export class StorageAdapter {
         items.push({ ...vocab, id: crypto.randomUUID(), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() })
       }
       await safeStorageSet({ [VOCAB_STORAGE_KEY]: items })
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       // storage unavailable
     }
   }
@@ -90,7 +96,8 @@ export class StorageAdapter {
       const items: Record<string, unknown>[] = Array.isArray(raw) ? raw as Record<string, unknown>[] : []
       items.push({ ...sentence, id: crypto.randomUUID(), createdAt: new Date().toISOString() })
       await safeStorageSet({ [SENTENCE_STORAGE_KEY]: items })
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       // storage unavailable
     }
   }
@@ -102,7 +109,8 @@ export class StorageAdapter {
       if (window.__IELTS_BRIDGE__?.saveVocabulary) {
         return await window.__IELTS_BRIDGE__.saveVocabulary(vocab)
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       // bridge unavailable on YouTube
     }
     const vocabId = typeof vocab.id === 'string' ? vocab.id : crypto.randomUUID()
@@ -116,7 +124,8 @@ export class StorageAdapter {
       if (window.__IELTS_BRIDGE__?.saveSentence) {
         return await window.__IELTS_BRIDGE__.saveSentence(sentence)
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       // bridge unavailable
     }
     const sentenceId = typeof sentence.id === 'string' ? sentence.id : crypto.randomUUID()
@@ -128,7 +137,8 @@ export class StorageAdapter {
       if (window.__IELTS_BRIDGE__?.saveNote) {
         return await window.__IELTS_BRIDGE__.saveNote(note)
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       // bridge unavailable
     }
     const noteId = typeof note.id === 'string' ? note.id : crypto.randomUUID()
@@ -140,7 +150,8 @@ export class StorageAdapter {
       if (window.__IELTS_BRIDGE__?.getSettings) {
         return await window.__IELTS_BRIDGE__.getSettings()
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       // bridge unavailable
     }
     return null
@@ -156,7 +167,8 @@ export class StorageAdapter {
       const raw = stored?.[VOCAB_STORAGE_KEY]
       const items: Record<string, unknown>[] = Array.isArray(raw) ? raw as Record<string, unknown>[] : []
       return items.find((v: Record<string, unknown>) => v.word === word)
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
       return undefined
     }
   }

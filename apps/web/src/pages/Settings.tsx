@@ -252,7 +252,8 @@ export default function Settings() {
       }).map(([key]) => key)
       emitSettingsChanged(changedKeys)
       showFeedback('success', 'Settings saved successfully.')
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/pages/Settings.tsx error:', error);
       showFeedback('error', 'Failed to save settings.')
     } finally {
       setSaving(false)
@@ -321,6 +322,7 @@ export default function Settings() {
       URL.revokeObjectURL(url)
       showFeedback('success', 'Backup exported successfully.')
     } catch (err) {
+      console.error('apps/web/src/pages/Settings.tsx error:', err);
       showFeedback('error', err instanceof Error ? err.message : 'Export failed')
     }
   }
@@ -345,13 +347,15 @@ export default function Settings() {
               await DatabaseService.importAll(raw as AppExportData)
               showFeedback('success', 'Data imported successfully.')
             } catch (err) {
+              console.error('apps/web/src/pages/Settings.tsx error:', err);
               showFeedback('error', err instanceof Error ? err.message : 'Import failed.')
             }
           },
           buttonLabel: 'Import & Overwrite',
           buttonVariant: 'danger',
         })
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/pages/Settings.tsx error:', error);
         showFeedback('error', 'Could not parse file.')
       }
     }
@@ -401,7 +405,8 @@ export default function Settings() {
         model: aiModelInput || DEFAULT_MODEL,
       })
       setAiTestResult({ ok: result.ok, message: result.message })
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/pages/Settings.tsx error:', error);
       setAiTestResult({ ok: false, message: 'Connection test failed. Check your settings.' })
     } finally {
       setAiTesting(false)
@@ -1278,7 +1283,9 @@ function CorsProxySection() {
         const parsed = JSON.parse(raw)
         return parsed.enabled ?? false
       }
-    } catch {}
+    } catch (error) {
+    console.error('apps/web/src/pages/Settings.tsx error:', error);
+    }
     return false
   })
   const [corsUrl, setCorsUrl] = useState(() => {
@@ -1288,7 +1295,9 @@ function CorsProxySection() {
         const parsed = JSON.parse(raw)
         return parsed.proxyUrl || 'https://corsproxy.io/?'
       }
-    } catch {}
+    } catch (error) {
+    console.error('apps/web/src/pages/Settings.tsx error:', error);
+    }
     return 'https://corsproxy.io/?'
   })
 

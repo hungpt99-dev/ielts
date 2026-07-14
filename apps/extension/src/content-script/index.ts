@@ -88,7 +88,8 @@ function forwardToBackground(type: string, requestId: string, payload?: unknown)
       }
       respondBridge(requestId, type + '_RESPONSE', !!response?.success, response?.data, response?.error)
     })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/content-script/index.ts error:', error);
     respondBridge(requestId, type + '_RESPONSE', false, undefined, 'EXTENSION_RUNTIME_UNAVAILABLE')
   }
 }
@@ -109,7 +110,8 @@ window.addEventListener('message', (event: MessageEvent) => {
           bridgeVersion: 1,
           syncAvailable: true,
         })
-      } catch {
+      } catch (error) {
+        console.error('apps/extension/src/content-script/index.ts error:', error);
         // Extension context invalidated (extension was reloaded)
       }
       return
@@ -118,7 +120,8 @@ window.addEventListener('message', (event: MessageEvent) => {
     if (type === 'GET_SYNC_STATUS' || type === 'EXPORT_EXTENSION_DATA' || type === 'IMPORT_EXTENSION_DATA') {
       forwardToBackground(type, requestId, payload)
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/content-script/index.ts error:', error);
     // Silently ignore errors (extension context may be invalidated)
   }
 })

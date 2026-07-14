@@ -16,14 +16,18 @@ function loadChatState(): ChatIconState {
         unreadCount: typeof parsed.unreadCount === 'number' ? parsed.unreadCount : 0,
       }
     }
-  } catch {}
+  } catch (error) {
+  console.error('apps/web/src/components/aiTutor/ChatIcon.tsx error:', error);
+  }
   return { isOpen: false, unreadCount: 0 }
 }
 
 function saveChatState(state: ChatIconState) {
   try {
     localStorage.setItem('ai-tutor-chat-state', JSON.stringify(state))
-  } catch {}
+  } catch (error) {
+console.error('apps/web/src/components/aiTutor/ChatIcon.tsx error:', error);
+  }
 }
 
 interface ChatIconProps {

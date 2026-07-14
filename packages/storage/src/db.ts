@@ -162,6 +162,7 @@ export async function safeDb<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn()
   } catch (error) {
+    console.error('packages/storage/src/db.ts error:', error);
     if (error instanceof StorageError) {
       throw error
     }

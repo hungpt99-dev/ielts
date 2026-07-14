@@ -10,7 +10,8 @@ async function getCapacitor() {
     if (!Capacitor.isNativePlatform()) return null
     nativePlatform = Capacitor.getPlatform() as 'ios' | 'android'
     return Capacitor
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/nativePlatform.ts error:', error);
     return null
   }
 }
@@ -32,7 +33,8 @@ async function loadPlugins() {
 
     const { Keyboard } = await import('@capacitor/keyboard')
     await Keyboard.setAccessoryBarVisible({ isVisible: false })
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/nativePlatform.ts error:', error);
     // plugins not critical — app works without them
   }
 
@@ -100,7 +102,8 @@ export function useNativeAppState() {
           }))
         })
         cleanup = () => handler.remove()
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/services/nativePlatform.ts error:', error);
         // not on native
       }
     }
@@ -114,7 +117,8 @@ export async function getAppInfo() {
   try {
     const { App } = await import('@capacitor/app')
     return await App.getInfo()
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/nativePlatform.ts error:', error);
     return null
   }
 }
@@ -123,7 +127,8 @@ export async function getAppLaunchUrl() {
   try {
     const { App } = await import('@capacitor/app')
     return await App.getLaunchUrl()
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/nativePlatform.ts error:', error);
     return null
   }
 }

@@ -8,6 +8,7 @@ export class JsonSchemaParser<TSchema> implements StructuredOutputParser<TSchema
       const data = JSON.parse(raw) as TSchema
       return { success: true, data }
     } catch (e) {
+      console.error('packages/ai-tutor-engine/src/ai/structured-output-parser.ts error:', e);
       const repaired = await this.tryRepair(raw)
       if (repaired) return { success: true, data: repaired as TSchema }
       return { success: false, error: `Failed to parse AI output: ${e instanceof Error ? e.message : 'Unknown error'}` }
@@ -19,7 +20,8 @@ export class JsonSchemaParser<TSchema> implements StructuredOutputParser<TSchema
     if (jsonMatch) {
       try {
         return JSON.parse(jsonMatch[0])
-      } catch {
+      } catch (error) {
+        console.error('packages/ai-tutor-engine/src/ai/structured-output-parser.ts error:', error);
         return null
       }
     }

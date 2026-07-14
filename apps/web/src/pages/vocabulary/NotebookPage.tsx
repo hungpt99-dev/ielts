@@ -128,6 +128,7 @@ export default function NotebookPage() {
       const all = await DatabaseService.getAll<VocabularyEntry>('vocabulary')
       setEntries(all)
     } catch (err) {
+      console.error('apps/web/src/pages/vocabulary/NotebookPage.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load vocabulary')
     } finally {
       setLoading(false)
@@ -207,6 +208,7 @@ export default function NotebookPage() {
       setModalOpen(false)
       setEditingEntry(null)
     } catch (err) {
+      console.error('apps/web/src/pages/vocabulary/NotebookPage.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save word')
     } finally { setSaving(false) }
   }
@@ -264,6 +266,7 @@ export default function NotebookPage() {
       }
       loadEntries()
     } catch (err) {
+      console.error('apps/web/src/pages/vocabulary/NotebookPage.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to import vocabulary')
     }
     if (fileInputRef.current) fileInputRef.current.value = ''

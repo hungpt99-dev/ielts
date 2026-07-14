@@ -119,7 +119,8 @@ function getStoredMeta(): StorageMeta {
         migratedAt: typeof parsed.migratedAt === 'string' ? parsed.migratedAt : null,
       }
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/configuration/storage.ts error:', error);
     /* ignore */
   }
   return { version: 0, migratedAt: null }
@@ -128,7 +129,8 @@ function getStoredMeta(): StorageMeta {
 function setStoredMeta(meta: StorageMeta): void {
   try {
     localStorage.setItem(STORAGE_VERSION_KEY, JSON.stringify(meta))
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/configuration/storage.ts error:', error);
     /* ignore */
   }
 }
@@ -166,7 +168,8 @@ function migrateV0toV1(raw: Record<string, unknown>): boolean {
 
     localStorage.removeItem(legacyKey)
     return true
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/configuration/storage.ts error:', error);
     return false
   }
 }
@@ -322,7 +325,8 @@ export function loadConfiguration(): UserConfiguration {
 
     const defaults = createDefaultConfiguration()
     return defaults
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/configuration/storage.ts error:', error);
     return createDefaultConfiguration()
   }
 }
@@ -374,7 +378,8 @@ export function migrateFromLegacySettings(): UserConfiguration | null {
     config.advanced.activeProviderId = 'default-openai'
 
     return config
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/configuration/storage.ts error:', error);
     return null
   }
 }
@@ -382,7 +387,8 @@ export function migrateFromLegacySettings(): UserConfiguration | null {
 export function configurationExists(): boolean {
   try {
     return localStorage.getItem(STORAGE_KEY) !== null
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/configuration/storage.ts error:', error);
     return false
   }
 }
@@ -395,7 +401,8 @@ export function getStorageStats(): { sizeBytes: number; version: number } {
       sizeBytes: raw ? new Blob([raw]).size : 0,
       version: meta.version,
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/configuration/storage.ts error:', error);
     return { sizeBytes: 0, version: 0 }
   }
 }

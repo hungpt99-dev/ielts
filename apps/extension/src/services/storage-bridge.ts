@@ -39,13 +39,17 @@ let currentSyncState: SettingsSyncState = {
 function notifySyncListeners(state: SettingsSyncState): void {
   currentSyncState = state
   for (const listener of syncListeners) {
-    try { listener(state) } catch { /* ignore listener error */ }
+    try { listener(state) } catch (error) {
+ console.error('apps/extension/src/services/storage-bridge.ts error:', error);
+ /* ignore listener error */ }
   }
 }
 
 function notifyAuthListeners(state: AuthState): void {
   for (const listener of authListeners) {
-    try { listener(state) } catch { /* ignore listener error */ }
+    try { listener(state) } catch (error) {
+ console.error('apps/extension/src/services/storage-bridge.ts error:', error);
+ /* ignore listener error */ }
   }
 }
 
@@ -70,7 +74,9 @@ export async function getPendingItemsCount(): Promise<number> {
     if (status && Array.isArray(status.pendingItems)) {
       return status.pendingItems.length
     }
-  } catch { /* ignore */ }
+  } catch (error) {
+ console.error('apps/extension/src/services/storage-bridge.ts error:', error);
+ /* ignore */ }
   return 0
 }
 
@@ -82,7 +88,8 @@ export async function getSyncStatus(): Promise<SyncStatus> {
       pendingItems: [],
       lastSyncResult: null,
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/storage-bridge.ts error:', error);
     return { lastSyncAt: null, pendingItems: [], lastSyncResult: null }
   }
 }
@@ -99,7 +106,9 @@ export async function getAuthState(): Promise<AuthState> {
         avatar: user.avatar || '',
       }
     }
-  } catch { /* ignore */ }
+  } catch (error) {
+ console.error('apps/extension/src/services/storage-bridge.ts error:', error);
+ /* ignore */ }
   return { isLoggedIn: false, name: '', email: '', avatar: '' }
 }
 
@@ -151,6 +160,7 @@ export async function forceSyncSettings(): Promise<SettingsSyncState> {
     notifySyncListeners(newState)
     return newState
   } catch (err) {
+    console.error('apps/extension/src/services/storage-bridge.ts error:', err);
     const errorMsg = err instanceof Error ? err.message : 'Sync failed'
     const newState: SettingsSyncState = { status: 'error', error: errorMsg, lastSyncedAt: currentSyncState.lastSyncedAt }
     notifySyncListeners(newState)

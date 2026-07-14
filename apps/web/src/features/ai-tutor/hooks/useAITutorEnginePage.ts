@@ -99,7 +99,9 @@ export function useAITutorEnginePage(): AITutorPageState {
     try {
       const raw = localStorage.getItem('ielts-settings')
       return raw ? !!JSON.parse(raw).aiApiKey : false
-    } catch { return false }
+    } catch (error) {
+ console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
+ return false }
   })()
 
   const loadData = useCallback(async () => {
@@ -200,9 +202,12 @@ export function useAITutorEnginePage(): AITutorPageState {
               focusAreas: [nextAction.data!.reason || prev.focusAreas[0]],
             }))
           }
-        } catch {}
+        } catch (error) {
+    console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
+        }
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
       /* use defaults */
     } finally {
       if (mountedRef.current) setLoading(false)
@@ -252,17 +257,23 @@ export function useAITutorEnginePage(): AITutorPageState {
     }, [navigate]),
     onAskTutor: useCallback((message: string) => {
       if (!isAiConfigured) return
-      try { sessionStorage.setItem('ai-tutor-pending-message', message) } catch {}
+      try { sessionStorage.setItem('ai-tutor-pending-message', message) } catch (error) {
+      console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
+      }
       window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
     }, [isAiConfigured]),
     onConfigureAi: useCallback(() => navigate('/settings/ai'), [navigate]),
     onSetTargetBand: useCallback(() => {
       window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
-      try { sessionStorage.setItem('ai-tutor-pending-message', 'I want to set my IELTS target band.') } catch {}
+      try { sessionStorage.setItem('ai-tutor-pending-message', 'I want to set my IELTS target band.') } catch (error) {
+    console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
+      }
     }, []),
     onSetExamDate: useCallback(() => {
       window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
-      try { sessionStorage.setItem('ai-tutor-pending-message', 'I want to set my IELTS exam date.') } catch {}
+      try { sessionStorage.setItem('ai-tutor-pending-message', 'I want to set my IELTS exam date.') } catch (error) {
+    console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
+      }
     }, []),
   }
 }

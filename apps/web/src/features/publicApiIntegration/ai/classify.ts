@@ -120,7 +120,9 @@ function readAppSettings(): Record<string, unknown> | null {
   try {
     const raw = localStorage.getItem(APP_SETTINGS_KEY)
     if (raw) return JSON.parse(raw)
-  } catch {}
+  } catch (error) {
+  console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);
+  }
   return null
 }
 
@@ -132,7 +134,8 @@ export function getStoredAiConfig(): AiProviderConfig {
       baseUrl: (settings?.aiEndpoint as string) || OPENAI_BASE_URL,
       model: (settings?.aiModel as string) || DEFAULT_MODEL,
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);
     return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_MODEL }
   }
 }
@@ -144,7 +147,9 @@ export function storeAiConfig(config: Partial<AiProviderConfig>): void {
     if (config.baseUrl !== undefined) current.aiEndpoint = config.baseUrl
     if (config.model !== undefined) current.aiModel = config.model
     localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(current))
-  } catch {}
+  } catch (error) {
+console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);
+  }
 }
 
 export function clearStoredAiConfig(): void {
@@ -154,7 +159,9 @@ export function clearStoredAiConfig(): void {
     delete current.aiEndpoint
     delete current.aiModel
     localStorage.setItem(APP_SETTINGS_KEY, JSON.stringify(current))
-  } catch {}
+  } catch (error) {
+console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);
+  }
 }
 
 function toProviderConfig(config: AiProviderConfig): ProviderConfig {
@@ -190,7 +197,9 @@ export async function extractVocabulary(content: string, config: AiProviderConfi
       if (result.status === 'success') {
         return { data: { words: [] }, error: null }
       }
-    } catch {}
+    } catch (error) {
+  console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', error);
+    }
   }
 
   const { content: result, error } = await callAi(VOCABULARY_EXTRACTION_SYSTEM_PROMPT, `Extract IELTS vocabulary from this content:\n\n${content}`, config)
@@ -212,6 +221,7 @@ export async function extractVocabulary(content: string, config: AiProviderConfi
       error: null,
     }
   } catch (e) {
+    console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', e);
     return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
   }
 }
@@ -224,6 +234,7 @@ export async function generateReadingQuestions(content: string, title: string, c
     const parsed = readingQuestionsSchema.parse(JSON.parse(json))
     return { data: { questions: parsed.questions as ReadingQuestionsResult['questions'] }, error: null }
   } catch (e) {
+    console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', e);
     return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
   }
 }
@@ -236,6 +247,7 @@ export async function generateListeningExercise(content: string, config: AiProvi
     const parsed = listeningExerciseSchema.parse(JSON.parse(json))
     return { data: { gaps: parsed.gaps }, error: null }
   } catch (e) {
+    console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', e);
     return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
   }
 }
@@ -248,6 +260,7 @@ export async function generateSpeakingPrompts(content: string, config: AiProvide
     const parsed = speakingPromptsSchema.parse(JSON.parse(json))
     return { data: { prompts: parsed.prompts }, error: null }
   } catch (e) {
+    console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', e);
     return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
   }
 }
@@ -260,6 +273,7 @@ export async function generateWritingIdeas(content: string, config: AiProviderCo
     const parsed = writingIdeasSchema.parse(JSON.parse(json))
     return { data: { ideas: parsed.ideas }, error: null }
   } catch (e) {
+    console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', e);
     return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
   }
 }
@@ -272,6 +286,7 @@ export async function generateGrammarExercises(content: string, config: AiProvid
     const parsed = grammarExercisesSchema.parse(JSON.parse(json))
     return { data: { exercises: parsed.exercises }, error: null }
   } catch (e) {
+    console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', e);
     return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
   }
 }
@@ -284,6 +299,7 @@ export async function generateMistakeReviewTasks(content: string, config: AiProv
     const parsed = mistakeReviewSchema.parse(JSON.parse(json))
     return { data: { tasks: parsed.tasks as MistakeReviewResult['tasks'] }, error: null }
   } catch (e) {
+    console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:', e);
     return { data: null, error: e instanceof Error ? e.message : 'Failed to parse AI response' }
   }
 }

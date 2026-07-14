@@ -49,6 +49,7 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
       const data = await searchApi(source, q)
       setResults(data)
     } catch (err) {
+      console.error('apps/extension/src/popup/components/ImportExportSection.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Search failed')
     } finally {
       setLoading(false)
@@ -61,7 +62,8 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
     try {
       const p = await fetchPreview(result)
       setPreview(p)
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/popup/components/ImportExportSection.tsx error:', error);
       showToast('error', 'Failed to load preview')
     } finally {
       setPreviewLoading(false)
@@ -128,6 +130,7 @@ export default function ImportExportSection({ onBack }: ImportExportSectionProps
       }
       setPreview(null)
     } catch (err) {
+      console.error('apps/extension/src/popup/components/ImportExportSection.tsx error:', err);
       showToast('error', `Import failed: ${err instanceof Error ? err.message : 'Unknown error'}`)
     } finally {
       setImporting(false)

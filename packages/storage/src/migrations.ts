@@ -324,7 +324,9 @@ export async function getAppliedVersion(): Promise<number> {
       const v = parseInt(raw, 10)
       return isNaN(v) ? 0 : v
     }
-  } catch {}
+  } catch (error) {
+  console.error('packages/storage/src/migrations.ts error:', error);
+  }
   return 0
 }
 
@@ -353,6 +355,7 @@ export async function applyMigrations(): Promise<void> {
           await version.upgrade!(db)
         })
       } catch (error) {
+        console.error('packages/storage/src/migrations.ts error:', error);
         throw new MigrationError(
           `Migration to version ${version.number} failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
           error,
@@ -366,5 +369,7 @@ export async function applyMigrations(): Promise<void> {
 export function clearAppliedVersion(): void {
   try {
     localStorage.removeItem(STORED_VERSION_KEY)
-  } catch {}
+  } catch (error) {
+    console.error('packages/storage/src/migrations.ts error:', error);
+  }
 }

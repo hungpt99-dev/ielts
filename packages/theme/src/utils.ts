@@ -35,20 +35,25 @@ export function getStoredThemeMode(): 'light' | 'dark' | 'system' {
   try {
     const stored = localStorage.getItem('ielts-theme-mode')
     if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
-  } catch {}
+  } catch (error) {
+  console.error('packages/theme/src/utils.ts error:', error);
+  }
   return 'system'
 }
 
 export function storeThemeMode(mode: 'light' | 'dark' | 'system'): void {
   try {
     localStorage.setItem('ielts-theme-mode', mode)
-  } catch {}
+  } catch (error) {
+console.error('packages/theme/src/utils.ts error:', error);
+  }
 }
 
 export function getStoredAccentColor(): string {
   try {
     return localStorage.getItem('ielts-accent-color') || '#2563eb'
-  } catch {
+  } catch (error) {
+    console.error('packages/theme/src/utils.ts error:', error);
     return '#2563eb'
   }
 }
@@ -56,7 +61,9 @@ export function getStoredAccentColor(): string {
 export function storeAccentColor(color: string): void {
   try {
     localStorage.setItem('ielts-accent-color', color)
-  } catch {}
+  } catch (error) {
+console.error('packages/theme/src/utils.ts error:', error);
+  }
 }
 
 const STORAGE_KEY_DARK_MODE = 'ielts-dark-mode'
@@ -64,7 +71,9 @@ const STORAGE_KEY_DARK_MODE = 'ielts-dark-mode'
 export function clearLegacyDarkModeStorage(): void {
   try {
     localStorage.removeItem(STORAGE_KEY_DARK_MODE)
-  } catch {}
+  } catch (error) {
+console.error('packages/theme/src/utils.ts error:', error);
+  }
 }
 
 function hexToRgb(hex: string): [number, number, number] {

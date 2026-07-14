@@ -53,7 +53,8 @@ export async function explain(
     }
     aiExplainCache.set(cacheKey, result.data as AiExplainResult)
     return { data: result.data as AiExplainResult, error: null }
-  } catch {
+  } catch (error) {
+    console.error('packages/ai/src/services/explain.ts error:', error);
     return { data: null, error: 'AI response was not valid JSON. Try again.' }
   }
 }

@@ -382,6 +382,7 @@ export async function safeApiFetch<T>(
     const data = (await res.json()) as T;
     return { data, error: null };
   } catch (err) {
+    console.error('apps/web/src/features/publicApiIntegration/utils/errorHandling.ts error:', err);
     const errorInfo = buildErrorMessage(err, source);
     return { data: null, error: errorInfo };
   }

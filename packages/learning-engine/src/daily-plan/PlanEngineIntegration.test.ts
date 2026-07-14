@@ -389,6 +389,7 @@ describe('buildUserProfile', () => {
     try {
       buildUserProfile({ settings: null, personalization: null, overrides: {} });
     } catch (e) {
+      console.error('packages/learning-engine/src/daily-plan/PlanEngineIntegration.test.ts error:', e);
       if (e instanceof ProfileValidationError) {
         expect(e.missingFields).toContain('currentOverallBand');
         expect(e.missingFields).toContain('planStartDate');

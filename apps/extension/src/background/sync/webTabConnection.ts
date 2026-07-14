@@ -28,9 +28,13 @@ export async function findWebAppTab(): Promise<WebTabInfo | null> {
         if (TRUSTED_WEB_ORIGINS.includes(origin)) {
           productionTab = { tabId: tab.id, url: tab.url }
         }
-      } catch {}
+      } catch (error) {
+    console.error('apps/extension/src/background/sync/webTabConnection.ts error:', error);
+      }
     }
     return productionTab
-  } catch {}
+  } catch (error) {
+  console.error('apps/extension/src/background/sync/webTabConnection.ts error:', error);
+  }
   return null
 }

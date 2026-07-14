@@ -68,7 +68,9 @@ function parseEntry(s: string, word: string): ParsedWordForm {
           verbConjugation,
         }
       }
-    } catch { /* ignore */ }
+    } catch (error) {
+ console.error('apps/web/src/features/vocabulary/components/WordFamilyDisplay.tsx error:', error);
+ /* ignore */ }
   }
   const match = s.match(/^(.+?)\s*\((.+?)\)\s*$/)
   if (match) {

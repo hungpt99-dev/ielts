@@ -24,6 +24,7 @@ export class OpenAIAdapter implements AIAdapter {
         }),
       })
     } catch (err: unknown) {
+      console.error('packages/ai/src/adapters/openai.ts error:', err: unknown);
       const message = err instanceof Error ? err.message : 'Unknown error'
       if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
         throw new AINetworkError()
@@ -71,7 +72,8 @@ export class OpenAIAdapter implements AIAdapter {
         config,
       )
       return true
-    } catch {
+    } catch (error) {
+      console.error('packages/ai/src/adapters/openai.ts error:', error);
       return false
     }
   }

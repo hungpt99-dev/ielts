@@ -111,6 +111,7 @@ export class TranscriptTranslationService {
         this.setCache(segments, targetLanguage, entry)
         return { segments: translated }
       } catch (err) {
+        console.error('apps/extension/src/youtube-learning/application/services/TranscriptTranslationService.ts error:', err);
         return { segments: [], error: err instanceof Error ? err.message : 'Translation failed' }
       }
     }

@@ -386,6 +386,7 @@ export default function GrammarLearning() {
       const all = await DatabaseService.getAll<GrammarNote>('grammarNotes')
       setNotes(all)
     } catch (err) {
+      console.error('apps/web/src/features/grammar/GrammarLearning.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load grammar notes')
     } finally {
       setLoading(false)
@@ -396,7 +397,9 @@ export default function GrammarLearning() {
     try {
       const all = await DatabaseService.getAll<MistakeEntry>('mistakes')
       setMistakes(all.filter(m => m.skill === 'grammar'))
-    } catch {}
+    } catch (error) {
+  console.error('apps/web/src/features/grammar/GrammarLearning.tsx error:', error);
+    }
   }, [])
 
   useEffect(() => {
@@ -547,6 +550,7 @@ export default function GrammarLearning() {
       setModalOpen(false)
       setEditingNote(null)
     } catch (err) {
+      console.error('apps/web/src/features/grammar/GrammarLearning.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save grammar note')
     } finally {
       setSaving(false)
@@ -619,7 +623,8 @@ export default function GrammarLearning() {
         const jsonEnd = content.lastIndexOf('}')
         if (jsonStart === -1 || jsonEnd === -1) throw new Error('No JSON found')
         parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/features/grammar/GrammarLearning.tsx error:', error);
         throw new Error('Failed to parse AI response as JSON')
       }
 
@@ -641,6 +646,7 @@ export default function GrammarLearning() {
       setExercises(newExercises)
       setExerciseMode(true)
     } catch (err) {
+      console.error('apps/web/src/features/grammar/GrammarLearning.tsx error:', err);
       setAiError(err instanceof Error ? err.message : 'Failed to generate exercises')
     } finally {
       setAiLoading(false)

@@ -87,7 +87,8 @@ export default function Exercise({ exercises, topic, onComplete, onGenerateAi }:
 
       const correctCount = results.filter(r => r.correct).length
       onComplete({ total: exercises.length, correct: correctCount, mistakes })
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/grammar/components/Exercise.tsx error:', error);
       const correctCount = results.filter(r => r.correct).length
       onComplete({ total: exercises.length, correct: correctCount, mistakes: [] })
     } finally {

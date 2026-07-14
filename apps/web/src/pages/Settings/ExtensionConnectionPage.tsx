@@ -206,7 +206,9 @@ export default function ExtensionConnectionPage() {
 
     try {
       window.postMessage({ source: 'ielts-page', action: 'EXTENSION_PING' }, window.location.origin)
-    } catch {}
+    } catch (error) {
+    console.error('apps/web/src/pages/Settings/ExtensionConnectionPage.tsx error:', error);
+    }
 
     setTimeout(() => {
       window.removeEventListener('message', handleHeartbeat)

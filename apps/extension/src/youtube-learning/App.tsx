@@ -42,7 +42,8 @@ export function YouTubeLearningApp() {
         { source: 'ielts-youtube-learning', type, payload },
         '*',
       )
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/App.tsx error:', error);
       // iframe may be detached
     }
   }, [])

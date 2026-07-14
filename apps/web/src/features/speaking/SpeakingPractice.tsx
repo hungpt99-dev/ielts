@@ -134,6 +134,7 @@ export default function SpeakingPractice() {
       const all = await DatabaseService.getAll<SpeakingSession>('speakingSessions')
       setHistory(all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     } catch (err) {
+      console.error('apps/web/src/features/speaking/SpeakingPractice.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load speaking history')
     } finally {
       setLoading(false)
@@ -227,7 +228,8 @@ export default function SpeakingPractice() {
       recordingTimerRef.current = setInterval(() => {
         setRecordingTime(prev => prev + 1)
       }, 1000)
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/speaking/SpeakingPractice.tsx error:', error);
       setRecordingSupported(false)
     }
   }
@@ -402,6 +404,7 @@ export default function SpeakingPractice() {
         ).catch(() => {})
       }
     } catch (err) {
+      console.error('apps/web/src/features/speaking/SpeakingPractice.tsx error:', err);
       if (err instanceof SyntaxError && aiContent) {
         setAiFeedback(aiContent)
         saveSession()

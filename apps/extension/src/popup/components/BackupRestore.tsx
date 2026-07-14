@@ -109,6 +109,7 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
       downloadJson(data, filename)
       showToast('success', `Exported ${data.meta.source} data`)
     } catch (e) {
+      console.error('apps/extension/src/popup/components/BackupRestore.tsx error:', e);
       showToast('error', `Export failed: ${e instanceof Error ? e.message : 'Unknown error'}`)
     }
     setExporting(false)
@@ -143,6 +144,7 @@ export default function BackupRestore({ onBack }: BackupRestoreProps) {
         showToast('success', `Successfully imported ${summary.added} items`)
       }
     } catch (e) {
+      console.error('apps/extension/src/popup/components/BackupRestore.tsx error:', e);
       showToast('error', `Import failed: ${e instanceof Error ? e.message : 'Invalid file'}`)
     }
 

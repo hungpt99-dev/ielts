@@ -85,6 +85,7 @@ export async function sendTutorMessage(
       metadata: { aiUsed: false, schemaVersion: '1.0' },
     }
   } catch (err) {
+    console.error('packages/ai-tutor-engine/src/application/chat/send-tutor-message.ts error:', err);
     return {
       status: 'failure',
       error: {

@@ -91,6 +91,7 @@ export class AITutorEngineImpl implements AITutorEngine {
       const result = getNextBestAction(request)
       return { status: 'success', data: result }
     } catch (err) {
+      console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: {
@@ -114,6 +115,7 @@ export class AITutorEngineImpl implements AITutorEngine {
       const result = await generateProactiveMessages(request, settings, cooldownState)
       return { status: 'success', data: result }
     } catch (err) {
+      console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: {
@@ -132,6 +134,7 @@ export class AITutorEngineImpl implements AITutorEngine {
       const result = await generateProgressReview(request, { aiClient: this.deps.aiClient })
       return { status: 'success', data: result }
     } catch (err) {
+      console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: {
@@ -150,6 +153,7 @@ export class AITutorEngineImpl implements AITutorEngine {
       const suggestions = generateContextSuggestions(request.learnerState)
       return { status: 'success', data: suggestions }
     } catch (err) {
+      console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: {
@@ -205,6 +209,7 @@ export class AITutorEngineImpl implements AITutorEngine {
 
       return { status: 'success', data: undefined }
     } catch (err) {
+      console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: {
@@ -223,6 +228,7 @@ export class AITutorEngineImpl implements AITutorEngine {
       const result = await updateTutorMemory(request, this.memoryManager)
       return { status: 'success', data: result }
     } catch (err) {
+      console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: {
@@ -241,7 +247,8 @@ export class AITutorEngineImpl implements AITutorEngine {
     try {
       const state = await this.deps.contextBuilder.build('proactive')
       memoryVersion = state.activitySummary?.tasksCompletedToday ?? 1
-    } catch {
+    } catch (error) {
+      console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', error);
       /* use defaults */
     }
     return {

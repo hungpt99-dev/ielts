@@ -78,7 +78,8 @@ export default function SavedWordsView({ onBack }: SavedWordsViewProps) {
         }
         setSelectedEntry(partial)
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/popup/components/SavedWordsView.tsx error:', error);
       setError('Could not load full word details')
     }
   }, [])

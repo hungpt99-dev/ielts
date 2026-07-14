@@ -26,7 +26,8 @@ function formatDate(iso: string): string {
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`
     if (diff < 604800000) return `${Math.floor(diff / 86400000)}d ago`
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/popup/components/SavedItemsView.tsx error:', error);
     return ''
   }
 }

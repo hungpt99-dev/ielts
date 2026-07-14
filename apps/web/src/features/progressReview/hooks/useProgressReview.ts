@@ -30,6 +30,7 @@ export function useProgressReview(): UseProgressReviewState {
         }
       }
     } catch (err) {
+      console.error('apps/web/src/features/progressReview/hooks/useProgressReview.ts error:', err);
       setError(err instanceof Error ? err.message : 'Failed to generate progress review')
     } finally {
       setLoading(false)

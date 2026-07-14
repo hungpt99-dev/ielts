@@ -31,7 +31,8 @@ export function useBidirectionalSync(): {
       } else {
         setState('website_not_open')
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/popup/hooks/useBidirectionalSync.ts error:', error);
       setState('website_not_open')
     }
   }, [])
@@ -55,6 +56,7 @@ export function useBidirectionalSync(): {
         })
       }
     } catch (err) {
+      console.error('apps/extension/src/popup/hooks/useBidirectionalSync.ts error:', err);
       setState('error')
       setResult({ state: 'error', error: err instanceof Error ? err.message : 'Sync failed' })
     }

@@ -28,7 +28,8 @@ const API_KEY_PREFIX = "ielts-api-key-";
 function getStoredApiKey(source: PublicApiSourceName): string {
   try {
     return localStorage.getItem(API_KEY_PREFIX + source) ?? "";
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/components/PublicApiSearch.tsx error:', error);
     return "";
   }
 }
@@ -40,7 +41,8 @@ function storeApiKey(source: PublicApiSourceName, key: string): void {
     } else {
       localStorage.removeItem(API_KEY_PREFIX + source);
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/components/PublicApiSearch.tsx error:', error);
     // localStorage unavailable
   }
 }
@@ -319,7 +321,8 @@ async function fetchPreview(
           content = pages[pageKey]?.extract ?? content;
         }
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/publicApiIntegration/components/PublicApiSearch.tsx error:', error);
       // fallback to snippet
     }
   }
@@ -435,6 +438,7 @@ export default function PublicApiSearch() {
         const data = await handler(sourceConfig, query.trim(), apiKey);
         setResults(data);
       } catch (err) {
+        console.error('apps/web/src/features/publicApiIntegration/components/PublicApiSearch.tsx error:', err);
         setError(buildErrorMessage(err, sourceConfig));
       } finally {
         setLoading(false);
@@ -450,6 +454,7 @@ export default function PublicApiSearch() {
       const preview = await fetchPreview(result);
       setPreviewItem(preview);
     } catch (err) {
+      console.error('apps/web/src/features/publicApiIntegration/components/PublicApiSearch.tsx error:', err);
       setError({
         type: "unknown",
         title: "Preview Error",

@@ -163,6 +163,7 @@ async function importRecords(
       await saveFn(record)
       summary.added++
     } catch (e) {
+      console.error('packages/storage/src/syncService.ts error:', e);
       summary.failed++
       summary.errors.push(
         `${label}: ${e instanceof Error ? e.message : 'Unknown error'}`,
@@ -286,7 +287,8 @@ export function readJsonFile(file: File): Promise<unknown> {
     reader.onload = () => {
       try {
         resolve(JSON.parse(reader.result as string))
-      } catch {
+      } catch (error) {
+        console.error('packages/storage/src/syncService.ts error:', error);
         reject(new Error('Invalid JSON file: not valid JSON'))
       }
     }

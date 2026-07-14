@@ -211,7 +211,8 @@ export class AiPlanOrchestrator {
         try {
           profileAnalysis = JSON.parse(cached) as AIProfileAnalysis;
           callStats.cacheHits++;
-        } catch {
+        } catch (error) {
+          console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
           this.cache.clear();
         }
       }
@@ -249,7 +250,8 @@ export class AiPlanOrchestrator {
           callStats.cacheHits++;
           previousBatchSummary = this.buildBatchSummary(parsed);
           continue;
-        } catch {
+        } catch (error) {
+          console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
           this.cache.clear();
         }
       }
@@ -289,7 +291,8 @@ export class AiPlanOrchestrator {
           taskCandidates.push(...parsed);
           callStats.cacheHits++;
           continue;
-        } catch {
+        } catch (error) {
+          console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
           this.cache.clear();
         }
       }
@@ -640,7 +643,8 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
       const result = await this.callAI(systemPrompt, userPrompt);
       if (signal?.aborted) return null;
       return result;
-    } catch {
+    } catch (error) {
+      console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
       return null;
     }
   }
@@ -652,7 +656,8 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
     try {
       const result = await fn();
       return result ?? fallback;
-    } catch {
+    } catch (error) {
+      console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
       return fallback;
     }
   }
@@ -666,7 +671,8 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
       const parsed = JSON.parse(cleaned) as unknown;
       const result = schema.safeParse(parsed);
       return result.success ? result.data : null;
-    } catch {
+    } catch (error) {
+      console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
       return null;
     }
   }
@@ -691,7 +697,8 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
         }
       }
       return results.length > 0 ? results : null;
-    } catch {
+    } catch (error) {
+      console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
       return null;
     }
   }

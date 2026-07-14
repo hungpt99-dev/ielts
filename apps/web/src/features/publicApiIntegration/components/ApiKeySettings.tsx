@@ -16,7 +16,8 @@ const API_KEY_PREFIX = "ielts-api-key-";
 function encodeKey(key: string): string {
   try {
     return btoa(key);
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/components/ApiKeySettings.tsx error:', error);
     return key;
   }
 }
@@ -24,7 +25,8 @@ function encodeKey(key: string): string {
 function decodeKey(encoded: string): string {
   try {
     return atob(encoded);
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/components/ApiKeySettings.tsx error:', error);
     return encoded;
   }
 }
@@ -33,7 +35,8 @@ function getStoredApiKey(source: string): string {
   try {
     const raw = localStorage.getItem(API_KEY_PREFIX + source);
     return raw ? decodeKey(raw) : "";
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/components/ApiKeySettings.tsx error:', error);
     return "";
   }
 }
@@ -45,7 +48,8 @@ function storeApiKey(source: string, key: string): void {
     } else {
       localStorage.removeItem(API_KEY_PREFIX + source);
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/components/ApiKeySettings.tsx error:', error);
     // localStorage unavailable
   }
 }
@@ -588,6 +592,7 @@ async function testPublicApiConnection(
     }
     return { ok: false, message: `No test available for ${source}.` };
   } catch (err) {
+    console.error('apps/web/src/features/publicApiIntegration/components/ApiKeySettings.tsx error:', err);
     return {
       ok: false,
       message:

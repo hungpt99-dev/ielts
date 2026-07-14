@@ -92,6 +92,7 @@ export default function VocabularyManager({
       setStats(s)
       onEntriesChange?.(all)
     } catch (err) {
+      console.error('apps/web/src/features/vocabulary/VocabularyManager.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load vocabulary')
     } finally {
       setLoading(false)
@@ -170,6 +171,7 @@ export default function VocabularyManager({
         setStats(s)
       }
     } catch (err) {
+      console.error('apps/web/src/features/vocabulary/VocabularyManager.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save word')
     } finally {
       setSaving(false)

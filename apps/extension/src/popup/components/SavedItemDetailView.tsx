@@ -39,7 +39,8 @@ function timeAgo(iso: string): string {
     if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`
     return `${Math.floor(diff / 86400000)}d ago`
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/popup/components/SavedItemDetailView.tsx error:', error);
     return ''
   }
 }
@@ -85,6 +86,7 @@ export default function SavedItemDetailView({ item: initialItem, onBack, onDelet
       const key = { vocab: 'vocab', explain: 'explain', 'ielts-vocab': 'ielts-vocab', examples: 'examples' }[action] as 'vocab' | 'explain' | 'ielts-vocab' | 'examples'
       setEnrich({ type: key, data: r } as EnrichmentState)
     } catch (err) {
+      console.error('apps/extension/src/popup/components/SavedItemDetailView.tsx error:', err);
       setEnrich({ type: 'error', message: err instanceof Error ? err.message : 'AI enrichment failed' })
     }
   }, [item.text])

@@ -41,6 +41,7 @@ export class MigrationRunner {
         results.push(record)
         this.applied.push(record)
       } catch (err) {
+        console.error('packages/learning-engine/src/infrastructure/migrations/index.ts error:', err);
         const record: MigrationRecord = {
           version: migration.version,
           appliedAt: new Date().toISOString(),

@@ -260,6 +260,7 @@ export default function Search() {
 
       setAllResults(results)
     } catch (err) {
+      console.error('apps/web/src/pages/Search.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load search data')
     } finally {
       setLoading(false)

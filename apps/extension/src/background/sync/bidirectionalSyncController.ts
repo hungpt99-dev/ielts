@@ -13,12 +13,16 @@ const META_KEY = 'ielts-bidi-sync-meta'
 interface SyncMeta { lastBidirectionalSyncAt: string | null }
 
 function getMeta(): SyncMeta {
-  try { return JSON.parse(localStorage.getItem(META_KEY) || '{}') } catch {}
+  try { return JSON.parse(localStorage.getItem(META_KEY) || '{}') } catch (error) {
+  console.error('apps/extension/src/background/sync/bidirectionalSyncController.ts error:', error);
+  }
   return { lastBidirectionalSyncAt: null }
 }
 
 function saveMeta(m: SyncMeta): void {
-  try { localStorage.setItem(META_KEY, JSON.stringify(m)) } catch {}
+  try { localStorage.setItem(META_KEY, JSON.stringify(m)) } catch (error) {
+console.error('apps/extension/src/background/sync/bidirectionalSyncController.ts error:', error);
+  }
 }
 
 export interface SyncSummary {
@@ -55,7 +59,9 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
         themeMode: (webSettings.themeMode as string) || (current as any).themeMode || 'light',
       } as any)
       if (webSettings.aiApiKey) await setApiKey(webSettings.aiApiKey as string)
-    } catch {}
+    } catch (error) {
+  console.error('apps/extension/src/background/sync/bidirectionalSyncController.ts error:', error);
+    }
   }
 
   const vocabList = data.vocabulary as Record<string, unknown>[] | undefined

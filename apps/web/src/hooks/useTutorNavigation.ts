@@ -9,7 +9,9 @@ export function useTutorNavigation() {
     const message = context.prompt + (context.title ? ` (${context.title})` : '')
     try {
       sessionStorage.setItem('ai-tutor-pending-message', message)
-    } catch {}
+    } catch (error) {
+    console.error('apps/web/src/hooks/useTutorNavigation.ts error:', error);
+    }
     window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
   }
 }

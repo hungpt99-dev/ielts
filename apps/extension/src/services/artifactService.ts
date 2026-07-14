@@ -27,7 +27,8 @@ function extractFavicon(url: string): string {
   try {
     const u = new URL(url)
     return `${u.protocol}//${u.hostname}/favicon.ico`
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/artifactService.ts error:', error);
     return ''
   }
 }
@@ -36,7 +37,8 @@ export async function getAllArtifacts(): Promise<ExtensionArtifact[]> {
   try {
     const result = await safeStorageGet<ExtensionArtifact[]>(ARTIFACTS_KEY)
     return result[ARTIFACTS_KEY] || []
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/artifactService.ts error:', error);
     return []
   }
 }
@@ -133,7 +135,8 @@ export async function saveCurrentPageAsArtifact(): Promise<ExtensionArtifact> {
   let extracted: ExtractResult | null = null
   try {
     extracted = await crawlActiveTab()
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/artifactService.ts error:', error);
     // content extraction is best-effort
   }
 
@@ -184,7 +187,8 @@ export async function saveCurrentPageAsArtifact(): Promise<ExtensionArtifact> {
 
   try {
     emitExtensionArticleSaved(title, url)
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/artifactService.ts error:', error);
     // event emission is best-effort
   }
 

@@ -40,7 +40,8 @@ function parseWritingFeedback(content: string): typeof EMPTY_FEEDBACK {
           }))
         : [],
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/writing/__tests__/WritingEvaluation.test.ts error:', error);
     return { ...EMPTY_FEEDBACK, bandScore: 5 }
   }
 }

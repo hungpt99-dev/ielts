@@ -65,7 +65,8 @@ export async function enrichVocabulary(word: string, context?: string): Promise<
       antonyms: Array.isArray(parsed.antonyms) ? parsed.antonyms as string[] : [],
       exampleSentence: String(parsed.exampleSentence ?? ''),
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/aiEnrichmentService.ts error:', error);
     return { word, meaning: result.content.slice(0, 200), translation: '', pronunciation: '', partOfSpeech: '', wordFamily: [], collocations: [], cefrLevel: '', ieltsUsage: '', contextualExamples: [], synonyms: [], antonyms: [], exampleSentence: '' }
   }
 }
@@ -86,7 +87,8 @@ export async function explainText(text: string, _language?: string): Promise<Exp
       examples: Array.isArray(parsed.examples) ? parsed.examples as string[] : [],
       relatedWords: Array.isArray(parsed.relatedWords) ? parsed.relatedWords as string[] : [],
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/aiEnrichmentService.ts error:', error);
     return { explanation: result.content, examples: [], relatedWords: [] }
   }
 }
@@ -107,7 +109,8 @@ export async function generateExamples(word: string, _count: number = 3): Promis
   try {
     const parsed = JSON.parse(result.content) as Record<string, unknown>
     return { sentences: Array.isArray(parsed.sentences) ? parsed.sentences as string[] : [result.content.slice(0, 200)] }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/aiEnrichmentService.ts error:', error);
     return { sentences: [result.content.slice(0, 200)] }
   }
 }

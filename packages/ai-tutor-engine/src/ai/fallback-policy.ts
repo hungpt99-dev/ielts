@@ -23,6 +23,7 @@ export class FallbackPolicy {
         const data = await primary()
         return { usedFallback: false, data }
       } catch (err) {
+        console.error('packages/ai-tutor-engine/src/ai/fallback-policy.ts error:', err);
         const tutorError = err as TutorError
         if (attempt < this.maxRetries && errorFilter?.(tutorError) !== false) {
           continue

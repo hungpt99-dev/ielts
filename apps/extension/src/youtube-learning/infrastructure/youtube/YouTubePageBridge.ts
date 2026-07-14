@@ -46,7 +46,8 @@ function extractCaptionTracksFromPage(): PlayerResponseResult | null {
         vssId: t.vssId || undefined,
       })),
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubePageBridge.ts error:', error);
     return null
   }
 }
@@ -73,6 +74,7 @@ export async function extractViaBackgroundScripting(
     }
     return null
   } catch (e) {
+    console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubePageBridge.ts error:', e);
     log('extractViaBackgroundScripting error:', e)
     return null
   }
@@ -136,12 +138,15 @@ export function extractFromPageScriptsFallback(): PlayerResponseResult | null {
                 vssId: t.vssId || undefined,
               })),
             }
-          } catch { continue }
+          } catch (error) {
+ console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubePageBridge.ts error:', error);
+ continue }
           break
         }
       }
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubePageBridge.ts error:', error);
     // fallback failed
   }
   return null

@@ -27,7 +27,8 @@ export class ContextSourceRegistry {
       try {
         const item = await source.collect()
         if (item) results.push(item)
-      } catch {
+      } catch (error) {
+        console.error('packages/ai-tutor-engine/src/context/context-source-registry.ts error:', error);
         /* source unavailable */
       }
     }

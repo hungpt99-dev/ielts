@@ -137,7 +137,8 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
             videoId: '',
           })
         }
-      } catch {
+      } catch (error) {
+        console.error('apps/extension/src/popup/components/VideoHelper.tsx error:', error);
         /* fallback to default */
       } finally {
         if (!cancelled) setVideoInfoLoading(false)
@@ -163,7 +164,8 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
       } else {
         setError('No captions found for this video. Paste the transcript manually.')
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/popup/components/VideoHelper.tsx error:', error);
       setError('Could not fetch transcript. Try pasting it manually.')
     } finally {
       setFetchingTranscript(false)
@@ -348,7 +350,8 @@ export default function VideoHelper({ onSaved, onCancel }: VideoHelperProps) {
 
       setSaved(true)
       setTimeout(() => onSaved(), 1200)
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/popup/components/VideoHelper.tsx error:', error);
       setError('Failed to save. Please try again.')
     } finally {
       setSaving(false)

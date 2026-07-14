@@ -12,7 +12,9 @@ export async function loadAllPassages(): Promise<ReadingPassageWithQuestions[]> 
   for (const p of seedPassages) {
     const notes = typeof p.notes === 'string' ? p.notes : '{}'
     let extra: { questions?: ReadingQuestion[]; estimatedMinutes?: number } = {}
-    try { extra = JSON.parse(notes) } catch {}
+    try { extra = JSON.parse(notes) } catch (error) {
+    console.error('apps/web/src/features/reading/passageSeedService.ts error:', error);
+    }
 
     result.push({
       id: p.id as string,

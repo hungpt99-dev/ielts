@@ -102,7 +102,8 @@ export function loadProactiveSettings(): ProactiveMessageSettings {
       },
       updatedAt: new Date().toISOString(),
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/aiTutor/hooks/useProactiveSettings.ts error:', error);
     return { ...DEFAULT_PROACTIVE_SETTINGS }
   }
 }
@@ -110,7 +111,8 @@ export function loadProactiveSettings(): ProactiveMessageSettings {
 export function saveProactiveSettings(settings: ProactiveMessageSettings): void {
   try {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings))
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/aiTutor/hooks/useProactiveSettings.ts error:', error);
     /* storage full or unavailable */
   }
 }
@@ -203,6 +205,7 @@ export function useProactiveSettings(): UseProactiveSettingsReturn {
       setSaved(true)
       setTimeout(() => setSaved(false), 2500)
     } catch (err) {
+      console.error('apps/web/src/features/aiTutor/hooks/useProactiveSettings.ts error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save settings')
     } finally {
       setLoading(false)

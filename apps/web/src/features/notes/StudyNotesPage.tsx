@@ -86,6 +86,7 @@ export default function StudyNotesPage() {
       const all = await DatabaseService.getAll<StudyNote>('studyNotes')
       setEntries(all)
     } catch (err) {
+      console.error('apps/web/src/features/notes/StudyNotesPage.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load study notes')
     } finally {
       setLoading(false)
@@ -212,6 +213,7 @@ export default function StudyNotesPage() {
       setModalOpen(false)
       setEditingEntry(null)
     } catch (err) {
+      console.error('apps/web/src/features/notes/StudyNotesPage.tsx error:', err);
       showToast('error', err instanceof Error ? err.message : 'Failed to save study note')
     } finally {
       setSaving(false)

@@ -60,6 +60,7 @@ async function runSync(): Promise<void> {
       setSyncStatus({ state: 'success', at: new Date().toISOString() })
     }
   } catch (err) {
+    console.error('apps/extension/src/background/sync/AutoSyncController.ts error:', err);
     setSyncStatus({ state: 'failed', at: new Date().toISOString(), error: err instanceof Error ? err.message : 'Sync failed' })
   } finally {
     syncLock.release()

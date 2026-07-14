@@ -198,7 +198,8 @@ export class VocabularyService {
         difficulty: parsed.difficulty,
         topic: parsed.topic,
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/application/services/VocabularyService.ts error:', error);
       return null
     }
   }
@@ -207,7 +208,8 @@ export class VocabularyService {
     try {
       const result = await safeStorageGet<VocabEntry[]>(VOCABULARY_STORAGE_KEY)
       return result?.[VOCABULARY_STORAGE_KEY] ?? []
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/application/services/VocabularyService.ts error:', error);
       return []
     }
   }

@@ -29,6 +29,7 @@ export default function Progress() {
       saveProgressSnapshot(fresh)
       setSnapshot(fresh)
     } catch (err) {
+      console.error('apps/web/src/pages/Progress.tsx error:', err);
       const cached = loadProgressSnapshot()
       if (cached) {
         setSnapshot(cached)

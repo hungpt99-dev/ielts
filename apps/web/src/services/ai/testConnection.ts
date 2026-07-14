@@ -12,7 +12,8 @@ export async function testConnection(config: { apiKey: string; baseUrl: string; 
       return { ok: false, message: result.error }
     }
     return { ok: true, message: 'Connection successful' }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/ai/testConnection.ts error:', error);
     return { ok: false, message: 'Connection test failed. Check your settings.' }
   }
 }

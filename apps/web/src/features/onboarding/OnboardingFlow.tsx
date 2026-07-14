@@ -100,7 +100,8 @@ export default function OnboardingFlow() {
         tutorStyle: completed.tutorStyle,
       })
       navigate('/dashboard', { replace: true })
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/onboarding/OnboardingFlow.tsx error:', error);
       setSaveError(true)
       setIsSaving(false)
     }

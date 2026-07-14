@@ -20,7 +20,8 @@ export function getSetting<T>(key: string, defaultValue: T): T {
     if (raw !== null) {
       return JSON.parse(raw) as T
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/storage/SettingsStorage.ts error:', error);
     /* ignore parse errors — return default */
   }
   return defaultValue
@@ -53,7 +54,9 @@ export function loadAppSettings(): AppSettings {
       }
       return { ...DEFAULT_SETTINGS, ...parsed }
     }
-  } catch {}
+  } catch (error) {
+  console.error('apps/web/src/services/storage/SettingsStorage.ts error:', error);
+  }
   return { ...DEFAULT_SETTINGS }
 }
 
@@ -78,7 +81,9 @@ export function clearAllLocalStorage(): void {
   for (const key of toRemove) {
     try {
       localStorage.removeItem(key)
-    } catch { /* ignore */ }
+    } catch (error) {
+ console.error('apps/web/src/services/storage/SettingsStorage.ts error:', error);
+ /* ignore */ }
   }
 }
 
@@ -147,7 +152,8 @@ export function getStorageQuotaStatus(): { usedBytes: number; remaining: number 
     localStorage.setItem(testKey, 'a')
     localStorage.removeItem(testKey)
     remaining = null
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/storage/SettingsStorage.ts error:', error);
     remaining = Math.max(0, 5 * 1024 * 1024 - usedBytes)
   }
   const percentUsed = remaining !== null ? Math.round((usedBytes / (usedBytes + remaining)) * 100) : 0

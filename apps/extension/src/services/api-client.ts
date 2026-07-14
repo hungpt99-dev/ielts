@@ -41,7 +41,9 @@ async function getCorsProxyConfig(): Promise<CorsProxyConfig> {
         return parsed
       }
     }
-  } catch {
+  } catch (error) {
+  console.error('apps/extension/src/services/api-client.ts error:', error);
+  
   }
   return { enabled: false, proxyUrl: DEFAULT_CORS_PROXY }
 }
@@ -259,7 +261,9 @@ export async function fetchPreview(result: ApiSearchResult): Promise<ApiPreview>
           content = pages[pageKey]?.extract ?? content
         }
       }
-    } catch {
+    } catch (error) {
+  console.error('apps/extension/src/services/api-client.ts error:', error);
+    
     }
   }
 

@@ -125,7 +125,8 @@ export async function generateLearningActivity(
           exercise.instructions = skillResult.exercise.instructions ?? exercise.instructions
           exercise.content = skillResult.exercise.content ?? exercise.content
         }
-      } catch {
+      } catch (error) {
+        console.error('packages/learning-engine/src/application/activities/generate-learning-activity.ts error:', error);
         /* fall through to AI or offline templates */
       }
     }
@@ -155,7 +156,8 @@ export async function generateLearningActivity(
           explanation: q.explanation ?? q.Explanation ?? '',
         })).filter((q: any) => q.question)
       }
-    } catch {
+    } catch (error) {
+      console.error('packages/learning-engine/src/application/activities/generate-learning-activity.ts error:', error);
       /* fall through to offline templates */
     }
   }

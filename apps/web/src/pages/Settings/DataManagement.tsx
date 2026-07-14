@@ -108,6 +108,7 @@ export default function DataManagement() {
       const totalRecords = TABLE_NAMES.reduce((sum, k) => sum + (data[k] as unknown[]).length, 0)
       showToast('success', `Backup exported (${formatBytes(blob.size)}, ${totalRecords} records)`)
     } catch (err) {
+      console.error('apps/web/src/pages/Settings/DataManagement.tsx error:', err);
       showToast('error', err instanceof Error ? err.message : 'Export failed')
     } finally {
       setExporting(false)
@@ -129,7 +130,8 @@ export default function DataManagement() {
           return
         }
         setImportPreview(raw)
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/pages/Settings/DataManagement.tsx error:', error);
         showToast('error', 'Could not parse file. Make sure it is a valid JSON file.')
       }
     }
@@ -154,6 +156,7 @@ export default function DataManagement() {
         showToast('warning', `Import completed with ${summary.failed} errors`)
       }
     } catch (err) {
+      console.error('apps/web/src/pages/Settings/DataManagement.tsx error:', err);
       showToast('error', err instanceof Error ? err.message : 'Import failed')
     } finally {
       setImporting(false)
@@ -175,6 +178,7 @@ export default function DataManagement() {
       showToast('success', 'All data has been cleared.')
       setShowResetConfirm(false)
     } catch (err) {
+      console.error('apps/web/src/pages/Settings/DataManagement.tsx error:', err);
       showToast('error', err instanceof Error ? err.message : 'Failed to clear data')
     } finally {
       setResetting(false)

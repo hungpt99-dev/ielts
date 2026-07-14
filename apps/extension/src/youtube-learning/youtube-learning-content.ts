@@ -58,7 +58,8 @@ function postToPanel(type: string, payload?: unknown): void {
         { source: 'ielts-content-script', type, payload },
         '*',
       )
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
       // iframe may be detached
     }
   }
@@ -295,6 +296,7 @@ async function handleTranscriptRequest(): Promise<void> {
       postToParent('TRANSCRIPT_UNAVAILABLE')
     }
   } catch (e) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', e);
     if (e instanceof DOMException && e.name === 'AbortError') {
     } else {
       const msg = e instanceof Error ? e.message : String(e)
@@ -324,7 +326,8 @@ async function handleAnalyzeVideo(): Promise<void> {
       return
     }
     postToParent('ANALYSIS_DATA', { error: 'Analysis service not available' })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
     postToParent('ANALYSIS_DATA', { error: 'Analysis failed' })
   }
 }
@@ -361,7 +364,9 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
 
     if (!result.error && result.content) {
       let parsed: Record<string, unknown>
-      try { parsed = JSON.parse(result.content) } catch { throw new Error('AI returned invalid JSON') }
+      try { parsed = JSON.parse(result.content) } catch (error) {
+ console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
+ throw new Error('AI returned invalid JSON') }
 
       const collocations = Array.isArray(parsed.collocations)
         ? parsed.collocations.map((c: any) => ({ phrase: typeof c === 'string' ? c : c.phrase || '', example: c.example }))
@@ -430,6 +435,7 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
 
     postToParent('VOCAB_EXPLANATION', { error: 'Word explanation unavailable' })
   } catch (e) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', e);
     const msg = e instanceof Error ? e.message : 'Failed to get word details'
     postToParent('VOCAB_EXPLANATION', { error: msg })
   }
@@ -451,7 +457,8 @@ async function handleSaveMistakes(payload: Record<string, unknown>): Promise<voi
     }
     await chrome.storage.local.set({ 'yt-learning-mistakes': all })
     postToParent('MISTAKES_SAVED', { success: true })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
     // non-critical
   }
 }
@@ -468,6 +475,7 @@ async function handleTranslateSegments(payload: Record<string, unknown>): Promis
     const result = await translationService.translateSegments(data, language)
     postToPanel('TRANSLATED_SEGMENTS', { segments: result.segments, error: result.error })
   } catch (err) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', err);
     const message = err instanceof Error ? err.message : 'Translation failed'
     postToPanel('TRANSLATED_SEGMENTS', { error: message })
   }
@@ -496,7 +504,8 @@ async function handleSaveVocab(payload: Record<string, unknown>): Promise<void> 
       payload: { word, sentence, videoTitle, videoUrl, timestamp },
     }).catch(() => {})
     postToParent('VOCAB_SAVED', { success: true, word })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
     postToParent('VOCAB_SAVED', { error: 'Failed to save word' })
   }
 }
@@ -524,7 +533,8 @@ async function handleExplainSentence(payload: Record<string, unknown>): Promise<
     }
 
     let parsed: Record<string, unknown>
-    try { parsed = JSON.parse(result.content) } catch {
+    try { parsed = JSON.parse(result.content) } catch (error) {
+      console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
       postToParent('SENTENCE_EXPLANATION', { error: 'AI returned invalid JSON' })
       return
     }
@@ -540,7 +550,8 @@ async function handleExplainSentence(payload: Record<string, unknown>): Promise<
       academicAlternative: parsed.academicAlternative || undefined,
       practiceQuestion: parsed.practiceQuestion || undefined,
     })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
     postToParent('SENTENCE_EXPLANATION', { error: 'Failed to generate explanation' })
   }
 }
@@ -633,14 +644,16 @@ async function handleGenerateQuiz(payload: Record<string, unknown>): Promise<voi
             }
           }
         }
-      } catch {
+      } catch (error) {
+        console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
         postToParent('QUIZ_DATA', { error: 'Quiz generation unavailable' })
         return
       }
     }
 
     postToParent('QUIZ_DATA', { error: 'Learning engine not available' })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
     postToParent('QUIZ_DATA', { error: 'Quiz generation failed' })
   }
 }
@@ -693,7 +706,8 @@ async function handleSubmitQuiz(payload: Record<string, unknown>): Promise<void>
       totalPossible,
       accuracy: totalPossible > 0 ? Math.round((totalScore / totalPossible) * 100) : 0,
     })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
     postToParent('QUIZ_EVALUATION', { error: 'Evaluation failed' })
   }
 }
@@ -785,6 +799,7 @@ export async function initYouTubeLearning(): Promise<void> {
       document.addEventListener('yt-navigate-finish', onYtNavigateFinish)
     }
   } catch (err) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', err);
     log('Initialization failed:', err)
   }
 }
@@ -792,7 +807,8 @@ export async function initYouTubeLearning(): Promise<void> {
 export async function setAutoOpen(enabled: boolean): Promise<void> {
   try {
     await chrome.storage.local.set({ [AUTO_OPEN_STORAGE_KEY]: enabled })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
     // storage unavailable
   }
 }
@@ -801,7 +817,8 @@ export async function getAutoOpen(): Promise<boolean> {
   try {
     const result = await chrome.storage.local.get(AUTO_OPEN_STORAGE_KEY)
     return result[AUTO_OPEN_STORAGE_KEY] === true
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
     return false
   }
 }

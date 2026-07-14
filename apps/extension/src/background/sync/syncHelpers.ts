@@ -73,5 +73,7 @@ export async function syncStorageForHighlighter(getAllVocabulary: () => Promise<
   try {
     const allVocab = await getAllVocabulary().catch(() => [])
     await new Promise<void>(r => chrome.storage.local.set({ vocabulary: allVocab }, r))
-  } catch {}
+  } catch (error) {
+    console.error('apps/extension/src/background/sync/syncHelpers.ts error:', error);
+  }
 }

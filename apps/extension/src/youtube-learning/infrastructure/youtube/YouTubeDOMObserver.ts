@@ -129,7 +129,8 @@ export class YouTubeDOMObserver {
         return urlObj.pathname.split('/shorts/')[1]?.split('?')[0] || ''
       }
       return urlObj.searchParams.get('v') || ''
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubeDOMObserver.ts error:', error);
       return ''
     }
   }

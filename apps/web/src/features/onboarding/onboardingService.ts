@@ -33,7 +33,8 @@ export function isOnboardingComplete(): boolean {
       Array.isArray(settings.weakSkills) &&
       typeof settings.studyGoal !== 'undefined'
     )
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/onboarding/onboardingService.ts error:', error);
     return false
   }
 }

@@ -58,7 +58,8 @@ async function loadSettings(): Promise<boolean> {
     const settings = result[SETTINGS_KEY] || {}
     excludedHosts = settings.highlightExcludedHosts ?? []
     return settings.autoHighlightSavedVocabulary !== false
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/content-script/highlighter/savedKeywordHighlighter.ts error:', error);
     console.debug('[IELTS Journey] Could not load settings, defaulting to enabled')
     excludedHosts = []
     return true
@@ -106,7 +107,8 @@ async function loadVocabulary(): Promise<HighlightWord[]> {
         }
       }
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/content-script/highlighter/savedKeywordHighlighter.ts error:', error);
     console.debug('[IELTS Journey] Could not load vocabulary from storage')
   }
 

@@ -59,6 +59,7 @@ export class LearningEngineImpl implements LearningEngine {
       })
       return { status: 'success', data: result, metadata: metadata(false, false) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to create session', recoverable: true },
@@ -82,6 +83,7 @@ export class LearningEngineImpl implements LearningEngine {
       })
       return { status: 'success', data: result, metadata: metadata(result.aiUsed, result.cacheHit) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to generate activity', recoverable: true },
@@ -105,6 +107,7 @@ export class LearningEngineImpl implements LearningEngine {
       })
       return { status: 'success', data: result, metadata: metadata(false, false) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       if (err instanceof Error && err.message.includes('already been submitted')) {
         return { status: 'failure', error: { code: 'attempt_already_submitted', message: err.message, recoverable: false } }
       }
@@ -135,6 +138,7 @@ export class LearningEngineImpl implements LearningEngine {
       })
       return { status: 'success', data: result, metadata: metadata(false, false) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: { code: 'storage_failure', message: err instanceof Error ? err.message : 'Failed to complete session', recoverable: true },
@@ -151,6 +155,7 @@ export class LearningEngineImpl implements LearningEngine {
       })
       return { status: 'success', data: result, metadata: metadata(false, false) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: { code: 'storage_failure', message: err instanceof Error ? err.message : 'Failed to resume session', recoverable: true },
@@ -203,6 +208,7 @@ export class LearningEngineImpl implements LearningEngine {
 
       return { status: 'success', data: { recommendations }, metadata: metadata(false, false) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to get recommendations', recoverable: true },
@@ -223,6 +229,7 @@ export class LearningEngineImpl implements LearningEngine {
       })
       return { status: 'success', data: result, metadata: metadata(false, false) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to create roadmap session', recoverable: true },
@@ -262,6 +269,7 @@ export class LearningEngineImpl implements LearningEngine {
       })
       return { status: 'success', data: result, metadata: metadata(false, false) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to create content session', recoverable: true },
@@ -277,6 +285,7 @@ export class LearningEngineImpl implements LearningEngine {
       const result = adaptDifficulty(request)
       return { status: 'success', data: result, metadata: metadata(false, false) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: { code: 'evaluation_failure', message: err instanceof Error ? err.message : 'Failed to adapt difficulty', recoverable: true },
@@ -295,6 +304,7 @@ export class LearningEngineImpl implements LearningEngine {
       })
       return { status: 'success', data: { exercise }, metadata: metadata(false, false) }
     } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {
         status: 'failure',
         error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to generate review', recoverable: true },

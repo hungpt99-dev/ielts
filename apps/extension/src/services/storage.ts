@@ -87,7 +87,8 @@ async function flushProgress(): Promise<void> {
       updated[key] = (updated[key] || 0) + value
     }
     await storageSet(STORAGE_KEYS.DAILY_PROGRESS, updated)
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/storage.ts error:', error);
     // write failed — re-queue
     for (const [key, value] of Object.entries(patch) as [keyof DailyProgress, number][]) {
       pendingProgress[key] = (pendingProgress[key] || 0) + value

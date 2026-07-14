@@ -84,6 +84,7 @@ export class VoiceService {
       this.recognition.start()
       this.setStatus('listening')
     } catch (err) {
+      console.error('apps/web/src/voice/VoiceService.ts error:', err);
       this.setStatus('error')
       this.handlers?.onError(err instanceof Error ? err.message : 'Failed to start speech recognition')
     }
@@ -93,7 +94,9 @@ export class VoiceService {
     if (this.recognition && this.status === 'listening') {
       try {
         this.recognition.stop()
-      } catch { }
+      } catch (error) {
+    console.error('apps/web/src/voice/VoiceService.ts error:', error);
+       }
     }
     const prevStatus = this.status
     this.setStatus('idle')
@@ -146,7 +149,9 @@ export class VoiceService {
     if (this.recognition && this.status === 'listening') {
       try {
         this.recognition.abort()
-      } catch { }
+      } catch (error) {
+    console.error('apps/web/src/voice/VoiceService.ts error:', error);
+       }
     }
     if (VoiceService.isSynthesisSupported()) {
       window.speechSynthesis.cancel()

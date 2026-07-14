@@ -15,7 +15,8 @@ export function extractYoutubeVideoId(url: string): string {
     if (id) return id
     const match = urlObj.pathname.match(/^\/embed\/([^/?]+)/)
     return match?.[1] || ''
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/youtube-learning/infrastructure/youtube/YouTubePageDetector.ts error:', error);
     return ''
   }
 }

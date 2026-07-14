@@ -65,7 +65,8 @@ export default function AIProviderSettingsPage() {
       emitSettingsChanged(['aiApiKey', 'aiProvider', 'aiBaseUrl', 'aiModel', 'aiEnabled'])
       emitAIProviderConfigured(provider, model)
       showFeedback('success', 'AI settings saved successfully.')
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/pages/Settings/AIProviderSettingsPage.tsx error:', error);
       showFeedback('error', 'Failed to save AI settings.')
     } finally {
       setSaving(false)
@@ -105,7 +106,8 @@ export default function AIProviderSettingsPage() {
         model: model || DEFAULT_MODEL,
       })
       setTestResult({ ok: result.ok, message: result.message })
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/pages/Settings/AIProviderSettingsPage.tsx error:', error);
       setTestResult({ ok: false, message: 'Connection test failed. Check your settings.' })
     } finally {
       setTesting(false)

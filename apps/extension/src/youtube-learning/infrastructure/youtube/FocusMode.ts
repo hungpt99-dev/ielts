@@ -51,7 +51,8 @@ export class FocusMode {
     try {
       const result = await chrome.storage.local.get(STORAGE_KEY)
       return !!result[STORAGE_KEY]
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/youtube/FocusMode.ts error:', error);
       return false
     }
   }
@@ -114,7 +115,8 @@ export class FocusMode {
   private async savePreference(enabled: boolean): Promise<void> {
     try {
       await chrome.storage.local.set({ [STORAGE_KEY]: enabled })
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/youtube/FocusMode.ts error:', error);
       // Storage unavailable
     }
   }

@@ -90,7 +90,9 @@ export async function submitAnswer(
               recurrenceCount: m.recurrenceCount,
               schemaVersion: '1.0',
             })
-          } catch { /* continue */ }
+          } catch (error) {
+ console.error('packages/learning-engine/src/application/attempts/submit-answer.ts error:', error);
+ /* continue */ }
         }
       }
     }

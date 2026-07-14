@@ -163,7 +163,9 @@ export function ChatWidget({
       const notes = JSON.parse(localStorage.getItem('savedAiNotes') || '[]')
       notes.push({ id: Date.now().toString(), content, createdAt: new Date().toISOString() })
       localStorage.setItem('savedAiNotes', JSON.stringify(notes))
-    } catch { /* ignore */ }
+    } catch (error) {
+ console.error('apps/web/src/components/aiTutor/ChatWidget.tsx error:', error);
+ /* ignore */ }
   }, [])
 
   const handleCopy = useCallback((content: string) => {

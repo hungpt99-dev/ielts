@@ -70,6 +70,7 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
       setCompleted(false)
       setStats({ again: 0, hard: 0, good: 0, easy: 0 })
     } catch (err) {
+      console.error('apps/web/src/features/vocabulary/components/ReviewMode.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load review queue')
     } finally {
       setLoading(false)
@@ -118,6 +119,7 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
         onComplete?.()
       }
     } catch (err) {
+      console.error('apps/web/src/features/vocabulary/components/ReviewMode.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save review')
     } finally {
       setSaving(false)

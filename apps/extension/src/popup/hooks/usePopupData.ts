@@ -58,7 +58,8 @@ async function loadRecentEntries(): Promise<LearningEntry[]> {
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       )
       .slice(0, 5)
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
     return []
   }
 }
@@ -69,7 +70,8 @@ async function loadUserData(): Promise<UserData | null> {
     if (result.ieltsUser?.isLoggedIn) {
       return result.ieltsUser as UserData
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
     // Storage not available
   }
   return null
@@ -80,7 +82,8 @@ function getInitialDarkMode(): boolean {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     const saved = localStorage.getItem('popup-dark-mode')
     return saved !== null ? saved === 'true' : prefersDark
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
     return false
   }
 }
@@ -88,7 +91,8 @@ function getInitialDarkMode(): boolean {
 function applyDarkMode(isDark: boolean) {
   try {
     document.documentElement.classList.toggle('dark', isDark)
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
     // DOM not available
   }
 }
@@ -142,7 +146,8 @@ export function usePopupData(): PopupDataResult {
         if (failures.length > 0) {
           setError('Failed to load some data')
         }
-      } catch {
+      } catch (error) {
+        console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
         if (!cancelled) setError('Failed to initialize popup data')
       } finally {
         if (!cancelled) {
@@ -167,9 +172,12 @@ export function usePopupData(): PopupDataResult {
       }
       chrome.storage.onChanged.addListener(listener)
       unregister = () => {
-        try { chrome.storage.onChanged.removeListener(listener) } catch { /* ignore */ }
+        try { chrome.storage.onChanged.removeListener(listener) } catch (error) {
+ console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
+ /* ignore */ }
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
       // chrome.storage not available
     }
 
@@ -184,7 +192,9 @@ export function usePopupData(): PopupDataResult {
       const next = !prev
       try {
         localStorage.setItem('popup-dark-mode', String(next))
-      } catch { /* localStorage not available */ }
+      } catch (error) {
+ console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
+ /* localStorage not available */ }
       applyDarkMode(next)
       return next
     })

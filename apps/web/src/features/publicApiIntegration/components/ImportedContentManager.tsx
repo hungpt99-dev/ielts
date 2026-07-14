@@ -73,7 +73,8 @@ function formatDate(iso: string): string {
       month: 'short',
       day: 'numeric',
     })
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/components/ImportedContentManager.tsx error:', error);
     return iso
   }
 }
@@ -120,6 +121,7 @@ export default function ImportedContentManager() {
           setError(null)
         }
       } catch (err) {
+        console.error('apps/web/src/features/publicApiIntegration/components/ImportedContentManager.tsx error:', err);
         if (!cancelled) {
           setError(err instanceof Error ? err.message : 'Failed to load imported content')
         }
@@ -197,6 +199,7 @@ export default function ImportedContentManager() {
       setNotesSaved(true)
       setTimeout(() => setNotesSaved(false), 2000)
     } catch (err) {
+      console.error('apps/web/src/features/publicApiIntegration/components/ImportedContentManager.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save notes')
     } finally {
       setSavingNotes(false)
@@ -210,6 +213,7 @@ export default function ImportedContentManager() {
       setConfirmDeleteId(null)
       if (selectedItem?.id === id) setSelectedItem(null)
     } catch (err) {
+      console.error('apps/web/src/features/publicApiIntegration/components/ImportedContentManager.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to delete content')
     }
   }
@@ -284,11 +288,13 @@ export default function ImportedContentManager() {
             isDraft: false,
           }
           await DatabaseService.addStudyNote(note)
-        } catch {
+        } catch (error) {
+          console.error('apps/web/src/features/publicApiIntegration/components/ImportedContentManager.tsx error:', error);
           // Non-critical
         }
       }
     } catch (err) {
+      console.error('apps/web/src/features/publicApiIntegration/components/ImportedContentManager.tsx error:', err);
       setExerciseError(
         err instanceof Error ? err.message : 'Failed to generate exercises',
       )

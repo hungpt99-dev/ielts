@@ -134,6 +134,7 @@ export default function ListeningPractice() {
       const all = await DatabaseService.getAll<ListeningPracticeSession>('listeningPracticeSessions')
       setHistory(all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     } catch (err) {
+      console.error('apps/web/src/features/listening/ListeningPractice.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load listening history')
     } finally {
       setLoading(false)
@@ -328,7 +329,8 @@ export default function ListeningPractice() {
         const jsonEnd = content.lastIndexOf('}')
         const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
         parsed = JSON.parse(jsonStr) as Record<string, unknown>
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/features/listening/ListeningPractice.tsx error:', error);
         throw new Error('Failed to parse AI response. The response was not valid JSON.')
       }
 
@@ -364,6 +366,7 @@ export default function ListeningPractice() {
       setAiModalOpen(false)
       startExercise(exercise)
     } catch (err) {
+      console.error('apps/web/src/features/listening/ListeningPractice.tsx error:', err);
       setAiError(err instanceof Error ? err.message : 'Failed to generate listening exercise')
     } finally {
       setAiGenerating(false)

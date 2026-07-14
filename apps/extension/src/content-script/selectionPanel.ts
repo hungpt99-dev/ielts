@@ -626,6 +626,7 @@ function storeToChromeStorage(batch: typeof pendingSaves): Promise<void> {
         safeStorageSet({ _pendingSaves: existing.concat(batch) }).then(resolve).catch(reject)
       })
     } catch (e) {
+      console.error('apps/extension/src/content-script/selectionPanel.ts error:', e);
       reject(e)
     }
   })
@@ -637,7 +638,8 @@ function storeToPageStorage(batch: typeof pendingSaves): void {
     const existing: Record<string, unknown>[] = raw ? JSON.parse(raw) : []
     existing.push(...batch.map(s => ({ ...s })))
     window.localStorage.setItem(PENDING_QUEUE_KEY, JSON.stringify(existing))
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/content-script/selectionPanel.ts error:', error);
     // localStorage full or unavailable — silently drop
   }
 }
@@ -687,7 +689,8 @@ function recoverFromPageStorage(): void {
       const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
       safeStorageSet({ _pendingSaves: existing.concat(items) })
     })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/content-script/selectionPanel.ts error:', error);
     // nothing to recover
   }
 }

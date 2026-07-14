@@ -188,6 +188,7 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
       setValue('synonyms', data.synonyms.join(', '))
       setValue('antonyms', data.antonyms.join(', '))
     } catch (err) {
+      console.error('apps/web/src/features/vocabulary/components/WordForm.tsx error:', err);
       setAiError(err instanceof Error ? err.message : 'Failed to generate example')
     } finally {
       setGenerating(false)

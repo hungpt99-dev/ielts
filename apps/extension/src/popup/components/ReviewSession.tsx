@@ -42,6 +42,7 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
       startTimeRef.current = Date.now()
       emitExtensionVocabularyReviewStarted(q.length)
     } catch (err) {
+      console.error('apps/extension/src/popup/components/ReviewSession.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load review queue')
     } finally {
       setLoading(false)
@@ -65,6 +66,7 @@ export default function ReviewSession({ onComplete, onBack }: ReviewSessionProps
         setCompleted(true)
       }
     } catch (err) {
+      console.error('apps/extension/src/popup/components/ReviewSession.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save review')
     } finally {
       setSaving(false)

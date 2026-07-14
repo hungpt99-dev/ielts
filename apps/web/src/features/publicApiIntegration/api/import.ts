@@ -130,6 +130,7 @@ export async function importPublicApiContent(
       contentId: entry.id,
     }
   } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/api/import.ts error:', error);
     return {
       success: false,
       contentId: '',

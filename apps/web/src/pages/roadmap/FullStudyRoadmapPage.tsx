@@ -65,9 +65,12 @@ export default function FullStudyRoadmapPage() {
         try {
           const settings = JSON.parse(settingsStr)
           setAiEnabled(!!(settings.aiApiKey && settings.aiEnabled !== false))
-        } catch { /* ignore */ }
+        } catch (error) {
+ console.error('apps/web/src/pages/roadmap/FullStudyRoadmapPage.tsx error:', error);
+ /* ignore */ }
       }
     } catch (err) {
+      console.error('apps/web/src/pages/roadmap/FullStudyRoadmapPage.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load roadmap')
     } finally {
       if (showLoading) setLoading(false)
@@ -122,7 +125,9 @@ export default function FullStudyRoadmapPage() {
       const allTasks = await DatabaseService.getAll<import('../../models').TaskEntry>('tasks')
       for (const t of allTasks) {
         if (dates.has(t.date.slice(0, 10))) {
-          try { await DatabaseService.remove('tasks', t.id) } catch {}
+          try { await DatabaseService.remove('tasks', t.id) } catch (error) {
+      console.error('apps/web/src/pages/roadmap/FullStudyRoadmapPage.tsx error:', error);
+          }
         }
       }
       const newRoadmap = await generateRoadmapWithEngine(settings)

@@ -21,6 +21,8 @@ export class SyncScheduler {
   private async fire(): Promise<void> {
     this.debounceTimer = null
     if (!this.callback) return
-    try { await this.callback() } catch {}
+    try { await this.callback() } catch (error) {
+      console.error('apps/extension/src/background/sync/SyncScheduler.ts error:', error);
+    }
   }
 }

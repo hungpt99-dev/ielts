@@ -28,7 +28,8 @@ function playPronunciation(word: string): void {
     utterance.rate = 0.9
     try {
       window.speechSynthesis.speak(utterance)
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/vocabulary-review/reviewModes.tsx error:', error);
       /* speech synthesis not available */
     }
   }

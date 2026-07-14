@@ -413,7 +413,8 @@ export function loadRoadmap(): RoadmapData | null {
     }
 
     return data as RoadmapData
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/roadmap/roadmapService.ts error:', error);
     return null
   }
 }
@@ -421,7 +422,8 @@ export function loadRoadmap(): RoadmapData | null {
 async function loadUserSettings(): Promise<AppSettings | null> {
   try {
     return loadAppSettings()
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/roadmap/roadmapService.ts error:', error);
     return null
   }
 }
@@ -453,7 +455,9 @@ export async function ensureRoadmap(): Promise<RoadmapData> {
     const allDbTasks = await DatabaseService.getAll<TaskEntry>('tasks')
     for (const t of allDbTasks) {
       if (dateSet.has(t.date.slice(0, 10))) {
-        try { await DatabaseService.remove('tasks', t.id) } catch {}
+        try { await DatabaseService.remove('tasks', t.id) } catch (error) {
+  console.error('apps/web/src/features/roadmap/roadmapService.ts error:', error);
+        }
       }
     }
   }
@@ -571,6 +575,7 @@ async function enrichPlanWithAI(
 
     return { ...plan, tasks: planTasks }
   } catch (err) {
+    console.error('apps/web/src/features/roadmap/roadmapService.ts error:', err);
     console.warn('AI enrichment failed, using deterministic plan:', err)
     return plan
   }
@@ -704,7 +709,9 @@ export async function toggleTask(roadmap: RoadmapData, phaseIndex: number, weekI
             correlationId: taskId,
           })
         }
-      } catch { /* engine recording is best-effort */ }
+      } catch (error) {
+ console.error('apps/web/src/features/roadmap/roadmapService.ts error:', error);
+ /* engine recording is best-effort */ }
     }
   }
 

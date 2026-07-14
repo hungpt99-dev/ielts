@@ -126,7 +126,8 @@ IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, om
     }
 
     return { data: details, error: null }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/popup/components/VocabularyCollector.tsx error:', error);
     return { data: null, error: 'Failed to parse AI response.' }
   }
 }
@@ -134,7 +135,8 @@ IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, om
 function generateId(): string {
   try {
     return crypto.randomUUID()
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/popup/components/VocabularyCollector.tsx error:', error);
     return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}-${Math.random().toString(36).slice(2, 11)}`
   }
 }
@@ -272,6 +274,7 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
     try {
       await saveVocabularyEntry(entry)
     } catch (err) {
+      console.error('apps/extension/src/popup/components/VocabularyCollector.tsx error:', err);
       console.warn('[VocabularyCollector] IndexedDB save failed, falling back to chrome.storage:', err)
     }
     const learningEntryData = {
@@ -292,17 +295,20 @@ export default function VocabularyCollector({ onSaved, onCancel }: VocabularyCol
     try {
       await saveEntry(learningEntryData)
     } catch (err) {
+      console.error('apps/extension/src/popup/components/VocabularyCollector.tsx error:', err);
       console.warn('[VocabularyCollector] learningEntries save failed (non-critical):', err)
     }
     try {
       await incrementDailyProgress(PROGRESS_KEYS.WORDS_ADDED, 1)
     } catch (err) {
+      console.error('apps/extension/src/popup/components/VocabularyCollector.tsx error:', err);
       console.warn('[VocabularyCollector] progress increment failed (non-critical):', err)
     }
 
     try {
       await chrome.runtime.sendMessage({ type: MESSAGE_TYPES.VOCAB_SAVED, payload: entry })
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/popup/components/VocabularyCollector.tsx error:', error);
       // Background may not be available (popup closed, etc.)
     }
 

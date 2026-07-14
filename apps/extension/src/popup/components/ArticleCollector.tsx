@@ -144,6 +144,7 @@ Requirements:
 
     return { data: questions as ArticleQuestion[], error: null }
   } catch (err) {
+    console.error('apps/extension/src/popup/components/ArticleCollector.tsx error:', err);
     const message = err instanceof Error ? err.message : 'Unknown error'
     if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
       return { data: null, error: 'Network error. Check your internet connection and API endpoint.' }
@@ -181,6 +182,7 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
       setContent(result.content)
       setCrawl({ status: 'success', result })
     } catch (err) {
+      console.error('apps/extension/src/popup/components/ArticleCollector.tsx error:', err);
       const message = err instanceof Error ? err.message : 'Failed to extract article'
       setCrawl({ status: 'error', error: message })
     }
@@ -297,7 +299,8 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
           updatedAt: now,
         }
         await saveEntry(learningEntry)
-      } catch {
+      } catch (error) {
+        console.error('apps/extension/src/popup/components/ArticleCollector.tsx error:', error);
         /* non-critical */
       }
 
@@ -305,7 +308,8 @@ export default function ArticleCollector({ onSaved, onCancel }: ArticleCollector
 
       setSaved(true)
       setTimeout(() => onSaved(), 1200)
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/popup/components/ArticleCollector.tsx error:', error);
       setErrors({ submit: 'Failed to save. Please try again.' })
     } finally {
       setSaving(false)

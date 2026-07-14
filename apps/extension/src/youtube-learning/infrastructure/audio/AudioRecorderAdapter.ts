@@ -36,6 +36,7 @@ export class AudioRecorderAdapter {
       this.setState('idle')
       return true
     } catch (err) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/audio/AudioRecorderAdapter.ts error:', err);
       this.setState('error')
       if (err instanceof DOMException && err.name === 'NotAllowedError') {
         this.callbacks.onPermissionDenied?.()
@@ -89,6 +90,7 @@ export class AudioRecorderAdapter {
 
       return true
     } catch (err) {
+      console.error('apps/extension/src/youtube-learning/infrastructure/audio/AudioRecorderAdapter.ts error:', err);
       this.setState('error')
       if (err instanceof DOMException && err.name === 'NotAllowedError') {
         this.callbacks.onPermissionDenied?.()

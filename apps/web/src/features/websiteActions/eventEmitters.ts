@@ -31,7 +31,9 @@ export function emitAppOpened(lastActiveAt: string | null, isReturnVisit: boolea
       page: window.location.pathname,
       payload: { eventType: 'app_opened', lastActiveAt, isReturnVisit } satisfies AppOpenedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitDashboardOpened(activeTasks: number): void {
@@ -43,7 +45,9 @@ export function emitDashboardOpened(activeTasks: number): void {
       entityType: 'dashboard',
       payload: { eventType: 'dashboard_opened', activeTasks } satisfies DashboardOpenedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitAITutorOpened(previousMessageCount: number): void {
@@ -55,7 +59,9 @@ export function emitAITutorOpened(previousMessageCount: number): void {
       entityType: 'ai_tutor',
       payload: { eventType: 'ai_tutor_opened', previousMessageCount } satisfies AITutorOpenedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitStudyRoadmapViewed(roadmapId: string, weeksPlanned: number): void {
@@ -67,7 +73,9 @@ export function emitStudyRoadmapViewed(roadmapId: string, weeksPlanned: number):
       entityType: 'roadmap',
       payload: { eventType: 'study_roadmap_viewed', roadmapId, weeksPlanned } satisfies StudyRoadmapViewedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitVocabularySaved(vocabularyId: string, word: string, topic: string, sessionWordCount: number): void {
@@ -80,7 +88,9 @@ export function emitVocabularySaved(vocabularyId: string, word: string, topic: s
       entityId: vocabularyId,
       payload: { eventType: 'vocabulary_saved', vocabularyId, word, topic, sessionWordCount } satisfies VocabularySavedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitVocabularyReviewed(vocabularyId: string, word: string, rating: 'again' | 'hard' | 'good' | 'easy', sessionReviewCount: number): void {
@@ -93,7 +103,9 @@ export function emitVocabularyReviewed(vocabularyId: string, word: string, ratin
       entityId: vocabularyId,
       payload: { eventType: 'vocabulary_reviewed', vocabularyId, word, rating, sessionReviewCount } satisfies VocabularyReviewedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitVocabularyForgotten(vocabularyId: string, word: string, timesForgotten: number): void {
@@ -106,7 +118,9 @@ export function emitVocabularyForgotten(vocabularyId: string, word: string, time
       entityId: vocabularyId,
       payload: { eventType: 'vocabulary_forgotten', vocabularyId, word, timesForgotten } satisfies VocabularyForgottenPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitVocabularyMastered(vocabularyId: string, word: string, totalMastered: number): void {
@@ -119,7 +133,9 @@ export function emitVocabularyMastered(vocabularyId: string, word: string, total
       entityId: vocabularyId,
       payload: { eventType: 'vocabulary_mastered', vocabularyId, word, totalMastered } satisfies VocabularyMasteredPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitArticleSaved(articleId: string, title: string, sourceUrl: string, wordCount: number): void {
@@ -132,7 +148,9 @@ export function emitArticleSaved(articleId: string, title: string, sourceUrl: st
       entityId: articleId,
       payload: { eventType: 'article_saved', articleId, title, sourceUrl, wordCount } satisfies ArticleSavedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitReadingPracticeCompleted(sessionId: string, title: string, accuracy: number, totalQuestions: number, correctAnswers: number, timeSpentSeconds: number): void {
@@ -145,7 +163,9 @@ export function emitReadingPracticeCompleted(sessionId: string, title: string, a
       entityId: sessionId,
       payload: { eventType: 'reading_practice_completed', sessionId, title, accuracy, totalQuestions, correctAnswers, timeSpentSeconds } satisfies ReadingPracticeCompletedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitListeningPracticeCompleted(sessionId: string, title: string, accuracy: number, totalQuestions: number, correctAnswers: number, timeSpentSeconds: number): void {
@@ -158,7 +178,9 @@ export function emitListeningPracticeCompleted(sessionId: string, title: string,
       entityId: sessionId,
       payload: { eventType: 'listening_practice_completed', sessionId, title, accuracy, totalQuestions, correctAnswers, timeSpentSeconds } satisfies ListeningPracticeCompletedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitWritingSubmitted(sessionId: string, taskType: 'task1' | 'task2', wordCount: number, estimatedBand: number): void {
@@ -171,7 +193,9 @@ export function emitWritingSubmitted(sessionId: string, taskType: 'task1' | 'tas
       entityId: sessionId,
       payload: { eventType: 'writing_submitted', sessionId, taskType, wordCount, estimatedBand } satisfies WritingSubmittedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitSpeakingPracticed(sessionId: string, part: 1 | 2 | 3, durationSeconds: number): void {
@@ -184,7 +208,9 @@ export function emitSpeakingPracticed(sessionId: string, part: 1 | 2 | 3, durati
       entityId: sessionId,
       payload: { eventType: 'speaking_practiced', sessionId, part, durationSeconds } satisfies SpeakingPracticedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitMistakeSaved(mistakeId: string, mistake: string, skill: string, sessionMistakeCount: number): void {
@@ -197,7 +223,9 @@ export function emitMistakeSaved(mistakeId: string, mistake: string, skill: stri
       entityId: mistakeId,
       payload: { eventType: 'mistake_saved', mistakeId, mistake, skill, sessionMistakeCount } satisfies MistakeSavedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitRepeatedMistakeDetected(mistakeId: string, mistake: string, skill: string, repetitionCount: number): void {
@@ -210,7 +238,9 @@ export function emitRepeatedMistakeDetected(mistakeId: string, mistake: string, 
       entityId: mistakeId,
       payload: { eventType: 'repeated_mistake_detected', mistakeId, mistake, skill, repetitionCount } satisfies RepeatedMistakeDetectedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitProgressViewed(timeRange: string): void {
@@ -222,7 +252,9 @@ export function emitProgressViewed(timeRange: string): void {
       entityType: 'progress',
       payload: { eventType: 'progress_viewed', timeRange } satisfies ProgressViewedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitAIProgressReviewGenerated(reviewId: string, periodStart: string, periodEnd: string): void {
@@ -235,7 +267,9 @@ export function emitAIProgressReviewGenerated(reviewId: string, periodStart: str
       entityId: reviewId,
       payload: { eventType: 'ai_progress_review_generated', reviewId, periodStart, periodEnd } satisfies AIProgressReviewGeneratedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitSettingsChanged(changedKeys: string[]): void {
@@ -247,7 +281,9 @@ export function emitSettingsChanged(changedKeys: string[]): void {
       entityType: 'settings',
       payload: { eventType: 'settings_changed', changedKeys } satisfies SettingsChangedPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitAIProviderConfigured(provider: string, model: string): void {
@@ -259,7 +295,9 @@ export function emitAIProviderConfigured(provider: string, model: string): void 
       entityType: 'settings',
       payload: { eventType: 'ai_provider_configured', provider, model } satisfies AIProviderConfiguredPayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitUserBecameInactive(inactivityDurationMinutes: number): void {
@@ -271,7 +309,9 @@ export function emitUserBecameInactive(inactivityDurationMinutes: number): void 
       entityType: 'user_session',
       payload: { eventType: 'user_became_inactive', inactivityDurationMinutes } satisfies UserBecameInactivePayload,
     })
-  } catch { }
+  } catch (error) {
+console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }
 
 export function emitUserReturnedAfterInactivity(inactivityDurationMinutes: number): void {
@@ -283,5 +323,7 @@ export function emitUserReturnedAfterInactivity(inactivityDurationMinutes: numbe
       entityType: 'user_session',
       payload: { eventType: 'user_returned_after_inactivity', inactivityDurationMinutes } satisfies UserReturnedAfterInactivityPayload,
     })
-  } catch { }
+  } catch (error) {
+    console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
+   }
 }

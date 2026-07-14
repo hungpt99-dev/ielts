@@ -59,7 +59,8 @@ export function emitFromPopup(data: ExtensionLearningEventData): void {
         .sendMessage(tabs[0].id, { type: CS_MESSAGE_TYPE, payload: data })
         .catch(() => {})
     })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/background/eventEmitters.ts error:', error);
     /* chrome.tabs not available */
   }
 }
@@ -254,7 +255,8 @@ function tryPostToPage(data: ExtensionLearningEventData): boolean {
       )
       return true
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/background/eventEmitters.ts error:', error);
     /* not in content-script context */
   }
   return false
@@ -270,7 +272,8 @@ function tryBroadcastToTabs(data: ExtensionLearningEventData): void {
           .catch(() => {})
       }
     })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/background/eventEmitters.ts error:', error);
     /* chrome.tabs not available */
   }
 }

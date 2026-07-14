@@ -74,6 +74,7 @@ export default function MockTests() {
       const all = await DatabaseService.getAll<MockTestEntry>('mockTests')
       setTests(all)
     } catch (err) {
+      console.error('apps/web/src/pages/MockTests.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load mock tests')
     } finally {
       setLoading(false)
@@ -154,6 +155,7 @@ export default function MockTests() {
       await DatabaseService.remove('mockTests', id)
       setTests(prev => prev.filter(t => t.id !== id))
     } catch (err) {
+      console.error('apps/web/src/pages/MockTests.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to delete mock test')
     }
   }
@@ -203,6 +205,7 @@ export default function MockTests() {
       setModalOpen(false)
       setEditingTest(null)
     } catch (err) {
+      console.error('apps/web/src/pages/MockTests.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save mock test')
     } finally {
       setSaving(false)

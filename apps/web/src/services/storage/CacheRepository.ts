@@ -33,7 +33,8 @@ export class CacheRepository<T> {
       }
 
       return entry
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/services/storage/CacheRepository.ts error:', error);
       return null
     }
   }
@@ -45,7 +46,8 @@ export class CacheRepository<T> {
         generatedAt: new Date().toISOString(),
       }
       localStorage.setItem(this.config.storageKey, JSON.stringify(entry))
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/services/storage/CacheRepository.ts error:', error);
       /* quota exceeded or storage unavailable */
     }
   }
@@ -53,7 +55,8 @@ export class CacheRepository<T> {
   invalidate(): void {
     try {
       localStorage.removeItem(this.config.storageKey)
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/services/storage/CacheRepository.ts error:', error);
       /* ignore */
     }
   }

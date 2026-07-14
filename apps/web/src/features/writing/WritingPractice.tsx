@@ -98,6 +98,7 @@ export default function WritingPractice() {
       const all = await DatabaseService.getAll<WritingSession>('writingSessions')
       setHistory(all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     } catch (err) {
+      console.error('apps/web/src/features/writing/WritingPractice.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load writing history')
     } finally {
       setLoading(false)
@@ -243,7 +244,8 @@ export default function WritingPractice() {
         const jsonEnd = content.lastIndexOf('}')
         const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
         parsed = JSON.parse(jsonStr)
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/features/writing/WritingPractice.tsx error:', error);
         throw new Error('Failed to parse AI response. The response was not valid JSON.')
       }
 
@@ -282,6 +284,7 @@ export default function WritingPractice() {
 
       setView('results')
     } catch (err) {
+      console.error('apps/web/src/features/writing/WritingPractice.tsx error:', err);
       setAiError(err instanceof Error ? err.message : 'Failed to get AI feedback')
     } finally {
       setAiLoading(false)

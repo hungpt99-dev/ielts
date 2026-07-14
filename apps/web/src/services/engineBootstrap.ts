@@ -25,7 +25,9 @@ function createAIClient(): TutorAIClient {
       })
       if (result.content) {
         try { return { success: true as const, data: JSON.parse(result.content) } }
-        catch { return { success: true as const, data: { text: result.content } } }
+        catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return { success: true as const, data: { text: result.content } } }
       }
       return { success: false as const, error: { code: 'ai_failed', message: result.error ?? 'AI call failed', recoverable: true } }
     },
@@ -38,14 +40,20 @@ function createDbMessageRepository() {
       try {
         const msgs = await DatabaseService.queryByIndex('aiContents', 'sessionId', sessionId)
         return msgs.length > 0 ? { id: sessionId, messages: msgs } : null
-      } catch { return null }
+      } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return null }
     },
     async saveSession(session: any) {
-      try { await DatabaseService.safePut('aiContents', session) } catch {}
+      try { await DatabaseService.safePut('aiContents', session) } catch (error) {
+    console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+      }
     },
     async appendMessages(sessionId: string, messages: any[]) {
       for (const msg of messages) {
-        try { await DatabaseService.safePut('aiContents', { ...msg, sessionId }) } catch {}
+        try { await DatabaseService.safePut('aiContents', { ...msg, sessionId }) } catch (error) {
+    console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       }
     },
   }
@@ -63,12 +71,16 @@ function createDbMemoryRepository() {
           store.set(learnerId, parsed)
           return parsed
         }
-      } catch {}
+      } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+      }
       return null
     },
     async save(memory: any) {
       store.set(memory.learnerId, memory)
-      try { localStorage.setItem(`tutor-memory-${memory.learnerId}`, JSON.stringify(memory)) } catch {}
+      try { localStorage.setItem(`tutor-memory-${memory.learnerId}`, JSON.stringify(memory)) } catch (error) {
+    console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+      }
     },
   }
 }
@@ -85,7 +97,9 @@ function createDependencyRepos() {
             return JSON.parse(found.content)
           }
           return found
-        } catch { return null }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return null }
       },
       async save(session: any) {
         try {
@@ -102,7 +116,9 @@ function createDependencyRepos() {
             isFavorite: false,
             createdAt: new Date().toISOString(),
           })
-        } catch {}
+        } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
       async findActive() {
         try {
@@ -111,7 +127,9 @@ function createDependencyRepos() {
             .filter((a: any) => a.prompt === 'learning-session' && a.content)
             .map((a: any) => JSON.parse(a.content))
             .filter((s: any) => s.status === 'in-progress' || s.status === 'prepared')
-        } catch { return [] }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return [] }
       },
     },
     attemptRepository: {
@@ -119,21 +137,29 @@ function createDependencyRepos() {
         try {
           const all = await DatabaseService.safeGetAll('readingPracticeSessions')
           return all.find((a: any) => a.id === id) ?? null
-        } catch { return null }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return null }
       },
       async save(attempt: any) {
-        try { await DatabaseService.safePut('readingPracticeSessions', attempt) } catch {}
+        try { await DatabaseService.safePut('readingPracticeSessions', attempt) } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
       async findBySession(sessionId: string) {
         try {
           const all = await DatabaseService.safeGetAll('readingPracticeSessions')
           return all.filter((a: any) => a.sessionId === sessionId)
-        } catch { return [] }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return [] }
       },
     },
     outcomeRepository: {
       async save(outcome: any) {
-        try { await DatabaseService.safePut('progressRecords', outcome) } catch {}
+        try { await DatabaseService.safePut('progressRecords', outcome) } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
       async findRecent(query?: any) {
         try {
@@ -142,7 +168,9 @@ function createDependencyRepos() {
           if (query?.skill) filtered = filtered.filter((o: any) => o.skill === query.skill)
           filtered.sort((a: any, b: any) => String(b.completedAt ?? '').localeCompare(String(a.completedAt ?? '')))
           return query?.limit ? filtered.slice(0, query.limit) : filtered
-        } catch { return [] }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return [] }
       },
     },
     exerciseRepository: {
@@ -150,10 +178,14 @@ function createDependencyRepos() {
         try {
           const all = await DatabaseService.safeGetAll('readingExercises')
           return all.find((a: any) => a.id === id) ?? null
-        } catch { return null }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return null }
       },
       async save(exercise: any) {
-        try { await DatabaseService.safePut('readingExercises', exercise) } catch {}
+        try { await DatabaseService.safePut('readingExercises', exercise) } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
     },
     progressRepository: {
@@ -164,7 +196,9 @@ function createDependencyRepos() {
     },
     mistakeRepository: {
       async save(mistake: any) {
-        try { await DatabaseService.safePut('mistakes', mistake) } catch {}
+        try { await DatabaseService.safePut('mistakes', mistake) } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
       async findRecent(skill: string, limit = 10) {
         try {
@@ -172,7 +206,9 @@ function createDependencyRepos() {
           const filtered = all.filter((m: any) => !skill || m.skill === skill)
           filtered.sort((a: any, b: any) => String(b.createdAt ?? '').localeCompare(String(a.createdAt ?? '')))
           return filtered.slice(0, limit)
-        } catch { return [] }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return [] }
       },
       async findByPattern() { return [] },
       async getRecurringPatterns() { return [] },
@@ -183,7 +219,9 @@ function createDependencyRepos() {
           const all = await DatabaseService.safeGetAll('vocabulary')
           const now = new Date().toISOString()
           return all.filter((v: any) => v.nextReviewAt && v.nextReviewAt <= now).slice(0, limit)
-        } catch { return [] }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return [] }
       },
       async getByTopic() { return [] },
       async updateMastery() {},
@@ -205,13 +243,17 @@ function createDependencyRepos() {
               metadata: JSON.stringify(event),
             })
           }
-        } catch {}
+        } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
       async publishMany(events: any[]) {
         for (const event of events) {
           try {
             await this.publish(event)
-          } catch {}
+          } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+          }
         }
       },
     },
@@ -227,10 +269,14 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
         try {
           const raw = localStorage.getItem('ielts-settings')
           return raw ? JSON.parse(raw) : null
-        } catch { return null }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return null }
       },
       async save(profile: any) {
-        try { localStorage.setItem('ielts-settings', JSON.stringify(profile)) } catch {}
+        try { localStorage.setItem('ielts-settings', JSON.stringify(profile)) } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
     }
 
@@ -239,10 +285,14 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
         try {
           const raw = localStorage.getItem(AI_TUTOR_KEY)
           return raw ? JSON.parse(raw) : getDefaultSettings()
-        } catch { return getDefaultSettings() }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return getDefaultSettings() }
       },
       async saveProactiveSettings(settings: any) {
-        try { localStorage.setItem(AI_TUTOR_KEY, JSON.stringify(settings)) } catch {}
+        try { localStorage.setItem(AI_TUTOR_KEY, JSON.stringify(settings)) } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
     }
 
@@ -272,12 +322,16 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
 
     const eventPublisher = {
       publishTutorEvent(event: any) {
-        try { localStorage.setItem('tutor-event', JSON.stringify(event)) } catch {}
+        try { localStorage.setItem('tutor-event', JSON.stringify(event)) } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
       publishLearningEvent(event: any) {
         try {
           DatabaseService.safePut('progressRecords', event)
-        } catch {}
+        } catch (error) {
+      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+        }
       },
     }
 
@@ -298,7 +352,9 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
           if (!examDate) return {}
           const daysUntil = Math.ceil((new Date(examDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
           return { examDate, daysUntilExam: Math.max(0, daysUntil), isUrgent: daysUntil <= 30, isFinalWeek: daysUntil <= 7 }
-        } catch { return {} }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return {} }
       },
       getRoadmapContext: async () => {
         try {
@@ -316,7 +372,9 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
             weeklyStudyMinutesTarget: 300,
             weeklyStudyMinutesCompleted: 0,
           }
-        } catch { return null }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return null }
       },
       getProgress: async () => {
         try {
@@ -324,7 +382,9 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
           const recent = records.filter(r => r.type === 'learning-outcome')
           const overall = recent.length > 0 ? Math.round(recent.reduce((s: number, r: any) => s + (r.value ?? 0), 0) / recent.length * 100) : 0
           return { overallCompletionPercent: overall, skillProgress: {}, weeklyCompletionPercent: 0, studyStreak: 0, inactiveDays: 0, consistency: 0 }
-        } catch { return {} }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return {} }
       },
       getSkillStates: async () => {
         try {
@@ -347,7 +407,9 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
             }
           }
           return bySkill
-        } catch { return {} }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return {} }
       },
       getMistakes: async () => {
         try {
@@ -359,7 +421,9 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
             recurringPatterns: [],
             bySkill: {},
           }
-        } catch { return { total: 0, unreviewed: 0, recentCount: 0, recurringPatterns: [], bySkill: {} } }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return { total: 0, unreviewed: 0, recentCount: 0, recurringPatterns: [], bySkill: {} } }
       },
       getVocabulary: async () => {
         try {
@@ -370,7 +434,9 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
             mastered: all.filter((v: any) => v.status === 'mastered').length,
             byTopic: {},
           }
-        } catch { return { totalSaved: 0, dueForReview: 0, mastered: 0, byTopic: {} } }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return { totalSaved: 0, dueForReview: 0, mastered: 0, byTopic: {} } }
       },
       getActivity: async () => {
         try {
@@ -382,7 +448,9 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
             weeklyStudyMinutes: 0,
             tasksCompletedToday: tasks.filter(t => t.isDone && t.completedAt?.slice(0, 10) === todayStr).length,
           }
-        } catch { return { lastActiveAt: null, todayStudyMinutes: 0, weeklyStudyMinutes: 0, tasksCompletedToday: 0 } }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return { lastActiveAt: null, todayStudyMinutes: 0, weeklyStudyMinutes: 0, tasksCompletedToday: 0 } }
       },
       getPreferences: async () => {
         try {
@@ -398,7 +466,9 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
             quietHoursEnd: '08:00',
             allowedCategories: [],
           }
-        } catch { return {} }
+        } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return {} }
       },
     })
 
@@ -415,7 +485,8 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
     engineInstance = createAITutorEngine(deps)
     await engineInstance.initialize()
     return engineInstance
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/engineBootstrap.ts error:', error);
     return null
   }
 }
@@ -428,7 +499,9 @@ function readAiConfig() {
   try {
     const s = JSON.parse(localStorage.getItem('ielts-settings') ?? '{}')
     return { apiKey: s.aiApiKey ?? '', baseUrl: s.aiBaseUrl ?? 'https://api.openai.com/v1', model: s.aiModel ?? 'gpt-4o-mini' }
-  } catch { return { apiKey: '', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini' } }
+  } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return { apiKey: '', baseUrl: 'https://api.openai.com/v1', model: 'gpt-4o-mini' } }
 }
 
 export async function initializeLearningEngine(): Promise<LearningEngine | null> {
@@ -475,8 +548,12 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
             const raw = await callAI(request.systemPrompt ?? '', request.userMessage ?? '', () => cfg, { temperature: request.temperature ?? 0.5, maxTokens: request.maxTokens ?? 2000 })
             if (raw.error) return { success: false, error: { code: 'ai_failed', message: raw.error, recoverable: true } }
             try { return { success: true, data: JSON.parse(raw.content ?? '{}') } }
-            catch { return { success: true, data: { text: raw.content } } }
-          } catch { return { success: false, error: { code: 'ai_unavailable', message: 'AI unavailable', recoverable: true } } }
+            catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return { success: true, data: { text: raw.content } } }
+          } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return { success: false, error: { code: 'ai_unavailable', message: 'AI unavailable', recoverable: true } } }
         },
         async evaluateOpenResponse(request: any) {
           const cfg = readAiConfig()
@@ -486,8 +563,12 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
             const raw = await callAI(`Evaluate this ${request.rubric?.join(', ') ?? 'response'}.\nReturn JSON.`, request.response ?? '', () => cfg, { temperature: 0.3, maxTokens: 1500 })
             if (raw.error) return { success: false, error: { code: 'ai_failed', message: raw.error, recoverable: true } }
             try { return { success: true, data: JSON.parse(raw.content ?? '{}') } }
-            catch { return { success: true, data: { feedback: raw.content } } }
-          } catch { return { success: false, error: { code: 'ai_unavailable', message: 'AI unavailable', recoverable: true } } }
+            catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return { success: true, data: { feedback: raw.content } } }
+          } catch (error) {
+ console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+ return { success: false, error: { code: 'ai_unavailable', message: 'AI unavailable', recoverable: true } } }
         },
         async explainFeedback() { return { explanation: '', suggestions: [] } },
         async recordLearningOutcome(outcome: any) {
@@ -502,7 +583,9 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
               createdAt: new Date().toISOString(),
               metadata: JSON.stringify(outcome),
             })
-          } catch {}
+          } catch (error) {
+          console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+          }
           try {
             const existing = localStorage.getItem('tutor-memory-learning')
             const mem = existing ? JSON.parse(existing) : { sessions: [], mistakes: [], strengths: [] }
@@ -510,7 +593,9 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
             if (outcome.mistakes?.length) mem.mistakes.push(...outcome.mistakes)
             if (outcome.strengths?.length) mem.strengths.push(...outcome.strengths)
             localStorage.setItem('tutor-memory-learning', JSON.stringify(mem))
-          } catch {}
+          } catch (error) {
+          console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+          }
           return { success: true }
         },
       },
@@ -527,7 +612,9 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
               task.accuracy = accuracy
               await DatabaseService.safePut('tasks', task)
             }
-          } catch {}
+          } catch (error) {
+        console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+          }
         },
       },
       ...repos,
@@ -535,7 +622,8 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
       skillRegistry: createDefaultSkillRegistry(),
     })
     return learningEngineInstance
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/engineBootstrap.ts error:', error);
     return null
   }
 }

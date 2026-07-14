@@ -37,6 +37,7 @@ export function createAIClient(adapter?: AIAdapter): AIClient {
 
         return { content: response.content, error: null }
       } catch (err: unknown) {
+        console.error('packages/ai/src/client/index.ts error:', err: unknown);
         if (err instanceof Error) {
           return { content: null, error: err.message }
         }

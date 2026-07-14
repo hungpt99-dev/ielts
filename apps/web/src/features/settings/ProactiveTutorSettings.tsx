@@ -59,11 +59,15 @@ function loadSettings(): ProactiveMessageSettings {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY)
     return raw ? { ...DEFAULT_SETTINGS, ...JSON.parse(raw) } : { ...DEFAULT_SETTINGS }
-  } catch { return { ...DEFAULT_SETTINGS } }
+  } catch (error) {
+ console.error('apps/web/src/features/settings/ProactiveTutorSettings.tsx error:', error);
+ return { ...DEFAULT_SETTINGS } }
 }
 
 function saveSettings(settings: ProactiveMessageSettings): void {
-  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)) } catch {}
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)) } catch (error) {
+console.error('apps/web/src/features/settings/ProactiveTutorSettings.tsx error:', error);
+  }
 }
 
 const CATEGORY_KEYS = Object.keys(CATEGORY_LABELS)
@@ -87,7 +91,8 @@ export default function ProactiveTutorSettings() {
     try {
       saveSettings(settings)
       setSaveFeedback('success')
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/settings/ProactiveTutorSettings.tsx error:', error);
       setSaveFeedback('error')
     } finally {
       setSaving(false)

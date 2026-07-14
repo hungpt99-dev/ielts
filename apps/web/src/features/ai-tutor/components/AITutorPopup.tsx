@@ -78,7 +78,9 @@ export default function AITutorPopup({
     try {
       pendingMessage = sessionStorage.getItem('ai-tutor-pending-message')
       if (pendingMessage) sessionStorage.removeItem('ai-tutor-pending-message')
-    } catch {}
+    } catch (error) {
+    console.error('apps/web/src/features/ai-tutor/components/AITutorPopup.tsx error:', error);
+    }
 
     if (pendingMessage) setVoiceInput(pendingMessage)
     if (loadingRef.current) return
@@ -182,7 +184,8 @@ export default function AITutorPopup({
         }
 
         setContextSuggestions(suggestions.slice(0, 4))
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/features/ai-tutor/components/AITutorPopup.tsx error:', error);
         const timeGreeting = getTimeBasedGreeting()
         setGreeting(`${timeGreeting}!`)
         setBandInfo('IELTS Coach')
@@ -225,7 +228,9 @@ export default function AITutorPopup({
         const lastAssistant = [...messages].reverse().find(m => m.role === 'assistant')
         if (lastAssistant?.content) return lastAssistant.content
       }
-    } catch {}
+    } catch (error) {
+    console.error('apps/web/src/features/ai-tutor/components/AITutorPopup.tsx error:', error);
+    }
     return "I am here to help with your IELTS journey! Ask me about what to study today, your weak skills, exam countdown, mistake review, vocabulary exercises, or anything else. What can I help with?"
   }, [])
 

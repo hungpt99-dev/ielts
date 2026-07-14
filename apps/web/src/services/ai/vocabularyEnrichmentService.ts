@@ -108,7 +108,8 @@ Required fields:
     }
 
     return { data: enriched, error: null }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/ai/vocabularyEnrichmentService.ts error:', error);
     return { data: null, error: 'Failed to parse AI response' }
   }
 }
@@ -168,7 +169,8 @@ export async function generateExample(word: string, topic?: string): Promise<{ d
     if (!validated.success) return { data: null, error: 'AI response had unexpected format' }
 
     return { data: validated.data, error: null }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/services/ai/vocabularyEnrichmentService.ts error:', error);
     return { data: null, error: 'Failed to parse AI response' }
   }
 }

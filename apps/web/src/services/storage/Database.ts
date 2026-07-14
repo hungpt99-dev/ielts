@@ -192,6 +192,7 @@ async function safeDbLocal<T>(fn: () => Promise<T>): Promise<T> {
     }
     return await safeDb(fn)
   } catch (error) {
+    console.error('apps/web/src/services/storage/Database.ts error:', error);
     if (error instanceof DatabaseError || error instanceof ValidationError) throw error
     throw new DatabaseError(
       error instanceof Error ? error.message : 'Database operation failed',
@@ -865,7 +866,8 @@ export const DatabaseService = {
               await repo.create(item as never)
               result.added++
             }
-          } catch {
+          } catch (error) {
+            console.error('apps/web/src/services/storage/Database.ts error:', error);
             result.failed++
           }
         }

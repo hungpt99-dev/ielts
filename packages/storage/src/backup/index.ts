@@ -82,7 +82,8 @@ export async function readBackupFile(file: File): Promise<AppBackupData> {
           return
         }
         resolve(data)
-      } catch {
+      } catch (error) {
+        console.error('packages/storage/src/backup/index.ts error:', error);
         reject(new BackupError('Failed to parse backup file: invalid JSON'))
       }
     }
@@ -128,6 +129,7 @@ export async function importBackup(
               summary.added++
             }
           } catch (e) {
+            console.error('packages/storage/src/backup/index.ts error:', e);
             summary.failed++
             if (e instanceof ValidationError) {
               summary.errors.push(`${tableName}: ${e.message}`)
@@ -217,6 +219,7 @@ export async function mergeBackupWithDedup(
               summary.added++
             }
           } catch (e) {
+            console.error('packages/storage/src/backup/index.ts error:', e);
             summary.failed++
             summary.errors.push(
               `${tableName}: ${e instanceof Error ? e.message : 'Unknown error'}`,

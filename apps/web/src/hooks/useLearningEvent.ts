@@ -33,7 +33,8 @@ export function useLearningEvent(options: UseLearningEventOptions): void {
         entityId: entityId ?? null,
         metadata: metadata ?? {},
       })
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/hooks/useLearningEvent.ts error:', error);
       // Event emission failure must not block user action
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,7 +79,8 @@ export async function safeEmit(
       entityId: options?.entityId ?? null,
       metadata: options?.metadata ?? {},
     })
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/hooks/useLearningEvent.ts error:', error);
     // Event emission failure must not block user action
   }
 }

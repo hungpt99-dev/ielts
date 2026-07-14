@@ -29,6 +29,7 @@ export default function TopicsProgress() {
       const all = await DatabaseService.getAll<TopicProgress>('topicsProgress')
       setTopics(all)
     } catch (err) {
+      console.error('apps/web/src/pages/TopicsProgress.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load topics progress')
     } finally {
       setLoading(false)

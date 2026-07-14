@@ -49,7 +49,9 @@ export default function AITutorEntry({ onBack }: AITutorEntryProps) {
             setLoading(false)
             return
           }
-        } catch {
+        } catch (error) {
+        console.error('apps/extension/src/popup/components/AITutorEntry.tsx error:', error);
+        
         }
 
         try {
@@ -60,7 +62,8 @@ export default function AITutorEntry({ onBack }: AITutorEntryProps) {
             title: response?.title || tab.title || '',
             url: response?.url || tab.url || '',
           })
-        } catch {
+        } catch (error) {
+          console.error('apps/extension/src/popup/components/AITutorEntry.tsx error:', error);
           if (!cancelled) {
             setContext({
               selectedText: '',
@@ -70,6 +73,7 @@ export default function AITutorEntry({ onBack }: AITutorEntryProps) {
           }
         }
       } catch (err: any) {
+        console.error('apps/extension/src/popup/components/AITutorEntry.tsx error:', err: any);
         if (!cancelled) {
           setFetchError(err.message || 'Could not access page context')
         }

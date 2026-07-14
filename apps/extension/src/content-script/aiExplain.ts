@@ -624,7 +624,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (text) {
       showExplainPanel(text, action)
     }
-    try { sendResponse({ success: true }) } catch { /* ignore */ }
+    try { sendResponse({ success: true }) } catch (error) {
+ console.error('apps/extension/src/content-script/aiExplain.ts error:', error);
+ /* ignore */ }
     return false
   }
 })

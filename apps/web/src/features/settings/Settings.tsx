@@ -211,6 +211,7 @@ export default function Settings() {
       URL.revokeObjectURL(url)
       showFeedback('success', 'Backup exported successfully.')
     } catch (err) {
+      console.error('apps/web/src/features/settings/Settings.tsx error:', err);
       showFeedback('error', err instanceof Error ? err.message : 'Export failed')
     }
   }
@@ -235,13 +236,15 @@ export default function Settings() {
               await DatabaseService.importAll(raw as AppExportData)
               showFeedback('success', 'Data imported successfully.')
             } catch (err) {
+              console.error('apps/web/src/features/settings/Settings.tsx error:', err);
               showFeedback('error', err instanceof Error ? err.message : 'Import failed.')
             }
           },
           buttonLabel: 'Import & Overwrite',
           buttonVariant: 'danger',
         })
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/features/settings/Settings.tsx error:', error);
         showFeedback('error', 'Could not parse file.')
       }
     }

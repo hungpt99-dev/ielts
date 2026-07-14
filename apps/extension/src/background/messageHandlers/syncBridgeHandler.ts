@@ -9,14 +9,18 @@ function getMeta(): { lastSyncFromWebAt: string | null; lastSyncToWebAt: string 
   try {
     const raw = localStorage.getItem(SYNC_META_KEY)
     if (raw) return JSON.parse(raw)
-  } catch {}
+  } catch (error) {
+  console.error('apps/extension/src/background/messageHandlers/syncBridgeHandler.ts error:', error);
+  }
   return { lastSyncFromWebAt: null, lastSyncToWebAt: null }
 }
 
 function saveMeta(meta: { lastSyncFromWebAt: string | null; lastSyncToWebAt: string | null }): void {
   try {
     localStorage.setItem(SYNC_META_KEY, JSON.stringify(meta))
-  } catch {}
+  } catch (error) {
+console.error('apps/extension/src/background/messageHandlers/syncBridgeHandler.ts error:', error);
+  }
 }
 
 export async function handleGetSyncStatus(): Promise<{
@@ -38,6 +42,7 @@ export async function handleGetSyncStatus(): Promise<{
       },
     }
   } catch (err) {
+    console.error('apps/extension/src/background/messageHandlers/syncBridgeHandler.ts error:', err);
     return { success: false, error: err instanceof Error ? err.message : 'GET_SYNC_STATUS failed' }
   }
 }
@@ -68,6 +73,7 @@ export async function handleExportData(): Promise<{
       },
     }
   } catch (err) {
+    console.error('apps/extension/src/background/messageHandlers/syncBridgeHandler.ts error:', err);
     return { success: false, error: err instanceof Error ? err.message : 'EXPORT failed' }
   }
 }
@@ -132,6 +138,7 @@ export async function handleImportData(payload: unknown): Promise<{
 
     return { success: true, data: { imported, updated } }
   } catch (err) {
+    console.error('apps/extension/src/background/messageHandlers/syncBridgeHandler.ts error:', err);
     return { success: false, error: err instanceof Error ? err.message : 'IMPORT failed' }
   }
 }

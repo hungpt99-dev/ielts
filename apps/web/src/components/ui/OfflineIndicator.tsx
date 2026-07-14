@@ -24,7 +24,8 @@ export default function OfflineIndicator() {
           req.onerror = () => reject(req.error)
         })
         setDbHealthy(true)
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/components/ui/OfflineIndicator.tsx error:', error);
         setDbHealthy(false)
       }
     }

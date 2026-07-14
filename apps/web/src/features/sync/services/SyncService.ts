@@ -35,7 +35,9 @@ function applySharedSettingsToWeb(ext: Record<string, unknown>): void {
     darkMode,
     aiEnabled: true,
   })
-  try { window.dispatchEvent(new CustomEvent('ielts-settings-updated')) } catch {}
+  try { window.dispatchEvent(new CustomEvent('ielts-settings-updated')) } catch (error) {
+console.error('apps/web/src/features/sync/services/SyncService.ts error:', error);
+  }
 }
 
 export async function syncFromExtension(): Promise<SyncResult> {
@@ -135,6 +137,7 @@ export async function syncFromExtension(): Promise<SyncResult> {
 
     return { success: true, dataImported: imported, dataUpdated: 0, settingsUpdated }
   } catch (err) {
+    console.error('apps/web/src/features/sync/services/SyncService.ts error:', err);
     return { success: false, dataImported: 0, dataUpdated: 0, settingsUpdated: false, error: err instanceof Error ? err.message : 'Sync failed' }
   }
 }
@@ -175,6 +178,7 @@ export async function syncToExtension(): Promise<SyncResult> {
       settingsUpdated: true,
     }
   } catch (err) {
+    console.error('apps/web/src/features/sync/services/SyncService.ts error:', err);
     return { success: false, dataImported: 0, dataUpdated: 0, settingsUpdated: false, error: err instanceof Error ? err.message : 'Sync failed' }
   }
 }

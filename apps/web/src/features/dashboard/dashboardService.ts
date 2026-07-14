@@ -167,7 +167,8 @@ function getRoadmapProgress(): number {
     const roadmap = loadRoadmap()
     if (!roadmap) return 0
     return roadmap.overallProgress
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/dashboard/dashboardService.ts error:', error);
     return 0
   }
 }

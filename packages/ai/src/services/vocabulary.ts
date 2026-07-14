@@ -62,6 +62,7 @@ export async function generateVocabularyDetails(
     vocabularyCache.set(cacheKey, result.data)
     return { data: result.data, error: null }
   } catch (err: unknown) {
+    console.error('packages/ai/src/services/vocabulary.ts error:', err: unknown);
     const message = err instanceof Error ? err.message : 'Unknown error'
     return { data: null, error: message.includes('Failed to fetch') || message.includes('NetworkError')
       ? 'Network error. Check your internet connection and API endpoint.'
@@ -104,6 +105,7 @@ export async function generateVocabularyQuiz(
     quizCache.set(quizKey, result.data)
     return { data: result.data, error: null }
   } catch (err: unknown) {
+    console.error('packages/ai/src/services/vocabulary.ts error:', err: unknown);
     const message = err instanceof Error ? err.message : 'Unknown error'
     return { data: null, error: `AI request failed: ${message}` }
   }

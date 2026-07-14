@@ -172,7 +172,9 @@ export async function completeLearningSession(
           if (ve.correct) {
             await deps.vocabularyRepository.markReviewed(ve.wordId)
           }
-        } catch { /* continue */ }
+        } catch (error) {
+ console.error('packages/learning-engine/src/application/sessions/complete-learning-session.ts error:', error);
+ /* continue */ }
       }
     }
   }
@@ -190,7 +192,9 @@ export async function completeLearningSession(
       const existingProgress = await deps.progressRepository.getSkillProgress(session.skill) ?? undefined
       const aggregated = aggregateSkillProgress(existingProgress, skillEvidence)
       await deps.progressRepository.updateSkillProgress(session.skill, aggregated)
-    } catch { /* continue */ }
+    } catch (error) {
+ console.error('packages/learning-engine/src/application/sessions/complete-learning-session.ts error:', error);
+ /* continue */ }
   }
 
   if (deps.studyPlanPort && session.roadmapTaskId) {
@@ -206,7 +210,9 @@ export async function completeLearningSession(
         roadmapTaskId: session.roadmapTaskId,
         accuracy,
       })
-    } catch { /* continue */ }
+    } catch (error) {
+ console.error('packages/learning-engine/src/application/sessions/complete-learning-session.ts error:', error);
+ /* continue */ }
   }
 
   if (deps.tutorPort) {
@@ -220,7 +226,9 @@ export async function completeLearningSession(
         mistakes: allMistakes.map(m => ({ category: m.category, text: m.originalResponse })),
         strengths: allSkillEvidence.filter(s => s.type === 'strength' || s.type === 'improvement').map(s => s.description),
       })
-    } catch { /* continue */ }
+    } catch (error) {
+ console.error('packages/learning-engine/src/application/sessions/complete-learning-session.ts error:', error);
+ /* continue */ }
   }
 
   const recommendations: LearningRecommendation[] = []

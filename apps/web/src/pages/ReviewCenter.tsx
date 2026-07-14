@@ -179,6 +179,7 @@ export default function ReviewCenter() {
         },
       ])
     } catch (err) {
+      console.error('apps/web/src/pages/ReviewCenter.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load review data')
     } finally {
       setLoading(false)

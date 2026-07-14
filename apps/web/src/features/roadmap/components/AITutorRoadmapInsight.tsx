@@ -77,7 +77,8 @@ export default function AITutorRoadmapInsight({ roadmap, profile, aiEnabled, onA
       } else {
         setInsight(null)
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/roadmap/components/AITutorRoadmapInsight.tsx error:', error);
       setError(true)
     } finally {
       setLoading(false)

@@ -74,7 +74,8 @@ export class ExtensionBridgeClient {
 
       try {
         window.postMessage(message, window.location.origin)
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/features/sync/bridge/ExtensionBridgeClient.ts error:', error);
         clearTimeout(timer)
         this.pendingRequests.delete(requestId)
         reject(new Error('POST_MESSAGE_FAILED'))
@@ -91,6 +92,7 @@ export class ExtensionBridgeClient {
       }
       return response.payload as PingExtensionResult
     } catch (err) {
+      console.error('apps/web/src/features/sync/bridge/ExtensionBridgeClient.ts error:', err);
       if (err instanceof Error && err.message === 'TIMEOUT') {
         throw new Error('Extension did not respond')
       }

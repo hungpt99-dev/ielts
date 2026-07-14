@@ -24,6 +24,7 @@ export function useDashboard(): DashboardState {
       setData(result.data)
       setWeeklyChart(result.weeklyChart)
     } catch (err) {
+      console.error('apps/web/src/hooks/useDashboard.ts error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load dashboard')
     } finally {
       setLoading(false)

@@ -60,7 +60,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === 'SAVE_SELECTION') {
     const payload = message.payload as SaveSelectionPayload
     showToast(`Saved as ${payload.category}`)
-    try { sendResponse({ success: true }) } catch { /* ignore */ }
+    try { sendResponse({ success: true }) } catch (error) {
+ console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
+ /* ignore */ }
     return false
   }
 
@@ -71,7 +73,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         url: window.location.href,
         selectedText: getSelectedText(),
       })
-    } catch { /* ignore */ }
+    } catch (error) {
+ console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
+ /* ignore */ }
     return false
   }
 
@@ -79,7 +83,8 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     try {
       const result = extractArticle()
       sendResponse({ success: true, data: result })
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
       sendResponse({ success: false, error: 'Failed to extract article' })
     }
     return false
@@ -108,7 +113,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       emitExtensionArticleSaved(title, url)
     })
     showToast('Page saved as Artifact')
-    try { sendResponse({ success: true }) } catch { /* ignore */ }
+    try { sendResponse({ success: true }) } catch (error) {
+ console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
+ /* ignore */ }
     return false
   }
 
@@ -145,7 +152,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       )
     }
 
-    try { sendResponse({ success: true }) } catch { /* ignore */ }
+    try { sendResponse({ success: true }) } catch (error) {
+ console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
+ /* ignore */ }
     return false
   }
 })

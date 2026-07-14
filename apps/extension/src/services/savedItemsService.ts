@@ -39,7 +39,8 @@ async function loadChromeStorageItems(): Promise<SavedItemDisplay[]> {
         source: 'chromeStorage',
       } as SavedItemDisplay
     })
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/savedItemsService.ts error:', error);
     return []
   }
 }
@@ -63,7 +64,8 @@ async function loadVocabularyItems(): Promise<SavedItemDisplay[]> {
       updatedAt: v.updatedAt,
       source: 'indexedDB' as const,
     }))
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/savedItemsService.ts error:', error);
     return []
   }
 }
@@ -87,7 +89,8 @@ async function loadArticleItems(): Promise<SavedItemDisplay[]> {
       updatedAt: a.updatedAt,
       source: 'indexedDB' as const,
     }))
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/savedItemsService.ts error:', error);
     return []
   }
 }
@@ -111,7 +114,8 @@ async function loadMistakeItems(): Promise<SavedItemDisplay[]> {
       updatedAt: m.updatedAt,
       source: 'indexedDB' as const,
     }))
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/savedItemsService.ts error:', error);
     return []
   }
 }
@@ -120,7 +124,8 @@ async function loadIndexedDbItems(): Promise<SavedItemDisplay[]> {
   try {
     const entries = await getAllEntries()
     return entries.map((e) => ({ ...e, source: 'indexedDB' as const }))
-  } catch {
+  } catch (error) {
+    console.error('apps/extension/src/services/savedItemsService.ts error:', error);
     return []
   }
 }
@@ -166,7 +171,9 @@ async function deleteFromChromeStorage(id: string): Promise<void> {
     if (filtered.length !== items.length) {
       await safeStorageSet({ [STORAGE_KEY]: filtered })
     }
-  } catch {}
+  } catch (error) {
+console.error('apps/extension/src/services/savedItemsService.ts error:', error);
+  }
 }
 
 async function updateChromeStorageItem(id: string, updates: Record<string, unknown>): Promise<void> {
@@ -178,7 +185,9 @@ async function updateChromeStorageItem(id: string, updates: Record<string, unkno
       items[index] = { ...items[index], ...updates, updatedAt: new Date().toISOString() }
       await safeStorageSet({ [STORAGE_KEY]: items })
     }
-  } catch {}
+  } catch (error) {
+console.error('apps/extension/src/services/savedItemsService.ts error:', error);
+  }
 }
 
 export async function deleteSavedItem(item: SavedItemDisplay): Promise<void> {

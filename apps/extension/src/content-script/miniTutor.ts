@@ -66,7 +66,8 @@ function getSelectionContext(): MiniTutorSelection & {
           fullText.slice(start, end) +
           (end < fullText.length ? '...' : '')
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
       surroundingText = base.text
     }
   }
@@ -93,22 +94,30 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     const aiType = ACTION_TO_AI_TYPE[action]
     if (aiType) {
       showExplainPanel(text, aiType)
-      try { sendResponse({ success: true, panelOpened: true }) } catch { /* ignore */ }
+      try { sendResponse({ success: true, panelOpened: true }) } catch (error) {
+ console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ /* ignore */ }
     } else {
-      try { sendResponse({ success: true, panelOpened: false }) } catch { /* ignore */ }
+      try { sendResponse({ success: true, panelOpened: false }) } catch (error) {
+ console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ /* ignore */ }
     }
     return false
   }
 
   if (message.type === 'MINI_TUTOR_GET_SELECTION') {
     const selection = getActiveSelection()
-    try { sendResponse(selection) } catch { /* ignore */ }
+    try { sendResponse(selection) } catch (error) {
+ console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ /* ignore */ }
     return false
   }
 
   if (message.type === 'MINI_TUTOR_GET_SELECTION_FULL') {
     const context = getSelectionContext()
-    try { sendResponse(context) } catch { /* ignore */ }
+    try { sendResponse(context) } catch (error) {
+ console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ /* ignore */ }
     return false
   }
 
@@ -117,17 +126,23 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     const selection = getActiveSelection()
 
     if (!selection.text) {
-      try { sendResponse({ success: false, error: 'No text selected' }) } catch { /* ignore */ }
+      try { sendResponse({ success: false, error: 'No text selected' }) } catch (error) {
+ console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ /* ignore */ }
       return false
     }
 
     const aiType = ACTION_TO_AI_TYPE[action]
     if (aiType) {
       showExplainPanel(selection.text, aiType)
-      try { sendResponse({ success: true, panelOpened: true }) } catch { /* ignore */ }
+      try { sendResponse({ success: true, panelOpened: true }) } catch (error) {
+ console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ /* ignore */ }
     } else {
       showExplainPanel(selection.text, 'simple')
-      try { sendResponse({ success: true, panelOpened: true }) } catch { /* ignore */ }
+      try { sendResponse({ success: true, panelOpened: true }) } catch (error) {
+ console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ /* ignore */ }
     }
     return false
   }

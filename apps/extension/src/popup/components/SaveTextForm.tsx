@@ -183,7 +183,8 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
             updatedAt: now,
           })
           await saveArticleEntry(articleEntry)
-        } catch {
+        } catch (error) {
+          console.error('apps/extension/src/popup/components/SaveTextForm.tsx error:', error);
           /* non-critical: article entry saved as learning entry already */
         }
       }
@@ -196,6 +197,7 @@ export default function SaveTextForm({ onSaved, onCancel }: SaveTextFormProps) {
       setSaved(true)
       setTimeout(() => onSaved(), 1200)
     } catch (err) {
+      console.error('apps/extension/src/popup/components/SaveTextForm.tsx error:', err);
       setErrors({ submit: 'Failed to save. Please try again.' })
     } finally {
       setSaving(false)

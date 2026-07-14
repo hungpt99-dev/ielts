@@ -40,7 +40,9 @@ function handleBackgroundMessage(message: unknown): void {
           { source: 'ielts-extension', action: DATA_SYNC_ACTION, data: item },
           window.location.origin,
         )
-      } catch {}
+      } catch (error) {
+console.error('apps/extension/src/content-script/bridge-client.ts error:', error);
+      }
     }
   }
 }

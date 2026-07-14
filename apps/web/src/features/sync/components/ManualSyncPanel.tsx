@@ -49,6 +49,7 @@ export default function ManualSyncPanel() {
       if (r.toExt.settingsUpdated || r.fromExt.settingsUpdated) parts.push('settings synced')
       setResultMessage(`Sync complete: ${parts.join(', ') || 'no changes'}`)
     } catch (err) {
+      console.error('apps/web/src/features/sync/components/ManualSyncPanel.tsx error:', err);
       setResultIsError(true)
       setResultMessage(err instanceof Error ? err.message : 'Sync failed')
     } finally {

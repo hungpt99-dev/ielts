@@ -60,7 +60,9 @@ export function removeSettingsChangeListener(listener: SettingsChangeListener): 
 
 function notifyListeners(settings: ExtensionSettings): void {
   for (const listener of listeners) {
-    try { listener(settings) } catch { /* ignore listener error */ }
+    try { listener(settings) } catch (error) {
+ console.error('apps/extension/src/background/settingsStorage.ts error:', error);
+ /* ignore listener error */ }
   }
 }
 

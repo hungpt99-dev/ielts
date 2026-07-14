@@ -120,6 +120,7 @@ export default function SettingsPage() {
       setAiErrors({})
       showToast('success', 'Settings saved')
     } catch (err) {
+      console.error('apps/extension/src/options/SettingsPage.tsx error:', err);
       const msg = err instanceof Error ? err.message : 'Unknown error'
       showToast('error', `Failed to save: ${msg}`)
     } finally {
@@ -160,6 +161,7 @@ export default function SettingsPage() {
       URL.revokeObjectURL(url)
       showToast('success', 'Settings exported')
     } catch (e) {
+      console.error('apps/extension/src/options/SettingsPage.tsx error:', e);
       showToast('error', `Export failed: ${e instanceof Error ? e.message : 'Unknown error'}`)
     }
   }, [showToast])
@@ -176,7 +178,9 @@ export default function SettingsPage() {
       try {
         const text = await file.text()
         let parsed: Record<string, unknown>
-        try { parsed = JSON.parse(text) } catch { showToast('error', 'File is not valid JSON'); return }
+        try { parsed = JSON.parse(text) } catch (error) {
+ console.error('apps/extension/src/options/SettingsPage.tsx error:', error);
+ showToast('error', 'File is not valid JSON'); return }
         const rawSettings = parsed?.settings as Record<string, unknown> | undefined
         if (!rawSettings || typeof rawSettings !== 'object') {
           showToast('error', 'Invalid settings file: missing "settings" object')
@@ -193,6 +197,7 @@ export default function SettingsPage() {
         setDirty(false)
         showToast('success', 'Settings imported')
       } catch (e) {
+        console.error('apps/extension/src/options/SettingsPage.tsx error:', e);
         showToast('error', `Import failed: ${e instanceof Error ? e.message : 'Invalid file'}`)
       } finally { setImporting(false) }
     }

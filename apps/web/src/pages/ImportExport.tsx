@@ -78,6 +78,7 @@ export default function ImportExport() {
       setSuccess(`Backup exported successfully (${formatBytes(blob.size)}, ${totalRecords} records)`)
       showToast('success', `Backup exported (${formatBytes(blob.size)}, ${totalRecords} records)`)
     } catch (err) {
+      console.error('apps/web/src/pages/ImportExport.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Export failed')
       showToast('error', err instanceof Error ? err.message : 'Export failed')
     } finally {
@@ -100,7 +101,8 @@ export default function ImportExport() {
         }
         setImportPreview(raw)
         setShowConfirm(true)
-      } catch {
+      } catch (error) {
+        console.error('apps/web/src/pages/ImportExport.tsx error:', error);
         setError('Could not parse file. Make sure it is a valid JSON file.')
       }
     }
@@ -122,6 +124,7 @@ export default function ImportExport() {
       showToast('success', `Data imported (${totalRecords} records)`)
       setImportPreview(null)
     } catch (err) {
+      console.error('apps/web/src/pages/ImportExport.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Import failed. Your data was not modified.')
       showToast('error', err instanceof Error ? err.message : 'Import failed')
     } finally {
@@ -150,6 +153,7 @@ export default function ImportExport() {
       setSuccess('All data has been cleared. Settings have been reset.')
       showToast('success', 'All data has been cleared')
     } catch (err) {
+      console.error('apps/web/src/pages/ImportExport.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to clear data')
       showToast('error', err instanceof Error ? err.message : 'Failed to clear data')
     }

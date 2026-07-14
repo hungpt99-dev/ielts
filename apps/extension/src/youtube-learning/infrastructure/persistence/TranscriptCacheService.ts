@@ -80,7 +80,9 @@ export class TranscriptCacheService {
           }
         }
       }
-    } catch { /* cache unavailable */ }
+    } catch (error) {
+ console.error('apps/extension/src/youtube-learning/infrastructure/persistence/TranscriptCacheService.ts error:', error);
+ /* cache unavailable */ }
     this.loaded = true
   }
 

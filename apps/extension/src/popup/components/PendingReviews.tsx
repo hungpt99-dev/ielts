@@ -19,6 +19,7 @@ export default function PendingReviews({ onStartReview, onBack }: PendingReviews
       const count = await getDueCount()
       setDueCount(count)
     } catch (err) {
+      console.error('apps/extension/src/popup/components/PendingReviews.tsx error:', err);
       setError(err instanceof Error ? err.message : 'Failed to load pending reviews')
       setDueCount(0)
     } finally {

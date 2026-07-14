@@ -10,7 +10,8 @@ export function getCorsProxyConfig(): CorsProxyConfig {
         return parsed
       }
     }
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/utils/corsProxy.ts error:', error);
     // localStorage unavailable or invalid config
   }
   return { enabled: false, proxyUrl: DEFAULT_CORS_PROXY }
@@ -19,7 +20,8 @@ export function getCorsProxyConfig(): CorsProxyConfig {
 export function saveCorsProxyConfig(config: CorsProxyConfig): void {
   try {
     localStorage.setItem(CORS_PROXY_STORAGE_KEY, JSON.stringify(config))
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/publicApiIntegration/utils/corsProxy.ts error:', error);
     // localStorage unavailable
   }
 }

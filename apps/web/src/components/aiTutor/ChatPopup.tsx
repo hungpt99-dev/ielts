@@ -35,7 +35,8 @@ export default function ChatPopup({
         const settings = JSON.parse(raw)
         setHasAiKey(!!settings.aiApiKey)
       }
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/components/aiTutor/ChatPopup.tsx error:', error);
       /* ignore */
     }
   }, [hasAiKeyProp])

@@ -354,7 +354,8 @@ async function tryEngineProgress(): Promise<Partial<ProgressSnapshot> | null> {
     if (sessionSummary.status !== 'success') return null
 
     return null
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/progress/progressService.ts error:', error);
     return null
   }
 }
@@ -394,7 +395,9 @@ export async function computeProgressSnapshot(): Promise<ProgressSnapshot> {
       const updated = recalculateProgress(roadmap, tasks)
       roadmapProgress = updated.overallProgress
     }
-  } catch {}
+  } catch (error) {
+  console.error('apps/web/src/features/progress/progressService.ts error:', error);
+  }
 
   return {
     version: 2,
@@ -435,7 +438,8 @@ export function loadProgressSnapshot(): ProgressSnapshot | null {
       return null
     }
     return JSON.parse(raw) as ProgressSnapshot
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/progress/progressService.ts error:', error);
     return null
   }
 }

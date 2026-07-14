@@ -50,7 +50,8 @@ export async function removeTask(
   day.taskIds.splice(taskIndex, 1)
   try {
     await DatabaseService.remove('tasks', taskId)
-  } catch {
+  } catch (error) {
+    console.error('apps/web/src/features/roadmap/roadmapCommands.ts error:', error);
     // ignore if already deleted
   }
   const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
@@ -72,7 +73,8 @@ export async function updateTask(
   if (Object.keys(updates).length > 0) {
     try {
       await DatabaseService.update('tasks', taskId, updates)
-    } catch {
+    } catch (error) {
+      console.error('apps/web/src/features/roadmap/roadmapCommands.ts error:', error);
       // ignore update failures
     }
   }

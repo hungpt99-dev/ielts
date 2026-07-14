@@ -44,7 +44,8 @@ function safeGet<T>(key: string, fallback: T): T {
     const raw = localStorage.getItem(key)
     if (!raw) return fallback
     return JSON.parse(raw) as T
-  } catch {
+  } catch (error) {
+    console.error('packages/ai-tutor-engine/src/infrastructure/proactive-message-storage.ts error:', error);
     return fallback
   }
 }
@@ -52,7 +53,8 @@ function safeGet<T>(key: string, fallback: T): T {
 function safeSet(key: string, value: unknown): void {
   try {
     localStorage.setItem(key, JSON.stringify(value))
-  } catch {
+  } catch (error) {
+    console.error('packages/ai-tutor-engine/src/infrastructure/proactive-message-storage.ts error:', error);
     /* noop */
   }
 }
@@ -80,7 +82,8 @@ export class LocalStorageProactiveMessageRepository implements ProactiveMessageR
   clearMessages(): void {
     try {
       localStorage.removeItem(STORAGE_KEY)
-    } catch {
+    } catch (error) {
+      console.error('packages/ai-tutor-engine/src/infrastructure/proactive-message-storage.ts error:', error);
       /* noop */
     }
   }
