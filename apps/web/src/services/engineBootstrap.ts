@@ -335,8 +335,27 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
     const profileRepo = {
       async get() {
         try {
-          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
-          return raw ? JSON.parse(raw) : {}
+          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+          if (!raw) return {}
+          const cfg = JSON.parse(raw)
+          const study = cfg.study ?? {}
+          return {
+            ...cfg,
+            currentOverallBand: study.currentBand,
+            targetOverallBand: study.targetBand,
+            currentBand: study.currentBand,
+            targetBand: study.targetBand,
+            examDate: study.examDate,
+            weakSkills: study.weakSkills ?? [],
+            studyGoal: study.studyGoal,
+            dailyStudyMinutes: study.dailyStudyMinutes,
+            preferredSchedule: study.preferredSchedule,
+            aiEnabled: cfg.aiEnabled ?? !!(cfg.aiApiKey || cfg.ai?.apiKey),
+            aiProvider: cfg.aiProvider ?? cfg.ai?.providerId ?? 'openai',
+            aiApiKey: cfg.aiApiKey ?? cfg.ai?.apiKey ?? '',
+            aiBaseUrl: cfg.aiBaseUrl ?? cfg.ai?.customApiUrl ?? '',
+            aiModel: cfg.aiModel ?? cfg.ai?.model ?? '',
+          }
         } catch (error) {
  console.error('apps/web/src/services/engineBootstrap.ts error:', error);
  return {} }
