@@ -49,7 +49,7 @@ const SKILL_COLORS: Record<string, string> = {
   Grammar: 'var(--color-success)',
 }
 
-export default function RoadmapSummary({ roadmap, onRegenerate, onAskAIReview, regenerating }: RoadmapSummaryProps) {
+export default function RoadmapSummary({ roadmap, onRegenerate, onAskAIReview, regenerating, enrichProgress }: RoadmapSummaryProps) {
   const [showConfirm, setShowConfirm] = useState(false)
   const [distribution, setDistribution] = useState<Record<string, number>>({})
   const totalDays = getTotalDays(roadmap)
