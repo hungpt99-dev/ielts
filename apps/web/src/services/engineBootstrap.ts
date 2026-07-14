@@ -335,21 +335,23 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
     const profileRepo = {
       async get() {
         try {
-          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+          let raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+          if (!raw) raw = localStorage.getItem('ielts-settings')
+          if (!raw) raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
           if (!raw) return {}
           const cfg = JSON.parse(raw)
           const study = cfg.study ?? {}
           return {
             ...cfg,
-            currentOverallBand: study.currentBand,
-            targetOverallBand: study.targetBand,
-            currentBand: study.currentBand,
-            targetBand: study.targetBand,
-            examDate: study.examDate,
-            weakSkills: study.weakSkills ?? [],
-            studyGoal: study.studyGoal,
-            dailyStudyMinutes: study.dailyStudyMinutes,
-            preferredSchedule: study.preferredSchedule,
+            currentOverallBand: study.currentBand ?? cfg.currentBand,
+            targetOverallBand: study.targetBand ?? cfg.targetBand,
+            currentBand: study.currentBand ?? cfg.currentBand,
+            targetBand: study.targetBand ?? cfg.targetBand,
+            examDate: study.examDate ?? cfg.examDate,
+            weakSkills: study.weakSkills ?? cfg.weakSkills ?? [],
+            studyGoal: study.studyGoal ?? cfg.studyGoal,
+            dailyStudyMinutes: study.dailyStudyMinutes ?? cfg.dailyStudyMinutes,
+            preferredSchedule: study.preferredSchedule ?? cfg.preferredSchedule,
             aiEnabled: cfg.aiEnabled ?? !!(cfg.aiApiKey || cfg.ai?.apiKey),
             aiProvider: cfg.aiProvider ?? cfg.ai?.providerId ?? 'openai',
             aiApiKey: cfg.aiApiKey ?? cfg.ai?.apiKey ?? '',
