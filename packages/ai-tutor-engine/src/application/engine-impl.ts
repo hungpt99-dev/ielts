@@ -33,6 +33,7 @@ export interface AITutorEngineDependencies {
   settingsRepository: TutorSettingsRepository
   eventPublisher: TutorEventPublisher
   clock?: ClockPort
+  progressReviewTtlMs?: number
 }
 
 export class AITutorEngineImpl implements AITutorEngine {
@@ -44,7 +45,8 @@ export class AITutorEngineImpl implements AITutorEngine {
   constructor(deps: AITutorEngineDependencies) {
     this.deps = deps
     this.memoryManager = new TutorMemoryManager(deps.memoryRepository)
-    this.progressCache = new AiGenerateResultCache<ProgressReviewResult>({ ttlMs: 3_600_000 })
+    const ttl = deps.progressReviewTtlMs ?? 3_600_000
+    this.progressCache = new AiGenerateResultCache<ProgressReviewResult>({ ttlMs: ttl })
   }
 
   async initialize(): Promise<AITutorInitializationResult> {

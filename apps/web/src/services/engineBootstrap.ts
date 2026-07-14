@@ -6,9 +6,10 @@ import type { AiCredentialProvider, ResolvedAiConnectionConfig } from '@ielts/ai
 import { userConfigurationSchema } from '@ielts/settings'
 import type { AiUserSettings } from '@ielts/settings'
 import { DEFAULT_APP_CONFIG, AI_PROVIDER_DEFINITIONS, STORAGE_KEYS } from '@ielts/config'
-import { LearnerContextBuilder } from '@ielts/ai-tutor-engine'
+import { LearnerContextBuilder, CachedContextBuilder } from '@ielts/ai-tutor-engine'
 import type { ContextSourceRegistry } from '@ielts/ai-tutor-engine'
 import { SystemClock } from '@ielts/ai-tutor-engine'
+import { AI_TUTOR_CACHE } from '../../features/ai-tutor/constants'
 import { createLearningEngine, createDefaultSkillRegistry } from '@ielts/learning-engine'
 import type { LearningEngine } from '@ielts/learning-engine'
 import { DatabaseService } from '../services/storage/Database'
@@ -601,14 +602,16 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       },
     })
 
+    const cachedBuilder = new CachedContextBuilder(contextBuilder)
     const deps: AITutorEngineDependencies = {
       aiClient: createAIClient(),
-      contextBuilder,
+      contextBuilder: cachedBuilder,
       messageRepository: msgRepo as any,
       memoryRepository: memRepo as any,
       settingsRepository: settingsRepo as any,
       eventPublisher: eventPublisher as any,
       clock: systemClock,
+      progressReviewTtlMs: AI_TUTOR_CACHE.PROGRESS_REVIEW_TTL_MS,
     }
 
     engineInstance = createAITutorEngine(deps)
