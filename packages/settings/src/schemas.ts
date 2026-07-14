@@ -1,11 +1,52 @@
 import { z } from 'zod'
 
 export const OPENAI_BASE_URL = 'https://api.openai.com/v1'
-export const DEFAULT_MODEL = 'gpt-4o-mini'
+export const DEFAULT_MODEL = 'gpt-4.1-mini'
 
 export const AI_PROVIDERS = ['openai', 'custom'] as const
 
 export const aiProviderSchema = z.enum(AI_PROVIDERS)
+
+export const AI_PROVIDER_IDS = [
+  'openai', 'claude', 'gemini', 'deepseek',
+  'openrouter', 'groq', 'local', 'custom',
+] as const
+
+export const aiUserSettingsSchema = z.object({
+  providerId: z.enum(AI_PROVIDER_IDS).default('openai'),
+  model: z.string().optional(),
+  customApiUrl: z.string().optional(),
+  temperature: z.number().min(0).max(2).optional(),
+})
+
+const studySettingsSchema = z.object({
+  targetBand: z.number().min(0).max(9).default(6.5),
+  currentBand: z.number().min(0).max(9).default(5.5),
+  examDate: z.string().optional(),
+  dailyStudyMinutes: z.number().int().positive().default(60),
+  weakSkills: z.array(z.string()).default([]),
+  nativeLanguage: z.string().default(''),
+  studyGoal: z.enum(['academic', 'general']).default('academic'),
+  preferredSchedule: z.array(z.string()).default(['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']),
+})
+
+const themeSettingsSchema = z.object({
+  mode: z.enum(['light', 'dark', 'system']).default('system'),
+  accentColor: z.string().default('#2563eb'),
+})
+
+const notificationSettingsSchema = z.object({
+  enabled: z.boolean().default(true),
+  reminderTime: z.string().default('09:00'),
+})
+
+export const userConfigurationSchema = z.object({
+  version: z.number().int().positive().default(1),
+  ai: aiUserSettingsSchema.default(aiUserSettingsSchema.parse({})),
+  study: studySettingsSchema.default(studySettingsSchema.parse({})),
+  theme: themeSettingsSchema.default(themeSettingsSchema.parse({})),
+  notifications: notificationSettingsSchema.default(notificationSettingsSchema.parse({})),
+})
 
 export const aiSettingsSchema = z.object({
   aiProvider: aiProviderSchema.default('openai'),

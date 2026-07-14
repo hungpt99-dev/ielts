@@ -4,11 +4,14 @@ export {
   NATIVE_LANGUAGES,
   OPENAI_BASE_URL,
   DEFAULT_MODEL,
+  AI_PROVIDER_IDS,
+  aiUserSettingsSchema,
+  userConfigurationSchema,
 } from './schemas'
 
 export { DEFAULT_AI_SETTINGS, DEFAULT_SHARED_SETTINGS } from './defaults'
 
-export type { AISettings, SharedSettings } from './types'
+export type { AISettings, SharedSettings, AiUserSettings, UserConfiguration } from './types'
 
 export type { SharedSettingsPatch } from './bridge'
 export {
@@ -21,3 +24,5 @@ export {
   darkModeFromThemeMode,
   translationTarget,
 } from './utils'
+
+export { UserSettingsRepository } from './repository'
