@@ -248,13 +248,21 @@ export default function Settings() {
     setSaving(true)
     try {
       updateSettings({
-        ...form,
-        aiApiKey: aiApiKeyInput,
-        aiProvider: aiProviderInput,
-        aiBaseUrl: aiBaseUrlInput || '',
-        aiEndpoint: aiBaseUrlInput || '',
-        aiModel: aiModelInput,
-        aiEnabled: aiEnabledInput,
+        ai: {
+          providerId: aiProviderInput as any,
+          model: aiModelInput,
+          customApiUrl: aiBaseUrlInput || '',
+        },
+        study: {
+          targetBand: form.targetBand,
+          currentBand: form.currentBand,
+          examDate: form.examDate || undefined,
+          dailyStudyMinutes: form.dailyStudyMinutes,
+          weakSkills: form.weakSkills ?? [],
+          studyGoal: form.studyGoal,
+          preferredSchedule: form.preferredSchedule ?? [],
+          nativeLanguage: form.nativeLanguage,
+        },
       })
       if (notifications.enabled && 'Notification' in window) {
         Notification.requestPermission()
