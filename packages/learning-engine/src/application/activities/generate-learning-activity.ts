@@ -132,15 +132,16 @@ export async function generateLearningActivity(
     }
   }
 
-  if (exercise.questions.length === 0 && context.constraints.aiAvailable) {
+  if (context.constraints.aiAvailable && (exercise.questions.length === 0 || exercise.sourceType === 'built-in')) {
     try {
-    const isReading = request.skill === 'reading'
-    const readingPrompt = isReading ? buildReadingPassagePrompt(difficultyDecision.level, questionCount, request.sourceContent?.text) : null
-    const aiResult = await deps.tutorPort.generateEducationalContent<any>({
-      systemPrompt: readingPrompt?.systemPrompt ?? buildPracticeQuestionsSystemPrompt(request.skill, request.activityType, questionCount, difficultyDecision.level),
-      userMessage: readingPrompt?.userMessage ?? `${buildPracticeQuestionsPrompt(request.skill, request.activityType, questionCount, difficultyDecision.level)}\n${request.sourceContent ? `Content: ${request.sourceContent.text.slice(0, 1000)}` : ''}`,
-      schema: {},
-    })
+      console.log('[GenerateActivity] Calling AI for skill:', request.skill, 'existing questions:', exercise.questions.length)
+      const isReading = request.skill === 'reading'
+      const readingPrompt = isReading ? buildReadingPassagePrompt(difficultyDecision.level, questionCount, request.sourceContent?.text) : null
+      const aiResult = await deps.tutorPort.generateEducationalContent<any>({
+        systemPrompt: readingPrompt?.systemPrompt ?? buildPracticeQuestionsSystemPrompt(request.skill, request.activityType, questionCount, difficultyDecision.level),
+        userMessage: readingPrompt?.userMessage ?? `${buildPracticeQuestionsPrompt(request.skill, request.activityType, questionCount, difficultyDecision.level)}\n${request.sourceContent ? `Content: ${request.sourceContent.text.slice(0, 1000)}` : ''}`,
+        schema: {},
+      })
       if (aiResult.success && aiResult.data) {
         const raw = aiResult.data
         if (isReading && raw.passage) {
@@ -148,13 +149,17 @@ export async function generateLearningActivity(
           exercise.title = raw.title ?? exercise.title
         }
         const items = Array.isArray(raw) ? raw : (raw.questions ?? [raw])
-        exercise.questions = items.map((q: any) => ({
+        const aiQuestions = items.map((q: any) => ({
           type: (q.type === 'true-false-not-given' || q.type === 'gap-fill' ? q.type : 'multiple-choice') as any,
           question: q.question ?? q.Question ?? '',
           options: q.options ?? q.Options ?? ['Option A', 'Option B', 'Option C', 'Option D'],
           correctIndex: typeof q.correctIndex === 'number' ? q.correctIndex : (typeof q.answer === 'number' ? q.answer : 0),
           explanation: q.explanation ?? q.Explanation ?? '',
         })).filter((q: any) => q.question)
+        if (aiQuestions.length > 0) {
+          exercise.questions = aiQuestions
+          exercise.sourceType = 'ai-generated'
+        }
       }
     } catch (error) {
       console.error('packages/learning-engine/src/application/activities/generate-learning-activity.ts error:', error);
