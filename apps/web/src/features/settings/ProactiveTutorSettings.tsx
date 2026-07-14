@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import ToggleSwitch from '../../components/ui/ToggleSwitch'
 import Button from '../../components/ui/Button'
-import Select from '../../components/ui/Select'
 import Input from '../../components/ui/Input'
+import Card, { CardContent } from '../../components/ui/Card'
 import type { ProactiveMessageSettings } from '@ielts/ai-tutor-engine'
-import type { TutorTone, ReminderFrequency } from '../aiTutor/hooks/useProactiveSettings'
 import { STORAGE_KEYS } from '@ielts/config'
 const SETTINGS_KEY = STORAGE_KEYS.localStorage.proactiveSettings
 
@@ -109,93 +108,73 @@ export default function ProactiveTutorSettings() {
   }
 
   return (
-    <div className="proactive-tutor-settings">
-      <h2>Proactive Tutor Settings</h2>
-
-      <div className="settings-section">
-        <ToggleSwitch
-          label="Enable Proactive Tutor"
-          checked={settings.enabled}
-          onChange={(v: boolean) => handleChange({ enabled: v })}
-        />
-      </div>
-
-      <div className="settings-section">
-        <h3>Message Categories</h3>
-        {CATEGORY_KEYS.map(cat => (
+    <div className="space-y-6">
+      <Card>
+        <CardContent className="space-y-6">
           <ToggleSwitch
-            key={cat}
-            label={CATEGORY_LABELS[cat] ?? cat}
-            checked={settings.categories[cat] ?? true}
-            onChange={(v: boolean) => handleChange({
-              categories: { ...settings.categories, [cat]: v },
-            })}
+            label="Enable Proactive Tutor"
+            checked={settings.enabled}
+            onChange={(v: boolean) => handleChange({ enabled: v })}
           />
-        ))}
-      </div>
 
-      <div className="settings-section">
-        <h3>Limits</h3>
-        <Input
-          type="number"
-          label="Max messages per day"
-          value={settings.maxMessagesPerDay}
-          onChange={(v: string) => handleChange({ maxMessagesPerDay: parseInt(v, 10) || 5 })}
-        />
-        <Input
-          type="time"
-          label="Quiet hours start"
-          value={settings.quietHoursStart}
-          onChange={(v: string) => handleChange({ quietHoursStart: v })}
-        />
-        <Input
-          type="time"
-          label="Quiet hours end"
-          value={settings.quietHoursEnd}
-          onChange={(v: string) => handleChange({ quietHoursEnd: v })}
-        />
-      </div>
+          <div className="space-y-3">
+            <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Message Categories</p>
+            {CATEGORY_KEYS.map(cat => (
+              <ToggleSwitch
+                key={cat}
+                label={CATEGORY_LABELS[cat] ?? cat}
+                checked={settings.categories[cat] ?? true}
+                onChange={(v: boolean) => handleChange({
+                  categories: { ...settings.categories, [cat]: v },
+                })}
+              />
+            ))}
+          </div>
 
-      <div className="settings-section">
-        <h3>Reminders</h3>
-        <ToggleSwitch
-          label="Exam reminders"
-          checked={settings.examReminders}
-          onChange={(v: boolean) => handleChange({ examReminders: v })}
-        />
-        <ToggleSwitch
-          label="Inactivity reminders"
-          checked={settings.inactivityReminders}
-          onChange={(v: boolean) => handleChange({ inactivityReminders: v })}
-        />
-        <ToggleSwitch
-          label="Vocabulary reminders"
-          checked={settings.vocabularyReminders}
-          onChange={(v: boolean) => handleChange({ vocabularyReminders: v })}
-        />
-        <ToggleSwitch
-          label="Roadmap reminders"
-          checked={settings.roadmapReminders}
-          onChange={(v: boolean) => handleChange({ roadmapReminders: v })}
-        />
-        <ToggleSwitch
-          label="Motivation messages"
-          checked={settings.motivationMessages}
-          onChange={(v: boolean) => handleChange({ motivationMessages: v })}
-        />
-      </div>
+          <div className="space-y-3">
+            <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Limits</p>
+            <Input
+              type="number"
+              label="Max messages per day"
+              value={settings.maxMessagesPerDay}
+              onChange={(e) => handleChange({ maxMessagesPerDay: parseInt((e.target as HTMLInputElement).value, 10) || 5 })}
+            />
+            <Input
+              type="time"
+              label="Quiet hours start"
+              value={settings.quietHoursStart}
+              onChange={(e) => handleChange({ quietHoursStart: (e.target as HTMLInputElement).value })}
+            />
+            <Input
+              type="time"
+              label="Quiet hours end"
+              value={settings.quietHoursEnd}
+              onChange={(e) => handleChange({ quietHoursEnd: (e.target as HTMLInputElement).value })}
+            />
+          </div>
 
-      <div className="settings-actions">
-        <Button onClick={handleSave} disabled={saving}>
-          {saving ? 'Saving...' : 'Save'}
-        </Button>
-        <Button onClick={handleReset} variant="secondary">
-          Reset to Defaults
-        </Button>
-      </div>
+          <div className="space-y-3">
+            <p className="text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>Reminders</p>
+            <ToggleSwitch label="Exam reminders" checked={settings.examReminders} onChange={(v: boolean) => handleChange({ examReminders: v })} />
+            <ToggleSwitch label="Inactivity reminders" checked={settings.inactivityReminders} onChange={(v: boolean) => handleChange({ inactivityReminders: v })} />
+            <ToggleSwitch label="Vocabulary reminders" checked={settings.vocabularyReminders} onChange={(v: boolean) => handleChange({ vocabularyReminders: v })} />
+            <ToggleSwitch label="Roadmap reminders" checked={settings.roadmapReminders} onChange={(v: boolean) => handleChange({ roadmapReminders: v })} />
+            <ToggleSwitch label="Motivation messages" checked={settings.motivationMessages} onChange={(v: boolean) => handleChange({ motivationMessages: v })} />
+          </div>
 
-      {saveFeedback === 'success' && <p className="feedback-success">Settings saved.</p>}
-      {saveFeedback === 'error' && <p className="feedback-error">Failed to save settings.</p>}
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Button onClick={handleSave} disabled={saving}>
+              {saving ? 'Saving...' : 'Save'}
+            </Button>
+            <Button onClick={handleReset} variant="secondary">
+              Reset to Defaults
+            </Button>
+          </div>
+
+          {saveFeedback === 'success' && <p className="text-sm" style={{ color: 'var(--color-success)' }}>Settings saved.</p>}
+          {saveFeedback === 'error' && <p className="text-sm" style={{ color: 'var(--color-danger)' }}>Failed to save settings.</p>}
+        </CardContent>
+      </Card>
     </div>
   )
 }
