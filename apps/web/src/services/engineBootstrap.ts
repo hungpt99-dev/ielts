@@ -612,6 +612,24 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       eventPublisher: eventPublisher as any,
       clock: systemClock,
       progressReviewTtlMs: AI_TUTOR_CACHE.PROGRESS_REVIEW_TTL_MS,
+      progressReviewCache: {
+        get: () => {
+          try {
+            const raw = localStorage.getItem(AI_TUTOR_CACHE.PROGRESS_REVIEW_STORAGE_KEY)
+            if (!raw) return null
+            const entry = JSON.parse(raw)
+            const age = Date.now() - new Date(entry.generatedAt).getTime()
+            if (age > AI_TUTOR_CACHE.PROGRESS_REVIEW_TTL_MS) {
+              localStorage.removeItem(AI_TUTOR_CACHE.PROGRESS_REVIEW_STORAGE_KEY)
+              return null
+            }
+            return entry
+          } catch { return null }
+        },
+        set: (result) => {
+          try { localStorage.setItem(AI_TUTOR_CACHE.PROGRESS_REVIEW_STORAGE_KEY, JSON.stringify(result)) } catch {}
+        },
+      },
     }
 
     engineInstance = createAITutorEngine(deps)

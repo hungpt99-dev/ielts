@@ -25,6 +25,11 @@ import { TutorMemoryManager } from '../memory/tutor-memory-manager'
 import { SystemClock } from '../ports/clock-port'
 import { AiGenerateResultCache } from '@ielts/ai'
 
+export interface ProgressReviewCache {
+  get(): ProgressReviewResult | null
+  set(result: ProgressReviewResult): void
+}
+
 export interface AITutorEngineDependencies {
   aiClient?: TutorAIClient
   contextBuilder: LearnerContextBuilder
@@ -34,6 +39,7 @@ export interface AITutorEngineDependencies {
   eventPublisher: TutorEventPublisher
   clock?: ClockPort
   progressReviewTtlMs?: number
+  progressReviewCache?: ProgressReviewCache
 }
 
 export class AITutorEngineImpl implements AITutorEngine {
@@ -144,6 +150,11 @@ export class AITutorEngineImpl implements AITutorEngine {
     if (cacheKey) {
       const cached = this.progressCache.get(cacheKey)
       if (cached) return { status: 'success', data: cached }
+      const persisted = this.deps.progressReviewCache?.get()
+      if (persisted) {
+        this.progressCache.set(cacheKey, persisted)
+        return { status: 'success', data: persisted }
+      }
     }
     try {
       const learnerState = request.learnerState ?? await this.deps.contextBuilder.build('proactive')
@@ -152,7 +163,10 @@ export class AITutorEngineImpl implements AITutorEngine {
         learnerState,
       }
       const result = await generateProgressReview(enrichedRequest, { aiClient: this.deps.aiClient })
-      if (cacheKey) this.progressCache.set(cacheKey, result)
+      if (cacheKey) {
+        this.progressCache.set(cacheKey, result)
+        this.deps.progressReviewCache?.set(result)
+      }
       return { status: 'success', data: result }
     } catch (err) {
       console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);
