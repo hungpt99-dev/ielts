@@ -9,7 +9,7 @@ import { DEFAULT_APP_CONFIG, AI_PROVIDER_DEFINITIONS, STORAGE_KEYS } from '@ielt
 import { LearnerContextBuilder, CachedContextBuilder } from '@ielts/ai-tutor-engine'
 import type { ContextSourceRegistry } from '@ielts/ai-tutor-engine'
 import { SystemClock } from '@ielts/ai-tutor-engine'
-import { AI_TUTOR_CACHE } from '../../features/ai-tutor/constants'
+import { AI_TUTOR_CACHE } from '../features/ai-tutor/constants'
 import { createLearningEngine, createDefaultSkillRegistry } from '@ielts/learning-engine'
 import type { LearningEngine } from '@ielts/learning-engine'
 import { DatabaseService } from '../services/storage/Database'
