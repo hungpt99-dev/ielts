@@ -11,6 +11,7 @@ import {
   DEFAULT_DAILY_STUDY_MINUTES,
   DEFAULT_STUDY_GOAL,
   DEFAULT_SCHEDULE,
+  DEFAULT_WEAK_SKILLS,
 } from '@ielts/config'
 import { SKILL_TO_CATEGORY } from './constants'
 import { getLearningEngine } from '../../services/engineBootstrap'
