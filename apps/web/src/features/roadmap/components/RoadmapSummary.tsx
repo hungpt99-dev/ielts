@@ -280,47 +280,38 @@ export default function RoadmapSummary({ roadmap, onRegenerate, onAskAIReview, r
         </div>
       </div>
 
-      <Modal open={!!(showConfirm || regenerating)} onClose={() => regenerating ? null : setShowConfirm(false)} title="Regenerate Study Plan" size="md">
-        {regenerating ? (
-          <div className="flex flex-col gap-5 py-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: 'var(--color-primary-light)' }}>
-                <svg className="h-5 w-5 animate-spin" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>Generating your new study plan</p>
-                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>AI is creating personalized content for each phase</p>
-              </div>
-            </div>
-
-            {enrichProgress && (
-              <div className="space-y-2">
-                <div className="flex h-2 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
-                  <div
-                    className="h-full rounded-full transition-all duration-500 ease-out"
-                    style={{
-                      width: `${Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%`,
-                      backgroundColor: 'var(--color-primary)',
-                    }}
-                  />
-                </div>
-                <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                  <span>
-                    {enrichProgress.phase === 'profile-analysis' && 'Analyzing your learning profile...'}
-                    {enrichProgress.phase === 'weekly-objectives' && `Setting weekly objectives (${enrichProgress.current}/${enrichProgress.total})`}
-                    {enrichProgress.phase === 'task-candidates' && `Generating task candidates (${enrichProgress.current}/${enrichProgress.total})`}
-                    {enrichProgress.phase === 'complete' && 'Finalizing your plan...'}
-                  </span>
-                  <span>{Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%</span>
-                </div>
-              </div>
-            )}
+      {regenerating && enrichProgress && (
+        <div className="mt-4 space-y-2 rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
+          <div className="flex items-center gap-3">
+            <svg className="h-4 w-4 shrink-0 animate-spin" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>Regenerating plan with AI...</span>
           </div>
-        ) : (
-          <div className="space-y-4">
+          <div className="flex h-2 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+            <div
+              className="h-full rounded-full transition-all duration-500 ease-out"
+              style={{
+                width: `${Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%`,
+                backgroundColor: 'var(--color-primary)',
+              }}
+            />
+          </div>
+          <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+            <span>
+              {enrichProgress.phase === 'profile-analysis' && 'Analyzing your learning profile...'}
+              {enrichProgress.phase === 'weekly-objectives' && `Setting weekly objectives (${enrichProgress.current}/${enrichProgress.total})`}
+              {enrichProgress.phase === 'task-candidates' && `Generating task candidates (${enrichProgress.current}/${enrichProgress.total})`}
+              {enrichProgress.phase === 'complete' && 'Finalizing your plan...'}
+            </span>
+            <span>{Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%</span>
+          </div>
+        </div>
+      )}
+
+      <Modal open={!!showConfirm} onClose={() => setShowConfirm(false)} title="Regenerate Study Plan" size="md">
+        <div className="space-y-4">
             <div className="flex items-start gap-3 rounded-2xl p-3 sm:p-4" style={{ backgroundColor: 'var(--color-primary-light)' }}>
               <svg className="mt-0.5 h-5 w-5 shrink-0" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -346,7 +337,6 @@ export default function RoadmapSummary({ roadmap, onRegenerate, onAskAIReview, r
               </Button>
             </div>
           </div>
-        )}
       </Modal>
     </section>
   )
