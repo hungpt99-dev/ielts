@@ -132,7 +132,7 @@ export async function generateLearningActivity(
     }
   }
 
-  if (context.constraints.aiAvailable && (exercise.questions.length === 0 || exercise.sourceType === 'built-in')) {
+  if (context.constraints.aiAvailable) {
     try {
       console.log('[GenerateActivity] Calling AI for skill:', request.skill, 'existing questions:', exercise.questions.length)
       const isReading = request.skill === 'reading'
