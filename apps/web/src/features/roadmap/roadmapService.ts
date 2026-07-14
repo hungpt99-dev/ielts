@@ -494,10 +494,10 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
   const defaultedExamDate = (study?.examDate as string) || (s.examDate as string) || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
   const profile = buildNormalizedProfile({
     settings: {
-      targetBand: (study?.targetBand as number) ?? (s.targetBand as number),
-      currentBand: (study?.currentBand as number) ?? (s.currentBand as number),
+      targetBand: (study?.targetBand as number) ?? (s.targetBand as number) ?? 7.0,
+      currentBand: (study?.currentBand as number) ?? (s.currentBand as number) ?? 5.5,
       examDate: defaultedExamDate,
-      dailyStudyMinutes: (study?.dailyStudyMinutes as number) ?? (s.dailyStudyMinutes as number),
+      dailyStudyMinutes: (study?.dailyStudyMinutes as number) ?? (s.dailyStudyMinutes as number) ?? 60,
       weakSkills: (study?.weakSkills as string[]) ?? (s.weakSkills as string[]) ?? [],
       studyGoal: (study?.studyGoal as string) ?? (s.studyGoal as string),
       preferredSchedule: (study?.preferredSchedule as string[]) ?? (s.preferredSchedule as string[]) ?? [],
