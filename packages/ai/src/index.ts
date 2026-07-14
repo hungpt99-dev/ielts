@@ -83,8 +83,8 @@ export type { ProviderConfig } from './client/types'
 export { createAIClient, callAI } from './client'
 export type { AIClient, AICallResult } from './client/types'
 
-// Cache utilities
-export { AiGenerateResultCache } from './utils'
+// Utilities
+export { AiGenerateResultCache, extractJSON } from './utils'
 export type { GenerateResultCacheOptions, GenerateResultCacheStats } from './utils'
 
 // Config resolver
