@@ -3,6 +3,7 @@ import type { AITutorEngine, AITutorEngineDependencies } from '@ielts/ai-tutor-e
 import type { TutorAIClient } from '@ielts/ai-tutor-engine'
 import { callAI, AiConfigurationResolver } from '@ielts/ai'
 import type { AiCredentialProvider, ResolvedAiConnectionConfig } from '@ielts/ai'
+import { userConfigurationSchema } from '@ielts/settings'
 import type { AiUserSettings } from '@ielts/settings'
 import { DEFAULT_APP_CONFIG, AI_PROVIDER_DEFINITIONS, STORAGE_KEYS } from '@ielts/config'
 import { LearnerContextBuilder } from '@ielts/ai-tutor-engine'
@@ -335,35 +336,35 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
     const profileRepo = {
       async get() {
         try {
-          let raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
-          if (!raw) raw = localStorage.getItem('ielts-settings')
-          if (!raw) raw = localStorage.getItem(STORAGE_KEYS.localStorage.appSettings)
+          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
           if (!raw) return {}
-          const cfg = JSON.parse(raw)
-          const study = cfg.study ?? {}
+          const rawObj = JSON.parse(raw)
+          const parsed = userConfigurationSchema.safeParse(rawObj)
+          if (!parsed.success) return {}
+          const { study, ai } = parsed.data
           return {
-            ...cfg,
-            currentOverallBand: study.currentBand ?? cfg.currentBand,
-            targetOverallBand: study.targetBand ?? cfg.targetBand,
-            currentBand: study.currentBand ?? cfg.currentBand,
-            targetBand: study.targetBand ?? cfg.targetBand,
-            examDate: study.examDate ?? cfg.examDate,
-            weakSkills: study.weakSkills ?? cfg.weakSkills ?? [],
-            studyGoal: study.studyGoal ?? cfg.studyGoal,
-            dailyStudyMinutes: study.dailyStudyMinutes ?? cfg.dailyStudyMinutes,
-            preferredSchedule: study.preferredSchedule ?? cfg.preferredSchedule,
-            aiEnabled: cfg.aiEnabled ?? !!(cfg.aiApiKey || cfg.ai?.apiKey),
-            aiProvider: cfg.aiProvider ?? cfg.ai?.providerId ?? 'openai',
-            aiApiKey: cfg.aiApiKey ?? cfg.ai?.apiKey ?? '',
-            aiBaseUrl: cfg.aiBaseUrl ?? cfg.ai?.customApiUrl ?? '',
-            aiModel: cfg.aiModel ?? cfg.ai?.model ?? '',
+            ...parsed.data,
+            currentOverallBand: study.currentBand,
+            targetOverallBand: study.targetBand,
+            currentBand: study.currentBand,
+            targetBand: study.targetBand,
+            examDate: study.examDate,
+            weakSkills: study.weakSkills,
+            studyGoal: study.studyGoal,
+            dailyStudyMinutes: study.dailyStudyMinutes,
+            preferredSchedule: study.preferredSchedule,
+            aiEnabled: !!(rawObj.aiApiKey || ai.providerId),
+            aiProvider: ai.providerId,
+            aiApiKey: rawObj.aiApiKey ?? '',
+            aiBaseUrl: ai.customApiUrl ?? '',
+            aiModel: ai.model ?? '',
           }
         } catch (error) {
  console.error('apps/web/src/services/engineBootstrap.ts error:', error);
  return {} }
       },
       async save(profile: any) {
-        try { localStorage.setItem(STORAGE_KEYS.localStorage.appSettings, JSON.stringify(profile)) } catch (error) {
+        try { localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(profile)) } catch (error) {
       console.error('apps/web/src/services/engineBootstrap.ts error:', error);
         }
       },
