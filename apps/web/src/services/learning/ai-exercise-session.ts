@@ -74,9 +74,11 @@ async function createEngineSession(
 function parseExerciseFromActivity(activityResult: any) {
   const exercise = activityResult.data.activity.exercise
   const passageText = exercise.content?.passage ?? exercise.content?.text ?? ''
+  const transcript = exercise.content?.transcript ?? passageText
   return {
     title: exercise.title,
     text: passageText,
+    transcript,
     instructions: exercise.instructions,
     questions: (exercise.questions ?? []).map((q: any) => ({
       id: q.id ?? id(),
