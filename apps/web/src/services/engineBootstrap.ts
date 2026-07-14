@@ -316,15 +316,30 @@ function createDependencyRepos() {
  return null }
       },
       async save(exercise: any) {
+        const diff = String(exercise.difficulty ?? 'intermediate').toLowerCase()
+        const DIFF_MAP: Record<string, 'beginner' | 'intermediate' | 'advanced'> = {
+          easy: 'beginner', beginner: 'beginner',
+          medium: 'intermediate', intermediate: 'intermediate',
+          hard: 'advanced', advanced: 'advanced',
+          '1': 'beginner', '2': 'intermediate', '3': 'advanced',
+        }
+        const SRC_MAP: Record<string, 'built-in' | 'user-created' | 'ai-generated' | 'web-content' | 'mistake-review' | 'vocabulary-practice'> = {
+          ai: 'ai-generated', aigenerated: 'ai-generated', 'ai-generated': 'ai-generated',
+          builtin: 'built-in', 'built-in': 'built-in',
+          user: 'user-created', usercreated: 'user-created', 'user-created': 'user-created',
+          web: 'web-content', webcontent: 'web-content', 'web-content': 'web-content',
+          mistake: 'mistake-review', mistakereview: 'mistake-review', 'mistake-review': 'mistake-review',
+          vocab: 'vocabulary-practice', vocabulary: 'vocabulary-practice', vocabularypractice: 'vocabulary-practice', 'vocabulary-practice': 'vocabulary-practice',
+        }
         try {
           await DatabaseService.safePut('readingExercises', {
             id: exercise.id,
             title: exercise.title ?? 'Exercise',
             description: exercise.description ?? '',
-            skill: exercise.skill ?? 'reading',
+            skill: String(exercise.skill ?? 'reading').toLowerCase() as any,
             topic: exercise.topic ?? 'general',
-            source: exercise.source ?? 'ai-generated',
-            difficulty: exercise.difficulty ?? 'intermediate',
+            source: SRC_MAP[String(exercise.source ?? '').toLowerCase().replace(/[\s_-]/g, '')] ?? 'ai-generated',
+            difficulty: DIFF_MAP[diff] ?? 'intermediate',
             content: typeof exercise.content === 'string' ? exercise.content : JSON.stringify(exercise.content ?? ''),
             questions: Array.isArray(exercise.questions) ? JSON.stringify(exercise.questions) : (exercise.questions ?? '[]'),
             totalPoints: exercise.totalPoints ?? 0,
