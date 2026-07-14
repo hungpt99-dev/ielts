@@ -6,6 +6,12 @@ import type { RoadmapData } from '../roadmapService'
 import type { TaskEntry } from '../../../models'
 import { DatabaseService } from '../../../services/storage/Database'
 
+interface EnrichProgress {
+  phase: string
+  current: number
+  total: number
+}
+
 interface RoadmapSummaryProps {
   roadmap: RoadmapData
   profile: {
@@ -19,6 +25,7 @@ interface RoadmapSummaryProps {
   onRegenerate: () => void
   onAskAIReview: () => void
   regenerating?: boolean
+  enrichProgress?: EnrichProgress | null
 }
 
 function getTotalDays(roadmap: RoadmapData): number {
@@ -273,21 +280,44 @@ export default function RoadmapSummary({ roadmap, onRegenerate, onAskAIReview, r
         </div>
       </div>
 
-      <Modal open={!!(showConfirm || regenerating)} onClose={() => regenerating ? null : setShowConfirm(false)} title="Regenerate Study Plan" size="sm">
+      <Modal open={!!(showConfirm || regenerating)} onClose={() => regenerating ? null : setShowConfirm(false)} title="Regenerate Study Plan" size="md">
         {regenerating ? (
-          <div className="flex flex-col items-center gap-4 py-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl" style={{ backgroundColor: 'var(--color-primary-light)' }}>
-              <svg className="h-5 w-5 animate-spin" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
+          <div className="flex flex-col gap-5 py-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl" style={{ backgroundColor: 'var(--color-primary-light)' }}>
+                <svg className="h-5 w-5 animate-spin" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>Generating your new study plan</p>
+                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>AI is creating personalized content for each phase</p>
+              </div>
             </div>
-            <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-              Generating your new study plan...
-            </p>
-            <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-              This may take a moment depending on your plan duration.
-            </p>
+
+            {enrichProgress && (
+              <div className="space-y-2">
+                <div className="flex h-2 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-500 ease-out"
+                    style={{
+                      width: `${Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%`,
+                      backgroundColor: 'var(--color-primary)',
+                    }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                  <span>
+                    {enrichProgress.phase === 'profile-analysis' && 'Analyzing your learning profile...'}
+                    {enrichProgress.phase === 'weekly-objectives' && `Setting weekly objectives (${enrichProgress.current}/${enrichProgress.total})`}
+                    {enrichProgress.phase === 'task-candidates' && `Generating task candidates (${enrichProgress.current}/${enrichProgress.total})`}
+                    {enrichProgress.phase === 'complete' && 'Finalizing your plan...'}
+                  </span>
+                  <span>{Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%</span>
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div className="space-y-4">

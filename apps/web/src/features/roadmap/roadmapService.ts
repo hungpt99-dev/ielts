@@ -576,13 +576,16 @@ async function enrichPlanWithAI(
     const aiCallFn: import('@ielts/learning-engine').AICallFn = async (systemPrompt, userPrompt) => {
       const result = await callAI(systemPrompt, userPrompt, () => config, {
         temperature: 0.7,
-        maxTokens: 2048,
+        maxTokens: 8192,
       })
       return result.content
     }
 
     const orchestrator = new AiPlanOrchestrator(aiCallFn, {
       callLimits: { maximumCallsPerGeneration: 10 },
+      onProgress: (phase, current, total) => {
+        window.dispatchEvent(new CustomEvent('plan-enrich-progress', { detail: { phase, current, total } }))
+      },
     })
     const enrichment = await orchestrator.enrichPlan({
       profile,

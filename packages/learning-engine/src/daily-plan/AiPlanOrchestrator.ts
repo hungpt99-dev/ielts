@@ -77,10 +77,13 @@ export type AICallFn = (
   userPrompt: string,
 ) => Promise<string | null>;
 
+export type EnrichProgressPhase = 'profile-analysis' | 'weekly-objectives' | 'task-candidates' | 'complete'
+
 export interface AiPlanOrchestratorConfig {
   callLimits?: Partial<AICallLimits>;
   enableCache?: boolean;
   cacheTtlMs?: number;
+  onProgress?: (phase: EnrichProgressPhase, current: number, total: number) => void;
 }
 
 export interface EnrichPlanParams {
@@ -172,12 +175,14 @@ export class AiPlanOrchestrator {
   private readonly limits: AICallLimits;
   private readonly cache: AiCache<string>;
   private readonly callAI: AICallFn;
+  private readonly config: AiPlanOrchestratorConfig;
 
   constructor(
     callAI: AICallFn,
     config: AiPlanOrchestratorConfig = {},
   ) {
     this.callAI = callAI;
+    this.config = config;
     this.limits = { ...DEFAULT_CALL_LIMITS, ...config.callLimits };
     this.cache = config.enableCache !== false
       ? new AiCache<string>(config.cacheTtlMs)
@@ -234,9 +239,18 @@ export class AiPlanOrchestrator {
       }
     }
 
+    const totalBatches = generationPlan.weeklyObjectiveBatches.length + generationPlan.taskCandidateBatches.length
+    let completedBatches = 0
+
     // Step 2: Weekly objectives (batched)
     const enrichedObjectives: AIWeeklyObjective[] = [];
     let previousBatchSummary: string | undefined;
+
+    const reportProgress = (phase: EnrichProgressPhase) => {
+      this.config.onProgress?.(phase, completedBatches, totalBatches)
+    }
+
+    reportProgress('weekly-objectives')
 
     for (const batch of generationPlan.weeklyObjectiveBatches) {
       if (signal?.aborted) break;
@@ -273,9 +287,12 @@ export class AiPlanOrchestrator {
         callStats.failedCalls++;
         fallbackUsed = true;
       }
+      completedBatches++
+      reportProgress('weekly-objectives')
     }
 
     // Step 3: Task candidates (batched)
+    reportProgress('task-candidates')
     const taskCandidates: AITaskCandidate[] = [];
     const weeksWithObjectives = new Map(
       enrichedObjectives.map(o => [o.weekId, o]),
@@ -315,8 +332,11 @@ export class AiPlanOrchestrator {
         callStats.failedCalls++;
         fallbackUsed = true;
       }
+      completedBatches++
+      reportProgress('task-candidates')
     }
 
+    reportProgress('complete')
     callStats.totalTokensEstimated = (callStats.successfulCalls + callStats.cacheHits) * 4000;
 
     return {

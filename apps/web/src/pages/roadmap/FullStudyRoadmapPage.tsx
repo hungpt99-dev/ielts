@@ -43,6 +43,7 @@ export default function FullStudyRoadmapPage() {
   const [error, setError] = useState<string | null>(null)
   const [aiEnabled, setAiEnabled] = useState(false)
   const [regenerating, setRegenerating] = useState(false)
+  const [enrichProgress, setEnrichProgress] = useState<{ phase: string; current: number; total: number } | null>(null)
   const [taskRefreshKey, setTaskRefreshKey] = useState(0)
 
   const loadData = useCallback(async (showLoading = true) => {
@@ -96,6 +97,15 @@ export default function FullStudyRoadmapPage() {
     }
   }, [loading, roadmap])
 
+  useEffect(() => {
+    function handleProgress(e: Event) {
+      const detail = (e as CustomEvent).detail as { phase: string; current: number; total: number }
+      setEnrichProgress(detail)
+    }
+    window.addEventListener('plan-enrich-progress', handleProgress)
+    return () => window.removeEventListener('plan-enrich-progress', handleProgress)
+  }, [])
+
   const handleToggleTask = useCallback(async (phaseIndex: number, weekIndex: number, dayIndex: number, taskIndex: number) => {
     const r = roadmapRef.current
     if (!r) return
@@ -111,6 +121,7 @@ export default function FullStudyRoadmapPage() {
   const handleRegenerate = useCallback(async () => {
     if (!roadmap || regenerating) return
     setRegenerating(true)
+    setEnrichProgress(null)
     try {
       console.log('[Regenerate] Starting regeneration...')
       const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
@@ -146,6 +157,7 @@ export default function FullStudyRoadmapPage() {
       await loadData(false)
     } finally {
       setRegenerating(false)
+      setEnrichProgress(null)
     }
   }, [roadmap, loadRoadmap, loadData, regenerating])
 
@@ -341,6 +353,7 @@ export default function FullStudyRoadmapPage() {
           onRegenerate={handleRegenerate}
           onAskAIReview={handleAskFollowUp}
           regenerating={regenerating}
+          enrichProgress={enrichProgress}
         />
       </PageContent>
     )
@@ -481,6 +494,7 @@ export default function FullStudyRoadmapPage() {
               onRegenerate={handleRegenerate}
               onAskAIReview={handleAskFollowUp}
               regenerating={regenerating}
+              enrichProgress={enrichProgress}
             />
           </aside>
         )}
