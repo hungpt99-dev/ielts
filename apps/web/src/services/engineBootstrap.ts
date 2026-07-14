@@ -319,19 +319,6 @@ function createDependencyRepos() {
         try {
           const { exerciseToEntry } = await import('./learning/adapters/exercise-to-entry')
           await DatabaseService.safePut('readingExercises', exerciseToEntry(exercise))
-            content: typeof exercise.content === 'string' ? exercise.content : JSON.stringify(exercise.content ?? ''),
-            questions: Array.isArray(exercise.questions) ? JSON.stringify(exercise.questions) : (exercise.questions ?? '[]'),
-            totalPoints: exercise.totalPoints ?? 0,
-            estimatedMinutes: exercise.estimatedMinutes ?? 0,
-            status: exercise.status ?? 'published',
-            tags: exercise.tags ?? [],
-            sourceId: exercise.sourceId,
-            contentVersion: exercise.contentVersion,
-            metadata: typeof exercise.metadata === 'string' ? exercise.metadata : JSON.stringify(exercise.metadata ?? {}),
-            isFavorite: exercise.isFavorite ?? false,
-            createdAt: exercise.createdAt ?? new Date().toISOString(),
-            updatedAt: exercise.updatedAt ?? new Date().toISOString(),
-          })
         } catch (error) {
       console.error('apps/web/src/services/engineBootstrap.ts error:', error);
         }
