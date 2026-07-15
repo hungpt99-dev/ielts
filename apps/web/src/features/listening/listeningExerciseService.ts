@@ -4,13 +4,14 @@ import type { ListeningExercise, ListeningQuestion } from '../../models'
 function getTranscriptText(e: Record<string, unknown>): string {
   const raw = e.content
   if (typeof raw === 'string') {
-    try {
-      const parsed = JSON.parse(raw)
-      return (typeof parsed.transcript === 'string' ? parsed.transcript : '') ||
-             (typeof parsed.passage === 'string' ? parsed.passage : '')
-    } catch (error) {
- console.error('apps/web/src/features/listening/listeningExerciseService.ts error:', error);
- return raw }
+    if (raw.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(raw)
+        return (typeof parsed.transcript === 'string' ? parsed.transcript : '') ||
+               (typeof parsed.passage === 'string' ? parsed.passage : '')
+      } catch {}
+    }
+    return raw
   }
   if (typeof raw === 'object' && raw !== null) {
     return (typeof (raw as any).transcript === 'string' ? (raw as any).transcript : '') ||
@@ -23,9 +24,7 @@ function getListeningQuestions(e: Record<string, unknown>): ListeningQuestion[] 
   const raw = e.questions
   if (Array.isArray(raw)) return raw as ListeningQuestion[]
   if (typeof raw === 'string') {
-    try { return JSON.parse(raw) as ListeningQuestion[] } catch (error) {
-  console.error('apps/web/src/features/listening/listeningExerciseService.ts error:', error);
-    }
+    try { return JSON.parse(raw) as ListeningQuestion[] } catch {}
   }
   return []
 }
