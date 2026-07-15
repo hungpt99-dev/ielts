@@ -478,14 +478,6 @@ export default function Dashboard() {
               title="AI Tutor Suggestion"
               recommendation={aiSuggestion || 'Complete your first study session, and I\'ll have personalized suggestions ready for you!'}
               icon={<IconAITutor size={20} />}
-              action={
-                <Button size="sm" variant="ghost" onClick={() => goToTutor({
-                  prompt: `You suggested: "${aiSuggestion || 'Help me improve my IELTS score'}". I'm at band ${currentBand} targeting band ${targetBand}. What should I focus on?`,
-                  title: 'Discuss AI Suggestion',
-                })}>
-                  Chat with Tutor
-                </Button>
-              }
               priority="medium"
             />
           </section>

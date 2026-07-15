@@ -1,12 +1,49 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getAITutorEngine } from '../../../services/engineBootstrap'
+import { initializeAITutorEngine } from '../../../services/engineBootstrap'
 import { DatabaseService } from '../../../services/storage/Database'
 import { ROUTES, STORAGE_KEYS } from '@ielts/config'
 
 import type { TaskEntry, VocabularyEntry, MistakeEntry } from '../../../models'
 import type { ProgressReview } from '../components/TeacherProgressReviewCard'
 import type { TutorSession, LearningProfile, FeedbackSummary, TeacherAdviceItem, ActivityItem } from '../types/aiTutor.types'
+
+function computeSkillBreakdown(tasks: TaskEntry[], mistakes: MistakeEntry[], weakSkillsList: string[]): ProgressReview['skillBreakdown'] {
+  const skillSet = ['listening', 'reading', 'writing', 'speaking', 'grammar', 'vocabulary'] as const
+  const now = new Date()
+  return skillSet.map(skill => {
+    const skillTasks = tasks.filter(t => t.category?.toLowerCase() === skill)
+    const doneTasks = skillTasks.filter(t => t.isDone)
+    const taskCount = skillTasks.length
+    const accuracy = taskCount > 0 ? Math.round((doneTasks.length / taskCount) * 100) : 0
+    const mistakeCount = mistakes.filter(m => m.skill?.toLowerCase() === skill).length
+    const lastDone = doneTasks.length > 0
+      ? doneTasks.filter(t => t.completedAt).sort((a, b) => new Date(b.completedAt!).getTime() - new Date(a.completedAt!).getTime())[0]
+      : null
+    const daysSincePractice = lastDone?.completedAt
+      ? Math.floor((now.getTime() - new Date(lastDone.completedAt).getTime()) / 86400000)
+      : 999
+    const doneDates = doneTasks.filter(t => t.completedAt).map(t => t.completedAt!.slice(0, 10))
+    const uniqueDays = [...new Set(doneDates)].sort()
+    let trend: 'improving' | 'declining' | 'stable' = 'stable'
+    if (uniqueDays.length >= 4) {
+      const half = Math.floor(uniqueDays.length / 2)
+      const recentCount = uniqueDays.slice(half).length
+      const earlyCount = half
+      if (recentCount > earlyCount + 1) trend = 'improving'
+      else if (recentCount < earlyCount - 1) trend = 'declining'
+    }
+    return {
+      skill: skill.charAt(0).toUpperCase() + skill.slice(1),
+      accuracy,
+      mistakeCount,
+      trend,
+      daysSincePractice: Math.min(daysSincePractice, 999),
+      taskCount,
+      isWeak: weakSkillsList.some(w => w.toLowerCase() === skill),
+    }
+  })
+}
 
 function computeStreak(tasks: TaskEntry[]): number {
   let streak = 0
@@ -65,6 +102,14 @@ function determineFocus(weakSkills: string[], todayUnfinished: number, dueReview
   return { focus: 'Daily Practice', skill: 'Reading', focusArea: 'Reading' }
 }
 
+const INITIAL_REVIEW: ProgressReview = {
+  summary: 'Keep up the good work!', improvements: [], struggles: [], focusAreas: ['Start your first lesson to get personalized recommendations'],
+  streak: 0, weeklyCompletion: 0, totalStudyHours: 0, mistakesReviewed: 0, vocabLearned: 0, weakSkills: [],
+  examCountdown: 0, skillBreakdown: [], weeklyTasksDone: 0, weeklyTasksTotal: 0, vocabDueReview: 0,
+  vocabMastered: 0, mistakesUnresolved: 0, mistakesRecent: 0, todayUnfinished: 0, isExamUrgent: false,
+  skillProgress: [], studyPlanAdherence: '', tutorFeedback: '', generatedAt: null,
+}
+
 export function useAITutorEnginePage(): AITutorPageState {
   const navigate = useNavigate()
   const mountedRef = useRef(true)
@@ -87,13 +132,7 @@ export function useAITutorEnginePage(): AITutorPageState {
   })
   const [adviceItems, setAdviceItems] = useState<TeacherAdviceItem[]>([])
   const [recentActivities, setRecentActivities] = useState<ActivityItem[]>([])
-  const [progressReview, setProgressReview] = useState<ProgressReview>({
-    summary: 'Keep up the good work!', improvements: [], struggles: [], focusAreas: ['Start your first lesson to get personalized recommendations'],
-    streak: 0, weeklyCompletion: 0, totalStudyHours: 0, mistakesReviewed: 0, vocabLearned: 0, weakSkills: [],
-    examCountdown: 0, skillBreakdown: [], weeklyTasksDone: 0, weeklyTasksTotal: 0, vocabDueReview: 0,
-    vocabMastered: 0, mistakesUnresolved: 0, mistakesRecent: 0, todayUnfinished: 0, isExamUrgent: false,
-    skillProgress: [], studyPlanAdherence: '', tutorFeedback: '', generatedAt: null,
-  })
+  const [progressReview, setProgressReview] = useState<ProgressReview>(INITIAL_REVIEW)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
@@ -201,9 +240,10 @@ export function useAITutorEnginePage(): AITutorPageState {
         vocabDueReview: dueReviews, vocabMastered: vocabulary.filter(v => v.status === 'mastered').length,
         mistakesUnresolved, mistakesRecent: mistakes.filter(m => m.status !== 'resolved').length,
         todayUnfinished, isExamUrgent,
+        skillBreakdown: computeSkillBreakdown(tasks, mistakes, weakSkillsList),
       }))
 
-      const engine = getAITutorEngine()
+      const engine = await initializeAITutorEngine()
       if (engine) {
         try {
           const [nextAction, progressResult] = await Promise.all([
@@ -228,14 +268,43 @@ export function useAITutorEnginePage(): AITutorPageState {
                 if (!updates.focusAreas) {
                   updates.focusAreas = [d.recommendedFocus]
                 }
-                updates.skillProgress = d.skillPriorityChanges.map(spc => ({
-                  skill: spc.skill.charAt(0).toUpperCase() + spc.skill.slice(1),
-                  status: spc.reason.includes('gap') ? 'needs work' : 'stable',
-                  sessions: 0,
-                  accuracy: 0,
-                  trend: spc.reason.includes('improving') ? 'improving' : 'declining',
-                  analysis: spc.reason,
-                }))
+                const skillTasksMap = tasks.reduce((acc, t) => {
+                  const s = (t.category ?? '').toLowerCase()
+                  if (!acc[s]) acc[s] = { total: 0, done: 0 }
+                  acc[s].total++
+                  if (t.isDone) acc[s].done++
+                  return acc
+                }, {} as Record<string, { total: number; done: number }>)
+                const doneTasksArr = tasks.filter(t => t.isDone)
+                updates.skillProgress = d.skillPriorityChanges.map(spc => {
+                  const skillLower = spc.skill.toLowerCase()
+                  const st = skillTasksMap[skillLower]
+                  const sessions = st?.done ?? 0
+                  const accuracy = st && st.total > 0 ? Math.round((st.done / st.total) * 100) : 0
+                  const mistakeCount = mistakes.filter(m => (m.skill ?? '').toLowerCase() === skillLower).length
+                  let status = 'stable'
+                  if (spc.reason.includes('gap')) status = 'needs work'
+                  if (mistakeCount > 5) status = 'needs work'
+                  if (accuracy >= 80 && sessions > 0) status = 'improving'
+                  let trend: 'improving' | 'declining' | 'stable' = 'stable'
+                  if (spc.reason.includes('improving')) trend = 'improving'
+                  else if (spc.reason.includes('declining')) trend = 'declining'
+                  else if (accuracy >= 80) trend = 'improving'
+                  else if (mistakeCount > 10) trend = 'declining'
+                  const analysis = mistakeCount > 0 && sessions > 0
+                    ? `${spc.reason} — ${sessions} sessions, ${mistakeCount} mistakes`
+                    : sessions > 0
+                      ? `${spc.reason} — ${sessions} sessions completed`
+                      : spc.reason
+                  return {
+                    skill: skillLower.charAt(0).toUpperCase() + skillLower.slice(1),
+                    status,
+                    sessions,
+                    accuracy,
+                    trend,
+                    analysis,
+                  }
+                })
                 updates.studyPlanAdherence =
                   `Weekly completion: ${d.studyConsistency.weeklyCompletionRate}% | ` +
                   `Streak: ${d.studyConsistency.streakDays}d | ` +

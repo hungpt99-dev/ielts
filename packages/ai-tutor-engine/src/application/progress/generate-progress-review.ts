@@ -48,16 +48,45 @@ export async function generateProgressReview(
   }
 
   if (deps?.aiClient) {
-    const aiResult = await deps.aiClient.generateStructured<{ enrichedSummary: string }>({
-      systemPrompt: 'You are an IELTS tutor generating a progress review. Use the provided data to create a personalized summary.',
+    const aiResult = await deps.aiClient.generateStructured<{
+      teacherSummary: string
+      teacherFeedback: string
+    }>({
+      systemPrompt: `You are an experienced IELTS teacher writing a data-driven progress review for your student. Your tone should be direct, specific, and insightful — like a teacher who has actually looked at their work.
+
+MANDATORY — include specific numbers and data in every response:
+- Reference their actual band, streak, completion rate, study hours, mistakes count, vocabulary saved
+- Mention specific skill names (Listening, Reading, Writing, Speaking) with what's working and what isn't
+- If they have weak skills, name them and say WHY they matter for IELTS
+- Give concrete, actionable steps — not generic advice
+
+Structure the teacherSummary as:
+1. One sentence with their current status (band, streak, exam timeline)
+2. One sentence with skill-specific observation (reference a number)
+3. One sentence with a specific actionable recommendation
+4. One sentence of honest encouragement tied to their effort
+
+The teacherFeedback should be shorter — 2-3 sentences with a specific observation the student can act on today.
+
+Do NOT:
+- Just say "keep going" or "you're doing great" without data to back it up
+- Be vague — every statement must reference something from their actual data
+- Use filler — every sentence should carry information
+
+The teacherSummary will be shown as the main message. The teacherFeedback will be shown as a "Tutor's Note" sidebar.`,
       userMessage: JSON.stringify(result),
-      schema: { enrichedSummary: '' },
+      schema: { teacherSummary: '', teacherFeedback: '' },
+      temperature: 0.7,
+      maxTokens: 1024,
     })
 
     if (aiResult.success && aiResult.data) {
-      const enriched = (aiResult.data as Record<string, unknown>).enrichedSummary ?? (aiResult.data as Record<string, unknown>).text
-      if (enriched && typeof enriched === 'string') {
-        result.summary = enriched
+      const data = aiResult.data as Record<string, unknown>
+      if (data.teacherSummary && typeof data.teacherSummary === 'string') {
+        result.summary = data.teacherSummary
+      }
+      if (data.teacherFeedback && typeof data.teacherFeedback === 'string') {
+        result.examRisk = data.teacherFeedback
       }
     }
   }
@@ -65,17 +94,37 @@ export async function generateProgressReview(
   return result
 }
 
-function buildSummary(state: LearnerStateSnapshot, _progress: ReturnType<typeof analyzeLearnerProgress>): string {
-  const parts: string[] = []
-  parts.push(`You are currently at band ${state.profile.currentOverallBand ?? '?'}, targeting band ${state.profile.targetOverallBand ?? '?'}.`)
+function buildSummary(state: LearnerStateSnapshot, progress: ReturnType<typeof analyzeLearnerProgress>): string {
+  const band = state.profile.currentOverallBand ?? '?'
+  const target = state.profile.targetOverallBand ?? '?'
+  const daysUntil = state.exam.daysUntilExam
 
-  if (state.progress.studyStreak > 0) {
-    parts.push(`You have a ${state.progress.studyStreak}-day study streak.`)
-  }
+  const gap = state.profile.weakSkills.length > 0
+    ? `I can see ${state.profile.weakSkills.join(', ')} need some extra attention right now`
+    : 'every skill has room to grow'
 
-  if (state.exam.daysUntilExam !== null) {
-    parts.push(`${state.exam.daysUntilExam} days until your exam.`)
-  }
+  const streakNote = state.progress.studyStreak > 0
+    ? `Great to see you've built a ${state.progress.studyStreak}-day study streak — that kind of consistency makes a real difference.`
+    : null
+
+  const examNote = daysUntil !== null
+    ? daysUntil <= 30
+      ? `With ${daysUntil} days until your exam, let's make every session count.`
+      : `You've got ${daysUntil} days until your exam — plenty of time to make meaningful progress if we stay focused.`
+    : null
+
+  const improvements = progress.strengths.length > 0
+    ? progress.strengths.map(s => `${s.area} is looking stronger — ${s.evidence}.`).join(' ')
+    : null
+
+  const parts = [
+    `Hi there! Here's how your IELTS preparation is going.`,
+    `You're currently working at band ${band}, with a target of band ${target}.`,
+    improvements,
+    streakNote,
+    examNote,
+    gap ? `${gap}, but I've seen you make progress before and I know you can do it again.` : null,
+  ].filter(Boolean)
 
   return parts.join(' ')
 }
@@ -110,11 +159,12 @@ function buildNextActions(state: LearnerStateSnapshot): string[] {
 
 function buildExamRisk(state: LearnerStateSnapshot): string | null {
   if (state.exam.daysUntilExam === null) return null
-  if (state.exam.daysUntilExam <= 7) {
-    return `Your exam is in ${state.exam.daysUntilExam} days. Focus on review and timed practice.`
+  const d = state.exam.daysUntilExam
+  if (d <= 7) {
+    return `Your exam is in ${d} days — you're in the final stretch. Focus on reviewing your notes, doing timed practice tests, and getting plenty of rest. Trust the work you've put in.`
   }
-  if (state.exam.daysUntilExam <= 30) {
-    return `${state.exam.daysUntilExam} days until exam. Stay consistent.`
+  if (d <= 30) {
+    return `${d} days until your exam. This is a great time to intensify your practice — focus on your weaker areas and do at least one full mock test per week. You're building toward something important, so stay consistent.`
   }
-  return null
+  return `You've got ${d} days until your exam — a solid runway to make real progress. The key is steady, consistent effort. Focus on one skill at a time and don't forget to review your mistakes regularly. You've got this.`
 }

@@ -45,9 +45,7 @@ export default function TeacherProgressReviewCard({ review, onRefresh, refreshin
 
       <SummaryText text={review.summary} />
 
-      {review.streak > 0 && (
-        <StatsGrid review={review} />
-      )}
+      <StatsGrid review={review} />
 
       {review.skillBreakdown.length > 0 && (
         <SkillBreakdownSection skills={review.skillBreakdown} />
@@ -144,7 +142,9 @@ function StatsGrid({ review }: { review: ProgressReview }) {
       <StatBadge icon={<IconTarget size={14} />} label="Weekly" value={`${review.weeklyCompletion}%`} highlight={review.weeklyCompletion >= 80} />
       <StatBadge icon={<IconTimer size={14} />} label="Study" value={`${review.totalStudyHours}h`} />
       <StatBadge icon={<IconVocabulary size={14} />} label="Words" value={`${review.vocabLearned}`} />
-      {review.mistakesReviewed > 0 && <StatBadge icon={<IconMistakes size={14} />} label="Mistakes" value={`${review.mistakesReviewed}`} />}
+      {review.vocabDueReview > 0 && <StatBadge icon={<IconVocabulary size={14} />} label="Due review" value={`${review.vocabDueReview}`} />}
+      {review.mistakesUnresolved > 0 && <StatBadge icon={<IconMistakes size={14} />} label="To review" value={`${review.mistakesUnresolved}`} />}
+      {review.todayUnfinished > 0 && <StatBadge icon={<IconTarget size={14} />} label="Unfinished" value={`${review.todayUnfinished}`} />}
       {review.examCountdown > 0 && <StatBadge icon={<IconTimer size={14} />} label="Exam in" value={`${review.examCountdown}d`} highlight={review.isExamUrgent} />}
     </div>
   )

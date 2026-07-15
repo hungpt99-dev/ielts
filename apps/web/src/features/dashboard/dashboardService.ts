@@ -11,6 +11,7 @@ import type {
   WeeklyStudyDay,
 } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
+import { initializeAITutorEngine } from '../../services/engineBootstrap'
 import { STORAGE_KEYS } from '@ielts/config'
 import { loadRoadmap, recalculateProgress } from '../roadmap/roadmapService'
 
@@ -215,7 +216,7 @@ export async function loadDashboardData(): Promise<{
 
   const todayUnfinished = todayTasks.filter(t => !t.isDone)
   const roadmapProgress = getRoadmapProgress(tasks)
-  const aiSuggestion = getAiSuggestion(
+  let aiSuggestion = getAiSuggestion(
     todayUnfinished.length,
     weakSkills,
     streak,
@@ -223,6 +224,26 @@ export async function loadDashboardData(): Promise<{
     recentMistakes,
     examCountdown,
   )
+  try {
+    const engine = await initializeAITutorEngine()
+    if (engine) {
+      const review = await engine.generateProgressReview({ forceRegenerate: false })
+      if (review.status === 'success' && review.data) {
+        const d = review.data
+        const hasWeaknesses = d.weaknesses.length > 0
+        const hasRealActions = d.realisticNextActions.length > 0
+        if (d.examRisk && d.examRisk.length > 30) {
+          aiSuggestion = d.examRisk
+        } else if (d.summary && d.summary.length > 20) {
+          aiSuggestion = d.summary
+        } else if (d.recommendedFocus) {
+          aiSuggestion = d.recommendedFocus
+        }
+      }
+    }
+  } catch {
+    /* fallback to programmatic suggestion */
+  }
 
   const data: DashboardData = {
     todayTasks,

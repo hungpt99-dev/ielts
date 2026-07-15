@@ -165,8 +165,8 @@ export class AITutorEngineImpl implements AITutorEngine {
       const result = await generateProgressReview(enrichedRequest, { aiClient: this.deps.aiClient })
       if (cacheKey) {
         this.progressCache.set(cacheKey, result)
-        this.deps.progressReviewCache?.set(result)
       }
+      this.deps.progressReviewCache?.set(result)
       return { status: 'success', data: result }
     } catch (err) {
       console.error('packages/ai-tutor-engine/src/application/engine-impl.ts error:', err);

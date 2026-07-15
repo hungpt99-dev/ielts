@@ -676,9 +676,17 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
           const stored = localStorage.getItem(lastActiveKey)
           const lastActive = stored ? new Date(stored) : new Date()
           const inactiveDays = Math.floor((Date.now() - lastActive.getTime()) / 86400000)
-          const streakRaw = localStorage.getItem('ielts-study-streak')
-          const studyStreak = streakRaw ? parseInt(streakRaw, 10) || 0 : 0
-          return { overallCompletionPercent: overall, skillProgress: {}, weeklyCompletionPercent: 0, studyStreak, inactiveDays, consistency: 0 }
+          const tasks = await DatabaseService.getAll<any>('tasks').catch(() => [] as any[])
+          const doneTasks = tasks.filter((t: any) => t.isDone)
+          const weeklyCompletionPercent = tasks.length > 0 ? Math.round((doneTasks.length / tasks.length) * 100) : 0
+          const today = new Date(); today.setHours(0, 0, 0, 0)
+          let studyStreak = 0
+          const doneDates = new Set(doneTasks.filter((t: any) => t.completedAt).map((t: any) => t.completedAt!.slice(0, 10)))
+          for (let i = 0; i < 365; i++) {
+            const d = new Date(today); d.setDate(d.getDate() - i)
+            if (doneDates.has(d.toISOString().slice(0, 10))) studyStreak++; else break
+          }
+          return { overallCompletionPercent: overall, skillProgress: {}, weeklyCompletionPercent, studyStreak, inactiveDays, consistency: 0 }
         } catch (error) {
  console.error('apps/web/src/services/engineBootstrap.ts error:', error);
  return {} }
@@ -694,17 +702,40 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
             records = await DatabaseService.getAll<any>('progressRecords')
           }
           const outcomes = records.filter(r => r.type === 'learning-outcome' || r.type === 'learning_session_completed')
+          const settingsRaw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+          const settings = settingsRaw ? (() => { try { return JSON.parse(settingsRaw) } catch { return {} } })() : {}
+          const study = settings.study ?? {}
+          const weakSkills: string[] = study.weakSkills ?? []
+          const currentBand = study.currentBand
+          const targetBand = study.targetBand
           const bySkill: any = {}
           for (const skill of ['listening', 'reading', 'writing', 'speaking'] as const) {
             const skillOutcomes = outcomes.filter((o: any) => o.category === skill || o.metadata?.includes(skill))
+            const sorted = [...skillOutcomes].sort((a: any, b: any) => new Date(a.createdAt ?? a.date ?? 0).getTime() - new Date(b.createdAt ?? b.date ?? 0).getTime())
+            const recentPerf = skillOutcomes.length > 0 ? Math.round(skillOutcomes.reduce((s: number, o: any) => s + (o.value ?? 0), 0) / skillOutcomes.length) : undefined
+            let trend: 'improving' | 'declining' | 'stable' = 'stable'
+            if (sorted.length >= 4) {
+              const half = Math.floor(sorted.length / 2)
+              const firstHalf = sorted.slice(0, half).reduce((s: number, o: any) => s + (o.value ?? 0), 0) / half
+              const secondHalf = sorted.slice(half).reduce((s: number, o: any) => s + (o.value ?? 0), 0) / (sorted.length - half)
+              const diff = secondHalf - firstHalf
+              if (diff > 5) trend = 'improving'
+              else if (diff < -5) trend = 'declining'
+            } else if (sorted.length >= 2) {
+              const first = sorted[0].value ?? 0
+              const last = sorted[sorted.length - 1].value ?? 0
+              const diff = last - first
+              if (diff > 10) trend = 'improving'
+              else if (diff < -10) trend = 'declining'
+            }
             bySkill[skill] = {
               skill,
-              currentBand: undefined,
-              targetBand: undefined,
-              gap: undefined,
-              recentPerformance: skillOutcomes.length > 0 ? Math.round(skillOutcomes.reduce((s: number, o: any) => s + (o.value ?? 0), 0) / skillOutcomes.length) : undefined,
-              trend: 'unknown' as const,
-              confidence: 0.5,
+              currentBand: currentBand ?? undefined,
+              targetBand: targetBand ?? undefined,
+              gap: (targetBand ?? 0) - (currentBand ?? 0) > 0 ? (targetBand ?? 0) - (currentBand ?? 0) : undefined,
+              recentPerformance: recentPerf,
+              trend,
+              confidence: skillOutcomes.length > 0 ? Math.min(1, 0.3 + skillOutcomes.length * 0.1) : 0.3,
               priorityScore: 0,
               frequentWeaknesses: [],
               recentStrengths: [],
@@ -725,12 +756,32 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
           } else {
             all = await DatabaseService.getAll<any>('mistakes')
           }
+          const patternCount = new Map<string, { count: number; skill: string }>()
+          for (const m of all) {
+            const text = m.mistake ?? m.title ?? m.pattern ?? 'unknown'
+            const key = `${text}|${m.skill ?? 'general'}`
+            const existing = patternCount.get(key) ?? { count: 0, skill: m.skill ?? 'general' }
+            existing.count++
+            patternCount.set(key, existing)
+          }
+          const recurringPatterns = Array.from(patternCount.entries())
+            .filter(([, v]) => v.count > 1)
+            .map(([k, v]) => ({
+              pattern: k.split('|')[0],
+              skill: v.skill,
+              frequency: v.count,
+            }))
+          const bySkill: Record<string, number> = {}
+          for (const m of all) {
+            const skill = m.skill ?? 'general'
+            bySkill[skill] = (bySkill[skill] ?? 0) + 1
+          }
           return {
             total: all.length,
             unreviewed: all.filter(m => m.status === 'new' || m.reviewStatus === 'unreviewed').length,
             recentCount: all.filter(m => new Date(m.createdAt || m.occurredAt) > new Date(Date.now() - 7 * 86400000)).length,
-            recurringPatterns: [],
-            bySkill: {},
+            recurringPatterns,
+            bySkill,
           }
         } catch (error) {
  console.error('apps/web/src/services/engineBootstrap.ts error:', error);
