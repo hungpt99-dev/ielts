@@ -318,6 +318,9 @@ function computeRecentActivity(
   tasks: TaskEntry[],
   vocabulary: VocabularyEntry[],
   reading: ReadingSession[],
+  listening: ListeningSession[],
+  writing: WritingSession[],
+  speaking: SpeakingSession[],
 ): { date: string; description: string; type: 'task' | 'vocab' | 'session' | 'review' }[] {
   const activity: { date: string; description: string; type: 'task' | 'vocab' | 'session' | 'review' }[] = []
   const sevenDaysAgo = new Date()
@@ -337,6 +340,21 @@ function computeRecentActivity(
   for (const r of reading) {
     if (r.createdAt >= since) {
       activity.push({ date: r.createdAt.slice(0, 10), description: `Reading: ${r.title}`, type: 'session' })
+    }
+  }
+  for (const l of listening) {
+    if (l.createdAt >= since) {
+      activity.push({ date: l.createdAt.slice(0, 10), description: `Listening: ${l.title}`, type: 'session' })
+    }
+  }
+  for (const w of writing) {
+    if (w.createdAt >= since) {
+      activity.push({ date: w.createdAt.slice(0, 10), description: `Writing: ${w.question}`, type: 'session' })
+    }
+  }
+  for (const sp of speaking) {
+    if (sp.createdAt >= since) {
+      activity.push({ date: sp.createdAt.slice(0, 10), description: `Speaking: ${sp.topic}`, type: 'session' })
     }
   }
 
@@ -385,7 +403,7 @@ export async function computeProgressSnapshot(): Promise<ProgressSnapshot> {
   const skillProgress = computeSkillProgress(reading, listening, writing, speaking, progressRecords)
   const monthlySummary = computeMonthlySummary(tasks, reading, listening, writing, speaking, vocabulary, mockTests)
   const weakSkills = computeWeakSkills(mistakes)
-  const recentActivity = computeRecentActivity(tasks, vocabulary, reading)
+  const recentActivity = computeRecentActivity(tasks, vocabulary, reading, listening, writing, speaking)
 
   let roadmapProgress = 0
   try {
