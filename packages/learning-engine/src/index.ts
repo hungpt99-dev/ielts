@@ -98,6 +98,7 @@ export type {
 } from './daily-plan/AiPlanOrchestrator';
 export { PlanRegenerator } from './daily-plan/PlanRegenerator';
 export type { RegeneratePlanParams, PlanRegeneratorConfig } from './daily-plan/PlanRegenerator';
+export { applyTaskEnrichments, buildTaskEnrichmentRequirements } from './daily-plan/enrichment/applyTaskEnrichments';
 export {
   mergeProfileSources,
   mapScheduleToStudyDays,

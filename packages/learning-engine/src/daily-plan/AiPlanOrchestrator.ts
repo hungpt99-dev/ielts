@@ -14,6 +14,7 @@ import type {
   PlanExplanation,
   PlanFeasibility,
   SkillGapScore,
+  TaskEnrichmentRequirement,
 } from './types';
 
 // ── Zod Schemas for AI Output Validation ──
@@ -77,6 +78,7 @@ export const AIWeeklyObjectiveSchema = z.object({
 
 export const AITaskCandidateSchema = z.object({
   candidateId: z.string().min(1),
+  requirementId: z.string().min(1).optional(),
   targetWeekId: z.string().min(1),
   skill: studyTaskSkillSchema,
   taskType: z.string().min(1),
@@ -119,6 +121,7 @@ export interface EnrichPlanParams {
   feasibility: PlanFeasibility;
   skillGaps: SkillGapScore[];
   signal?: AbortSignal;
+  requirements?: TaskEnrichmentRequirement[];
 }
 
 export interface EnrichPlanResult {
@@ -566,13 +569,33 @@ export class AiPlanOrchestrator {
       return this.emptyWithCompleteness(generationPlan, callStats, fallbackUsed);
     }
 
-    // ── Second Pass: Repair Work (only missing items) ──
+    // ── Map candidates to task enrichment requirements by week+skill ──
+
+    const taskRequirements = params.requirements;
+    const assignedReqIds = new Set<string>();
+
+    if (taskRequirements) {
+      for (const candidate of taskCandidates) {
+        if (candidate.requirementId && taskRequirements.some(r => r.id === candidate.requirementId)) {
+          assignedReqIds.add(candidate.requirementId);
+          continue;
+        }
+        const eligible = taskRequirements.filter(
+          r => r.weekId === candidate.targetWeekId && r.skill === candidate.skill && !assignedReqIds.has(r.id),
+        );
+        if (eligible.length > 0) {
+          candidate.requirementId = eligible[0].id;
+          assignedReqIds.add(eligible[0].id);
+        }
+      }
+    }
 
     const requirements = buildEnrichmentRequirements(phases, generationPlan.taskCandidateBatches);
     const requirementCounts = new Map<string, number>();
     for (const c of taskCandidates) {
-      const reqId = `${generationPlan.taskCandidateBatches.find(b => b.weekIds.includes(c.targetWeekId))?.phaseId ?? 'unknown'}:${c.targetWeekId}:${c.skill}`;
-      requirementCounts.set(reqId, (requirementCounts.get(reqId) ?? 0) + 1);
+      if (c.requirementId) {
+        requirementCounts.set(c.requirementId, (requirementCounts.get(c.requirementId) ?? 0) + 1);
+      }
     }
 
     const coverage = calculateEnrichmentCoverage(
@@ -1006,6 +1029,7 @@ You must respond with valid JSON array only — no markdown, no explanation outs
 Each entry must follow:
 {
   "candidateId": string,
+  "requirementId": string (must match the supplied requirementId exactly — do not invent or modify),
   "targetWeekId": string,
   "skill": "listening" | "reading" | "writing" | "speaking" | "vocabulary" | "grammar",
   "taskType": string,
@@ -1068,7 +1092,8 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
     const content = await this.safeAICall(systemPrompt, userPrompt, signal);
     if (!content) return null;
 
-    return this.parseAndValidateArray(content, AITaskCandidateSchema, 'task-candidates');
+    const parsed = this.parseAndValidateArray(content, AITaskCandidateSchema, 'task-candidates');
+    return parsed as AITaskCandidate[] | null;
   }
 
   // ── Helpers ──

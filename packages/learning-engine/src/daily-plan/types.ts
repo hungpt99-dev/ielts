@@ -488,6 +488,8 @@ export interface StudyTask {
     generationReason?: string;
     templateId?: string;
     aiCandidateId?: string;
+    enrichmentSource?: 'ai' | 'deterministic-fallback';
+    requirementId?: string;
   };
 }
 
@@ -754,8 +756,20 @@ export interface AIWeeklyObjective {
   pedagogicalReason: string;
 }
 
+export interface TaskEnrichmentRequirement {
+  id: string;
+  taskId: string;
+  phaseId: string;
+  weekId: string;
+  skill: StudyTaskSkill;
+  taskType: string;
+  scheduledMinutes: number;
+  sequence: number;
+}
+
 export interface AITaskCandidate {
   candidateId: string;
+  requirementId: string;
   targetWeekId: string;
   skill: StudyTaskSkill;
   taskType: string;
@@ -769,6 +783,17 @@ export interface AITaskCandidate {
   prerequisites?: string[];
   suggestedSourceTypes?: StudyTaskSourceType[];
   relevantSourceIds?: string[];
+}
+
+export interface EnrichmentMergeReport {
+  totalRequirements: number;
+  totalCandidates: number;
+  appliedAiCandidates: number;
+  fallbackTasks: number;
+  duplicateRequirementIds: string[];
+  unknownRequirementIds: string[];
+  missingRequirementIds: string[];
+  rejectedRequirementIds: string[];
 }
 
 export interface AICacheRecord {

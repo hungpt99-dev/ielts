@@ -567,7 +567,7 @@ async function enrichPlanWithAI(
 
   try {
     const { callAI } = await import('@ielts/ai')
-    const { AiPlanOrchestrator } = await import('@ielts/learning-engine')
+    const { AiPlanOrchestrator, applyTaskEnrichments, buildTaskEnrichmentRequirements } = await import('@ielts/learning-engine')
 
     const config = {
       apiKey,
@@ -583,6 +583,10 @@ async function enrichPlanWithAI(
       return result.content
     }
 
+    // Build exact task enrichment requirements
+    const requirements = buildTaskEnrichmentRequirements(plan)
+    console.log('[AIEnrich] Built', requirements.length, 'enrichment requirements from plan tasks')
+
     const orchestrator = new AiPlanOrchestrator(aiCallFn, {
       callLimits: { maximumCallsPerGeneration: DEFAULT_PLAN_ENRICH_MAX_CALLS },
       onProgress: (phase, current, total) => {
@@ -596,130 +600,29 @@ async function enrichPlanWithAI(
       weeks: plan.weeks,
       feasibility: plan.feasibility,
       skillGaps: computeSkillGaps(profile),
+      requirements,
     })
     console.log('[AIEnrich] enrichment candidates:', enrichment.taskCandidates?.length, 'plan tasks:', plan.tasks.length)
 
     if (!enrichment.taskCandidates || enrichment.taskCandidates.length === 0) {
-      console.log('[AIEnrich] No task candidates returned from AI, using original plan')
-      return plan
+      console.log('[AIEnrich] No task candidates returned from AI, applying deterministic fallback')
+      const { plan: fallbackPlan } = applyTaskEnrichments(plan, requirements, [])
+      return fallbackPlan
     }
 
-    const planTasks = [...plan.tasks]
-    const phasesMap = new Map(plan.phases.map(p => [p.id, p]))
-    const weeksMap = new Map(plan.weeks.map(w => [w.id, w]))
-    console.log('[AIEnrich] Enriching... candidates:', enrichment.taskCandidates.length, 'planTasks:', planTasks.length)
-    let matched = 0
-    let injected = 0
-    for (const candidate of enrichment.taskCandidates) {
-      let match = planTasks.find(
-        t => t.weekId === candidate.targetWeekId && t.skill === candidate.skill && t.sourceType === 'built-in',
-      )
-      if (!match) {
-        match = planTasks.find(
-          t => t.weekId === candidate.targetWeekId && t.skill === candidate.skill,
-        )
-      }
-      if (!match && (candidate.skill === 'vocabulary' || candidate.skill === 'grammar')) {
-        const targetWeek = weeksMap.get(candidate.targetWeekId)
-        if (targetWeek) {
-          const phase = phasesMap.get(targetWeek.phaseId)
-          if (phase) {
-            match = planTasks.find(
-              t => t.weekId === candidate.targetWeekId && phase.targetSkills.includes(t.skill) && t.sourceType === 'built-in' && !t.title.startsWith('[AI]'),
-            )
-            if (!match) {
-              match = planTasks.find(
-                t => t.weekId === candidate.targetWeekId && t.sourceType === 'built-in' && !t.title.startsWith('[AI]'),
-              )
-            }
-          }
-        }
-      }
-      if (!match) {
-        match = planTasks.find(
-          t => t.skill === candidate.skill && t.sourceType === 'built-in' && !t.title.startsWith('[AI]'),
-        )
-      }
-      if (match) {
-        matched++
-        match.title = candidate.title
-        match.description = candidate.description
-        match.objective = candidate.objective
-        match.reason = candidate.reason
-        match.estimatedMinutes = candidate.recommendedMinutes
-        match.sourceType = 'ai-generated'
-        match.metadata = {
-          ...match.metadata,
-          aiCandidateId: candidate.candidateId,
-          generationReason: candidate.reason,
-        }
-      } else if (candidate.priority === 'high' || candidate.priority === 'normal') {
-        const targetWeek = weeksMap.get(candidate.targetWeekId)
-        if (targetWeek) {
-          const weekTasks = planTasks.filter(t => t.weekId === candidate.targetWeekId)
-          const weekScheduled = weekTasks.reduce((s, t) => s + t.estimatedMinutes, 0)
-          const hasCapacity = weekScheduled + candidate.recommendedMinutes <= targetWeek.availableMinutes
-          if (hasCapacity) {
-            const phase = phasesMap.get(targetWeek.phaseId)
-            const newTask: import('@ielts/learning-engine').StudyTask = {
-              id: `ai-${candidate.candidateId}`,
-              roadmapId: plan.id,
-              phaseId: targetWeek.phaseId,
-              weekId: candidate.targetWeekId,
-              date: targetWeek.startDate,
-              sessionOrder: weekTasks.length + 1,
-              skill: candidate.skill as any,
-              taskType: candidate.taskType,
-              title: candidate.title,
-              description: candidate.description,
-              objective: candidate.objective,
-              reason: candidate.reason,
-              estimatedMinutes: candidate.recommendedMinutes,
-              difficulty: candidate.difficulty as any,
-              priority: candidate.priority as any,
-              sourceType: 'ai-generated',
-              status: 'not-started',
-              scheduledAt: new Date().toISOString(),
-              metadata: {
-                aiCandidateId: candidate.candidateId,
-                generationReason: candidate.reason,
-                targetBand: profile.targetOverallBand,
-                focusArea: phase?.type ?? 'skill-building',
-              },
-            }
-            planTasks.push(newTask)
-            injected++
-          }
-        }
-      }
-    }
-    console.log('[AIEnrich] Matched', matched, 'injected', injected, 'of', enrichment.taskCandidates.length, 'candidates')
+    // Apply exact task enrichment merge
+    const { plan: enrichedPlan, report } = applyTaskEnrichments(plan, requirements, enrichment.taskCandidates)
+    console.log('[AIEnrich] Enrichment merge report:', JSON.stringify({
+      totalRequirements: report.totalRequirements,
+      totalCandidates: report.totalCandidates,
+      appliedAiCandidates: report.appliedAiCandidates,
+      fallbackTasks: report.fallbackTasks,
+      duplicates: report.duplicateRequirementIds.length,
+      unknown: report.unknownRequirementIds.length,
+      missing: report.missingRequirementIds.length,
+    }))
 
-    const genericPatterns = [/^[A-Z][a-z]+ Practice$/, /^[A-Z][a-z]+ Exercise$/, /^Listening Practice/, /^Reading Practice/, /^Writing Practice/, /^Speaking Practice/]
-    let propagated = 0
-    for (const task of planTasks) {
-      if (task.sourceType === 'ai-generated' || !genericPatterns.some(p => p.test(task.title))) continue
-      const sibling = planTasks.find(t =>
-        t.weekId === task.weekId &&
-        t.skill === task.skill &&
-        t.sourceType === 'ai-generated' &&
-        t.title !== task.title,
-      )
-      if (sibling) {
-        task.title = sibling.title
-        task.description = sibling.description
-        task.objective = sibling.objective
-        task.reason = sibling.reason
-        task.sourceType = 'ai-generated'
-        task.metadata = { ...task.metadata, aiCandidateId: sibling.metadata?.aiCandidateId, generationReason: sibling.reason }
-        propagated++
-      }
-    }
-    if (propagated > 0) {
-      console.log('[AIEnrich] Propagated AI enrichment to', propagated, 'generic sibling tasks')
-    }
-
-    return { ...plan, tasks: planTasks }
+    return enrichedPlan
   } catch (err) {
     console.error('apps/web/src/features/roadmap/roadmapService.ts error:', err);
     console.warn('AI enrichment failed, using deterministic plan:', err)
