@@ -506,15 +506,25 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
     sessionId?: string
     attemptId?: string
     timeSpentMs?: number
-  }): Promise<LearningOperationResult<{ totalQuestions: number; correctAnswers: number }>> {
+  }): Promise<LearningOperationResult<{ totalQuestions: number; correctAnswers: number; questionResults: Array<{ questionId: string; question: string; userAnswer: unknown; correctAnswer: string | number | string[]; isCorrect: boolean; explanation: string }> }>> {
     try {
       let correct = 0
       const mistakes: any[] = []
+      const questionResults: Array<{ questionId: string; question: string; userAnswer: unknown; correctAnswer: string | number | string[]; isCorrect: boolean; explanation: string }> = []
       const now = new Date().toISOString()
 
       for (const q of request.questions) {
         const userAnswer = request.answers[q.id]
-        if (this.isCorrect(q, userAnswer)) {
+        const isCorrect = this.isCorrect(q, userAnswer)
+        questionResults.push({
+          questionId: q.id,
+          question: q.question,
+          userAnswer,
+          correctAnswer: q.correctAnswer,
+          isCorrect,
+          explanation: q.explanation || '',
+        })
+        if (isCorrect) {
           correct++
         } else {
           mistakes.push({
@@ -575,7 +585,7 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
         }).catch(() => {})
       }
 
-      return { status: 'success', data: { totalQuestions: request.questions.length, correctAnswers: correct }, metadata: metadata(false, false) }
+      return { status: 'success', data: { totalQuestions: request.questions.length, correctAnswers: correct, questionResults }, metadata: metadata(false, false) }
     } catch (err) {
       console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {

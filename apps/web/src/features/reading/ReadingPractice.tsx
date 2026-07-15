@@ -12,7 +12,7 @@ import EmptyState from '../../components/ui/EmptyState'
 import Question from './components/Question'
 import { loadAllPassages } from './passageSeedService'
 import { generateId } from '../../utils'
-import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
+import { startEngineSession } from '../../services/learning/ai-exercise-session'
 import type { SessionInfo } from '../../services/learning/ai-exercise-session'
 import { getLearningEngine } from '../../services/engineBootstrap'
 import { generateQuestionsForPassage } from '../../services/ai/AIService'
@@ -138,7 +138,7 @@ export default function ReadingPractice() {
     total: number
     accuracy: number
     timeSpentSeconds: number
-    questionResults: Array<{ question: ReadingQuestion; answer: unknown; isCorrect: boolean }>
+    questionResults: Array<{ questionId: string; question: string; userAnswer: unknown; correctAnswer: string | number | string[]; isCorrect: boolean; explanation: string }>
   } | null>(null)
   const [aiGeneratedPassage, setAiGeneratedPassage] = useState<ReadingPassageWithQuestions | null>(null)
   const [allPassages, setAllPassages] = useState<ReadingPassageWithQuestions[]>([])
@@ -261,38 +261,44 @@ export default function ReadingPractice() {
     setAnswers(prev => ({ ...prev, [questionId]: answer }))
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!currentPassage) return
     stopTimer()
 
-    const questionResults = currentPassage.questions.map(q => ({
-      question: q,
-      answer: answers[q.id],
-      isCorrect: checkAnswer(q, answers[q.id]),
-    }))
+    const engine = getLearningEngine()
+    let questionResults: Array<{ questionId: string; question: string; userAnswer: unknown; correctAnswer: string | number | string[]; isCorrect: boolean; explanation: string }> = []
+    let total = currentPassage.questions.length
+    let score = 0
 
-    const score = questionResults.filter(r => r.isCorrect).length
-    const total = questionResults.length
-    const accuracy = computeAccuracy(score, total)
+    if (engine && sessionInfo) {
+      const result = await engine.completeExercise({
+        skill: 'reading',
+        topic: currentPassage.title,
+        questions: currentPassage.questions.map(q => ({
+          id: q.id,
+          question: q.question,
+          correctAnswer: q.correctAnswer,
+          options: q.options,
+          explanation: q.explanation || '',
+          type: q.type,
+          blanks: q.blanks,
+        })),
+        answers: answers as Record<string, unknown>,
+        sessionId: sessionInfo.sessionId,
+        attemptId: sessionInfo.attemptId,
+        timeSpentMs: timerSeconds * 1000,
+      })
+      if (result.status === 'success' && result.data) {
+        questionResults = result.data.questionResults
+        total = result.data.totalQuestions
+        score = result.data.correctAnswers
+      }
+    }
 
-    setResults({
-      score,
-      total,
-      accuracy,
-      timeSpentSeconds: timerSeconds,
-      questionResults,
-    })
+    const accuracy = total > 0 ? Math.round((score / total) * 100) : 0
+
+    setResults({ score, total, accuracy, timeSpentSeconds: timerSeconds, questionResults })
     setView('results')
-
-    const mistakes = questionResults
-      .filter(r => !r.isCorrect)
-      .map(r => ({
-        questionId: r.question.id,
-        question: r.question.question,
-        userAnswer: getUserAnswerLabel(r.question, r.answer),
-        correctAnswer: getAnswerLabel(r.question),
-        explanation: r.question.explanation,
-      }))
 
     const session: ReadingPracticeSession = {
       id: generateId(),
@@ -306,34 +312,17 @@ export default function ReadingPractice() {
       totalQuestions: total,
       accuracy,
       timeSpentSeconds: timerSeconds,
-      mistakes,
+      mistakes: questionResults.filter(r => !r.isCorrect).map(r => ({
+        questionId: r.questionId,
+        question: r.question,
+        userAnswer: String(r.userAnswer ?? ''),
+        correctAnswer: String(r.correctAnswer ?? ''),
+        explanation: r.explanation,
+      })),
       createdAt: new Date().toISOString(),
     }
 
     DatabaseService.add('readingPracticeSessions', session).catch(() => {})
-
-    if (sessionInfo) {
-      submitAndComplete(
-        sessionInfo,
-        currentPassage.questions.map(q => ({
-          questionId: q.id,
-          answer: answers[q.id],
-          answeredAt: new Date().toISOString(),
-          timeSpentMs: timerSeconds * 1000,
-        })),
-        timerSeconds,
-        currentPassage.questions.map(q => ({
-          id: q.id,
-          question: q.question,
-          correctAnswer: q.correctAnswer,
-          options: q.options,
-          explanation: q.explanation || '',
-          type: q.type,
-          blanks: q.blanks,
-        })),
-      ).catch(() => {})
-    }
-
     setHistory(prev => [session, ...prev])
   }
 
@@ -906,17 +895,20 @@ export default function ReadingPractice() {
             <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
               Question Review
             </h2>
-            {results.questionResults.map((r, i) => (
-              <Question
-                key={r.question.id}
-                question={r.question}
-                index={i}
-                answer={r.answer}
-                onAnswer={() => {}}
-                showResult
-                isCorrect={r.isCorrect}
-              />
-            ))}
+            {results.questionResults.map((r, i) => {
+              const origQ = currentPassage?.questions.find(q => q.id === r.questionId)
+              return (
+                <Question
+                  key={r.questionId}
+                  question={origQ || ({ id: r.questionId, question: r.question } as ReadingQuestion)}
+                  index={i}
+                  answer={r.userAnswer}
+                  onAnswer={() => {}}
+                  showResult
+                  isCorrect={r.isCorrect}
+                />
+              )
+            })}
           </div>
 
           {results.questionResults.filter(r => !r.isCorrect).length > 0 && (
@@ -928,29 +920,32 @@ export default function ReadingPractice() {
                 <div className="space-y-3">
                   {results.questionResults
                     .filter(r => !r.isCorrect)
-                    .map(r => (
-                      <div
-                        key={r.question.id}
-                        className="rounded-lg border p-3 text-sm"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface-alt)',
-                        }}
-                      >
-                        <p className="font-medium" style={{ color: 'var(--color-text)' }}>
-                          {r.question.question}
-                        </p>
-                        <p className="mt-1" style={{ color: 'var(--color-danger)' }}>
-                          Your answer: {getUserAnswerLabel(r.question, r.answer)}
-                        </p>
-                        <p style={{ color: 'var(--color-success)' }}>
-                          Correct answer: {getAnswerLabel(r.question)}
-                        </p>
-                        <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
-                          {r.question.explanation}
-                        </p>
-                      </div>
-                    ))}
+                    .map(r => {
+                      const origQ = currentPassage?.questions.find(q => q.id === r.questionId)
+                      return (
+                        <div
+                          key={r.questionId}
+                          className="rounded-lg border p-3 text-sm"
+                          style={{
+                            borderColor: 'var(--color-border)',
+                            backgroundColor: 'var(--color-surface-alt)',
+                          }}
+                        >
+                          <p className="font-medium" style={{ color: 'var(--color-text)' }}>
+                            {r.question}
+                          </p>
+                          <p className="mt-1" style={{ color: 'var(--color-danger)' }}>
+                            Your answer: {origQ ? getUserAnswerLabel(origQ, r.userAnswer) : String(r.userAnswer ?? '')}
+                          </p>
+                          <p style={{ color: 'var(--color-success)' }}>
+                            Correct answer: {origQ ? getAnswerLabel(origQ) : String(r.correctAnswer ?? '')}
+                          </p>
+                          <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
+                            {r.explanation}
+                          </p>
+                        </div>
+                      )
+                    })}
                 </div>
               </CardContent>
             </Card>

@@ -120,5 +120,5 @@ export interface LearningEngine {
     sessionId?: string
     attemptId?: string
     timeSpentMs?: number
-  }): Promise<LearningOperationResult<{ totalQuestions: number; correctAnswers: number }>>
+  }): Promise<LearningOperationResult<{ totalQuestions: number; correctAnswers: number; questionResults: Array<{ questionId: string; question: string; userAnswer: unknown; correctAnswer: string | number | string[]; isCorrect: boolean; explanation: string }> }>>
 }

@@ -12,7 +12,7 @@ import AudioPlayer from './components/AudioPlayer'
 import LQuestion from './components/ListeningQuestion'
 
 import { generateId } from '../../utils'
-import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
+import { startEngineSession } from '../../services/learning/ai-exercise-session'
 import type { SessionInfo } from '../../services/learning/ai-exercise-session'
 import { getLearningEngine } from '../../services/engineBootstrap'
 import { loadListeningExercises } from './listeningExerciseService'
@@ -110,7 +110,7 @@ export default function ListeningPractice() {
     total: number
     accuracy: number
     timeSpentSeconds: number
-    questionResults: Array<{ question: ListeningQuestion; answer: unknown; isCorrect: boolean }>
+    questionResults: Array<{ questionId: string; question: string; userAnswer: unknown; correctAnswer: string | number | string[]; isCorrect: boolean; explanation: string }>
   } | null>(null)
 
   const [timerSeconds, setTimerSeconds] = useState(0)
@@ -224,38 +224,52 @@ export default function ListeningPractice() {
     setAnswers(prev => ({ ...prev, [questionId]: answer }))
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!currentExercise) return
     stopTimer()
 
-    const questionResults = currentExercise.questions.map(q => ({
-      question: q,
-      answer: answers[q.id],
-      isCorrect: checkAnswer(q, answers[q.id]),
-    }))
+    const engine = getLearningEngine()
+    let questionResults: Array<{ questionId: string; question: string; userAnswer: unknown; correctAnswer: string | number | string[]; isCorrect: boolean; explanation: string }> = []
+    let total = currentExercise.questions.length
+    let score = 0
 
-    const score = questionResults.filter(r => r.isCorrect).length
-    const total = questionResults.length
-    const accuracy = computeAccuracy(score, total)
+    if (engine && sessionInfo) {
+      const result = await engine.completeExercise({
+        skill: 'listening',
+        topic: currentExercise.title,
+        questions: currentExercise.questions.map(q => ({
+          id: q.id,
+          question: q.question,
+          correctAnswer: q.correctAnswer,
+          options: q.options,
+          explanation: q.explanation || '',
+          type: q.type,
+          blanks: q.blanks,
+        })),
+        answers: answers as Record<string, unknown>,
+        sessionId: sessionInfo.sessionId,
+        attemptId: sessionInfo.attemptId,
+        timeSpentMs: timerSeconds * 1000,
+      })
+      if (result.status === 'success' && result.data) {
+        questionResults = result.data.questionResults
+        total = result.data.totalQuestions
+        score = result.data.correctAnswers
+      }
+    }
 
-    setResults({
-      score,
-      total,
-      accuracy,
-      timeSpentSeconds: timerSeconds,
-      questionResults,
-    })
+    const accuracy = total > 0 ? Math.round((score / total) * 100) : 0
+
+    setResults({ score, total, accuracy, timeSpentSeconds: timerSeconds, questionResults })
     setView('results')
 
-    const mistakes = questionResults
-      .filter(r => !r.isCorrect)
-      .map(r => ({
-        questionId: r.question.id,
-        question: r.question.question,
-        userAnswer: getUserAnswerLabel(r.question, r.answer),
-        correctAnswer: getAnswerLabel(r.question),
-        explanation: r.question.explanation,
-      }))
+    const mistakes = questionResults.filter(r => !r.isCorrect).map(r => ({
+      questionId: r.questionId,
+      question: r.question,
+      userAnswer: String(r.userAnswer ?? ''),
+      correctAnswer: String(r.correctAnswer ?? ''),
+      explanation: r.explanation,
+    }))
 
     const session: ListeningPracticeSession = {
       id: generateId(),
@@ -276,29 +290,6 @@ export default function ListeningPractice() {
     }
 
     DatabaseService.add('listeningPracticeSessions', session).catch(() => {})
-
-    if (sessionInfo) {
-      submitAndComplete(
-        sessionInfo,
-        currentExercise.questions.map(q => ({
-          questionId: q.id,
-          answer: answers[q.id],
-          answeredAt: new Date().toISOString(),
-          timeSpentMs: timerSeconds * 1000,
-        })),
-        timerSeconds,
-        currentExercise.questions.map(q => ({
-          id: q.id,
-          question: q.question,
-          correctAnswer: q.correctAnswer,
-          options: q.options,
-          explanation: q.explanation || '',
-          type: q.type,
-          blanks: q.blanks,
-        })),
-      ).catch(() => {})
-    }
-
     setHistory(prev => [session, ...prev])
   }
 
@@ -832,17 +823,20 @@ export default function ListeningPractice() {
             <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
               Question Review
             </h2>
-            {results.questionResults.map((r, i) => (
-              <LQuestion
-                key={r.question.id}
-                question={r.question}
-                index={i}
-                answer={r.answer}
-                onAnswer={() => {}}
-                showResult
-                isCorrect={r.isCorrect}
-              />
-            ))}
+            {results.questionResults.map((r, i) => {
+              const origQ = currentExercise?.questions.find(q => q.id === r.questionId)
+              return (
+                <LQuestion
+                  key={r.questionId}
+                  question={origQ || ({ id: r.questionId, question: r.question } as ListeningQuestion)}
+                  index={i}
+                  answer={r.userAnswer}
+                  onAnswer={() => {}}
+                  showResult
+                  isCorrect={r.isCorrect}
+                />
+              )
+            })}
           </div>
 
           {results.questionResults.filter(r => !r.isCorrect).length > 0 && (
@@ -854,29 +848,32 @@ export default function ListeningPractice() {
                 <div className="space-y-3">
                   {results.questionResults
                     .filter(r => !r.isCorrect)
-                    .map(r => (
-                      <div
-                        key={r.question.id}
-                        className="rounded-lg border p-3 text-sm"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface-alt)',
-                        }}
-                      >
-                        <p className="font-medium" style={{ color: 'var(--color-text)' }}>
-                          {r.question.question}
-                        </p>
-                        <p className="mt-1" style={{ color: 'var(--color-danger)' }}>
-                          Your answer: {getUserAnswerLabel(r.question, r.answer)}
-                        </p>
-                        <p style={{ color: 'var(--color-success)' }}>
-                          Correct answer: {getAnswerLabel(r.question)}
-                        </p>
-                        <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
-                          {r.question.explanation}
-                        </p>
-                      </div>
-                    ))}
+                    .map(r => {
+                      const origQ = currentExercise?.questions.find(q => q.id === r.questionId)
+                      return (
+                        <div
+                          key={r.questionId}
+                          className="rounded-lg border p-3 text-sm"
+                          style={{
+                            borderColor: 'var(--color-border)',
+                            backgroundColor: 'var(--color-surface-alt)',
+                          }}
+                        >
+                          <p className="font-medium" style={{ color: 'var(--color-text)' }}>
+                            {r.question}
+                          </p>
+                          <p className="mt-1" style={{ color: 'var(--color-danger)' }}>
+                            Your answer: {origQ ? getUserAnswerLabel(origQ, r.userAnswer) : String(r.userAnswer ?? '')}
+                          </p>
+                          <p style={{ color: 'var(--color-success)' }}>
+                            Correct answer: {origQ ? getAnswerLabel(origQ) : String(r.correctAnswer ?? '')}
+                          </p>
+                          <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
+                            {r.explanation}
+                          </p>
+                        </div>
+                      )
+                    })}
                 </div>
               </CardContent>
             </Card>
