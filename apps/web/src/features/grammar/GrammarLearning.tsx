@@ -576,17 +576,23 @@ export default function GrammarLearning() {
     setExerciseMode(true)
   }
 
-  function handleExerciseComplete(results: { total: number; correct: number; mistakes?: Array<{ id: string; mistake: string; correction: string; explanation: string; source: string }> }) {
+  function handleExerciseComplete(results: { total: number; correct: number; mistakes?: Array<{ id: string; mistake: string; correction: string; explanation: string; source: string }>; questions?: GrammarExerciseItem[]; answers?: Record<string, string> }) {
     setExerciseMode(false)
     loadMistakes()
     const engine = getLearningEngine()
-    if (engine) {
+    if (engine && results.questions && results.questions.length > 0) {
       engine.completeExercise({
         skill: 'grammar',
         topic: selectedTopic,
-        totalQuestions: results.total,
-        correctAnswers: results.correct,
-        mistakes: results.mistakes || [],
+        questions: results.questions.map(q => ({
+          id: q.id,
+          question: q.question,
+          correctAnswer: q.correctAnswer,
+          options: q.options,
+          explanation: q.explanation || '',
+          type: q.type,
+        })),
+        answers: (results.answers || {}) as Record<string, unknown>,
         sessionId: sessionInfo?.sessionId,
         attemptId: sessionInfo?.attemptId,
         timeSpentMs: 0,

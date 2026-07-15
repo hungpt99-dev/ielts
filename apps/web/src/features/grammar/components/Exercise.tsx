@@ -18,7 +18,7 @@ export interface GrammarExerciseItem {
 interface ExerciseProps {
   exercises: GrammarExerciseItem[]
   topic: string
-  onComplete: (results: { total: number; correct: number; mistakes: MistakeEntry[] }) => void
+  onComplete: (results: { total: number; correct: number; mistakes: MistakeEntry[]; questions: GrammarExerciseItem[]; answers: Record<string, string> }) => void
   onGenerateAi?: (topic: string) => void
   onRegenerate?: (topic: string) => void
 }
@@ -86,11 +86,11 @@ export default function Exercise({ exercises, topic, onComplete, onGenerateAi, o
       }
 
       const correctCount = results.filter(r => r.correct).length
-      onComplete({ total: exercises.length, correct: correctCount, mistakes })
+      onComplete({ total: exercises.length, correct: correctCount, mistakes, questions: exercises, answers: userAnswers })
     } catch (error) {
       console.error('apps/web/src/features/grammar/components/Exercise.tsx error:', error);
       const correctCount = results.filter(r => r.correct).length
-      onComplete({ total: exercises.length, correct: correctCount, mistakes: [] })
+      onComplete({ total: exercises.length, correct: correctCount, mistakes: [], questions: exercises, answers: userAnswers })
     } finally {
       setSaving(false)
     }

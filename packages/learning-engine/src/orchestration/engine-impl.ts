@@ -469,20 +469,83 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
     }
   }
 
-  async completeExercise(request: { skill: string; topic: string; totalQuestions: number; correctAnswers: number; mistakes: any[]; sessionId?: string; attemptId?: string; timeSpentMs?: number }): Promise<LearningOperationResult<void>> {
+  private normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | string[]): boolean {
+    if (userAnswer === undefined || userAnswer === null) return false
+    if (typeof userAnswer === 'string' && typeof correctAnswer === 'string') {
+      return userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()
+    }
+    if (typeof userAnswer === 'number' && typeof correctAnswer === 'number') {
+      return userAnswer === correctAnswer
+    }
+    if (Array.isArray(userAnswer) && Array.isArray(correctAnswer)) {
+      return userAnswer.some((v: string) =>
+        correctAnswer.some((c: string) => v.toLowerCase().trim() === c.toLowerCase().trim())
+      )
+    }
+    return String(userAnswer).toLowerCase().trim() === String(correctAnswer).toLowerCase().trim()
+  }
+
+  private isCorrect(question: any, answer: unknown): boolean {
+    if (question.type === 'gap-fill') {
+      const blanks: string[] = question.blanks || []
+      const userBlanks = (answer as string[]) || []
+      if (blanks.length === 0) return false
+      return blanks.every((b, i) => {
+        const userVal = userBlanks[i]?.toLowerCase().trim() || ''
+        return b.toLowerCase().trim() === userVal
+      })
+    }
+    return this.normalizeAnswer(answer, question.correctAnswer)
+  }
+
+  async completeExercise(request: {
+    skill: string
+    topic: string
+    questions: Array<{ id: string; question: string; correctAnswer: string | number | string[]; options?: string[]; explanation: string; type?: string; blanks?: string[] }>
+    answers: Record<string, unknown>
+    sessionId?: string
+    attemptId?: string
+    timeSpentMs?: number
+  }): Promise<LearningOperationResult<{ totalQuestions: number; correctAnswers: number }>> {
     try {
-      for (const m of request.mistakes) {
+      let correct = 0
+      const mistakes: any[] = []
+      const now = new Date().toISOString()
+
+      for (const q of request.questions) {
+        const userAnswer = request.answers[q.id]
+        if (this.isCorrect(q, userAnswer)) {
+          correct++
+        } else {
+          mistakes.push({
+            id: crypto.randomUUID?.() ?? `${Date.now()}-mistake`,
+            mistake: q.question,
+            correction: Array.isArray(q.correctAnswer) ? q.correctAnswer.join(', ') : String(q.correctAnswer),
+            explanation: q.explanation || '',
+            source: `${request.skill === 'grammar' ? 'Grammar' : request.skill === 'reading' ? 'Reading' : request.skill === 'listening' ? 'Listening' : 'Exercise'} - ${request.topic}`,
+            date: now.slice(0, 10),
+            skill: request.skill,
+            status: 'new',
+            repetitionCount: 0,
+            createdAt: now,
+            updatedAt: now,
+          })
+        }
+      }
+
+      for (const m of mistakes) {
         await this.deps.mistakeRepository.save(m).catch(() => {})
       }
+
       if (request.sessionId && request.attemptId) {
         const { submitAnswer } = await import('../application/attempts/submit-answer')
         await submitAnswer({
           sessionId: request.sessionId,
           attemptId: request.attemptId,
-          answers: request.mistakes.map(m => ({
+          answers: mistakes.map(m => ({
             questionId: m.id || '',
-            answer: m.mistake || m.originalResponse || '',
-            answeredAt: new Date().toISOString(),
+            answer: m.mistake || '',
+            answeredAt: now,
             timeSpentMs: request.timeSpentMs || 0,
           })),
           correlationId: crypto.randomUUID?.() ?? `${Date.now()}-corr`,
@@ -511,7 +574,8 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
           clock: this.deps.clock,
         }).catch(() => {})
       }
-      return { status: 'success', data: undefined as any, metadata: metadata(false, false) }
+
+      return { status: 'success', data: { totalQuestions: request.questions.length, correctAnswers: correct }, metadata: metadata(false, false) }
     } catch (err) {
       console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
       return {

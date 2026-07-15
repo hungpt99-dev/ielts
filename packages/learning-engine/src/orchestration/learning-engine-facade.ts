@@ -112,5 +112,13 @@ export interface LearningEngine {
 
   generateWritingPrompt(request: GenerateWritingPromptRequest): Promise<LearningOperationResult<{ question: string }>>
 
-  completeExercise(request: { skill: string; topic: string; totalQuestions: number; correctAnswers: number; mistakes: any[]; sessionId?: string; attemptId?: string; timeSpentMs?: number }): Promise<LearningOperationResult<void>>
+  completeExercise(request: {
+    skill: string
+    topic: string
+    questions: Array<{ id: string; question: string; correctAnswer: string | number | string[]; options?: string[]; explanation: string; type?: string; blanks?: string[] }>
+    answers: Record<string, unknown>
+    sessionId?: string
+    attemptId?: string
+    timeSpentMs?: number
+  }): Promise<LearningOperationResult<{ totalQuestions: number; correctAnswers: number }>>
 }
