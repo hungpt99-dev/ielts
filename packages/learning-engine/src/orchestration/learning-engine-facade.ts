@@ -112,6 +112,10 @@ export interface LearningEngine {
 
   generateWritingPrompt(request: GenerateWritingPromptRequest): Promise<LearningOperationResult<{ question: string }>>
 
+  getMistakes(skill?: string): Promise<LearningOperationResult<{ mistakes: any[] }>>
+
+  getOutcomes(skill?: string): Promise<LearningOperationResult<{ outcomes: any[] }>>
+
   completeExercise(request: {
     skill: string
     topic: string

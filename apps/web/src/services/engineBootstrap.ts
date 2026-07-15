@@ -662,7 +662,14 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       },
       getProgress: async () => {
         try {
-          const records = await DatabaseService.getAll<any>('progressRecords')
+          const le = getLearningEngine()
+          let records: any[]
+          if (le) {
+            const result = await le.getOutcomes()
+            records = result.status === 'success' && result.data ? result.data.outcomes.map((o: any) => ({ ...o, type: 'learning-outcome' })) : []
+          } else {
+            records = await DatabaseService.getAll<any>('progressRecords')
+          }
           const recent = records.filter(r => r.type === 'learning-outcome')
           const overall = recent.length > 0 ? Math.round(recent.reduce((s: number, r: any) => s + (r.value ?? 0), 0) / recent.length * 100) : 0
           const lastActiveKey = 'ielts-last-active-at'
@@ -678,7 +685,14 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       },
       getSkillStates: async () => {
         try {
-          const records = await DatabaseService.getAll<any>('progressRecords')
+          const le = getLearningEngine()
+          let records: any[]
+          if (le) {
+            const result = await le.getOutcomes()
+            records = result.status === 'success' && result.data ? result.data.outcomes.map((o: any) => ({ ...o, type: 'learning-outcome' })) : []
+          } else {
+            records = await DatabaseService.getAll<any>('progressRecords')
+          }
           const outcomes = records.filter(r => r.type === 'learning-outcome' || r.type === 'learning_session_completed')
           const bySkill: any = {}
           for (const skill of ['listening', 'reading', 'writing', 'speaking'] as const) {
@@ -703,11 +717,18 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
       },
       getMistakes: async () => {
         try {
-          const all = await DatabaseService.getAll<any>('mistakes')
+          const le = getLearningEngine()
+          let all: any[]
+          if (le) {
+            const result = await le.getMistakes()
+            all = result.status === 'success' && result.data ? result.data.mistakes : []
+          } else {
+            all = await DatabaseService.getAll<any>('mistakes')
+          }
           return {
             total: all.length,
-            unreviewed: all.filter(m => m.status === 'new').length,
-            recentCount: all.filter(m => new Date(m.createdAt) > new Date(Date.now() - 7 * 86400000)).length,
+            unreviewed: all.filter(m => m.status === 'new' || m.reviewStatus === 'unreviewed').length,
+            recentCount: all.filter(m => new Date(m.createdAt || m.occurredAt) > new Date(Date.now() - 7 * 86400000)).length,
             recurringPatterns: [],
             bySkill: {},
           }

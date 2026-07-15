@@ -498,6 +498,26 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
     return this.normalizeAnswer(answer, question.correctAnswer)
   }
 
+  async getMistakes(skill?: string): Promise<LearningOperationResult<{ mistakes: any[] }>> {
+    try {
+      const mistakes = await this.deps.mistakeRepository.findRecent(skill)
+      return { status: 'success', data: { mistakes }, metadata: metadata(false, false) }
+    } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
+      return { status: 'failure', error: { code: 'storage_failure', message: err instanceof Error ? err.message : 'Failed to get mistakes', recoverable: true } }
+    }
+  }
+
+  async getOutcomes(skill?: string): Promise<LearningOperationResult<{ outcomes: any[] }>> {
+    try {
+      const outcomes = await this.deps.outcomeRepository.findRecent({ skill })
+      return { status: 'success', data: { outcomes }, metadata: metadata(false, false) }
+    } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
+      return { status: 'failure', error: { code: 'storage_failure', message: err instanceof Error ? err.message : 'Failed to get outcomes', recoverable: true } }
+    }
+  }
+
   async completeExercise(request: {
     skill: string
     topic: string
