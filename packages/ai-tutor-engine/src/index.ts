@@ -115,11 +115,11 @@ export type { GrammarTutorModule, GrammarExplanationRequest, GrammarExplanationR
 export { buildLearningProgressReviewPrompt } from './prompts/learningProgressReview'
 export type { ProgressReviewData, SkillProgress, WeaknessReport, WeakSkill, VocabularyStatus, ReviewSummary, StudyConsistency, AIProgressReviewResponse } from './prompts/learningProgressReview'
 
-// ── Services (shared with moved hooks) ────────────────────────────────
-export { MessageStorage } from './services/messageStorage'
-export { ProactiveEventBus } from './services/proactiveEventBus'
-export { generateProactiveMessages, generateContextSuggestions as generateContextCandidates } from './services/proactiveMessageEngine'
-export type { ProactiveEngineInput } from './services/proactiveMessageEngine'
+// ── Proactive Generation (application layer) ──────────────────────────
+export { generateProactiveMessages } from './application/proactive/generate-proactive-messages'
+
+// ── Chat Message Storage (infrastructure) ────────────────────────────
+export { MessageStorage } from './infrastructure/chat-message-storage'
 
 // ── Infrastructure Adapters ───────────────────────────────────────────
 export { LocalStorageProactiveMessageRepository, proactiveMessageDefaults, isInQuietHours as checkQuietHours, canSendNow, getMessagesForToday } from './infrastructure/proactive-message-storage'

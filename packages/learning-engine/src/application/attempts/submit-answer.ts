@@ -37,12 +37,9 @@ export async function submitAnswer(
   const evaluations: AnswerEvaluation[] = []
   let allComplete = true
 
-  for (const answer of attempt.answers) {
-    const question = exercise.questions.find(q => {
-      const qId = 'question' in q ? (q as any).question : ''
-      return answer.questionId === qId
-    })
-
+  for (let i = 0; i < attempt.answers.length; i++) {
+    const answer = attempt.answers[i]
+    const question = exercise.questions[i]
     if (!question) continue
 
     const evalMethod = selectEvaluationMethod(question.type, true)

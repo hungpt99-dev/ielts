@@ -23,6 +23,7 @@ interface SpeakingPhrase {
   phrases: string[]
 }
 import { generateId } from '../../utils'
+import { getLearningEngine } from '../../services/engineBootstrap'
 import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
 import type { SessionInfo } from '../../services/learning/ai-exercise-session'
 import PageHeader from '../../components/layout/PageHeader'
@@ -159,8 +160,38 @@ export default function SpeakingPractice() {
     }
   }, [])
 
+  const [speakingQuestions, setSpeakingQuestions] = useState<SpeakingQuestion[]>([])
+
+  useEffect(() => {
+    getLearningEngine()?.getExercises('speaking').then(result => {
+      if (result.status !== 'success' || !result.data) return
+      const mapped: SpeakingQuestion[] = []
+      for (const e of result.data.exercises) {
+        const entry = e as any
+        const part = entry.metadata?.part
+        if (!part || part < 1 || part > 3) continue
+        const topic = entry.metadata?.topic || 'General'
+        const question = entry.content || ''
+        if (!question) continue
+        const cueCardRaw = entry.metadata?.cueCard
+        let cueCard: SpeakingQuestion['cueCard']
+        if (typeof cueCardRaw === 'string') { try { cueCard = JSON.parse(cueCardRaw) } catch {} }
+        else if (cueCardRaw && typeof cueCardRaw === 'object') cueCard = cueCardRaw as any
+        mapped.push({
+          id: entry.id,
+          part: part as 1 | 2 | 3,
+          question,
+          topic,
+          followUp: cueCard?.followUp,
+          cueCard: cueCard ? { topic: cueCard.topic, points: cueCard.points, followUp: cueCard.followUp } : undefined,
+        })
+      }
+      setSpeakingQuestions(mapped)
+    }).catch(() => {})
+  }, [])
+
   const filteredQuestions = useMemo(() => {
-    let filtered = [] as SpeakingQuestion[]
+    let filtered = speakingQuestions
     if (search.trim()) {
       const query = search.toLowerCase()
       filtered = filtered.filter(
@@ -172,11 +203,44 @@ export default function SpeakingPractice() {
     if (topicFilter) filtered = filtered.filter(p => p.topic === topicFilter)
     if (partFilter) filtered = filtered.filter(p => p.part === partFilter)
     return filtered
-  }, [search, topicFilter, partFilter])
+  }, [speakingQuestions, search, topicFilter, partFilter])
+
+  const [speakingPhrases, setSpeakingPhrases] = useState<SpeakingPhrase[]>([])
+
+  useEffect(() => {
+    getLearningEngine()?.getExercises('speaking').then(result => {
+      if (result.status !== 'success' || !result.data) {
+        console.log('[SpeakingPhrases] no data:', result?.status)
+        return
+      }
+      console.log('[SpeakingPhrases] exercises count:', result.data.exercises.length)
+      const mapped: SpeakingPhrase[] = []
+      for (const e of result.data.exercises) {
+        const entry = e as any
+        console.log('[SpeakingPhrases] entry:', JSON.stringify({ id: entry.id, source: entry.source, title: entry.title, hasPhrases: !!entry.metadata?.phrases }))
+        if (entry.source !== 'built-in') continue
+        const rawPhrases = entry.metadata?.phrases
+        if (!rawPhrases) continue
+        let phrases: string[] = []
+        if (typeof rawPhrases === 'string') { try { phrases = JSON.parse(rawPhrases) } catch { continue } }
+        else if (Array.isArray(rawPhrases)) phrases = rawPhrases
+        if (phrases.length === 0) continue
+        mapped.push({ category: entry.title || 'General', phrases })
+      }
+      setSpeakingPhrases(mapped)
+    }).catch(() => {})
+  }, [])
 
   const filteredPhrases = useMemo(() => {
-    return [] as SpeakingPhrase[]
-  }, [phrasesFilter])
+    if (!phrasesFilter.trim()) return speakingPhrases
+    const query = phrasesFilter.toLowerCase()
+    return speakingPhrases
+      .map(group => ({
+        category: group.category,
+        phrases: group.phrases.filter(p => p.toLowerCase().includes(query)),
+      }))
+      .filter(group => group.phrases.length > 0)
+  }, [speakingPhrases, phrasesFilter])
 
   async function startRecording() {
     if (!recordingSupported) return
@@ -348,6 +412,7 @@ export default function SpeakingPractice() {
         `Speaking Part ${part}: ${questionText}`,
         'medium',
         15,
+        questionText,
       )
 
       if (error) throw new Error(error)

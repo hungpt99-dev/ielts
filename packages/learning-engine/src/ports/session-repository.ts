@@ -12,6 +12,8 @@ export interface LearningSessionRepository {
 export interface ExerciseRepository {
   getById(id: string): Promise<Exercise | null>
   save(exercise: Exercise): Promise<void>
+  delete(id: string): Promise<void>
+  findAll(skill?: string): Promise<Exercise[]>
 }
 
 export interface LearningAttemptRepository {

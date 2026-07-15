@@ -14,8 +14,11 @@ import LQuestion from './components/ListeningQuestion'
 import { generateId } from '../../utils'
 import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
 import type { SessionInfo } from '../../services/learning/ai-exercise-session'
+import { getLearningEngine } from '../../services/engineBootstrap'
+import { loadListeningExercises } from './listeningExerciseService'
 import PageHeader from '../../components/layout/PageHeader'
-import { IconListening } from '@ielts/ui'
+import { IconListening, IconDelete } from '@ielts/ui'
+import ConfirmDialog from '../../components/ui/ConfirmDialog'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -128,6 +131,9 @@ export default function ListeningPractice() {
   const [historyDetail, setHistoryDetail] = useState<ListeningPracticeSession | null>(null)
   const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
 
+  const [confirmDelete, setConfirmDelete] = useState<ListeningExercise | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
   const loadHistory = useCallback(async () => {
     try {
       setLoading(true)
@@ -151,8 +157,10 @@ export default function ListeningPractice() {
     }
   }, [])
 
-  const allExercises = useMemo(() => {
-    return [] as ListeningExercise[]
+  const [allExercises, setAllExercises] = useState<ListeningExercise[]>([])
+
+  useEffect(() => {
+    loadListeningExercises().then(setAllExercises).catch(() => {})
   }, [])
 
   const filteredExercises = useMemo(() => {
@@ -316,6 +324,7 @@ export default function ListeningPractice() {
         `Listening: ${aiTopic.trim()}`,
         aiDifficulty,
         20,
+        aiTopic.trim(),
       )
 
       if (error) throw new Error(error)
@@ -340,11 +349,31 @@ export default function ListeningPractice() {
 
       const validTypes = ['multiple-choice', 'gap-fill'] as const
 
+      const trimmedTopic = aiTopic.trim()
+      const title = (parsed.title as string || '').toLowerCase().includes(trimmedTopic.toLowerCase())
+        ? parsed.title as string
+        : `Listening: ${trimmedTopic}`
+      const transcriptText = parsed.transcript as string || ''
+      const transcriptMatchesTopic = transcriptText.toLowerCase().includes(trimmedTopic.toLowerCase())
+      let finalTranscript = transcriptText
+      if (!transcriptMatchesTopic) {
+        const retry = await startEngineSession('listening', `Listening: ${trimmedTopic}`, aiDifficulty, 20, trimmedTopic)
+        if (retry.content) {
+          try {
+            const rParsed = JSON.parse(
+              retry.content.slice(retry.content.indexOf('{'), retry.content.lastIndexOf('}') + 1),
+            )
+            if (rParsed.transcript && (rParsed.transcript as string).toLowerCase().includes(trimmedTopic.toLowerCase())) {
+              finalTranscript = rParsed.transcript as string
+            }
+          } catch {}
+        }
+      }
       const exercise: ListeningExercise = {
         id: generateId(),
-        title: parsed.title,
-        topic: aiTopic.trim(),
-        transcript: parsed.transcript,
+        title,
+        topic: trimmedTopic,
+        transcript: finalTranscript,
         audioUrl: '',
         audioType: 'audio',
         questions: parsed.questions.map((q: Record<string, unknown>, i: number) => ({
@@ -363,6 +392,8 @@ export default function ListeningPractice() {
         estimatedMinutes: 12,
       }
 
+      setAllExercises(prev => [exercise, ...prev])
+
       setAiModalOpen(false)
       startExercise(exercise)
     } catch (err) {
@@ -370,6 +401,19 @@ export default function ListeningPractice() {
       setAiError(err instanceof Error ? err.message : 'Failed to generate listening exercise')
     } finally {
       setAiGenerating(false)
+    }
+  }
+
+  async function handleDeleteExercise(exercise: ListeningExercise) {
+    setDeletingId(exercise.id)
+    try {
+      const engine = getLearningEngine()
+      if (engine) await engine.deleteExercise(exercise.id)
+      setAllExercises(prev => prev.filter(e => e.id !== exercise.id))
+    } catch {
+    } finally {
+      setDeletingId(null)
+      setConfirmDelete(null)
     }
   }
 
@@ -566,9 +610,19 @@ export default function ListeningPractice() {
                       <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
                         {exercise.questions.length} questions &middot; ~{exercise.estimatedMinutes} min
                       </span>
-                      <Button size="sm" onClick={() => startExercise(exercise)}>
-                        Start Practice
-                      </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          icon={<IconDelete size={16} />}
+                          onClick={() => setConfirmDelete(exercise)}
+                          disabled={deletingId === exercise.id}
+                          aria-label={`Delete ${exercise.title}`}
+                        />
+                        <Button size="sm" onClick={() => startExercise(exercise)}>
+                          Start Practice
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -1137,6 +1191,17 @@ export default function ListeningPractice() {
           </div>
         )}
       </Modal>
+
+      <ConfirmDialog
+        open={confirmDelete !== null}
+        onClose={() => setConfirmDelete(null)}
+        title="Delete exercise?"
+        message={`Are you sure you want to delete "${confirmDelete?.title || ''}"? This will also remove all associated practice sessions.`}
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={() => confirmDelete && handleDeleteExercise(confirmDelete)}
+        loading={deletingId !== null}
+      />
     </div>
   )
 }

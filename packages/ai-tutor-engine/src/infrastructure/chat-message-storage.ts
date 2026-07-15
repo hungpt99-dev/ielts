@@ -25,9 +25,7 @@ function loadSnapshot(): ChatSnapshot | null {
         return result.data as ChatSnapshot
       }
     }
-  } catch (error) {
-  console.error('packages/ai-tutor-engine/src/services/messageStorage.ts error:', error);
-  }
+  } catch {}
   return null
 }
 
@@ -48,12 +46,10 @@ function saveSnapshot(snapshot: ChatSnapshot): void {
   snapshot.updatedAt = new Date().toISOString()
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot))
-  } catch (error) {
-console.error('packages/ai-tutor-engine/src/services/messageStorage.ts error:', error);
-  }
+  } catch {}
 }
 
-export class LocalStorageMessageRepository implements MessageRepositoryPort {
+class LocalStorageMessageRepository implements MessageRepositoryPort {
   getMessages(): ChatMessage[] {
     return getOrCreateSnapshot().messages
   }
@@ -126,9 +122,7 @@ export class LocalStorageMessageRepository implements MessageRepositoryPort {
   clearAll(): void {
     try {
       localStorage.removeItem(STORAGE_KEY)
-    } catch (error) {
-  console.error('packages/ai-tutor-engine/src/services/messageStorage.ts error:', error);
-    }
+    } catch {}
   }
 
   exportToJson(): string {
@@ -145,8 +139,7 @@ export class LocalStorageMessageRepository implements MessageRepositoryPort {
       }
       localStorage.setItem(STORAGE_KEY, json)
       return { success: true }
-    } catch (error) {
-      console.error('packages/ai-tutor-engine/src/services/messageStorage.ts error:', error);
+    } catch {
       return { success: false, error: 'Invalid JSON format' }
     }
   }
@@ -193,5 +186,3 @@ export class LocalStorageMessageRepository implements MessageRepositoryPort {
 }
 
 export const MessageStorage: MessageRepositoryPort = new LocalStorageMessageRepository()
-
-export default MessageStorage

@@ -35,6 +35,7 @@ export {
   buildMistakeReviewPrompt,
   buildVocabularyExtractionPrompt,
   buildReadingPassagePrompt,
+  buildListeningPassagePrompt,
   buildPracticeQuestionsPrompt,
   buildPracticeQuestionsSystemPrompt,
 } from './prompts'

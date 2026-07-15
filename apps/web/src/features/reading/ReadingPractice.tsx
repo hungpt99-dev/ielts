@@ -14,9 +14,11 @@ import { loadAllPassages } from './passageSeedService'
 import { generateId } from '../../utils'
 import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
 import type { SessionInfo } from '../../services/learning/ai-exercise-session'
+import { getLearningEngine } from '../../services/engineBootstrap'
 import { generateQuestionsForPassage } from '../../services/ai/AIService'
 import PageHeader from '../../components/layout/PageHeader'
-import { IconReading } from '@ielts/ui'
+import { IconReading, IconDelete } from '@ielts/ui'
+import ConfirmDialog from '../../components/ui/ConfirmDialog'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -159,6 +161,9 @@ export default function ReadingPractice() {
   const [generatingQuestions, setGeneratingQuestions] = useState<Record<string, boolean>>({})
   const [generateError, setGenerateError] = useState<string | null>(null)
   const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
+
+  const [confirmDelete, setConfirmDelete] = useState<ReadingPassageWithQuestions | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   const loadHistory = useCallback(async () => {
     try {
@@ -330,6 +335,7 @@ export default function ReadingPractice() {
     setResults(null)
     setTimerSeconds(0)
     setSessionInfo(null)
+    setAiGeneratedPassage(null)
     setView('browse')
   }
 
@@ -353,6 +359,7 @@ export default function ReadingPractice() {
         `Reading: ${aiTopic.trim()}`,
         aiDifficulty,
         20,
+        aiTopic.trim(),
       )
 
       if (error) throw new Error(error)
@@ -376,11 +383,15 @@ export default function ReadingPractice() {
       }
 
       const validTypes = ['multiple-choice', 'true-false-not-given', 'gap-fill'] as const
+      const trimmedTopic = aiTopic.trim()
+      const title = (parsed.title as string || '').toLowerCase().includes(trimmedTopic.toLowerCase())
+        ? parsed.title as string
+        : `Reading: ${trimmedTopic}`
 
       const passage: ReadingPassageWithQuestions = {
         id: generateId(),
-        title: parsed.title as string,
-        topic: aiTopic.trim(),
+        title,
+        topic: trimmedTopic,
         text: parsed.text as string,
         questions: (parsed.questions as Record<string, unknown>[]).map((q, i) => ({
           id: `ai-q${i}`,
@@ -398,7 +409,7 @@ export default function ReadingPractice() {
         estimatedMinutes: 20,
       }
 
-      setAiGeneratedPassage(passage)
+      setAllPassages(prev => [passage, ...prev])
       setAiModalOpen(false)
       startPassage(passage)
     } catch (err) {
@@ -406,6 +417,20 @@ export default function ReadingPractice() {
       setAiError(err instanceof Error ? err.message : 'Failed to generate reading passage')
     } finally {
       setAiGenerating(false)
+    }
+  }
+
+  async function handleDeletePassage(passage: ReadingPassageWithQuestions) {
+    setDeletingId(passage.id)
+    try {
+      const engine = getLearningEngine()
+      if (engine) await engine.deleteExercise(passage.id)
+      setAllPassages(prev => prev.filter(p => p.id !== passage.id))
+      setAiGeneratedPassage(prev => prev?.id === passage.id ? null : prev)
+    } catch {
+    } finally {
+      setDeletingId(null)
+      setConfirmDelete(null)
     }
   }
 
@@ -670,7 +695,15 @@ export default function ReadingPractice() {
                       <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
                         {passage.questions.length} questions &middot; ~{passage.estimatedMinutes} min
                       </span>
-                      <div className="flex gap-2">
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          icon={<IconDelete size={16} />}
+                          onClick={() => setConfirmDelete(passage)}
+                          disabled={deletingId === passage.id}
+                          aria-label={`Delete ${passage.title}`}
+                        />
                         <Button size="sm" onClick={() => startPassage(passage)}>
                           {passage.questions.length > 0 ? 'Start Practice' : 'Read'}
                         </Button>
@@ -1206,6 +1239,17 @@ export default function ReadingPractice() {
           </div>
         )}
       </Modal>
+
+      <ConfirmDialog
+        open={confirmDelete !== null}
+        onClose={() => setConfirmDelete(null)}
+        title="Delete passage?"
+        message={`Are you sure you want to delete "${confirmDelete?.title || ''}"? This will also remove all associated practice sessions.`}
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={() => confirmDelete && handleDeletePassage(confirmDelete)}
+        loading={deletingId !== null}
+      />
     </div>
   )
 }

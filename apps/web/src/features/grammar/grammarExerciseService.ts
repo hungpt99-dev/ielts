@@ -1,26 +1,27 @@
-import { DatabaseService } from '../../services/storage/Database'
+import { getLearningEngine } from '../../services/engineBootstrap'
 import type { GrammarExerciseItem } from './components/Exercise'
 
-function getGrammarQuestions(e: Record<string, unknown>): any[] {
-  const raw = e.questions
-  if (Array.isArray(raw)) return raw
-  if (typeof raw === 'string') {
-    try { return JSON.parse(raw) } catch (error) {
-  console.error('apps/web/src/features/grammar/grammarExerciseService.ts error:', error);
-    }
-  }
-  return []
-}
-
 export async function loadSavedGrammarExercises(): Promise<Map<string, GrammarExerciseItem[]>> {
-  const all = await DatabaseService.getAll<Record<string, unknown>>('readingExercises').catch(() => [])
+  const engine = getLearningEngine()
+  if (!engine) return new Map()
+
+  const result = await engine.getExercises('grammar')
   const byTopic = new Map<string, GrammarExerciseItem[]>()
-  for (const e of all) {
-    const skill = e.skill as string | undefined
-    if (skill && skill !== 'grammar') continue
+
+  if (result.status === 'failure' || !result.data) return byTopic
+
+  for (const e of result.data.exercises as unknown as Record<string, unknown>[]) {
     const topic = (e.topic as string) || 'General'
-    const questions = getGrammarQuestions(e)
-    const items: GrammarExerciseItem[] = questions.map((q: any, i: number) => ({
+
+    let rawQuestions: any[] = []
+    const q = e.questions
+    if (typeof q === 'string') {
+      try { rawQuestions = JSON.parse(q) } catch {}
+    } else if (Array.isArray(q)) {
+      rawQuestions = q
+    }
+
+    const items: GrammarExerciseItem[] = rawQuestions.map((q: any, i: number) => ({
       id: `saved-${(e.id as string) || ''}-${i}`,
       topic,
       type: (q.type === 'true-false-not-given' ? 'true-false' : q.type === 'error-correction' ? 'error-correction' : 'multiple-choice') as GrammarExerciseItem['type'],
@@ -29,7 +30,9 @@ export async function loadSavedGrammarExercises(): Promise<Map<string, GrammarEx
       correctAnswer: String(q.correctIndex ?? q.answer ?? ''),
       explanation: q.explanation || '',
     }))
+
     if (items.length > 0) byTopic.set(topic, items)
   }
+
   return byTopic
 }

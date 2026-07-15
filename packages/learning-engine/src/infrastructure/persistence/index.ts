@@ -30,6 +30,15 @@ export class InMemoryExerciseRepository implements ExerciseRepository {
   async save(exercise: Exercise): Promise<void> {
     this.exercises.set(exercise.id, exercise)
   }
+
+  async delete(id: string): Promise<void> {
+    this.exercises.delete(id)
+  }
+
+  async findAll(skill?: string): Promise<Exercise[]> {
+    const all = Array.from(this.exercises.values())
+    return skill ? all.filter(e => e.skill === skill) : all
+  }
 }
 
 export class InMemoryAttemptRepository implements LearningAttemptRepository {

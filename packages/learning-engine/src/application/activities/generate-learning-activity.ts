@@ -7,7 +7,7 @@ import { determineDifficulty } from '../../domain/policies/difficulty-policy'
 import { selectQuestionTypes, estimateQuestionCount } from '../../domain/policies/question-count-policy'
 import type { LearnerContextPort } from '../../ports/learner-context-port'
 import type { SkillRegistry } from '../../skills/skill-registry'
-import { buildReadingPassagePrompt, buildPracticeQuestionsPrompt, buildPracticeQuestionsSystemPrompt } from '@ielts/ai'
+import { buildReadingPassagePrompt, buildListeningPassagePrompt, buildPracticeQuestionsPrompt, buildPracticeQuestionsSystemPrompt } from '@ielts/ai'
 
 export interface GenerateActivityDependencies {
   sessionRepository: LearningSessionRepository
@@ -135,11 +135,24 @@ export async function generateLearningActivity(
   if (context.constraints.aiAvailable) {
     try {
       console.log('[GenerateActivity] Calling AI for skill:', request.skill, 'existing questions:', exercise.questions.length)
+      const topic = request.topic || request.sourceContent?.topic || undefined
+      const hasSourceContent = !!request.sourceContent?.text
       const isReading = request.skill === 'reading'
-      const readingPrompt = isReading ? buildReadingPassagePrompt(difficultyDecision.level, questionCount, request.sourceContent?.text) : null
+      const isListening = request.skill === 'listening'
+      const readingPrompt = isReading && !hasSourceContent ? buildReadingPassagePrompt(difficultyDecision.level, questionCount, topic) : null
+      const listeningPrompt = isListening && !hasSourceContent && topic ? buildListeningPassagePrompt(difficultyDecision.level, questionCount, topic) : null
+      console.log('[GenerateActivity] topic:', topic, 'hasSourceContent:', hasSourceContent, 'isListening:', isListening, 'hasListeningPrompt:', !!listeningPrompt, 'isReading:', isReading, 'hasReadingPrompt:', !!readingPrompt)
+      const systemPrompt = readingPrompt?.systemPrompt ?? listeningPrompt?.systemPrompt ?? buildPracticeQuestionsSystemPrompt(request.skill, request.activityType, questionCount, difficultyDecision.level, hasSourceContent ? undefined : topic)
+      const userMessage = readingPrompt?.userMessage ?? listeningPrompt?.userMessage ?? (
+        hasSourceContent
+          ? `Based on the content below, generate ${questionCount} ${request.activityType} questions for ${request.skill} practice:\n\nContent: ${request.sourceContent!.text.slice(0, 1000)}`
+          : `${buildPracticeQuestionsPrompt(request.skill, request.activityType, questionCount, difficultyDecision.level, topic)}`
+      )
+      console.log('[GenerateActivity] systemPrompt (first 200):', systemPrompt.slice(0, 200))
+      console.log('[GenerateActivity] userMessage (first 200):', userMessage.slice(0, 200))
       const aiResult = await deps.tutorPort.generateEducationalContent<any>({
-        systemPrompt: readingPrompt?.systemPrompt ?? buildPracticeQuestionsSystemPrompt(request.skill, request.activityType, questionCount, difficultyDecision.level),
-        userMessage: readingPrompt?.userMessage ?? `${buildPracticeQuestionsPrompt(request.skill, request.activityType, questionCount, difficultyDecision.level)}\n${request.sourceContent ? `Content: ${request.sourceContent.text.slice(0, 1000)}` : ''}`,
+        systemPrompt,
+        userMessage,
         schema: {},
       })
       if (aiResult.success && aiResult.data) {
@@ -148,12 +161,18 @@ export async function generateLearningActivity(
           exercise.content = { ...exercise.content, passage: raw.passage }
           exercise.title = raw.title ?? exercise.title
         }
+        if (isListening && raw.transcript) {
+          exercise.content = { ...exercise.content, transcript: raw.transcript }
+          exercise.title = raw.title ?? exercise.title
+        }
         const items = Array.isArray(raw) ? raw : (raw.questions ?? [raw])
-        const aiQuestions = items.map((q: any) => ({
+        const aiQuestions = items.map((q: any, idx: number) => ({
+          id: `${exerciseId}-q${idx}`,
           type: (q.type === 'true-false-not-given' || q.type === 'gap-fill' ? q.type : 'multiple-choice') as any,
           question: q.question ?? q.Question ?? '',
           options: q.options ?? q.Options ?? ['Option A', 'Option B', 'Option C', 'Option D'],
           correctIndex: typeof q.correctIndex === 'number' ? q.correctIndex : (typeof q.answer === 'number' ? q.answer : 0),
+          blanks: Array.isArray(q.blanks) ? q.blanks : undefined,
           explanation: q.explanation ?? q.Explanation ?? '',
         })).filter((q: any) => q.question)
         if (aiQuestions.length > 0) {

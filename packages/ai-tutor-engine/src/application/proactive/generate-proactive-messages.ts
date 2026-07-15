@@ -3,6 +3,7 @@ import { ProactiveTutorOrchestrator } from '../../proactive/proactive-tutor-orch
 import { TriggerRegistry } from '../../proactive/trigger-registry'
 import { MessageGeneratorRegistry } from '../../proactive/message-generator-registry'
 import { createDefaultGenerators } from '../../proactive/default-generators'
+import { createDefaultTriggers } from '../../proactive/default-triggers'
 import type { CooldownEntry } from '../../domain/policies/cooldown-policy'
 
 export async function generateProactiveMessages(
@@ -12,6 +13,10 @@ export async function generateProactiveMessages(
 ): Promise<ProactiveEvaluationResult> {
   const triggerRegistry = new TriggerRegistry()
   const generatorRegistry = new MessageGeneratorRegistry()
+
+  for (const trigger of createDefaultTriggers()) {
+    triggerRegistry.register(trigger)
+  }
 
   for (const gen of createDefaultGenerators()) {
     generatorRegistry.register(gen)

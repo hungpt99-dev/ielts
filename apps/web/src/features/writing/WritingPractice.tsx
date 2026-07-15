@@ -13,10 +13,10 @@ interface WritingPrompt {
   difficulty: 'easy' | 'medium' | 'hard'
 }
 import { generateId } from '../../utils'
-import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
-import type { SessionInfo } from '../../services/learning/ai-exercise-session'
+import { getLearningEngine } from '../../services/engineBootstrap'
 import PageHeader from '../../components/layout/PageHeader'
-import { IconWriting } from '@ielts/ui'
+import { IconWriting, IconDelete } from '@ielts/ui'
+import ConfirmDialog from '../../components/ui/ConfirmDialog'
 import FeedbackPanel, { type WritingFeedback } from './components/FeedbackPanel'
 
 const TOPICS = [
@@ -86,6 +86,9 @@ export default function WritingPractice() {
 
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
+  const [genQuestionLoading, setGenQuestionLoading] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   const [historyDetail, setHistoryDetail] = useState<WritingSession | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
@@ -119,8 +122,33 @@ export default function WritingPractice() {
     return essayText.trim() ? essayText.trim().split(/\s+/).length : 0
   }, [essayText])
 
+  const [prompts, setPrompts] = useState<WritingPrompt[]>([])
+
+  useEffect(() => {
+    getLearningEngine()?.getExercises('writing').then(result => {
+      if (result.status !== 'success' || !result.data) return
+      const mapped: WritingPrompt[] = result.data.exercises.map(e => {
+        const entry = e as any
+        const meta = entry.metadata || {}
+        if (meta.topic) console.log('[Writing] first entry:', JSON.stringify({ id: entry.id, content: (entry.content || '').slice(0, 50), metaTopic: meta.topic, metaDesc: meta.description }))
+        let questions: any[] = entry.questions
+        if (typeof questions === 'string') { try { questions = JSON.parse(questions) } catch { questions = [] } }
+        const question = entry.content || (questions?.[0]?.prompt) || ''
+        return {
+          id: entry.id,
+          taskType: (meta.taskType || 'task2') as WritingTaskType,
+          question: question as string,
+          topic: meta.topic || 'General',
+          description: meta.description || '',
+          difficulty: entry.difficulty === 'beginner' || entry.difficulty === 'easy' ? 'easy' : entry.difficulty === 'advanced' || entry.difficulty === 'hard' ? 'hard' : 'medium',
+        }
+      })
+      setPrompts(mapped)
+    }).catch(() => {})
+  }, [])
+
   const filteredPrompts = useMemo(() => {
-    let filtered = [] as WritingPrompt[]
+    let filtered = prompts
     if (search.trim()) {
       const query = search.toLowerCase()
       filtered = filtered.filter(
@@ -133,7 +161,7 @@ export default function WritingPractice() {
     if (topicFilter) filtered = filtered.filter(p => p.topic === topicFilter)
     if (taskTypeFilter) filtered = filtered.filter(p => p.taskType === taskTypeFilter)
     return filtered
-  }, [search, topicFilter, taskTypeFilter])
+  }, [prompts, search, topicFilter, taskTypeFilter])
 
   function startTimer() {
     if (timerRef.current) clearInterval(timerRef.current)
@@ -225,29 +253,15 @@ export default function WritingPractice() {
     setAiError(null)
 
     try {
-      const taskType = (selectedPrompt?.taskType || 'task2') as 'task1' | 'task2'
+      const engine = getLearningEngine()
+      if (!engine) throw new Error('Learning engine not initialized')
 
-      const { content, error, sessionInfo: si } = await startEngineSession(
-        'writing',
-        `Writing ${questionText}`,
-        'medium',
-        30,
-      )
-
-      if (error) throw new Error(error)
-      if (!content) throw new Error('AI returned an empty response. Try again.')
-      setSessionInfo(si)
-
-      let parsed
-      try {
-        const jsonStart = content.indexOf('{')
-        const jsonEnd = content.lastIndexOf('}')
-        const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
-        parsed = JSON.parse(jsonStr)
-      } catch (error) {
-        console.error('apps/web/src/features/writing/WritingPractice.tsx error:', error);
-        throw new Error('Failed to parse AI response. The response was not valid JSON.')
+      const result = await engine.evaluateWriting({ question: questionText, essay: essayText })
+      if (result.status === 'failure') {
+        throw new Error(result.error?.message ?? 'AI evaluation failed')
       }
+
+      const parsed = result.data.feedback
 
       const newFeedback: WritingFeedback = {
         taskResponse: parsed.taskResponse || '',
@@ -271,17 +285,7 @@ export default function WritingPractice() {
 
       setFeedback(newFeedback)
       stopTimer()
-
       saveDraft()
-
-      if (si) {
-        submitAndComplete(
-          si,
-          [{ questionId: 'writing', answer: essayText, answeredAt: new Date().toISOString(), timeSpentMs: timerSeconds * 1000 }],
-          timerSeconds,
-        ).catch(() => {})
-      }
-
       setView('results')
     } catch (err) {
       console.error('apps/web/src/features/writing/WritingPractice.tsx error:', err);
@@ -296,6 +300,19 @@ export default function WritingPractice() {
     setView('browse')
   }
 
+  async function handleDeletePrompt(id: string) {
+    setDeletingId(id)
+    try {
+      const engine = getLearningEngine()
+      if (engine) await engine.deleteExercise(id)
+      setPrompts(prev => prev.filter(p => p.id !== id))
+    } catch {
+    } finally {
+      setDeletingId(null)
+      setConfirmDelete(null)
+    }
+  }
+
   function handleReset() {
     stopTimer()
     setSelectedPrompt(null)
@@ -303,7 +320,6 @@ export default function WritingPractice() {
     setQuestionText('')
     setFeedback(emptyFeedback)
     setSessionId(null)
-    setSessionInfo(null)
     setTimerSeconds(0)
     setAiError(null)
     setDraftSaved(false)
@@ -313,6 +329,27 @@ export default function WritingPractice() {
   function handleViewHistory() {
     loadHistory()
     setView('history')
+  }
+
+  async function handleGenerateQuestion() {
+    const topic = customTopic.trim() || 'General'
+    const taskType = (taskTypeFilter || 'task2') as 'task1' | 'task2'
+    setGenQuestionLoading(true)
+    try {
+      const engine = getLearningEngine()
+      if (!engine) throw new Error('Learning engine not initialized')
+
+      const result = await engine.generateWritingPrompt({ taskType, topic, difficulty: 'medium' })
+      if (result.status === 'failure') {
+        throw new Error(result.error?.message ?? 'Failed to generate question')
+      }
+      setQuestionText(result.data.question)
+    } catch (err) {
+      console.error('apps/web/src/features/writing/WritingPractice.tsx error:', err);
+      setAiError(err instanceof Error ? err.message : 'Failed to generate question')
+    } finally {
+      setGenQuestionLoading(false)
+    }
   }
 
   async function handleDeleteSession(id: string) {
@@ -558,7 +595,15 @@ export default function WritingPractice() {
                     >
                       {prompt.question}
                     </p>
-                    <div className="mt-3 flex justify-end">
+                    <div className="mt-3 flex items-center justify-end gap-2">
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        icon={<IconDelete size={16} />}
+                        onClick={() => setConfirmDelete(prompt.id)}
+                        disabled={deletingId === prompt.id}
+                        aria-label={`Delete ${prompt.description || prompt.question}`}
+                      />
                       <Button size="sm" onClick={() => startPractice(prompt)}>
                         Start Writing
                       </Button>
@@ -713,22 +758,37 @@ export default function WritingPractice() {
                       </select>
                     </div>
                   </div>
-                  <label htmlFor="custom-question" className="mt-4 block text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                    Your Question
-                  </label>
-                  <textarea
-                    id="custom-question"
-                    value={questionText}
-                    onChange={(e) => setQuestionText(e.target.value)}
-                    rows={4}
-                    placeholder="Paste your IELTS writing prompt here..."
-                    className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
-                    style={{
-                      borderColor: 'var(--color-border)',
-                      backgroundColor: 'var(--color-surface)',
-                      color: 'var(--color-text)',
-                    }}
-                  />
+                  <div className="mt-4 flex items-end gap-3">
+                    <div className="flex-1">
+                      <label htmlFor="custom-question" className="block text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                        Your Question
+                      </label>
+                      <textarea
+                        id="custom-question"
+                        value={questionText}
+                        onChange={(e) => setQuestionText(e.target.value)}
+                        rows={4}
+                        placeholder="Paste your IELTS writing prompt here, or click Generate Question..."
+                        className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
+                        style={{
+                          borderColor: 'var(--color-border)',
+                          backgroundColor: 'var(--color-surface)',
+                          color: 'var(--color-text)',
+                        }}
+                      />
+                    </div>
+                    <Button
+                      onClick={handleGenerateQuestion}
+                      loading={genQuestionLoading}
+                      disabled={!customTopic.trim()}
+                      variant="secondary"
+                      size="sm"
+                      className="mb-0.5 shrink-0"
+                      style={{ whiteSpace: 'nowrap' }}
+                    >
+                      Generate Question
+                    </Button>
+                  </div>
                 </div>
               )}
             </CardContent>
@@ -1199,6 +1259,17 @@ export default function WritingPractice() {
           </div>
         </div>
       </Modal>
+
+      <ConfirmDialog
+        open={confirmDelete !== null}
+        onClose={() => setConfirmDelete(null)}
+        title="Delete prompt?"
+        message="Are you sure you want to delete this writing prompt?"
+        confirmLabel="Delete"
+        variant="danger"
+        onConfirm={() => confirmDelete && handleDeletePrompt(confirmDelete)}
+        loading={deletingId !== null}
+      />
     </div>
   )
 }

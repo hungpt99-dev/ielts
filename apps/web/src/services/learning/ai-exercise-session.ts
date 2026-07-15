@@ -85,6 +85,7 @@ function parseExerciseFromActivity(activityResult: any) {
       type: q.type,
       question: q.question,
       options: q.options ?? [],
+      blanks: Array.isArray(q.blanks) ? q.blanks : undefined,
       correctAnswer: String(q.correctIndex ?? q.answer ?? ''),
       explanation: q.explanation ?? '',
     })),
@@ -96,7 +97,8 @@ export async function generateFromEngine(
   description: string,
   difficulty: string,
   availableMinutes: number,
-  sourceContent?: { id: string; type: string; text: string },
+  sourceContent?: { id: string; type: string; text: string; topic?: string },
+  topic?: string,
 ): Promise<AiSessionResult> {
   const engine = getLearningEngine()
   if (!engine) return { content: null, error: null }
@@ -117,6 +119,7 @@ export async function generateFromEngine(
       difficulty: mapDifficulty(difficulty, skill),
       contextScope: skill as any,
       sourceContent: sourceContent as any,
+      topic: topic || sourceContent?.topic || undefined,
       correlationId: id(),
     })
     if (activityResult.status === 'failure' || !activityResult.data?.activity?.exercise?.questions?.length) {
@@ -142,6 +145,7 @@ export async function startEngineSession(
   description: string,
   difficulty: string,
   availableMinutes: number,
+  topic?: string,
 ): Promise<EngineSessionResult> {
   const engine = getLearningEngine()
   if (!engine) return { content: null, sessionInfo: null, error: 'Engine not initialized' }
@@ -162,6 +166,7 @@ export async function startEngineSession(
       availableMinutes,
       difficulty: mapDifficulty(difficulty, skill),
       contextScope: skill as any,
+      topic: topic || undefined,
       correlationId: id(),
     })
     if (activityResult.status === 'failure' || !activityResult.data?.activity?.exercise?.questions?.length) {

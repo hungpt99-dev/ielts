@@ -18,6 +18,7 @@ import PageHeader from '../../components/layout/PageHeader'
 import PageContent from '../../components/layout/PageContent'
 import { generateQuestionsForPassage } from '../../services/ai/AIService'
 import { extractVocabulary, getStoredAiConfig } from '../../features/publicApiIntegration/ai'
+import { getLearningEngine } from '../../services/engineBootstrap'
 import { IconSavedContent, IconAITutor, IconEdit, IconRefresh, IconVocabulary, IconReading, IconUpload } from '@ielts/ui'
 
 const CATEGORY_LABELS: Record<ArtifactCategory, string> = {
@@ -416,8 +417,9 @@ export default function ArtifactsPage() {
       if (!Array.isArray(questions) || questions.length === 0) throw new Error('No questions generated')
 
       const now = new Date().toISOString()
+      const passageId = crypto.randomUUID()
       await DatabaseService.add('passages', {
-        id: crypto.randomUUID(),
+        id: passageId,
         title: `${detailItem.title} (Exercises)`,
         content: text,
         source: 'user-created',
@@ -431,6 +433,34 @@ export default function ArtifactsPage() {
         createdAt: now,
         updatedAt: now,
       } as never)
+      const engine = getLearningEngine()
+      if (engine) {
+        engine.saveExercise({
+          id: passageId,
+          sessionId: '',
+          skill: 'reading',
+          exerciseType: 'comprehension',
+          objectiveId: '',
+          title: `${detailItem.title} (Exercises)`,
+          instructions: '',
+          content: { passage: text },
+          questions: questions.map((q: any, i: number) => ({
+            id: `art-q-${i}`,
+            type: q.type === 'true-false-not-given' ? 'true-false-not-given' : q.type === 'gap-fill' ? 'gap-fill' : 'multiple-choice',
+            question: q.question || '',
+            options: Array.isArray(q.options) ? q.options : ['A', 'B', 'C', 'D'],
+            correctIndex: typeof q.correctIndex === 'number' ? q.correctIndex : (typeof q.answer === 'number' ? q.answer : 0),
+            explanation: q.explanation || '',
+          })),
+          difficulty: a.difficulty === 'beginner' || a.difficulty === 'easy' ? 'easy' : a.difficulty === 'advanced' || a.difficulty === 'hard' ? 'hard' : 'medium',
+          estimatedMinutes: Math.max(1, Math.ceil(text.split(/\s+/).length / 80)),
+          sourceType: 'ai-generated',
+          sourceIds: [detailItem.id],
+          explanationPolicy: 'after-attempt',
+          evaluationPolicy: 'deterministic',
+          metadata: { focusAreas: [], contextSnapshotHash: '', schemaVersion: '1.0' },
+        } as any)
+      }
 
       setDetailItem(null)
       showToast('Exercise generated! Find it in Reading Practice')
@@ -451,8 +481,9 @@ export default function ArtifactsPage() {
       return
     }
     const now = new Date().toISOString()
+    const passageId = crypto.randomUUID()
     await DatabaseService.add('passages', {
-      id: crypto.randomUUID(),
+      id: passageId,
       title: detailItem.title,
       content: text,
       source: 'user-created',
@@ -466,6 +497,27 @@ export default function ArtifactsPage() {
       createdAt: now,
       updatedAt: now,
     } as never)
+    const engine = getLearningEngine()
+    if (engine) {
+      engine.saveExercise({
+        id: passageId,
+        sessionId: '',
+        skill: 'reading',
+        exerciseType: 'comprehension',
+        objectiveId: '',
+        title: detailItem.title,
+        instructions: '',
+        content: { passage: text },
+        questions: [],
+        difficulty: a.difficulty === 'beginner' || a.difficulty === 'easy' ? 'easy' : a.difficulty === 'advanced' || a.difficulty === 'hard' ? 'hard' : 'medium',
+        estimatedMinutes: Math.max(1, Math.ceil(text.split(/\s+/).length / 80)),
+        sourceType: 'saved-content',
+        sourceIds: [detailItem.id],
+        explanationPolicy: 'after-attempt',
+        evaluationPolicy: 'deterministic',
+        metadata: { focusAreas: [], contextSnapshotHash: '', schemaVersion: '1.0' },
+      } as any)
+    }
     setDetailItem(null)
     navigate(ROUTES.reading)
   }, [detailItem, navigate, showToast])

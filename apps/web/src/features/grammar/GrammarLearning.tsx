@@ -611,6 +611,7 @@ export default function GrammarLearning() {
         `Grammar: ${topic}`,
         'medium',
         15,
+        topic,
       )
 
       if (error) throw new Error(error)

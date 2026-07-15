@@ -1,47 +1,48 @@
-import { DatabaseService } from '../../services/storage/Database'
+import { getLearningEngine } from '../../services/engineBootstrap'
 import type { ReadingPassageWithQuestions, ReadingQuestion } from '../../models'
 
 export async function loadAllPassages(): Promise<ReadingPassageWithQuestions[]> {
-  const [seedPassages, userEntries] = await Promise.all([
-    DatabaseService.getAll<Record<string, unknown>>('readingPassages').catch(() => []),
-    DatabaseService.getAll<Record<string, unknown>>('passages').catch(() => []),
-  ])
+  const engine = getLearningEngine()
+  if (!engine) return []
 
-  const result: ReadingPassageWithQuestions[] = []
+  const result = await engine.getExercises('reading')
+  if (result.status === 'failure' || !result.data) return []
 
-  for (const p of seedPassages) {
-    const notes = typeof p.notes === 'string' ? p.notes : '{}'
-    let extra: { questions?: ReadingQuestion[]; estimatedMinutes?: number } = {}
-    try { extra = JSON.parse(notes) } catch (error) {
-    console.error('apps/web/src/features/reading/passageSeedService.ts error:', error);
+  const passages: ReadingPassageWithQuestions[] = []
+  const seen = new Set<string>()
+
+  for (const e of result.data.exercises as unknown as Record<string, unknown>[]) {
+    const id = e.id as string
+    if (seen.has(id)) continue
+    seen.add(id)
+
+    const content = (e.content as string) || ''
+    if (content.length < 50) continue
+
+    let questions: ReadingQuestion[] = []
+    const rawQ = e.questions
+    if (typeof rawQ === 'string') {
+      try { questions = JSON.parse(rawQ) as ReadingQuestion[] } catch {}
+    } else if (Array.isArray(rawQ)) {
+      questions = rawQ as ReadingQuestion[]
     }
 
-    result.push({
-      id: p.id as string,
-      title: p.title as string,
-      topic: p.topic as string || 'General',
-      text: p.content as string,
-      questions: extra.questions || [],
-      difficulty: (p.difficulty as 'easy' | 'medium' | 'hard') || 'medium',
-      wordCount: (p.wordCount as number) || 0,
-      estimatedMinutes: extra.estimatedMinutes || Math.max(1, Math.ceil(((p.wordCount as number) || 0) / 80)),
-    })
-  }
+    const rawDiff = String(e.difficulty || 'medium').toLowerCase()
+    const difficulty: 'easy' | 'medium' | 'hard' =
+      rawDiff === 'beginner' || rawDiff === 'easy' ? 'easy' :
+      rawDiff === 'advanced' || rawDiff === 'hard' ? 'hard' : 'medium'
 
-  for (const p of userEntries) {
-    const content = (p.content as string) || ''
-    if (content.length < 50) continue
-    result.push({
-      id: p.id as string,
-      title: (p.title as string) || 'Untitled',
-      topic: (p.topic as string) || 'General',
+    passages.push({
+      id,
+      title: (e.title as string) || 'Untitled',
+      topic: (e.topic as string) || 'General',
       text: content,
-      questions: [],
-      difficulty: (p.difficulty as 'easy' | 'medium' | 'hard') || 'medium',
+      questions,
+      difficulty,
       wordCount: content.split(/\s+/).filter(Boolean).length,
-      estimatedMinutes: Math.max(1, Math.ceil(content.split(/\s+/).filter(Boolean).length / 80)),
+      estimatedMinutes: (e.estimatedMinutes as number) || Math.max(1, Math.ceil(content.split(/\s+/).filter(Boolean).length / 80)),
     })
   }
 
-  return result
+  return passages
 }

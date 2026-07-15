@@ -2,6 +2,7 @@ import { ProactiveTutorOrchestrator } from '../../proactive/proactive-tutor-orch
 import { TriggerRegistry } from '../../proactive/trigger-registry'
 import { MessageGeneratorRegistry } from '../../proactive/message-generator-registry'
 import { createDefaultGenerators } from '../../proactive/default-generators'
+import { createDefaultTriggers } from '../../proactive/default-triggers'
 import type { ProactiveEvaluationRequest, ProactiveEvaluationResult } from '../../domain/entities/proactive-message'
 import type { LearnerContextBuilder } from '../../context/learner-context-builder'
 import type { TutorSettingsRepository } from '../../ports/tutor-settings-repository'
@@ -25,6 +26,10 @@ export async function evaluateProactiveOpportunity(
 
   const triggerRegistry = new TriggerRegistry()
   const generatorRegistry = new MessageGeneratorRegistry()
+
+  for (const trigger of createDefaultTriggers()) {
+    triggerRegistry.register(trigger)
+  }
 
   for (const gen of createDefaultGenerators()) {
     generatorRegistry.register(gen)

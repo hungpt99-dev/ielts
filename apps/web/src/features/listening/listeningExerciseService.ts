@@ -1,4 +1,4 @@
-import { DatabaseService } from '../../services/storage/Database'
+import { getLearningEngine } from '../../services/engineBootstrap'
 import type { ListeningExercise, ListeningQuestion } from '../../models'
 
 function getTranscriptText(e: Record<string, unknown>): string {
@@ -40,22 +40,30 @@ function getListeningDifficulty(e: Record<string, unknown>): 'easy' | 'medium' |
 }
 
 export async function loadListeningExercises(): Promise<ListeningExercise[]> {
-  const exercises = await DatabaseService.getAll<Record<string, unknown>>('readingExercises').catch(() => [])
-  const result: ListeningExercise[] = []
+  const engine = getLearningEngine()
+  if (!engine) return []
 
-  for (const e of exercises) {
-    const skill = e.skill as string | undefined
-    if (skill && skill !== 'listening') continue
+  const result = await engine.getExercises('listening')
+  if (result.status === 'failure' || !result.data) return []
+
+  const seen = new Set<string>()
+  const exercises: ListeningExercise[] = []
+
+  for (const e of result.data.exercises as unknown as Record<string, unknown>[]) {
+    const id = e.id as string
+    if (seen.has(id)) continue
+    seen.add(id)
 
     const transcript = getTranscriptText(e)
     if (transcript.length < 50) continue
 
     const questions = getListeningQuestions(e)
+    if (questions.length === 0) continue
 
-    result.push({
-      id: e.id as string,
+    exercises.push({
+      id,
       title: (e.title as string) || 'Untitled',
-      topic: (e.topic as string) || (e.skill as string) || 'General',
+      topic: (e.topic as string) || 'General',
       transcript,
       audioUrl: '',
       audioType: 'audio',
@@ -66,5 +74,5 @@ export async function loadListeningExercises(): Promise<ListeningExercise[]> {
     })
   }
 
-  return result
+  return exercises
 }

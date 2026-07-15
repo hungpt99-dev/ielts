@@ -26,6 +26,7 @@ export interface GenerateLearningActivityRequest {
   difficulty: ExerciseDifficulty
   contextScope: string
   sourceContent?: LearningSourceContent
+  topic?: string
   correlationId: string
 }
 

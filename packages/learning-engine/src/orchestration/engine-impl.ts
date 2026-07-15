@@ -1,7 +1,8 @@
-import type { LearningEngine, AdaptDifficultyRequest, AdaptDifficultyResult, GenerateReviewRequest, GenerateReviewResult, CreateContentSessionRequest } from './learning-engine-facade'
+import type { LearningEngine, AdaptDifficultyRequest, AdaptDifficultyResult, GenerateReviewRequest, GenerateReviewResult, CreateContentSessionRequest, EvaluateWritingRequest, GenerateWritingPromptRequest } from './learning-engine-facade'
 import type { CreateLearningSessionRequest, CreateLearningSessionResult, CompleteLearningSessionRequest, CompleteLearningSessionResult, ResumeLearningSessionResult, LearningSessionSummaryResult } from '../domain/entities/learning-session'
 import type { GenerateLearningActivityRequest, GenerateLearningActivityResult } from '../domain/entities/learning-activity'
 import type { StartAttemptRequest, SubmitLearningAnswerRequest, SubmitLearningAnswerResult, LearningAttempt } from '../domain/entities/learning-attempt'
+import type { Exercise } from '../domain/entities/exercise'
 import { startAttempt as startAttemptFn } from '../application/attempts/start-attempt'
 import type { LearningRecommendationRequest, LearningRecommendationResult } from '../domain/entities/learning-recommendation'
 import type { LearningOperationOptions, LearningOperationResult, LearningOperationMetadata } from '../domain/results/learning-operation-result'
@@ -325,6 +326,145 @@ export class LearningEngineImpl implements LearningEngine {
       return {
         status: 'failure',
         error: { code: 'context_unavailable', message: err instanceof Error ? err.message : 'Failed to generate review', recoverable: true },
+      }
+    }
+  }
+
+  async getExercises(skill?: string): Promise<LearningOperationResult<{ exercises: Exercise[] }>> {
+    try {
+      const exercises = await this.deps.exerciseRepository.findAll(skill)
+      return { status: 'success', data: { exercises }, metadata: metadata(false, false) }
+    } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
+      return {
+        status: 'failure',
+        error: { code: 'storage_failure', message: err instanceof Error ? err.message : 'Failed to get exercises', recoverable: true },
+      }
+    }
+  }
+
+  async saveExercise(exercise: Exercise): Promise<LearningOperationResult<void>> {
+    try {
+      await this.deps.exerciseRepository.save(exercise)
+      return { status: 'success', data: undefined as any, metadata: metadata(false, false) }
+    } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
+      return {
+        status: 'failure',
+        error: { code: 'storage_failure', message: err instanceof Error ? err.message : 'Failed to save exercise', recoverable: true },
+      }
+    }
+  }
+
+  async deleteExercise(id: string): Promise<LearningOperationResult<void>> {
+    try {
+      await this.deps.exerciseRepository.delete(id)
+      return { status: 'success', data: undefined as any, metadata: metadata(false, false) }
+    } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
+      return {
+        status: 'failure',
+        error: { code: 'storage_failure', message: err instanceof Error ? err.message : 'Failed to delete exercise', recoverable: true },
+      }
+    }
+  }
+
+  async evaluateWriting(request: EvaluateWritingRequest): Promise<LearningOperationResult<{ feedback: any }>> {
+    try {
+      const systemPrompt = `You are an expert IELTS writing examiner and tutor. Evaluate the user's essay based on the official IELTS Writing Task rubric.
+
+Return ONLY valid JSON in this exact format, no other text:
+{
+  "bandScore": number (1-9),
+  "taskResponse": "detailed feedback on task achievement / task response (2-3 sentences)",
+  "coherence": "detailed feedback on coherence and cohesion (2-3 sentences)",
+  "vocabulary": "detailed feedback on lexical resource (2-3 sentences)",
+  "grammar": "detailed feedback on grammatical range and accuracy (2-3 sentences)",
+  "overallFeedback": "summary of strengths and key areas to improve (2-3 sentences)",
+  "improvedVersion": "a rewritten version of a key paragraph showing improvement",
+  "mistakes": [
+    {
+      "category": "grammar" | "vocabulary" | "coherence" | "task-response",
+      "text": "the incorrect or problematic text",
+      "correction": "the corrected version",
+      "explanation": "why this is an issue and how to fix it"
+    }
+  ]
+}
+
+Be specific and constructive. Reference specific sentences from the essay in your feedback.`
+
+      const userMessage = `Writing Task Question:
+${request.question}
+
+User's Essay:
+${request.essay}
+
+Please evaluate this essay according to the IELTS Writing Task rubric.`
+
+      const result = await this.deps.tutorPort.generateEducationalContent({
+        systemPrompt,
+        userMessage,
+        schema: {},
+      })
+
+      if (!result.success) {
+        return {
+          status: 'failure',
+          error: { code: 'ai_failed', message: result.error?.message ?? 'AI evaluation failed', recoverable: true },
+        }
+      }
+
+      return { status: 'success', data: { feedback: result.data }, metadata: metadata(true, false) }
+    } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
+      return {
+        status: 'failure',
+        error: { code: 'evaluation_failure', message: err instanceof Error ? err.message : 'Failed to evaluate writing', recoverable: true },
+      }
+    }
+  }
+
+  async generateWritingPrompt(request: GenerateWritingPromptRequest): Promise<LearningOperationResult<{ question: string }>> {
+    try {
+      const systemPrompt = `You are an IELTS writing examiner. Generate a single IELTS Writing Task ${request.taskType === 'task1' ? '1' : '2'} prompt about "${request.topic}" at ${request.difficulty} difficulty.
+
+Return ONLY valid JSON in this exact format, no other text:
+{
+  "question": "the full IELTS writing prompt question"
+}
+
+The question must be a complete, realistic IELTS Writing Task ${request.taskType === 'task1' ? '1' : '2'} prompt about "${request.topic}".`
+
+      const userMessage = `Generate an IELTS Writing Task ${request.taskType === 'task1' ? '1' : '2'} prompt about "${request.topic}" at ${request.difficulty} difficulty.`
+
+      const result = await this.deps.tutorPort.generateEducationalContent({
+        systemPrompt,
+        userMessage,
+        schema: {},
+      })
+
+      if (!result.success) {
+        return {
+          status: 'failure',
+          error: { code: 'ai_failed', message: result.error?.message ?? 'AI generation failed', recoverable: true },
+        }
+      }
+
+      const question = result.data?.question || ''
+      if (!question) {
+        return {
+          status: 'failure',
+          error: { code: 'generation_failed', message: 'AI returned empty question', recoverable: true },
+        }
+      }
+
+      return { status: 'success', data: { question }, metadata: metadata(true, false) }
+    } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
+      return {
+        status: 'failure',
+        error: { code: 'generation_failure', message: err instanceof Error ? err.message : 'Failed to generate writing prompt', recoverable: true },
       }
     }
   }

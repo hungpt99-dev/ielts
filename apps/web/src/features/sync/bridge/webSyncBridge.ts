@@ -1,6 +1,7 @@
 import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { BRIDGE_NAMESPACE } from './extensionBridge.types'
 import { DatabaseService } from '../../../services/storage/Database'
+import { getLearningEngine } from '../../../services/engineBootstrap'
 import { STORAGE_KEYS } from '@ielts/config'
 
 let initialized = false
@@ -95,6 +96,24 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
                 createdAt: (entry.createdAt as string) || new Date().toISOString(),
                 updatedAt: (entry.updatedAt as string) || new Date().toISOString(),
               } as never).catch(() => {})
+              const engine = getLearningEngine()
+              if (engine) {
+                engine.saveExercise({
+                  id,
+                  sessionId: '', skill: 'reading', exerciseType: 'comprehension', objectiveId: '',
+                  title: entry.pageTitle || entry.topic || 'Saved from extension',
+                  instructions: '',
+                  content: { passage: entry.text as string },
+                  questions: [],
+                  difficulty: (entry.difficulty as string) === 'easy' || (entry.difficulty as string) === 'beginner' ? 'easy' : (entry.difficulty as string) === 'hard' || (entry.difficulty as string) === 'advanced' ? 'hard' : 'medium',
+                  estimatedMinutes: Math.max(1, Math.ceil(((entry.text as string) || '').split(/\s+/).length / 80)),
+                  sourceType: 'saved-content',
+                  sourceIds: [id],
+                  explanationPolicy: 'after-attempt',
+                  evaluationPolicy: 'deterministic',
+                  metadata: { focusAreas: [], contextSnapshotHash: '', schemaVersion: '1.0' },
+                } as any).catch(() => {})
+              }
               existingPassageIds.add(id)
             }
           } else {
@@ -143,6 +162,25 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
               createdAt: (article.createdAt as string) || new Date().toISOString(),
               updatedAt: (article.updatedAt as string) || new Date().toISOString(),
             } as never).catch(() => {})
+            const engine = getLearningEngine()
+            if (engine) {
+              const artText = (article.content as string) || (article.text as string) || ''
+              engine.saveExercise({
+                id,
+                sessionId: '', skill: 'reading', exerciseType: 'comprehension', objectiveId: '',
+                title: (article.title as string) || (article.pageTitle as string) || 'Article',
+                instructions: '',
+                content: { passage: artText },
+                questions: [],
+                difficulty: 'medium',
+                estimatedMinutes: Math.max(1, Math.ceil(artText.split(/\s+/).length / 80)),
+                sourceType: 'saved-content',
+                sourceIds: [id],
+                explanationPolicy: 'after-attempt',
+                evaluationPolicy: 'deterministic',
+                metadata: { focusAreas: [], contextSnapshotHash: '', schemaVersion: '1.0' },
+              } as any).catch(() => {})
+            }
             existingPassageIds.add(id)
           }
         }

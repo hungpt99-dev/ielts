@@ -5,6 +5,7 @@ import type { LearningRecommendationRequest, LearningRecommendationResult } from
 import type { LearningOperationOptions, LearningOperationResult } from '../domain/results/learning-operation-result'
 import type { RoadmapLearningTask } from '../ports/study-plan-port'
 import type { LearningSourceContent } from '../domain/entities/learning-activity'
+import type { Exercise } from '../domain/entities/exercise'
 
 export interface AdaptDifficultyRequest {
   skill: string
@@ -29,6 +30,17 @@ export interface GenerateReviewRequest {
 
 export interface GenerateReviewResult {
   exercise: import('../domain/entities/exercise').Exercise
+}
+
+export interface EvaluateWritingRequest {
+  question: string
+  essay: string
+}
+
+export interface GenerateWritingPromptRequest {
+  taskType: 'task1' | 'task2'
+  topic: string
+  difficulty: string
 }
 
 export interface CreateContentSessionRequest {
@@ -89,4 +101,14 @@ export interface LearningEngine {
   ): Promise<LearningOperationResult<GenerateReviewResult>>
 
   getSessionSummary(sessionId: string): Promise<LearningOperationResult<LearningSessionSummaryResult>>
+
+  getExercises(skill?: string): Promise<LearningOperationResult<{ exercises: Exercise[] }>>
+
+  saveExercise(exercise: Exercise): Promise<LearningOperationResult<void>>
+
+  deleteExercise(id: string): Promise<LearningOperationResult<void>>
+
+  evaluateWriting(request: EvaluateWritingRequest): Promise<LearningOperationResult<{ feedback: any }>>
+
+  generateWritingPrompt(request: GenerateWritingPromptRequest): Promise<LearningOperationResult<{ question: string }>>
 }

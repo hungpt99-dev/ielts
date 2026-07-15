@@ -43,7 +43,7 @@ export function useChatWidget(options: UseChatWidgetOptions): UseChatWidgetRetur
     onClearChat: externalClearChat,
   } = options
 
-  const [messages, setMessages] = useState<ChatMessage[]>(MessageStorage.getMessages)
+  const [messages, setMessages] = useState<ChatMessage[]>(MessageStorage.getMessages())
   const [isTyping, setIsTyping] = useState(false)
   const [showActions, setShowActions] = useState(true)
   const [isMobileFullscreen, setIsMobileFullscreen] = useState(false)
