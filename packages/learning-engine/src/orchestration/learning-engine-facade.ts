@@ -111,4 +111,6 @@ export interface LearningEngine {
   evaluateWriting(request: EvaluateWritingRequest): Promise<LearningOperationResult<{ feedback: any }>>
 
   generateWritingPrompt(request: GenerateWritingPromptRequest): Promise<LearningOperationResult<{ question: string }>>
+
+  completeExercise(request: { skill: string; topic: string; totalQuestions: number; correctAnswers: number; mistakes: any[]; sessionId?: string; attemptId?: string; timeSpentMs?: number }): Promise<LearningOperationResult<void>>
 }

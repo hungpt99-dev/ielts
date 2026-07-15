@@ -469,6 +469,58 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
     }
   }
 
+  async completeExercise(request: { skill: string; topic: string; totalQuestions: number; correctAnswers: number; mistakes: any[]; sessionId?: string; attemptId?: string; timeSpentMs?: number }): Promise<LearningOperationResult<void>> {
+    try {
+      for (const m of request.mistakes) {
+        await this.deps.mistakeRepository.save(m).catch(() => {})
+      }
+      if (request.sessionId && request.attemptId) {
+        const { submitAnswer } = await import('../application/attempts/submit-answer')
+        await submitAnswer({
+          sessionId: request.sessionId,
+          attemptId: request.attemptId,
+          answers: request.mistakes.map(m => ({
+            questionId: m.id || '',
+            answer: m.mistake || m.originalResponse || '',
+            answeredAt: new Date().toISOString(),
+            timeSpentMs: request.timeSpentMs || 0,
+          })),
+          correlationId: crypto.randomUUID?.() ?? `${Date.now()}-corr`,
+        }, {
+          sessionRepository: this.deps.sessionRepository,
+          attemptRepository: this.deps.attemptRepository,
+          exerciseRepository: this.deps.exerciseRepository,
+          tutorPort: this.deps.tutorPort,
+          mistakeRepository: this.deps.mistakeRepository,
+          eventPublisher: this.deps.eventPublisher,
+        }).catch(() => {})
+
+        const { completeLearningSession } = await import('../application/sessions/complete-learning-session')
+        await completeLearningSession({
+          sessionId: request.sessionId,
+          actualDurationMinutes: Math.ceil((request.timeSpentMs || 0) / 60000),
+          hintCount: 0,
+          correlationId: crypto.randomUUID?.() ?? `${Date.now()}-corr`,
+        }, {
+          sessionRepository: this.deps.sessionRepository,
+          attemptRepository: this.deps.attemptRepository,
+          outcomeRepository: this.deps.outcomeRepository,
+          mistakeRepository: this.deps.mistakeRepository,
+          vocabularyRepository: this.deps.vocabularyRepository,
+          eventPublisher: this.deps.eventPublisher,
+          clock: this.deps.clock,
+        }).catch(() => {})
+      }
+      return { status: 'success', data: undefined as any, metadata: metadata(false, false) }
+    } catch (err) {
+      console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
+      return {
+        status: 'failure',
+        error: { code: 'storage_failure', message: err instanceof Error ? err.message : 'Failed to complete exercise', recoverable: true },
+      }
+    }
+  }
+
   async getSessionSummary(sessionId: string): Promise<LearningOperationResult<LearningSessionSummaryResult>> {
     const session = await this.deps.sessionRepository.getById(sessionId)
     if (!session) {
