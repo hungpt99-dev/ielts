@@ -338,11 +338,16 @@ export default function Exercise({ exercises, topic, onComplete, onGenerateAi, o
               </div>
             )}
 
-            <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center justify-between pt-2">
               <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
                 {Object.keys(userAnswers).length} of {exercises.length} answered
               </p>
               <div className="flex gap-2">
+                {onRegenerate && (
+                  <Button variant="outline" size="sm" onClick={() => onRegenerate(topic)}>
+                    Regenerate
+                  </Button>
+                )}
                 {!submitted ? (
                   <Button
                     onClick={checkAnswer}
