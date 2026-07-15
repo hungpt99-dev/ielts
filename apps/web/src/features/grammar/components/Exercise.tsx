@@ -343,11 +343,6 @@ export default function Exercise({ exercises, topic, onComplete, onGenerateAi, o
                 {Object.keys(userAnswers).length} of {exercises.length} answered
               </p>
               <div className="flex gap-2">
-                {onRegenerate && (
-                  <Button variant="outline" size="sm" onClick={() => onRegenerate(topic)}>
-                    Regenerate
-                  </Button>
-                )}
                 {!submitted ? (
                   <Button
                     onClick={checkAnswer}

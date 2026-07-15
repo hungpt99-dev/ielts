@@ -601,10 +601,6 @@ export default function GrammarLearning() {
   }
 
   async function generateAiExercises(topic: string) {
-    if (!settings.aiApiKey) {
-      setAiError('Set your AI API key in Settings first')
-      return
-    }
     if (!topic.trim()) {
       setAiError('Select a grammar topic first')
       return
@@ -962,9 +958,16 @@ export default function GrammarLearning() {
                 Practice and test your knowledge
               </p>
             </div>
-            <Button variant="ghost" size="sm" onClick={() => { setExerciseMode(false) }}>
-              Back to {tab === 'exercises' ? 'Exercises' : 'Topics'}
-            </Button>
+            <div className="flex items-center gap-2">
+              {exercises.length > 0 && (
+                <Button variant="outline" size="sm" onClick={() => generateAiExercises(selectedTopic)} loading={aiLoading}>
+                  Regenerate
+                </Button>
+              )}
+              <Button variant="ghost" size="sm" onClick={() => { setExerciseMode(false) }}>
+                Back to {tab === 'exercises' ? 'Exercises' : 'Topics'}
+              </Button>
+            </div>
           </div>
           <Exercise
             exercises={exercises}
