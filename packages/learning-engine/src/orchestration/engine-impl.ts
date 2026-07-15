@@ -585,6 +585,38 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
         }).catch(() => {})
       }
 
+      await this.deps.outcomeRepository.save({
+        sessionId: request.sessionId || '',
+        exerciseId: '',
+        attemptId: request.attemptId || '',
+        skill: request.skill,
+        objectiveId: '',
+        score: correct,
+        maximumScore: request.questions.length,
+        difficulty: 'medium',
+        actualMinutes: Math.ceil((request.timeSpentMs || 0) / 60000),
+        hintsUsed: 0,
+        strengths: [],
+        weaknesses: [],
+        mistakes: mistakes.map((m: any) => ({
+          id: m.id,
+          skill: request.skill,
+          category: 'incorrect',
+          originalResponse: m.mistake || '',
+          correctedResponse: m.correction || '',
+          explanation: m.explanation || '',
+          sourceExerciseId: '',
+          sourceQuestionId: '',
+          occurredAt: now,
+          recurrenceCount: 0,
+          severity: 'moderate',
+          confidence: 0.5,
+          reviewStatus: 'unreviewed',
+        })),
+        vocabularyEvidence: [],
+        completedAt: now,
+      }).catch(() => {})
+
       return { status: 'success', data: { totalQuestions: request.questions.length, correctAnswers: correct, questionResults }, metadata: metadata(false, false) }
     } catch (err) {
       console.error('packages/learning-engine/src/orchestration/engine-impl.ts error:', err);
