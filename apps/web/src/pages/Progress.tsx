@@ -4,8 +4,8 @@ import MobilePageContainer from '../components/layout/MobilePageContainer'
 import PageHeader from '../components/layout/PageHeader'
 import { IconProgress } from '@ielts/ui'
 import { emitProgressViewed } from '../features/websiteActions/eventEmitters'
-import { computeProgressSnapshot, loadProgressSnapshot, saveProgressSnapshot } from '../features/progress/progressService'
-import type { ProgressSnapshot } from '../features/progress/progressService'
+import { computeProgressSnapshot, loadProgressSnapshot, saveProgressSnapshot } from '../features/progress/engineProgressService'
+import type { ProgressSnapshot } from '../features/progress/engineProgressService'
 
 export default function Progress() {
   const [loading, setLoading] = useState(true)

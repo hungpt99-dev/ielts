@@ -79,7 +79,27 @@ export async function computeProgressSnapshot(): Promise<ProgressSnapshot> {
   const engine = getLearningEngine()
   if (engine) {
     try {
-      return await legacyCompute()
+      const [mistakesResult, outcomesResult, exercisesResult] = await Promise.all([
+        engine.getMistakes().catch(() => null),
+        engine.getOutcomes().catch(() => null),
+        engine.getExercises().catch(() => null),
+      ])
+
+      const mistakes = mistakesResult?.status === 'success' && mistakesResult.data ? mistakesResult.data.mistakes : []
+      const outcomes = outcomesResult?.status === 'success' && outcomesResult.data ? outcomesResult.data.outcomes : []
+
+      const snapshot = await legacyCompute()
+      if (mistakes.length > 0) {
+        const bySkill: Record<string, number> = {}
+        for (const m of mistakes) {
+          const skill = m.skill || m.source?.split(' - ')[0]?.toLowerCase() || 'general'
+          bySkill[skill] = (bySkill[skill] || 0) + 1
+        }
+        snapshot.weakSkills = Object.entries(bySkill)
+          .map(([skill, count]) => ({ skill, count }))
+          .sort((a, b) => b.count - a.count)
+      }
+      return snapshot
     } catch (error) {
   console.error('apps/web/src/features/progress/engineProgressService.ts error:', error);
     }
