@@ -963,6 +963,7 @@ export default function GrammarLearning() {
             topic={selectedTopic}
             onComplete={handleExerciseComplete}
             onGenerateAi={generateAiExercises}
+            onRegenerate={generateAiExercises}
           />
         </div>
       )}

@@ -20,9 +20,10 @@ interface ExerciseProps {
   topic: string
   onComplete: (results: { total: number; correct: number; mistakes: MistakeEntry[] }) => void
   onGenerateAi?: (topic: string) => void
+  onRegenerate?: (topic: string) => void
 }
 
-export default function Exercise({ exercises, topic, onComplete, onGenerateAi }: ExerciseProps) {
+export default function Exercise({ exercises, topic, onComplete, onGenerateAi, onRegenerate }: ExerciseProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [userAnswers, setUserAnswers] = useState<Record<string, string>>({})
   const [submitted, setSubmitted] = useState(false)
@@ -155,7 +156,7 @@ export default function Exercise({ exercises, topic, onComplete, onGenerateAi }:
       </div>
 
       {allChecked ? (
-        completeScreen(results, finish, saving, topic)
+        completeScreen(results, finish, saving, topic, onRegenerate)
       ) : (
         <Card>
           <CardContent className="space-y-4">
@@ -371,6 +372,7 @@ function completeScreen(
   finish: () => void,
   saving: boolean,
   topic: string,
+  onRegenerate?: (topic: string) => void,
 ) {
   const correctCount = results.filter(r => r.correct).length
   const total = results.length
@@ -443,9 +445,16 @@ function completeScreen(
           Mistakes have been saved to your notebook for review.
         </p>
 
-        <Button className="mt-6" onClick={finish} loading={saving}>
-          Back to Topics
-        </Button>
+        <div className="mt-6 flex items-center justify-center gap-3">
+          <Button onClick={finish} loading={saving} variant="secondary">
+            Back to Topics
+          </Button>
+          {onRegenerate && (
+            <Button onClick={() => onRegenerate(topic)} variant="primary">
+              Regenerate
+            </Button>
+          )}
+        </div>
       </CardContent>
     </Card>
   )
