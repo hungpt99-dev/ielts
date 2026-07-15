@@ -633,11 +633,12 @@ export default function GrammarLearning() {
         throw new Error('Failed to parse AI response as JSON')
       }
 
-      if (!parsed.exercises || !Array.isArray(parsed.exercises) || parsed.exercises.length === 0) {
+      const rawExercises = parsed.exercises || parsed.questions || []
+      if (!Array.isArray(rawExercises) || rawExercises.length === 0) {
         throw new Error('No exercises generated')
       }
 
-      const newExercises: GrammarExerciseItem[] = parsed.exercises.map((ex: { type: string; question: string; options?: string[]; correctAnswer: string; explanation: string }, i: number) => ({
+      const newExercises: GrammarExerciseItem[] = rawExercises.map((ex: { type: string; question: string; options?: string[]; correctAnswer: string; explanation: string }, i: number) => ({
         id: `ai-${generateId()}-${i}`,
         topic,
         type: ex.type as GrammarExerciseItem['type'],
