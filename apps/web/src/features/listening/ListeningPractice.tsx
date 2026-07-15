@@ -233,7 +233,7 @@ export default function ListeningPractice() {
     let total = currentExercise.questions.length
     let score = 0
 
-    if (engine && sessionInfo) {
+    if (engine) {
       const result = await engine.completeExercise({
         skill: 'listening',
         topic: currentExercise.title,
@@ -247,8 +247,8 @@ export default function ListeningPractice() {
           blanks: q.blanks,
         })),
         answers: answers as Record<string, unknown>,
-        sessionId: sessionInfo.sessionId,
-        attemptId: sessionInfo.attemptId,
+        sessionId: sessionInfo?.sessionId,
+        attemptId: sessionInfo?.attemptId,
         timeSpentMs: timerSeconds * 1000,
       })
       if (result.status === 'success' && result.data) {
