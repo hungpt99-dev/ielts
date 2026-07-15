@@ -628,6 +628,71 @@ export interface PlanGenerationFailureReason {
   suggestedAction: string;
 }
 
+// ── AI Enrichment Budget & Coverage Types ──
+
+export interface AiGenerationCallBudget {
+  profileAnalysisCalls: number;
+  objectiveBatchCalls: number;
+  taskCandidateBatchCalls: number;
+  requiredCalls: number;
+  repairBudget: number;
+  maximumCalls: number;
+  hardCallLimit: number;
+}
+
+export interface AiCallStats {
+  requiredCallsAttempted: number;
+  repairCallsAttempted: number;
+  successfulCalls: number;
+  failedCalls: number;
+  totalAttemptedCalls: number;
+  cacheHits: number;
+  totalTokensEstimated: number;
+}
+
+export interface EnrichmentRequirement {
+  requirementId: string;
+  phaseId: string;
+  weekId?: string;
+  skill: string;
+  itemType: 'task-candidate' | 'weekly-objective' | 'profile-analysis';
+  expectedCount: number;
+}
+
+export interface EnrichmentCoverage {
+  requirementId: string;
+  expectedCount: number;
+  generatedCount: number;
+  missingCount: number;
+  complete: boolean;
+}
+
+export interface EnrichmentRepairRequest {
+  originalBatchId: number;
+  missingRequirements: Array<{
+    requirementId: string;
+    missingCount: number;
+    skill: string;
+  }>;
+}
+
+export interface EnrichmentCompletenessReport {
+  expectedItems: number;
+  generatedItems: number;
+  aiGeneratedItems: number;
+  repairedItems: number;
+  fallbackItems: number;
+  duplicateItemsDiscarded: number;
+  missingItems: number;
+  missingRequirementIds: string[];
+  complete: boolean;
+}
+
+export interface AiRetryPolicy {
+  maxRepairAttempts: number;
+  enableRepair: boolean;
+}
+
 // ── AI Integration Types ──
 
 export interface AIGenerationPlan {
@@ -638,6 +703,8 @@ export interface AIGenerationPlan {
   allowRepairCall: boolean;
   maximumCalls: number;
   tokenBudget: number;
+  callBudget: AiGenerationCallBudget;
+  retryPolicy: AiRetryPolicy;
 }
 
 export interface AIWeekBatch {

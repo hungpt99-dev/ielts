@@ -173,7 +173,7 @@ describe('AiPlanOrchestrator', () => {
         expect(result.profileAnalysis).toBeNull();
         expect(result.enrichedObjectives).toHaveLength(0);
         expect(result.taskCandidates).toHaveLength(0);
-        expect(result.callStats.attemptedCalls).toBeGreaterThan(0);
+        expect(result.callStats.totalAttemptedCalls).toBeGreaterThan(0);
         expect(result.callStats.successfulCalls).toBe(0);
       });
 
@@ -192,7 +192,7 @@ describe('AiPlanOrchestrator', () => {
 
         expect(result.fallbackUsed).toBe(true);
         expect(result.profileAnalysis).toBeNull();
-        expect(result.callStats.attemptedCalls).toBe(0);
+        expect(result.callStats.totalAttemptedCalls).toBe(0);
       });
     });
 
@@ -455,7 +455,7 @@ describe('AiPlanOrchestrator', () => {
     });
 
     describe('call limits', () => {
-      it('respects maximum calls per generation', async () => {
+      it('executes all required batches regardless of maximumCallsPerGeneration', async () => {
         const limitedOrchestrator = new AiPlanOrchestrator(
           mockCallAI as unknown as AICallFn,
           { callLimits: { maximumCallsPerGeneration: 2, maximumWeeksPerBatch: 2 } },
@@ -464,7 +464,8 @@ describe('AiPlanOrchestrator', () => {
         mockCallAI.mockResolvedValue(null);
 
         const result = await limitedOrchestrator.enrichPlan(baseParams);
-        expect(result.callStats.attemptedCalls).toBeLessThanOrEqual(2);
+        // With dynamic budgeting, all required batches execute regardless of old limit
+        expect(result.callStats.requiredCallsAttempted).toBeGreaterThan(0);
       });
 
       it('enforces maximum candidates per batch', async () => {
@@ -488,7 +489,7 @@ describe('AiPlanOrchestrator', () => {
         const result = await orchestrator.enrichPlan({ ...baseParams, signal: controller.signal });
 
         expect(result.fallbackUsed).toBe(true);
-        expect(result.callStats.attemptedCalls).toBe(0);
+        expect(result.callStats.totalAttemptedCalls).toBe(0);
       });
 
       it('stops making calls when aborted mid-generation', async () => {
@@ -589,7 +590,7 @@ describe('AiPlanOrchestrator', () => {
         const result = await orchestrator.enrichPlan({ ...baseParams, profile });
 
         expect(result.fallbackUsed).toBe(true);
-        expect(result.callStats.attemptedCalls).toBe(0);
+        expect(result.callStats.totalAttemptedCalls).toBe(0);
       });
 
       it('returns fallback result when AI key exists but calls fail', async () => {

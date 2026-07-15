@@ -126,14 +126,10 @@ export interface EnrichPlanResult {
   enrichedObjectives: AIWeeklyObjective[];
   taskCandidates: AITaskCandidate[];
   generationPlan: AIGenerationPlan;
-  callStats: {
-    attemptedCalls: number;
-    successfulCalls: number;
-    failedCalls: number;
-    totalTokensEstimated: number;
-    cacheHits: number;
-  };
+  callStats: AiCallStats;
   fallbackUsed: boolean;
+  completeness: EnrichmentCompletenessReport;
+  requirements: EnrichmentRequirement[];
 }
 
 export interface ExplainabilityContext {
@@ -145,6 +141,184 @@ export interface ExplainabilityContext {
   skillGaps: SkillGapScore[];
   profileAnalysis: AIProfileAnalysis | null;
   enrichedObjectives: AIWeeklyObjective[];
+}
+
+// ── Domain Errors ──
+
+export class AiGenerationPlanTooLargeError extends Error {
+  public readonly requiredCalls: number;
+  public readonly hardCallLimit: number;
+  public readonly profileAnalysisCalls: number;
+  public readonly objectiveBatchCalls: number;
+  public readonly taskCandidateBatchCalls: number;
+
+  constructor(details: {
+    requiredCalls: number;
+    hardCallLimit: number;
+    profileAnalysisCalls: number;
+    objectiveBatchCalls: number;
+    taskCandidateBatchCalls: number;
+  }) {
+    super(
+      `AI generation plan too large: ${details.requiredCalls} required calls exceeds hard limit of ${details.hardCallLimit}`,
+    );
+    this.name = 'AiGenerationPlanTooLargeError';
+    this.requiredCalls = details.requiredCalls;
+    this.hardCallLimit = details.hardCallLimit;
+    this.profileAnalysisCalls = details.profileAnalysisCalls;
+    this.objectiveBatchCalls = details.objectiveBatchCalls;
+    this.taskCandidateBatchCalls = details.taskCandidateBatchCalls;
+  }
+}
+
+export class IncompletePlanEnrichmentError extends Error {
+  public readonly missingRequirements: Array<{ requirementId: string; expectedCount: number; generatedCount: number }>;
+  public readonly expectedItemCount: number;
+  public readonly generatedItemCount: number;
+  public readonly repairCallsAttempted: number;
+  public readonly repairBudget: number;
+
+  constructor(details: {
+    missingRequirements: Array<{ requirementId: string; expectedCount: number; generatedCount: number }>;
+    expectedItemCount: number;
+    generatedItemCount: number;
+    repairCallsAttempted: number;
+    repairBudget: number;
+  }) {
+    super(
+      `Plan enrichment incomplete: ${details.missingRequirements.length} requirements still missing after ${details.repairCallsAttempted} repair calls`,
+    );
+    this.name = 'IncompletePlanEnrichmentError';
+    this.missingRequirements = details.missingRequirements;
+    this.expectedItemCount = details.expectedItemCount;
+    this.generatedItemCount = details.generatedItemCount;
+    this.repairCallsAttempted = details.repairCallsAttempted;
+    this.repairBudget = details.repairBudget;
+  }
+}
+
+// ── Domain Helpers ──
+
+import type { AiGenerationCallBudget, AiCallStats, EnrichmentRequirement, EnrichmentCoverage, EnrichmentCompletenessReport } from './types';
+
+export function calculateAiGenerationCallBudget(input: {
+  profileAnalysisRequired: boolean;
+  objectiveBatchCount: number;
+  taskCandidateBatchCount: number;
+  maxRepairCalls: number;
+  hardCallLimit: number;
+}): AiGenerationCallBudget {
+  const profileAnalysisCalls = input.profileAnalysisRequired ? 1 : 0;
+  const objectiveBatchCalls = input.objectiveBatchCount;
+  const taskCandidateBatchCalls = input.taskCandidateBatchCount;
+  const requiredCalls = profileAnalysisCalls + objectiveBatchCalls + taskCandidateBatchCalls;
+  const repairBudget = Math.max(0, input.maxRepairCalls);
+  const maximumCalls = Math.min(requiredCalls + repairBudget, input.hardCallLimit);
+
+  return {
+    profileAnalysisCalls,
+    objectiveBatchCalls,
+    taskCandidateBatchCalls,
+    requiredCalls,
+    repairBudget,
+    maximumCalls,
+    hardCallLimit: input.hardCallLimit,
+  };
+}
+
+export function calculateEnrichmentCoverage(
+  requirements: EnrichmentRequirement[],
+  getGeneratedCount: (requirementId: string) => number,
+): EnrichmentCoverage[] {
+  return requirements.map(req => {
+    const generatedCount = getGeneratedCount(req.requirementId);
+    const missingCount = Math.max(0, req.expectedCount - generatedCount);
+    return {
+      requirementId: req.requirementId,
+      expectedCount: req.expectedCount,
+      generatedCount,
+      missingCount,
+      complete: missingCount === 0,
+    };
+  });
+}
+
+export function mergeAndDeduplicate<T extends { candidateId?: string; title?: string; recommendedMinutes?: number }>(
+  newItems: T[],
+  existingItems: T[],
+  getRequirementId: (item: T) => string,
+): { merged: T[]; duplicatesDiscarded: number } {
+  const existingSignatures = new Set<string>();
+  for (const item of existingItems) {
+    existingSignatures.add(makeContentSignature(item, getRequirementId(item)));
+  }
+
+  let duplicatesDiscarded = 0;
+  const merged = [...existingItems];
+
+  for (const item of newItems) {
+    const sig = makeContentSignature(item, getRequirementId(item));
+    if (existingSignatures.has(sig)) {
+      duplicatesDiscarded++;
+    } else {
+      existingSignatures.add(sig);
+      merged.push(item);
+    }
+  }
+
+  return { merged, duplicatesDiscarded };
+}
+
+function makeContentSignature(item: { candidateId?: string; title?: string; recommendedMinutes?: number }, requirementId: string): string {
+  const title = (item.title ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
+  return [requirementId, title, item.recommendedMinutes ?? 0].join('|');
+}
+
+export function buildEnrichmentRequirements(phases: StudyPhase[], taskBatches: import('./types').AITaskBatch[]): EnrichmentRequirement[] {
+  const requirements: EnrichmentRequirement[] = [];
+
+  for (const batch of taskBatches) {
+    const phase = phases.find(p => p.id === batch.phaseId);
+    if (!phase) continue;
+    for (const weekId of batch.weekIds) {
+      for (const skill of phase.targetSkills.length > 0 ? phase.targetSkills : ['listening', 'reading', 'writing', 'speaking']) {
+        const requirementId = `${batch.phaseId}:${weekId}:${skill}`;
+        requirements.push({
+          requirementId,
+          phaseId: batch.phaseId,
+          weekId,
+          skill,
+          itemType: 'task-candidate',
+          expectedCount: Math.max(1, Math.ceil(batch.requiredCount / Math.max(1, batch.weekIds.length * Math.max(1, phase.targetSkills.length)))),
+        });
+      }
+    }
+  }
+
+  return requirements;
+}
+
+export function createCompletenessReport(
+  requirements: EnrichmentRequirement[],
+  coverage: EnrichmentCoverage[],
+  totalItems: number,
+  aiGeneratedItems: number,
+  repairedItems: number,
+  fallbackItems: number,
+  duplicatesDiscarded: number,
+): EnrichmentCompletenessReport {
+  const missing = coverage.filter(c => !c.complete);
+  return {
+    expectedItems: requirements.reduce((s, r) => s + r.expectedCount, 0),
+    generatedItems: totalItems,
+    aiGeneratedItems,
+    repairedItems,
+    fallbackItems,
+    duplicateItemsDiscarded: duplicatesDiscarded,
+    missingItems: missing.reduce((s, c) => s + c.missingCount, 0),
+    missingRequirementIds: missing.map(c => c.requirementId),
+    complete: missing.length === 0,
+  };
 }
 
 // ── Default Limits ──
@@ -230,13 +404,37 @@ export class AiPlanOrchestrator {
       return this.emptyResult(0, true);
     }
 
-    const callStats = { attemptedCalls: 0, successfulCalls: 0, failedCalls: 0, totalTokensEstimated: 0, cacheHits: 0 };
+    console.log('[AiOrchestrator] Call budget:', JSON.stringify(generationPlan.callBudget))
+
+    const callStats: AiCallStats = {
+      requiredCallsAttempted: 0,
+      repairCallsAttempted: 0,
+      successfulCalls: 0,
+      failedCalls: 0,
+      totalAttemptedCalls: 0,
+      cacheHits: 0,
+      totalTokensEstimated: 0,
+    };
     let fallbackUsed = false;
+    let aiGeneratedItems = 0;
+    let repairedItems = 0;
+    let fallbackItems = 0;
+    let duplicatesDiscarded = 0;
+
+    const totalBatches = generationPlan.weeklyObjectiveBatches.length + generationPlan.taskCandidateBatches.length
+    let completedBatches = 0
+
+    const reportProgress = (phase: EnrichProgressPhase) => {
+      this.config.onProgress?.(phase, completedBatches, totalBatches)
+    }
+
+    // ── First Pass: Required Work (no retries) ──
 
     // Step 1: Optional profile analysis
     let profileAnalysis: AIProfileAnalysis | null = null;
     if (generationPlan.profileAnalysisRequired) {
-      callStats.attemptedCalls++;
+      callStats.requiredCallsAttempted++;
+      callStats.totalAttemptedCalls++;
       const cacheKey = this.profileAnalysisCacheKey(profile);
       const cached = this.cache.get(cacheKey);
       if (cached) {
@@ -257,6 +455,7 @@ export class AiPlanOrchestrator {
         if (profileAnalysis) {
           callStats.successfulCalls++;
           this.cache.set(cacheKey, JSON.stringify(profileAnalysis));
+          aiGeneratedItems++;
         } else {
           callStats.failedCalls++;
           fallbackUsed = true;
@@ -264,24 +463,16 @@ export class AiPlanOrchestrator {
       }
     }
 
-    const totalBatches = generationPlan.weeklyObjectiveBatches.length + generationPlan.taskCandidateBatches.length
-    let completedBatches = 0
-
-    // Step 2: Weekly objectives (batched)
+    // Step 2: Weekly objectives (all batches, no retries)
+    reportProgress('weekly-objectives')
     const enrichedObjectives: AIWeeklyObjective[] = [];
     let previousBatchSummary: string | undefined;
 
-    const reportProgress = (phase: EnrichProgressPhase) => {
-      this.config.onProgress?.(phase, completedBatches, totalBatches)
-    }
-
-    reportProgress('weekly-objectives')
-
     for (const batch of generationPlan.weeklyObjectiveBatches) {
       if (signal?.aborted) break;
-      if (callStats.attemptedCalls >= this.limits.maximumCallsPerGeneration) break;
 
-      callStats.attemptedCalls++;
+      callStats.requiredCallsAttempted++;
+      callStats.totalAttemptedCalls++;
       const cacheKey = this.objectiveBatchCacheKey(batch, profile);
       const cached = this.cache.get(cacheKey);
       if (cached) {
@@ -290,6 +481,8 @@ export class AiPlanOrchestrator {
           enrichedObjectives.push(...parsed);
           callStats.cacheHits++;
           previousBatchSummary = this.buildBatchSummary(parsed);
+          completedBatches++;
+          reportProgress('weekly-objectives');
           continue;
         } catch (error) {
           console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
@@ -307,6 +500,7 @@ export class AiPlanOrchestrator {
         callStats.successfulCalls++;
         this.cache.set(cacheKey, JSON.stringify(objectives));
         previousBatchSummary = this.buildBatchSummary(objectives);
+        aiGeneratedItems += objectives.length;
       } else {
         console.log('[AiOrchestrator] Weekly objectives failed for batch:', batch.batchIndex)
         callStats.failedCalls++;
@@ -316,7 +510,11 @@ export class AiPlanOrchestrator {
       reportProgress('weekly-objectives')
     }
 
-    // Step 3: Task candidates (batched)
+    if (signal?.aborted) {
+      return this.emptyWithCompleteness(generationPlan, callStats, fallbackUsed);
+    }
+
+    // Step 3: Task candidates (all batches, no retries)
     reportProgress('task-candidates')
     const taskCandidates: AITaskCandidate[] = [];
     const weeksWithObjectives = new Map(
@@ -325,9 +523,9 @@ export class AiPlanOrchestrator {
 
     for (const batch of generationPlan.taskCandidateBatches) {
       if (signal?.aborted) break;
-      if (callStats.attemptedCalls >= this.limits.maximumCallsPerGeneration) break;
 
-      callStats.attemptedCalls++;
+      callStats.requiredCallsAttempted++;
+      callStats.totalAttemptedCalls++;
       const cacheKey = this.taskBatchCacheKey(batch, profile);
       const cached = this.cache.get(cacheKey);
       if (cached) {
@@ -335,6 +533,8 @@ export class AiPlanOrchestrator {
           const parsed = JSON.parse(cached) as AITaskCandidate[];
           taskCandidates.push(...parsed);
           callStats.cacheHits++;
+          completedBatches++;
+          reportProgress('task-candidates');
           continue;
         } catch (error) {
           console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
@@ -351,37 +551,8 @@ export class AiPlanOrchestrator {
         taskCandidates.push(...candidates);
         callStats.successfulCalls++;
         this.cache.set(cacheKey, JSON.stringify(candidates));
-        if (candidates.length < batch.requiredCount) {
-          console.log('[AiOrchestrator] Batch', batch.batchIndex, 'got', candidates.length, 'of', batch.requiredCount, 'required (partial — AI returned fewer than requested)')
-          let missingCount = batch.requiredCount - candidates.length;
-          for (let retry = 0; retry < 2 && missingCount > 0; retry++) {
-            if (callStats.attemptedCalls >= this.limits.maximumCallsPerGeneration) break;
-            if (signal?.aborted) break;
-            callStats.attemptedCalls++;
-            const retryCandidates = await this.callWithFallback<AITaskCandidate[]>(
-              () => this.callTaskCandidates(
-                { ...batch, requiredCount: missingCount },
-                weeks,
-                weeksWithObjectives,
-                profile,
-                signal,
-                candidates,
-              ),
-              [],
-            );
-            if (retryCandidates && retryCandidates.length > 0) {
-              taskCandidates.push(...retryCandidates);
-              callStats.successfulCalls++;
-              console.log('[AiOrchestrator] Batch', batch.batchIndex, 'retry', retry + 1, 'got', retryCandidates.length, 'of', missingCount, 'needed');
-              missingCount = Math.max(0, missingCount - retryCandidates.length);
-            }
-          }
-          if (missingCount > 0) {
-            console.log('[AiOrchestrator] Batch', batch.batchIndex, 'still missing', missingCount, 'candidates after', 2, 'retries');
-          }
-        } else {
-          console.log('[AiOrchestrator] Batch', batch.batchIndex, 'got', candidates.length, 'candidates (required:', batch.requiredCount, ')')
-        }
+        aiGeneratedItems += candidates.length;
+        console.log('[AiOrchestrator] Batch', batch.batchIndex, 'got', candidates.length, 'candidates (required:', batch.requiredCount, ')')
       } else {
         console.log('[AiOrchestrator] Task candidates FAILED for batch:', batch.batchIndex, 'required:', batch.requiredCount, 'weeks:', batch.weekIds.length)
         callStats.failedCalls++;
@@ -391,8 +562,136 @@ export class AiPlanOrchestrator {
       reportProgress('task-candidates')
     }
 
+    if (signal?.aborted) {
+      return this.emptyWithCompleteness(generationPlan, callStats, fallbackUsed);
+    }
+
+    // ── Second Pass: Repair Work (only missing items) ──
+
+    const requirements = buildEnrichmentRequirements(phases, generationPlan.taskCandidateBatches);
+    const requirementCounts = new Map<string, number>();
+    for (const c of taskCandidates) {
+      const reqId = `${generationPlan.taskCandidateBatches.find(b => b.weekIds.includes(c.targetWeekId))?.phaseId ?? 'unknown'}:${c.targetWeekId}:${c.skill}`;
+      requirementCounts.set(reqId, (requirementCounts.get(reqId) ?? 0) + 1);
+    }
+
+    const coverage = calculateEnrichmentCoverage(
+      requirements,
+      (reqId: string) => requirementCounts.get(reqId) ?? 0,
+    );
+    const missingReqs = coverage.filter(c => !c.complete);
+
+    if (missingReqs.length > 0 && generationPlan.retryPolicy.enableRepair) {
+      console.log('[AiOrchestrator] Repair pass needed for', missingReqs.length, 'requirements');
+
+      for (let repairAttempt = 0; repairAttempt < generationPlan.retryPolicy.maxRepairAttempts; repairAttempt++) {
+        if (callStats.repairCallsAttempted >= generationPlan.callBudget.repairBudget) break;
+        if (signal?.aborted) break;
+
+        const stillMissing = coverage.filter(c => !c.complete);
+        if (stillMissing.length === 0) break;
+
+        const repairBatch = generationPlan.taskCandidateBatches.find(
+          b => stillMissing.some(r => r.requirementId.startsWith(b.phaseId))
+        );
+        if (!repairBatch) break;
+
+        const missingForBatch = stillMissing.filter(
+          r => r.requirementId.startsWith(repairBatch.phaseId)
+        );
+
+        callStats.repairCallsAttempted++;
+        callStats.totalAttemptedCalls++;
+
+        const repairCandidates = await this.callWithFallback<AITaskCandidate[]>(
+          () => this.callTaskCandidates(
+            {
+              ...repairBatch,
+              requiredCount: missingForBatch.reduce((s, r) => s + r.missingCount, 0),
+            },
+            weeks,
+            weeksWithObjectives,
+            profile,
+            signal,
+            taskCandidates,
+          ),
+          [],
+        );
+
+        if (repairCandidates && repairCandidates.length > 0) {
+          const { merged, duplicatesDiscarded: dupCount } = mergeAndDeduplicate(
+            repairCandidates,
+            taskCandidates,
+            (item) => {
+              const batch = generationPlan.taskCandidateBatches.find(b => b.weekIds.includes(item.targetWeekId));
+              return `${batch?.phaseId ?? 'unknown'}:${item.targetWeekId}:${item.skill}`;
+            },
+          );
+          duplicatesDiscarded += dupCount;
+          const newItems = merged.length - taskCandidates.length;
+          repairedItems += newItems;
+          taskCandidates.length = 0;
+          taskCandidates.push(...merged);
+
+          // Recalculate coverage
+          const updatedCounts = new Map<string, number>();
+          for (const c of taskCandidates) {
+            const reqId = `${repairBatch.phaseId}:${c.targetWeekId}:${c.skill}`;
+            updatedCounts.set(reqId, (updatedCounts.get(reqId) ?? 0) + 1);
+          }
+          Array.from(coverage.entries()).forEach(([_, c]) => {
+            const newCount = updatedCounts.get(c.requirementId) ?? 0;
+            c.generatedCount = newCount;
+            c.missingCount = Math.max(0, c.expectedCount - newCount);
+            c.complete = c.missingCount === 0;
+          });
+
+          callStats.successfulCalls++;
+          console.log('[AiOrchestrator] Repair attempt', repairAttempt + 1, 'got', newItems, 'new items,', duplicatesDiscarded, 'duplicates discarded');
+        } else {
+          callStats.failedCalls++;
+          console.log('[AiOrchestrator] Repair attempt', repairAttempt + 1, 'failed');
+        }
+      }
+
+      // After repair, check if still incomplete
+      const finalMissing = coverage.filter(c => !c.complete);
+      if (finalMissing.length > 0 && generationPlan.retryPolicy.maxRepairAttempts > 0) {
+        console.log('[AiOrchestrator] Still missing', finalMissing.length, 'requirements after repair');
+        fallbackUsed = true;
+      }
+    }
+
     reportProgress('complete')
     callStats.totalTokensEstimated = (callStats.successfulCalls + callStats.cacheHits) * 4000;
+
+    const finalCoverage = calculateEnrichmentCoverage(
+      requirements,
+      (reqId: string) => {
+        const batch = generationPlan.taskCandidateBatches.find(b => reqId.startsWith(b.phaseId));
+        return taskCandidates.filter(c => {
+          const cReqId = `${batch?.phaseId ?? 'unknown'}:${c.targetWeekId}:${c.skill}`;
+          return cReqId === reqId;
+        }).length;
+      },
+    );
+
+    const completeness = createCompletenessReport(
+      requirements,
+      finalCoverage,
+      taskCandidates.length,
+      aiGeneratedItems,
+      repairedItems,
+      fallbackItems,
+      duplicatesDiscarded,
+    );
+
+    console.log('[AiOrchestrator] Enrichment completeness:', JSON.stringify({
+      expectedItems: completeness.expectedItems,
+      generatedItems: completeness.generatedItems,
+      complete: completeness.complete,
+      missingItems: completeness.missingItems,
+    }));
 
     return {
       profileAnalysis,
@@ -401,6 +700,8 @@ export class AiPlanOrchestrator {
       generationPlan,
       callStats,
       fallbackUsed,
+      completeness,
+      requirements,
     };
   }
 
@@ -478,7 +779,7 @@ export class AiPlanOrchestrator {
     const maxWeeksPerBatch = this.limits.maximumWeeksPerBatch;
 
     if (weekCount === 0) {
-      return {
+      const emptyPlan: AIGenerationPlan = {
         useAI: false,
         profileAnalysisRequired: false,
         weeklyObjectiveBatches: [],
@@ -486,7 +787,16 @@ export class AiPlanOrchestrator {
         allowRepairCall: false,
         maximumCalls: 0,
         tokenBudget: 0,
+        callBudget: calculateAiGenerationCallBudget({
+          profileAnalysisRequired: false,
+          objectiveBatchCount: 0,
+          taskCandidateBatchCount: 0,
+          maxRepairCalls: 0,
+          hardCallLimit: 25,
+        }),
+        retryPolicy: { maxRepairAttempts: 0, enableRepair: false },
       };
+      return emptyPlan;
     }
 
     const objectiveBatches: AIWeekBatch[] = [];
@@ -528,14 +838,34 @@ export class AiPlanOrchestrator {
     const totalBatches = objectiveBatches.length + taskBatches.length;
     const useAI = totalBatches > 0;
 
+    const callBudget = calculateAiGenerationCallBudget({
+      profileAnalysisRequired: useAI,
+      objectiveBatchCount: objectiveBatches.length,
+      taskCandidateBatchCount: taskBatches.length,
+      maxRepairCalls: this.limits.maximumRepairCalls,
+      hardCallLimit: 25,
+    });
+
+    if (useAI && callBudget.requiredCalls > callBudget.hardCallLimit) {
+      throw new AiGenerationPlanTooLargeError({
+        requiredCalls: callBudget.requiredCalls,
+        hardCallLimit: callBudget.hardCallLimit,
+        profileAnalysisCalls: callBudget.profileAnalysisCalls,
+        objectiveBatchCalls: callBudget.objectiveBatchCalls,
+        taskCandidateBatchCalls: callBudget.taskCandidateBatchCalls,
+      });
+    }
+
     return {
       useAI,
       profileAnalysisRequired: useAI,
       weeklyObjectiveBatches: objectiveBatches,
       taskCandidateBatches: taskBatches,
-      allowRepairCall: useAI && totalBatches <= this.limits.maximumCallsPerGeneration + 1,
-      maximumCalls: Math.min(totalBatches, this.limits.maximumCallsPerGeneration),
+      allowRepairCall: useAI && callBudget.repairBudget > 0,
+      maximumCalls: callBudget.maximumCalls,
       tokenBudget: Math.min(totalBatches * 4000, this.limits.maximumTokensPerGeneration),
+      callBudget,
+      retryPolicy: { maxRepairAttempts: this.limits.maximumRepairCalls, enableRepair: callBudget.repairBudget > 0 },
     };
   }
 
@@ -854,6 +1184,24 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
   }
 
   private emptyResult(attemptedCalls: number, fallbackUsed: boolean): EnrichPlanResult {
+    const emptyCallStats: AiCallStats = {
+      requiredCallsAttempted: 0,
+      repairCallsAttempted: 0,
+      successfulCalls: 0,
+      failedCalls: 0,
+      totalAttemptedCalls: attemptedCalls,
+      cacheHits: 0,
+      totalTokensEstimated: 0,
+    };
+    const emptyBudget: AiGenerationCallBudget = {
+      profileAnalysisCalls: 0,
+      objectiveBatchCalls: 0,
+      taskCandidateBatchCalls: 0,
+      requiredCalls: 0,
+      repairBudget: 0,
+      maximumCalls: 0,
+      hardCallLimit: 25,
+    };
     return {
       profileAnalysis: null,
       enrichedObjectives: [],
@@ -866,9 +1214,46 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
         allowRepairCall: false,
         maximumCalls: 0,
         tokenBudget: 0,
+        callBudget: emptyBudget,
+        retryPolicy: { maxRepairAttempts: 0, enableRepair: false },
       },
-      callStats: { attemptedCalls, successfulCalls: 0, failedCalls: 0, totalTokensEstimated: 0, cacheHits: 0 },
+      callStats: emptyCallStats,
       fallbackUsed,
+      completeness: {
+        expectedItems: 0,
+        generatedItems: 0,
+        aiGeneratedItems: 0,
+        repairedItems: 0,
+        fallbackItems: 0,
+        duplicateItemsDiscarded: 0,
+        missingItems: 0,
+        missingRequirementIds: [],
+        complete: false,
+      },
+      requirements: [],
+    };
+  }
+
+  private emptyWithCompleteness(generationPlan: AIGenerationPlan, callStats: AiCallStats, fallbackUsed: boolean): EnrichPlanResult {
+    return {
+      profileAnalysis: null,
+      enrichedObjectives: [],
+      taskCandidates: [],
+      generationPlan,
+      callStats,
+      fallbackUsed,
+      completeness: {
+        expectedItems: 0,
+        generatedItems: 0,
+        aiGeneratedItems: 0,
+        repairedItems: 0,
+        fallbackItems: 0,
+        duplicateItemsDiscarded: 0,
+        missingItems: 0,
+        missingRequirementIds: [],
+        complete: false,
+      },
+      requirements: [],
     };
   }
 
