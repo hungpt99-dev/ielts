@@ -366,8 +366,8 @@ export async function computeProgressSnapshot(): Promise<ProgressSnapshot> {
     progressRecords,
   ] = await Promise.all([
     DatabaseService.getAll<TaskEntry>('tasks'),
-    DatabaseService.getAll<ReadingSession>('readingSessions'),
-    DatabaseService.getAll<ListeningSession>('listeningSessions'),
+    DatabaseService.getAll<ReadingSession>('readingPracticeSessions'),
+    DatabaseService.getAll<ListeningSession>('listeningPracticeSessions'),
     DatabaseService.getAll<WritingSession>('writingSessions'),
     DatabaseService.getAll<SpeakingSession>('speakingSessions'),
     DatabaseService.getAll<VocabularyEntry>('vocabulary'),
