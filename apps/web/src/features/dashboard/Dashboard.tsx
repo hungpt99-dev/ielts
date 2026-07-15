@@ -13,7 +13,6 @@ import ProgressChart from './components/ProgressChart'
 import { DatabaseService } from '../../services/storage/Database'
 import type { DashboardData, WeeklyStudyDay, TaskEntry } from '../../models'
 import {
-  SkillCard,
   ProgressSummaryCard,
   AITutorRecommendationCard,
   LoadingSkeleton,
@@ -32,7 +31,6 @@ import {
   IconGrammar,
   IconVocabulary,
 } from '@ielts/ui'
-import type { SkillType } from '@ielts/ui'
 
 const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -59,48 +57,6 @@ function formatExamUrgency(days: number): { color: string; label: string } {
   if (days <= 14) return { color: 'var(--color-danger)', label: `${days} days to exam` }
   if (days <= 30) return { color: 'var(--color-warning)', label: `${days} days to exam` }
   return { color: 'var(--color-success)', label: `${days} days to exam` }
-}
-
-function computeSkillProgress(data: DashboardData): Array<{ name: string; score: number; maxScore: number; weak: boolean }> {
-  const isWeak = (skill: string) => data.weakSkills.some(s => s.toLowerCase() === skill.toLowerCase())
-  const { recentSessions } = data
-
-  const skills: Array<{ name: string; sessions: number }> = [
-    { name: 'Reading', sessions: recentSessions.reading },
-    { name: 'Listening', sessions: recentSessions.listening },
-    { name: 'Writing', sessions: recentSessions.writing },
-    { name: 'Speaking', sessions: recentSessions.speaking },
-  ]
-
-  const maxSessions = Math.max(...skills.map(s => s.sessions), 1)
-  return skills.map(s => {
-    const ratio = s.sessions / maxSessions
-    const raw = 1 + ratio * 7
-    const band = Math.round(raw * 2) / 2
-    return {
-      name: s.name,
-      score: Math.max(1, Math.min(9, band)),
-      maxScore: 9,
-      weak: isWeak(s.name),
-    }
-  })
-}
-
-function skillNameToSkillType(name: string): SkillType {
-  const map: Record<string, SkillType> = {
-    Reading: 'reading',
-    Listening: 'listening',
-    Writing: 'writing',
-    Speaking: 'speaking',
-  }
-  return map[name] || 'reading'
-}
-
-const skillIcons: Record<string, React.ReactNode> = {
-  Reading: <IconReading size={18} />,
-  Listening: <IconListening size={18} />,
-  Writing: <IconWriting size={18} />,
-  Speaking: <IconSpeaking size={18} />,
 }
 
 const quickPracticeSkills = [
@@ -212,7 +168,6 @@ export default function Dashboard() {
         value: d.minutes,
       }))
     : []
-  const skillProgress = computeSkillProgress(data)
   const hasExamDate = examDate && examCountdown > 0
   const missionProgress = tasks.length > 0 ? Math.round((todayDone.length / tasks.length) * 100) : 0
   const hasAllTasksDone = tasks.length > 0 && todayUnfinished.length === 0
@@ -647,34 +602,7 @@ export default function Dashboard() {
         </section>
       )}
 
-      {/* ============================================================ */}
-      {/* 5. Skill Progress Grid                                        */}
-      {/* ============================================================ */}
-      <section aria-label="Skill progress">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
-            Skill Progress
-          </h2>
-          <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.progress)}>
-            View Details
-          </Button>
-        </div>
-        <div className="grid grid-cols-1 gap-3 md:gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {skillProgress.map(skill => (
-            <SkillCard
-              key={skill.name}
-              skill={skillNameToSkillType(skill.name)}
-              label={skill.name}
-              score={skill.score}
-              maxScore={skill.maxScore}
-              weak={skill.weak}
-              icon={skillIcons[skill.name]}
-              onClick={() => navigate(`/progress?skill=${skill.name.toLowerCase()}`)}
-              style={{ cursor: 'pointer' }}
-            />
-          ))}
-        </div>
-      </section>
+
 
       {/* ============================================================ */}
       {/* 6. Charts Row: Weekly Chart + Band Progress                    */}

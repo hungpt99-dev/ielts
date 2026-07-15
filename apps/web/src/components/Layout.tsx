@@ -24,14 +24,12 @@ const SpeakingPracticePage = lazy(() => import('../pages/practice/SpeakingPracti
 const GrammarExercisePage = lazy(() => import('../pages/practice/GrammarExercisePage'))
 const MistakeNotebook = lazy(() => import('../features/mistakes/MistakeNotebook'))
 const MockTests = lazy(() => import('../pages/MockTests'))
-const Progress = lazy(() => import('../pages/Progress'))
 const Settings = lazy(() => import('../pages/Settings'))
 const DataManagement = lazy(() => import('../pages/Settings/DataManagement'))
 const AIProviderSettingsPage = lazy(() => import('../pages/Settings/AIProviderSettingsPage'))
 const ExtensionConnectionPage = lazy(() => import('../pages/Settings/ExtensionConnectionPage'))
 const SearchPage = lazy(() => import('../pages/Search'))
 const ImportExport = lazy(() => import('../pages/ImportExport'))
-const TopicsProgress = lazy(() => import('../pages/TopicsProgress'))
 const PublicApiImportPage = lazy(() => import('../pages/PublicApiImportPage'))
 const FullStudyRoadmapPage = lazy(() => import('../pages/roadmap/FullStudyRoadmapPage'))
 const ArtifactsPage = lazy(() => import('../features/artifacts/ArtifactsPage'))
@@ -78,12 +76,7 @@ const practiceSubItems: NavItemDefinition[] = [
   { to: ROUTES.speaking, label: 'Speaking', icon: <IconSpeaking size={20} /> },
   { to: ROUTES.grammar, label: 'Grammar', icon: <IconGrammar size={20} /> },
   { to: ROUTES.mistakes, label: 'Mistakes', icon: <IconMistakes size={20} /> },
-]
-
-const progressSubItems: NavItemDefinition[] = [
-  { to: ROUTES.progress, label: 'Progress', icon: <IconProgress size={20} /> },
   { to: ROUTES.mockTests, label: 'Mock Tests', icon: <IconProgress size={20} /> },
-  { to: ROUTES.topics, label: 'Topics', icon: <IconStudyPlan size={20} /> },
 ]
 
 function NavLinkItem({
@@ -178,18 +171,13 @@ function AccordionGroup({
 export default function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [practiceExpanded, setPracticeExpanded] = useState(false)
-  const [progressExpanded, setProgressExpanded] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
 
   useEffect(() => {
-    const practicePaths = [ROUTES.reading, ROUTES.listening, ROUTES.writing, ROUTES.speaking, ROUTES.grammar, ROUTES.mistakes]
-    const progressPaths = [ROUTES.progress, ROUTES.mockTests, ROUTES.topics]
+    const practicePaths = [ROUTES.reading, ROUTES.listening, ROUTES.writing, ROUTES.speaking, ROUTES.grammar, ROUTES.mistakes, ROUTES.mockTests]
     if (practicePaths.some((p) => location.pathname.startsWith(p))) {
       setPracticeExpanded(true)
-    }
-    if (progressPaths.some((p) => location.pathname.startsWith(p))) {
-      setProgressExpanded(true)
     }
   }, [location.pathname])
 
@@ -223,11 +211,11 @@ export default function AppLayout() {
       onClick: () => navigate(ROUTES.vocabulary),
     },
     {
-      id: 'progress',
-      label: 'Progress',
+      id: 'mock-tests',
+      label: 'Mock Tests',
       icon: <IconProgress size={22} />,
-      active: location.pathname.startsWith(ROUTES.progress) || location.pathname.startsWith(ROUTES.mockTests) || location.pathname.startsWith(ROUTES.topics),
-      onClick: () => navigate(ROUTES.progress),
+      active: location.pathname.startsWith(ROUTES.mockTests),
+      onClick: () => navigate(ROUTES.mockTests),
     },
   ]
 
@@ -345,20 +333,6 @@ export default function AppLayout() {
                 <NavLinkItem key={item.to} to={item.to} label={item.label} icon={item.icon} onClick={closeSidebar} />
               ))}
             </AccordionGroup>
-
-            <AccordionGroup
-              label="Progress"
-              icon={<IconProgress size={20} />}
-              expanded={progressExpanded}
-              onToggle={() => {
-                setProgressExpanded(!progressExpanded)
-                if (practiceExpanded) setPracticeExpanded(false)
-              }}
-            >
-              {progressSubItems.map((item) => (
-                <NavLinkItem key={item.to} to={item.to} label={item.label} icon={item.icon} onClick={closeSidebar} />
-              ))}
-            </AccordionGroup>
           </div>
         </nav>
 
@@ -442,9 +416,7 @@ export default function AppLayout() {
                       <Route path="/grammar" element={<GrammarExercisePage />} />
                       <Route path="/mistakes" element={<MistakeNotebook />} />
                       <Route path="/mock-tests" element={<MockTests />} />
-                      <Route path="/topics" element={<TopicsProgress />} />
-                      <Route path="/progress" element={<Progress />} />
-                      <Route path="/progress-review" element={<Navigate to="/progress" replace />} />
+
                       <Route path="/artifacts" element={<ArtifactsPage />} />
                       <Route path="/search" element={<SearchPage />} />
                       <Route path="/books" element={<BooksPage />} />

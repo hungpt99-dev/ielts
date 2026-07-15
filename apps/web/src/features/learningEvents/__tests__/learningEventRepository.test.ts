@@ -63,16 +63,16 @@ describe('LearningEventRepository', () => {
 
     it('uses provided optional fields', async () => {
       const input = makeInput({
-        page: ROUTES.progress,
-        entityType: 'progress',
-        entityId: 'progress-1',
+        page: ROUTES.dashboard,
+        entityType: 'vocabulary',
+        entityId: 'entity-1',
         metadata: { source: 'test' },
         correlationId: 'corr-1',
       })
       const event = await repo.save(input)
-      expect(event.page).toBe(ROUTES.progress)
-      expect(event.entityType).toBe('progress')
-      expect(event.entityId).toBe('progress-1')
+      expect(event.page).toBe(ROUTES.dashboard)
+      expect(event.entityType).toBe('vocabulary')
+      expect(event.entityId).toBe('entity-1')
       expect(event.metadata).toEqual({ source: 'test' })
       expect(event.correlationId).toBe('corr-1')
     })

@@ -12,7 +12,7 @@ import type {
 } from '../../models'
 import { DatabaseService } from '../../services/storage/Database'
 import { STORAGE_KEYS } from '@ielts/config'
-import { loadRoadmap } from '../roadmap/roadmapService'
+import { loadRoadmap, recalculateProgress } from '../roadmap/roadmapService'
 
 function getToday(): string {
   return new Date().toISOString().slice(0, 10)
@@ -162,11 +162,12 @@ function getExamCountdown(examDate: string): number {
   return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)))
 }
 
-function getRoadmapProgress(): number {
+function getRoadmapProgress(tasks: TaskEntry[]): number {
   try {
     const roadmap = loadRoadmap()
     if (!roadmap) return 0
-    return roadmap.overallProgress
+    const updated = recalculateProgress(roadmap, tasks)
+    return updated.overallProgress
   } catch (error) {
     console.error('apps/web/src/features/dashboard/dashboardService.ts error:', error);
     return 0
@@ -213,7 +214,7 @@ export async function loadDashboardData(): Promise<{
   const examCountdown = getExamCountdown(examDate)
 
   const todayUnfinished = todayTasks.filter(t => !t.isDone)
-  const roadmapProgress = getRoadmapProgress()
+  const roadmapProgress = getRoadmapProgress(tasks)
   const aiSuggestion = getAiSuggestion(
     todayUnfinished.length,
     weakSkills,

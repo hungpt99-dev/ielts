@@ -320,13 +320,7 @@ export default function FullStudyRoadmapPage() {
             >
 <IconEdit size={16} /> Take a Mock Test
             </button>
-            <button
-              onClick={() => navigate(ROUTES.progress)}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-3 text-sm font-medium transition-all hover:brightness-95"
-              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
-            >
-<IconProgress size={16} /> View Full Progress
-            </button>
+
             <button
               onClick={handleRegenerate}
               disabled={regenerating}

@@ -16,8 +16,6 @@ import type {
   SpeakingPracticedPayload,
   MistakeSavedPayload,
   RepeatedMistakeDetectedPayload,
-  ProgressViewedPayload,
-  AIProgressReviewGeneratedPayload,
   SettingsChangedPayload,
   AIProviderConfiguredPayload,
   UserBecameInactivePayload,
@@ -238,35 +236,6 @@ export function emitRepeatedMistakeDetected(mistakeId: string, mistake: string, 
       entityType: 'mistake',
       entityId: mistakeId,
       payload: { eventType: 'repeated_mistake_detected', mistakeId, mistake, skill, repetitionCount } satisfies RepeatedMistakeDetectedPayload,
-    })
-  } catch (error) {
-console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
-   }
-}
-
-export function emitProgressViewed(timeRange: string): void {
-  try {
-    emitLearningEvent({
-      eventType: 'progress_viewed',
-      source: 'progress',
-      page: ROUTES.progress,
-      entityType: 'progress',
-      payload: { eventType: 'progress_viewed', timeRange } satisfies ProgressViewedPayload,
-    })
-  } catch (error) {
-console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
-   }
-}
-
-export function emitAIProgressReviewGenerated(reviewId: string, periodStart: string, periodEnd: string): void {
-  try {
-    emitLearningEvent({
-      eventType: 'ai_progress_review_generated',
-      source: 'progress',
-      page: ROUTES.progress,
-      entityType: 'progress',
-      entityId: reviewId,
-      payload: { eventType: 'ai_progress_review_generated', reviewId, periodStart, periodEnd } satisfies AIProgressReviewGeneratedPayload,
     })
   } catch (error) {
 console.error('apps/web/src/features/websiteActions/eventEmitters.ts error:', error);
