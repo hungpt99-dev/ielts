@@ -280,7 +280,7 @@ export default function RoadmapSummary({ roadmap, onRegenerate, onAskAIReview, r
         </div>
       </div>
 
-      {regenerating && enrichProgress && (
+      {regenerating && (
         <div className="mt-4 space-y-2 rounded-xl border p-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
           <div className="flex items-center gap-3">
             <svg className="h-4 w-4 shrink-0 animate-spin" style={{ color: 'var(--color-primary)' }} fill="none" viewBox="0 0 24 24">
@@ -289,24 +289,32 @@ export default function RoadmapSummary({ roadmap, onRegenerate, onAskAIReview, r
             </svg>
             <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>Regenerating plan with AI...</span>
           </div>
-          <div className="flex h-2 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
-            <div
-              className="h-full rounded-full transition-all duration-500 ease-out"
-              style={{
-                width: `${Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%`,
-                backgroundColor: 'var(--color-primary)',
-              }}
-            />
-          </div>
-          <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-            <span>
-              {enrichProgress.phase === 'profile-analysis' && 'Analyzing your learning profile...'}
-              {enrichProgress.phase === 'weekly-objectives' && `Setting weekly objectives (${enrichProgress.current}/${enrichProgress.total})`}
-              {enrichProgress.phase === 'task-candidates' && `Generating task candidates (${enrichProgress.current}/${enrichProgress.total})`}
-              {enrichProgress.phase === 'complete' && 'Finalizing your plan...'}
-            </span>
-            <span>{Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%</span>
-          </div>
+          {enrichProgress ? (
+            <>
+              <div className="flex h-2 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                <div
+                  className="h-full rounded-full transition-all duration-500 ease-out"
+                  style={{
+                    width: `${Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%`,
+                    backgroundColor: 'var(--color-primary)',
+                  }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                <span>
+                  {enrichProgress.phase === 'profile-analysis' && 'Analyzing your learning profile...'}
+                  {enrichProgress.phase === 'weekly-objectives' && `Setting weekly objectives (${enrichProgress.current}/${enrichProgress.total})`}
+                  {enrichProgress.phase === 'task-candidates' && `Generating task candidates (${enrichProgress.current}/${enrichProgress.total})`}
+                  {enrichProgress.phase === 'complete' && 'Finalizing your plan...'}
+                </span>
+                <span>{Math.min(100, Math.round((enrichProgress.current / Math.max(enrichProgress.total, 1)) * 100))}%</span>
+              </div>
+            </>
+          ) : (
+            <div className="flex h-2 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+              <div className="h-full w-full origin-left animate-pulse rounded-full" style={{ backgroundColor: 'var(--color-primary)', animation: 'pulse 1.5s ease-in-out infinite', opacity: 0.5 }} />
+            </div>
+          )}
         </div>
       )}
 
