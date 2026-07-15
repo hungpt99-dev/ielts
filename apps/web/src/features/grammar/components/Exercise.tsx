@@ -4,7 +4,6 @@ import { DatabaseService } from '../../../services/storage/Database'
 import Card, { CardContent } from '../../../components/ui/Card'
 import Button from '../../../components/ui/Button'
 import { generateId } from '../../../utils'
-import { getLearningEngine } from '../../../services/engineBootstrap'
 
 export interface GrammarExerciseItem {
   id: string
@@ -62,15 +61,14 @@ export default function Exercise({ exercises, topic, onComplete, onGenerateAi, o
   async function finish() {
     if (saving) return
     setSaving(true)
-    const engine = getLearningEngine()
     try {
       const now = new Date().toISOString()
-      const mistakes: any[] = []
+      const mistakes: MistakeEntry[] = []
 
       for (let i = 0; i < exercises.length; i++) {
         const result = results.find(r => r.exerciseId === exercises[i].id)
         if (!result || !result.correct) {
-          mistakes.push({
+          const mistake: MistakeEntry = {
             id: generateId(),
             mistake: exercises[i].question,
             correction: exercises[i].correctAnswer,
@@ -78,23 +76,17 @@ export default function Exercise({ exercises, topic, onComplete, onGenerateAi, o
             source: `Grammar - ${topic}`,
             date: now.slice(0, 10),
             skill: 'grammar',
-            status: 'new',
+            status: 'new' as MistakeStatus,
             repetitionCount: 0,
             createdAt: now,
             updatedAt: now,
-          })
+          }
+          mistakes.push(mistake)
         }
       }
 
       const correctCount = results.filter(r => r.correct).length
-      if (engine) engine.completeExercise({
-        skill: 'grammar',
-        topic,
-        totalQuestions: exercises.length,
-        correctAnswers: correctCount,
-        mistakes,
-      }).catch(() => {})
-      onComplete({ total: exercises.length, correct: correctCount, mistakes: mistakes as MistakeEntry[] })
+      onComplete({ total: exercises.length, correct: correctCount, mistakes })
     } catch (error) {
       console.error('apps/web/src/features/grammar/components/Exercise.tsx error:', error);
       const correctCount = results.filter(r => r.correct).length

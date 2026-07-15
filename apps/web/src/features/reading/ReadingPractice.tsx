@@ -322,6 +322,19 @@ export default function ReadingPractice() {
           timeSpentMs: timerSeconds * 1000,
         })),
         timerSeconds,
+        mistakes.map(m => ({
+          id: generateId(),
+          mistake: m.question || m.userAnswer || '',
+          correction: m.correctAnswer || '',
+          explanation: m.explanation || '',
+          source: `Reading - ${currentPassage.title}`,
+          date: new Date().toISOString().slice(0, 10),
+          skill: 'reading',
+          status: 'new',
+          repetitionCount: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        })),
       ).catch(() => {})
     }
 

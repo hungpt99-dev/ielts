@@ -7,8 +7,9 @@ import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import Exercise, { type GrammarExerciseItem } from './components/Exercise'
 import { generateId } from '../../utils'
-import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
+import { startEngineSession } from '../../services/learning/ai-exercise-session'
 import type { SessionInfo } from '../../services/learning/ai-exercise-session'
+import { getLearningEngine } from '../../services/engineBootstrap'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconGrammar } from '@ielts/ui'
 
@@ -578,17 +579,18 @@ export default function GrammarLearning() {
   function handleExerciseComplete(results: { total: number; correct: number; mistakes?: Array<{ id: string; mistake: string; correction: string; explanation: string; source: string }> }) {
     setExerciseMode(false)
     loadMistakes()
-    if (sessionInfo && results.mistakes) {
-      submitAndComplete(
-        sessionInfo,
-        results.mistakes.map(m => ({
-          questionId: m.id,
-          answer: m.mistake,
-          answeredAt: new Date().toISOString(),
-          timeSpentMs: 0,
-        })),
-        results.total * 30,
-      ).catch(() => {})
+    const engine = getLearningEngine()
+    if (engine) {
+      engine.completeExercise({
+        skill: 'grammar',
+        topic: selectedTopic,
+        totalQuestions: results.total,
+        correctAnswers: results.correct,
+        mistakes: results.mistakes || [],
+        sessionId: sessionInfo?.sessionId,
+        attemptId: sessionInfo?.attemptId,
+        timeSpentMs: 0,
+      }).catch(() => {})
     }
   }
 

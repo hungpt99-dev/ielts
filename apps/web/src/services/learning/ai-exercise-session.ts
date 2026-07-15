@@ -199,11 +199,27 @@ export async function submitAndComplete(
   sessionInfo: SessionInfo,
   answers: Array<{ questionId: string; answer: unknown; answeredAt: string; timeSpentMs: number }>,
   timeSpentSeconds: number,
+  mistakes?: any[],
 ): Promise<{ success: boolean; error?: string }> {
   const engine = getLearningEngine()
   if (!engine) return { success: false, error: 'Engine not initialized' }
 
   try {
+    if (mistakes && mistakes.length > 0) {
+      const result = await engine.completeExercise({
+        skill: 'reading',
+        topic: '',
+        totalQuestions: answers.length,
+        correctAnswers: answers.length - mistakes.length,
+        mistakes,
+        sessionId: sessionInfo.sessionId,
+        attemptId: sessionInfo.attemptId,
+        timeSpentMs: timeSpentSeconds * 1000,
+      })
+      if (result.status === 'failure') return { success: false, error: result.error?.message }
+      return { success: true }
+    }
+
     const submitResult = await engine.submitAnswer({
       sessionId: sessionInfo.sessionId,
       attemptId: sessionInfo.attemptId,
