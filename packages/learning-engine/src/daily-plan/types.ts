@@ -175,6 +175,7 @@ export interface UserProfileInput {
   timezone: string;
   studyDays: DayOfWeek[];
   weeklyAvailability: WeeklyAvailability;
+  targetDailyMinutes?: number;
   maximumSessionMinutes: number;
   maximumSessionsPerDay: number;
   preferredStudyTime: StudyTimePreference;
@@ -285,6 +286,21 @@ export interface DateAvailabilityOverride {
 
 // ── Normalized Profile ──
 
+export interface DerivedStudyCapacity {
+  targetDailyMinutes: number;
+  preferredSessionMinutes: number;
+  maximumSessionMinutes: number;
+  maximumSessionsPerDay: number;
+}
+
+export interface DailyPlanDiagnostics {
+  targetMinutes: number;
+  scheduledMinutes: number;
+  utilizationRatio: number;
+  unallocatedMinutes: number;
+  underutilizationReasons: string[];
+}
+
 export interface NormalizedProfile {
   currentOverallBand: number;
   targetOverallBand: number;
@@ -296,6 +312,7 @@ export interface NormalizedProfile {
   timezone: string;
   weeklyAvailability: WeeklyAvailability;
   availabilityExceptions: AvailabilityException[];
+  targetDailyMinutes: number;
   maximumSessionMinutes: number;
   maximumSessionsPerDay: number;
   studyIntensity: StudyIntensity;

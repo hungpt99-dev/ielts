@@ -46,6 +46,7 @@ function createProfile(overrides: Partial<NormalizedProfile> = {}): NormalizedPr
     timezone: 'Asia/Ho_Chi_Minh',
     weeklyAvailability: createWeeklyAvailability(),
     availabilityExceptions: [],
+    targetDailyMinutes: 180,
     maximumSessionMinutes: 60,
     maximumSessionsPerDay: 3,
     studyIntensity: 'moderate',

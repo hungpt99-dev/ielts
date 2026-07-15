@@ -53,6 +53,7 @@ const ALL_DAYS: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'fr
 interface DailyCapacity {
   date: LocalDate;
   availableMinutes: number;
+  targetMinutes: number;
   maxSessionMinutes: number;
   maxSessions: number;
   isStudyDay: boolean;
@@ -687,6 +688,7 @@ export class DailyPlanEngine {
 
       const enabled = dayAvail.enabled && !isUnavailable;
       const availableMinutes = override ? (override.availableMinutes ?? dayAvail.availableMinutes) : dayAvail.availableMinutes;
+      const targetMinutes = Math.min(profile.targetDailyMinutes, availableMinutes);
       const maxSessionMinutes = Math.min(
         profile.maximumSessionMinutes,
         dayAvail.maximumSessionMinutes ?? profile.maximumSessionMinutes
@@ -699,6 +701,7 @@ export class DailyPlanEngine {
       capacities.push({
         date: current,
         availableMinutes: enabled ? availableMinutes : 0,
+        targetMinutes: enabled ? targetMinutes : 0,
         maxSessionMinutes,
         maxSessions,
         isStudyDay: enabled,
@@ -1040,7 +1043,11 @@ export class DailyPlanEngine {
       skillMinutesRemaining[skill] = Math.round((alloc / 100) * totalSchedulable);
     }
 
-    const dailySkillCounter = new Map<string, Map<StudyTaskSkill, number>>();
+    const diagnosticsMap = new Map<LocalDate, {
+      scheduledMinutes: number;
+      targetMinutes: number;
+      underutilizationReasons: string[];
+    }>();
 
     for (let di = 0; di < dailyCapacities.length; di++) {
       const cap = dailyCapacities[di];
@@ -1053,12 +1060,10 @@ export class DailyPlanEngine {
       const phase = phaseMap.get(week.phaseId);
       if (!phase) continue;
 
-      const daySkills = dailySkillCounter.get(cap.date) ?? new Map();
-      dailySkillCounter.set(cap.date, daySkills);
-
-      let remaining = cap.availableMinutes;
+      let remaining = cap.targetMinutes;
       let sessionsLeft = cap.maxSessions;
       let currentSessionOrder = 0;
+      let scheduledToday = 0;
 
       const weekTasks = tasks.filter(t => t.weekId === week.id);
       const weekScheduled = weekTasks.reduce((s, t) => s + t.estimatedMinutes, 0);
@@ -1066,31 +1071,31 @@ export class DailyPlanEngine {
 
       if (weekRemaining <= 0) continue;
 
-      const availableForDay = Math.min(remaining, weekRemaining);
-
+      // ── Primary skill-balanced scheduling ──
       const selectedSkills = this.selectSkillsForDay(
         phase,
         week,
         skillMinutesRemaining,
-        availableForDay,
-        cap.maxSessionMinutes,
         cap.date,
-        profile,
       );
 
+      let usedSkills = 0;
       for (const skill of selectedSkills) {
         if (sessionsLeft <= 0) break;
+        if (scheduledToday >= cap.targetMinutes) break;
 
-        const sessionDuration = clampMinutes(
-          Math.min(skillMinutesRemaining[skill] ?? 10, remaining / Math.max(1, sessionsLeft)),
-          cap.maxSessionMinutes,
+        const estimated = Math.min(
+          skillMinutesRemaining[skill] ?? 10,
+          (cap.targetMinutes - scheduledToday) / Math.max(1, sessionsLeft),
         );
+        const sessionDuration = clampMinutes(estimated, cap.maxSessionMinutes);
 
         if (sessionDuration < MIN_SESSION_MINUTES) continue;
         if (sessionDuration > remaining) continue;
 
         sessionCounter++;
         currentSessionOrder++;
+        usedSkills++;
 
         const task = this.createStudyTask(
           roadmapId,
@@ -1108,11 +1113,73 @@ export class DailyPlanEngine {
         tasks.push(task);
         remaining -= sessionDuration;
         sessionsLeft--;
+        scheduledToday += sessionDuration;
         skillMinutesRemaining[skill] = (skillMinutesRemaining[skill] ?? 0) - sessionDuration;
-        daySkills.set(skill as StudyTaskSkill, (daySkills.get(skill as StudyTaskSkill) ?? 0) + 1);
-
         week.scheduledMinutes += sessionDuration;
       }
+
+      // ── Fill pass: fill remaining daily capacity ──
+      const reasons: string[] = [];
+      if (scheduledToday < cap.targetMinutes && sessionsLeft > 0) {
+        const remainingSkills = SKILL_NAMES.filter(s => (skillMinutesRemaining[s] ?? 0) > 0);
+        if (remainingSkills.length > 0) {
+          let fillAttempts = 0;
+          while (
+            sessionsLeft > 0 &&
+            scheduledToday < cap.targetMinutes &&
+            fillAttempts < SKILL_NAMES.length * 2
+          ) {
+            fillAttempts++;
+            const skill = remainingSkills[fillAttempts % remainingSkills.length];
+            if ((skillMinutesRemaining[skill] ?? 0) <= 0) continue;
+
+            const remainingBudget = cap.targetMinutes - scheduledToday;
+            const estimated = Math.min(
+              skillMinutesRemaining[skill]!,
+              remainingBudget / Math.max(1, sessionsLeft),
+            );
+            const sessionDuration = clampMinutes(estimated, cap.maxSessionMinutes);
+
+            if (sessionDuration < MIN_SESSION_MINUTES) continue;
+            if (sessionDuration > remaining) continue;
+
+            sessionCounter++;
+            currentSessionOrder++;
+
+            const task = this.createStudyTask(
+              roadmapId,
+              phase,
+              week,
+              cap.date,
+              currentSessionOrder,
+              skill,
+              sessionDuration,
+              `task-fill-${sessionCounter}`,
+              profile,
+              skillGaps,
+            );
+
+            tasks.push(task);
+            remaining -= sessionDuration;
+            sessionsLeft--;
+            scheduledToday += sessionDuration;
+            skillMinutesRemaining[skill] = (skillMinutesRemaining[skill] ?? 0) - sessionDuration;
+            week.scheduledMinutes += sessionDuration;
+          }
+        }
+
+        if (scheduledToday < cap.targetMinutes) {
+          if (sessionsLeft <= 0) reasons.push('explicit session limit reached');
+          else if (remainingSkills.length === 0) reasons.push('no eligible exercises with remaining minutes');
+          else reasons.push('phase workload restriction');
+        }
+      }
+
+      diagnosticsMap.set(cap.date, {
+        scheduledMinutes: scheduledToday,
+        targetMinutes: cap.targetMinutes,
+        underutilizationReasons: reasons,
+      });
     }
 
     const usedByDate = new Map<LocalDate, { minutes: number; sessions: number }>();
@@ -1157,10 +1224,7 @@ export class DailyPlanEngine {
     phase: StudyPhase,
     week: StudyWeek,
     skillMinutesRemaining: Record<string, number>,
-    availableMinutes: number,
-    maxSessionMinutes: number,
     _date: LocalDate,
-    _profile: NormalizedProfile,
   ): string[] {
     const skills: string[] = [];
 
@@ -1174,14 +1238,10 @@ export class DailyPlanEngine {
         skill: s,
         score: (skillMinutesRemaining[s] ?? 0) + (week.skillAllocation[s] ?? 0) * 10,
       }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 3);
+      .sort((a, b) => b.score - a.score);
 
     for (const s of scored) {
-      const duration = clampMinutes(Math.min(skillMinutesRemaining[s.skill] ?? 10, availableMinutes / Math.max(1, scored.length)), maxSessionMinutes);
-      if (duration >= MIN_SESSION_MINUTES) {
-        skills.push(s.skill);
-      }
+      skills.push(s.skill);
     }
 
     return skills;

@@ -2,6 +2,7 @@ import {
   toNearestOfficialBand,
 } from '../domain/value-objects';
 import type {
+  DerivedStudyCapacity,
   NormalizedProfile,
   UserProfileInput,
   WeeklyAvailability,
@@ -12,6 +13,24 @@ import type {
   SkillBandScores,
   UserProfileField,
 } from './types';
+
+// ── Constants ──
+
+const DEFAULT_PREFERRED_SESSION_MINUTES = 60;
+const MAXIMUM_DERIVED_SESSION_MINUTES = 90;
+
+// ── Shared Capacity Derivation ──
+
+export function deriveStudyCapacity(dailyStudyMinutes: number): DerivedStudyCapacity {
+  const targetDailyMinutes = Math.max(1, Math.floor(dailyStudyMinutes));
+  const preferredSessionMinutes = DEFAULT_PREFERRED_SESSION_MINUTES;
+  return {
+    targetDailyMinutes,
+    preferredSessionMinutes,
+    maximumSessionMinutes: Math.min(targetDailyMinutes, MAXIMUM_DERIVED_SESSION_MINUTES),
+    maximumSessionsPerDay: Math.max(1, Math.ceil(targetDailyMinutes / preferredSessionMinutes)),
+  };
+}
 
 // ── Data Source Shape ──
 // These types mirror the shapes returned by existing services
@@ -85,6 +104,7 @@ export function mergeProfileSources(
     result.targetOverallBand = settings.targetBand;
     result.examDate = settings.examDate || undefined;
     result.examType = mapStudyGoalToExamType(settings.studyGoal);
+    const cap = deriveStudyCapacity(settings.dailyStudyMinutes);
     result.weeklyAvailability = createWeeklyAvailability(
       settings.preferredSchedule,
       settings.dailyStudyMinutes,
@@ -93,6 +113,9 @@ export function mergeProfileSources(
     result.weakSkills = mapWeakSkills(settings.weakSkills);
     result.offlineOnlyMode = !settings.aiEnabled;
     result.aiProviderAvailable = settings.aiEnabled && !!(settings.aiApiKey || settings.aiProvider);
+    result.targetDailyMinutes = cap.targetDailyMinutes;
+    result.maximumSessionMinutes = cap.maximumSessionMinutes;
+    result.maximumSessionsPerDay = cap.maximumSessionsPerDay;
   }
 
   if (personalization) {
@@ -158,12 +181,13 @@ export function createWeeklyAvailability(
   schedule: string[],
   dailyMinutes: number,
 ): WeeklyAvailability {
+  const cap = deriveStudyCapacity(dailyMinutes);
   const enabledDays = new Set(schedule.map(d => d.toLowerCase()));
   const baseDay: DayAvailability = {
     enabled: true,
-    availableMinutes: dailyMinutes,
-    maximumSessionMinutes: Math.min(dailyMinutes, 60),
-    maximumSessions: Math.max(1, Math.ceil(dailyMinutes / 30)),
+    availableMinutes: cap.targetDailyMinutes,
+    maximumSessionMinutes: cap.maximumSessionMinutes,
+    maximumSessions: cap.maximumSessionsPerDay,
   };
   const restDay: DayAvailability = {
     enabled: false,
@@ -263,7 +287,24 @@ function buildPartialNormalizedSkillBands(bands: Partial<SkillBandScores>): Part
   return result;
 }
 
+function resolveSessionLimits(input: UserProfileInput): {
+  maximumSessionMinutes: number;
+  maximumSessionsPerDay: number;
+  targetDailyMinutes: number;
+} {
+  const dailyMinutes = input.weeklyAvailability?.monday?.availableMinutes
+    ?? input.targetDailyMinutes
+    ?? 60;
+  const derived = deriveStudyCapacity(dailyMinutes);
+  return {
+    targetDailyMinutes: input.targetDailyMinutes ?? derived.targetDailyMinutes,
+    maximumSessionMinutes: input.maximumSessionMinutes ?? derived.maximumSessionMinutes,
+    maximumSessionsPerDay: input.maximumSessionsPerDay ?? derived.maximumSessionsPerDay,
+  };
+}
+
 export function normalizeProfile(input: UserProfileInput): NormalizedProfile {
+  const limits = resolveSessionLimits(input);
   return {
     currentOverallBand: toNearestOfficialBand(input.currentOverallBand),
     targetOverallBand: toNearestOfficialBand(input.targetOverallBand),
@@ -275,8 +316,9 @@ export function normalizeProfile(input: UserProfileInput): NormalizedProfile {
     timezone: input.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
     weeklyAvailability: input.weeklyAvailability,
     availabilityExceptions: buildAvailabilityExceptions(input),
-    maximumSessionMinutes: input.maximumSessionMinutes ?? 60,
-    maximumSessionsPerDay: input.maximumSessionsPerDay ?? 3,
+    targetDailyMinutes: limits.targetDailyMinutes,
+    maximumSessionMinutes: limits.maximumSessionMinutes,
+    maximumSessionsPerDay: limits.maximumSessionsPerDay,
     studyIntensity: input.studyIntensity ?? 'moderate',
     weakSkills: input.weakSkills ?? [],
     strongSkills: input.strongSkills ?? [],
@@ -335,6 +377,7 @@ export function buildUserProfile(params: BuildProfileParams): UserProfileInput {
     throw new ProfileValidationError(missingCheck.missingFields);
   }
 
+  const cap = deriveStudyCapacity(combined.weeklyAvailability?.monday?.availableMinutes ?? 60);
   return {
     currentOverallBand: combined.currentOverallBand!,
     targetOverallBand: combined.targetOverallBand!,
@@ -346,8 +389,9 @@ export function buildUserProfile(params: BuildProfileParams): UserProfileInput {
     timezone: combined.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone,
     studyDays: combined.studyDays ?? [],
     weeklyAvailability: combined.weeklyAvailability!,
-    maximumSessionMinutes: combined.maximumSessionMinutes ?? 60,
-    maximumSessionsPerDay: combined.maximumSessionsPerDay ?? 3,
+    targetDailyMinutes: combined.targetDailyMinutes ?? cap.targetDailyMinutes,
+    maximumSessionMinutes: combined.maximumSessionMinutes ?? cap.maximumSessionMinutes,
+    maximumSessionsPerDay: combined.maximumSessionsPerDay ?? cap.maximumSessionsPerDay,
     preferredStudyTime: combined.preferredStudyTime ?? 'flexible',
     restDays: combined.restDays ?? [],
     studyIntensity: combined.studyIntensity ?? 'moderate',

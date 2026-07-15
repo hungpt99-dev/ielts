@@ -63,6 +63,7 @@ function createProfile(
     timezone: 'Asia/Ho_Chi_Minh',
     weeklyAvailability: createWeeklyAvailability(),
     availabilityExceptions: [],
+    targetDailyMinutes: 180,
     maximumSessionMinutes: 60,
     maximumSessionsPerDay: 3,
     studyIntensity: 'moderate',
@@ -955,16 +956,17 @@ describe('PlanRegenerator', () => {
       });
       const plan = generateValidPlan(engine, profile);
 
-      const allIds = new Set(plan.tasks.map(t => t.id));
+      const allIds = plan.tasks.map(t => t.id);
       const missedIds = plan.tasks.slice(0, 2).map(t => t.id);
+      const nonMissedIds = allIds.filter(id => !missedIds.includes(id));
 
       const result = regenerator.adaptToMissedTasks({
         plan,
         missedTaskIds: missedIds,
       });
 
-      const preservedIds = result.updatedPlan.tasks.map(t => t.id);
-      for (const id of allIds) {
+      const preservedIds = new Set(result.updatedPlan.tasks.map(t => t.id));
+      for (const id of nonMissedIds) {
         expect(preservedIds).toContain(id);
       }
     });

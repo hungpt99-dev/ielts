@@ -41,6 +41,7 @@ function makeProfile(overrides?: Partial<NormalizedProfile>): NormalizedProfile 
       sunday: { enabled: false, availableMinutes: 0, maximumSessionMinutes: 0, maximumSessions: 0 },
     },
     availabilityExceptions: [],
+    targetDailyMinutes: 120,
     maximumSessionMinutes: 60,
     maximumSessionsPerDay: 3,
     studyIntensity: 'moderate',

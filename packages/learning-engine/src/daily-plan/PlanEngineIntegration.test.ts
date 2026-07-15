@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+  deriveStudyCapacity,
   mergeProfileSources,
   mapScheduleToStudyDays,
   createWeeklyAvailability,
@@ -117,6 +118,64 @@ function validUserProfile(): UserProfileInput {
 
 // ── Tests ──
 
+describe('deriveStudyCapacity', () => {
+  it('derives 1 session for 30 minutes', () => {
+    const cap = deriveStudyCapacity(30);
+    expect(cap.targetDailyMinutes).toBe(30);
+    expect(cap.maximumSessionsPerDay).toBe(1);
+    expect(cap.maximumSessionMinutes).toBe(30);
+    expect(cap.preferredSessionMinutes).toBe(60);
+  });
+
+  it('derives 1 session for 60 minutes', () => {
+    const cap = deriveStudyCapacity(60);
+    expect(cap.targetDailyMinutes).toBe(60);
+    expect(cap.maximumSessionsPerDay).toBe(1);
+    expect(cap.maximumSessionMinutes).toBe(60);
+  });
+
+  it('derives 2 sessions for 90 minutes', () => {
+    const cap = deriveStudyCapacity(90);
+    expect(cap.targetDailyMinutes).toBe(90);
+    expect(cap.maximumSessionsPerDay).toBe(2);
+    expect(cap.maximumSessionMinutes).toBe(90);
+  });
+
+  it('derives 2 sessions for 120 minutes', () => {
+    const cap = deriveStudyCapacity(120);
+    expect(cap.targetDailyMinutes).toBe(120);
+    expect(cap.maximumSessionsPerDay).toBe(2);
+    expect(cap.maximumSessionMinutes).toBe(90);
+  });
+
+  it('derives 3 sessions for 180 minutes', () => {
+    const cap = deriveStudyCapacity(180);
+    expect(cap.targetDailyMinutes).toBe(180);
+    expect(cap.maximumSessionsPerDay).toBe(3);
+    expect(cap.maximumSessionMinutes).toBe(90);
+  });
+
+  it('derives 6 sessions for 360 minutes', () => {
+    const cap = deriveStudyCapacity(360);
+    expect(cap.targetDailyMinutes).toBe(360);
+    expect(cap.maximumSessionsPerDay).toBe(6);
+    expect(cap.maximumSessionMinutes).toBe(90);
+  });
+
+  it('caps maximumSessionMinutes at 90', () => {
+    const cap = deriveStudyCapacity(999);
+    expect(cap.targetDailyMinutes).toBe(999);
+    expect(cap.maximumSessionMinutes).toBe(90);
+    expect(cap.maximumSessionsPerDay).toBe(17);
+  });
+
+  it('never returns zero sessions', () => {
+    const cap = deriveStudyCapacity(0);
+    expect(cap.targetDailyMinutes).toBe(1);
+    expect(cap.maximumSessionsPerDay).toBe(1);
+  });
+});
+
 describe('mapScheduleToStudyDays', () => {
   it('converts short day names to full day-of-week values', () => {
     expect(mapScheduleToStudyDays(['mon', 'wed', 'fri'])).toEqual([
@@ -169,7 +228,7 @@ describe('createWeeklyAvailability', () => {
 
   it('calculates max sessions from daily minutes', () => {
     const avail = createWeeklyAvailability(['mon'], 90);
-    expect(avail.monday.maximumSessions).toBe(3);
+    expect(avail.monday.maximumSessions).toBe(2);
     const short = createWeeklyAvailability(['mon'], 25);
     expect(short.monday.maximumSessions).toBe(1);
   });
