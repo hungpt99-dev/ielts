@@ -6,6 +6,44 @@
 
 The Study Plan Engine generates personalized IELTS study roadmaps. Given a learner's current band, target band, exam date, and weekly availability, it produces a phased study plan with daily tasks, spaced-repetition reviews, and mock tests. It operates fully offline by default and optionally enriches plans via AI.
 
+## IELTS Band Model
+
+**Official IELTS bands** use only whole and half-band values:  
+0, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9
+
+**Internal proficiency scores** are continuous values (e.g., 5.72) used for internal calculations.
+They are never displayed as "official" IELTS scores.
+
+### Domain Types
+
+Defined in `packages/learning-engine/src/domain/value-objects/ielts-band.ts`:
+
+```typescript
+type OfficialIeltsBand = 0 | 1 | 1.5 | ... | 9
+type InternalProficiencyScore = number // continuous, 0-9
+
+function isOfficialIeltsBand(value: number): boolean
+function toNearestOfficialBand(score: number): OfficialIeltsBand
+function toDisplayBand(band: OfficialIeltsBand): string
+function normalizeInternalScore(score: number): number
+```
+
+### Rounding Policy
+
+- Scores are first rounded to the nearest 0.5 using `Math.floor(x * 2 + 0.5) / 2`
+- Then mapped to the nearest official IELTS band value
+- Values of .25 and above round up to the next half band
+- Values below .25 round down
+
+### Phase Band Goals
+
+Phase titles now reference official band goals. Examples:
+- "Building foundations for Band 6.0"
+- "Developing Band 6.5 skills"
+- "Ready for Band 7.0"
+
+Phase band goals are distributed across valid official bands between current and target.
+
 ## Current Files
 
 | File | Role |
@@ -238,3 +276,20 @@ In the web app (`apps/web/src/`):
 4. **Single-threaded** — `generatePlan` is synchronous and blocks for large windows
 5. **No incremental updates** — After initial generation, the plan is mostly static until regeneration
 6. **AI is advisory** — AI-generated task candidates are currently not injected into the final plan (the engine uses its own deterministic task creation)
+
+## IELTS Band Correctness
+
+The engine now enforces **strict separation** between:
+
+1. **Official IELTS bands**: whole/half-band values only (5.0, 5.5, 6.0, etc.)
+2. **Internal proficiency scores**: continuous values (5.72, etc.) for calculations
+3. **Phase band goals**: official bands used in phase titles and labels
+4. **Skill-specific bands**: official bands per skill, used for prioritization
+
+Key protections:
+- Input bands are normalized to official values via `toNearestOfficialBand()` in `normalizeProfile()`
+- Phase titles use `toDisplayBand()` to ensure correct formatting
+- `planConverter.ts` now uses `toNearestOfficialBand()` and `OFFICIAL_IELTS_BANDS` for phase range labels
+- AI prompts include explicit instructions to only use valid IELTS band values
+- Zod validation at AI output boundaries prevents invalid bands from reaching persistence
+- The domain type `OfficialIeltsBand` is a strict union type (not `number`)

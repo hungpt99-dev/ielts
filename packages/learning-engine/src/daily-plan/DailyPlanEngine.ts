@@ -1,3 +1,13 @@
+import {
+  buildPhaseBlueprints,
+  createStudyPhasesFromBlueprints,
+  hasDuplicatePhaseTitles,
+  isMonotonicStageProgression,
+  isMonotonicBandProgression,
+  hasRegressiveFinalPhase,
+  areTitlesSemanticallyUnique,
+  detectGenericTitles,
+} from './phase-blueprint';
 import type {
   NormalizedProfile,
   PlanningWindow,
@@ -9,7 +19,6 @@ import type {
   StudyTask,
   StudyPlan,
   StudyTimeBudget,
-  StudyPhaseType,
   StudyTaskSkill,
   LocalDate,
   PlanValidationIssue,
@@ -40,18 +49,6 @@ const MIN_SESSION_MINUTES = 10;
 const SKILL_NAMES: StudyTaskSkill[] = ['listening', 'reading', 'writing', 'speaking', 'vocabulary', 'grammar'];
 const CORE_SKILLS: StudyTaskSkill[] = ['listening', 'reading', 'writing', 'speaking'];
 const ALL_DAYS: DayOfWeek[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-
-const PHASE_CONFIGS: Array<{ type: StudyPhaseType; minDays: number; optimalDays: number }> = [
-  { type: 'diagnostic', minDays: 1, optimalDays: 3 },
-  { type: 'foundation', minDays: 7, optimalDays: 21 },
-  { type: 'skill-building', minDays: 7, optimalDays: 21 },
-  { type: 'guided-practice', minDays: 5, optimalDays: 14 },
-  { type: 'timed-practice', minDays: 5, optimalDays: 10 },
-  { type: 'error-correction', minDays: 3, optimalDays: 7 },
-  { type: 'mock-examination', minDays: 2, optimalDays: 5 },
-  { type: 'final-review', minDays: 2, optimalDays: 4 },
-  { type: 'exam-readiness', minDays: 1, optimalDays: 3 },
-];
 
 interface DailyCapacity {
   date: LocalDate;
@@ -174,7 +171,7 @@ export class DailyPlanEngine {
       };
     }
 
-    this.reportProgress('planning-phases', 4, 12, 'Building learning phases');
+      this.reportProgress('planning-phases', 4, 12, 'Building learning phases');
     if (cancelled()) return { status: 'cancelled' }
     const phases = this.planPhases(window, profile, skillGaps);
     const timeBudget = this.allocateTimeBudget(window, profile, feasibility);
@@ -183,9 +180,10 @@ export class DailyPlanEngine {
     const plan = this.buildPlan(profile, window, feasibility, timeBudget, skillAllocation, phases, dailyCapacities, skillGaps);
     this.reportProgress('adding-reviews', 6, 12, 'Adding review tasks');
     this.reportProgress('adding-mock-tests', 7, 12, 'Adding mock tests');
-    this.reportProgress('validating-plan', 8, 12, 'Validating your schedule');
+      this.reportProgress('validating-plan', 8, 12, 'Validating your schedule');
     if (cancelled()) return { status: 'cancelled' }
     const validationIssues = this.validatePlan(plan);
+
 
     if (validationIssues.some(i => i.severity === 'error')) {
       this.reportProgress('repairing-plan', 10, 12, 'Repairing schedule conflicts');
@@ -365,6 +363,27 @@ export class DailyPlanEngine {
     );
     if (hasIntensiveNewMaterial) {
       issues.push(this.issue('final-week-violation', 'warning', 'Final week contains intensive new material'));
+    }
+
+    if (hasDuplicatePhaseTitles(phases)) {
+      issues.push(this.issue('duplicate-phase-title', 'error', 'Phases contain duplicate titles'));
+    }
+    if (!isMonotonicStageProgression(phases)) {
+      issues.push(this.issue('phase-stage-regression', 'error', 'Phase stages regress (a later stage is earlier than a previous stage)'));
+    }
+    if (!isMonotonicBandProgression(phases)) {
+      issues.push(this.issue('band-goal-regression', 'error', 'Official band goals decrease across phases'));
+    }
+    if (hasRegressiveFinalPhase(phases)) {
+      issues.push(this.issue('regressive-final-phase', 'error', 'Final phase stage is less advanced than the previous phase'));
+    }
+    if (!areTitlesSemanticallyUnique(phases)) {
+      issues.push(this.issue('generic-phase-title', 'warning', 'Multiple phases use the same semantic title pattern'));
+    }
+
+    const genericTitles = detectGenericTitles(phases.map(p => p.title));
+    if (genericTitles.length > 0) {
+      issues.push(this.issue('generic-phase-title', 'warning', `Phases have generic titles: ${genericTitles.join(', ')}`));
     }
 
     return issues;
@@ -848,61 +867,11 @@ export class DailyPlanEngine {
   }
 
   private planPhases(window: PlanningWindow, profile: NormalizedProfile, skillGaps: SkillGapScore[]): StudyPhase[] {
-    const phases: StudyPhase[] = [];
-    const totalDays = window.totalCalendarDays;
-    const bandGap = profile.targetOverallBand - profile.currentOverallBand;
+    const blueprints = buildPhaseBlueprints(profile, window, skillGaps);
+    const { phases } = createStudyPhasesFromBlueprints(blueprints, window.startDate, profile, window);
 
-    let remainingDays = totalDays;
-
-    const selected: StudyPhaseType[] = [];
-
-    if (totalDays <= 7) {
-      selected.push('diagnostic', 'exam-readiness');
-    } else if (totalDays <= 14) {
-      selected.push('diagnostic', 'error-correction', 'mock-examination', 'final-review');
-    } else if (totalDays <= 30) {
-      selected.push('diagnostic', 'skill-building', 'guided-practice', 'timed-practice', 'mock-examination', 'final-review');
-    } else if (totalDays <= 60) {
-      if (bandGap > 2) {
-        selected.push('diagnostic', 'foundation', 'skill-building', 'guided-practice', 'mock-examination', 'exam-readiness');
-      } else {
-        selected.push('diagnostic', 'skill-building', 'guided-practice', 'timed-practice', 'mock-examination', 'final-review');
-      }
-    } else {
-      selected.push('diagnostic', 'foundation', 'skill-building', 'guided-practice', 'timed-practice', 'mock-examination', 'final-review', 'exam-readiness');
-    }
-
-    const configs = PHASE_CONFIGS.filter(c => selected.includes(c.type));
-    const totalOptimal = configs.reduce((s, c) => s + c.optimalDays, 0);
-    const scale = Math.min(1, totalDays / Math.max(1, totalOptimal));
-
-    let currentDate = window.startDate;
-
-    for (let i = 0; i < configs.length && remainingDays > 0; i++) {
-      const cfg = configs[i];
-      const phaseDays = Math.max(cfg.minDays, Math.min(Math.round(cfg.optimalDays * scale), remainingDays - (configs.length - i - 1) * 1));
-      const endDate = addDays(currentDate, phaseDays - 1);
-
-      if (isBeforeOrSame(endDate, window.finalStudyDate) || i === configs.length - 1) {
-        const allocatedMinutes = this.estimatePhaseMinutes(currentDate, endDate, profile, window);
-        phases.push({
-          id: `phase-${i + 1}`,
-          type: cfg.type,
-          title: this.phaseTitle(cfg.type),
-          description: this.phaseDescription(cfg.type, profile),
-          startDate: currentDate,
-          endDate: endDate,
-          targetSkills: this.phaseTargetSkills(cfg.type, skillGaps),
-          objectives: [],
-          allocatedMinutes,
-          scheduledMinutes: 0,
-          order: i + 1,
-          status: 'upcoming',
-        });
-
-        remainingDays -= phaseDays;
-        currentDate = addDays(currentDate, phaseDays);
-      }
+    for (const phase of phases) {
+      phase.allocatedMinutes = this.estimatePhaseMinutes(phase.startDate, phase.endDate, profile, window);
     }
 
     return phases;
@@ -1983,7 +1952,7 @@ export class DailyPlanEngine {
     const mockCount = Math.max(1, Math.floor(window.totalCalendarDays / 21));
 
     const phasesList: StudyPhase[] = [
-      { id: 'phase-1', type: 'skill-building', title: 'Skill Building', description: 'Build core skills', startDate: window.startDate, endDate: addDays(window.startDate, 6), targetSkills: ['writing', 'speaking'], objectives: [], allocatedMinutes: 0, scheduledMinutes: 0, order: 1, status: 'upcoming' },
+      { id: 'phase-1', type: 'skill-building', stage: 'skill-development', title: 'Skill Building', description: 'Build core skills', summary: 'Build core skills', startDate: window.startDate, endDate: addDays(window.startDate, 6), targetSkills: ['writing', 'speaking'], objectives: [], completionCriteria: [], allocatedMinutes: 0, scheduledMinutes: 0, order: 1, status: 'upcoming', officialBandGoal: 6 },
     ];
 
     return {
@@ -2005,64 +1974,6 @@ export class DailyPlanEngine {
   }
 
   // ── Utility Helpers ──
-
-  private phaseTitle(type: StudyPhaseType): string {
-    const titles: Record<StudyPhaseType, string> = {
-      'diagnostic': 'Diagnostic Assessment',
-      'foundation': 'Foundation Building',
-      'skill-building': 'Skill Development',
-      'strategy-development': 'Strategy Development',
-      'guided-practice': 'Guided Practice',
-      'timed-practice': 'Timed Practice',
-      'mock-examination': 'Mock Examination',
-      'error-correction': 'Error Correction',
-      'final-review': 'Final Review',
-      'exam-readiness': 'Exam Readiness',
-    };
-    return titles[type] ?? type;
-  }
-
-  private phaseDescription(type: StudyPhaseType, _profile: NormalizedProfile): string {
-    const descriptions: Record<StudyPhaseType, string> = {
-      'diagnostic': 'Initial assessment to establish baseline performance across all skills',
-      'foundation': 'Build fundamental vocabulary, grammar, and core techniques',
-      'skill-building': 'Develop key skills for each IELTS section',
-      'strategy-development': 'Learn test-taking strategies and approaches',
-      'guided-practice': 'Practice with structured guidance and feedback',
-      'timed-practice': 'Practice under timed conditions to build speed and accuracy',
-      'mock-examination': 'Complete mock tests under exam conditions',
-      'error-correction': 'Analyze and correct common mistakes',
-      'final-review': 'Consolidate knowledge and review key concepts',
-      'exam-readiness': 'Prepare mentally and logistically for exam day',
-    };
-    return descriptions[type] ?? type;
-  }
-
-  private phaseTargetSkills(type: StudyPhaseType, skillGaps: SkillGapScore[]): StudyTaskSkill[] {
-    const sortedByGap = [...skillGaps]
-      .filter(g => CORE_SKILLS.includes(g.skill))
-      .sort((a, b) => b.bandGap - a.bandGap);
-
-    switch (type) {
-      case 'diagnostic':
-        return CORE_SKILLS;
-      case 'foundation':
-        return ['vocabulary', 'grammar', ...CORE_SKILLS];
-      case 'skill-building':
-      case 'guided-practice':
-        return sortedByGap.slice(0, 3).map(g => g.skill);
-      case 'timed-practice':
-      case 'mock-examination':
-        return CORE_SKILLS;
-      case 'error-correction':
-        return sortedByGap.slice(0, 2).map(g => g.skill);
-      case 'final-review':
-      case 'exam-readiness':
-        return CORE_SKILLS;
-      default:
-        return CORE_SKILLS;
-    }
-  }
 
   private estimatePhaseMinutes(start: LocalDate, end: LocalDate, profile: NormalizedProfile, _window: PlanningWindow): number {
     let total = 0;
@@ -2110,7 +2021,7 @@ export class DailyPlanEngine {
       severity,
       path,
       message,
-      repairable: ['task-after-exam', 'task-on-exam-date', 'daily-capacity-exceeded', 'session-duration-exceeded', 'total-scheduled-exceeded'].includes(code),
+      repairable: ['task-after-exam', 'task-on-exam-date', 'daily-capacity-exceeded', 'session-duration-exceeded', 'total-scheduled-exceeded', 'duplicate-phase-title', 'phase-stage-regression', 'band-goal-regression', 'regressive-final-phase', 'generic-phase-title'].includes(code),
     };
   }
 }

@@ -81,10 +81,10 @@ export interface RoadmapData {
 const ROADMAP_STORAGE_KEY = STORAGE_KEYS.localStorage.roadmap
 
 const PHASE_META = [
-  { name: 'Foundation Building', desc: 'Build essential vocabulary, grammar, and basic IELTS skills', range: 'Band 4.0-5.5' },
-  { name: 'Skill Development', desc: 'Develop core strategies for each IELTS skill section', range: 'Band 5.5-6.5' },
-  { name: 'Advanced Practice', desc: 'Practice with complex materials and timed exercises', range: 'Band 6.5-7.5' },
-  { name: 'Test Readiness', desc: 'Simulate full tests and refine weak areas before exam day', range: 'Band 7.5+' },
+  { name: 'Foundation Building', desc: 'Build essential vocabulary, grammar, and basic IELTS skills', range: 'Building foundations' },
+  { name: 'Skill Development', desc: 'Develop core strategies for each IELTS skill section', range: 'Developing core skills' },
+  { name: 'Advanced Practice', desc: 'Practice with complex materials and timed exercises', range: 'Advanced practice' },
+  { name: 'Test Readiness', desc: 'Simulate full tests and refine weak areas before exam day', range: 'Preparing for exam day' },
 ]
 
 const WEEK_FOCUS_TEMPLATES = [
@@ -605,8 +605,11 @@ async function enrichPlanWithAI(
     }
 
     const planTasks = [...plan.tasks]
+    const phasesMap = new Map(plan.phases.map(p => [p.id, p]))
+    const weeksMap = new Map(plan.weeks.map(w => [w.id, w]))
     console.log('[AIEnrich] Enriching... candidates:', enrichment.taskCandidates.length, 'planTasks:', planTasks.length)
     let matched = 0
+    let injected = 0
     for (const candidate of enrichment.taskCandidates) {
       let match = planTasks.find(
         t => t.weekId === candidate.targetWeekId && t.skill === candidate.skill && t.sourceType === 'built-in',
@@ -615,6 +618,22 @@ async function enrichPlanWithAI(
         match = planTasks.find(
           t => t.weekId === candidate.targetWeekId && t.skill === candidate.skill,
         )
+      }
+      if (!match && (candidate.skill === 'vocabulary' || candidate.skill === 'grammar')) {
+        const targetWeek = weeksMap.get(candidate.targetWeekId)
+        if (targetWeek) {
+          const phase = phasesMap.get(targetWeek.phaseId)
+          if (phase) {
+            match = planTasks.find(
+              t => t.weekId === candidate.targetWeekId && phase.targetSkills.includes(t.skill) && t.sourceType === 'built-in' && !t.title.startsWith('[AI]'),
+            )
+            if (!match) {
+              match = planTasks.find(
+                t => t.weekId === candidate.targetWeekId && t.sourceType === 'built-in' && !t.title.startsWith('[AI]'),
+              )
+            }
+          }
+        }
       }
       if (!match) {
         match = planTasks.find(
@@ -634,11 +653,71 @@ async function enrichPlanWithAI(
           aiCandidateId: candidate.candidateId,
           generationReason: candidate.reason,
         }
-      } else {
-        console.log('[AIEnrich] UNMATCHED candidate:', JSON.stringify({ skill: candidate.skill, targetWeekId: candidate.targetWeekId, title: candidate.title?.slice(0, 60) }))
+      } else if (candidate.priority === 'high' || candidate.priority === 'normal') {
+        const targetWeek = weeksMap.get(candidate.targetWeekId)
+        if (targetWeek) {
+          const weekTasks = planTasks.filter(t => t.weekId === candidate.targetWeekId)
+          const weekScheduled = weekTasks.reduce((s, t) => s + t.estimatedMinutes, 0)
+          const hasCapacity = weekScheduled + candidate.recommendedMinutes <= targetWeek.availableMinutes
+          if (hasCapacity) {
+            const phase = phasesMap.get(targetWeek.phaseId)
+            const newTask: import('@ielts/learning-engine').StudyTask = {
+              id: `ai-${candidate.candidateId}`,
+              roadmapId: plan.id,
+              phaseId: targetWeek.phaseId,
+              weekId: candidate.targetWeekId,
+              date: targetWeek.startDate,
+              sessionOrder: weekTasks.length + 1,
+              skill: candidate.skill as any,
+              taskType: candidate.taskType,
+              title: candidate.title,
+              description: candidate.description,
+              objective: candidate.objective,
+              reason: candidate.reason,
+              estimatedMinutes: candidate.recommendedMinutes,
+              difficulty: candidate.difficulty as any,
+              priority: candidate.priority as any,
+              sourceType: 'ai-generated',
+              status: 'not-started',
+              scheduledAt: new Date().toISOString(),
+              metadata: {
+                aiCandidateId: candidate.candidateId,
+                generationReason: candidate.reason,
+                targetBand: profile.targetOverallBand,
+                focusArea: phase?.type ?? 'skill-building',
+              },
+            }
+            planTasks.push(newTask)
+            injected++
+          }
+        }
       }
     }
-    console.log('[AIEnrich] Matched', matched, 'of', enrichment.taskCandidates.length, 'candidates')
+    console.log('[AIEnrich] Matched', matched, 'injected', injected, 'of', enrichment.taskCandidates.length, 'candidates')
+
+    const genericPatterns = [/^[A-Z][a-z]+ Practice$/, /^[A-Z][a-z]+ Exercise$/, /^Listening Practice/, /^Reading Practice/, /^Writing Practice/, /^Speaking Practice/]
+    let propagated = 0
+    for (const task of planTasks) {
+      if (task.sourceType === 'ai-generated' || !genericPatterns.some(p => p.test(task.title))) continue
+      const sibling = planTasks.find(t =>
+        t.weekId === task.weekId &&
+        t.skill === task.skill &&
+        t.sourceType === 'ai-generated' &&
+        t.title !== task.title,
+      )
+      if (sibling) {
+        task.title = sibling.title
+        task.description = sibling.description
+        task.objective = sibling.objective
+        task.reason = sibling.reason
+        task.sourceType = 'ai-generated'
+        task.metadata = { ...task.metadata, aiCandidateId: sibling.metadata?.aiCandidateId, generationReason: sibling.reason }
+        propagated++
+      }
+    }
+    if (propagated > 0) {
+      console.log('[AIEnrich] Propagated AI enrichment to', propagated, 'generic sibling tasks')
+    }
 
     return { ...plan, tasks: planTasks }
   } catch (err) {

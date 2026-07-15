@@ -60,7 +60,7 @@ Required fields:
 - "collocations": array of 2-3 common collocations
 - "synonyms": array of 2-3 synonyms
 - "antonyms": array of 1-2 antonyms (empty array if none exist)
-- "wordFamily": array of objects, each with "word" (string), "pos" (part of speech), "meaning" (string), "pronunciation" (string)
+- "wordFamily": array of related word forms (e.g. ["ubiquity", "ubiquitously"])
 - "cefrLevel": one of: A1, A2, B1, B2, C1, C2
 - "ieltsRelevance": one of: low, medium, high`
 

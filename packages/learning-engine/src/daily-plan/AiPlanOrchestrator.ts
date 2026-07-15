@@ -26,11 +26,36 @@ const studyTaskSkillSchema = z.enum([
 const difficultySchema = z.enum(['easy', 'medium', 'hard']);
 const prioritySchema = z.enum(['low', 'normal', 'high']);
 
+const phaseStageSchema = z.enum([
+  'foundation', 'skill-development', 'guided-practice', 'accuracy',
+  'performance', 'consistency', 'target-readiness', 'exam-readiness',
+]);
+
+const officialBandSchema = z.number().refine(
+  v => [0, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9].includes(v),
+  { message: 'Official IELTS bands must be whole or half-band values (0, 1, 1.5, 2, ..., 9)' },
+);
+
+
+
 const PrimaryWeaknessSchema = z.object({
   skill: studyTaskSkillSchema,
   reason: z.string().min(1),
   confidence: z.number().min(0).max(1),
 });
+
+export const AIPhaseSchema = z.object({
+  order: z.number().int().min(1),
+  stage: phaseStageSchema,
+  title: z.string().min(1).max(150),
+  summary: z.string().min(1).max(300),
+  officialBandGoal: officialBandSchema,
+  focusSkills: z.array(studyTaskSkillSchema).min(1).max(6),
+  objectives: z.array(z.string().min(1)).min(1).max(5),
+  completionCriteria: z.array(z.string().min(1)).min(1).max(5),
+});
+
+export const AIPhaseArraySchema = z.array(AIPhaseSchema).min(2).max(12);
 
 export const AIProfileAnalysisSchema = z.object({
   primaryWeaknesses: z.array(PrimaryWeaknessSchema).min(1).max(4),
@@ -326,7 +351,37 @@ export class AiPlanOrchestrator {
         taskCandidates.push(...candidates);
         callStats.successfulCalls++;
         this.cache.set(cacheKey, JSON.stringify(candidates));
-        console.log('[AiOrchestrator] Batch', batch.batchIndex, 'got', candidates.length, 'candidates (required:', batch.requiredCount, ')')
+        if (candidates.length < batch.requiredCount) {
+          console.log('[AiOrchestrator] Batch', batch.batchIndex, 'got', candidates.length, 'of', batch.requiredCount, 'required (partial — AI returned fewer than requested)')
+          let missingCount = batch.requiredCount - candidates.length;
+          for (let retry = 0; retry < 2 && missingCount > 0; retry++) {
+            if (callStats.attemptedCalls >= this.limits.maximumCallsPerGeneration) break;
+            if (signal?.aborted) break;
+            callStats.attemptedCalls++;
+            const retryCandidates = await this.callWithFallback<AITaskCandidate[]>(
+              () => this.callTaskCandidates(
+                { ...batch, requiredCount: missingCount },
+                weeks,
+                weeksWithObjectives,
+                profile,
+                signal,
+                candidates,
+              ),
+              [],
+            );
+            if (retryCandidates && retryCandidates.length > 0) {
+              taskCandidates.push(...retryCandidates);
+              callStats.successfulCalls++;
+              console.log('[AiOrchestrator] Batch', batch.batchIndex, 'retry', retry + 1, 'got', retryCandidates.length, 'of', missingCount, 'needed');
+              missingCount = Math.max(0, missingCount - retryCandidates.length);
+            }
+          }
+          if (missingCount > 0) {
+            console.log('[AiOrchestrator] Batch', batch.batchIndex, 'still missing', missingCount, 'candidates after', 2, 'retries');
+          }
+        } else {
+          console.log('[AiOrchestrator] Batch', batch.batchIndex, 'got', candidates.length, 'candidates (required:', batch.requiredCount, ')')
+        }
       } else {
         console.log('[AiOrchestrator] Task candidates FAILED for batch:', batch.batchIndex, 'required:', batch.requiredCount, 'weeks:', batch.weekIds.length)
         callStats.failedCalls++;
@@ -454,15 +509,19 @@ export class AiPlanOrchestrator {
       if (phaseWeeks.length === 0) continue;
 
       const totalCapacity = phaseWeeks.reduce((s, w) => s + w.availableMinutes, 0);
-      const estimatedTasks = Math.ceil(totalCapacity / 25);
-      const cappedTasks = Math.min(estimatedTasks, this.limits.maximumCandidatesPerBatch);
+      const candidateCapacity = Math.round(totalCapacity / 25);
+      const perWeekTarget = Math.max(2, Math.round(candidateCapacity / Math.max(1, phaseWeeks.length)));
+      const cappedPerPhase = Math.min(
+        perWeekTarget * phaseWeeks.length,
+        this.limits.maximumCandidatesPerBatch,
+      );
 
       taskBatches.push({
         batchIndex: taskBatches.length + 1,
         phaseId: phase.id,
         weekIds: phaseWeeks.map(w => w.id),
-        requiredCount: cappedTasks,
-        tokenBudget: Math.min(cappedTasks * 1000, this.limits.maximumTokensPerGeneration / Math.max(1, phases.length)),
+        requiredCount: cappedPerPhase,
+        tokenBudget: Math.min(cappedPerPhase * 1000, this.limits.maximumTokensPerGeneration / Math.max(1, phases.length)),
       });
     }
 
@@ -499,6 +558,21 @@ Use this exact schema:
   "risks": [string],
   "learnerSummary": string
 }
+
+IMPORTANT IELTS BAND RULES:
+- Official IELTS bands use ONLY whole and half-band values: 0, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9
+- Values like 5.6, 5.8, 6.1, 6.3, 6.4, 6.6 are NOT valid IELTS bands
+- Never invent band values with unsupported precision
+- When referencing band scores, use only valid whole or half-band values
+
+PHASE PROGRESSION RULES (when discussing learning phases):
+- Every phase must have a unique purpose and title
+- Do NOT repeat the same or semantically equivalent phase title
+- The phases must form a chronological learning progression
+- A later phase must not represent an earlier level of readiness
+- The final phase must be the most advanced and focus on target validation or exam readiness
+- Phase titles should primarily describe the learner's focus skills and stage - not just the target band
+- Phases progress through stages: foundation → skill-development → guided-practice → accuracy → performance → consistency → target-readiness → exam-readiness
 
 Rules:
 - Skills must be one of: listening, reading, writing, speaking, vocabulary, grammar
@@ -549,6 +623,11 @@ Each entry must follow:
   "pedagogicalReason": string (max 300 chars)
 }
 
+IMPORTANT IELTS BAND RULES:
+- Official IELTS bands use ONLY whole and half-band values: 0, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9
+- Values like 5.6, 5.8, 6.1, 6.3, 6.4, 6.6 are NOT valid IELTS bands
+- Never invent band values with unsupported precision
+
 Rules:
 - Return an array of objects, one per week
 - weekId must match the provided week IDs exactly
@@ -578,7 +657,7 @@ Learner profile:
     const content = await this.safeAICall(systemPrompt, userPrompt, signal);
     if (!content) return null;
 
-    return this.parseAndValidateArray(content, AIWeeklyObjectiveSchema);
+    return this.parseAndValidateArray(content, AIWeeklyObjectiveSchema, 'weekly-objectives');
   }
 
   private async callTaskCandidates(
@@ -587,6 +666,7 @@ Learner profile:
     weeksWithObjectives: Map<string, AIWeeklyObjective>,
     profile: NormalizedProfile,
     signal?: AbortSignal,
+    existingCandidates?: AITaskCandidate[],
   ): Promise<AITaskCandidate[] | null> {
     const batchWeeks = weeks.filter(w => batch.weekIds.includes(w.id));
     if (batchWeeks.length === 0) return [];
@@ -609,6 +689,20 @@ Each entry must follow:
   "prerequisites": [string] (optional, max 5)
 }
 
+IMPORTANT IELTS BAND RULES:
+- Official IELTS bands use ONLY whole and half-band values: 0, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9
+- Values like 5.6, 5.8, 6.1, 6.3, 6.4, 6.6 are NOT valid IELTS bands
+- Never invent band values with unsupported precision
+
+MATCHING RULES (CRITICAL):
+- The study plan uses core skills: listening, reading, writing, speaking, vocabulary, grammar
+- Vocabulary and grammar are SUPPORTING skills — most tasks in the plan are for core skills
+- Only generate vocabulary or grammar candidates when the week's focus clearly requires them (e.g. a vocabulary-focused week)
+- PREFER candidates for: listening, reading, writing, speaking
+- Vocabulary candidates should be rare — only when the phase explicitly targets vocabulary
+- Grammar candidates should be rare — only when the phase explicitly targets grammar
+- Prioritize generating candidates for the skills that appear in the phase's skill allocation
+
 Title quality rules (MOST IMPORTANT):
 - Each title must be specific and descriptive, NOT generic like "Writing Practice" or "Listening Practice"
 - Include the skill, task type, and focus area in the title
@@ -619,10 +713,11 @@ Title quality rules (MOST IMPORTANT):
 Other rules:
 - recommendMinutes must be one of: ${ALLOWED_DURATIONS.join(', ')}
 - candidateId should be unique and contain the week reference
-- Generate at most ${batch.requiredCount} candidates
-- Spread candidates across the target weeks
+- Generate exactly ${batch.requiredCount} candidates — do not return fewer
+- Spread candidates evenly across the ${batch.weekIds.length} target week(s) (${Math.round(batch.requiredCount / Math.max(1, batch.weekIds.length))}–${Math.ceil(batch.requiredCount / Math.max(1, batch.weekIds.length))} per week)
 - Do NOT include final dates or scheduling
-- Do NOT guarantee score improvements`;
+- Do NOT guarantee score improvements
+${existingCandidates ? `- IMPORTANT: These tasks are already covered — do NOT generate duplicates of them:\n${existingCandidates.map(c => `  • Week ${c.targetWeekId}: ${c.title}`).join('\n')}` : ''}`;
 
     const weekDetails = batchWeeks.map(w => {
       const objective = weeksWithObjectives.get(w.id);
@@ -643,7 +738,7 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
     const content = await this.safeAICall(systemPrompt, userPrompt, signal);
     if (!content) return null;
 
-    return this.parseAndValidateArray(content, AITaskCandidateSchema);
+    return this.parseAndValidateArray(content, AITaskCandidateSchema, 'task-candidates');
   }
 
   // ── Helpers ──
@@ -720,9 +815,14 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
   private parseAndValidateArray<T>(
     content: string,
     schema: z.ZodType<T>,
+    label?: string,
   ): T[] | null {
     try {
-      const cleaned = this.repairJSON(this.extractJSON(content));
+      const raw = this.extractJSON(content);
+      const cleaned = this.repairJSON(raw);
+      if (raw !== cleaned) {
+        console.log(`[AiOrchestrator] ${label || ''} repairJSON modified output: ${raw.length} -> ${cleaned.length} chars`);
+      }
       const parsed = JSON.parse(cleaned);
       const items: unknown[] = Array.isArray(parsed)
         ? parsed
@@ -730,15 +830,25 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
           ? (parsed as Record<string, unknown>).items as unknown[]
           : [parsed];
       const results: T[] = [];
+      let rejected = 0;
       for (const item of items) {
         const result = schema.safeParse(item);
         if (result.success) {
           results.push(result.data);
+        } else {
+          rejected++;
+          if (rejected <= 3) {
+            const snippet = JSON.stringify(item).slice(0, 120);
+            console.log(`[AiOrchestrator] ${label || ''} Zod rejected item: ${result.error.issues[0]?.message || 'unknown'} — snippet: ${snippet}`);
+          }
         }
+      }
+      if (rejected > 0) {
+        console.log(`[AiOrchestrator] ${label || ''} validation: ${results.length} accepted, ${rejected} rejected (of ${items.length} total)`);
       }
       return results.length > 0 ? results : null;
     } catch (error) {
-      console.error('packages/learning-engine/src/daily-plan/AiPlanOrchestrator.ts error:', error);
+      console.error(`[AiOrchestrator] ${label || ''} parse error:`, error);
       return null;
     }
   }

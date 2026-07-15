@@ -241,7 +241,7 @@ export function addPhase(
     name: `Phase ${insertAt + 1}`,
     description: 'New learning phase',
     order: insertAt,
-    targetRange: 'Band X-Y',
+    targetRange: 'New Phase',
     weeks: [],
     isComplete: false,
     completedTasks: 0,

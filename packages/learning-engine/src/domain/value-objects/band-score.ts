@@ -1,4 +1,6 @@
-export type BandScore = number
+import type { OfficialIeltsBand } from './ielts-band'
+
+export type BandScore = OfficialIeltsBand
 
 export type IELTSSection = 'listening' | 'reading' | 'writing' | 'speaking' | 'grammar' | 'vocabulary'
 

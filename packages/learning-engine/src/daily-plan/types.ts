@@ -62,6 +62,27 @@ export type StudyPhaseType =
   | "final-review"
   | "exam-readiness";
 
+export type PhaseStage =
+  | 'foundation'
+  | 'skill-development'
+  | 'guided-practice'
+  | 'accuracy'
+  | 'performance'
+  | 'consistency'
+  | 'target-readiness'
+  | 'exam-readiness';
+
+export const PHASE_STAGE_ORDER: Record<PhaseStage, number> = {
+  'foundation': 0,
+  'skill-development': 1,
+  'guided-practice': 2,
+  'accuracy': 3,
+  'performance': 4,
+  'consistency': 5,
+  'target-readiness': 6,
+  'exam-readiness': 7,
+};
+
 export type PlanValidationCode =
   | "start-after-exam"
   | "task-outside-window"
@@ -87,7 +108,12 @@ export type PlanValidationCode =
   | "mock-missing-analysis"
   | "final-week-violation"
   | "ai-schema-mismatch"
-  | "score-claim";
+  | "score-claim"
+  | "duplicate-phase-title"
+  | "phase-stage-regression"
+  | "band-goal-regression"
+  | "regressive-final-phase"
+  | "generic-phase-title";
 
 export type StudyTaskSkill =
   | "listening"
@@ -374,16 +400,20 @@ export interface StudyTimeBudget {
 export interface StudyPhase {
   id: string;
   type: StudyPhaseType;
+  stage: PhaseStage;
   title: string;
   description: string;
+  summary: string;
   startDate: LocalDate;
   endDate: LocalDate;
   targetSkills: StudyTaskSkill[];
   objectives: string[];
+  completionCriteria: string[];
   allocatedMinutes: number;
   scheduledMinutes: number;
   order: number;
   status: "upcoming" | "active" | "completed";
+  officialBandGoal?: number;
 }
 
 // ── Week ──

@@ -1,7 +1,7 @@
 import { callAI, vocabularyDetailsSchema, AiConfigurationResolver } from '@ielts/ai'
 import type { VocabularyDetails } from '@ielts/ai'
 import type { AiUserSettings } from '@ielts/settings'
-import { DEFAULT_APP_CONFIG, STORAGE_KEYS } from '@ielts/config'
+import { DEFAULT_APP_CONFIG, DEFAULT_AI_API_URL, STORAGE_KEYS, AI_PROVIDER_DEFINITIONS } from '@ielts/config'
 
 export interface EnrichResult {
   lemma?: string
@@ -28,6 +28,15 @@ interface VocabWordForm {
     pastParticiple: string
     presentParticiple: string
     thirdPersonSingular: string
+  }
+}
+
+function urlSafe(value: string): boolean {
+  try {
+    const url = new URL(value)
+    return url.protocol === 'http:' || url.protocol === 'https:'
+  } catch {
+    return false
   }
 }
 
@@ -63,11 +72,17 @@ function getAiConfig(): { apiKey: string; baseUrl: string; model: string } | nul
     if (!raw) return null
     const config = JSON.parse(raw)
     const ai = (config?.ai as Record<string, unknown>) ?? {}
-    const apiKey = (ai?.apiKey as string) ?? (config?.aiApiKey as string) ?? ''
+    const providerId = (ai?.providerId as string) ?? 'openai'
+    const storedKey = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${providerId}`)
+    const apiKey = (ai?.apiKey as string) ?? (config?.aiApiKey as string) ?? storedKey ?? ''
     if (!apiKey) return null
+    const customUrl = ai?.customApiUrl as string | undefined
+    const providerDefault = AI_PROVIDER_DEFINITIONS[providerId as keyof typeof AI_PROVIDER_DEFINITIONS]?.defaultApiUrl
+    const defaultUrl = providerDefault ?? DEFAULT_AI_API_URL
+    const baseUrl = customUrl && urlSafe(customUrl) ? customUrl : defaultUrl
     return {
       apiKey,
-      baseUrl: (ai?.customApiUrl as string) ?? 'https://api.openai.com/v1',
+      baseUrl,
       model: (ai?.model as string) ?? DEFAULT_APP_CONFIG.ai.defaultModel,
     }
   } catch {
@@ -91,7 +106,7 @@ Required fields:
 - "collocations": array of 2-3 common collocations
 - "synonyms": array of 2-3 synonyms
 - "antonyms": array of 1-2 antonyms (empty array if none exist)
-- "wordFamily": array of objects, each with "word" (string), "pos" (part of speech), "meaning" (string), "pronunciation" (string)
+- "wordFamily": array of related word forms (e.g. ["ubiquity", "ubiquitously"])
 - "cefrLevel": one of: A1, A2, B1, B2, C1, C2
 - "ieltsRelevance": one of: low, medium, high`
 

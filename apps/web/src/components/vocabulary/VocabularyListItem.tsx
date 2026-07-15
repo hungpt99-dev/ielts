@@ -3,6 +3,7 @@ import type { VocabularyEntry, VocabDifficulty, VocabStatus } from '../../models
 import PronounceButton from '../ui/PronounceButton'
 import WordFamilyDisplay from '../../features/vocabulary/components/WordFamilyDisplay'
 import { enrichVocabulary } from '../../features/vocabulary/vocabularyService'
+import { useToast } from '../ui/Toast'
 import { IconStar, IconCheckCircle, IconEdit, IconDelete, IconChevronRight } from '@ielts/ui'
 
 export type { VocabularyEntry }
@@ -41,6 +42,7 @@ function VocabularyListItem({
 }: VocabularyListItemProps) {
   const [enriching, setEnriching] = useState(false)
   const [localEnriched, setLocalEnriched] = useState<VocabularyEntry | null>(null)
+  const { showToast } = useToast()
 
   const displayEntry = localEnriched ?? entry
   const displayWordFamily = displayEntry.wordFamily
@@ -50,7 +52,10 @@ function VocabularyListItem({
     try {
       const { DatabaseService } = await import('../../services/storage/Database')
       const { data, error } = await enrichVocabulary(entry.word, displayEntry.topic)
-      if (error || !data) return
+      if (error || !data) {
+        showToast('error', error || 'Enrichment failed')
+        return
+      }
       const mergedWordFamily = [...new Set([...entry.wordFamily, ...(data.wordFamily || [])])]
       const updated: VocabularyEntry = {
         ...entry,

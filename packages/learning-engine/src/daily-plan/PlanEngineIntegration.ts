@@ -1,3 +1,6 @@
+import {
+  toNearestOfficialBand,
+} from '../domain/value-objects';
 import type {
   NormalizedProfile,
   UserProfileInput,
@@ -242,15 +245,30 @@ const DEFAULT_SKILL_BANDS: SkillBandScores = {
   speaking: 0,
 };
 
+function buildNormalizedSkillBands(bands: Partial<SkillBandScores>): SkillBandScores {
+  return {
+    listening: toNearestOfficialBand(bands.listening ?? 0),
+    reading: toNearestOfficialBand(bands.reading ?? 0),
+    writing: toNearestOfficialBand(bands.writing ?? 0),
+    speaking: toNearestOfficialBand(bands.speaking ?? 0),
+  };
+}
+
+function buildPartialNormalizedSkillBands(bands: Partial<SkillBandScores>): Partial<SkillBandScores> {
+  const result: Partial<SkillBandScores> = {};
+  if (bands.listening !== undefined) result.listening = toNearestOfficialBand(bands.listening);
+  if (bands.reading !== undefined) result.reading = toNearestOfficialBand(bands.reading);
+  if (bands.writing !== undefined) result.writing = toNearestOfficialBand(bands.writing);
+  if (bands.speaking !== undefined) result.speaking = toNearestOfficialBand(bands.speaking);
+  return result;
+}
+
 export function normalizeProfile(input: UserProfileInput): NormalizedProfile {
   return {
-    currentOverallBand: input.currentOverallBand,
-    targetOverallBand: input.targetOverallBand,
-    currentSkillBands: {
-      ...DEFAULT_SKILL_BANDS,
-      ...(input.currentSkillBands ?? {}),
-    },
-    targetSkillBands: { ...(input.targetSkillBands ?? {}) },
+    currentOverallBand: toNearestOfficialBand(input.currentOverallBand),
+    targetOverallBand: toNearestOfficialBand(input.targetOverallBand),
+    currentSkillBands: buildNormalizedSkillBands(input.currentSkillBands ?? {}),
+    targetSkillBands: buildPartialNormalizedSkillBands(input.targetSkillBands ?? {}),
     examType: input.examType,
     examDate: input.examDate,
     planStartDate: input.planStartDate,

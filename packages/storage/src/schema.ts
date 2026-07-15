@@ -53,7 +53,7 @@ export const artifactCategorySchema = z.enum(['article', 'video', 'reference', '
 
 export const artifactSchema = z.object({
   id: z.string().min(1),
-  url: z.string().min(1),
+  url: z.string().default(''),
   title: z.string().min(1),
   description: z.string().default(''),
   favicon: z.string().default(''),

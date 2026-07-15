@@ -69,14 +69,14 @@ function createProfile(overrides: Partial<NormalizedProfile> = {}): NormalizedPr
 function createPhases(): StudyPhase[] {
   return [
     {
-      id: 'phase-1', type: 'diagnostic', title: 'Diagnostic Assessment', description: 'Initial assessment',
+      id: 'phase-1', type: 'diagnostic', stage: 'foundation', title: 'Diagnostic Assessment', description: 'Initial assessment', summary: 'Initial assessment',
       startDate: '2026-07-14', endDate: '2026-07-16', targetSkills: ['listening', 'reading', 'writing', 'speaking'],
-      objectives: [], allocatedMinutes: 240, scheduledMinutes: 0, order: 1, status: 'upcoming',
+      objectives: [], completionCriteria: [], allocatedMinutes: 240, scheduledMinutes: 0, order: 1, status: 'upcoming',
     },
     {
-      id: 'phase-2', type: 'skill-building', title: 'Skill Development', description: 'Build core skills',
+      id: 'phase-2', type: 'skill-building', stage: 'skill-development', title: 'Skill Development', description: 'Build core skills', summary: 'Build core skills',
       startDate: '2026-07-17', endDate: '2026-08-06', targetSkills: ['writing', 'speaking'],
-      objectives: [], allocatedMinutes: 1200, scheduledMinutes: 0, order: 2, status: 'upcoming',
+      objectives: [], completionCriteria: [], allocatedMinutes: 1200, scheduledMinutes: 0, order: 2, status: 'upcoming',
     },
   ];
 }

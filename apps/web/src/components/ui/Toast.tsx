@@ -39,20 +39,30 @@ const bgColors: Record<ToastType, string> = {
   warning: 'var(--color-warning)',
 }
 
+const dismissDurations: Record<ToastType, number> = {
+  success: 2800,
+  error: 5000,
+  info: 3000,
+  warning: 4000,
+}
+
+const MAX_VISIBLE_TOASTS = 3
+
 function ToastItem({ toast, onRemove }: { toast: ToastMessage; onRemove: (id: string) => void }) {
   const [exiting, setExiting] = useState(false)
   const removeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
+    const duration = dismissDurations[toast.type]
     const timer = setTimeout(() => {
       setExiting(true)
       removeTimerRef.current = setTimeout(() => onRemove(toast.id), 200)
-    }, 2800)
+    }, duration)
     return () => {
       clearTimeout(timer)
       if (removeTimerRef.current) clearTimeout(removeTimerRef.current)
     }
-  }, [toast.id, onRemove])
+  }, [toast.id, toast.type, onRemove])
 
   function handleDismiss() {
     setExiting(true)
@@ -61,13 +71,16 @@ function ToastItem({ toast, onRemove }: { toast: ToastMessage; onRemove: (id: st
 
   return (
     <div
-      className={`flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-medium shadow-lg pointer-events-auto transition-all duration-200 max-w-sm break-words ${
+      className={`flex items-center gap-2 rounded-xl px-3.5 py-2.5 text-sm font-medium shadow-lg pointer-events-auto transition-all duration-200 ${
         exiting ? 'opacity-0 translate-x-full' : 'opacity-100 translate-x-0'
       }`}
       style={{
         background: bgColors[toast.type],
         color: 'var(--color-on-primary)',
         fontFamily: 'var(--font-sans)',
+        minWidth: '280px',
+        maxWidth: '440px',
+        width: 'fit-content',
       }}
       role="alert"
     >
@@ -84,8 +97,8 @@ function ToastItem({ toast, onRemove }: { toast: ToastMessage; onRemove: (id: st
           }}
           className="shrink-0 rounded-lg px-2 py-0.5 text-xs font-semibold cursor-pointer"
           style={{
-            background: 'var(--color-overlay)',
-            border: '1px solid var(--color-border-light)',
+            background: 'rgba(255,255,255,0.2)',
+            border: 'none',
             color: 'inherit',
           }}
         >
@@ -96,7 +109,7 @@ function ToastItem({ toast, onRemove }: { toast: ToastMessage; onRemove: (id: st
         onClick={handleDismiss}
         className="shrink-0 rounded-full p-0.5 hover:opacity-80"
         style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', opacity: 0.7 }}
-        aria-label="Dismiss notification"
+        aria-label="Dismiss"
       >
         <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -113,7 +126,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const showToast = useCallback((type: ToastType, message: string, action?: ToastMessage['action']) => {
     counterRef.current += 1
     const id = `toast-${counterRef.current}-${Date.now()}`
-    setToasts(prev => [...prev, { id, type, message, action }])
+    setToasts(prev => {
+      const next = [...prev, { id, type, message, action }]
+      return next.length > MAX_VISIBLE_TOASTS ? next.slice(next.length - MAX_VISIBLE_TOASTS) : next
+    })
   }, [])
 
   const removeToast = useCallback((id: string) => {
@@ -124,7 +140,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     <ToastContext.Provider value={{ showToast }}>
       {children}
       <div
-        className="fixed bottom-6 right-6 z-[var(--z-toast)] flex flex-col gap-2 pointer-events-none"
+        className="fixed bottom-6 right-6 flex flex-col gap-2 pointer-events-none"
+        style={{ zIndex: 700 }}
         role="status"
         aria-live="polite"
         aria-relevant="additions removals"

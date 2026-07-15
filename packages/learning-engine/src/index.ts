@@ -68,7 +68,8 @@ export type { LearningEvent, LearningEventType } from './domain/events/learning-
 
 // ── Value Objects (NEW) ──────────────────────────────────────────────
 export type { BandScore, IELTSSection, SkillBandScores, LocalDate, ExerciseDifficulty, ExerciseScore } from './domain/value-objects'
-export { calculateAccuracy } from './domain/value-objects'
+export type { OfficialIeltsBand, InternalProficiencyScore, IeltsSkill, SkillBandProfile, IeltsLevelEstimate } from './domain/value-objects'
+export { calculateAccuracy, isOfficialIeltsBand, toNearestOfficialBand, roundToOfficialBand, toDisplayBand, normalizeInternalScore, validateOfficialBand, bandGap, OFFICIAL_IELTS_BANDS } from './domain/value-objects'
 
 // ── Ports (NEW) ──────────────────────────────────────────────────────
 export type { LearnerContextPort } from './ports/learner-context-port'

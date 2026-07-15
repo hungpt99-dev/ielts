@@ -33,3 +33,14 @@ export const PHASE_TYPE_TO_NAME: Record<string, string> = {
   'final-review': 'Final Review',
   'exam-readiness': 'Exam Readiness',
 }
+
+export const PHASE_STAGE_TO_GOAL_LABEL: Record<string, string> = {
+  foundation: 'Build foundation for',
+  'skill-development': 'Develop core',
+  'guided-practice': 'Apply skills at',
+  accuracy: 'Improve accuracy at',
+  performance: 'Build performance at',
+  consistency: 'Stabilize',
+  'target-readiness': 'Confirm readiness for',
+  'exam-readiness': 'Prepare for',
+}

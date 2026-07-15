@@ -1,24 +1,30 @@
 import type { StudyPlan } from '@ielts/learning-engine'
 import type { StudyTask } from '@ielts/learning-engine'
+import { toNearestOfficialBand, toDisplayBand } from '@ielts/learning-engine'
 import { DatabaseService } from '../../services/storage/Database'
 import type { RoadmapData, RoadmapPhase, RoadmapWeek, RoadmapDay } from './roadmapService'
-import { ENGINE_SKILL_TO_CATEGORY as SKILL_TO_CATEGORY, PHASE_TYPE_TO_NAME } from './constants'
+import { ENGINE_SKILL_TO_CATEGORY as SKILL_TO_CATEGORY, PHASE_TYPE_TO_NAME, PHASE_STAGE_TO_GOAL_LABEL } from './constants'
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
 }
 
 function getTargetRange(
-  phaseOrder: number,
-  totalPhases: number,
+  phase: { stage?: string; officialBandGoal?: number; title: string; description: string },
   currentBand: number,
   targetBand: number,
 ): string {
-  const bandGap = Math.max(targetBand - currentBand, 0.5)
-  const bandPerPhase = bandGap / Math.max(totalPhases, 1)
-  const low = currentBand + phaseOrder * bandPerPhase
-  const high = Math.min(low + bandPerPhase, 9)
-  return `Band ${low.toFixed(1)}-${high.toFixed(1)}`
+  const targetOfficial = toNearestOfficialBand(targetBand)
+
+  if (phase.officialBandGoal && phase.officialBandGoal > 0) {
+    return `Goal: ${PHASE_STAGE_TO_GOAL_LABEL[phase.stage ?? ''] ?? 'Build toward'} Band ${toDisplayBand(toNearestOfficialBand(phase.officialBandGoal))}`
+  }
+
+  if (currentBand >= targetBand) {
+    return `Goal: Maintain Band ${toDisplayBand(targetOfficial)}`
+  }
+
+  return `Goal: Progress toward Band ${toDisplayBand(targetOfficial)}`
 }
 
 export async function studyPlanToRoadmapData(
@@ -46,7 +52,7 @@ export async function studyPlanToRoadmapData(
 
   const totalPhases = plan.phases.length
 
-  const phases: RoadmapPhase[] = plan.phases.map(phase => {
+  const phases: RoadmapPhase[] = plan.phases.map((phase, index) => {
     const phaseWeeks = plan.weeks.filter(w => w.phaseId === phase.id)
     const weeks: RoadmapWeek[] = phaseWeeks.map(week => {
       const weekTasks = plan.tasks.filter(t => t.weekId === week.id)
@@ -88,10 +94,10 @@ export async function studyPlanToRoadmapData(
     const phaseTotalTasks = weeks.reduce((s, w) => s + w.totalTasks, 0)
     return {
       id: phase.id,
-      name: PHASE_TYPE_TO_NAME[phase.type] ?? phase.title,
-      description: phase.description,
+      name: phase.title,
+      description: phase.description || phase.summary,
       order: phase.order,
-      targetRange: getTargetRange(phase.order, totalPhases, currentBand, targetBand),
+      targetRange: getTargetRange(phase, currentBand, targetBand),
       weeks,
       isComplete: weeks.every(w => w.isComplete),
       completedTasks: phaseCompletedTasks,

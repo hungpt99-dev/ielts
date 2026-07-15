@@ -4,3 +4,22 @@ export type { ExerciseDifficulty, ExerciseDifficultyLevel } from './difficulty-l
 export type { ExerciseScore } from './exercise-score'
 export { calculateAccuracy } from './exercise-score'
 export type { ConfidenceScore, ProgressTrend } from './confidence-score'
+export {
+  OFFICIAL_IELTS_BANDS,
+  OFFICIAL_BAND_SET,
+  isOfficialIeltsBand,
+  toNearestOfficialBand,
+  roundToOfficialBand,
+  toDisplayBand,
+  normalizeInternalScore,
+  validateOfficialBand,
+  bandGap,
+  createSkillBandProfile,
+} from './ielts-band'
+export type {
+  OfficialIeltsBand,
+  InternalProficiencyScore,
+  IeltsLevelEstimate,
+  IeltsSkill,
+  SkillBandProfile,
+} from './ielts-band'

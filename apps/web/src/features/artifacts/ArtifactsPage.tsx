@@ -58,11 +58,11 @@ function generateId(): string {
 }
 
 function extractFavicon(url: string): string {
+  if (!url) return ''
   try {
     const u = new URL(url)
     return `${u.protocol}//${u.hostname}/favicon.ico`
-  } catch (error) {
-    console.error('apps/web/src/features/artifacts/ArtifactsPage.tsx error:', error);
+  } catch {
     return ''
   }
 }
