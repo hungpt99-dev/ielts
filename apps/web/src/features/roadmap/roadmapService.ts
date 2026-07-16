@@ -567,7 +567,7 @@ async function enrichPlanWithAI(
 
   try {
     const { callAI } = await import('@ielts/ai')
-    const { AiPlanOrchestrator, applyTaskEnrichments, buildTaskEnrichmentRequirements } = await import('@ielts/learning-engine')
+    const { AiPlanOrchestrator, applyTaskEnrichments, buildTaskEnrichmentRequirements, selectRequirementsForAi, buildTaskGenerationBatches, calculateAffordableCandidateCount } = await import('@ielts/learning-engine')
 
     const config = {
       apiKey,
@@ -587,6 +587,21 @@ async function enrichPlanWithAI(
     const requirements = buildTaskEnrichmentRequirements(plan)
     console.log('[AIEnrich] Built', requirements.length, 'enrichment requirements from plan tasks')
 
+    // Select which requirements to send to AI (coverage policy)
+    const affordableCount = calculateAffordableCandidateCount(
+      { profileAnalysisCalls: 1, objectiveBatchCalls: 3, taskCandidateBatchCalls: 8, requiredCalls: 12, repairBudget: 1, maximumCalls: 13, hardCallLimit: 25 },
+      DEFAULT_PLAN_ENRICH_MAX_CALLS,
+    )
+    const { selected, deterministic } = selectRequirementsForAi(requirements, {
+      targetAiCoverage: 0.5,
+      minimumAiPerWeekSkillGroup: 1,
+      prioritizeWeakSkills: true,
+      prioritizeHighValueTasks: true,
+      distributeAcrossEntireRoadmap: true,
+    }, affordableCount)
+
+    console.log('[AIEnrich] Selected', selected.length, 'for AI,', deterministic.length, 'deterministic')
+
     const orchestrator = new AiPlanOrchestrator(aiCallFn, {
       callLimits: { maximumCallsPerGeneration: DEFAULT_PLAN_ENRICH_MAX_CALLS },
       onProgress: (phase, current, total) => {
@@ -600,26 +615,27 @@ async function enrichPlanWithAI(
       weeks: plan.weeks,
       feasibility: plan.feasibility,
       skillGaps: computeSkillGaps(profile),
-      requirements,
+      requirements: selected,
     })
     console.log('[AIEnrich] enrichment candidates:', enrichment.taskCandidates?.length, 'plan tasks:', plan.tasks.length)
 
-    if (!enrichment.taskCandidates || enrichment.taskCandidates.length === 0) {
-      console.log('[AIEnrich] No task candidates returned from AI, applying deterministic fallback')
-      const { plan: fallbackPlan } = applyTaskEnrichments(plan, requirements, [])
-      return fallbackPlan
-    }
-
-    // Apply exact task enrichment merge
-    const { plan: enrichedPlan, report } = applyTaskEnrichments(plan, requirements, enrichment.taskCandidates)
+    // Apply exact task enrichment merge with coverage info
+    const selectedForAiIds = selected.map(r => r.id)
+    const { plan: enrichedPlan, report } = applyTaskEnrichments(
+      plan,
+      requirements,
+      enrichment.taskCandidates ?? [],
+      selectedForAiIds,
+    )
     console.log('[AIEnrich] Enrichment merge report:', JSON.stringify({
-      totalRequirements: report.totalRequirements,
-      totalCandidates: report.totalCandidates,
-      appliedAiCandidates: report.appliedAiCandidates,
-      fallbackTasks: report.fallbackTasks,
+      totalTaskRequirements: report.totalTaskRequirements,
+      selectedForAi: report.selectedForAi,
+      intentionallyDeterministic: report.intentionallyDeterministic,
+      validAiCandidates: report.validAiCandidates,
+      fallbackAfterAiFailureTasks: report.fallbackAfterAiFailureTasks,
+      plannedDeterministicTasks: report.plannedDeterministicTasks,
       duplicates: report.duplicateRequirementIds.length,
       unknown: report.unknownRequirementIds.length,
-      missing: report.missingRequirementIds.length,
     }))
 
     return enrichedPlan

@@ -3,24 +3,8 @@ import type {
   StudyTask,
   TaskEnrichmentRequirement,
   AITaskCandidate,
-  EnrichmentMergeReport,
+  TaskEnrichmentReport,
 } from '../types';
-
-// ── Centralized generic-title detection ──
-
-const GENERIC_TITLE_PATTERNS: RegExp[] = [
-  /^[A-Z][a-z]+\s+Practice$/,
-  /^[A-Z][a-z]+\s+Exercise$/,
-  /^(Listening|Reading|Writing|Speaking|Vocabulary|Grammar)\s+Practice$/i,
-  /^(Listening|Reading|Writing|Speaking)\s+Exercise$/i,
-  /^(Listen|Speak|Read|Write)$/i,
-  /^Practice$/i,
-  /^Exercise$/i,
-];
-
-export function isGenericTitle(title: string): boolean {
-  return GENERIC_TITLE_PATTERNS.some(p => p.test(title.trim()));
-}
 
 // ── Build enrichment requirements from plan tasks ──
 
@@ -37,13 +21,14 @@ export function buildTaskEnrichmentRequirements(plan: StudyPlan): TaskEnrichment
   }));
 }
 
-// ── Exact enrichment merge ──
+// ── Exact enrichment merge by requirementId → taskId ──
 
 export function applyTaskEnrichments(
   plan: StudyPlan,
   requirements: TaskEnrichmentRequirement[],
   candidates: AITaskCandidate[],
-): { plan: StudyPlan; report: EnrichmentMergeReport } {
+  selectedForAi: string[],
+): { plan: StudyPlan; report: TaskEnrichmentReport } {
   const taskById = new Map<string, StudyTask>();
   for (const task of plan.tasks) {
     taskById.set(task.id, task);
@@ -54,17 +39,14 @@ export function applyTaskEnrichments(
     reqById.set(req.id, req);
   }
 
+  const selectedSet = new Set(selectedForAi);
   const candidateByReqId = new Map<string, AITaskCandidate>();
-  const duplicateRequirementIds: string[] = [];
   const unknownRequirementIds: string[] = [];
+  const duplicateRequirementIds: string[] = [];
 
   for (const candidate of candidates) {
-    if (!candidate.requirementId) {
-      unknownRequirementIds.push(candidate.candidateId);
-      continue;
-    }
-    if (!reqById.has(candidate.requirementId)) {
-      unknownRequirementIds.push(candidate.requirementId);
+    if (!candidate.requirementId || !reqById.has(candidate.requirementId)) {
+      unknownRequirementIds.push(candidate.requirementId || '(missing)');
       continue;
     }
     if (candidateByReqId.has(candidate.requirementId)) {
@@ -74,11 +56,14 @@ export function applyTaskEnrichments(
     candidateByReqId.set(candidate.requirementId, candidate);
   }
 
-  const appliedAiCandidates: string[] = [];
+  let aiGenerated = 0;
+  let aiRepaired = 0;
+  let plannedDeterministic = 0;
+  let fallbackAfterAiFailure = 0;
+  const invalidRequirementIds: string[] = [];
   const missingRequirementIds: string[] = [];
-  const fallbackTasks: string[] = [];
-  const rejectedRequirementIds: string[] = [];
   const updatedTasks: StudyTask[] = [];
+  const totalScheduledMinutes = plan.tasks.reduce((s, t) => s + t.estimatedMinutes, 0);
 
   for (const req of requirements) {
     const task = taskById.get(req.taskId);
@@ -88,9 +73,10 @@ export function applyTaskEnrichments(
     }
 
     const candidate = candidateByReqId.get(req.id);
+    const wasSelectedForAi = selectedSet.has(req.id);
 
-    if (candidate && !rejectCandidate(candidate)) {
-      appliedAiCandidates.push(req.id);
+    if (candidate && candidateIsValid(candidate)) {
+      aiGenerated++;
       updatedTasks.push({
         ...task,
         title: candidate.title,
@@ -98,20 +84,19 @@ export function applyTaskEnrichments(
         objective: candidate.objective,
         reason: candidate.reason,
         estimatedMinutes: req.scheduledMinutes,
+        enrichment: { source: 'ai-generated', requirementId: req.id },
         metadata: {
           ...task.metadata,
-          enrichmentSource: 'ai',
-          requirementId: req.id,
           aiCandidateId: candidate.candidateId,
         },
       });
-    } else {
-      if (candidate && rejectCandidate(candidate)) {
-        rejectedRequirementIds.push(req.id);
+    } else if (wasSelectedForAi) {
+      // Selected for AI but no valid candidate → fallback
+      if (candidate && !candidateIsValid(candidate)) {
+        invalidRequirementIds.push(req.id);
       }
-
+      fallbackAfterAiFailure++;
       const fallback = buildDeterministicFallback(task);
-      fallbackTasks.push(req.id);
       updatedTasks.push({
         ...task,
         title: fallback.title,
@@ -119,27 +104,48 @@ export function applyTaskEnrichments(
         objective: fallback.objective,
         reason: fallback.reason,
         estimatedMinutes: req.scheduledMinutes,
-        metadata: {
-          ...task.metadata,
-          enrichmentSource: 'deterministic-fallback',
-          requirementId: req.id,
-        },
+        enrichment: { source: 'fallback-after-ai-failure', requirementId: req.id },
+        metadata: { ...task.metadata },
+      });
+    } else {
+      // Not selected for AI → planned deterministic
+      plannedDeterministic++;
+      const fallback = buildDeterministicFallback(task);
+      updatedTasks.push({
+        ...task,
+        title: fallback.title,
+        description: fallback.description,
+        objective: fallback.objective,
+        reason: fallback.reason,
+        estimatedMinutes: req.scheduledMinutes,
+        enrichment: { source: 'planned-deterministic', requirementId: req.id },
+        metadata: { ...task.metadata },
       });
     }
   }
 
   const taskMap = new Map(updatedTasks.map(t => [t.id, t]));
   const finalTasks = plan.tasks.map(t => taskMap.get(t.id) ?? t);
+  const finalTotal = finalTasks.reduce((s, t) => s + t.estimatedMinutes, 0);
 
-  const report: EnrichmentMergeReport = {
-    totalRequirements: requirements.length,
-    totalCandidates: candidates.length,
-    appliedAiCandidates: appliedAiCandidates.length,
-    fallbackTasks: fallbackTasks.length,
-    duplicateRequirementIds,
+  // Invariant: total minutes must equal original
+  if (finalTotal !== totalScheduledMinutes) {
+    console.warn('[applyTaskEnrichments] Total minutes mismatch:',
+      totalScheduledMinutes, '→', finalTotal);
+  }
+
+  const report: TaskEnrichmentReport = {
+    totalTaskRequirements: requirements.length,
+    selectedForAi: selectedForAi.length,
+    intentionallyDeterministic: requirements.length - selectedForAi.length,
+    validAiCandidates: aiGenerated,
+    repairedAiCandidates: aiRepaired,
+    plannedDeterministicTasks: plannedDeterministic,
+    fallbackAfterAiFailureTasks: fallbackAfterAiFailure,
     unknownRequirementIds,
+    duplicateRequirementIds,
+    invalidRequirementIds,
     missingRequirementIds,
-    rejectedRequirementIds,
   };
 
   return {
@@ -150,14 +156,13 @@ export function applyTaskEnrichments(
 
 // ── Candidate validation ──
 
-function rejectCandidate(candidate: AITaskCandidate): boolean {
-  if (!candidate.title || candidate.title.trim().length === 0) return true;
-  if (!candidate.description || candidate.description.trim().length === 0) return true;
-  if (!candidate.objective || candidate.objective.trim().length === 0) return true;
-  if (!candidate.reason || candidate.reason.trim().length === 0) return true;
-  if (isGenericTitle(candidate.title)) return true;
-  if (candidate.recommendedMinutes < 5 || candidate.recommendedMinutes > 180) return true;
-  return false;
+function candidateIsValid(candidate: AITaskCandidate): boolean {
+  if (!candidate.title || candidate.title.trim().length === 0) return false;
+  if (!candidate.description || candidate.description.trim().length === 0) return false;
+  if (!candidate.objective || candidate.objective.trim().length === 0) return false;
+  if (!candidate.reason || candidate.reason.trim().length === 0) return false;
+  if (candidate.recommendedMinutes < 5 || candidate.recommendedMinutes > 180) return false;
+  return true;
 }
 
 // ── Deterministic fallback builder ──

@@ -15,6 +15,9 @@ import type {
   PlanFeasibility,
   SkillGapScore,
   TaskEnrichmentRequirement,
+  TaskEnrichmentReport,
+  AiCallStats,
+  AiGenerationCallBudget,
 } from './types';
 
 // ── Zod Schemas for AI Output Validation ──
@@ -131,8 +134,8 @@ export interface EnrichPlanResult {
   generationPlan: AIGenerationPlan;
   callStats: AiCallStats;
   fallbackUsed: boolean;
-  completeness: EnrichmentCompletenessReport;
-  requirements: EnrichmentRequirement[];
+  taskReport: TaskEnrichmentReport;
+  selectedForAi: string[];
 }
 
 export interface ExplainabilityContext {
@@ -202,8 +205,6 @@ export class IncompletePlanEnrichmentError extends Error {
 
 // ── Domain Helpers ──
 
-import type { AiGenerationCallBudget, AiCallStats, EnrichmentRequirement, EnrichmentCoverage, EnrichmentCompletenessReport } from './types';
-
 export function calculateAiGenerationCallBudget(input: {
   profileAnalysisRequired: boolean;
   objectiveBatchCount: number;
@@ -226,101 +227,6 @@ export function calculateAiGenerationCallBudget(input: {
     repairBudget,
     maximumCalls,
     hardCallLimit: input.hardCallLimit,
-  };
-}
-
-export function calculateEnrichmentCoverage(
-  requirements: EnrichmentRequirement[],
-  getGeneratedCount: (requirementId: string) => number,
-): EnrichmentCoverage[] {
-  return requirements.map(req => {
-    const generatedCount = getGeneratedCount(req.requirementId);
-    const missingCount = Math.max(0, req.expectedCount - generatedCount);
-    return {
-      requirementId: req.requirementId,
-      expectedCount: req.expectedCount,
-      generatedCount,
-      missingCount,
-      complete: missingCount === 0,
-    };
-  });
-}
-
-export function mergeAndDeduplicate<T extends { candidateId?: string; title?: string; recommendedMinutes?: number }>(
-  newItems: T[],
-  existingItems: T[],
-  getRequirementId: (item: T) => string,
-): { merged: T[]; duplicatesDiscarded: number } {
-  const existingSignatures = new Set<string>();
-  for (const item of existingItems) {
-    existingSignatures.add(makeContentSignature(item, getRequirementId(item)));
-  }
-
-  let duplicatesDiscarded = 0;
-  const merged = [...existingItems];
-
-  for (const item of newItems) {
-    const sig = makeContentSignature(item, getRequirementId(item));
-    if (existingSignatures.has(sig)) {
-      duplicatesDiscarded++;
-    } else {
-      existingSignatures.add(sig);
-      merged.push(item);
-    }
-  }
-
-  return { merged, duplicatesDiscarded };
-}
-
-function makeContentSignature(item: { candidateId?: string; title?: string; recommendedMinutes?: number }, requirementId: string): string {
-  const title = (item.title ?? '').toLowerCase().replace(/\s+/g, ' ').trim();
-  return [requirementId, title, item.recommendedMinutes ?? 0].join('|');
-}
-
-export function buildEnrichmentRequirements(phases: StudyPhase[], taskBatches: import('./types').AITaskBatch[]): EnrichmentRequirement[] {
-  const requirements: EnrichmentRequirement[] = [];
-
-  for (const batch of taskBatches) {
-    const phase = phases.find(p => p.id === batch.phaseId);
-    if (!phase) continue;
-    for (const weekId of batch.weekIds) {
-      for (const skill of phase.targetSkills.length > 0 ? phase.targetSkills : ['listening', 'reading', 'writing', 'speaking']) {
-        const requirementId = `${batch.phaseId}:${weekId}:${skill}`;
-        requirements.push({
-          requirementId,
-          phaseId: batch.phaseId,
-          weekId,
-          skill,
-          itemType: 'task-candidate',
-          expectedCount: Math.max(1, Math.ceil(batch.requiredCount / Math.max(1, batch.weekIds.length * Math.max(1, phase.targetSkills.length)))),
-        });
-      }
-    }
-  }
-
-  return requirements;
-}
-
-export function createCompletenessReport(
-  requirements: EnrichmentRequirement[],
-  coverage: EnrichmentCoverage[],
-  totalItems: number,
-  aiGeneratedItems: number,
-  repairedItems: number,
-  fallbackItems: number,
-  duplicatesDiscarded: number,
-): EnrichmentCompletenessReport {
-  const missing = coverage.filter(c => !c.complete);
-  return {
-    expectedItems: requirements.reduce((s, r) => s + r.expectedCount, 0),
-    generatedItems: totalItems,
-    aiGeneratedItems,
-    repairedItems,
-    fallbackItems,
-    duplicateItemsDiscarded: duplicatesDiscarded,
-    missingItems: missing.reduce((s, c) => s + c.missingCount, 0),
-    missingRequirementIds: missing.map(c => c.requirementId),
-    complete: missing.length === 0,
   };
 }
 
@@ -420,9 +326,6 @@ export class AiPlanOrchestrator {
     };
     let fallbackUsed = false;
     let aiGeneratedItems = 0;
-    let repairedItems = 0;
-    let fallbackItems = 0;
-    let duplicatesDiscarded = 0;
 
     const totalBatches = generationPlan.weeklyObjectiveBatches.length + generationPlan.taskCandidateBatches.length
     let completedBatches = 0
@@ -514,7 +417,7 @@ export class AiPlanOrchestrator {
     }
 
     if (signal?.aborted) {
-      return this.emptyWithCompleteness(generationPlan, callStats, fallbackUsed);
+      return this.emptyResult(0, true);
     }
 
     // Step 3: Task candidates (all batches, no retries)
@@ -566,155 +469,15 @@ export class AiPlanOrchestrator {
     }
 
     if (signal?.aborted) {
-      return this.emptyWithCompleteness(generationPlan, callStats, fallbackUsed);
-    }
-
-    // ── Map candidates to task enrichment requirements by week+skill ──
-
-    const taskRequirements = params.requirements;
-    const assignedReqIds = new Set<string>();
-
-    if (taskRequirements) {
-      for (const candidate of taskCandidates) {
-        if (candidate.requirementId && taskRequirements.some(r => r.id === candidate.requirementId)) {
-          assignedReqIds.add(candidate.requirementId);
-          continue;
-        }
-        const eligible = taskRequirements.filter(
-          r => r.weekId === candidate.targetWeekId && r.skill === candidate.skill && !assignedReqIds.has(r.id),
-        );
-        if (eligible.length > 0) {
-          candidate.requirementId = eligible[0].id;
-          assignedReqIds.add(eligible[0].id);
-        }
-      }
-    }
-
-    const requirements = buildEnrichmentRequirements(phases, generationPlan.taskCandidateBatches);
-    const requirementCounts = new Map<string, number>();
-    for (const c of taskCandidates) {
-      if (c.requirementId) {
-        requirementCounts.set(c.requirementId, (requirementCounts.get(c.requirementId) ?? 0) + 1);
-      }
-    }
-
-    const coverage = calculateEnrichmentCoverage(
-      requirements,
-      (reqId: string) => requirementCounts.get(reqId) ?? 0,
-    );
-    const missingReqs = coverage.filter(c => !c.complete);
-
-    if (missingReqs.length > 0 && generationPlan.retryPolicy.enableRepair) {
-      console.log('[AiOrchestrator] Repair pass needed for', missingReqs.length, 'requirements');
-
-      for (let repairAttempt = 0; repairAttempt < generationPlan.retryPolicy.maxRepairAttempts; repairAttempt++) {
-        if (callStats.repairCallsAttempted >= generationPlan.callBudget.repairBudget) break;
-        if (signal?.aborted) break;
-
-        const stillMissing = coverage.filter(c => !c.complete);
-        if (stillMissing.length === 0) break;
-
-        const repairBatch = generationPlan.taskCandidateBatches.find(
-          b => stillMissing.some(r => r.requirementId.startsWith(b.phaseId))
-        );
-        if (!repairBatch) break;
-
-        const missingForBatch = stillMissing.filter(
-          r => r.requirementId.startsWith(repairBatch.phaseId)
-        );
-
-        callStats.repairCallsAttempted++;
-        callStats.totalAttemptedCalls++;
-
-        const repairCandidates = await this.callWithFallback<AITaskCandidate[]>(
-          () => this.callTaskCandidates(
-            {
-              ...repairBatch,
-              requiredCount: missingForBatch.reduce((s, r) => s + r.missingCount, 0),
-            },
-            weeks,
-            weeksWithObjectives,
-            profile,
-            signal,
-            taskCandidates,
-          ),
-          [],
-        );
-
-        if (repairCandidates && repairCandidates.length > 0) {
-          const { merged, duplicatesDiscarded: dupCount } = mergeAndDeduplicate(
-            repairCandidates,
-            taskCandidates,
-            (item) => {
-              const batch = generationPlan.taskCandidateBatches.find(b => b.weekIds.includes(item.targetWeekId));
-              return `${batch?.phaseId ?? 'unknown'}:${item.targetWeekId}:${item.skill}`;
-            },
-          );
-          duplicatesDiscarded += dupCount;
-          const newItems = merged.length - taskCandidates.length;
-          repairedItems += newItems;
-          taskCandidates.length = 0;
-          taskCandidates.push(...merged);
-
-          // Recalculate coverage
-          const updatedCounts = new Map<string, number>();
-          for (const c of taskCandidates) {
-            const reqId = `${repairBatch.phaseId}:${c.targetWeekId}:${c.skill}`;
-            updatedCounts.set(reqId, (updatedCounts.get(reqId) ?? 0) + 1);
-          }
-          Array.from(coverage.entries()).forEach(([_, c]) => {
-            const newCount = updatedCounts.get(c.requirementId) ?? 0;
-            c.generatedCount = newCount;
-            c.missingCount = Math.max(0, c.expectedCount - newCount);
-            c.complete = c.missingCount === 0;
-          });
-
-          callStats.successfulCalls++;
-          console.log('[AiOrchestrator] Repair attempt', repairAttempt + 1, 'got', newItems, 'new items,', duplicatesDiscarded, 'duplicates discarded');
-        } else {
-          callStats.failedCalls++;
-          console.log('[AiOrchestrator] Repair attempt', repairAttempt + 1, 'failed');
-        }
-      }
-
-      // After repair, check if still incomplete
-      const finalMissing = coverage.filter(c => !c.complete);
-      if (finalMissing.length > 0 && generationPlan.retryPolicy.maxRepairAttempts > 0) {
-        console.log('[AiOrchestrator] Still missing', finalMissing.length, 'requirements after repair');
-        fallbackUsed = true;
-      }
+      return this.emptyResult(0, true);
     }
 
     reportProgress('complete')
     callStats.totalTokensEstimated = (callStats.successfulCalls + callStats.cacheHits) * 4000;
 
-    const finalCoverage = calculateEnrichmentCoverage(
-      requirements,
-      (reqId: string) => {
-        const batch = generationPlan.taskCandidateBatches.find(b => reqId.startsWith(b.phaseId));
-        return taskCandidates.filter(c => {
-          const cReqId = `${batch?.phaseId ?? 'unknown'}:${c.targetWeekId}:${c.skill}`;
-          return cReqId === reqId;
-        }).length;
-      },
-    );
+    console.log('[AiOrchestrator] Task candidates generated:', taskCandidates.length);
 
-    const completeness = createCompletenessReport(
-      requirements,
-      finalCoverage,
-      taskCandidates.length,
-      aiGeneratedItems,
-      repairedItems,
-      fallbackItems,
-      duplicatesDiscarded,
-    );
-
-    console.log('[AiOrchestrator] Enrichment completeness:', JSON.stringify({
-      expectedItems: completeness.expectedItems,
-      generatedItems: completeness.generatedItems,
-      complete: completeness.complete,
-      missingItems: completeness.missingItems,
-    }));
+    const selectedForAi: string[] = [];
 
     return {
       profileAnalysis,
@@ -723,8 +486,20 @@ export class AiPlanOrchestrator {
       generationPlan,
       callStats,
       fallbackUsed,
-      completeness,
-      requirements,
+      taskReport: {
+        totalTaskRequirements: params.requirements?.length ?? 0,
+        selectedForAi: selectedForAi.length,
+        intentionallyDeterministic: (params.requirements?.length ?? 0) - selectedForAi.length,
+        validAiCandidates: taskCandidates.length,
+        repairedAiCandidates: 0,
+        plannedDeterministicTasks: 0,
+        fallbackAfterAiFailureTasks: 0,
+        unknownRequirementIds: [],
+        duplicateRequirementIds: [],
+        invalidRequirementIds: [],
+        missingRequirementIds: [],
+      },
+      selectedForAi,
     };
   }
 
@@ -1244,41 +1019,20 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
       },
       callStats: emptyCallStats,
       fallbackUsed,
-      completeness: {
-        expectedItems: 0,
-        generatedItems: 0,
-        aiGeneratedItems: 0,
-        repairedItems: 0,
-        fallbackItems: 0,
-        duplicateItemsDiscarded: 0,
-        missingItems: 0,
+      taskReport: {
+        totalTaskRequirements: 0,
+        selectedForAi: 0,
+        intentionallyDeterministic: 0,
+        validAiCandidates: 0,
+        repairedAiCandidates: 0,
+        plannedDeterministicTasks: 0,
+        fallbackAfterAiFailureTasks: 0,
+        unknownRequirementIds: [],
+        duplicateRequirementIds: [],
+        invalidRequirementIds: [],
         missingRequirementIds: [],
-        complete: false,
       },
-      requirements: [],
-    };
-  }
-
-  private emptyWithCompleteness(generationPlan: AIGenerationPlan, callStats: AiCallStats, fallbackUsed: boolean): EnrichPlanResult {
-    return {
-      profileAnalysis: null,
-      enrichedObjectives: [],
-      taskCandidates: [],
-      generationPlan,
-      callStats,
-      fallbackUsed,
-      completeness: {
-        expectedItems: 0,
-        generatedItems: 0,
-        aiGeneratedItems: 0,
-        repairedItems: 0,
-        fallbackItems: 0,
-        duplicateItemsDiscarded: 0,
-        missingItems: 0,
-        missingRequirementIds: [],
-        complete: false,
-      },
-      requirements: [],
+      selectedForAi: [],
     };
   }
 

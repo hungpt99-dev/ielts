@@ -481,6 +481,10 @@ export interface StudyTask {
   dependencies?: string[];
   reviewOfTaskId?: string;
   rescheduledFromDate?: LocalDate;
+  enrichment?: {
+    source: TaskEnrichmentOutcome;
+    requirementId: string;
+  };
   metadata: {
     targetBand?: number;
     focusArea?: string;
@@ -488,8 +492,6 @@ export interface StudyTask {
     generationReason?: string;
     templateId?: string;
     aiCandidateId?: string;
-    enrichmentSource?: 'ai' | 'deterministic-fallback';
-    requirementId?: string;
   };
 }
 
@@ -652,7 +654,13 @@ export interface AiCallStats {
   totalTokensEstimated: number;
 }
 
-export interface EnrichmentRequirement {
+export type TaskEnrichmentOutcome =
+  | 'ai-generated'
+  | 'ai-repaired'
+  | 'planned-deterministic'
+  | 'fallback-after-ai-failure';
+
+export interface PhaseWeekSkillRequirement {
   requirementId: string;
   phaseId: string;
   weekId?: string;
@@ -669,30 +677,45 @@ export interface EnrichmentCoverage {
   complete: boolean;
 }
 
-export interface EnrichmentRepairRequest {
-  originalBatchId: number;
-  missingRequirements: Array<{
-    requirementId: string;
-    missingCount: number;
-    skill: string;
-  }>;
-}
-
-export interface EnrichmentCompletenessReport {
-  expectedItems: number;
-  generatedItems: number;
-  aiGeneratedItems: number;
-  repairedItems: number;
-  fallbackItems: number;
-  duplicateItemsDiscarded: number;
-  missingItems: number;
-  missingRequirementIds: string[];
-  complete: boolean;
-}
-
 export interface AiRetryPolicy {
   maxRepairAttempts: number;
   enableRepair: boolean;
+}
+
+export interface AiTaskCoverageConfig {
+  targetAiCoverage: number;
+  minimumAiPerWeekSkillGroup: number;
+  prioritizeWeakSkills: boolean;
+  prioritizeHighValueTasks: boolean;
+  distributeAcrossEntireRoadmap: boolean;
+}
+
+export interface AiTaskGenerationBatch {
+  id: string;
+  requirements: TaskEnrichmentRequirement[];
+  expectedCandidateCount: number;
+}
+
+export interface BatchValidationResult {
+  validCandidates: AITaskCandidate[];
+  missingRequirementIds: string[];
+  unknownRequirementIds: string[];
+  duplicateRequirementIds: string[];
+  invalidRequirementIds: string[];
+}
+
+export interface TaskEnrichmentReport {
+  totalTaskRequirements: number;
+  selectedForAi: number;
+  intentionallyDeterministic: number;
+  validAiCandidates: number;
+  repairedAiCandidates: number;
+  plannedDeterministicTasks: number;
+  fallbackAfterAiFailureTasks: number;
+  unknownRequirementIds: string[];
+  duplicateRequirementIds: string[];
+  invalidRequirementIds: string[];
+  missingRequirementIds: string[];
 }
 
 // ── AI Integration Types ──

@@ -99,6 +99,7 @@ export type {
 export { PlanRegenerator } from './daily-plan/PlanRegenerator';
 export type { RegeneratePlanParams, PlanRegeneratorConfig } from './daily-plan/PlanRegenerator';
 export { applyTaskEnrichments, buildTaskEnrichmentRequirements } from './daily-plan/enrichment/applyTaskEnrichments';
+export { isGenericTitle, isValidTaskCandidate, calculateAffordableCandidateCount, selectRequirementsForAi, buildTaskGenerationBatches, validateBatchResponse, compareRequirementPriority } from './daily-plan/enrichment/selectRequirementsForAi';
 export {
   mergeProfileSources,
   mapScheduleToStudyDays,
