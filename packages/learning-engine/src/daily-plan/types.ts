@@ -660,23 +660,6 @@ export type TaskEnrichmentOutcome =
   | 'planned-deterministic'
   | 'fallback-after-ai-failure';
 
-export interface PhaseWeekSkillRequirement {
-  requirementId: string;
-  phaseId: string;
-  weekId?: string;
-  skill: string;
-  itemType: 'task-candidate' | 'weekly-objective' | 'profile-analysis';
-  expectedCount: number;
-}
-
-export interface EnrichmentCoverage {
-  requirementId: string;
-  expectedCount: number;
-  generatedCount: number;
-  missingCount: number;
-  complete: boolean;
-}
-
 export interface AiRetryPolicy {
   maxRepairAttempts: number;
   enableRepair: boolean;
@@ -806,17 +789,6 @@ export interface AITaskCandidate {
   prerequisites?: string[];
   suggestedSourceTypes?: StudyTaskSourceType[];
   relevantSourceIds?: string[];
-}
-
-export interface EnrichmentMergeReport {
-  totalRequirements: number;
-  totalCandidates: number;
-  appliedAiCandidates: number;
-  fallbackTasks: number;
-  duplicateRequirementIds: string[];
-  unknownRequirementIds: string[];
-  missingRequirementIds: string[];
-  rejectedRequirementIds: string[];
 }
 
 export interface AICacheRecord {
