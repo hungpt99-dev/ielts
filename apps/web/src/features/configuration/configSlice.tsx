@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react'
 import type {
-  UserConfiguration,
+  ExtendedUserConfiguration,
   ConfigurationBasic,
   ConfigurationAdvanced,
   AiTutorConfig,
@@ -41,14 +41,14 @@ export interface ConfigActions {
 }
 
 interface ConfigContextValue {
-  config: UserConfiguration
+  config: ExtendedUserConfiguration
   actions: ConfigActions
 }
 
 const ConfigContext = createContext<ConfigContextValue | null>(null)
 
 export function ConfigProvider({ children }: { children: ReactNode }) {
-  const [config, setConfig] = useState<UserConfiguration>(() => {
+  const [config, setConfig] = useState<ExtendedUserConfiguration>(() => {
     const existing = loadConfiguration()
     const defaults = createDefaultConfiguration()
     if (

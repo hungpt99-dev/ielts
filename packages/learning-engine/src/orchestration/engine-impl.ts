@@ -451,7 +451,7 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
         }
       }
 
-      const question = result.data?.question || ''
+      const question = (result.data as any)?.question || ''
       if (!question) {
         return {
           status: 'failure',
@@ -577,6 +577,7 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
             answer: m.mistake || '',
             answeredAt: now,
             timeSpentMs: request.timeSpentMs || 0,
+            isFinal: true,
           })),
           correlationId: crypto.randomUUID?.() ?? `${Date.now()}-corr`,
         }, {
@@ -592,7 +593,6 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
         await completeLearningSession({
           sessionId: request.sessionId,
           actualDurationMinutes: Math.ceil((request.timeSpentMs || 0) / 60000),
-          hintCount: 0,
           correlationId: crypto.randomUUID?.() ?? `${Date.now()}-corr`,
         }, {
           sessionRepository: this.deps.sessionRepository,
@@ -620,7 +620,7 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
         weaknesses: [],
         mistakes: mistakes.map((m: any) => ({
           id: m.id,
-          skill: request.skill,
+          skill: request.skill as any,
           category: 'incorrect',
           originalResponse: m.mistake || '',
           correctedResponse: m.correction || '',

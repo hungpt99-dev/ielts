@@ -1,6 +1,6 @@
 import type { ExerciseDifficulty } from '../value-objects'
 import type { LearningObjective } from './learning-objective'
-import type { ExerciseQuestion } from './exercise-question'
+import type { ExerciseQuestion } from '@ielts/shared'
 
 export interface LearningExample {
   title: string

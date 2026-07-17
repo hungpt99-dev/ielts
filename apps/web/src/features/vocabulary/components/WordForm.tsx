@@ -181,12 +181,23 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
       }
 
       if (data.meaning) setValue('meaning', data.meaning)
+      if (data.translation) setValue('meaningVi', data.translation)
       if (data.pronunciation) setValue('pronunciation', data.pronunciation)
       if (data.partOfSpeech) setValue('partOfSpeech', data.partOfSpeech)
       if (data.exampleSentence) setValue('exampleSentence', data.exampleSentence)
       setValue('collocations', data.collocations.join(', '))
       setValue('synonyms', data.synonyms.join(', '))
       setValue('antonyms', data.antonyms.join(', '))
+      if (data.cefrLevel) setValue('cefrLevel', data.cefrLevel as VocabularyEntry['cefrLevel'])
+      if (data.ieltsRelevance) setValue('ieltsRelevance', data.ieltsRelevance as VocabularyEntry['ieltsRelevance'])
+      if (data.difficulty) setValue('difficulty', data.difficulty as VocabularyEntry['difficulty'])
+      if (data.verbConjugation) {
+        setVerbConjugation(data.verbConjugation)
+        setValue('verbConjugation', data.verbConjugation)
+      }
+      if (Array.isArray(data.wordFamily) && data.wordFamily.length > 0) {
+        setValue('wordFamily', data.wordFamily.join(', '))
+      }
     } catch (err) {
       console.error('apps/web/src/features/vocabulary/components/WordForm.tsx error:', err);
       setAiError(err instanceof Error ? err.message : 'Failed to generate example')

@@ -1,14 +1,13 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { GrammarNote, GrammarStatus, MistakeEntry, MistakeSkill } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { grammarNoteRepo, mistakeRepo } from '../../services/repositories'
 import { useSettings } from '../../context/SettingsContext'
 import Card, { CardContent } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import Exercise, { type GrammarExerciseItem } from './components/Exercise'
 import { generateId } from '../../utils'
-import { startEngineSession } from '../../services/learning/ai-exercise-session'
-import type { SessionInfo } from '../../services/learning/ai-exercise-session'
+import { generateActivityUseCase } from '../../use-cases/generate-activity'
 import { getLearningEngine } from '../../services/engineBootstrap'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconGrammar } from '@ielts/ui'
@@ -32,314 +31,6 @@ const STATUS_OPTIONS: { value: GrammarStatus; label: string; color: string }[] =
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
-
-const SEED_EXERCISES: GrammarExerciseItem[] = [
-  {
-    id: 'ex-1',
-    topic: 'Conditionals',
-    type: 'multiple-choice',
-    question: 'Which sentence is a correct second conditional?',
-    options: [
-      'If I will have time, I will go',
-      'If I had time, I would go',
-      'If I have time, I would go',
-      'If I had had time, I would go',
-    ],
-    correctAnswer: 'B',
-    explanation: 'Second conditional uses "if + past simple, would + base verb" for unreal present situations.',
-  },
-  {
-    id: 'ex-2',
-    topic: 'Conditionals',
-    type: 'gap-fill',
-    question: 'Complete: "If I ____ (study) harder, I would pass the exam."',
-    correctAnswer: 'studied',
-    explanation: 'Second conditional uses past simple in the if-clause.',
-  },
-  {
-    id: 'ex-3',
-    topic: 'Articles',
-    type: 'multiple-choice',
-    question: 'Choose the correct sentence:',
-    options: [
-      'She is best student in class',
-      'She is the best student in the class',
-      'She is a best student in a class',
-      'She is best student in a class',
-    ],
-    correctAnswer: 'B',
-    explanation: 'Use "the" before superlatives and when referring to a specific noun.',
-  },
-  {
-    id: 'ex-4',
-    topic: 'Articles',
-    type: 'gap-fill',
-    question: 'Fill in the blank: "I saw ____ dog in the park." (first mention)',
-    correctAnswer: 'a',
-    explanation: 'Use "a/an" for non-specific singular countable nouns when first mentioned.',
-  },
-  {
-    id: 'ex-5',
-    topic: 'Passive Voice',
-    type: 'true-false',
-    question: 'Is this sentence active or passive? "The experiment was conducted by the research team." The sentence is in active voice.',
-    correctAnswer: 'F',
-    explanation: 'The sentence is in passive voice because the subject receives the action (was conducted).',
-  },
-  {
-    id: 'ex-6',
-    topic: 'Passive Voice',
-    type: 'gap-fill',
-    question: 'Change to passive: "The team conducted the experiment." → "The experiment ____ ____ by the team."',
-    correctAnswer: 'was conducted',
-    explanation: 'Passive voice: be (past) + past participle.',
-  },
-  {
-    id: 'ex-7',
-    topic: 'Relative Clauses',
-    type: 'multiple-choice',
-    question: 'Which sentence uses a non-defining relative clause correctly?',
-    options: [
-      'My sister that lives in London is a doctor',
-      'My sister, who lives in London, is a doctor',
-      'My sister who lives in London is a doctor',
-      'My sister, that lives in London, is a doctor',
-    ],
-    correctAnswer: 'B',
-    explanation: 'Non-defining relative clauses use commas and "who" (not "that") for people.',
-  },
-  {
-    id: 'ex-8',
-    topic: 'Relative Clauses',
-    type: 'error-correction',
-    question: 'Correct this sentence: "The car, that is red, belongs to John."',
-    correctAnswer: 'The car, which is red, belongs to John.',
-    explanation: 'Use "which" (not "that") for non-defining relative clauses referring to things.',
-  },
-  {
-    id: 'ex-9',
-    topic: 'Tenses',
-    type: 'multiple-choice',
-    question: 'Choose the correct tense: "I ____ here for five years."',
-    options: [
-      'am living',
-      'live',
-      'have lived',
-      'am lived',
-    ],
-    correctAnswer: 'C',
-    explanation: 'Present perfect (have + past participle) is used for actions that started in the past and continue to the present.',
-  },
-  {
-    id: 'ex-10',
-    topic: 'Tenses',
-    type: 'gap-fill',
-    question: 'Complete: "In 2020, the government ____ (introduce) new policies."',
-    correctAnswer: 'introduced',
-    explanation: 'Use past simple for completed actions at a specific time in the past.',
-  },
-  {
-    id: 'ex-11',
-    topic: 'Prepositions',
-    type: 'multiple-choice',
-    question: 'Choose the correct preposition: "She is interested ____ learning English."',
-    options: ['in', 'on', 'at', 'for'],
-    correctAnswer: 'A',
-    explanation: 'The adjective "interested" is followed by the preposition "in".',
-  },
-  {
-    id: 'ex-12',
-    topic: 'Prepositions',
-    type: 'gap-fill',
-    question: 'Complete: "He apologized ____ being late."',
-    correctAnswer: 'for',
-    explanation: 'The verb "apologize" is followed by the preposition "for".',
-  },
-  {
-    id: 'ex-13',
-    topic: 'Modal Verbs',
-    type: 'multiple-choice',
-    question: 'Which modal verb expresses obligation?',
-    options: ['can', 'must', 'might', 'could'],
-    correctAnswer: 'B',
-    explanation: '"Must" expresses strong obligation or necessity.',
-  },
-  {
-    id: 'ex-14',
-    topic: 'Modal Verbs',
-    type: 'true-false',
-    question: '"You should see a doctor" is stronger advice than "You must see a doctor."',
-    correctAnswer: 'F',
-    explanation: '"Must" is stronger than "should". "Must" expresses necessity; "should" is a recommendation.',
-  },
-  {
-    id: 'ex-15',
-    topic: 'Subject-Verb Agreement',
-    type: 'multiple-choice',
-    question: 'Choose the correct verb: "The list of items ____ on the table."',
-    options: ['is', 'are', 'were', 'have been'],
-    correctAnswer: 'A',
-    explanation: 'The subject is "list" (singular), not "items". The verb agrees with the subject, not the prepositional object.',
-  },
-  {
-    id: 'ex-16',
-    topic: 'Subject-Verb Agreement',
-    type: 'error-correction',
-    question: 'Correct: "Everyone have their own opinion."',
-    correctAnswer: 'Everyone has their own opinion.',
-    explanation: '"Everyone" is grammatically singular and takes a singular verb.',
-  },
-  {
-    id: 'ex-17',
-    topic: 'Reported Speech',
-    type: 'gap-fill',
-    question: 'Direct: "I am tired." → She said that she ____ tired.',
-    correctAnswer: 'was',
-    explanation: 'In reported speech, present simple usually shifts to past simple.',
-  },
-  {
-    id: 'ex-18',
-    topic: 'Reported Speech',
-    type: 'multiple-choice',
-    question: 'Report this question: "Are you coming?" → She asked ____.',
-    options: [
-      'if I am coming',
-      'if I was coming',
-      'if I were coming',
-      'if I came',
-    ],
-    correctAnswer: 'B',
-    explanation: 'Yes/no questions in reported speech use "if/whether" and backshift the tense.',
-  },
-  {
-    id: 'ex-19',
-    topic: 'Comparatives & Superlatives',
-    type: 'multiple-choice',
-    question: 'Choose the correct form: "This is ____ movie I have ever seen."',
-    options: [
-      'the most boring',
-      'the boringest',
-      'more boring',
-      'most boring',
-    ],
-    correctAnswer: 'A',
-    explanation: 'For adjectives with 2+ syllables, use "the most + adjective" for superlative form.',
-  },
-  {
-    id: 'ex-20',
-    topic: 'Comparatives & Superlatives',
-    type: 'error-correction',
-    question: 'Correct: "She is more smarter than him."',
-    correctAnswer: 'She is smarter than him.',
-    explanation: 'For one-syllable adjectives, add "-er" to form the comparative (not "more").',
-  },
-  {
-    id: 'ex-21',
-    topic: 'Gerunds & Infinitives',
-    type: 'multiple-choice',
-    question: 'Which verb is followed by a gerund?',
-    options: ['want', 'decide', 'enjoy', 'promise'],
-    correctAnswer: 'C',
-    explanation: '"Enjoy" is always followed by a gerund (enjoy + -ing). The others take infinitives.',
-  },
-  {
-    id: 'ex-22',
-    topic: 'Gerunds & Infinitives',
-    type: 'gap-fill',
-    question: 'Complete: "I avoid ____ (eat) too much sugar."',
-    correctAnswer: 'eating',
-    explanation: '"Avoid" is followed by a gerund (-ing form).',
-  },
-  {
-    id: 'ex-23',
-    topic: 'Linking Words',
-    type: 'multiple-choice',
-    question: 'Which linking word shows contrast?',
-    options: ['furthermore', 'however', 'therefore', 'moreover'],
-    correctAnswer: 'B',
-    explanation: '"However" introduces a contrasting idea. The others add supporting information.',
-  },
-  {
-    id: 'ex-24',
-    topic: 'Linking Words',
-    type: 'gap-fill',
-    question: 'Complete: "He was tired; ____, he continued working." (showing contrast)',
-    correctAnswer: 'however',
-    explanation: '"However" is used to show contrast between two clauses.',
-  },
-  {
-    id: 'ex-25',
-    topic: 'Quantifiers',
-    type: 'multiple-choice',
-    question: 'Which sentence is correct?',
-    options: [
-      'I have a few money',
-      'I have a little money',
-      'I have a few moneys',
-      'I have little moneys',
-    ],
-    correctAnswer: 'B',
-    explanation: '"Money" is uncountable, so use "a little" (not "a few").',
-  },
-  {
-    id: 'ex-26',
-    topic: 'Quantifiers',
-    type: 'true-false',
-    question: '"Few" and "a few" have the same meaning.',
-    correctAnswer: 'F',
-    explanation: '"Few" means "not many" (negative), while "a few" means "some" (positive).',
-  },
-  {
-    id: 'ex-27',
-    topic: 'Punctuation',
-    type: 'error-correction',
-    question: 'Correct: "Its a beautiful day."',
-    correctAnswer: "It's a beautiful day.",
-    explanation: '"It\'s" is the contraction of "it is". "Its" shows possession.',
-  },
-  {
-    id: 'ex-28',
-    topic: 'Punctuation',
-    type: 'gap-fill',
-    question: 'Add the missing punctuation: "If you study hard you will pass"',
-    correctAnswer: 'If you study hard, you will pass',
-    explanation: 'Use a comma after the if-clause when it begins a sentence.',
-  },
-  {
-    id: 'ex-29',
-    topic: 'Word Order',
-    type: 'multiple-choice',
-    question: 'Which sentence has correct word order?',
-    options: [
-      'She speaks very well English',
-      'She speaks English very well',
-      'She very well speaks English',
-      'She speaks English well very',
-    ],
-    correctAnswer: 'B',
-    explanation: 'English word order: subject + verb + object + adverb (manner, place, time).',
-  },
-  {
-    id: 'ex-30',
-    topic: 'Word Order',
-    type: 'error-correction',
-    question: 'Correct: "Always she arrives on time."',
-    correctAnswer: 'She always arrives on time.',
-    explanation: 'Adverbs of frequency (always, usually, etc.) come before the main verb but after "be".',
-  },
-]
-
-const EXERCISES_BY_TOPIC = SEED_EXERCISES.reduce<Record<string, GrammarExerciseItem[]>>((acc, ex) => {
-  if (!acc[ex.topic]) acc[ex.topic] = []
-  acc[ex.topic].push(ex)
-  return acc
-}, {})
-
-function generateExercisesForTopic(topic: string, count: number): GrammarExerciseItem[] {
-  const existing = EXERCISES_BY_TOPIC[topic] || []
-  if (existing.length >= count) return existing.slice(0, count)
-  return existing
 }
 
 export default function GrammarLearning() {
@@ -372,7 +63,6 @@ export default function GrammarLearning() {
   const [selectedTopic, setSelectedTopic] = useState<string>('')
   const [exercises, setExercises] = useState<GrammarExerciseItem[]>([])
   const [exerciseMode, setExerciseMode] = useState(false)
-  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
 
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
@@ -384,7 +74,7 @@ export default function GrammarLearning() {
     try {
       setLoading(true)
       setError(null)
-      const all = await DatabaseService.getAll<GrammarNote>('grammarNotes')
+      const all = await grammarNoteRepo.findAll()
       setNotes(all)
     } catch (err) {
       console.error('apps/web/src/features/grammar/GrammarLearning.tsx error:', err);
@@ -396,7 +86,7 @@ export default function GrammarLearning() {
 
   const loadMistakes = useCallback(async () => {
     try {
-      const all = await DatabaseService.getAll<MistakeEntry>('mistakes')
+      const all = await mistakeRepo.findAll()
       setMistakes(all.filter(m => m.skill === 'grammar'))
     } catch (error) {
   console.error('apps/web/src/features/grammar/GrammarLearning.tsx error:', error);
@@ -529,7 +219,7 @@ export default function GrammarLearning() {
           status: formStatus,
           updatedAt: now,
         }
-        await DatabaseService.put('grammarNotes', updated)
+        await grammarNoteRepo.bulkUpsert([updated])
         setNotes(prev => prev.map(n => n.id === updated.id ? updated : n))
       } else {
         const note: GrammarNote = {
@@ -545,7 +235,7 @@ export default function GrammarLearning() {
           createdAt: now,
           updatedAt: now,
         }
-        await DatabaseService.add('grammarNotes', note)
+        await grammarNoteRepo.create(note)
         setNotes(prev => [...prev, note])
       }
       setModalOpen(false)
@@ -559,21 +249,55 @@ export default function GrammarLearning() {
   }
 
   function handleDelete(id: string) {
-    DatabaseService.remove('grammarNotes', id)
+    grammarNoteRepo.delete(id)
     setNotes(prev => prev.filter(n => n.id !== id))
   }
 
   async function handleStatusChange(note: GrammarNote, status: GrammarStatus) {
     const updated: GrammarNote = { ...note, status, updatedAt: new Date().toISOString() }
-    await DatabaseService.put('grammarNotes', updated)
+    await grammarNoteRepo.bulkUpsert([updated])
     setNotes(prev => prev.map(n => n.id === updated.id ? updated : n))
   }
 
-  function startExercises(topic: string) {
-    const exs = generateExercisesForTopic(topic, 10)
-    setSelectedTopic(topic)
-    setExercises(exs)
-    setExerciseMode(true)
+  async function startExercises(topic: string) {
+    setAiLoading(true)
+    setAiError(null)
+    try {
+      const result = await generateActivityUseCase({
+        skill: 'grammar',
+        description: `Grammar: ${topic}`,
+        difficulty: 'medium',
+        availableMinutes: 15,
+        topic,
+      })
+      if (result.error) throw new Error(result.error)
+      if (!result.content) throw new Error('No exercises generated')
+
+      const parsed = JSON.parse(result.content)
+      const rawExercises = parsed.exercises || parsed.questions || []
+      if (!Array.isArray(rawExercises) || rawExercises.length === 0) {
+        throw new Error('No exercises generated')
+      }
+
+      const newExercises: GrammarExerciseItem[] = rawExercises.map((ex: any, i: number) => ({
+        id: `grammar-${generateId()}-${i}`,
+        topic,
+        type: ex.type as GrammarExerciseItem['type'],
+        question: ex.question || ex.text || '',
+        options: ex.options,
+        correctAnswer: String(ex.correctAnswer ?? ex.correctIndex ?? ''),
+        explanation: ex.explanation || '',
+      }))
+
+      setSelectedTopic(topic)
+      setExercises(newExercises)
+      setExerciseMode(true)
+    } catch (err) {
+      console.error(err)
+      setAiError(err instanceof Error ? err.message : 'Failed to generate exercises')
+    } finally {
+      setAiLoading(false)
+    }
   }
 
   function handleExerciseComplete(results: { total: number; correct: number; mistakes?: Array<{ id: string; mistake: string; correction: string; explanation: string; source: string }>; questions?: GrammarExerciseItem[]; answers?: Record<string, string> }) {
@@ -593,77 +317,22 @@ export default function GrammarLearning() {
           type: q.type,
         })),
         answers: (results.answers || {}) as Record<string, unknown>,
-        sessionId: sessionInfo?.sessionId,
-        attemptId: sessionInfo?.attemptId,
+        sessionId: '',
+        attemptId: '',
         timeSpentMs: 0,
       }).catch(() => {})
     }
   }
 
   async function generateAiExercises(topic: string) {
-    if (!topic.trim()) {
-      setAiError('Select a grammar topic first')
-      return
-    }
-
-    setAiLoading(true)
-    setAiError(null)
-
-    try {
-      const { content, error, sessionInfo: si } = await startEngineSession(
-        'grammar',
-        `Grammar: ${topic}`,
-        'medium',
-        15,
-        topic,
-      )
-
-      if (error) throw new Error(error)
-      if (!content) throw new Error('AI returned an empty response. Try again.')
-      setSessionInfo(si)
-
-      let parsed
-      try {
-        const jsonStart = content.indexOf('{')
-        const jsonEnd = content.lastIndexOf('}')
-        if (jsonStart === -1 || jsonEnd === -1) throw new Error('No JSON found')
-        parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
-      } catch (error) {
-        console.error('apps/web/src/features/grammar/GrammarLearning.tsx error:', error);
-        throw new Error('Failed to parse AI response as JSON')
-      }
-
-      const rawExercises = parsed.exercises || parsed.questions || []
-      if (!Array.isArray(rawExercises) || rawExercises.length === 0) {
-        throw new Error('No exercises generated')
-      }
-
-      const newExercises: GrammarExerciseItem[] = rawExercises.map((ex: { type: string; question: string; options?: string[]; correctAnswer: string; explanation: string }, i: number) => ({
-        id: `ai-${generateId()}-${i}`,
-        topic,
-        type: ex.type as GrammarExerciseItem['type'],
-        question: ex.question,
-        options: ex.options,
-        correctAnswer: ex.correctAnswer,
-        explanation: ex.explanation,
-      }))
-
-      setSelectedTopic(topic)
-      setExercises(newExercises)
-      setExerciseMode(true)
-    } catch (err) {
-      console.error('apps/web/src/features/grammar/GrammarLearning.tsx error:', err);
-      setAiError(err instanceof Error ? err.message : 'Failed to generate exercises')
-    } finally {
-      setAiLoading(false)
-    }
+    return startExercises(topic)
   }
 
   async function handleMistakeStatus(id: string, status: MistakeEntry['status']) {
     const updated = mistakes.find(m => m.id === id)
     if (!updated) return
     const entry: MistakeEntry = { ...updated, status, updatedAt: new Date().toISOString() }
-    await DatabaseService.put('mistakes', entry)
+    await mistakeRepo.bulkUpsert([entry])
     setMistakes(prev => prev.map(m => m.id === id ? entry : m))
   }
 
@@ -1020,7 +689,6 @@ export default function GrammarLearning() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {GRAMMAR_TOPICS.map(topic => {
               const note = notes.find(n => n.topic === topic)
-              const exCount = (EXERCISES_BY_TOPIC[topic] || []).length
               return (
                 <button
                   key={topic}
@@ -1040,7 +708,7 @@ export default function GrammarLearning() {
                     </svg>
                   </div>
                   <div className="mt-2 flex items-center gap-2 text-xs" style={{ color: 'var(--color-muted)' }}>
-                    <span>{exCount} exercise{exCount !== 1 ? 's' : ''}</span>
+                    <span>Generated exercises</span>
                     {note && (
                       <span
                         className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-medium ${getStatusStyle(note.status)}`}

@@ -6,7 +6,7 @@ The primary structured data store. Database name: `'ielts-journey'`. Managed by 
 
 ## Schema Versions
 
-Current version: **8**. The schema is defined in `APP_SCHEMA` (`packages/storage/src/migrations.ts`).
+Current version: **9**. The schema is defined in `APP_SCHEMA` (`packages/storage/src/migrations.ts`).
 
 ### v1 (initial)
 `vocabulary`, `vocabularyReviews`, `tasks`, `readingSessions`, `readingPracticeSessions`, `listeningSessions`, `listeningPracticeSessions`, `writingSessions`, `speakingSessions`, `grammarNotes`, `mistakes`, `mockTests`, `topicsProgress`, `passages`
@@ -31,6 +31,9 @@ Added: `learningEvents`
 
 ### v8
 Added: `youtubeVideos`, `transcripts`, `videoAnalyses`, `videoVocabularySources`, `savedSentences`, `timestampedNotes`, `learningPlaylists`, `playlistItems`, `videoStudySessions`, `studyActivities`, `youtubeExercises`, `exerciseAttempts`, `dictationAttempts`, `shadowingAttempts`, `speakingAttempts`, `summaryAttempts`, `tutorInterventions`, `aiGenerationCache`, `channelEvaluations`
+
+### v9
+Consolidated: all 47 stores redefined under a single version for clean schema alignment.
 
 **Total tables across all versions: 47**
 

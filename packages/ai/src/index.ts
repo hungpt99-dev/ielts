@@ -18,7 +18,7 @@ export type { AiExplainType } from './prompts'
 export { PromptRegistry, getDefaultPromptRegistry, setDefaultPromptRegistry, registerDefaultPrompts } from './prompts'
 export type { RegisteredPrompt, PromptVersion } from './prompts'
 
-// Exercise generation prompts (shared between classify.ts and learning-engine)
+// Exercise generation prompts (used by classify.ts; learning-engine has its own copy)
 export {
   READING_QUESTIONS_SYSTEM_PROMPT,
   LISTENING_EXERCISE_SYSTEM_PROMPT,
@@ -34,9 +34,13 @@ export {
   buildGrammarExercisesPrompt,
   buildMistakeReviewPrompt,
   buildVocabularyExtractionPrompt,
+  /** @deprecated Import from @ielts/learning-engine's prompt-builders instead */
   buildReadingPassagePrompt,
+  /** @deprecated Import from @ielts/learning-engine's prompt-builders instead */
   buildListeningPassagePrompt,
+  /** @deprecated Import from @ielts/learning-engine's prompt-builders instead */
   buildPracticeQuestionsPrompt,
+  /** @deprecated Import from @ielts/learning-engine's prompt-builders instead */
   buildPracticeQuestionsSystemPrompt,
 } from './prompts'
 
@@ -87,6 +91,16 @@ export type { AIClient, AICallResult } from './client/types'
 // Utilities
 export { AiGenerateResultCache, extractJSON } from './utils'
 export type { GenerateResultCacheOptions, GenerateResultCacheStats } from './utils'
+
+// Errors (classes used by consumers for type checking and catch blocks)
+export {
+  AIError,
+  AIAuthError,
+  AIRateLimitError,
+  AINetworkError,
+  AIEmptyResponseError,
+  AIConfigError,
+} from './errors'
 
 // Config resolver
 export { AiConfigurationResolver, AiAdapterFactory } from './config'

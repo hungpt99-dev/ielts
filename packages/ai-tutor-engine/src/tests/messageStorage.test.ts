@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { MessageStorage } from '../services/messageStorage'
+import { MessageStorage } from '../infrastructure/chat-message-storage'
 
 beforeEach(() => {
   localStorage.clear()

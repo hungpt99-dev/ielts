@@ -7,6 +7,7 @@ import { getAllArtifacts, saveArtifact, type ExtensionArtifact } from '../../ser
 import { findWebAppTab } from './webTabConnection'
 import { loadSettings, saveSettings, setApiKey } from '../settingsStorage'
 import { toExtensionVocab, toExtensionMistake, syncStorageForHighlighter } from './syncHelpers'
+import { vocabularyRepo, mistakeRepo, passageEntryRepo } from '../../services/repositories'
 
 const TIMEOUT_MS = 15000
 const META_KEY = 'ielts-bidi-sync-meta'
@@ -41,6 +42,9 @@ async function exportExtensionData(): Promise<Record<string, unknown>> {
     getAllArticles().catch(() => []),
     getAllArtifacts().catch(() => []),
   ])
+  vocabularyRepo.findAll().catch(() => {})
+  mistakeRepo.findAll().catch(() => {})
+  passageEntryRepo.findAll().catch(() => {})
   return { vocabulary: vocab, mistakes, learningEntries: entries, articles, artifacts }
 }
 
@@ -68,30 +72,35 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
   const vocabList = data.vocabulary as Record<string, unknown>[] | undefined
   if (Array.isArray(vocabList)) {
     const existing = await getAllVocabulary().catch(() => [])
+    vocabularyRepo.findAll().catch(() => {})
     const existingIds = new Set(existing.map(v => v.id))
     for (const item of vocabList) {
       const id = (item.id as string) || crypto.randomUUID()
       if (existingIds.has(id)) { updated++ } else { imported++ }
       existingIds.add(id)
       await saveVocabularyEntry(toExtensionVocab(item, id)).catch(() => {})
+      vocabularyRepo.bulkUpsert([toExtensionVocab(item, id) as any]).catch(() => {})
     }
   }
 
   const mistakeList = data.mistakes as Record<string, unknown>[] | undefined
   if (Array.isArray(mistakeList)) {
     const existing = await getAllMistakes().catch(() => [])
+    mistakeRepo.findAll().catch(() => {})
     const existingIds = new Set(existing.map(m => m.id))
     for (const item of mistakeList) {
       const id = (item.id as string) || crypto.randomUUID()
       if (existingIds.has(id)) { updated++ } else { imported++ }
       existingIds.add(id)
       await saveMistakeEntry(toExtensionMistake(item, id)).catch(() => {})
+      mistakeRepo.bulkUpsert([toExtensionMistake(item, id) as any]).catch(() => {})
     }
   }
 
   const entriesList = data.learningEntries as Record<string, unknown>[] | undefined
   if (Array.isArray(entriesList)) {
     const existing = await getAllEntries().catch(() => [])
+    passageEntryRepo.findAll().catch(() => {})
     const existingIds = new Set(existing.map(e => e.id))
     for (const item of entriesList) {
       const id = (item.id as string) || crypto.randomUUID()
@@ -112,12 +121,28 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
         createdAt: (item.createdAt as string) || new Date().toISOString(),
         updatedAt: (item.updatedAt as string) || new Date().toISOString(),
       }).catch(() => {})
+      passageEntryRepo.bulkUpsert([{
+        id,
+        text: (item.text as string) || '',
+        category: (item.category as any) || 'reading',
+        topic: (item.topic as string) || '',
+        skill: (item.skill as any) || 'general',
+        difficulty: ((item.difficulty as string) || '') as '' | 'easy' | 'medium' | 'hard',
+        tags: Array.isArray(item.tags) ? item.tags as string[] : [],
+        personalNote: (item.personalNote as string) || '',
+        pageTitle: (item.pageTitle as string) || '',
+        pageUrl: (item.pageUrl as string) || '',
+        status: (item.status as any) || 'new',
+        createdAt: (item.createdAt as string) || new Date().toISOString(),
+        updatedAt: (item.updatedAt as string) || new Date().toISOString(),
+      } as any]).catch(() => {})
     }
   }
 
   const articlesList = data.articles as Record<string, unknown>[] | undefined
   if (Array.isArray(articlesList)) {
     const existing = await getAllArticles().catch(() => [])
+    passageEntryRepo.findAll().catch(() => {})
     const existingIds = new Set(existing.map(a => a.id))
     for (const item of articlesList) {
       const id = (item.id as string) || crypto.randomUUID()
@@ -139,6 +164,22 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
         createdAt: (item.createdAt as string) || new Date().toISOString(),
         updatedAt: (item.updatedAt as string) || new Date().toISOString(),
       } as any).catch(() => {})
+      passageEntryRepo.bulkUpsert([{
+        id,
+        title: (item.title as string) || (item.pageTitle as string) || 'Untitled',
+        url: (item.source as string) || (item.pageUrl as string) || '',
+        content: (item.content as string) || (item.text as string) || '',
+        selectedParagraph: '',
+        topic: (item.topic as string) || 'general',
+        tags: Array.isArray(item.tags) ? item.tags as string[] : [],
+        personalNote: (item.personalNote as string) || '',
+        isReadingPractice: false,
+        difficulty: (item.difficulty as string) || '',
+        aiQuestions: [],
+        status: 'new',
+        createdAt: (item.createdAt as string) || new Date().toISOString(),
+        updatedAt: (item.updatedAt as string) || new Date().toISOString(),
+      } as any]).catch(() => {})
     }
   }
 

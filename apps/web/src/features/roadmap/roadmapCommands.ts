@@ -1,5 +1,5 @@
 import type { TaskEntry } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { taskRepo } from '../../services/repositories'
 import type { RoadmapData, RoadmapPhase, RoadmapWeek, RoadmapDay } from './roadmapService'
 import { recalculateProgress } from './roadmapService'
 import { SKILL_TO_CATEGORY } from './constants'
@@ -20,7 +20,7 @@ export async function addTask(
 ): Promise<RoadmapData> {
   const cloned = deepClone(roadmap)
   const day = cloned.phases[phaseIndex].weeks[weekIndex].days[dayIndex]
-  const entry = await DatabaseService.addTask({
+  const entry = await taskRepo.create({
     title: 'New task',
     description: '',
     category: 'Vocabulary',
@@ -33,7 +33,7 @@ export async function addTask(
     completedAt: null,
   })
   day.taskIds.push(entry.id)
-  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  const tasks = await taskRepo.findAll()
   return recalculateProgress(cloned, tasks)
 }
 
@@ -49,12 +49,12 @@ export async function removeTask(
   const taskId = day.taskIds[taskIndex]
   day.taskIds.splice(taskIndex, 1)
   try {
-    await DatabaseService.remove('tasks', taskId)
+    await taskRepo.delete(taskId)
   } catch (error) {
     console.error('apps/web/src/features/roadmap/roadmapCommands.ts error:', error);
     // ignore if already deleted
   }
-  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  const tasks = await taskRepo.findAll()
   return recalculateProgress(cloned, tasks)
 }
 
@@ -72,13 +72,13 @@ export async function updateTask(
   if (fields.category !== undefined) updates.category = SKILL_TO_CATEGORY[fields.category] ?? fields.category as TaskCategory
   if (Object.keys(updates).length > 0) {
     try {
-      await DatabaseService.update('tasks', taskId, updates)
+      await taskRepo.update(taskId, updates)
     } catch (error) {
       console.error('apps/web/src/features/roadmap/roadmapCommands.ts error:', error);
       // ignore update failures
     }
   }
-  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  const tasks = await taskRepo.findAll()
   return recalculateProgress(deepClone(roadmap), tasks)
 }
 
@@ -106,7 +106,7 @@ export async function addDay(
   const cloned = deepClone(roadmap)
   const days = cloned.phases[phaseIndex].weeks[weekIndex].days
   const insertAt = afterIndex !== undefined ? afterIndex + 1 : days.length
-  const entry = await DatabaseService.addTask({
+  const entry = await taskRepo.create({
     title: 'New task',
     description: '',
     category: 'Vocabulary',
@@ -126,7 +126,7 @@ export async function addDay(
   }
   days.splice(insertAt, 0, newDay)
   days.forEach((day, idx) => { day.dayNumber = idx + 1 })
-  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  const tasks = await taskRepo.findAll()
   return recalculateProgress(cloned, tasks)
 }
 

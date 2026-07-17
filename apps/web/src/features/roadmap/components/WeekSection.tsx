@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { IconCheck, IconFlame } from '@ielts/ui'
 import type { TaskEntry } from '../../../models'
-import { DatabaseService } from '../../../services/storage/Database'
+import { taskRepo } from '../../../services/repositories'
 import type { RoadmapWeek, RoadmapDay } from '../roadmapService'
 import DayCard from './DayCard'
 import EditableText from './EditableText'
@@ -47,7 +47,7 @@ export default function WeekSection({
   const weekProgress = week.totalTasks > 0 ? Math.round((week.completedTasks / week.totalTasks) * 100) : 0
 
   useEffect(() => {
-    DatabaseService.getAll<TaskEntry>('tasks').then(allTasks => {
+    taskRepo.findAll().then(allTasks => {
       setTaskMap(new Map(allTasks.map(t => [t.id, t])))
     })
   }, [week, taskRefreshKey])

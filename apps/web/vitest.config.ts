@@ -10,6 +10,10 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
       '@ielts/ai': resolve(__dirname, '../../packages/ai/src'),
       '@ielts/ai-tutor-engine': resolve(__dirname, '../../packages/ai-tutor-engine/src'),
+      '@ielts/config': resolve(__dirname, '../../packages/config/src'),
+      '@ielts/learning-engine': resolve(__dirname, '../../packages/learning-engine/src'),
+      '@ielts/settings': resolve(__dirname, '../../packages/settings/src'),
+      '@ielts/shared': resolve(__dirname, '../../packages/shared/src'),
       '@ielts/storage': resolve(__dirname, '../../packages/storage/src'),
       '@ielts/theme': resolve(__dirname, '../../packages/theme/src'),
       '@ielts/ui': resolve(__dirname, '../../packages/ui/src'),
@@ -22,10 +26,6 @@ export default defineConfig({
     include: [
       'src/**/*.{test,spec}.{ts,tsx}',
       'tests/**/*.{test,spec}.{ts,tsx}',
-      '../../packages/storage/src/**/*.{test,spec}.{ts,tsx}',
-      '../../packages/ai/src/**/*.{test,spec}.{ts,tsx}',
-      '../../packages/ai-tutor-engine/src/**/*.{test,spec}.{ts,tsx}',
-      '../../apps/extension/src/**/*.{test,spec}.{ts,tsx}',
     ],
 
     watch: false,

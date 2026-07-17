@@ -1,4 +1,4 @@
-import type { ExerciseQuestionType } from '../entities/exercise-question'
+import type { ExerciseQuestionType } from '@ielts/shared'
 import type { EvaluationMethod } from '../entities/evaluation'
 
 const DETERMINISTIC_TYPES: ExerciseQuestionType[] = [

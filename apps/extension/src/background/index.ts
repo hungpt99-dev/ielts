@@ -5,6 +5,7 @@ import { saveVocabularyEntry } from '../storage/vocabularyStore'
 import { safeStorageSet } from '../utils/safe-chrome'
 import { initMessaging } from './messaging'
 import { initAiService } from './ai-service'
+import { ensureStorageInitialized, vocabularyRepo, passageEntryRepo } from '../services/repositories'
 
 interface AiExplainItem {
   id: string
@@ -147,6 +148,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   }
 })
 
+ensureStorageInitialized()
 initMessaging()
 initAiService()
 
@@ -248,6 +250,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
           updatedAt: now,
         }
         await saveEntry(learningEntry)
+        passageEntryRepo.bulkUpsert([{ id: sharedId, title: 'Extension Entry', content: JSON.stringify(learningEntry), topic: pending.category as string || 'general', createdAt: now, updatedAt: now }]).catch(() => {})
 
         if (pending.category === 'vocabulary') {
           vocabCount++
@@ -277,6 +280,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
             createdAt: now,
             updatedAt: now,
           }).catch(() => {})
+          vocabularyRepo.bulkUpsert([{ id: sharedId, word: text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''), sourceSentence: text, pageTitle: (pending.pageTitle as string) || '', pageUrl: (pending.pageUrl as string) || '', topic: (pending.topic as string) || 'general', personalNote: (pending.note as string) || '', tags: (pending.tags as string[]) || [], meaning: '', translation: '', partOfSpeech: '', pronunciation: '', exampleSentence: '', synonyms: [], antonyms: [], collocations: [], wordFamily: [], difficulty: '', status: 'new', addedToReview: true, reviewId: '', createdAt: now, updatedAt: now }]).catch(() => {})
         }
       } catch (err) {
         console.error('[PendingSave] Item failed:', err)

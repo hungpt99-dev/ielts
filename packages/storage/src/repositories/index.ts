@@ -1,6 +1,12 @@
 export { BaseRepository } from './BaseRepository'
 export type { RepositoryItem, PaginationParams, PaginatedResult } from './BaseRepository'
 
+export { PlanRepository } from './PlanRepository'
+export type { PlanEntry, PhaseEntry, WeekEntry, DayEntry } from './PlanRepository'
+
+export { ActivityRepository } from './ActivityRepository'
+export type { ActivityEntry } from './ActivityRepository'
+
 export {
   VocabularyRepository,
   VocabReviewRepository,

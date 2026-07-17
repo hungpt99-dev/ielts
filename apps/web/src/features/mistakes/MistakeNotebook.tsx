@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTutorNavigation } from '../../hooks/useTutorNavigation'
 import type { MistakeEntry, MistakeSkill, MistakeStatus } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { mistakeRepo } from '../../services/repositories'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
@@ -143,7 +143,7 @@ export default function MistakeNotebook() {
     try {
       setLoading(true)
       setError(null)
-      const all = await DatabaseService.getAll<MistakeEntry>('mistakes')
+      const all = await mistakeRepo.findAll()
       setEntries(all)
     } catch (err) {
       console.error('apps/web/src/features/mistakes/MistakeNotebook.tsx error:', err);
@@ -287,7 +287,7 @@ export default function MistakeNotebook() {
   }
 
   function handleDelete(id: string) {
-    DatabaseService.remove('mistakes', id)
+    mistakeRepo.delete(id)
     setEntries(prev => prev.filter(e => e.id !== id))
     setDeleteConfirm(null)
     if (detailEntry?.id === id) setDetailEntry(null)
@@ -300,7 +300,7 @@ export default function MistakeNotebook() {
       status,
       updatedAt: new Date().toISOString(),
     }
-    DatabaseService.put('mistakes', updated)
+    mistakeRepo.bulkUpsert([updated])
     setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
     if (detailEntry?.id === entry.id) setDetailEntry(updated)
     if (status === 'resolved') {
@@ -318,7 +318,7 @@ export default function MistakeNotebook() {
       repetitionCount: entry.repetitionCount + 1,
       updatedAt: new Date().toISOString(),
     }
-    DatabaseService.put('mistakes', updated)
+    mistakeRepo.bulkUpsert([updated])
     setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
     if (detailEntry?.id === entry.id) setDetailEntry(updated)
   }
@@ -348,7 +348,7 @@ export default function MistakeNotebook() {
           status: form.status,
           updatedAt: now,
         }
-        await DatabaseService.put('mistakes', updated)
+        await mistakeRepo.bulkUpsert([updated])
         setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
         showToast('Mistake updated')
       } else {
@@ -366,7 +366,7 @@ export default function MistakeNotebook() {
           createdAt: now,
           updatedAt: now,
         }
-        await DatabaseService.add('mistakes', entry)
+        await mistakeRepo.create(entry)
         setEntries(prev => [...prev, entry as MistakeEntry])
         showToast('Mistake saved')
       }

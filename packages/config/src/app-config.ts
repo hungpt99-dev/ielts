@@ -4,6 +4,7 @@ import { DEFAULT_FEATURE_FLAGS } from './feature-flags'
 import { DEFAULT_LOGGING_CONFIG } from './logging'
 import { DEFAULT_AI_TIMEOUT_MS, DEFAULT_AI_MAX_RETRIES, DEFAULT_AI_TEMPERATURE, DEFAULT_AI_MODEL } from './ai'
 import type { YouTubeInfrastructureConfig } from './youtube/youtube-infra'
+import { YOUTUBE_INFRA_CONFIG } from './youtube/youtube-infra'
 
 export interface DefaultAiConfig {
   readonly timeoutMs: number
@@ -34,11 +35,7 @@ export const DEFAULT_APP_CONFIG: AppConfig = Object.freeze({
     defaultModel: DEFAULT_AI_MODEL,
   }),
   features: DEFAULT_FEATURE_FLAGS,
-  youtube: Object.freeze({
-    apiBaseUrl: 'https://www.googleapis.com/youtube/v3',
-    corsProxyBaseUrl: undefined,
-    timeoutMs: 20_000,
-  }),
+  youtube: YOUTUBE_INFRA_CONFIG,
 })
 
 export function createAppConfig(overrides?: Partial<AppConfig>): AppConfig {

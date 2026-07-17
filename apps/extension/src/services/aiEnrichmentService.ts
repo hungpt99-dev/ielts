@@ -1,5 +1,7 @@
-import { callAI } from '@ielts/ai'
+import { createAIClient } from '@ielts/ai'
 import { safeFetchProviderConfig } from '../utils/safe-chrome'
+
+const aiClient = createAIClient()
 
 export interface VocabEnrichResult {
   word: string
@@ -39,10 +41,12 @@ export interface ExampleSentencesResult {
 
 export async function enrichVocabulary(word: string, context?: string): Promise<VocabEnrichResult> {
   const providerConfig = await safeFetchProviderConfig()
-  const result = await callAI(
-    'You are an IELTS vocabulary assistant. Return JSON with: meaning, pronunciation, partOfSpeech, wordFamily, collocations, cefrLevel, synonyms, antonyms, exampleSentence.',
-    `Word: ${word}${context ? ` Context: ${context.slice(0, 500)}` : ''}`,
-    () => providerConfig,
+  const result = await aiClient.complete(
+    [
+      { role: 'system', content: 'You are an IELTS vocabulary assistant. Return JSON with: meaning, pronunciation, partOfSpeech, wordFamily, collocations, cefrLevel, synonyms, antonyms, exampleSentence.' },
+      { role: 'user', content: `Word: ${word}${context ? ` Context: ${context.slice(0, 500)}` : ''}` },
+    ],
+    providerConfig,
     { temperature: 0.3, maxTokens: 1000 },
   )
   if (result.error || !result.content) {
@@ -73,10 +77,12 @@ export async function enrichVocabulary(word: string, context?: string): Promise<
 
 export async function explainText(text: string, _language?: string): Promise<ExplainResult> {
   const providerConfig = await safeFetchProviderConfig()
-  const result = await callAI(
-    'You are an IELTS text explainer. Explain the text simply. Return JSON: { "explanation": string, "examples": string[], "relatedWords": string[] }',
-    `Explain this:\n${text.slice(0, 2000)}`,
-    () => providerConfig,
+  const result = await aiClient.complete(
+    [
+      { role: 'system', content: 'You are an IELTS text explainer. Explain the text simply. Return JSON: { "explanation": string, "examples": string[], "relatedWords": string[] }' },
+      { role: 'user', content: `Explain this:\n${text.slice(0, 2000)}` },
+    ],
+    providerConfig,
     { temperature: 0.3, maxTokens: 800 },
   )
   if (result.error || !result.content) return { explanation: '', examples: [], relatedWords: [] }
@@ -99,10 +105,12 @@ export async function analyzeIeltsVocab(word: string, _context?: string): Promis
 
 export async function generateExamples(word: string, _count: number = 3): Promise<ExampleSentencesResult> {
   const providerConfig = await safeFetchProviderConfig()
-  const result = await callAI(
-    'You are an IELTS vocabulary examples generator. Return JSON: { "sentences": string[] }',
-    `Generate example sentences using "${word}" suitable for IELTS level.`,
-    () => providerConfig,
+  const result = await aiClient.complete(
+    [
+      { role: 'system', content: 'You are an IELTS vocabulary examples generator. Return JSON: { "sentences": string[] }' },
+      { role: 'user', content: `Generate example sentences using "${word}" suitable for IELTS level.` },
+    ],
+    providerConfig,
     { temperature: 0.5, maxTokens: 500 },
   )
   if (result.error || !result.content) return { sentences: [] }

@@ -1,5 +1,5 @@
 import type { TaskEntry, StudyGoal } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { taskRepo } from '../../services/repositories'
 
 import {
   STORAGE_KEYS,
@@ -18,6 +18,8 @@ import {
 import { SKILL_TO_CATEGORY } from './constants'
 import { getLearningEngine } from '../../services/engineBootstrap'
 import type { RoadmapLearningTask } from '@ielts/learning-engine'
+import { PlanRepository } from '@ielts/storage'
+import type { PlanEntry, PhaseEntry, WeekEntry, DayEntry } from '@ielts/storage'
 
 const CATEGORY_TO_SKILL: Record<string, 'listening' | 'reading' | 'writing' | 'speaking' | 'grammar' | 'vocabulary'> = {
   Vocabulary: 'vocabulary',
@@ -79,6 +81,46 @@ export interface RoadmapData {
 }
 
 const ROADMAP_STORAGE_KEY = STORAGE_KEYS.localStorage.roadmap
+const REGENERATION_STATE_KEY = `${ROADMAP_STORAGE_KEY}.regeneration`
+
+export type RegenerationPhase = 'idle' | 'generating-plan' | 'enriching-tasks' | 'completed' | 'failed'
+
+export interface RoadmapRegenerationState {
+  status: RegenerationPhase
+  startedAt: string
+  phase: string
+  current: number
+  total: number
+  errorMessage?: string
+  planData?: string
+  enrichedPlanData?: string
+}
+
+export function loadRegenerationState(): RoadmapRegenerationState | null {
+  try {
+    const raw = localStorage.getItem(REGENERATION_STATE_KEY)
+    if (!raw) return null
+    return JSON.parse(raw) as RoadmapRegenerationState
+  } catch {
+    return null
+  }
+}
+
+export function saveRegenerationState(state: RoadmapRegenerationState): void {
+  try {
+    localStorage.setItem(REGENERATION_STATE_KEY, JSON.stringify(state))
+  } catch {
+    /* non-critical */
+  }
+}
+
+export function clearRegenerationState(): void {
+  try {
+    localStorage.removeItem(REGENERATION_STATE_KEY)
+  } catch {
+    /* non-critical */
+  }
+}
 
 const PHASE_META = [
   { name: 'Foundation Building', desc: 'Build essential vocabulary, grammar, and basic IELTS skills', range: 'Building foundations' },
@@ -321,7 +363,7 @@ export async function generateRoadmap(settings: Record<string, unknown>, existin
             if (existing.isDone) weekDone++
           } else {
             const isDone = doneDates.has(dateStr)
-            const entry = await DatabaseService.addTask({
+            const entry = await taskRepo.create({
               title: taskTitle,
               description: `Skill: ${skillFocus}. ${objective}`,
               category: SKILL_TO_CATEGORY[skillFocus] ?? 'Vocabulary',
@@ -452,37 +494,26 @@ async function loadUserSettings(): Promise<Record<string, unknown> | null> {
 }
 
 export async function ensureRoadmap(): Promise<RoadmapData> {
+  const canonical = await loadCanonicalRoadmap()
+  if (canonical && canonical.phases.length > 0) {
+    const tasks = await taskRepo.findAll()
+    const updated = recalculateProgress(canonical, tasks)
+    saveRoadmap(updated)
+    return updated
+  }
+
   const existing = loadRoadmap()
   const settings = await loadUserSettings()
   if (!settings) {
     throw new Error('User settings not found. Please complete onboarding first.')
   }
 
-  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  const tasks = await taskRepo.findAll()
 
-  if (existing && existing.generatedAt) {
-    const existingGenerated = new Date(existing.generatedAt)
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
-    if (existingGenerated > oneDayAgo && existing.phases.length > 0) {
-      const updated = recalculateProgress(existing, tasks)
-      saveRoadmap(updated)
-      return updated
-    }
-    // Clean up all tasks in the roadmap's date range before regenerating
-    const dateSet = new Set<string>()
-    for (const phase of existing.phases) {
-      for (const week of phase.weeks) {
-        for (const day of week.days) dateSet.add(day.date)
-      }
-    }
-    const allDbTasks = await DatabaseService.getAll<TaskEntry>('tasks')
-    for (const t of allDbTasks) {
-      if (dateSet.has(t.date.slice(0, 10))) {
-        try { await DatabaseService.remove('tasks', t.id) } catch (error) {
-  console.error('apps/web/src/features/roadmap/roadmapService.ts error:', error);
-        }
-      }
-    }
+  if (existing && existing.phases.length > 0) {
+    const updated = recalculateProgress(existing, tasks)
+    saveRoadmap(updated)
+    return updated
   }
 
   const roadmap = await generateRoadmapWithEngine(settings)
@@ -502,8 +533,64 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
   const { studyPlanToRoadmapData } = await import('./planConverter')
   const s = settings as Record<string, unknown>
 
+  const saved = loadRegenerationState()
+
+  if (saved?.enrichedPlanData) {
+    try {
+      const enrichedPlan: import('@ielts/learning-engine').StudyPlan = JSON.parse(saved.enrichedPlanData)
+      if (enrichedPlan.tasks?.length > 0) {
+        console.log('[RoadmapGen] Using saved enriched plan,', enrichedPlan.tasks.length, 'tasks')
+        const resolvedCurrentBand = (s.study as Record<string, unknown>)?.currentBand as number ?? s.currentBand as number ?? DEFAULT_CURRENT_BAND
+        const resolvedTargetBand = (s.study as Record<string, unknown>)?.targetBand as number ?? s.targetBand as number ?? DEFAULT_TARGET_BAND
+        const roadmap = await studyPlanToRoadmapData(enrichedPlan, resolvedCurrentBand, resolvedTargetBand)
+        saveRoadmap(roadmap)
+        clearRegenerationState()
+        return roadmap
+      }
+    } catch (err) {
+      console.warn('[RoadmapGen] Failed to use saved enriched plan:', err)
+    }
+  }
+
+  if (saved?.status === 'enriching-tasks' && saved.planData) {
+    try {
+      const restoredPlan: import('@ielts/learning-engine').StudyPlan = JSON.parse(saved.planData)
+      if (!restoredPlan.tasks || restoredPlan.tasks.length === 0) {
+        console.warn('[RoadmapGen] Saved plan has no tasks, regenerating')
+      } else {
+        console.log('[RoadmapGen] Resuming from saved plan,', restoredPlan.tasks.length, 'tasks,', restoredPlan.phases?.length ?? 0, 'phases')
+        saveRegenerationState({
+          status: 'enriching-tasks',
+          startedAt: new Date().toISOString(),
+          phase: 'Enriching tasks with AI',
+          current: 0,
+          total: 12,
+          planData: saved.planData,
+        })
+        const enriched = await enrichPlanWithAI(restoredPlan, restoredPlan.profile, settings)
+        const resolvedCurrentBand = (s.study as Record<string, unknown>)?.currentBand as number ?? s.currentBand as number ?? DEFAULT_CURRENT_BAND
+        const resolvedTargetBand = (s.study as Record<string, unknown>)?.targetBand as number ?? s.targetBand as number ?? DEFAULT_TARGET_BAND
+        const roadmap = await studyPlanToRoadmapData(enriched, resolvedCurrentBand, resolvedTargetBand)
+        saveRoadmap(roadmap)
+        clearRegenerationState()
+        return roadmap
+      }
+    } catch (err) {
+      console.warn('[RoadmapGen] Failed to resume from saved plan, regenerating:', err)
+    }
+  }
+
+  saveRegenerationState({
+    status: 'generating-plan',
+    startedAt: new Date().toISOString(),
+    phase: 'Building your study plan',
+    current: 0,
+    total: 12,
+  })
+
   const today = new Date().toISOString().split('T')[0]
   const engine = new DailyPlanEngine()
+
   const study = s.study as Record<string, unknown> | undefined
   const defaultedExamDate = (study?.examDate as string) || (s.examDate as string) || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
   console.log('[RoadmapGen] Building profile...', { targetBand: study?.targetBand ?? s.targetBand, currentBand: study?.currentBand ?? s.currentBand })
@@ -527,12 +614,28 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
   console.log('[RoadmapGen] Engine plan result status:', result.status)
 
   if (result.status === 'success') {
-    console.log('[RoadmapGen] Plan generated, enriching with AI...')
+      console.log('[RoadmapGen] Plan generated, enriching with AI...')
+      let planJson: string | undefined
+      try {
+        planJson = JSON.stringify(result.plan)
+        console.log('[RoadmapGen] Plan serialized for resume, size:', planJson?.length ?? 0)
+      } catch (e) {
+        console.warn('[RoadmapGen] Could not serialize plan for resume:', e)
+      }
+    saveRegenerationState({
+      status: 'enriching-tasks',
+      startedAt: new Date().toISOString(),
+      phase: 'Enriching tasks with AI',
+      current: 0,
+      total: 12,
+      planData: planJson,
+    })
     const enriched = await enrichPlanWithAI(result.plan, profile, settings)
     const resolvedCurrentBand = (study?.currentBand as number) ?? (s.currentBand as number) ?? DEFAULT_CURRENT_BAND
     const resolvedTargetBand = (study?.targetBand as number) ?? (s.targetBand as number) ?? DEFAULT_TARGET_BAND
     const roadmap = await studyPlanToRoadmapData(enriched, resolvedCurrentBand, resolvedTargetBand)
     saveRoadmap(roadmap)
+    clearRegenerationState()
     return roadmap
   }
 
@@ -542,6 +645,14 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
 
   if (result.status === 'failure') {
     console.warn('[Roadmap] Engine failure:', result.reason?.message)
+    saveRegenerationState({
+      status: 'failed',
+      startedAt: new Date().toISOString(),
+      phase: result.reason?.suggestedAction ?? 'Plan generation failed',
+      current: 0,
+      total: 0,
+      errorMessage: result.reason?.message ?? 'Unknown error',
+    })
   }
   return null
 }
@@ -566,7 +677,7 @@ async function enrichPlanWithAI(
   }
 
   try {
-    const { callAI } = await import('@ielts/ai')
+    const { createAIClient: createBaseAIClient } = await import('@ielts/ai')
     const { AiPlanOrchestrator, applyTaskEnrichments, buildTaskEnrichmentRequirements, selectRequirementsForAi, buildTaskGenerationBatches, calculateAffordableCandidateCount } = await import('@ielts/learning-engine')
 
     const config = {
@@ -575,12 +686,33 @@ async function enrichPlanWithAI(
       model: (ai.model as string) || (settings.aiModel as string) || DEFAULT_APP_CONFIG.ai.defaultModel,
     }
 
+    const baseClient = createBaseAIClient()
+
     const aiCallFn: import('@ielts/learning-engine').AICallFn = async (systemPrompt, userPrompt) => {
-      const result = await callAI(systemPrompt, userPrompt, () => config, {
-        temperature: 0.7,
-        maxTokens: DEFAULT_AI_MAX_TOKENS,
-      })
-      return result.content
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 30000)
+      try {
+        const result = await baseClient.complete(
+          [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt },
+          ],
+          {
+            apiKey: config.apiKey,
+            baseUrl: config.baseUrl,
+            model: config.model,
+            temperature: 0.7,
+            maxTokens: DEFAULT_AI_MAX_TOKENS,
+          },
+          {
+            temperature: 0.7,
+            maxTokens: DEFAULT_AI_MAX_TOKENS,
+          },
+        )
+        return result.content
+      } finally {
+        clearTimeout(timeoutId)
+      }
     }
 
     // Build exact task enrichment requirements
@@ -606,6 +738,15 @@ async function enrichPlanWithAI(
       callLimits: { maximumCallsPerGeneration: DEFAULT_PLAN_ENRICH_MAX_CALLS },
       onProgress: (phase, current, total) => {
         window.dispatchEvent(new CustomEvent('plan-enrich-progress', { detail: { phase, current, total } }))
+        const existing = loadRegenerationState()
+        saveRegenerationState({
+          status: 'enriching-tasks',
+          startedAt: new Date().toISOString(),
+          phase,
+          current,
+          total,
+          planData: existing?.planData,
+        })
       },
     })
     const enrichment = await orchestrator.enrichPlan({
@@ -619,12 +760,35 @@ async function enrichPlanWithAI(
     })
     console.log('[AIEnrich] enrichment candidates:', enrichment.taskCandidates?.length, 'plan tasks:', plan.tasks.length)
 
+    // Remap AI candidates to requirements by weekId + skill
+    // The AI prompt does not receive requirement IDs, so candidates may have mismatched requirementId.
+    // We match each candidate to the first selected requirement for the same week and skill.
+    const reqByWeekSkill = new Map<string, typeof selected[0]>()
+    for (const req of selected) {
+      const task = plan.tasks.find(t => t.id === req.taskId)
+      if (task) {
+        const key = `${task.weekId}:${req.skill}`
+        if (!reqByWeekSkill.has(key)) {
+          reqByWeekSkill.set(key, req)
+        }
+      }
+    }
+    const remappedCandidates = (enrichment.taskCandidates ?? [])
+      .map(c => {
+        const key = `${c.targetWeekId}:${c.skill}`
+        const matchedReq = reqByWeekSkill.get(key)
+        if (matchedReq) {
+          return { ...c, requirementId: matchedReq.id }
+        }
+        return c
+      })
+
     // Apply exact task enrichment merge with coverage info
     const selectedForAiIds = selected.map(r => r.id)
     const { plan: enrichedPlan, report } = applyTaskEnrichments(
       plan,
       requirements,
-      enrichment.taskCandidates ?? [],
+      remappedCandidates,
       selectedForAiIds,
     )
     console.log('[AIEnrich] Enrichment merge report:', JSON.stringify({
@@ -637,6 +801,22 @@ async function enrichPlanWithAI(
       duplicates: report.duplicateRequirementIds.length,
       unknown: report.unknownRequirementIds.length,
     }))
+
+    try {
+      const enrichedJson = JSON.stringify(enrichedPlan)
+      const current = loadRegenerationState()
+      saveRegenerationState({
+        ...current,
+        status: 'enriching-tasks',
+        planData: current?.planData,
+        enrichedPlanData: enrichedJson,
+        phase: 'complete',
+        current: current?.total ?? 12,
+        total: current?.total ?? 12,
+      } as RoadmapRegenerationState)
+    } catch {
+      /* non-critical */
+    }
 
     return enrichedPlan
   } catch (err) {
@@ -736,12 +916,12 @@ export async function toggleTask(roadmap: RoadmapData, phaseIndex: number, weekI
   const day = roadmap.phases[phaseIndex].weeks[weekIndex].days[dayIndex]
   const taskId = day.taskIds[taskIndex]
 
-  const dbTask = await DatabaseService.getById<TaskEntry>('tasks', taskId)
+  const dbTask = await taskRepo.findById(taskId)
   if (!dbTask) throw new Error('Task not found')
 
   const nowDone = !dbTask.isDone
 
-  await DatabaseService.update('tasks', taskId, {
+  await taskRepo.update(taskId, {
     isDone: nowDone,
     completedAt: nowDone ? new Date().toISOString() : null,
   } as Partial<TaskEntry>)
@@ -780,7 +960,7 @@ export async function toggleTask(roadmap: RoadmapData, phaseIndex: number, weekI
     }
   }
 
-  const tasks = await DatabaseService.getAll<TaskEntry>('tasks')
+  const tasks = await taskRepo.findAll()
   const updated = recalculateProgress(roadmap, tasks)
   saveRoadmap(updated)
   return updated
@@ -841,4 +1021,116 @@ export function getExamCountdown(examDate: string): number {
   const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
   const diff = exam.getTime() - today.getTime()
   return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)))
+}
+
+export async function loadCanonicalRoadmap(): Promise<RoadmapData | null> {
+  try {
+    const planRepo = new PlanRepository()
+    const allPlans = await planRepo.getAllPlans()
+    if (allPlans.length === 0) return null
+
+    const latestPlan = allPlans.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )[0]
+
+    return buildRoadmapFromPlan(latestPlan, planRepo)
+  } catch {
+    return null
+  }
+}
+
+export async function ensureCanonicalRoadmap(): Promise<RoadmapData | null> {
+  const canonical = await loadCanonicalRoadmap()
+  if (canonical) return canonical
+
+  const existing = loadRoadmap()
+  if (existing) return existing
+
+  return null
+}
+
+async function buildRoadmapFromPlan(
+  plan: PlanEntry,
+  planRepo: PlanRepository,
+): Promise<RoadmapData> {
+  const phases = await planRepo.getPhasesByPlanId(plan.id)
+  phases.sort((a, b) => a.order - b.order)
+
+  const allTasks = await taskRepo.findAll().catch(() => [] as TaskEntry[])
+  const tasksByDay = new Map<string, TaskEntry[]>()
+  for (const task of allTasks) {
+    const date = task.date?.slice(0, 10) ?? ''
+    if (!date) continue
+    const existing = tasksByDay.get(date) || []
+    existing.push(task)
+    tasksByDay.set(date, existing)
+  }
+
+  const roadmapPhases: RoadmapPhase[] = []
+  let totalTasks = 0
+  let completedTasks = 0
+
+  for (const phase of phases) {
+    const weeks = await planRepo.getWeeksByPhaseId(phase.id)
+    weeks.sort((a, b) => a.weekNumber - b.weekNumber)
+
+    const roadmapWeeks: RoadmapWeek[] = []
+    for (const week of weeks) {
+      const days = await planRepo.getDaysByWeekId(week.id)
+      days.sort((a, b) => a.dayNumber - b.dayNumber)
+
+      const roadmapDays: RoadmapDay[] = days.map(d => {
+        const dayTasks = tasksByDay.get(d.date) || []
+        return {
+          id: d.id,
+          date: d.date,
+          dayNumber: d.dayNumber,
+          taskIds: dayTasks.map(t => t.id),
+        }
+      })
+
+      const weekTotal = roadmapDays.reduce((s, d) => s + d.taskIds.length, 0)
+      const weekDone = roadmapDays.reduce((s, d) => s + d.taskIds.filter(id => {
+        const t = allTasks.find(tt => tt.id === id)
+        return t?.isDone
+      }).length, 0)
+
+      roadmapWeeks.push({
+        id: week.id,
+        weekNumber: week.weekNumber,
+        label: week.label,
+        focus: week.focus,
+        goal: week.goal,
+        days: roadmapDays,
+        isComplete: weekTotal > 0 && weekDone >= weekTotal,
+        completedTasks: weekDone,
+        totalTasks: weekTotal,
+      })
+      totalTasks += weekTotal
+      completedTasks += weekDone
+    }
+
+    roadmapPhases.push({
+      id: phase.id,
+      name: phase.name,
+      description: phase.description,
+      order: phase.order,
+      targetRange: phase.targetRange,
+      weeks: roadmapWeeks,
+      isComplete: roadmapWeeks.every(w => w.isComplete),
+      completedTasks: roadmapWeeks.reduce((s, w) => s + w.completedTasks, 0),
+      totalTasks: roadmapWeeks.reduce((s, w) => s + w.totalTasks, 0),
+    })
+  }
+
+  return {
+    phases: roadmapPhases,
+    currentPhaseIndex: 0,
+    currentWeekIndex: 0,
+    overallProgress: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0,
+    totalTasks,
+    completedTasks,
+    generatedAt: plan.createdAt,
+    updatedAt: plan.updatedAt,
+  }
 }

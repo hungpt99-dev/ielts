@@ -1,6 +1,8 @@
-import { callAI } from '@ielts/ai'
+import { createAIClient } from '@ielts/ai'
 import { safeFetchProviderConfig } from '../../../utils/safe-chrome'
 import type { TranscriptSegmentData } from '../../domain/types'
+
+const aiClient = createAIClient()
 
 interface TranslatedSegment {
   id: string
@@ -70,10 +72,12 @@ export class TranscriptTranslationService {
     const userPrompt = `Translate these English segments to ${targetLanguage}. Return a JSON array of objects, each with keys "id" and "translatedText", one per segment.\n\nSegments:\n${JSON.stringify(batch.map(s => ({ id: s.id, text: s.text })))}`
 
     const providerConfig = await safeFetchProviderConfig()
-    const result = await callAI(
-      systemPrompt,
-      userPrompt,
-      () => providerConfig,
+    const result = await aiClient.complete(
+      [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      providerConfig,
       { temperature: 0.2, maxTokens: MAX_TOKENS_PER_BATCH },
     )
 

@@ -1,6 +1,7 @@
 import {
   BRIDGE_NAMESPACE,
   type BridgeMessageBase,
+  type ExtensionBridgeResponse as BridgeResponse,
   type BridgeResponse,
   type PingExtensionResult,
   type BridgeMessageType,

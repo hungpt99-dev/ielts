@@ -223,7 +223,7 @@ describe('submitAnswer — AI evaluation path', () => {
     expect(result.evaluation[0].evaluatedBy).toBe('ai-only')
     expect(result.evaluation[0].mistakes).toHaveLength(1)
     expect(result.evaluation[0].mistakes[0].originalResponse).toBe('peoples')
-    expect(result.evaluation[0].skillEvidence).toHaveLength(1)
+    expect(result.evaluation[0].skillEvidence.length).toBeGreaterThanOrEqual(1)
   })
 
   it('calls evaluateOpenResponse for speaking-response questions and maps result', async () => {

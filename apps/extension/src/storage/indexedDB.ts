@@ -1,3 +1,8 @@
+/**
+ * @deprecated Use @ielts/storage repositories instead.
+ * Import from '../services/repositories' for the canonical persistence layer.
+ * This file will be removed once all consumers are migrated.
+ */
 import type { LearningEntry, SaveCategory } from '../types'
 import { openDB, STORE_NAMES } from './db'
 

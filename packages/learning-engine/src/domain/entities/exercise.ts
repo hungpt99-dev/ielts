@@ -1,6 +1,6 @@
 import type { IELTSSection } from '../value-objects'
 import type { ExerciseDifficulty } from '../value-objects'
-import type { ExerciseQuestion } from './exercise-question'
+import type { ExerciseQuestion } from '@ielts/shared'
 
 export type ExerciseType = 'lesson' | 'quiz' | 'essay' | 'speaking' | 'comprehension' | 'error-correction' | 'gap-fill' | 'matching' | 'shadowing'
 
@@ -72,7 +72,7 @@ export interface GenerateExerciseRequest {
   constraints: {
     availableMinutes: number
     targetQuestionCount?: number
-    allowedQuestionTypes?: import('./exercise-question').ExerciseQuestionType[]
+    allowedQuestionTypes?: import('@ielts/shared').ExerciseQuestionType[]
     maximumContentLength?: number
     offlineOnly: boolean
   }

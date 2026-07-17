@@ -25,6 +25,20 @@ export type {
 } from './exercise-question'
 
 export type {
+  LearningActivity,
+  LearningActivityType,
+  ActivityContent,
+} from './learning-activity'
+
+export type {
+  BridgeMessage,
+  BridgeResponse,
+  BridgeMessageType,
+  BridgeSource,
+} from './bridge-protocol'
+export { BRIDGE_PROTOCOL_VERSION } from './bridge-protocol'
+
+export type {
   OperationResult,
   OperationResultStatus,
   OperationError,

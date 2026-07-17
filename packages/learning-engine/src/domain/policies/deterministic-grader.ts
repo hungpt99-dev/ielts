@@ -1,4 +1,4 @@
-import type { ExerciseQuestion } from '../entities/exercise-question'
+import type { ExerciseQuestion } from '@ielts/shared'
 import type { AnswerEvaluation } from '../entities/evaluation'
 
 export function gradeAnswer(

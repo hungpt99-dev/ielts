@@ -1,5 +1,4 @@
-import { callAI, AiConfigurationResolver } from '@ielts/ai'
-import type { ProviderConfig } from '@ielts/ai'
+import { createAIClient as createBaseAIClient, AiConfigurationResolver } from '@ielts/ai'
 import {
   readingQuestionsSchema,
   listeningExerciseSchema,
@@ -193,13 +192,18 @@ console.error('apps/web/src/features/publicApiIntegration/ai/classify.ts error:'
   }
 }
 
-function toProviderConfig(config: AiProviderConfig): ProviderConfig {
-  return { apiKey: config.apiKey, baseUrl: config.baseUrl, model: config.model }
-}
+const baseClient = createBaseAIClient()
 
 async function callAi(systemPrompt: string, userPrompt: string, config: AiProviderConfig) {
   if (!config.apiKey) return { content: null, error: 'AI API key not configured.' }
-  return callAI(systemPrompt, userPrompt, () => toProviderConfig(config), { temperature: 0.5, maxTokens: 2000 })
+  return baseClient.complete(
+    [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+    { apiKey: config.apiKey, baseUrl: config.baseUrl, model: config.model, temperature: 0.5, maxTokens: 2000 },
+    { temperature: 0.5, maxTokens: 2000 },
+  )
 }
 
 function extractJson(content: string): string {

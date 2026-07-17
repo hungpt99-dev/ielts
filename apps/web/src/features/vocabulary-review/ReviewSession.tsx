@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
-import type { VocabularyEntry, VocabReviewEntry, ReviewRating } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import type { VocabularyEntry, ReviewRating } from '../../models'
+import { vocabularyRepo, vocabReviewRepo } from '../../services/repositories'
 import Card, { CardContent } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import {
@@ -81,8 +81,8 @@ export default function ReviewSession({ onBack }: ReviewSessionProps) {
       setLoading(true)
       setError(null)
       const [vocabulary, reviews] = await Promise.all([
-        DatabaseService.getAll<VocabularyEntry>('vocabulary'),
-        DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews'),
+        vocabularyRepo.findAll(),
+        vocabReviewRepo.findAll(),
       ])
       setAllVocabulary(vocabulary)
       const q = buildReviewQueue(vocabulary, reviews, cfg)

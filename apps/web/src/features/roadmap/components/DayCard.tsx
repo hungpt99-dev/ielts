@@ -309,6 +309,11 @@ export default function DayCard({
                       {task.title}
                     </span>
                   </div>
+                  {task.description && task.description !== task.title && (
+                    <p className="mt-1 text-xs line-clamp-2" style={{ color: 'var(--color-text-secondary)' }}>
+                      {task.description}
+                    </p>
+                  )}
                   <div className="flex gap-2 mt-1.5">
                     <button onClick={() => onToggleTask(task.id)} className="rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors hover:brightness-90 active:scale-[0.97]" style={{ color: task.isDone ? 'var(--color-text-secondary)' : 'white', backgroundColor: task.isDone ? 'var(--color-surface-alt)' : 'var(--color-primary)' }}>
                       {task.isDone ? '↩ Undo' : 'Mark done'}

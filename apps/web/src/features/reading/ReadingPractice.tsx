@@ -4,7 +4,7 @@ import type {
   ReadingPassageWithQuestions,
   ReadingPracticeSession,
 } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { readingPracticeRepo } from '../../services/repositories'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
@@ -12,10 +12,9 @@ import EmptyState from '../../components/ui/EmptyState'
 import Question from './components/Question'
 import { loadAllPassages } from './passageSeedService'
 import { generateId } from '../../utils'
-import { startEngineSession } from '../../services/learning/ai-exercise-session'
-import type { SessionInfo } from '../../services/learning/ai-exercise-session'
-import { getLearningEngine } from '../../services/engineBootstrap'
+import { generateActivityUseCase } from '../../use-cases/generate-activity'
 import { generateQuestionsForPassage } from '../../services/ai/AIService'
+import { getLearningEngine } from '../../services/engineBootstrap'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconReading, IconDelete } from '@ielts/ui'
 import ConfirmDialog from '../../components/ui/ConfirmDialog'
@@ -160,7 +159,6 @@ export default function ReadingPractice() {
   const [historyDetail, setHistoryDetail] = useState<ReadingPracticeSession | null>(null)
   const [generatingQuestions, setGeneratingQuestions] = useState<Record<string, boolean>>({})
   const [generateError, setGenerateError] = useState<string | null>(null)
-  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
 
   const [confirmDelete, setConfirmDelete] = useState<ReadingPassageWithQuestions | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -168,7 +166,7 @@ export default function ReadingPractice() {
   const loadHistory = useCallback(async () => {
     try {
       setLoading(true)
-      const all = await DatabaseService.getAll<ReadingPracticeSession>('readingPracticeSessions')
+      const all = await readingPracticeRepo.findAll()
       setHistory(all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     } catch (err) {
       console.error('apps/web/src/features/reading/ReadingPractice.tsx error:', err);
@@ -284,8 +282,6 @@ export default function ReadingPractice() {
           blanks: q.blanks,
         })),
         answers: answers as Record<string, unknown>,
-        sessionId: sessionInfo?.sessionId,
-        attemptId: sessionInfo?.attemptId,
         timeSpentMs: timerSeconds * 1000,
       })
       if (result.status === 'success' && result.data) {
@@ -322,7 +318,7 @@ export default function ReadingPractice() {
       createdAt: new Date().toISOString(),
     }
 
-    DatabaseService.add('readingPracticeSessions', session).catch(() => {})
+    readingPracticeRepo.create(session).catch(() => {})
     setHistory(prev => [session, ...prev])
   }
 
@@ -332,7 +328,6 @@ export default function ReadingPractice() {
     setAnswers({})
     setResults(null)
     setTimerSeconds(0)
-    setSessionInfo(null)
     setAiGeneratedPassage(null)
     setView('browse')
   }
@@ -352,24 +347,21 @@ export default function ReadingPractice() {
     setAiError(null)
 
     try {
-      const { content, error, sessionInfo: si } = await startEngineSession(
-        'reading',
-        `Reading: ${aiTopic.trim()}`,
-        aiDifficulty,
-        20,
-        aiTopic.trim(),
-      )
+      const result = await generateActivityUseCase({
+        skill: 'reading',
+        description: `Reading: ${aiTopic.trim()}`,
+        difficulty: aiDifficulty,
+        availableMinutes: 20,
+        topic: aiTopic.trim(),
+      })
 
-      if (error) throw new Error(error)
-      if (!content) throw new Error('AI returned an empty response. Try again.')
-
-      setSessionInfo(si)
 
       let parsed: Record<string, unknown>
       try {
-        const jsonStart = content.indexOf('{')
-        const jsonEnd = content.lastIndexOf('}')
-        const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
+        const rawContent = result.content || ''
+        const jsonStart = rawContent.indexOf('{')
+        const jsonEnd = rawContent.lastIndexOf('}')
+        const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? rawContent.slice(jsonStart, jsonEnd + 1) : rawContent
         parsed = JSON.parse(jsonStr) as Record<string, unknown>
       } catch (error) {
         console.error('apps/web/src/features/reading/ReadingPractice.tsx error:', error);

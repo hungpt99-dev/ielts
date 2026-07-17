@@ -47,13 +47,87 @@ export async function submitAnswer(
     if (evalMethod === 'deterministic') {
       const evaluation = gradeAnswer(question, answer.answer)
       evaluations.push(evaluation)
+    } else if (evalMethod === 'ai-only' || evalMethod === 'ai-assisted') {
+      try {
+        const rubric = ('rubric' in question && Array.isArray(question.rubric) ? question.rubric : ['Relevance', 'Accuracy', 'Clarity']) as string[]
+        const aiResult = await deps.tutorPort.evaluateOpenResponse({
+          response: String(answer.answer),
+          rubric,
+          schema: {} as any,
+        })
+        if (aiResult.success && aiResult.data) {
+          const data = aiResult.data as any
+          const score = typeof data.overallBand === 'number' ? data.overallBand : (typeof data.score === 'number' ? data.score : 0)
+          const maxScore = typeof data.maximumScore === 'number' ? data.maximumScore : 9
+          evaluations.push({
+            questionId: answer.questionId,
+            status: score >= maxScore / 2 ? 'correct' : (score > 0 ? 'partially-correct' : 'incorrect'),
+            score,
+            maximumScore: maxScore,
+            feedback: data.overallFeedback ?? data.feedback ?? 'Evaluated by AI',
+            mistakes: (data.corrections ?? data.mistakes ?? []).map((c: any, i: number) => ({
+              id: `ai-mistake-${i}`,
+              skill: exercise.skill as any,
+              category: 'content',
+              originalResponse: c.original ?? c.text ?? '',
+              correctedResponse: c.corrected ?? c.correction ?? '',
+              explanation: c.explanation ?? '',
+            sourceExerciseId: exercise.id,
+            sourceQuestionId: answer.questionId,
+            occurredAt: new Date().toISOString(),
+            recurrenceCount: 0,
+            severity: 'moderate' as const,
+            confidence: 0.7,
+            reviewStatus: 'unreviewed' as const,
+          })),
+          skillEvidence: (data.strengths ?? []).map((s: string) => ({
+              skill: exercise.skill as any,
+              type: 'strength' as const,
+              description: s,
+              score: 0,
+              maximumScore: 0,
+              accuracy: 0,
+              sourceExerciseId: exercise.id,
+              sourceSessionId: attempt.sessionId,
+              occurredAt: new Date().toISOString(),
+              confidence: 0.5,
+            })),
+            evaluatedBy: evalMethod === 'ai-only' ? 'ai-only' : 'ai-assisted',
+            confidence: data.confidence ?? 0.5,
+          })
+        } else {
+          evaluations.push({
+            questionId: answer.questionId,
+            status: 'not-evaluable',
+            score: 0,
+            maximumScore: 1,
+            feedback: aiResult.error?.message ?? 'AI evaluation failed',
+            mistakes: [],
+            skillEvidence: [],
+            evaluatedBy: evalMethod === 'ai-only' ? 'ai-only' : 'ai-assisted',
+            confidence: 0,
+          })
+        }
+      } catch {
+        evaluations.push({
+          questionId: answer.questionId,
+          status: 'not-evaluable',
+          score: 0,
+          maximumScore: 1,
+          feedback: 'AI evaluation error',
+          mistakes: [],
+          skillEvidence: [],
+          evaluatedBy: 'ai-assisted',
+          confidence: 0,
+        })
+      }
     } else {
       evaluations.push({
         questionId: answer.questionId,
         status: 'not-evaluable',
         score: 0,
         maximumScore: 1,
-        feedback: 'This question requires manual review.',
+        feedback: 'This question cannot be evaluated automatically.',
         mistakes: [],
         skillEvidence: [],
         evaluatedBy: 'deterministic',

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTutorNavigation } from '../../hooks/useTutorNavigation'
 import { ROUTES } from '@ielts/config'
 import type { Artifact, ArtifactCategory, VocabularyEntry } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { artifactRepo, readingPassageRepo, vocabularyRepo } from '../../services/repositories'
 import Card, { CardContent } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
@@ -172,7 +172,7 @@ export default function ArtifactsPage() {
     try {
       setLoading(true)
       setError(null)
-      const all = await DatabaseService.getAll<Artifact>('artifacts')
+      const all = await artifactRepo.findAll()
       setArtifacts(all)
     } catch (err) {
       console.error('apps/web/src/features/artifacts/ArtifactsPage.tsx error:', err);
@@ -327,7 +327,7 @@ export default function ArtifactsPage() {
           contentText: form.contentText,
           personalNote: form.personalNote,
         }
-        await DatabaseService.put('artifacts', updated)
+        await artifactRepo.bulkUpsert([updated])
         setArtifacts(prev => prev.map(a => a.id === editingId ? updated : a))
         showToast('Content updated')
       } else {
@@ -352,7 +352,7 @@ export default function ArtifactsPage() {
           personalNote: form.personalNote,
           wordCount: form.contentText ? form.contentText.split(/\s+/).length : 0,
         }
-        await DatabaseService.add('artifacts', artifact)
+        await artifactRepo.create(artifact)
         setArtifacts(prev => [artifact, ...prev])
         showToast('Content saved')
       }
@@ -367,7 +367,7 @@ export default function ArtifactsPage() {
   }
 
   async function handleDelete(id: string) {
-    await DatabaseService.remove('artifacts', id)
+    await artifactRepo.delete(id)
     setArtifacts(prev => prev.filter(a => a.id !== id))
     setDeleteConfirm(null)
     showToast('Content deleted')
@@ -377,13 +377,13 @@ export default function ArtifactsPage() {
     const artifact = artifacts.find(a => a.id === id)
     if (!artifact) return
     const updated = { ...artifact, isFavorite: !artifact.isFavorite, updatedAt: new Date().toISOString() }
-    await DatabaseService.put('artifacts', updated)
+    await artifactRepo.bulkUpsert([updated])
     setArtifacts(prev => prev.map(a => a.id === id ? updated : a))
   }
 
   async function handleStatusUpdate(artifact: Artifact, status: string) {
     const updated = { ...artifact, readingStatus: status, updatedAt: new Date().toISOString() }
-    await DatabaseService.put('artifacts', updated)
+    await artifactRepo.bulkUpsert([updated])
     setArtifacts(prev => prev.map(a => a.id === artifact.id ? updated : a))
     if (detailItem?.id === artifact.id) setDetailItem(updated)
     showToast(`Marked as ${getStatusLabel(status)}`)
@@ -418,7 +418,7 @@ export default function ArtifactsPage() {
 
       const now = new Date().toISOString()
       const passageId = crypto.randomUUID()
-      await DatabaseService.add('passages', {
+      await readingPassageRepo.create({
         id: passageId,
         title: `${detailItem.title} (Exercises)`,
         content: text,
@@ -482,7 +482,7 @@ export default function ArtifactsPage() {
     }
     const now = new Date().toISOString()
     const passageId = crypto.randomUUID()
-    await DatabaseService.add('passages', {
+    await readingPassageRepo.create({
       id: passageId,
       title: detailItem.title,
       content: text,
@@ -546,7 +546,7 @@ export default function ArtifactsPage() {
       }
       const saved: VocabularyEntry[] = []
       for (const w of data.words) {
-        const entry = await DatabaseService.addVocabulary({
+        const entry = await vocabularyRepo.create({
           word: w.word,
           meaning: w.meaning,
           meaningVi: '',

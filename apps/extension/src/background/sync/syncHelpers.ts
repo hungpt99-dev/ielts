@@ -1,6 +1,8 @@
 import type { ExtensionVocabEntry } from '../../storage/vocabularyStore'
 import type { ExtensionMistakeEntry } from '../../storage/mistakeStore'
 
+export type { ExtensionVocabEntry }
+
 export function toExtensionVocab(item: Record<string, unknown>, id: string): ExtensionVocabEntry {
   return {
     id,

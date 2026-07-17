@@ -1,26 +1,19 @@
+import type { BridgeMessageType, BridgeSource, BridgeMessage, BridgeResponse } from '@ielts/shared'
+export type { BridgeMessageType, BridgeSource, BridgeMessage, BridgeResponse }
+
 export const BRIDGE_NAMESPACE = 'IELTS_JOURNEY_EXTENSION_BRIDGE'
-
-export type BridgeMessageType =
-  | 'PING_EXTENSION'
-  | 'PING_EXTENSION_RESPONSE'
-  | 'GET_SYNC_STATUS'
-  | 'GET_SYNC_STATUS_RESPONSE'
-  | 'EXPORT_EXTENSION_DATA'
-  | 'EXPORT_EXTENSION_DATA_RESPONSE'
-  | 'IMPORT_EXTENSION_DATA'
-  | 'IMPORT_EXTENSION_DATA_RESPONSE'
-
-export type BridgeSource = 'web' | 'content-script' | 'extension'
 
 export interface BridgeMessageBase {
   namespace: typeof BRIDGE_NAMESPACE
   type: BridgeMessageType
   requestId: string
   source: BridgeSource
+  correlationId?: string
+  idempotencyKey?: string
   createdAt: string
 }
 
-export interface BridgeResponse<T = unknown> extends BridgeMessageBase {
+export type ExtensionBridgeResponse<T = unknown> = BridgeMessageBase & {
   success: boolean
   payload?: T
   error?: string

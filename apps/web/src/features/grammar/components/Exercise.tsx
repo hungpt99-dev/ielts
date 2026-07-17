@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react'
 import type { MistakeEntry, MistakeStatus } from '../../../models'
-import { DatabaseService } from '../../../services/storage/Database'
 import Card, { CardContent } from '../../../components/ui/Card'
 import Button from '../../../components/ui/Button'
 import { generateId } from '../../../utils'

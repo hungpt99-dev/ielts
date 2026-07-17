@@ -1,4 +1,4 @@
-import { DatabaseService } from '../../../services/storage/Database'
+import { taskRepo, readingPracticeRepo, listeningPracticeRepo, writingSessionRepo, speakingSessionRepo, vocabularyRepo, vocabReviewRepo, mistakeRepo, progressRecordRepo } from '../../../services/repositories'
 import type {
   TaskEntry,
   ReadingPracticeSession,
@@ -449,15 +449,15 @@ export async function generateProgressReview(
 ): Promise<{ report: ProgressReviewReport | null; error: string | null }> {
   try {
     const [tasks, readingPractices, listeningPractices, writingSessions, speakingSessions, vocabulary, vocabReviews, mistakes, progressRecords] = await Promise.all([
-      DatabaseService.safeGetAll<TaskEntry>('tasks'),
-      DatabaseService.safeGetAll<ReadingPracticeSession>('readingPracticeSessions'),
-      DatabaseService.safeGetAll<ListeningPracticeSession>('listeningPracticeSessions'),
-      DatabaseService.safeGetAll<WritingSession>('writingSessions'),
-      DatabaseService.safeGetAll<SpeakingSession>('speakingSessions'),
-      DatabaseService.safeGetAll<VocabularyEntry>('vocabulary'),
-      DatabaseService.safeGetAll<VocabReviewEntry>('vocabularyReviews'),
-      DatabaseService.safeGetAll<MistakeEntry>('mistakes'),
-      DatabaseService.safeGetAll<ProgressRecord>('progressRecords'),
+      taskRepo.findAll(),
+      readingPracticeRepo.findAll(),
+      listeningPracticeRepo.findAll(),
+      writingSessionRepo.findAll(),
+      speakingSessionRepo.findAll(),
+      vocabularyRepo.findAll(),
+      vocabReviewRepo.findAll(),
+      mistakeRepo.findAll(),
+      progressRecordRepo.findAll(),
     ])
 
     const input: BuildReportInput = {

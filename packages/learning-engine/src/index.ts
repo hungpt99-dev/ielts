@@ -43,7 +43,7 @@ export type {
   MultipleChoiceQuestion, GapFillQuestion, TrueFalseNotGivenQuestion,
   ShortAnswerQuestion, MatchingQuestion, ErrorCorrectionQuestion,
   EssayQuestion, SpeakingResponseQuestion,
-} from './domain/entities/exercise-question'
+} from '@ielts/shared'
 export type {
   LearningAttempt, LearningAttemptStatus, LearningAnswer,
   StartAttemptRequest, SubmitLearningAnswerRequest, SubmitLearningAnswerResult,

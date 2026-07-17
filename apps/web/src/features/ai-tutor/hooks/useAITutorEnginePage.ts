@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { initializeAITutorEngine } from '../../../services/engineBootstrap'
-import { DatabaseService } from '../../../services/storage/Database'
+import { taskRepo, vocabularyRepo, mistakeRepo } from '../../../services/repositories'
 import { ROUTES, STORAGE_KEYS } from '@ielts/config'
 
 import type { TaskEntry, VocabularyEntry, MistakeEntry } from '../../../models'
@@ -158,9 +158,9 @@ export function useAITutorEnginePage(): AITutorPageState {
         } catch { return {} }
       })()
       const [tasks, vocabulary, mistakes] = await Promise.all([
-        DatabaseService.getAll<TaskEntry>('tasks'),
-        DatabaseService.getAll<VocabularyEntry>('vocabulary'),
-        DatabaseService.getAll<MistakeEntry>('mistakes'),
+        taskRepo.findAll(),
+        vocabularyRepo.findAll(),
+        mistakeRepo.findAll(),
       ])
 
       const todayStr = new Date().toISOString().slice(0, 10)

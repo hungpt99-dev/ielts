@@ -5,7 +5,7 @@ import { getDefaultProfile, TOTAL_ONBOARDING_STEPS } from './types'
 import { onboardingRepository } from './OnboardingRepository'
 import { stepValidators } from './validation'
 import type { StepErrors } from './validation'
-import { completeOnboarding } from './onboardingService'
+import { completeOnboardingUseCase } from '../../use-cases/complete-onboarding'
 import { ROUTES } from '@ielts/config'
 import OnboardingLayout from './components/OnboardingLayout'
 import Button from '../../components/ui/Button'
@@ -87,7 +87,7 @@ export default function OnboardingFlow() {
       const completed = { ...profile, onboardingCompleted: true }
       onboardingRepository.save(completed)
       onboardingRepository.markCompleted()
-      await completeOnboarding({
+      await completeOnboardingUseCase({
         currentBand: completed.currentBand || 5.5,
         targetBand: completed.targetBand,
         examDate: completed.hasExamDate ? completed.examDate : '',

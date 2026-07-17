@@ -9,6 +9,8 @@ export {
 } from './errors'
 
 export {
+  PlanRepository,
+  ActivityRepository,
   VocabularyRepository,
   VocabReviewRepository,
   MistakeRepository,
@@ -44,6 +46,7 @@ export {
   ArtifactRepository,
 } from './repositories'
 export type { RepositoryItem, PaginationParams, PaginatedResult } from './repositories'
+export type { PlanEntry, PhaseEntry, WeekEntry, DayEntry } from './repositories'
 export type { ExerciseEntry, Artifact } from './repositories'
 export type {
   VocabularyEntry,

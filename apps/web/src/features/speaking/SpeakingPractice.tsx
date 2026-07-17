@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { SpeakingSession, SpeakingPart } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { speakingSessionRepo } from '../../services/repositories'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
@@ -24,7 +24,8 @@ interface SpeakingPhrase {
 }
 import { generateId } from '../../utils'
 import { getLearningEngine } from '../../services/engineBootstrap'
-import { startEngineSession, submitAndComplete } from '../../services/learning/ai-exercise-session'
+import { generateActivityUseCase } from '../../use-cases/generate-activity'
+import { submitAndComplete } from '../../services/learning/ai-exercise-session'
 import type { SessionInfo } from '../../services/learning/ai-exercise-session'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconSpeaking } from '@ielts/ui'
@@ -132,7 +133,7 @@ export default function SpeakingPractice() {
   const loadHistory = useCallback(async () => {
     try {
       setLoading(true)
-      const all = await DatabaseService.getAll<SpeakingSession>('speakingSessions')
+      const all = await speakingSessionRepo.findAll()
       setHistory(all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     } catch (err) {
       console.error('apps/web/src/features/speaking/SpeakingPractice.tsx error:', err);
@@ -380,11 +381,11 @@ export default function SpeakingPractice() {
     }
 
     if (sessionId) {
-      DatabaseService.put('speakingSessions', session).then(() => {
+      speakingSessionRepo.bulkUpsert([session]).then(() => {
         loadHistory()
       }).catch(() => {})
     } else {
-      DatabaseService.add('speakingSessions', session).then(() => {
+      speakingSessionRepo.create(session).then(() => {
         setSessionId(session.id)
         loadHistory()
       }).catch(() => {})
@@ -402,28 +403,22 @@ export default function SpeakingPractice() {
     setAiError(null)
     setAiFeedback(null)
 
-    let aiContent = ''
+    const aiContent = ''
     try {
       const questionText = selectedQuestion?.question || 'Custom practice'
       const part = (selectedQuestion?.part || 1) as 1 | 2 | 3
 
-      const { content, error, sessionInfo: si } = await startEngineSession(
-        'speaking',
-        `Speaking Part ${part}: ${questionText}`,
-        'medium',
-        15,
-        questionText,
-      )
-
-      if (error) throw new Error(error)
-      if (!content) throw new Error('AI returned an empty response. Try again.')
-      setSessionInfo(si)
-
-      aiContent = content
-
-      const jsonStart = content.indexOf('{')
-      const jsonEnd = content.lastIndexOf('}')
-      const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
+      const result = await generateActivityUseCase({
+        skill: 'speaking',
+        description: `Speaking: ${selectedQuestion.topic}`,
+        difficulty: selectedQuestion.difficulty || 'medium',
+        availableMinutes: 10,
+        topic: selectedQuestion.topic,
+      })
+      const rawContent = result.content || ''
+      const jsonStart = rawContent.indexOf('{')
+      const jsonEnd = rawContent.lastIndexOf('}')
+      const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? rawContent.slice(jsonStart, jsonEnd + 1) : rawContent
       const parsed = JSON.parse(jsonStr) as Record<string, unknown>
 
       const textFields = ['fluencyNotes', 'vocabularyNotes', 'grammarNotes', 'pronunciationNotes', 'betterExpressions', 'improvedAnswer'] as const
@@ -458,7 +453,7 @@ export default function SpeakingPractice() {
 
       const bandScore = parsed.bandScore
       const bandMsg = typeof bandScore === 'number' ? `\n\nEstimated Band: ${bandScore.toFixed(1)}` : ''
-      setAiFeedback(content + bandMsg)
+      setAiFeedback((result.content || aiContent) + bandMsg)
       saveSession()
       if (sessionInfo) {
         const dur = timer.mode === 'countdown' ? timer.total - timer.seconds : timer.seconds
@@ -520,7 +515,7 @@ export default function SpeakingPractice() {
   }
 
   function handleDeleteSession(id: string) {
-    DatabaseService.remove('speakingSessions', id)
+    speakingSessionRepo.delete(id)
     setHistory(prev => prev.filter(s => s.id !== id))
     setDeleteConfirmId(null)
   }

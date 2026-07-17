@@ -23,7 +23,8 @@ import { generateContextSuggestions } from './recommendations/generate-context-s
 import { updateTutorMemory } from './memory/update-tutor-memory'
 import { TutorMemoryManager } from '../memory/tutor-memory-manager'
 import { SystemClock } from '../ports/clock-port'
-import { AiGenerateResultCache } from '@ielts/ai'
+import { LocalTtlCache } from '../infrastructure/local-ttl-cache'
+import { generateCacheKey } from '../ports/cache-port'
 
 export interface ProgressReviewCache {
   get(): ProgressReviewResult | null
@@ -46,13 +47,13 @@ export class AITutorEngineImpl implements AITutorEngine {
   private deps: AITutorEngineDependencies
   private memoryManager: TutorMemoryManager
   private initialized = false
-  private progressCache: AiGenerateResultCache<ProgressReviewResult>
+  private progressCache: LocalTtlCache<ProgressReviewResult>
 
   constructor(deps: AITutorEngineDependencies) {
     this.deps = deps
     this.memoryManager = new TutorMemoryManager(deps.memoryRepository)
     const ttl = deps.progressReviewTtlMs ?? 3_600_000
-    this.progressCache = new AiGenerateResultCache<ProgressReviewResult>({ ttlMs: ttl })
+    this.progressCache = new LocalTtlCache<ProgressReviewResult>({ ttlMs: ttl })
   }
 
   async initialize(): Promise<AITutorInitializationResult> {
@@ -146,7 +147,7 @@ export class AITutorEngineImpl implements AITutorEngine {
   async generateProgressReview(
     request: ProgressReviewRequest,
   ): Promise<TutorOperationResult<ProgressReviewResult>> {
-    const cacheKey = request.forceRegenerate ? '' : AiGenerateResultCache.generateKey('progress-review')
+    const cacheKey = request.forceRegenerate ? '' : generateCacheKey('progress-review')
     if (cacheKey) {
       const cached = this.progressCache.get(cacheKey)
       if (cached) return { status: 'success', data: cached }

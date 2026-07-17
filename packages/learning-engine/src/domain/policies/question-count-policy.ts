@@ -1,4 +1,4 @@
-import type { ExerciseQuestionType } from '../entities/exercise-question'
+import type { ExerciseQuestionType } from '@ielts/shared'
 
 const QUESTION_TIME_ESTIMATES: Record<string, number> = {
   'multiple-choice': 1,

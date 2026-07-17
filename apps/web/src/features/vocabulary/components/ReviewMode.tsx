@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { VocabularyEntry, VocabReviewEntry, ReviewRating, VocabStatus } from '../../../models'
-import { DatabaseService } from '../../../services/storage/Database'
+import { vocabularyRepo, vocabReviewRepo } from '../../../services/repositories'
 import { getDailyReviewQueue, calculateNextReview, getInitialReviewEntry } from '../../../utils/spaced-repetition'
 import Card, { CardContent } from '../../../components/ui/Card'
 import Button from '../../../components/ui/Button'
@@ -61,8 +61,8 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
       setLoading(true)
       setError(null)
       const [vocabulary, reviews] = await Promise.all([
-        DatabaseService.getAll<VocabularyEntry>('vocabulary'),
-        DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews'),
+        vocabularyRepo.findAll(),
+        vocabReviewRepo.findAll(),
       ])
       const q = getDailyReviewQueue(vocabulary, reviews, getToday())
       setQueue(q)
@@ -93,11 +93,11 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
       let review = currentItem.review
       if (!review) {
         review = getInitialReviewEntry(currentItem.vocab.id, now)
-        await DatabaseService.put('vocabularyReviews', review)
+        await vocabReviewRepo.bulkUpsert([review])
       }
 
       const updatedReview = calculateNextReview(review, rating, now)
-      await DatabaseService.put('vocabularyReviews', updatedReview)
+      await vocabReviewRepo.bulkUpsert([updatedReview])
 
       const vocabStatus: VocabStatus =
         rating === 'again' ? 'learning' :
@@ -107,7 +107,7 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
 
       if (currentItem.vocab.status !== vocabStatus) {
         const updatedVocab: VocabularyEntry = { ...currentItem.vocab, status: vocabStatus, updatedAt: now.toISOString() }
-        await DatabaseService.put('vocabulary', updatedVocab)
+        await vocabularyRepo.bulkUpsert([updatedVocab])
       }
 
       setStats(prev => ({ ...prev, [rating]: prev[rating] + 1 }))

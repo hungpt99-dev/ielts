@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { VocabularyEntry, VocabDifficulty, VocabStatus, ReviewRating } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { vocabularyRepo } from '../../services/repositories'
 import Card, { CardContent } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
@@ -23,6 +23,7 @@ import {
   upsertVocabulary,
 } from './vocabularyService'
 import type { VocabStats, VocabFilter, VocabExercisePrompt } from './vocabularyService'
+import { generateActivityUseCase } from '../../use-cases/generate-activity'
 
 const IELTS_TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -86,7 +87,7 @@ export default function VocabularyManager({
     try {
       setLoading(true)
       setError(null)
-      const all = await DatabaseService.getAll<VocabularyEntry>('vocabulary')
+      const all = await vocabularyRepo.findAll()
       setEntries(all)
       const s = await computeStats(all)
       setStats(s)
@@ -179,7 +180,7 @@ export default function VocabularyManager({
   }
 
   function handleDelete(id: string) {
-    DatabaseService.remove('vocabulary', id)
+    vocabularyRepo.delete(id)
     setEntries(prev => prev.filter(e => e.id !== id))
     computeStats().then(s => setStats(s))
   }
@@ -828,7 +829,41 @@ function ExerciseMode({ entries, onBack }: { entries: VocabularyEntry[]; onBack:
   async function generate() {
     setGenerating(true)
     const words = entries.filter(e => selectedIds.has(e.id))
-    const result = await generateExercisesFromVocabulary(words.length > 0 ? words : entries, 3)
+    const selectedWords = words.length > 0 ? words : entries
+    const topics = [...new Set(selectedWords.map(e => e.topic).filter(Boolean))]
+    const topic = topics.length > 0 ? topics[0] : 'general'
+
+    const engineResult = await generateActivityUseCase({
+      skill: 'vocabulary',
+      description: `Vocabulary practice: ${topic}`,
+      difficulty: 'medium',
+      availableMinutes: 10,
+      topic,
+    })
+
+    if (engineResult.content && !engineResult.error) {
+      try {
+        const parsed = JSON.parse(engineResult.content)
+        if (parsed.title && parsed.questions?.length > 0) {
+          const wordsToUse = selectedWords.map(w => w.word)
+          const promptText = `Practice using these words in context: ${wordsToUse.join(', ')}`
+          const enginePrompts: VocabExercisePrompt[] = [{
+            skill: 'Vocabulary',
+            topic,
+            prompt: promptText,
+            instructions: `Answer the following questions about vocabulary.\n\n${parsed.questions.slice(0, 5).map((q: any) => `- ${q.question || q.text || ''}`).join('\n')}`,
+            wordsToUse,
+            estimatedMinutes: 10,
+          }]
+          setExercises(enginePrompts)
+          setGenerating(false)
+          return
+        }
+      } catch {
+      }
+    }
+
+    const result = await generateExercisesFromVocabulary(selectedWords, 3)
     setExercises(result)
     setGenerating(false)
   }

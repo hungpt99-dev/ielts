@@ -16,11 +16,11 @@ describe('Migrations', () => {
 
   describe('APP_SCHEMA', () => {
     it('has correct current version', () => {
-      expect(CURRENT_DB_VERSION).toBe(8)
+      expect(CURRENT_DB_VERSION).toBe(9)
     })
 
-    it('has 8 versions defined', () => {
-      expect(APP_SCHEMA.versions).toHaveLength(8)
+    it('has 9 versions defined', () => {
+      expect(APP_SCHEMA.versions).toHaveLength(9)
     })
 
     it('has versions in ascending order', () => {

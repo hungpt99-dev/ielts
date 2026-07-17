@@ -55,6 +55,7 @@ export function buildVocabularyExtractionPrompt(content: string): string {
 }
 
 // ─── Learning Engine AI Tier Prompts ────────────────────────────────────
+/** @deprecated Import from `@ielts/learning-engine/src/application/activities/prompt-builders` instead */
 export function buildReadingPassagePrompt(difficulty: string, questionCount: number, topic?: string): { systemPrompt: string; userMessage: string } {
   return {
     systemPrompt: `You are an IELTS reading tutor. Generate a complete IELTS reading passage with ${Math.max(questionCount, 3)} questions at ${difficulty} difficulty.
@@ -77,6 +78,7 @@ Return ONLY valid JSON in this exact format, no other text:
   }
 }
 
+/** @deprecated Import from `@ielts/learning-engine/src/application/activities/prompt-builders` instead */
 export function buildListeningPassagePrompt(difficulty: string, questionCount: number, topic: string): { systemPrompt: string; userMessage: string } {
   return {
     systemPrompt: `You are an IELTS listening tutor. Generate a complete IELTS listening exercise about "${topic}" with a transcript and ${questionCount} questions at ${difficulty} difficulty. The title, transcript, AND questions must ALL be directly about "${topic}".
@@ -100,11 +102,13 @@ Return ONLY valid JSON in this exact format, no other text:
   }
 }
 
+/** @deprecated Import from `@ielts/learning-engine/src/application/activities/prompt-builders` instead */
 export function buildPracticeQuestionsPrompt(skill: string, activityType: string, questionCount: number, _difficulty: string, topic?: string): string {
   const topicClause = topic ? ` on the topic of "${topic}"` : ''
   return `Generate ${questionCount} ${activityType} questions for ${skill} practice${topicClause}.`
 }
 
+/** @deprecated Import from `@ielts/learning-engine/src/application/activities/prompt-builders` instead */
 export function buildPracticeQuestionsSystemPrompt(skill: string, activityType: string, questionCount: number, difficulty: string, topic?: string): string {
   const topicClause = topic ? ` about "${topic}"` : ''
   return `You are an IELTS ${skill} tutor. Generate ${questionCount} ${activityType} questions at ${difficulty} difficulty${topicClause}.

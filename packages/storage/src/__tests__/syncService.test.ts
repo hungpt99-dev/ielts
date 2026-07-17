@@ -9,8 +9,6 @@ import {
   markItemsSynced,
   markSyncFailed,
   generateExportFilename,
-  createBridgeMessage,
-  isValidBridgeMessage,
   validateExtensionExportData,
 } from '../syncService'
 
@@ -177,32 +175,6 @@ describe('syncService', () => {
       const date = new Date().toISOString().slice(0, 10)
       expect(name).toContain(date)
       expect(name).toContain('.json')
-    })
-  })
-
-  describe('bridge messages', () => {
-    describe('createBridgeMessage', () => {
-      it('creates valid bridge message', () => {
-        const msg = createBridgeMessage('SAVE_VOCAB', { word: 'test' })
-        expect(msg.source).toBe('ielts-extension')
-        expect(msg.action).toBe('SAVE_VOCAB')
-        expect(msg.data).toEqual({ word: 'test' })
-        expect(msg.requestId).toBeTruthy()
-      })
-    })
-
-    describe('isValidBridgeMessage', () => {
-      it('validates correct message', () => {
-        expect(isValidBridgeMessage({ source: 'ielts-extension', action: 'SAVE' })).toBe(true)
-        expect(isValidBridgeMessage({ source: 'ielts-page', action: 'SYNC' })).toBe(true)
-      })
-
-      it('rejects invalid messages', () => {
-        expect(isValidBridgeMessage(null)).toBe(false)
-        expect(isValidBridgeMessage({})).toBe(false)
-        expect(isValidBridgeMessage({ source: 'unknown', action: 'SAVE' })).toBe(false)
-        expect(isValidBridgeMessage({ source: 'ielts-extension' })).toBe(false)
-      })
     })
   })
 

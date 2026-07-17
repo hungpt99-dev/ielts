@@ -12,11 +12,6 @@ import {
   isDarkMode,
   applyTheme,
   applyAccentColor,
-  getStoredThemeMode,
-  storeThemeMode,
-  getStoredAccentColor,
-  storeAccentColor,
-  clearLegacyDarkModeStorage,
 } from './utils'
 
 const ThemeContext = createContext<ThemeContextValue>({
@@ -28,18 +23,31 @@ const ThemeContext = createContext<ThemeContextValue>({
   setAccentColor: () => {},
 })
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setModeState] = useState<ThemeMode>(getStoredThemeMode)
-  const [accentColor, setAccentColorState] = useState(getStoredAccentColor)
+interface ThemeProviderProps {
+  children: ReactNode
+  initialMode?: ThemeMode
+  initialAccentColor?: string
+  onModeChange?: (mode: ThemeMode) => void
+  onAccentColorChange?: (color: string) => void
+}
+
+export function ThemeProvider({
+  children,
+  initialMode = 'system',
+  initialAccentColor = '#2563eb',
+  onModeChange,
+  onAccentColorChange,
+}: ThemeProviderProps) {
+  const [mode, setModeState] = useState<ThemeMode>(initialMode)
+  const [accentColor, setAccentColorState] = useState(initialAccentColor)
   const [systemDark, setSystemDark] = useState(getSystemTheme)
 
   const dark = isDarkMode(mode)
 
   const setMode = useCallback((newMode: ThemeMode) => {
     setModeState(newMode)
-    storeThemeMode(newMode)
-    clearLegacyDarkModeStorage()
-  }, [])
+    onModeChange?.(newMode)
+  }, [onModeChange])
 
   const toggle = useCallback(() => {
     setMode(dark ? 'light' : 'dark')
@@ -47,8 +55,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const setAccentColor = useCallback((color: string) => {
     setAccentColorState(color)
-    storeAccentColor(color)
-  }, [])
+    onAccentColorChange?.(color)
+  }, [onAccentColorChange])
 
   useEffect(() => {
     applyTheme(mode)

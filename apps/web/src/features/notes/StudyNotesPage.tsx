@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { StudyNote } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { studyNoteRepo } from '../../services/repositories'
 import Card, { CardContent } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
@@ -83,7 +83,7 @@ export default function StudyNotesPage() {
     try {
       setLoading(true)
       setError(null)
-      const all = await DatabaseService.getAll<StudyNote>('studyNotes')
+      const all = await studyNoteRepo.findAll()
       setEntries(all)
     } catch (err) {
       console.error('apps/web/src/features/notes/StudyNotesPage.tsx error:', err);
@@ -199,13 +199,12 @@ export default function StudyNotesPage() {
         updatedAt: now,
       }
 
-      const table = 'studyNotes' as const
       if (editingEntry) {
-        await DatabaseService.put(table, entry)
+        await studyNoteRepo.bulkUpsert([entry])
         setEntries(prev => prev.map(e => e.id === entry.id ? entry : e))
         showToast('success', 'Study note updated')
       } else {
-        await DatabaseService.add(table, entry)
+        await studyNoteRepo.create(entry)
         setEntries(prev => [...prev, entry])
         showToast('success', 'Study note added')
       }
@@ -221,7 +220,7 @@ export default function StudyNotesPage() {
   }
 
   function handleDelete(id: string) {
-    DatabaseService.remove('studyNotes', id)
+    studyNoteRepo.delete(id)
     setEntries(prev => prev.filter(e => e.id !== id))
     showToast('info', 'Study note deleted')
   }
@@ -234,13 +233,13 @@ export default function StudyNotesPage() {
 
   async function toggleFavorite(entry: StudyNote) {
     const updated: StudyNote = { ...entry, isFavorite: !entry.isFavorite, updatedAt: new Date().toISOString() }
-    await DatabaseService.put('studyNotes', updated)
+    await studyNoteRepo.bulkUpsert([updated])
     setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
   }
 
   async function toggleDraft(entry: StudyNote) {
     const updated: StudyNote = { ...entry, isDraft: !entry.isDraft, updatedAt: new Date().toISOString() }
-    await DatabaseService.put('studyNotes', updated)
+    await studyNoteRepo.bulkUpsert([updated])
     setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
     showToast('info', updated.isDraft ? 'Marked as draft' : 'Published')
   }
@@ -249,7 +248,7 @@ export default function StudyNotesPage() {
     const now = new Date().toISOString()
     if (editingEntry) {
       const updated: StudyNote = { ...editingEntry, content, updatedAt: now }
-      await DatabaseService.put('studyNotes', updated)
+      await studyNoteRepo.bulkUpsert([updated])
       setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
       setEditingEntry(updated)
       showToast('info', 'Draft autosaved')
@@ -266,7 +265,7 @@ export default function StudyNotesPage() {
         createdAt: now,
         updatedAt: now,
       }
-      await DatabaseService.add('studyNotes', note)
+      await studyNoteRepo.create(note)
       setEntries(prev => [...prev, note])
       setEditingEntry(note)
       showToast('info', 'Draft autosaved')
@@ -276,7 +275,7 @@ export default function StudyNotesPage() {
   const autosaveTitle = useCallback(async (title: string) => {
     if (!editingEntry || !title.trim()) return
     const updated: StudyNote = { ...editingEntry, title: title.trim(), updatedAt: new Date().toISOString() }
-    await DatabaseService.put('studyNotes', updated)
+    await studyNoteRepo.bulkUpsert([updated])
     setEntries(prev => prev.map(e => e.id === updated.id ? updated : e))
     setEditingEntry(updated)
   }, [editingEntry])

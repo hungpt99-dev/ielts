@@ -226,44 +226,6 @@ export async function markSyncFailed(
 }
 
 
-export interface BridgeMessage {
-  source: 'ielts-extension' | 'ielts-page'
-  action: string
-  data?: unknown
-  requestId?: string
-}
-
-export interface BridgeResponse {
-  source: 'ielts-extension' | 'ielts-page'
-  action: string
-  data?: unknown
-  requestId?: string
-  error?: string
-}
-
-export function createBridgeMessage(
-  action: string,
-  data?: unknown,
-): BridgeMessage {
-  return {
-    source: 'ielts-extension',
-    action,
-    data,
-    requestId: crypto.randomUUID(),
-  }
-}
-
-export function isValidBridgeMessage(data: unknown): data is BridgeMessage {
-  if (!data || typeof data !== 'object') return false
-  const msg = data as Record<string, unknown>
-  return (
-    (msg.source === 'ielts-extension' || msg.source === 'ielts-page') &&
-    typeof msg.action === 'string'
-  )
-}
-
-
-
 export function downloadJson(data: unknown, filename: string): void {
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
   const url = URL.createObjectURL(blob)

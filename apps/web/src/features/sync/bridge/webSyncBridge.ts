@@ -1,6 +1,6 @@
 import { DEFAULT_AI_MODEL } from '@ielts/config'
 import { BRIDGE_NAMESPACE } from './extensionBridge.types'
-import { DatabaseService } from '../../../services/storage/Database'
+import { vocabularyRepo, mistakeRepo, studyNoteRepo, passageEntryRepo, artifactRepo } from '../../../services/repositories'
 import { getLearningEngine } from '../../../services/engineBootstrap'
 import { STORAGE_KEYS } from '@ielts/config'
 
@@ -27,7 +27,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
 
       console.log('[WebSyncBridge] IMPORT_EXTENSION_DATA received, keys:', Object.keys(data))
 
-      const existingVocab = await DatabaseService.getAll<Record<string, unknown>>('vocabulary')
+      const existingVocab = await vocabularyRepo.findAll()
       const existingIds = new Set(existingVocab.map(v => v.id as string))
 
       const vocabList = data.vocabulary as Record<string, unknown>[] | undefined
@@ -54,33 +54,33 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
         }))
         const newVocab = normalized.filter(v => !existingIds.has(v.id as string))
         if (newVocab.length > 0) {
-          await DatabaseService.bulkAdd('vocabulary', newVocab as never[]).catch(() => {})
+          await vocabularyRepo.bulkCreate(newVocab as any[]).catch(() => {})
           window.dispatchEvent(new CustomEvent('vocabulary-changed'))
         }
       }
 
       const mistakesList = data.mistakes as Record<string, unknown>[] | undefined
       if (Array.isArray(mistakesList)) {
-        const existingMistakes = await DatabaseService.getAll<Record<string, unknown>>('mistakes')
+        const existingMistakes = await mistakeRepo.findAll()
         const existingMistakeIds = new Set(existingMistakes.map(m => m.id as string))
         const newMistakes = mistakesList.filter(m => !existingMistakeIds.has(m.id as string))
         if (newMistakes.length > 0) {
-          await DatabaseService.bulkAdd('mistakes', newMistakes as never[]).catch(() => {})
+          await mistakeRepo.bulkCreate(newMistakes as any[]).catch(() => {})
         }
       }
 
       const entriesList = data.learningEntries as Record<string, unknown>[] | undefined
       if (Array.isArray(entriesList)) {
-        const existingNotes = await DatabaseService.getAll<Record<string, unknown>>('studyNotes')
+        const existingNotes = await studyNoteRepo.findAll()
         const existingNoteIds = new Set(existingNotes.map(n => n.id as string))
-        const existingPassages = await DatabaseService.getAll<Record<string, unknown>>('passages').catch(() => [] as Record<string, unknown>[])
+        const existingPassages = await passageEntryRepo.findAll().catch(() => [] as Record<string, unknown>[])
         const existingPassageIds = new Set(existingPassages.map(p => p.id as string))
 
         for (const entry of entriesList) {
           const id = entry.id as string
           if (entry.category === 'reading') {
             if (!existingPassageIds.has(id)) {
-              await DatabaseService.add('passages', {
+              await passageEntryRepo.create({
                 id,
                 title: entry.pageTitle || entry.topic || 'Saved from extension',
                 content: entry.text as string,
@@ -95,7 +95,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
                 status: (entry.status as string) || 'new',
                 createdAt: (entry.createdAt as string) || new Date().toISOString(),
                 updatedAt: (entry.updatedAt as string) || new Date().toISOString(),
-              } as never).catch(() => {})
+              }).catch(() => {})
               const engine = getLearningEngine()
               if (engine) {
                 engine.saveExercise({
@@ -118,7 +118,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
             }
           } else {
             if (!existingNoteIds.has(id)) {
-              await DatabaseService.add('studyNotes', {
+              await studyNoteRepo.create({
                 id,
                 text: entry.text as string,
                 category: entry.category as string,
@@ -131,7 +131,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
                 status: (entry.status as string) || 'new',
                 createdAt: (entry.createdAt as string) || new Date().toISOString(),
                 updatedAt: (entry.updatedAt as string) || new Date().toISOString(),
-              } as never).catch(() => {})
+              } as any).catch(() => {})
               existingNoteIds.add(id)
             }
           }
@@ -141,13 +141,13 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
       const articlesList = data.articles as Record<string, unknown>[] | undefined
       if (Array.isArray(articlesList)) {
         console.log('[WebSyncBridge] Received', articlesList.length, 'articles from extension')
-        const existingPassages = await DatabaseService.getAll<Record<string, unknown>>('passages').catch(() => [] as Record<string, unknown>[])
+        const existingPassages = await passageEntryRepo.findAll().catch(() => [] as Record<string, unknown>[])
         const existingPassageIds = new Set(existingPassages.map(p => p.id as string))
         for (const article of articlesList) {
           const id = article.id as string
           if (!existingPassageIds.has(id)) {
             console.log('[WebSyncBridge] Saving article:', (article.title as string)?.slice(0, 50))
-            await DatabaseService.add('passages', {
+            await passageEntryRepo.create({
               id,
               title: (article.title as string) || (article.pageTitle as string) || 'Article',
               content: (article.content as string) || (article.text as string) || '',
@@ -161,7 +161,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
               status: 'new',
               createdAt: (article.createdAt as string) || new Date().toISOString(),
               updatedAt: (article.updatedAt as string) || new Date().toISOString(),
-            } as never).catch(() => {})
+            }).catch(() => {})
             const engine = getLearningEngine()
             if (engine) {
               const artText = (article.content as string) || (article.text as string) || ''
@@ -188,12 +188,12 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
       const artifactsList = data.artifacts as Record<string, unknown>[] | undefined
       if (Array.isArray(artifactsList)) {
         console.log('[WebSyncBridge] Received', artifactsList.length, 'artifacts from extension')
-        const existingArtifacts = await DatabaseService.getAll<Record<string, unknown>>('artifacts').catch(() => [] as Record<string, unknown>[])
+        const existingArtifacts = await artifactRepo.findAll().catch(() => [] as Record<string, unknown>[])
         const existingArtifactIds = new Set(existingArtifacts.map(a => a.id as string))
         for (const artifact of artifactsList) {
           const id = artifact.id as string
           if (!existingArtifactIds.has(id)) {
-            await DatabaseService.add('artifacts', {
+            await artifactRepo.create({
               id,
               url: (artifact.url as string) || (artifact.pageUrl as string) || '',
               title: (artifact.title as string) || 'Untitled',
@@ -210,7 +210,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
               personalNote: (artifact.personalNote as string) || '',
               createdAt: (artifact.createdAt as string) || new Date().toISOString(),
               updatedAt: (artifact.updatedAt as string) || new Date().toISOString(),
-            } as never).catch(() => {})
+            }).catch(() => {})
             existingArtifactIds.add(id)
           }
         }
@@ -220,11 +220,11 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
 
     if (msg.type === 'EXPORT_EXTENSION_DATA') {
       const [vocabEntries, mistakeEntries, noteEntries, passageEntries, artifactEntries] = await Promise.all([
-        DatabaseService.getAll<Record<string, unknown>>('vocabulary').catch(() => []),
-        DatabaseService.getAll<Record<string, unknown>>('mistakes').catch(() => []),
-        DatabaseService.getAll<Record<string, unknown>>('studyNotes').catch(() => []),
-        DatabaseService.getAll<Record<string, unknown>>('passages').catch(() => []),
-        DatabaseService.getAll<Record<string, unknown>>('artifacts').catch(() => []),
+        vocabularyRepo.findAll().catch(() => []),
+        mistakeRepo.findAll().catch(() => []),
+        studyNoteRepo.findAll().catch(() => []),
+        passageEntryRepo.findAll().catch(() => []),
+        artifactRepo.findAll().catch(() => []),
       ])
 
       const settings = (() => {

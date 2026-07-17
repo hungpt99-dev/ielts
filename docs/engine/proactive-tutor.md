@@ -141,21 +141,20 @@ The proactive system has two parallel implementations:
 
 Used by: `AITutorEngineImpl` (`engine-impl.ts:105-126`), `handleLearningEvent` (`engine-impl.ts:164-217`)
 
-### Legacy: `services/` directory
+### Legacy: `services/` directory (REMOVED)
 
-- `services/proactiveMessageEngine.ts` — Legacy engine with `ProactiveEngineInput` types, delegates to new orchestrator but has its own input format and mapping layer
-- `services/proactiveEventBus.ts` — Event-driven dispatching for proactive messages
-- `services/messageStorage.ts` — UI-driven proactive message storage
+The following files have been removed and their functionality consolidated into the canonical `proactive/` module:
+- ~~`services/proactiveMessageEngine.ts`~~ — Removed; replaced by `ProactiveTutorOrchestrator` and `application/proactive/generate-proactive-messages.ts`
+- ~~`services/proactiveEventBus.ts`~~ — Removed; replaced by `ports/tutor-event-publisher.ts`
+- ~~`services/messageStorage.ts`~~ — Removed; replaced by `infrastructure/chat-message-storage.ts`
 
-Used by: Older web app hooks (re-exported from `index.ts:119-122`)
-
-Both paths ultimately call the same application-layer `generateProactiveMessages`, but through different interfaces and mapping layers.
+All proactive messaging now flows through the hexagonal `proactive/` module and application layer.
 
 ## Current Delivery
 
 The web app delivers proactive messages through the **`NotificationCenter`** component. It:
 
-1. Queries `getAITutorEngine()?.evaluateProactiveSupport()` (or uses legacy `proactiveEventBus`)
+1. Queries `getAITutorEngine()?.evaluateProactiveSupport()`
 2. Displays selected messages in the notification drawer
 3. Tracks dismissal/read status via `localStorage` or `DatabaseService`
 

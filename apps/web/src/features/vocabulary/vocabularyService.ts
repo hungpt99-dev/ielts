@@ -1,5 +1,5 @@
 import type { VocabularyEntry, VocabReviewEntry, ReviewRating, VocabDifficulty, VocabStatus } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { vocabularyRepo, vocabReviewRepo } from '../../services/repositories'
 import { generateId } from '../../utils'
 import { getInitialReviewEntry, calculateNextReview } from '../../utils/spaced-repetition'
 import { enrichVocabulary, normalizeToLemma } from '../../services/ai/vocabularyEnrichmentService'
@@ -39,11 +39,11 @@ function getToday(): string {
 }
 
 export async function getAllVocabulary(): Promise<VocabularyEntry[]> {
-  return DatabaseService.getAll<VocabularyEntry>('vocabulary')
+  return vocabularyRepo.findAll()
 }
 
 export async function getVocabularyById(id: string): Promise<VocabularyEntry | undefined> {
-  return DatabaseService.getById<VocabularyEntry>('vocabulary', id)
+  return vocabularyRepo.findById(id)
 }
 
 export async function addVocabulary(
@@ -56,7 +56,7 @@ export async function addVocabulary(
     createdAt: now,
     updatedAt: now,
   }
-  await DatabaseService.add('vocabulary', full)
+  await vocabularyRepo.create(full)
   return full
 }
 
@@ -64,18 +64,18 @@ export async function updateVocabulary(
   id: string,
   changes: Partial<VocabularyEntry>,
 ): Promise<void> {
-  await DatabaseService.update<VocabularyEntry>('vocabulary', id, {
+  await vocabularyRepo.update(id, {
     ...changes,
     updatedAt: new Date().toISOString(),
   })
 }
 
 export async function deleteVocabulary(id: string): Promise<void> {
-  await DatabaseService.remove('vocabulary', id)
+  await vocabularyRepo.delete(id)
 }
 
 export async function upsertVocabulary(entry: VocabularyEntry): Promise<void> {
-  await DatabaseService.put('vocabulary', entry)
+  await vocabularyRepo.bulkUpsert([entry])
 }
 
 export function filterVocabulary(
@@ -122,7 +122,7 @@ export function filterVocabulary(
 
 export async function computeStats(entries?: VocabularyEntry[]): Promise<VocabStats> {
   const all = entries ?? await getAllVocabulary()
-  const reviews = await DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews')
+  const reviews = await vocabReviewRepo.findAll()
 
   const dueForReview = reviews.filter(r => {
     if (r.interval >= 21 && r.repetitions >= 5) return false
@@ -178,7 +178,7 @@ export async function toggleFavorite(entry: VocabularyEntry): Promise<Vocabulary
     ? entry.tags.filter(t => t !== 'favorite')
     : [...entry.tags, 'favorite']
   const updated: VocabularyEntry = { ...entry, tags, updatedAt: new Date().toISOString() }
-  await DatabaseService.put('vocabulary', updated)
+  await vocabularyRepo.bulkUpsert([updated])
   return updated
 }
 
@@ -187,7 +187,7 @@ export async function changeStatus(
   status: VocabStatus,
 ): Promise<VocabularyEntry> {
   const updated: VocabularyEntry = { ...entry, status, updatedAt: new Date().toISOString() }
-  await DatabaseService.put('vocabulary', updated)
+  await vocabularyRepo.bulkUpsert([updated])
   return updated
 }
 
@@ -196,7 +196,7 @@ export async function changeDifficulty(
   difficulty: VocabDifficulty,
 ): Promise<VocabularyEntry> {
   const updated: VocabularyEntry = { ...entry, difficulty, updatedAt: new Date().toISOString() }
-  await DatabaseService.put('vocabulary', updated)
+  await vocabularyRepo.bulkUpsert([updated])
   return updated
 }
 
@@ -208,14 +208,14 @@ export async function toggleTag(
     ? entry.tags.filter(t => t !== tag)
     : [...entry.tags, tag]
   const updated: VocabularyEntry = { ...entry, tags, updatedAt: new Date().toISOString() }
-  await DatabaseService.put('vocabulary', updated)
+  await vocabularyRepo.bulkUpsert([updated])
   return updated
 }
 
 export async function getDueReviewWords(): Promise<VocabularyEntry[]> {
   const [vocabulary, reviews] = await Promise.all([
     getAllVocabulary(),
-    DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews'),
+    vocabReviewRepo.findAll(),
   ])
 
   const todayStr = getToday()
@@ -243,7 +243,7 @@ export async function rateWord(
   rating: ReviewRating,
 ): Promise<VocabReviewEntry> {
   const now = new Date()
-  const existing = await DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews')
+  const existing = await vocabReviewRepo.findAll()
   let review = existing.find(r => r.vocabularyId === entry.id)
 
   if (!review) {
@@ -251,7 +251,7 @@ export async function rateWord(
   }
 
   const updatedReview = calculateNextReview(review, rating, now)
-  await DatabaseService.put('vocabularyReviews', updatedReview)
+  await vocabReviewRepo.bulkUpsert([updatedReview])
 
   const vocabStatus: VocabStatus =
     rating === 'again' ? 'learning' :

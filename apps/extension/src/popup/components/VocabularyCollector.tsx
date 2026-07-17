@@ -50,8 +50,10 @@ interface AIDetails {
   verbConjugation?: VerbConjugation
 }
 
-import { callAI } from '@ielts/ai'
+import { createAIClient } from '@ielts/ai'
 import { safeFetchProviderConfig } from '../../utils/safe-chrome'
+
+const vocabAiClient = createAIClient()
 
 async function generateVocabularyDetails(
   word: string,
@@ -86,7 +88,14 @@ Respond with valid JSON in this exact format:
 }
 IMPORTANT: Only include verbConjugation if the word is a verb. If not a verb, omit verbConjugation entirely.`
 
-  const result = await callAI(systemPrompt, userPrompt, () => providerConfig, { temperature: 0.5, maxTokens: 1000 })
+  const result = await vocabAiClient.complete(
+    [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+    providerConfig,
+    { temperature: 0.5, maxTokens: 1000 },
+  )
 
   if (result.error || !result.content) {
     return { data: null, error: result.error || 'AI returned an empty response.' }

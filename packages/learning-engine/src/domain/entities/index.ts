@@ -2,7 +2,7 @@ export type { LearningSession, LearningSessionStatus, LearningSessionSource, Lea
 export type { LearningObjective, LearningObjectiveType, LearningObjectiveSource, TaskPriority, LearningSuccessCriterion } from './learning-objective'
 export type { LearningActivity, ActivityType, GenerateLearningActivityRequest, GenerateLearningActivityResult, LearningSourceContent } from './learning-activity'
 export type { Exercise, ExerciseType, ExerciseSourceType, ExplanationPolicy, EvaluationPolicy, LearningContentPayload, ExerciseTemplate, ExerciseTemplateInput } from './exercise'
-export type { ExerciseQuestion, ExerciseQuestionType, MultipleChoiceQuestion, GapFillQuestion, TrueFalseNotGivenQuestion, ShortAnswerQuestion, MatchingQuestion, ErrorCorrectionQuestion, EssayQuestion, SpeakingResponseQuestion } from './exercise-question'
+export type { ExerciseQuestion, ExerciseQuestionType, MultipleChoiceQuestion, GapFillQuestion, TrueFalseNotGivenQuestion, ShortAnswerQuestion, MatchingQuestion, ErrorCorrectionQuestion, EssayQuestion, SpeakingResponseQuestion } from '@ielts/shared'
 export type { LearningAttempt, LearningAttemptStatus, LearningAnswer, StartAttemptRequest, SubmitLearningAnswerRequest, SubmitLearningAnswerResult } from './learning-attempt'
 export type { AnswerEvaluation, EvaluationStatus, EvaluationMethod, RubricScore, WritingEvaluation, SpeakingEvaluation } from './evaluation'
 export type { MistakeEvidence, MistakeSeverity, MistakeReviewStatus } from './mistake-evidence'

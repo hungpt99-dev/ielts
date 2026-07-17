@@ -116,6 +116,20 @@ export function ChatWidget({
     firstFocusable?.focus()
   }, [isOpen, popupRef])
 
+  useEffect(() => {
+    if (!isOpen) return
+    const raf = requestAnimationFrame(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'instant' as ScrollBehavior })
+    })
+    const timer = setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, 350)
+    return () => {
+      cancelAnimationFrame(raf)
+      clearTimeout(timer)
+    }
+  }, [isOpen, messagesEndRef])
+
   const prevVoiceInput = useRef(voiceInput)
   useEffect(() => {
     if (!voiceInput || voiceInput === prevVoiceInput.current) return

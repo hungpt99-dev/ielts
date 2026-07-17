@@ -10,7 +10,7 @@ import Button from '../../components/ui/Button'
 import Badge from '../../components/ui/Badge'
 import { getEmptyStateMessage, EmptyStateIllustrated, ErrorState } from '../../components/ui/EmptyState'
 import ProgressChart from './components/ProgressChart'
-import { DatabaseService } from '../../services/storage/Database'
+import { taskRepo } from '../../services/repositories'
 import type { DashboardData, WeeklyStudyDay, TaskEntry } from '../../models'
 import {
   ProgressSummaryCard,
@@ -88,7 +88,7 @@ export default function Dashboard() {
       completedAt: !task.isDone ? new Date().toISOString() : null,
       updatedAt: new Date().toISOString(),
     }
-    await DatabaseService.put('tasks', updated)
+    await taskRepo.bulkUpsert([updated])
     setTasks(prev => prev.map(t => t.id === updated.id ? updated : t))
   }
 

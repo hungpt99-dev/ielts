@@ -1,13 +1,14 @@
-import { AiGenerateResultCache } from '@ielts/ai'
 import type { ProactiveEvaluationRequest, ProactiveEvaluationResult } from '../domain/entities/proactive-message'
 import { generateProactiveMessages } from '../application/proactive/generate-proactive-messages'
 import type { ProactiveMessageSettings } from '../domain/entities/proactive-message'
+import { LocalTtlCache } from '../infrastructure/local-ttl-cache'
+import { generateCacheKey } from '../ports/cache-port'
 
 export class CachedProactiveEvaluator {
-  private cache: AiGenerateResultCache<ProactiveEvaluationResult>
+  private cache: LocalTtlCache<ProactiveEvaluationResult>
 
   constructor(ttlMs = 300_000) {
-    this.cache = new AiGenerateResultCache<ProactiveEvaluationResult>({ ttlMs, maxSize: 20 })
+    this.cache = new LocalTtlCache<ProactiveEvaluationResult>({ ttlMs, maxSize: 20 })
   }
 
   async evaluate(
@@ -15,7 +16,7 @@ export class CachedProactiveEvaluator {
     settings: ProactiveMessageSettings,
     cooldownState: Array<{ triggerType: string; lastFiredAt: string }>,
   ): Promise<ProactiveEvaluationResult> {
-    const cacheKey = AiGenerateResultCache.generateKey(
+    const cacheKey = generateCacheKey(
       'proactive',
       request.triggerEvent ?? 'manual',
       String(request.learnerState.generatedAt),

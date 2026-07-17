@@ -1,6 +1,9 @@
 // ============================================================
 // IELTS Journey — TypeScript Data Models
 // ============================================================
+// Canonical domain types are in @ielts/shared and @ielts/storage.
+// This file provides presentation-layer view models and backward-compatible
+// re-exports. Prefer importing directly from the canonical source for new code.
 
 
 export type ISOString = string
@@ -17,13 +20,11 @@ export type TaskCategory =
   | 'Grammar'
   | 'Mock Test'
 
-export type MistakeSkill =
-  | 'vocabulary'
-  | 'grammar'
-  | 'reading'
-  | 'listening'
-  | 'writing'
-  | 'speaking'
+import type { IELTSSection } from '@ielts/shared'
+export type { IELTSSection }
+
+/** @deprecated Use IELTSSection from '@ielts/shared' instead */
+export type MistakeSkill = IELTSSection
 
 export type VocabDifficulty = 'easy' | 'medium' | 'hard'
 
@@ -35,6 +36,7 @@ export type MistakeStatus = 'new' | 'reviewed' | 'resolved'
 
 export type ReviewRating = 'again' | 'hard' | 'good' | 'easy'
 
+/** @deprecated Prefer explicit status types (VocabStatus, GrammarStatus, etc.) */
 export type LearningStatus = 'new' | 'learning' | 'reviewing' | 'mastered' | 'needs-review'
 
 export type SpeakingPart = 1 | 2 | 3
@@ -43,6 +45,7 @@ export type WritingTaskType = 'task1' | 'task2'
 
 export type PassageSource = 'user-created' | 'pasted'
 
+/** @deprecated Import ExerciseQuestionType from '@ielts/shared' instead */
 export type QuestionType =
   | 'True / False / Not Given'
   | 'Matching Headings'
@@ -55,64 +58,23 @@ export type QuestionType =
 export type StudyGoal = 'academic' | 'general'
 
 
-import type { VerbConjugation } from '@ielts/shared'
-export type { VerbConjugation }
+import type { VerbConjugation, ExerciseQuestionType } from '@ielts/shared'
+export type { VerbConjugation, ExerciseQuestionType }
 
-export interface VocabularyEntry {
-  id: string
-  word: string
-  meaning: string
-  meaningVi: string
-  pronunciation: string
-  partOfSpeech: string
-  topic: string
-  exampleSentence: string
-  collocations: string[]
-  synonyms: string[]
-  antonyms: string[]
-  wordFamily: string[]
-  verbConjugation?: VerbConjugation
-  personalNote: string
-  difficulty: VocabDifficulty
-  status: VocabStatus
-  cefrLevel: '' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2'
-  ieltsRelevance: '' | 'low' | 'medium' | 'high'
-  tags: string[]
-  createdAt: ISOString
-  updatedAt: ISOString
-}
+/** @deprecated Import VocabularyEntry from '@ielts/storage' instead */
+export type { VocabularyEntry } from '@ielts/storage'
 
-export interface VocabReviewEntry {
-  id: string
-  vocabularyId: string
-  interval: number
-  easeFactor: number
-  repetitions: number
-  nextReviewDate: ISOString
-  lastReviewDate: ISOString
-  history: Array<{
-    date: ISOString
-    rating: ReviewRating
-  }>
-}
+/** @deprecated Import VocabReviewEntry from '@ielts/storage' instead */
+export type { VocabReviewEntry } from '@ielts/storage'
+
+/** @deprecated Import TaskEntry from '@ielts/storage' instead */
+export type { TaskEntry } from '@ielts/storage'
 
 
-export interface TaskEntry {
-  id: string
-  title: string
-  description: string
-  category: TaskCategory
-  date: ISOString
-  isDone: boolean
-  isRecurring: boolean
-  recurringDays: number[]
-  notes: string
-  timeMinutes: number
-  createdAt: ISOString
-  updatedAt: ISOString
-  completedAt: ISOString | null
-}
-
+// ════════════════════════════════════════════════════════════
+// Presentation-layer view models (not in canonical sources)
+// These are app-specific read models for rendering.
+// ════════════════════════════════════════════════════════════
 
 export interface ReadingSession {
   id: string
@@ -204,19 +166,8 @@ export interface GrammarNote {
 }
 
 
-export interface MistakeEntry {
-  id: string
-  mistake: string
-  correction: string
-  explanation: string
-  source: string
-  date: ISOString
-  skill: MistakeSkill
-  status: MistakeStatus
-  repetitionCount: number
-  createdAt: ISOString
-  updatedAt: ISOString
-}
+/** @deprecated Import MistakeEntry from '@ielts/storage' instead */
+export type { MistakeEntry } from '@ielts/storage'
 
 
 export interface MockTestEntry {
@@ -250,12 +201,14 @@ export interface TopicProgress {
 }
 
 
+/** @deprecated Import ExerciseQuestionType from '@ielts/shared' instead */
 export type ReadingQuestionType =
   | 'multiple-choice'
   | 'true-false-not-given'
   | 'matching-headings'
   | 'gap-fill'
 
+/** Presentation-layer read model for reading questions */
 export interface ReadingQuestion {
   id: string
   type: ReadingQuestionType
@@ -303,6 +256,7 @@ export interface ReadingPracticeSession {
 }
 
 
+/** @deprecated Import ExerciseQuestionType from '@ielts/shared' instead */
 export type ListeningQuestionType =
   | 'multiple-choice'
   | 'gap-fill'
@@ -572,17 +526,8 @@ export interface AiContent {
 }
 
 
-export interface ProgressRecord {
-  id: string
-  date: ISOString
-  skill: 'reading' | 'listening' | 'writing' | 'speaking' | 'vocabulary' | 'grammar'
-  metric: string
-  value: number
-  unit: string
-  notes: string
-  tags: string[]
-  createdAt: ISOString
-}
+/** @deprecated Import ProgressRecord from '@ielts/storage' instead */
+export type { ProgressRecord } from '@ielts/storage'
 
 
 export interface DashboardData {

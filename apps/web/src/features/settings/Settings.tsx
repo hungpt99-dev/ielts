@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSettings } from '../../context/SettingsContext'
 import { useTheme } from '../../context/ThemeContext'
-import { DatabaseService } from '../../services/storage/Database'
+import { exportAllData, importBackup, clearAllTables } from '@ielts/storage'
 import {
   loadNotificationPrefs,
   saveNotificationPrefs,
@@ -198,7 +198,7 @@ export default function Settings() {
 
   async function handleExport() {
     try {
-      const data = await DatabaseService.exportAll()
+      const data = await exportAllData()
       const json = JSON.stringify(data, null, 2)
       const blob = new Blob([json], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
@@ -234,7 +234,7 @@ export default function Settings() {
           message: `Import backup created on ${new Date(raw.exportedAt).toLocaleString()}? This will overwrite ALL current data.`,
           action: async () => {
             try {
-              await DatabaseService.importAll(raw as AppExportData)
+              await importBackup(raw as AppExportData)
               showFeedback('success', 'Data imported successfully.')
             } catch (err) {
               console.error('apps/web/src/features/settings/Settings.tsx error:', err);
@@ -259,7 +259,8 @@ export default function Settings() {
       title: 'Clear All Data',
       message: 'Delete ALL your data including vocabulary, tasks, sessions, notes, mistakes, and mock tests. This action cannot be undone. Export a backup first.',
       action: async () => {
-        await DatabaseService.resetAll()
+        await clearAllTables()
+        localStorage.clear()
         window.location.reload()
       },
       buttonLabel: 'Delete Everything',

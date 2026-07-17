@@ -50,7 +50,7 @@ function VocabularyListItem({
   const handleEnrich = useCallback(async () => {
     setEnriching(true)
     try {
-      const { DatabaseService } = await import('../../services/storage/Database')
+      const { vocabularyRepo } = await import('../../services/repositories')
       const { data, error } = await enrichVocabulary(entry.word, displayEntry.topic)
       if (error || !data) {
         showToast('error', error || 'Enrichment failed')
@@ -61,6 +61,7 @@ function VocabularyListItem({
         ...entry,
         word: data.lemma || displayEntry.word,
         meaning: data.meaning || displayEntry.meaning,
+        meaningVi: data.translation || displayEntry.meaningVi,
         pronunciation: data.pronunciation || displayEntry.pronunciation,
         partOfSpeech: data.partOfSpeech || displayEntry.partOfSpeech,
         exampleSentence: data.exampleSentence || displayEntry.exampleSentence,
@@ -70,9 +71,11 @@ function VocabularyListItem({
         wordFamily: mergedWordFamily,
         cefrLevel: (data.cefrLevel || displayEntry.cefrLevel) as VocabularyEntry['cefrLevel'],
         ieltsRelevance: (data.ieltsRelevance || displayEntry.ieltsRelevance) as VocabularyEntry['ieltsRelevance'],
+        difficulty: (data.difficulty || displayEntry.difficulty) as VocabularyEntry['difficulty'],
+        verbConjugation: data.verbConjugation || displayEntry.verbConjugation,
         updatedAt: new Date().toISOString(),
       }
-      await DatabaseService.put('vocabulary', updated)
+      await vocabularyRepo.bulkUpsert([updated])
       setLocalEnriched(updated)
     } finally {
       setEnriching(false)

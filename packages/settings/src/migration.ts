@@ -1,5 +1,13 @@
 import type { UserConfiguration } from './types'
 
+function readStudy(
+  legacy: Record<string, unknown>,
+  key: string,
+): unknown {
+  const study = legacy.study as Record<string, unknown> | undefined
+  return study?.[key] ?? legacy[key]
+}
+
 export function migrateFromLegacySettings(legacy: Record<string, unknown>): UserConfiguration | null {
   if (!legacy || Object.keys(legacy).length === 0) return null
 
@@ -11,14 +19,14 @@ export function migrateFromLegacySettings(legacy: Record<string, unknown>): User
       customApiUrl: (legacy.aiBaseUrl as string) || (legacy.aiEndpoint as string) || undefined,
     },
     study: {
-      targetBand: (legacy.targetBand as number) ?? 6.5,
-      currentBand: (legacy.currentBand as number) ?? 5.5,
-      examDate: (legacy.examDate as string) || undefined,
-      dailyStudyMinutes: (legacy.dailyStudyMinutes as number) ?? 60,
-      weakSkills: (legacy.weakSkills as string[]) ?? [],
-      nativeLanguage: (legacy.nativeLanguage as string) ?? '',
-      studyGoal: (legacy.studyGoal as 'academic' | 'general') ?? 'academic',
-      preferredSchedule: (legacy.preferredSchedule as string[]) ?? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
+      targetBand: (readStudy(legacy, 'targetBand') as number) ?? 6.5,
+      currentBand: (readStudy(legacy, 'currentBand') as number) ?? 5.5,
+      examDate: (readStudy(legacy, 'examDate') as string) || undefined,
+      dailyStudyMinutes: (readStudy(legacy, 'dailyStudyMinutes') as number) ?? 60,
+      weakSkills: (readStudy(legacy, 'weakSkills') as string[]) ?? [],
+      nativeLanguage: (readStudy(legacy, 'nativeLanguage') as string) ?? '',
+      studyGoal: (readStudy(legacy, 'studyGoal') as 'academic' | 'general') ?? 'academic',
+      preferredSchedule: (readStudy(legacy, 'preferredSchedule') as string[]) ?? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'],
     },
     theme: {
       mode: (legacy.themeMode as 'light' | 'dark' | 'system') || 'system',

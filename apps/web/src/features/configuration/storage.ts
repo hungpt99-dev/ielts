@@ -1,5 +1,5 @@
 import type {
-  UserConfiguration,
+  ExtendedUserConfiguration,
   ConfigurationBasic,
   ConfigurationAdvanced,
   AiProviderConfig,
@@ -16,10 +16,12 @@ import type {
   PrivacyLevel,
 } from './models'
 import { STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
+import { loadUserConfiguration } from '@ielts/settings'
+import type { UserConfiguration } from '@ielts/settings'
 
-const STORAGE_KEY = STORAGE_KEYS.localStorage.userSettings
+const STORAGE_KEY = STORAGE_KEYS.localStorage.configurationAdvanced
 const LEGACY_STORAGE_KEY = STORAGE_KEYS.localStorage.appSettings
-const STORAGE_VERSION_KEY = STORAGE_KEYS.localStorage.configurationVersion
+const STORAGE_VERSION_KEY = STORAGE_KEYS.localStorage.configurationAdvancedVersion
 const CURRENT_VERSION = 1
 
 export interface StorageMeta {
@@ -103,7 +105,7 @@ function createDefaultBasic(): ConfigurationBasic {
   }
 }
 
-export function createDefaultConfiguration(): UserConfiguration {
+export function createDefaultConfiguration(): ExtendedUserConfiguration {
   return {
     basic: createDefaultBasic(),
     advanced: createDefaultAdvanced(),
@@ -133,6 +135,65 @@ function setStoredMeta(meta: StorageMeta): void {
   } catch (error) {
     console.error('apps/web/src/features/configuration/storage.ts error:', error);
     /* ignore */
+  }
+}
+
+function applyCanonicalToBasic(basic: ConfigurationBasic, canonical: UserConfiguration): void {
+  if (canonical.study.targetBand) basic.targetBand = canonical.study.targetBand
+  if (canonical.study.examDate) basic.examDate = canonical.study.examDate
+  if (canonical.study.nativeLanguage) basic.nativeLanguage = canonical.study.nativeLanguage
+  if (canonical.study.dailyStudyMinutes) basic.dailyStudyMinutes = canonical.study.dailyStudyMinutes
+}
+
+function applyCanonicalToProvider(advanced: ConfigurationAdvanced, canonical: UserConfiguration): void {
+  const activeId = advanced.activeProviderId
+  if (!activeId || !advanced.providers[activeId]) return
+
+  const provider = advanced.providers[activeId]
+  if (canonical.ai.providerId) {
+    provider.provider = canonical.ai.providerId as AiProviderType
+  }
+  if (canonical.ai.model) provider.model = canonical.ai.model
+  if (canonical.ai.customApiUrl) provider.baseUrl = canonical.ai.customApiUrl
+}
+
+function syncCanonicalFromConfig(config: ExtendedUserConfiguration): void {
+  try {
+    const canonical = loadUserConfiguration()
+    const activeId = config.advanced.activeProviderId
+    const activeProvider = activeId ? config.advanced.providers[activeId] : null
+
+    const updated: Partial<UserConfiguration> = {}
+    const study: Record<string, unknown> = {}
+    if (config.basic.targetBand !== canonical.study.targetBand) study.targetBand = config.basic.targetBand
+    if (config.basic.examDate !== canonical.study.examDate) study.examDate = config.basic.examDate
+    if (config.basic.nativeLanguage !== canonical.study.nativeLanguage) study.nativeLanguage = config.basic.nativeLanguage
+    if (config.basic.dailyStudyMinutes !== canonical.study.dailyStudyMinutes) study.dailyStudyMinutes = config.basic.dailyStudyMinutes
+
+    if (Object.keys(study).length > 0) {
+      const mergedStudy = { ...canonical.study, ...study }
+      updated.study = mergedStudy
+    }
+
+    const ai: Record<string, unknown> = {}
+    if (activeProvider) {
+      if (activeProvider.provider && activeProvider.provider !== canonical.ai.providerId) ai.providerId = activeProvider.provider
+      if (activeProvider.model && activeProvider.model !== canonical.ai.model) ai.model = activeProvider.model
+      if (activeProvider.baseUrl && activeProvider.baseUrl !== canonical.ai.customApiUrl) ai.customApiUrl = activeProvider.baseUrl
+    }
+
+    if (Object.keys(ai).length > 0) {
+      const mergedAi = { ...canonical.ai, ...ai }
+      updated.ai = mergedAi
+    }
+
+    if (Object.keys(updated).length > 0) {
+      const merged = { ...canonical, ...updated }
+      localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(merged))
+      window.dispatchEvent(new CustomEvent('ielts-settings-updated', { detail: merged }))
+    }
+  } catch (error) {
+    console.error('apps/web/src/features/configuration/storage.ts error:', error);
   }
 }
 
@@ -263,84 +324,96 @@ function deepMerge<T extends Record<string, unknown>>(defaults: T, overrides: Pa
   return result
 }
 
-export function loadConfiguration(): UserConfiguration {
+function loadExtendedConfig(): ExtendedUserConfiguration | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return null
+    return JSON.parse(raw) as ExtendedUserConfiguration
+  } catch {
+    return null
+  }
+}
+
+export function loadConfiguration(): ExtendedUserConfiguration {
+  try {
     const meta = getStoredMeta()
+    const extended = loadExtendedConfig()
+    const defaults = createDefaultConfiguration()
+    const canonical = loadUserConfiguration()
 
-    if (raw) {
-      const parsed = JSON.parse(raw)
-      const defaults = createDefaultConfiguration()
-
-      if (meta.version < CURRENT_VERSION) {
-        runMigrations(parsed, meta.version)
-      }
-
-      const validation = validateConfiguration(parsed)
-      if (!validation.valid) {
-        console.warn('Configuration validation failed, applying defaults for invalid fields:', validation.errors)
-      }
-
-      const config: UserConfiguration = {
-        basic: {
-          ...defaults.basic,
-          ...(parsed.basic || {}),
-        },
-        advanced: {
-          ...defaults.advanced,
-          ...(parsed.advanced || {}),
-          providers: deepMerge(
-            defaults.advanced.providers,
-            (parsed.advanced?.providers || {}) as Partial<typeof defaults.advanced.providers>,
-          ),
-          tutorConfig: deepMerge(
-            defaults.advanced.tutorConfig,
-            (parsed.advanced?.tutorConfig || {}) as Partial<typeof defaults.advanced.tutorConfig>,
-          ) as AiTutorConfig,
-          vocabReview: deepMerge(
-            defaults.advanced.vocabReview,
-            (parsed.advanced?.vocabReview || {}) as Partial<typeof defaults.advanced.vocabReview>,
-          ) as typeof defaults.advanced.vocabReview,
-          speakingFeedback: deepMerge(
-            defaults.advanced.speakingFeedback,
-            (parsed.advanced?.speakingFeedback || {}) as Partial<typeof defaults.advanced.speakingFeedback>,
-          ) as typeof defaults.advanced.speakingFeedback,
-          writingCorrection: deepMerge(
-            defaults.advanced.writingCorrection,
-            (parsed.advanced?.writingCorrection || {}) as Partial<typeof defaults.advanced.writingCorrection>,
-          ) as typeof defaults.advanced.writingCorrection,
-          privacy: deepMerge(
-            defaults.advanced.privacy,
-            (parsed.advanced?.privacy || {}) as Partial<typeof defaults.advanced.privacy>,
-          ) as typeof defaults.advanced.privacy,
-        },
-      }
-
-      if (meta.version < CURRENT_VERSION) {
-        setStoredMeta({ version: CURRENT_VERSION, migratedAt: new Date().toISOString() })
-        saveConfiguration(config)
-      }
-
-      return config
+    if (!extended) {
+      const fresh = createDefaultConfiguration()
+      applyCanonicalToBasic(fresh.basic, canonical)
+      return fresh
     }
 
-    const defaults = createDefaultConfiguration()
-    return defaults
+    if (meta.version < CURRENT_VERSION) {
+      runMigrations(extended as unknown as Record<string, unknown>, meta.version)
+    }
+
+    applyCanonicalToBasic(extended.basic, canonical)
+    applyCanonicalToProvider(extended.advanced, canonical)
+
+    const mergedAdv = deepMerge(
+      defaults.advanced,
+      (extended.advanced || {}) as Partial<typeof defaults.advanced>,
+    )
+    mergedAdv.providers = deepMerge(
+      defaults.advanced.providers,
+      (extended.advanced?.providers || {}) as Partial<typeof defaults.advanced.providers>,
+    )
+    mergedAdv.tutorConfig = deepMerge(
+      defaults.advanced.tutorConfig,
+      (extended.advanced?.tutorConfig || {}) as Partial<typeof defaults.advanced.tutorConfig>,
+    ) as AiTutorConfig
+    mergedAdv.vocabReview = deepMerge(
+      defaults.advanced.vocabReview,
+      (extended.advanced?.vocabReview || {}) as Partial<typeof defaults.advanced.vocabReview>,
+    ) as typeof defaults.advanced.vocabReview
+    mergedAdv.speakingFeedback = deepMerge(
+      defaults.advanced.speakingFeedback,
+      (extended.advanced?.speakingFeedback || {}) as Partial<typeof defaults.advanced.speakingFeedback>,
+    ) as typeof defaults.advanced.speakingFeedback
+    mergedAdv.writingCorrection = deepMerge(
+      defaults.advanced.writingCorrection,
+      (extended.advanced?.writingCorrection || {}) as Partial<typeof defaults.advanced.writingCorrection>,
+    ) as typeof defaults.advanced.writingCorrection
+    mergedAdv.privacy = deepMerge(
+      defaults.advanced.privacy,
+      (extended.advanced?.privacy || {}) as Partial<typeof defaults.advanced.privacy>,
+    ) as typeof defaults.advanced.privacy
+
+    const config: ExtendedUserConfiguration = {
+      basic: { ...defaults.basic, ...extended.basic },
+      advanced: mergedAdv,
+    }
+
+    if (meta.version < CURRENT_VERSION) {
+      setStoredMeta({ version: CURRENT_VERSION, migratedAt: new Date().toISOString() })
+      saveConfiguration(config)
+    }
+
+    return config
   } catch (error) {
     console.error('apps/web/src/features/configuration/storage.ts error:', error);
     return createDefaultConfiguration()
   }
 }
 
-export function saveConfiguration(config: UserConfiguration): void {
+export function saveConfiguration(config: ExtendedUserConfiguration): void {
   try {
     const validation = validateConfiguration(config)
     if (!validation.valid) {
       console.error('Attempted to save invalid configuration:', validation.errors)
       return
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(config))
+    const extended: ExtendedUserConfiguration = {
+      basic: { ...config.basic },
+      advanced: { ...config.advanced },
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(extended))
     setStoredMeta({ version: CURRENT_VERSION, migratedAt: new Date().toISOString() })
+    syncCanonicalFromConfig(config)
   } catch (e) {
     console.error('Failed to save configuration to localStorage:', e)
   }
@@ -355,7 +428,7 @@ export function clearConfiguration(): void {
   }
 }
 
-export function migrateFromLegacySettings(): UserConfiguration | null {
+export function migrateFromLegacySettings(): ExtendedUserConfiguration | null {
   try {
     const raw = localStorage.getItem(LEGACY_STORAGE_KEY)
     if (!raw) return null

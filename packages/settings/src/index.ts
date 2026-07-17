@@ -6,6 +6,8 @@ export {
   NATIVE_LANGUAGES,
   OPENAI_BASE_URL,
   DEFAULT_MODEL,
+  aiSettingsSchema,
+  sharedSettingsSchema,
   aiUserSettingsSchema,
   userConfigurationSchema,
 } from './schemas'
@@ -30,3 +32,5 @@ export type { UserSettingsRepository } from './repository'
 
 export { migrateFromLegacySettings } from './migration'
 export { loadUserConfiguration } from './settings-service'
+export { LocalStorageCredentialStore } from './local-storage-credential-store'
+export { LocalStorageUserSettingsRepository } from './local-storage-user-settings-repository'

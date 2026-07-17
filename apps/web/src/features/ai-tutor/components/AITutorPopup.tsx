@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import ChatPopup from '../../../components/aiTutor/ChatPopup'
 import type { ContextSuggestion } from '@ielts/ai-tutor-engine'
 import { STORAGE_KEYS } from '@ielts/config'
-import { DatabaseService } from '../../../services/storage/Database'
+import { taskRepo, vocabularyRepo, mistakeRepo } from '../../../services/repositories'
 import type { TaskEntry, VocabularyEntry, MistakeEntry } from '../../../models'
 import { getAITutorEngine } from '../../../services/engineBootstrap'
 
@@ -96,9 +96,9 @@ export default function AITutorPopup({
           } catch { return {} }
         })()
         const [tasks, vocabulary, mistakes] = await Promise.all([
-          DatabaseService.getAll<TaskEntry>('tasks'),
-          DatabaseService.getAll<VocabularyEntry>('vocabulary'),
-          DatabaseService.getAll<MistakeEntry>('mistakes'),
+          taskRepo.findAll(),
+          vocabularyRepo.findAll(),
+          mistakeRepo.findAll(),
         ])
 
         if (cancelled) return

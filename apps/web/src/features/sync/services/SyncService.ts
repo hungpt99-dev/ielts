@@ -1,5 +1,5 @@
 import { DEFAULT_AI_MODEL } from '@ielts/config'
-import { DatabaseService } from '../../../services/storage/Database'
+import { vocabularyRepo, mistakeRepo, artifactRepo } from '../../../services/repositories'
 import { STORAGE_KEYS } from '@ielts/config'
 import { getClient } from '../bridge/ExtensionBridgeClient'
 import type { VocabularyEntry, MistakeEntry, Artifact, ArtifactCategory } from '../../../models'
@@ -65,7 +65,7 @@ export async function syncFromExtension(): Promise<SyncResult> {
 
     let imported = 0
 
-    const existingVocab = await DatabaseService.getAll<VocabularyEntry>('vocabulary')
+    const existingVocab = await vocabularyRepo.findAll()
     const existingVocabIds = new Set(existingVocab.map(v => v.id))
     const incomingVocab = data.vocabulary as Record<string, unknown>[] | undefined
     if (Array.isArray(incomingVocab)) {
@@ -91,32 +91,32 @@ export async function syncFromExtension(): Promise<SyncResult> {
       }))
       const newVocab = normalized.filter(v => !existingVocabIds.has(v.id))
       if (newVocab.length > 0) {
-        await DatabaseService.bulkAdd('vocabulary', newVocab as never[]).catch(() => {})
+        await vocabularyRepo.bulkCreate(newVocab as any[]).catch(() => {})
         imported += newVocab.length
         window.dispatchEvent(new CustomEvent('vocabulary-changed'))
       }
     }
 
-    const existingMistakes = await DatabaseService.getAll<MistakeEntry>('mistakes')
+    const existingMistakes = await mistakeRepo.findAll()
     const existingMistakeIds = new Set(existingMistakes.map(m => m.id))
     const incomingMistakes = data.mistakes as Record<string, unknown>[] | undefined
     if (Array.isArray(incomingMistakes)) {
       const newMistakes = incomingMistakes.filter(m => !existingMistakeIds.has(m.id as string))
       if (newMistakes.length > 0) {
-        await DatabaseService.bulkAdd('mistakes', newMistakes as never[]).catch(() => {})
+        await mistakeRepo.bulkCreate(newMistakes as any[]).catch(() => {})
         imported += newMistakes.length
       }
     }
 
     const incomingArtifacts = data.artifacts as Record<string, unknown>[] | undefined
     if (Array.isArray(incomingArtifacts)) {
-      const existingArtifacts = await DatabaseService.getAll<Artifact>('artifacts')
+      const existingArtifacts = await artifactRepo.findAll()
       const existingArtifactIds = new Set(existingArtifacts.map(a => a.id))
       for (const a of incomingArtifacts) {
         const id = (a.id as string) || crypto.randomUUID()
         if (!existingArtifactIds.has(id)) {
           existingArtifactIds.add(id)
-          await DatabaseService.add('artifacts', {
+          await artifactRepo.create({
             id,
             url: (a.url as string) || (a.pageUrl as string) || '',
             title: (a.title as string) || 'Untitled',
@@ -133,7 +133,7 @@ export async function syncFromExtension(): Promise<SyncResult> {
             personalNote: (a.personalNote as string) || '',
             createdAt: (a.createdAt as string) || new Date().toISOString(),
             updatedAt: (a.updatedAt as string) || new Date().toISOString(),
-          } as never).catch(() => {})
+          }).catch(() => {})
           imported++
         }
       }
@@ -170,9 +170,9 @@ export async function syncToExtension(): Promise<SyncResult> {
   const client = getClient()
   try {
     const [vocabEntries, mistakeEntries, artifactEntries] = await Promise.all([
-      DatabaseService.getAll<VocabularyEntry>('vocabulary'),
-      DatabaseService.getAll<MistakeEntry>('mistakes'),
-      DatabaseService.getAll<Record<string, unknown>>('artifacts').catch(() => []),
+      vocabularyRepo.findAll(),
+      mistakeRepo.findAll(),
+      artifactRepo.findAll().catch(() => []),
     ])
 
     const payload = {

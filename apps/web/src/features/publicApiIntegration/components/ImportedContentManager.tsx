@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import type { PublicApiImportedContent, StudyNote } from '../../../models'
-import { DatabaseService } from '../../../services/storage/Database'
+import { publicApiContentRepo, studyNoteRepo } from '../../../services/repositories'
 import Card, { CardContent, CardHeader, CardTitle } from '../../../components/ui/Card'
 import Button from '../../../components/ui/Button'
 import Badge from '../../../components/ui/Badge'
@@ -115,7 +115,7 @@ export default function ImportedContentManager() {
 
     async function load() {
       try {
-        const data = await DatabaseService.safeGetAll<PublicApiImportedContent>('publicApiContent')
+        const data = await publicApiContentRepo.findAll()
         if (!cancelled) {
           setItems(data ?? [])
           setError(null)
@@ -187,7 +187,7 @@ export default function ImportedContentManager() {
     if (!selectedItem) return
     setSavingNotes(true)
     try {
-      await DatabaseService.updatePublicApiContent(selectedItem.id, {
+      await publicApiContentRepo.patch(selectedItem.id, {
         userNotes: editingNotes,
       })
       setItems(prev =>
@@ -208,7 +208,7 @@ export default function ImportedContentManager() {
 
   async function deleteItem(id: string) {
     try {
-      await DatabaseService.safeRemove('publicApiContent', id)
+      await publicApiContentRepo.delete(id)
       setItems(prev => prev.filter(i => i.id !== id))
       setConfirmDeleteId(null)
       if (selectedItem?.id === id) setSelectedItem(null)
@@ -287,7 +287,7 @@ export default function ImportedContentManager() {
             isFavorite: false,
             isDraft: false,
           }
-          await DatabaseService.addStudyNote(note)
+          await studyNoteRepo.create(note as any)
         } catch (error) {
           console.error('apps/web/src/features/publicApiIntegration/components/ImportedContentManager.tsx error:', error);
           // Non-critical

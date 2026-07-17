@@ -7,7 +7,7 @@ import { determineDifficulty } from '../../domain/policies/difficulty-policy'
 import { selectQuestionTypes, estimateQuestionCount } from '../../domain/policies/question-count-policy'
 import type { LearnerContextPort } from '../../ports/learner-context-port'
 import type { SkillRegistry } from '../../skills/skill-registry'
-import { buildReadingPassagePrompt, buildListeningPassagePrompt, buildPracticeQuestionsPrompt, buildPracticeQuestionsSystemPrompt } from '@ielts/ai'
+import { buildReadingPassagePrompt, buildListeningPassagePrompt, buildPracticeQuestionsPrompt, buildPracticeQuestionsSystemPrompt } from './prompt-builders'
 
 export interface GenerateActivityDependencies {
   sessionRepository: LearningSessionRepository

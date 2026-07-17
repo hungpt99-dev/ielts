@@ -1,5 +1,5 @@
 import type { VocabularyEntry, VocabReviewEntry, ReviewRating, VocabStatus } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { vocabReviewRepo, vocabularyRepo } from '../../services/repositories'
 import { getDailyReviewQueue, calculateNextReview, getInitialReviewEntry } from '../../utils/spaced-repetition'
 
 export type ReviewMode =
@@ -104,11 +104,11 @@ export async function handleRating(
   let review = item.review
   if (!review) {
     review = getInitialReviewEntry(item.vocab.id, now)
-    await DatabaseService.put('vocabularyReviews', review)
+    await vocabReviewRepo.bulkUpsert([review])
   }
 
   const updatedReview = calculateNextReview(review, rating, now)
-  await DatabaseService.put('vocabularyReviews', updatedReview)
+  await vocabReviewRepo.bulkUpsert([updatedReview])
 
   const newStatus = getVocabStatus(rating, item.vocab.status)
   if (item.vocab.status !== newStatus) {
@@ -117,7 +117,7 @@ export async function handleRating(
       status: newStatus,
       updatedAt: now.toISOString(),
     }
-    await DatabaseService.put('vocabulary', updatedVocab)
+    await vocabularyRepo.bulkUpsert([updatedVocab])
   }
 }
 

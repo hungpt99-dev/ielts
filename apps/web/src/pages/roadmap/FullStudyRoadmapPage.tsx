@@ -8,6 +8,8 @@ import {
   toggleTask,
   getRoadmapUserProfile,
   generateRoadmapWithEngine,
+  loadRegenerationState,
+  clearRegenerationState,
 } from '../../features/roadmap/roadmapService'
 import type {
   RoadmapPhase,
@@ -45,6 +47,7 @@ export default function FullStudyRoadmapPage() {
   const [regenerating, setRegenerating] = useState(false)
   const [enrichProgress, setEnrichProgress] = useState<{ phase: string; current: number; total: number } | null>(null)
   const [taskRefreshKey, setTaskRefreshKey] = useState(0)
+  const [persistedRegen, setPersistedRegen] = useState(loadRegenerationState())
 
   const loadData = useCallback(async (showLoading = true) => {
     try {
@@ -84,6 +87,19 @@ export default function FullStudyRoadmapPage() {
     loadData()
   }, [loadData])
 
+  useEffect(() => {
+    const current = loadRegenerationState()
+    if (current && current.status !== 'idle' && current.status !== 'completed') {
+      const age = Date.now() - new Date(current.startedAt).getTime()
+      if (age > 10 * 60 * 1000) {
+        clearRegenerationState()
+        return
+      }
+      setPersistedRegen(current)
+      setEnrichProgress({ phase: current.phase, current: current.current, total: current.total })
+    }
+  }, [])
+
   const roadmapEmitted = useRef(false)
 
   useEffect(() => {
@@ -101,6 +117,13 @@ export default function FullStudyRoadmapPage() {
     function handleProgress(e: Event) {
       const detail = (e as CustomEvent).detail as { phase: string; current: number; total: number }
       setEnrichProgress(detail)
+      setPersistedRegen({
+        status: 'enriching-tasks',
+        startedAt: new Date().toISOString(),
+        phase: detail.phase,
+        current: detail.current,
+        total: detail.total,
+      })
     }
     window.addEventListener('plan-enrich-progress', handleProgress)
     return () => window.removeEventListener('plan-enrich-progress', handleProgress)
@@ -119,16 +142,23 @@ export default function FullStudyRoadmapPage() {
   }, [loadRoadmap])
 
   const handleRegenerate = useCallback(async () => {
+    console.log('[Regenerate] Called, roadmap:', !!roadmap, 'regenerating:', regenerating)
     if (!roadmap || regenerating) return
+    const saved = loadRegenerationState()
+    console.log('[Regenerate] isResume:', !!saved?.planData, 'hasEnriched:', !!saved?.enrichedPlanData)
     setRegenerating(true)
-    setEnrichProgress(null)
+    setPersistedRegen(null)
+    const isResume = !!loadRegenerationState()?.planData
+    if (!isResume) {
+      setEnrichProgress(null)
+    }
     try {
       console.log('[Regenerate] Starting regeneration...')
       const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
       const settings = raw ? JSON.parse(raw) : null
       console.log('[Regenerate] Settings loaded:', settings ? 'yes' : 'no')
       if (!settings) throw new Error('Settings not found')
-      const { DatabaseService } = await import('../../services/storage/Database')
+      const { taskRepo } = await import('../../services/repositories')
       const dates = new Set<string>()
       for (const phase of roadmap.phases) {
         for (const week of phase.weeks) {
@@ -138,10 +168,10 @@ export default function FullStudyRoadmapPage() {
         }
       }
       console.log('[Regenerate] Deleting', dates.size, 'dates of old tasks...')
-      const allTasks = await DatabaseService.getAll<import('../../models').TaskEntry>('tasks')
+      const allTasks = await taskRepo.findAll()
       for (const t of allTasks) {
         if (dates.has(t.date.slice(0, 10))) {
-          try { await DatabaseService.remove('tasks', t.id) } catch (error) {
+          try { await taskRepo.delete(t.id) } catch (error) {
       console.error('apps/web/src/pages/roadmap/FullStudyRoadmapPage.tsx error:', error);
           }
         }
@@ -150,16 +180,28 @@ export default function FullStudyRoadmapPage() {
       const newRoadmap = await generateRoadmapWithEngine(settings)
       console.log('[Regenerate] New roadmap generated, saving...')
       loadRoadmap(newRoadmap)
+      setPersistedRegen(null)
       console.log('[Regenerate] Done!')
     } catch (err) {
       console.error('[Regenerate] Engine generation failed, falling back:', err)
       localStorage.removeItem(STORAGE_KEYS.localStorage.roadmap)
+      clearRegenerationState()
+      setPersistedRegen(null)
       await loadData(false)
     } finally {
       setRegenerating(false)
       setEnrichProgress(null)
     }
   }, [roadmap, loadRoadmap, loadData, regenerating])
+
+  useEffect(() => {
+    const saved = loadRegenerationState()
+    console.log('[AutoResume] checking:', { loading, hasRoadmap: !!roadmap, hasPlanData: !!saved?.planData, hasEnrichedPlan: !!saved?.enrichedPlanData, regenerating })
+    if (!loading && roadmap && (saved?.enrichedPlanData || saved?.planData) && !regenerating) {
+      console.log('[AutoResume] triggering handleRegenerate')
+      handleRegenerate()
+    }
+  }, [loading, roadmap, regenerating, handleRegenerate])
 
   const handleScrollToToday = useCallback(() => {
     todayRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -356,7 +398,6 @@ export default function FullStudyRoadmapPage() {
   // ---- Normal Roadmap View ----
   return (
     <PageContent className="space-y-6">
-      {/* Skip link for keyboard users */}
       <a
         href="#today-section"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-xl focus:px-4 focus:py-2 focus:text-sm focus:font-medium"
@@ -364,6 +405,41 @@ export default function FullStudyRoadmapPage() {
       >
         Skip to today's tasks
       </a>
+
+      {(regenerating || persistedRegen) && enrichProgress && (
+        <div
+          className="rounded-xl border p-4"
+          style={{ borderColor: 'var(--color-primary)', backgroundColor: 'var(--color-primary-light)' }}
+          role="status"
+          aria-live="polite"
+        >
+          <div className="flex items-center gap-3">
+            <span className="inline-block h-5 w-5 animate-spin rounded-full border-2" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
+            <div className="flex-1">
+              <p className="text-sm font-semibold" style={{ color: 'var(--color-primary)' }}>
+                Regenerating plan with AI...
+              </p>
+              {enrichProgress.phase && (
+                <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-secondary)' }}>
+                  {enrichProgress.phase} ({enrichProgress.current}/{enrichProgress.total})
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="mt-3 h-1.5 w-full rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{
+                width: enrichProgress.total > 0 ? `${Math.round((enrichProgress.current / enrichProgress.total) * 100)}%` : '0%',
+                backgroundColor: 'var(--color-primary)',
+              }}
+            />
+          </div>
+          <p className="mt-2 text-xs" style={{ color: 'var(--color-muted)' }}>
+            You can leave this page and come back — progress will be saved.
+          </p>
+        </div>
+      )}
 
       <RoadmapHeader
         roadmap={roadmap}

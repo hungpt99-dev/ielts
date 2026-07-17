@@ -1,6 +1,6 @@
-import { callAI } from '@ielts/ai'
+import { createAIClient } from '@ielts/ai'
 import { safeFetchProviderConfig } from '../utils/safe-chrome'
-import { initializeExtensionEngine, getExtensionEngine } from '../storage/engine-adapters'
+import { initializeExtensionEngine, getExtensionEngine } from '../services/extensionEngine'
 import { YouTubeAdapter } from './infrastructure/youtube/YouTubeAdapter'
 import { YouTubeLayoutManager, PANEL_IFRAME_ID } from './infrastructure/youtube/YouTubeLayoutManager'
 import { FocusMode } from './infrastructure/youtube/FocusMode'
@@ -14,6 +14,8 @@ import { clearTranscriptCache } from './infrastructure/youtube/YouTubeTranscript
 import { safeStorageGet } from '../utils/safe-chrome'
 import { setVideoHelperHidden } from '../content-script/videoHelper'
 import { loadSettings } from '../background/settingsStorage'
+
+const aiClient = createAIClient()
 
 const TRANSCRIPT_RETRY_COOLDOWN_MS = 3000
 const MAX_PENDING_MESSAGES = 50
@@ -360,7 +362,14 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
     const systemPrompt = 'You are an IELTS vocabulary expert. Return ONLY valid JSON, no markdown, no code fences.'
     const userPrompt = `Analyze this word for an IELTS learner:\n\nWord: "${word}"\nContext sentence: "${sentence}"\n\nReturn JSON with:\n- word: the original word\n- normalizedWord: lowercase lemma\n- lemma: base form\n- pronunciation: IPA pronunciation (optional)\n- partOfSpeech: e.g. noun, verb, adjective\n- contextualDefinition: definition matching this context\n- translation: translation in the user's preferred language (optional)\n- cefrLevel: "A1"|"A2"|"B1"|"B2"|"C1"|"C2"\n- ieltsRelevance: "low"|"medium"|"high"\n- collocations: array of {phrase: string, example?: string}\n- synonyms: array of strings\n- wordFamily: array of {word: string, partOfSpeech: string}\n- simpleExample: simple example sentence\n- ieltsExample: IELTS-style example sentence (optional)\n- verbConjugation: {base: string, pastSimple: string, pastParticiple: string, presentParticiple: string, thirdPersonSingular: string} (omit if not a verb)\n\nContextual definition must relate to the provided sentence. If the word has multiple meanings, explain the one used in the context sentence first.`
 
-    const result = await callAI(systemPrompt, userPrompt, () => providerConfig, { temperature: 0.3 })
+    const result = await aiClient.complete(
+      [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      providerConfig,
+      { temperature: 0.3 },
+    )
 
     if (!result.error && result.content) {
       let parsed: Record<string, unknown>
@@ -525,7 +534,14 @@ async function handleExplainSentence(payload: Record<string, unknown>): Promise<
     const systemPrompt = 'You are an IELTS listening and grammar tutor. Analyze the given transcript sentence. Return ONLY valid JSON, no markdown, no code fences.'
     const userPrompt = `Analyze this transcript sentence for an IELTS learner:\n\nSentence: "${sentence}"\n\nContext: "${contextText}"\n\nReturn JSON with:\n- simpleMeaning: clear simple explanation\n- translation: translation in the user's preferred language (optional)\n- sentenceStructure: grammar structure explanation\n- grammarPoints: array of {name, explanation, sourceText?}\n- vocabulary: array of {word, meaningInContext}\n- listeningNotes: array of listening difficulty notes\n- simplifiedVersion: simpler English version\n- academicAlternative: more academic IELTS version (optional)\n- practiceQuestion: {prompt, answer} (optional)`
 
-    const result = await callAI(systemPrompt, userPrompt, () => providerConfig, { temperature: 0.3 })
+    const result = await aiClient.complete(
+      [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      providerConfig,
+      { temperature: 0.3 },
+    )
 
     if (result.error || !result.content) {
       postToParent('SENTENCE_EXPLANATION', { error: result.error || 'AI returned empty response' })

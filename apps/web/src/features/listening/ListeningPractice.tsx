@@ -4,7 +4,7 @@ import type {
   ListeningPracticeSession,
   ListeningQuestion,
 } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { listeningPracticeRepo } from '../../services/repositories'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
@@ -12,8 +12,7 @@ import AudioPlayer from './components/AudioPlayer'
 import LQuestion from './components/ListeningQuestion'
 
 import { generateId } from '../../utils'
-import { startEngineSession } from '../../services/learning/ai-exercise-session'
-import type { SessionInfo } from '../../services/learning/ai-exercise-session'
+import { generateActivityUseCase } from '../../use-cases/generate-activity'
 import { getLearningEngine } from '../../services/engineBootstrap'
 import { loadListeningExercises } from './listeningExerciseService'
 import PageHeader from '../../components/layout/PageHeader'
@@ -129,7 +128,6 @@ export default function ListeningPractice() {
 
   const [showTranscript, setShowTranscript] = useState(false)
   const [historyDetail, setHistoryDetail] = useState<ListeningPracticeSession | null>(null)
-  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
 
   const [confirmDelete, setConfirmDelete] = useState<ListeningExercise | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -137,7 +135,7 @@ export default function ListeningPractice() {
   const loadHistory = useCallback(async () => {
     try {
       setLoading(true)
-      const all = await DatabaseService.getAll<ListeningPracticeSession>('listeningPracticeSessions')
+      const all = await listeningPracticeRepo.findAll()
       setHistory(all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     } catch (err) {
       console.error('apps/web/src/features/listening/ListeningPractice.tsx error:', err);
@@ -247,8 +245,6 @@ export default function ListeningPractice() {
           blanks: q.blanks,
         })),
         answers: answers as Record<string, unknown>,
-        sessionId: sessionInfo?.sessionId,
-        attemptId: sessionInfo?.attemptId,
         timeSpentMs: timerSeconds * 1000,
       })
       if (result.status === 'success' && result.data) {
@@ -289,7 +285,7 @@ export default function ListeningPractice() {
       createdAt: new Date().toISOString(),
     }
 
-    DatabaseService.add('listeningPracticeSessions', session).catch(() => {})
+    listeningPracticeRepo.create(session).catch(() => {})
     setHistory(prev => [session, ...prev])
   }
 
@@ -299,7 +295,6 @@ export default function ListeningPractice() {
     setAnswers({})
     setNotes('')
     setResults(null)
-    setSessionInfo(null)
     setTimerSeconds(0)
     setView('browse')
   }
@@ -319,24 +314,22 @@ export default function ListeningPractice() {
     setAiError(null)
 
     try {
-      const { content, error, sessionInfo: si } = await startEngineSession(
-        'listening',
-        `Listening: ${aiTopic.trim()}`,
-        aiDifficulty,
-        20,
-        aiTopic.trim(),
-      )
+      const result = await generateActivityUseCase({
+        skill: 'listening',
+        description: `Listening: ${aiTopic.trim()}`,
+        difficulty: aiDifficulty,
+        availableMinutes: 20,
+        topic: aiTopic.trim(),
+      })
+      if (result.error) throw new Error(result.error)
+      if (!result.content) throw new Error('AI returned an empty response. Try again.')
 
-      if (error) throw new Error(error)
-      if (!content) throw new Error('AI returned an empty response. Try again.')
-
-      setSessionInfo(si)
 
       let parsed: Record<string, unknown>
       try {
-        const jsonStart = content.indexOf('{')
-        const jsonEnd = content.lastIndexOf('}')
-        const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? content.slice(jsonStart, jsonEnd + 1) : content
+        const jsonStart = result.content.indexOf('{')
+        const jsonEnd = result.content.lastIndexOf('}')
+        const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? result.content.slice(jsonStart, jsonEnd + 1) : result.content
         parsed = JSON.parse(jsonStr) as Record<string, unknown>
       } catch (error) {
         console.error('apps/web/src/features/listening/ListeningPractice.tsx error:', error);
@@ -357,17 +350,7 @@ export default function ListeningPractice() {
       const transcriptMatchesTopic = transcriptText.toLowerCase().includes(trimmedTopic.toLowerCase())
       let finalTranscript = transcriptText
       if (!transcriptMatchesTopic) {
-        const retry = await startEngineSession('listening', `Listening: ${trimmedTopic}`, aiDifficulty, 20, trimmedTopic)
-        if (retry.content) {
-          try {
-            const rParsed = JSON.parse(
-              retry.content.slice(retry.content.indexOf('{'), retry.content.lastIndexOf('}') + 1),
-            )
-            if (rParsed.transcript && (rParsed.transcript as string).toLowerCase().includes(trimmedTopic.toLowerCase())) {
-              finalTranscript = rParsed.transcript as string
-            }
-          } catch {}
-        }
+        finalTranscript = transcriptText
       }
       const exercise: ListeningExercise = {
         id: generateId(),

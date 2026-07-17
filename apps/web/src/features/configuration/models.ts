@@ -128,7 +128,7 @@ export interface ConfigurationBasic {
   dailyStudyMinutes: number
 }
 
-export interface UserConfiguration {
+export interface ExtendedUserConfiguration {
   basic: ConfigurationBasic
   advanced: ConfigurationAdvanced
 }

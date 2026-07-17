@@ -9,8 +9,8 @@
 | **Persistence** | `@ielts/storage` (canonical) + extension's own IndexedDB + engine adapters | All persistence through `@ielts/storage` only | Extension maintains separate DB layer | **High** |
 | **Settings** | `localStorage` (legacy), `@ielts/settings`, `chrome.storage` (extension) | Single settings flow through `@ielts/storage` | 3 storage locations, partial migration | **Medium** |
 | **Learner context** | `engineBootstrap.ts` builds partial context; `LearnerContextBuilder` exists but not fully wired | Full `LearnerStateSnapshot` from all sources | Context sources missing/incomplete | **High** |
-| **Proactive tutor** | 2 implementations: `ProactiveTutorOrchestrator` + legacy `proactiveMessageEngine` | Single `ProactiveTutorOrchestrator` as the authoritative implementation | Dual implementation, need to deprecate legacy | **Medium** |
-| **AI Tutor Engine architecture** | Both `ports/` (hexagonal new) and `services/` (legacy) directories coexist | Fully hexagonal, no legacy services | Incomplete migration to ports/adapters | **Medium** |
+| **Proactive tutor** | 2 implementations: `ProactiveTutorOrchestrator` + legacy `proactiveMessageEngine` | Single `ProactiveTutorOrchestrator` as the authoritative implementation | Legacy code already removed; only ProactiveTutorOrchestrator remains | **Completed** |
+| **AI Tutor Engine architecture** | Both `ports/` (hexagonal new) and `services/` (legacy) directories coexist | Fully hexagonal, no legacy services | Legacy services/ already removed; empty directories cleaned up | **Completed** |
 | **Study Plan placement** | `DailyPlanEngine` in `@ielts/learning-engine` | Separate `StudyPlanEngine` concept | Conceptually distinct but code is in learning engine package | **Low** |
 | **Test coverage (web)** | Limited — evaluation tests exist but no AI integration | All feature components covered | Written features lack component tests | **Medium** |
 | **Test coverage (AI Tutor Engine)** | No test files found | Engine has test coverage | Complete gap | **High** |

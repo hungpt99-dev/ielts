@@ -18,6 +18,8 @@ export const STORAGE_KEYS = {
     apiKeyPrefix: 'ielts-api-key-' as const,
     proactiveSettings: 'ielts-proactive-settings' as const,
     proactiveSettingsV3: 'ielts-proactive-settings-v3' as const,
+    configurationAdvanced: 'ielts-configuration-advanced' as const,
+    configurationAdvancedVersion: 'ielts-configuration-advanced-version' as const,
   },
   extensionLocal: {
     extensionSettings: 'extensionSettings' as const,

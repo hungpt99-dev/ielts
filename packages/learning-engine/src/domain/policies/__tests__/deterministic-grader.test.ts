@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { gradeAnswer } from '../deterministic-grader'
-import type { ExerciseQuestion } from '../../entities/exercise-question'
+import type { ExerciseQuestion } from '@ielts/shared'
 
 describe('deterministic-grader — gradeAnswer', () => {
   describe('multiple-choice', () => {

@@ -86,7 +86,7 @@ Incremental phases. No big-bang rewrites. Each phase is independently verifiable
 | Item | Detail |
 |---|---|
 | Prerequisites | Phases 2-5 complete, all consumers migrated |
-| Files affected | Deprecated `@ielts/ai-tutor-engine/src/services/*`, legacy `proactiveMessageEngine`, extension adapters after consolidation, hardcoded exercise generation in web features |
+| Files affected | Deprecated `@ielts/ai-tutor-engine/src/services/*` (already removed), legacy `proactiveMessageEngine` (already removed), extension adapters after consolidation, hardcoded exercise generation in web features |
 | Compatibility | Remove legacy code after verifying zero internal consumers. Add deprecation warnings one release before removal. |
 | Tests required | All existing tests pass after removal |
 | Completion criteria | No duplicate models, no duplicate AI clients, no hardcoded exercise generation, all storage through `@ielts/storage` |

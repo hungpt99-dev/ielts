@@ -1,6 +1,8 @@
-import { callAI } from '@ielts/ai'
+import { createAIClient } from '@ielts/ai'
 import { safeFetchProviderConfig, safeStorageGet, safeStorageSet } from '../../../utils/safe-chrome'
 import { StorageAdapter } from '../../infrastructure/persistence/StorageAdapter'
+
+const aiClient = createAIClient()
 
 export interface VerbConjugation {
   base: string
@@ -168,7 +170,14 @@ export class VocabularyService {
     const userPrompt = `Analyze this word for IELTS learners: "${word}"\n${contextPart}Provide: meaning, translation, partOfSpeech, pronunciation, exampleSentence (string), collocations (array of strings), synonyms (array of strings), antonyms (array of strings), wordFamily (array of strings), difficulty (A1-C2 or IELTS band), topic. If the word is a verb, also provide verbConjugation with base, pastSimple, pastParticiple, presentParticiple, thirdPersonSingular fields.`
 
     const providerConfig = await safeFetchProviderConfig()
-    const result = await callAI(systemPrompt, userPrompt, () => providerConfig, { temperature: 0.3 })
+    const result = await aiClient.complete(
+      [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      providerConfig,
+      { temperature: 0.3 },
+    )
     if (result.error || !result.content) return null
 
     try {

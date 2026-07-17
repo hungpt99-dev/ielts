@@ -330,21 +330,11 @@ In `packages/ai-tutor-engine/src/skill-modules/`:
 | `tutor-settings` | `ports/tutor-settings-repository.ts` | Proactive settings |
 | `event-publisher` | `ports/tutor-event-publisher.ts` | Domain events |
 
-## Duplicate Implementations: services/ vs. ports/
+## Proactive System Architecture
 
-The engine has two parallel implementations for proactive messaging:
+The proactive messaging system follows a hexagonal architecture with ports, domain policies, and application use cases. The legacy `services/` directory (`proactiveEventBus.ts`, `proactiveMessageEngine.ts`, `messageStorage.ts`) has been removed and consolidated into:
 
-### Legacy `services/` directory
-
-| File | Purpose |
-|---|---|
-| `services/proactiveEventBus.ts` | Event-based proactive message dispatching |
-| `services/proactiveMessageEngine.ts` | Proactive message generation + context suggestion (wraps new orchestrator) |
-| `services/messageStorage.ts` | Web-UI-based proactive message persistence |
-
-These are re-exported from `index.ts:119-122` for backward compatibility with web app hooks.
-
-### Modern `proactive/` + `ports/` directory
+### Current Proactive Implementation
 
 | File | Purpose |
 |---|---|
@@ -355,8 +345,6 @@ These are re-exported from `index.ts:119-122` for backward compatibility with we
 | `proactive/cached-proactive-evaluator.ts` | Cached evaluation wrapper |
 | `ports/proactive-message-repository.ts` | Repository contract |
 | `infrastructure/proactive-message-storage.ts` | LocalStorage implementation |
-
-The legacy `proactiveMessageEngine.ts` delegates to the application-layer `generateProactiveMessages` (`application/proactive/generate-proactive-messages.ts`), but uses its own input types (`ProactiveEngineInput`) and mapping layer.
 
 ## Domain Services
 

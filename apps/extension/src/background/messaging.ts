@@ -8,6 +8,7 @@ import {
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry, type ExtensionVocabEntry } from '../storage/vocabularyStore'
 import { emitFromBackground } from './eventEmitters'
+import { vocabularyRepo, passageEntryRepo } from '../services/repositories'
 
 const DEBUG = typeof process !== 'undefined' && process.env?.NODE_ENV === 'development'
 
@@ -365,6 +366,7 @@ export function initMessaging(): void {
         updatedAt: now,
       }
       await saveEntry(learningEntry)
+      passageEntryRepo.bulkUpsert([{ id: msg.payload.id || `ext-${Date.now()}`, title: 'Extension Entry', content: JSON.stringify(learningEntry), topic: msg.payload.category || 'general', createdAt: now, updatedAt: now }]).catch(() => {})
       await incrementDailyProgress('wordsAdded', 1)
 
       const sourceUrl = msg.payload.pageUrl || ''

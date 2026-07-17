@@ -4,11 +4,29 @@ const mockSafeGetAll = vi.hoisted(() => vi.fn())
 const mockCallAI = vi.hoisted(() => vi.fn())
 
 vi.mock('../../../../services/storage/Database', () => ({
-  DatabaseService: { safeGetAll: mockSafeGetAll },
+  DatabaseService: {
+    safeGetAll: mockSafeGetAll,
+    getAll: mockSafeGetAll,
+    getById: vi.fn().mockResolvedValue(undefined),
+    safeGetById: vi.fn().mockResolvedValue(undefined),
+    add: vi.fn().mockResolvedValue('mock-id'),
+    put: vi.fn().mockResolvedValue(undefined),
+    update: vi.fn().mockResolvedValue(undefined),
+    remove: vi.fn().mockResolvedValue(undefined),
+    count: vi.fn().mockResolvedValue(0),
+    bulkAdd: vi.fn().mockResolvedValue(undefined),
+    exportAll: vi.fn().mockResolvedValue({}),
+    importAll: vi.fn().mockResolvedValue(undefined),
+    resetAll: vi.fn().mockResolvedValue(undefined),
+    clearAll: vi.fn().mockResolvedValue(undefined),
+  },
 }))
 
 vi.mock('@ielts/ai', () => ({
   callAI: mockCallAI,
+  createAIClient: vi.fn().mockReturnValue({
+    complete: vi.fn().mockResolvedValue({ content: '{}', error: null }),
+  }),
 }))
 
 import { generateProgressReview } from '../progressReviewService'

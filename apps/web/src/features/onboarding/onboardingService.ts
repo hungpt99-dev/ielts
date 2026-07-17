@@ -1,6 +1,6 @@
 import type { StudyGoal } from '../../models'
 
-import { DatabaseService } from '../../services/storage/Database'
+import { taskRepo } from '../../services/repositories'
 import { STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
 
 function generateId(): string {
@@ -145,30 +145,31 @@ function generateRoadmapTasks(settings: Record<string, unknown>): Array<{
 
 export async function completeOnboarding(data: OnboardingData): Promise<void> {
   const settings: Record<string, unknown> = {
+    version: 1,
     study: {
       targetBand: data.targetBand,
       currentBand: data.currentBand,
-      examDate: data.examDate,
+      examDate: data.examDate || undefined,
       dailyStudyMinutes: data.dailyStudyMinutes,
       weakSkills: data.weakSkills,
+      nativeLanguage: data.preferredLanguage || '',
       studyGoal: data.studyGoal,
       preferredSchedule: data.preferredSchedule,
     },
-    targetBand: data.targetBand,
-    currentBand: data.currentBand,
-    examDate: data.examDate,
-    dailyStudyMinutes: data.dailyStudyMinutes,
-    weakSkills: data.weakSkills,
-    preferredTopics: data.preferredTopics,
-    studyReminder: 'Time to study IELTS!',
-    studyGoal: data.studyGoal,
-    preferredSchedule: data.preferredSchedule,
-    aiApiKey: '',
-    aiProvider: 'openai',
-    aiEndpoint: '',
-    aiModel: DEFAULT_AI_MODEL,
-    darkMode: false,
-    aiEnabled: false,
+    ai: {
+      providerId: 'openai',
+      model: undefined,
+      customApiUrl: undefined,
+      temperature: undefined,
+    },
+    theme: {
+      mode: 'system' as const,
+      accentColor: '#2563eb',
+    },
+    notifications: {
+      enabled: true,
+      reminderTime: '09:00',
+    },
   }
 
   localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(settings))
@@ -177,9 +178,9 @@ export async function completeOnboarding(data: OnboardingData): Promise<void> {
   localStorage.setItem('ielts-tutor-style', data.tutorStyle || 'encouraging')
   localStorage.setItem('ielts-strong-skills', JSON.stringify(data.strongSkills || []))
 
-  const existingTasks = await DatabaseService.getAll('tasks')
+  const existingTasks = await taskRepo.findAll()
   if (existingTasks.length === 0) {
     const roadmapTasks = generateRoadmapTasks(settings)
-    await DatabaseService.bulkAdd('tasks', roadmapTasks)
+    await taskRepo.bulkCreate(roadmapTasks)
   }
 }

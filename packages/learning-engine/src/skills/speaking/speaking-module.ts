@@ -1,6 +1,6 @@
 import type { IELTSSection } from '../../domain/value-objects'
 import type { Exercise, GenerateExerciseRequest } from '../../domain/entities/exercise'
-import type { ExerciseQuestion } from '../../domain/entities/exercise-question'
+import type { ExerciseQuestion } from '@ielts/shared'
 import type { AnswerEvaluation } from '../../domain/entities/evaluation'
 import type { MistakeEvidence } from '../../domain/entities/mistake-evidence'
 import type { SkillEvidence } from '../../domain/entities/skill-evidence'

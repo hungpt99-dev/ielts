@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { ProactiveMessage, ProactiveMessageCategory, ProactiveMessageSettings, LearnerStateSnapshot } from '@ielts/ai-tutor-engine'
-import { generateProactiveMessages, checkQuietHours, canSendNow as canSendNowFn, getMessagesForToday as getMessagesCountForToday, LocalStorageProactiveMessageRepository, generateId } from '@ielts/ai-tutor-engine'
+import { checkQuietHours, canSendNow as canSendNowFn, getMessagesForToday as getMessagesCountForToday, LocalStorageProactiveMessageRepository, generateId } from '@ielts/ai-tutor-engine'
 import { STORAGE_KEYS } from '@ielts/config'
+import { loadUserConfiguration } from '@ielts/settings'
+import { getAITutorEngine } from '../services/engineBootstrap'
 
 const repository = new LocalStorageProactiveMessageRepository()
 
@@ -9,41 +11,53 @@ type ProactiveMessageCallback = (message: ProactiveMessage) => void
 
 const LAST_ACTIVE_KEY = 'ielts-last-active-at'
 
-function buildLearnerState(): LearnerStateSnapshot {
-  const settingsRaw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
-  const settings = settingsRaw ? JSON.parse(settingsRaw) : {}
-  const study = settings.study ?? {}
+async function buildLearnerState(): Promise<LearnerStateSnapshot> {
+  const config = loadUserConfiguration()
+  const study = config.study
   const lastActiveAt = localStorage.getItem(LAST_ACTIVE_KEY)
   const now = new Date().toISOString()
   const lastActive = lastActiveAt ? new Date(lastActiveAt) : new Date()
   const inactiveDays = Math.floor((Date.now() - lastActive.getTime()) / 86400000)
 
-  const tasksRaw = localStorage.getItem('ielts-tasks')
-  const tasks = tasksRaw ? JSON.parse(tasksRaw) : []
+  const { DatabaseService } = await import('../services/storage/Database')
+
+  const [tasks, vocab, mistakes, roadmapRaw] = await Promise.all([
+    DatabaseService.getAll<any>('tasks').catch(() => [] as any[]),
+    DatabaseService.getAll<any>('vocabulary').catch(() => [] as any[]),
+    DatabaseService.getAll<any>('mistakes').catch(() => [] as any[]),
+    (async () => {
+      const stored = localStorage.getItem('ielts-roadmap')
+      if (stored) return stored
+      try {
+        const { PlanRepository } = await import('@ielts/storage')
+        const planRepo = new PlanRepository()
+        const plans = await planRepo.getAllPlans()
+        if (plans.length > 0) return JSON.stringify(plans[plans.length - 1])
+      } catch { /* ignore */ }
+      return null
+    })(),
+  ])
+
   const todayStr = now.slice(0, 10)
-  const tasksCompletedToday = Array.isArray(tasks)
-    ? tasks.filter((t: any) => t.isDone && t.completedAt?.slice(0, 10) === todayStr).length
-    : 0
+  const tasksCompletedToday = tasks.filter((t: any) => t.isDone && t.completedAt?.slice(0, 10) === todayStr).length
 
-  const streakRaw = localStorage.getItem('ielts-study-streak')
-  const studyStreak = streakRaw ? parseInt(streakRaw, 10) || 0 : 0
+  const doneDates = new Set(
+    tasks.filter((t: any) => t.isDone && t.completedAt).map((t: any) => t.completedAt!.slice(0, 10)),
+  )
+  let studyStreak = 0
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(today); d.setDate(d.getDate() - i)
+    if (doneDates.has(d.toISOString().slice(0, 10))) studyStreak++; else break
+  }
 
-  const vocabRaw = localStorage.getItem('ielts-vocabulary')
-  const vocab = vocabRaw ? JSON.parse(vocabRaw) : []
-  const dueForReview = Array.isArray(vocab)
-    ? vocab.filter((v: any) => v.nextReviewAt && new Date(v.nextReviewAt) <= new Date()).length
-    : 0
+  const dueForReview = vocab.filter((v: any) => v.nextReviewAt && new Date(v.nextReviewAt) <= new Date()).length
 
-  const mistakesRaw = localStorage.getItem('ielts-mistakes')
-  const mistakes = mistakesRaw ? JSON.parse(mistakesRaw) : []
-  const unreviewed = Array.isArray(mistakes)
-    ? mistakes.filter((m: any) => m.status === 'new' || m.status === 'unreviewed').length
-    : 0
+  const unreviewed = mistakes.filter((m: any) => m.status === 'new' || m.status === 'unreviewed').length
 
-  const examDate = study.examDate || settings.examDate
+  const examDate = study.examDate || ''
   const daysUntilExam = examDate ? Math.max(0, Math.floor((new Date(examDate).getTime() - Date.now()) / 86400000)) : null
 
-  const roadmapRaw = localStorage.getItem('ielts-roadmap')
   const roadmap = roadmapRaw ? JSON.parse(roadmapRaw) : null
   const missedTasks = roadmap?.phases
     ? roadmap.phases.reduce((sum: number, p: any) => sum + (p.weeks?.reduce((ws: number, w: any) => ws + (w.days?.reduce((ds: number, d: any) => ds + d.taskIds?.length || 0, 0) || 0), 0) || 0), 0) -
@@ -54,18 +68,18 @@ function buildLearnerState(): LearnerStateSnapshot {
     profile: {
       id: 'learner',
       name: '',
-      currentBand: study.currentBand || settings.currentBand || 0,
-      targetBand: study.targetBand || settings.targetBand || 0,
-      examType: (study.studyGoal || settings.studyGoal || 'academic') as any,
-      weakSkills: study.weakSkills || settings.weakSkills || [],
-      strongSkills: study.strongSkills || settings.strongSkills || [],
-      preferredStudyTime: study.preferredStudyTime || 'flexible',
+      currentBand: study.currentBand || 0,
+      targetBand: study.targetBand || 0,
+      examType: study.studyGoal || 'academic',
+      weakSkills: study.weakSkills || [],
+      strongSkills: [],
+      preferredStudyTime: 'flexible',
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
     exam: {
       examDate: examDate || '',
       daysUntilExam,
-      examType: (study.studyGoal || settings.studyGoal || 'academic') as any,
+      examType: study.studyGoal || 'academic',
     },
     progress: {
       overallCompletionPercent: roadmap?.overallProgress || 0,
@@ -76,13 +90,13 @@ function buildLearnerState(): LearnerStateSnapshot {
       consistency: 0,
     },
     vocabularySummary: {
-      totalCount: Array.isArray(vocab) ? vocab.length : 0,
+      totalCount: vocab.length,
       dueForReview,
-      masteredCount: Array.isArray(vocab) ? vocab.filter((v: any) => v.status === 'mastered').length : 0,
-      newCount: Array.isArray(vocab) ? vocab.filter((v: any) => v.status === 'new').length : 0,
+      masteredCount: vocab.filter((v: any) => v.status === 'mastered').length,
+      newCount: vocab.filter((v: any) => v.status === 'new').length,
     },
     mistakeSummary: {
-      total: Array.isArray(mistakes) ? mistakes.length : 0,
+      total: mistakes.length,
       unreviewed,
       bySkill: {},
     },
@@ -135,16 +149,16 @@ export function useProactiveMessages() {
       const todayCount = getMessagesCountForToday(messagesRef.current)
       if (todayCount >= settings.maxMessagesPerDay) return
       if (!checkQuietHours(settings.quietHoursStart, settings.quietHoursEnd)) return
-      const state = buildLearnerState()
-      const result = await generateProactiveMessages(
+      const state = await buildLearnerState()
+      const engine = getAITutorEngine()
+      if (!engine) return
+      const result = await engine.evaluateProactiveSupport(
         { triggerEvent: 'daily_evaluation', learnerState: state, recentMessages: [] },
-        settings as any,
-        [],
       )
-      if (!result.selected || result.selected.length === 0) return
+      if (result.status !== 'success' || !result.data?.selected || result.data.selected.length === 0) return
       const now = new Date().toISOString()
       const maxAllowed = settings.maxMessagesPerDay - todayCount
-      const toAdd = result.selected.slice(0, Math.max(0, maxAllowed)).map(m => ({
+      const toAdd = result.data.selected.slice(0, Math.max(0, maxAllowed)).map(m => ({
         ...m,
         id: generateId(),
         isRead: false,

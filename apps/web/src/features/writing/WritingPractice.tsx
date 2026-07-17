@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import type { WritingSession, WritingTaskType } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { writingSessionRepo } from '../../services/repositories'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
@@ -98,7 +98,7 @@ export default function WritingPractice() {
   const loadHistory = useCallback(async () => {
     try {
       setLoading(true)
-      const all = await DatabaseService.getAll<WritingSession>('writingSessions')
+      const all = await writingSessionRepo.findAll()
       setHistory(all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     } catch (err) {
       console.error('apps/web/src/features/writing/WritingPractice.tsx error:', err);
@@ -237,7 +237,7 @@ export default function WritingPractice() {
       createdAt: new Date().toISOString(),
     }
     try {
-      await DatabaseService.put('writingSessions', session)
+      await writingSessionRepo.bulkUpsert([session])
       setSessionId(session.id)
       setDraftSaved(true)
       loadHistory()
@@ -353,7 +353,7 @@ export default function WritingPractice() {
   }
 
   async function handleDeleteSession(id: string) {
-    await DatabaseService.remove('writingSessions', id)
+    await writingSessionRepo.delete(id)
     setHistory(prev => prev.filter(s => s.id !== id))
     setDeleteConfirmId(null)
   }

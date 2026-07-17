@@ -59,6 +59,11 @@ export interface IDatabase {
   tutorInterventions: Table<Record<string, unknown>, string>
   aiGenerationCache: Table<Record<string, unknown>, string>
   channelEvaluations: Table<Record<string, unknown>, string>
+  plans: Table<Record<string, unknown>, string>
+  phases: Table<Record<string, unknown>, string>
+  weeks: Table<Record<string, unknown>, string>
+  days: Table<Record<string, unknown>, string>
+  activities: Table<Record<string, unknown>, string>
 }
 
 export class AppDatabase extends Dexie implements IDatabase {
@@ -115,6 +120,11 @@ export class AppDatabase extends Dexie implements IDatabase {
   tutorInterventions!: Table<Record<string, unknown>, string>
   aiGenerationCache!: Table<Record<string, unknown>, string>
   channelEvaluations!: Table<Record<string, unknown>, string>
+  plans!: Table<Record<string, unknown>, string>
+  phases!: Table<Record<string, unknown>, string>
+  weeks!: Table<Record<string, unknown>, string>
+  days!: Table<Record<string, unknown>, string>
+  activities!: Table<Record<string, unknown>, string>
 
   constructor(schema: AppDatabaseSchema, options?: DexieOptions) {
     super(DB_NAME, options)
@@ -230,4 +240,9 @@ export const TABLE_NAMES: (keyof IDatabase)[] = [
   'tutorInterventions',
   'aiGenerationCache',
   'channelEvaluations',
+  'plans',
+  'phases',
+  'weeks',
+  'days',
+  'activities',
 ]

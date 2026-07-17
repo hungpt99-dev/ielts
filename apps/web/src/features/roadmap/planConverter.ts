@@ -1,7 +1,7 @@
 import type { StudyPlan } from '@ielts/learning-engine'
 import type { StudyTask } from '@ielts/learning-engine'
 import { toNearestOfficialBand, toDisplayBand } from '@ielts/learning-engine'
-import { DatabaseService } from '../../services/storage/Database'
+import { taskRepo } from '../../services/repositories'
 import type { RoadmapData, RoadmapPhase, RoadmapWeek, RoadmapDay } from './roadmapService'
 import { ENGINE_SKILL_TO_CATEGORY as SKILL_TO_CATEGORY, PHASE_TYPE_TO_NAME, PHASE_STAGE_TO_GOAL_LABEL } from './constants'
 
@@ -34,8 +34,21 @@ export async function studyPlanToRoadmapData(
 ): Promise<RoadmapData> {
   const taskEntryMap = new Map<string, string>()
 
+  const existingTasks = await taskRepo.findAll()
+  const existingByKey = new Map<string, string>()
+  for (const t of existingTasks) {
+    const key = t.date.slice(0, 10) + '|' + t.title
+    if (!existingByKey.has(key)) existingByKey.set(key, t.id)
+  }
+
   for (const task of plan.tasks) {
-    const entry = await DatabaseService.addTask({
+    const dateKey = task.date + '|' + task.title
+    const existingId = existingByKey.get(dateKey)
+    if (existingId) {
+      taskEntryMap.set(task.id, existingId)
+      continue
+    }
+    const entry = await taskRepo.create({
       title: task.title,
       description: task.description || task.objective,
       category: SKILL_TO_CATEGORY[task.skill] ?? 'Vocabulary',
@@ -48,6 +61,7 @@ export async function studyPlanToRoadmapData(
       completedAt: task.status === 'completed' ? (task.completedAt ?? new Date().toISOString()) : null,
     })
     taskEntryMap.set(task.id, entry.id)
+    existingByKey.set(dateKey, entry.id)
   }
 
   const totalPhases = plan.phases.length

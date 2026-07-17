@@ -10,7 +10,13 @@ import type {
   VocabularyEntry,
   WeeklyStudyDay,
 } from '../../models'
-import { DatabaseService } from '../../services/storage/Database'
+import { taskRepo, vocabReviewRepo, mistakeRepo, vocabularyRepo } from '../../services/repositories'
+import { ReadingSessionRepository, ListeningSessionRepository, WritingSessionRepository, SpeakingSessionRepository } from '@ielts/storage'
+
+const readingSessionRepo = new ReadingSessionRepository()
+const listeningSessionRepo = new ListeningSessionRepository()
+const writingSessionRepo = new WritingSessionRepository()
+const speakingSessionRepo = new SpeakingSessionRepository()
 import { initializeAITutorEngine } from '../../services/engineBootstrap'
 import { STORAGE_KEYS } from '@ielts/config'
 import { loadRoadmap, recalculateProgress } from '../roadmap/roadmapService'
@@ -180,17 +186,17 @@ export async function loadDashboardData(): Promise<{
   weeklyChart: WeeklyStudyDay[]
 }> {
   const [tasks, reviews, reading, listening, writing, speaking, mistakes, vocabulary] = await Promise.all([
-    DatabaseService.getAll<TaskEntry>('tasks'),
-    DatabaseService.getAll<VocabReviewEntry>('vocabularyReviews'),
-    DatabaseService.getAll<ReadingSession>('readingSessions'),
-    DatabaseService.getAll<ListeningSession>('listeningSessions'),
-    DatabaseService.getAll<WritingSession>('writingSessions'),
-    DatabaseService.getAll<SpeakingSession>('speakingSessions'),
-    DatabaseService.getAll<MistakeEntry>('mistakes'),
-    DatabaseService.getAll<VocabularyEntry>('vocabulary'),
+    taskRepo.findAll() as Promise<TaskEntry[]>,
+    vocabReviewRepo.findAll() as Promise<VocabReviewEntry[]>,
+    readingSessionRepo.findAll() as Promise<ReadingSession[]>,
+    listeningSessionRepo.findAll() as Promise<ListeningSession[]>,
+    writingSessionRepo.findAll() as Promise<WritingSession[]>,
+    speakingSessionRepo.findAll() as Promise<SpeakingSession[]>,
+    mistakeRepo.findAll() as Promise<MistakeEntry[]>,
+    vocabularyRepo.findAll() as Promise<VocabularyEntry[]>,
   ])
 
-  const todayTasks = await DatabaseService.getTasksForDate(getToday())
+  const todayTasks = tasks.filter(t => t.date.slice(0, 10) === getToday())
   const streak = computeStreak(tasks)
   const weeklyProgress = computeWeeklyProgress(tasks)
   const totalStudyHours = computeTotalStudyHours(reading, listening, writing, speaking, tasks)

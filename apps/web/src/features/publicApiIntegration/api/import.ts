@@ -1,4 +1,4 @@
-import { DatabaseService } from '../../../services/storage/Database'
+import { publicApiContentRepo, vocabularyRepo } from '../../../services/repositories'
 import type { PublicApiImportedContent, VocabularyEntry } from '../../../models'
 import type {
   PublicApiPreview,
@@ -102,7 +102,7 @@ export async function importPublicApiContent(
 
   try {
     const entry = createImportEntry(preview, overrides)
-    await DatabaseService.addPublicApiContent(entry)
+    await publicApiContentRepo.create(entry)
 
     if (preview.contentType === 'dictionary' || preview.contentType === 'vocabulary-list') {
       const vocabEntry: Omit<VocabularyEntry, 'id' | 'createdAt' | 'updatedAt'> = {
@@ -122,7 +122,7 @@ export async function importPublicApiContent(
         status: 'new',
         tags: overrides?.tags ?? [],
       }
-      await DatabaseService.add('vocabulary', vocabEntry)
+      await vocabularyRepo.create(vocabEntry)
     }
 
     return {

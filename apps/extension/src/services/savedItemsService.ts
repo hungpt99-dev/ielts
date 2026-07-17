@@ -4,6 +4,7 @@ import { getAllArticles, deleteArticleEntry } from '../storage/articleStore'
 import { getAllMistakes, deleteMistakeEntry } from '../storage/mistakeStore'
 import { safeStorageGet, safeStorageSet } from '../utils/safe-chrome'
 import type { LearningEntry, SaveCategory } from '../types'
+import { vocabularyRepo, mistakeRepo, passageEntryRepo } from './repositories'
 
 export interface SavedItemDisplay extends LearningEntry {
   source: 'indexedDB' | 'chromeStorage'
@@ -48,6 +49,7 @@ async function loadChromeStorageItems(): Promise<SavedItemDisplay[]> {
 async function loadVocabularyItems(): Promise<SavedItemDisplay[]> {
   try {
     const entries = await getAllVocabulary()
+    vocabularyRepo.findAll().catch(() => {})
     return entries.map((v) => ({
       id: v.id,
       text: v.word + (v.meaning ? ` — ${v.meaning}` : ''),
@@ -73,6 +75,7 @@ async function loadVocabularyItems(): Promise<SavedItemDisplay[]> {
 async function loadArticleItems(): Promise<SavedItemDisplay[]> {
   try {
     const entries = await getAllArticles()
+    passageEntryRepo.findAll().catch(() => {})
     return entries.map((a) => ({
       id: a.id,
       text: a.title + (a.content ? ` — ${a.content.slice(0, 200)}` : ''),
@@ -98,6 +101,7 @@ async function loadArticleItems(): Promise<SavedItemDisplay[]> {
 async function loadMistakeItems(): Promise<SavedItemDisplay[]> {
   try {
     const entries = await getAllMistakes()
+    mistakeRepo.findAll().catch(() => {})
     return entries.map((m) => ({
       id: m.id,
       text: m.mistake + (m.correction ? ` → ${m.correction}` : ''),
@@ -123,6 +127,7 @@ async function loadMistakeItems(): Promise<SavedItemDisplay[]> {
 async function loadIndexedDbItems(): Promise<SavedItemDisplay[]> {
   try {
     const entries = await getAllEntries()
+    passageEntryRepo.findAll().catch(() => {})
     return entries.map((e) => ({ ...e, source: 'indexedDB' as const }))
   } catch (error) {
     console.error('apps/extension/src/services/savedItemsService.ts error:', error);
@@ -197,6 +202,9 @@ export async function deleteSavedItem(item: SavedItemDisplay): Promise<void> {
     deleteArticleEntry(item.id).catch(() => {}),
     deleteMistakeEntry(item.id).catch(() => {}),
     deleteFromChromeStorage(item.id),
+    vocabularyRepo.delete(item.id).catch(() => {}),
+    mistakeRepo.delete(item.id).catch(() => {}),
+    passageEntryRepo.delete(item.id).catch(() => {}),
   ])
 }
 
@@ -211,5 +219,6 @@ export async function updateSavedItem(
     await updateChromeStorageItem(item.id, data)
   } else {
     await saveEntry({ ...item, ...data, updatedAt: timestamp })
+    passageEntryRepo.bulkUpsert([{ ...item, ...data, updatedAt: timestamp } as any]).catch(() => {})
   }
 }

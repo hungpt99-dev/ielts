@@ -32,3 +32,12 @@ export {
   DEFAULT_WEAK_SKILLS,
   DEFAULT_SCHEDULE,
 } from './study-defaults'
+export {
+  IELTS_SKILLS,
+  type IeltsSkill,
+  CEFR_LEVELS,
+  BAND_MIN,
+  BAND_MAX,
+  BAND_STEP,
+  EXERCISE_TYPES,
+} from './domain-constants'

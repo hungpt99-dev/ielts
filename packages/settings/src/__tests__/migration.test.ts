@@ -47,4 +47,46 @@ describe('migrateFromLegacySettings', () => {
     const result = migrateFromLegacySettings(legacy)
     expect(result!.ai?.customApiUrl).toBe('https://custom.com/v1')
   })
+
+  it('reads from study sub-object when flat keys are absent', () => {
+    const legacy = {
+      study: {
+        targetBand: 7.5,
+        currentBand: 6.0,
+        examDate: '2026-12-01',
+        dailyStudyMinutes: 90,
+        weakSkills: ['Reading'],
+        studyGoal: 'general',
+      },
+    }
+    const result = migrateFromLegacySettings(legacy)
+    expect(result).not.toBeNull()
+    expect(result!.study?.targetBand).toBe(7.5)
+    expect(result!.study?.currentBand).toBe(6.0)
+    expect(result!.study?.examDate).toBe('2026-12-01')
+    expect(result!.study?.dailyStudyMinutes).toBe(90)
+    expect(result!.study?.weakSkills).toEqual(['Reading'])
+    expect(result!.study?.studyGoal).toBe('general')
+  })
+
+  it('favors study sub-object over flat keys when both exist', () => {
+    const legacy = {
+      study: { targetBand: 8.0, currentBand: 6.5 },
+      targetBand: 7.0,
+      currentBand: 5.5,
+    }
+    const result = migrateFromLegacySettings(legacy)
+    expect(result!.study?.targetBand).toBe(8.0)
+    expect(result!.study?.currentBand).toBe(6.5)
+  })
+
+  it('preserves preferredSchedule from study sub-object', () => {
+    const legacy = {
+      study: {
+        preferredSchedule: ['sat', 'sun'],
+      },
+    }
+    const result = migrateFromLegacySettings(legacy)
+    expect(result!.study?.preferredSchedule).toEqual(['sat', 'sun'])
+  })
 })

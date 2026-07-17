@@ -3,6 +3,7 @@ import { getAllVocabulary, saveVocabularyEntry } from '../../storage/vocabularyS
 import { getAllMistakes, saveMistakeEntry } from '../../storage/mistakeStore'
 import { loadSettings, saveSettings, setApiKey } from '../settingsStorage'
 import { toExtensionVocab, toExtensionMistake, syncStorageForHighlighter } from '../sync/syncHelpers'
+import { vocabularyRepo, mistakeRepo } from '../../services/repositories'
 
 const SYNC_META_KEY = 'ielts-legacy-sync-meta'
 
@@ -35,6 +36,8 @@ export async function handleGetSyncStatus(): Promise<{
       getAllVocabulary().catch(() => []),
       getAllMistakes().catch(() => []),
     ])
+    vocabularyRepo.findAll().catch(() => {})
+    mistakeRepo.findAll().catch(() => {})
     return {
       success: true,
       data: {
@@ -59,6 +62,8 @@ export async function handleExportData(): Promise<{
       getAllMistakes().catch(() => []),
       loadSettings().catch(() => null),
     ])
+    vocabularyRepo.findAll().catch(() => {})
+    mistakeRepo.findAll().catch(() => {})
     return {
       success: true,
       data: {
@@ -111,23 +116,27 @@ export async function handleImportData(payload: unknown): Promise<{
 
     if (Array.isArray(data.vocabulary)) {
       const existing = await getAllVocabulary().catch(() => [])
+      vocabularyRepo.findAll().catch(() => {})
       const existingIds = new Set(existing.map(v => v.id))
       for (const item of data.vocabulary) {
         const id = (item.id as string) || crypto.randomUUID()
         if (existingIds.has(id)) { updated++ } else { imported++ }
         existingIds.add(id)
         await saveVocabularyEntry(toExtensionVocab(item, id)).catch(() => {})
+        vocabularyRepo.bulkUpsert([toExtensionVocab(item, id) as any]).catch(() => {})
       }
     }
 
     if (Array.isArray(data.mistakes)) {
       const existing = await getAllMistakes().catch(() => [])
+      mistakeRepo.findAll().catch(() => {})
       const existingIds = new Set(existing.map(m => m.id))
       for (const item of data.mistakes) {
         const id = (item.id as string) || crypto.randomUUID()
         if (existingIds.has(id)) { updated++ } else { imported++ }
         existingIds.add(id)
         await saveMistakeEntry(toExtensionMistake(item, id)).catch(() => {})
+        mistakeRepo.bulkUpsert([toExtensionMistake(item, id) as any]).catch(() => {})
       }
     }
 
