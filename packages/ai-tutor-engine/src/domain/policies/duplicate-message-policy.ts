@@ -1,11 +1,13 @@
 import type { ProactiveMessage } from '../entities/proactive-message'
 
+const DUPLICATE_KEY_EXPIRY_MS = 86_400_000
+
 export interface DuplicateCheckConfig {
   keyExpiryMs: number
 }
 
 export const DEFAULT_DUPLICATE_CONFIG: DuplicateCheckConfig = {
-  keyExpiryMs: 86_400_000,
+  keyExpiryMs: DUPLICATE_KEY_EXPIRY_MS,
 }
 
 export function isDuplicate(

@@ -1,6 +1,13 @@
 export const IELTS_SKILLS = ['listening', 'reading', 'writing', 'speaking'] as const
 export type IeltsSkill = (typeof IELTS_SKILLS)[number]
 
+export const LANGUAGE_SKILLS = [
+  ...IELTS_SKILLS,
+  'vocabulary',
+  'grammar',
+] as const
+export type LanguageSkill = (typeof LANGUAGE_SKILLS)[number]
+
 export const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const
 
 export const BAND_MIN = 0

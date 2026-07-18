@@ -25,8 +25,8 @@ export interface SyncStatus {
 }
 
 const LOCAL_KEYS = {
-  DAILY_PROGRESS: 'dailyProgress',
-  AI_API_KEY: 'aiApiKey',
+  DAILY_PROGRESS: EXT_STORAGE_KEYS.extensionLocal.dailyProgress,
+  AI_API_KEY: EXT_STORAGE_KEYS.extensionLocal.aiApiKey,
   SAVED_ITEMS: 'savedItems',
   LAST_VIDEO_PAGE: 'lastVideoPage',
   PENDING_VIDEO_INFO: 'pendingVideoInfo',

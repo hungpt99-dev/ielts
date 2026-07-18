@@ -1,6 +1,7 @@
 import { loadUserConfiguration } from '@ielts/settings'
 import { DatabaseService } from '../services/storage/Database'
 import { mapNativeLanguage } from './createAiInfrastructure'
+import { STORAGE_KEYS } from '@ielts/config'
 
 interface ContextSourceDeps {
   getLearningEngine: () => any
@@ -68,7 +69,7 @@ export function createProgressContextSource(deps: ContextSourceDeps) {
       const overall = recent.length > 0
         ? Math.round(recent.reduce((s: number, r: any) => s + (r.value ?? 0), 0) / recent.length * 100)
         : 0
-      const lastActiveKey = 'ielts-last-active-at'
+      const lastActiveKey = STORAGE_KEYS.localStorage.lastActiveAt
       const stored = localStorage.getItem(lastActiveKey)
       const lastActive = stored ? new Date(stored) : new Date()
       const inactiveDays = Math.floor((Date.now() - lastActive.getTime()) / 86400000)
@@ -225,7 +226,7 @@ export function createActivityContextSource() {
     try {
       const tasks = await DatabaseService.getAll<any>('tasks')
       const todayStr = new Date().toISOString().slice(0, 10)
-      const lastActiveKey = 'ielts-last-active-at'
+      const lastActiveKey = STORAGE_KEYS.localStorage.lastActiveAt
       const stored = localStorage.getItem(lastActiveKey)
       const lastActiveAt = stored || new Date().toISOString()
       if (!stored) {

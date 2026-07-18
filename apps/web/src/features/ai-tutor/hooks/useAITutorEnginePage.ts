@@ -375,7 +375,7 @@ export function useAITutorEnginePage(): AITutorPageState {
     }, [navigate]),
     onAskTutor: useCallback((message: string) => {
       if (!isAiConfigured) return
-      try { sessionStorage.setItem('ai-tutor-pending-message', message) } catch (error) {
+      try { sessionStorage.setItem(STORAGE_KEYS.sessionStorage.aiTutorPendingMessage, message) } catch (error) {
       console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
       }
       window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
@@ -383,13 +383,13 @@ export function useAITutorEnginePage(): AITutorPageState {
     onConfigureAi: useCallback(() => navigate(ROUTES.settingsAi), [navigate]),
     onSetTargetBand: useCallback(() => {
       window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
-      try { sessionStorage.setItem('ai-tutor-pending-message', 'I want to set my IELTS target band.') } catch (error) {
+      try { sessionStorage.setItem(STORAGE_KEYS.sessionStorage.aiTutorPendingMessage, 'I want to set my IELTS target band.') } catch (error) {
     console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
       }
     }, []),
     onSetExamDate: useCallback(() => {
       window.dispatchEvent(new CustomEvent('open-ai-tutor-chat'))
-      try { sessionStorage.setItem('ai-tutor-pending-message', 'I want to set my IELTS exam date.') } catch (error) {
+      try { sessionStorage.setItem(STORAGE_KEYS.sessionStorage.aiTutorPendingMessage, 'I want to set my IELTS exam date.') } catch (error) {
     console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
       }
     }, []),

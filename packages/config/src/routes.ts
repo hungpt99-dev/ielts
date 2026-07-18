@@ -27,4 +27,5 @@ export const ROUTES = {
   privacy: '/privacy',
   landing: '/landing',
   onboarding: '/onboarding',
+  feedback: '/feedback',
 } as const

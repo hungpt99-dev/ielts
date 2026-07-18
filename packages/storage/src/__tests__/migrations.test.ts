@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import {
   APP_SCHEMA,
   CURRENT_DB_VERSION,
+  STORED_VERSION_KEY,
   getSchemaForVersion,
   getStoreNamesForVersion,
   getAppliedVersion,
@@ -122,7 +123,7 @@ describe('Migrations', () => {
     })
 
     it('handles invalid stored value gracefully', async () => {
-      localStorage.setItem('schema_version', 'invalid')
+      localStorage.setItem(STORED_VERSION_KEY, 'invalid')
       const version = await getAppliedVersion()
       expect(version).toBe(0)
     })

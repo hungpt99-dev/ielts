@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DEFAULT_PLAN_ENRICH_HARD_CALL_LIMIT } from '@ielts/config';
 import type {
   NormalizedProfile,
   PlanningWindow,
@@ -590,7 +591,7 @@ export class AiPlanOrchestrator {
           objectiveBatchCount: 0,
           taskCandidateBatchCount: 0,
           maxRepairCalls: 0,
-          hardCallLimit: 25,
+          hardCallLimit: DEFAULT_PLAN_ENRICH_HARD_CALL_LIMIT,
         }),
         retryPolicy: { maxRepairAttempts: 0, enableRepair: false },
       };
@@ -641,7 +642,7 @@ export class AiPlanOrchestrator {
       objectiveBatchCount: objectiveBatches.length,
       taskCandidateBatchCount: taskBatches.length,
       maxRepairCalls: this.limits.maximumRepairCalls,
-      hardCallLimit: 25,
+      hardCallLimit: DEFAULT_PLAN_ENRICH_HARD_CALL_LIMIT,
     });
 
     if (useAI && callBudget.requiredCalls > callBudget.hardCallLimit) {
@@ -1000,7 +1001,7 @@ Weak skills: ${profile.weakSkills.join(', ') || 'none'}`;
       requiredCalls: 0,
       repairBudget: 0,
       maximumCalls: 0,
-      hardCallLimit: 25,
+      hardCallLimit: DEFAULT_PLAN_ENRICH_HARD_CALL_LIMIT,
     };
     return {
       profileAnalysis: null,

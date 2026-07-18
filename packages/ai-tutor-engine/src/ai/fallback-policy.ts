@@ -1,3 +1,4 @@
+import { DEFAULT_AI_MAX_RETRIES } from '@ielts/config'
 import type { TutorError } from '../domain/errors/tutor-error'
 
 export interface FallbackResult<T> {
@@ -9,7 +10,7 @@ export interface FallbackResult<T> {
 export class FallbackPolicy {
   private maxRetries: number
 
-  constructor(maxRetries: number = 2) {
+  constructor(maxRetries: number = DEFAULT_AI_MAX_RETRIES) {
     this.maxRetries = maxRetries
   }
 

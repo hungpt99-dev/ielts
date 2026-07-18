@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from '@ielts/config'
 import { useState, useEffect, useCallback } from 'react'
 import { getTodayEntries } from '../../storage/indexedDB'
 import type { LearningEntry } from '../../types'
@@ -80,7 +81,7 @@ async function loadUserData(): Promise<UserData | null> {
 function getInitialDarkMode(): boolean {
   try {
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const saved = localStorage.getItem('popup-dark-mode')
+    const saved = localStorage.getItem(STORAGE_KEYS.extensionLocal.popupDarkMode)
     return saved !== null ? saved === 'true' : prefersDark
   } catch (error) {
     console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
@@ -191,7 +192,7 @@ export function usePopupData(): PopupDataResult {
     setDarkMode((prev) => {
       const next = !prev
       try {
-        localStorage.setItem('popup-dark-mode', String(next))
+        localStorage.setItem(STORAGE_KEYS.extensionLocal.popupDarkMode, String(next))
       } catch (error) {
  console.error('apps/extension/src/popup/hooks/usePopupData.ts error:', error);
  /* localStorage not available */ }

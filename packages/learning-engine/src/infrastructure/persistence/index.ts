@@ -1,3 +1,4 @@
+import { SESSION_STATUS } from '../../domain/constants'
 import type { LearningSession } from '../../domain/entities/learning-session'
 import type { LearningSessionRepository, ExerciseRepository, LearningAttemptRepository, LearningOutcomeRepository } from '../../ports/session-repository'
 import type { Exercise } from '../../domain/entities/exercise'
@@ -16,7 +17,7 @@ export class InMemorySessionRepository implements LearningSessionRepository {
   }
 
   async findActive(): Promise<LearningSession[]> {
-    return Array.from(this.sessions.values()).filter(s => s.status === 'in-progress' || s.status === 'prepared')
+    return Array.from(this.sessions.values()).filter(s => s.status === SESSION_STATUS.IN_PROGRESS || s.status === SESSION_STATUS.PREPARED)
   }
 }
 

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { ROUTES } from '@ielts/config'
 import { DatabaseService } from '../services/storage/Database'
 import type {
   VocabularyEntry,
@@ -95,13 +96,13 @@ function extractSnippet(text: string, query: string, maxLen = 120): string {
 
 function typeToLink(type: string, id: string): string {
   switch (type) {
-    case 'vocabulary': return `/vocabulary#${id}`
-    case 'reading': return `/reading#${id}`
-    case 'listening': return `/listening#${id}`
-    case 'writing': return `/writing#${id}`
-    case 'speaking': return `/speaking#${id}`
-    case 'grammar': return `/grammar#${id}`
-    case 'mistake': return `/mistakes#${id}`
+    case 'vocabulary': return `${ROUTES.vocabulary}#${id}`
+    case 'reading': return `${ROUTES.reading}#${id}`
+    case 'listening': return `${ROUTES.listening}#${id}`
+    case 'writing': return `${ROUTES.writing}#${id}`
+    case 'speaking': return `${ROUTES.speaking}#${id}`
+    case 'grammar': return `${ROUTES.grammar}#${id}`
+    case 'mistake': return `${ROUTES.mistakes}#${id}`
     default: return '/'
   }
 }

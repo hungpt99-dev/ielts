@@ -59,9 +59,9 @@ function persistCanonicalSettings(input: CompleteOnboardingInput): void {
 
   localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(settings))
   localStorage.setItem(STORAGE_KEYS.localStorage.onboardingComplete, 'true')
-  localStorage.setItem('ielts-preferred-language', input.preferredLanguage || 'en')
-  localStorage.setItem('ielts-tutor-style', input.tutorStyle || 'encouraging')
-  localStorage.setItem('ielts-strong-skills', JSON.stringify(input.strongSkills || []))
+  localStorage.setItem(STORAGE_KEYS.localStorage.preferredLanguage, input.preferredLanguage || 'en')
+  localStorage.setItem(STORAGE_KEYS.localStorage.tutorStyle, input.tutorStyle || 'encouraging')
+  localStorage.setItem(STORAGE_KEYS.localStorage.strongSkills, JSON.stringify(input.strongSkills || []))
 }
 
 function mapEngineTaskToDb(

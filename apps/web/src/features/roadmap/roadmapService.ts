@@ -34,6 +34,29 @@ const CATEGORY_TO_SKILL: Record<string, 'listening' | 'reading' | 'writing' | 's
   'Mock Test': 'reading',
 }
 
+// ── Business rule constants ──────────────────────────────────────────
+const DEFAULT_PLANNING_WINDOW_DAYS = 84
+const MAX_PLANNING_WINDOW_DAYS = 365
+const PHASE_THRESHOLD_DAYS_1 = 7
+const PHASE_THRESHOLD_DAYS_2 = 21
+const PHASE_THRESHOLD_DAYS_3 = 49
+const TASKS_PER_DAY_DIVISOR = 22
+const MAX_MINUTES_PER_TASK = 30
+const AI_CALL_TIMEOUT_MS = 30000
+const AI_TEMPERATURE = 0.7
+const DEFAULT_AI_TARGET_COVERAGE = 0.5
+const DEFAULT_AI_MIN_PER_WEEK_SKILL_GROUP = 1
+const AI_CALL_BUDGET = {
+  profileAnalysisCalls: 1,
+  objectiveBatchCalls: 3,
+  taskCandidateBatchCalls: 8,
+  requiredCalls: 12,
+  repairBudget: 1,
+  maximumCalls: 13,
+  hardCallLimit: 25,
+} as const
+const DEFAULT_TASK_MINUTES_FALLBACK = 20
+
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
 }
@@ -284,9 +307,9 @@ function getStudyDates(settings: Record<string, unknown>): string[] {
 
   const endDate = examDate ? new Date(examDate.slice(0, 10) + 'T00:00:00') : new Date(today)
   if (!examDate || endDate <= today) {
-    endDate.setDate(endDate.getDate() + 84)
+    endDate.setDate(endDate.getDate() + DEFAULT_PLANNING_WINDOW_DAYS)
   }
-  const maxDays = Math.min(Math.ceil((endDate.getTime() - today.getTime()) / 86400000), 365)
+  const maxDays = Math.min(Math.ceil((endDate.getTime() - today.getTime()) / 86400000), MAX_PLANNING_WINDOW_DAYS)
   const dates: string[] = []
   for (let i = 0; i < maxDays; i++) {
     const d = new Date(today)
@@ -300,9 +323,9 @@ function getStudyDates(settings: Record<string, unknown>): string[] {
 }
 
 function getPhaseCount(totalStudyDays: number): number {
-  if (totalStudyDays <= 7) return 1
-  if (totalStudyDays <= 21) return 2
-  if (totalStudyDays <= 49) return 3
+  if (totalStudyDays <= PHASE_THRESHOLD_DAYS_1) return 1
+  if (totalStudyDays <= PHASE_THRESHOLD_DAYS_2) return 2
+  if (totalStudyDays <= PHASE_THRESHOLD_DAYS_3) return 3
   return 4
 }
 
@@ -343,7 +366,7 @@ export async function generateRoadmap(settings: Record<string, unknown>, existin
       let weekDone = 0
 
       const dailyStudyMinutesVal = (study?.dailyStudyMinutes as number) ?? s.dailyStudyMinutes ?? 60
-      const tasksPerDay = Math.max(1, Math.min(4, Math.round(dailyStudyMinutesVal / 22)))
+      const tasksPerDay = Math.max(1, Math.min(4, Math.round(dailyStudyMinutesVal / TASKS_PER_DAY_DIVISOR)))
 
       for (let d = 0; d < weekDates.length; d++) {
         const dateStr = weekDates[d]
@@ -355,7 +378,7 @@ export async function generateRoadmap(settings: Record<string, unknown>, existin
           const skillFocus = skillsInPhase[globalTaskIdx % skillsInPhase.length]
           const objective = getDayObjective(skillFocus, globalTaskIdx)
           const taskTitle = getTaskTitle(skillFocus, globalTaskIdx)
-          const timeMinutes = Math.min(Math.round(dailyStudyMinutesVal / tasksPerDay), 30)
+          const timeMinutes = Math.min(Math.round(dailyStudyMinutesVal / tasksPerDay), MAX_MINUTES_PER_TASK)
 
           const existing = existingByKey.get(dateStr + '|' + taskTitle)
           if (existing) {
@@ -592,7 +615,7 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
   const engine = new DailyPlanEngine()
 
   const study = s.study as Record<string, unknown> | undefined
-  const defaultedExamDate = (study?.examDate as string) || (s.examDate as string) || new Date(Date.now() + 84 * 86400000).toISOString().split('T')[0]
+  const defaultedExamDate = (study?.examDate as string) || (s.examDate as string) || new Date(Date.now() + DEFAULT_PLANNING_WINDOW_DAYS * 86400000).toISOString().split('T')[0]
   console.log('[RoadmapGen] Building profile...', { targetBand: study?.targetBand ?? s.targetBand, currentBand: study?.currentBand ?? s.currentBand })
   const profile = buildNormalizedProfile({
     settings: {
@@ -690,7 +713,7 @@ async function enrichPlanWithAI(
 
     const aiCallFn: import('@ielts/learning-engine').AICallFn = async (systemPrompt, userPrompt) => {
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 30000)
+      const timeoutId = setTimeout(() => controller.abort(), AI_CALL_TIMEOUT_MS)
       try {
         const result = await baseClient.complete(
           [
@@ -701,11 +724,11 @@ async function enrichPlanWithAI(
             apiKey: config.apiKey,
             baseUrl: config.baseUrl,
             model: config.model,
-            temperature: 0.7,
+            temperature: AI_TEMPERATURE,
             maxTokens: DEFAULT_AI_MAX_TOKENS,
           },
           {
-            temperature: 0.7,
+            temperature: AI_TEMPERATURE,
             maxTokens: DEFAULT_AI_MAX_TOKENS,
           },
         )
@@ -721,12 +744,12 @@ async function enrichPlanWithAI(
 
     // Select which requirements to send to AI (coverage policy)
     const affordableCount = calculateAffordableCandidateCount(
-      { profileAnalysisCalls: 1, objectiveBatchCalls: 3, taskCandidateBatchCalls: 8, requiredCalls: 12, repairBudget: 1, maximumCalls: 13, hardCallLimit: 25 },
+      AI_CALL_BUDGET,
       DEFAULT_PLAN_ENRICH_MAX_CALLS,
     )
     const { selected, deterministic } = selectRequirementsForAi(requirements, {
-      targetAiCoverage: 0.5,
-      minimumAiPerWeekSkillGroup: 1,
+      targetAiCoverage: DEFAULT_AI_TARGET_COVERAGE,
+      minimumAiPerWeekSkillGroup: DEFAULT_AI_MIN_PER_WEEK_SKILL_GROUP,
       prioritizeWeakSkills: true,
       prioritizeHighValueTasks: true,
       distributeAcrossEntireRoadmap: true,
@@ -940,7 +963,7 @@ export async function toggleTask(roadmap: RoadmapData, phaseIndex: number, weekI
         objective: dbTask.title,
         reason: `Roadmap task: ${dbTask.title}`,
         scheduledDate: dbTask.date,
-        estimatedMinutes: dbTask.timeMinutes || 20,
+        estimatedMinutes: dbTask.timeMinutes || DEFAULT_TASK_MINUTES_FALLBACK,
         priority: 'normal',
         sourceType: 'roadmap',
       }

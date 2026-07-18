@@ -1,4 +1,5 @@
 import type { SaveCategory, LearningEntry } from '../types'
+import { STORAGE_KEYS } from '@ielts/config'
 import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry } from '../storage/vocabularyStore'
@@ -222,10 +223,10 @@ import('./sync/AutoSyncController').then(({ onExtensionPopupOpen }) => {
 // Content scripts write to _pendingSaves (array) at most once per 2 seconds.
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== 'local') return
-  const items = changes['_pendingSaves']?.newValue as Array<Record<string, unknown>> | undefined
+  const items = changes[STORAGE_KEYS.extensionLocal.pendingSaves]?.newValue as Array<Record<string, unknown>> | undefined
   if (!items || !Array.isArray(items) || items.length === 0) return
 
-  safeStorageSet({ _pendingSaves: [] }).then(async () => {
+  safeStorageSet({ [STORAGE_KEYS.extensionLocal.pendingSaves]: [] }).then(async () => {
     let vocabCount = 0
 
     for (const pending of items) {

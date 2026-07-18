@@ -370,7 +370,7 @@ export const APP_SCHEMA: AppDatabaseSchema = {
   ],
 }
 
-const STORED_VERSION_KEY = STORAGE_KEYS.indexedDB.schemaVersionKey
+export const STORED_VERSION_KEY = STORAGE_KEYS.indexedDB.schemaVersionKey
 
 export function getSchemaForVersion(version: number): StorageVersion | undefined {
   return APP_SCHEMA.versions.find(v => v.number === version)

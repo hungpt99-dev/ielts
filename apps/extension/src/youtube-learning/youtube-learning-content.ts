@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from '@ielts/config'
 import { createAIClient } from '@ielts/ai'
 import { safeFetchProviderConfig } from '../utils/safe-chrome'
 import { initializeExtensionEngine, getExtensionEngine } from '../services/extensionEngine'
@@ -19,7 +20,7 @@ const aiClient = createAIClient()
 
 const TRANSCRIPT_RETRY_COOLDOWN_MS = 3000
 const MAX_PENDING_MESSAGES = 50
-const AUTO_OPEN_STORAGE_KEY = 'yt-learning-auto-open'
+const AUTO_OPEN_STORAGE_KEY = STORAGE_KEYS.extensionLocal.ytLearningAutoOpen
 
 const DEBUG = process.env.NODE_ENV === 'development'
 
@@ -455,8 +456,8 @@ async function handleSaveMistakes(payload: Record<string, unknown>): Promise<voi
   if (!Array.isArray(mistakes) || mistakes.length === 0) return
 
   try {
-    const existing = await safeStorageGet<unknown[]>('yt-learning-mistakes')
-    const all = (existing?.['yt-learning-mistakes'] ?? []) as Array<Record<string, unknown>>
+    const existing = await safeStorageGet<unknown[]>(STORAGE_KEYS.extensionLocal.ytLearningMistakes)
+    const all = (existing?.[STORAGE_KEYS.extensionLocal.ytLearningMistakes] ?? []) as Array<Record<string, unknown>>
     for (const m of mistakes) {
       const dup = all.find(
         (e: Record<string, unknown>) =>
@@ -464,7 +465,7 @@ async function handleSaveMistakes(payload: Record<string, unknown>): Promise<voi
       )
       if (!dup) all.push({ ...m, savedAt: new Date().toISOString() })
     }
-    await chrome.storage.local.set({ 'yt-learning-mistakes': all })
+    await chrome.storage.local.set({ [STORAGE_KEYS.extensionLocal.ytLearningMistakes]: all })
     postToParent('MISTAKES_SAVED', { success: true })
   } catch (error) {
     console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);

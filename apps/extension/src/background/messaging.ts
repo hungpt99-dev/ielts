@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from '@ielts/config'
 import type { SaveCategory, LearningEntry } from '../types'
 import {
   updateDailyProgress,
@@ -298,7 +299,7 @@ export function handleMessage(
 
 export function initMessaging(): void {
   registerHandler('GET_DAILY_PROGRESS', async () => {
-    const result = await chrome.storage.local.get(['dailyProgress'])
+    const result = await chrome.storage.local.get([STORAGE_KEYS.extensionLocal.dailyProgress])
     return (
       result.dailyProgress || {
         wordsAdded: 0,

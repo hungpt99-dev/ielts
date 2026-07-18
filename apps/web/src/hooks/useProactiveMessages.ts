@@ -26,7 +26,7 @@ async function buildLearnerState(): Promise<LearnerStateSnapshot> {
     DatabaseService.getAll<any>('vocabulary').catch(() => [] as any[]),
     DatabaseService.getAll<any>('mistakes').catch(() => [] as any[]),
     (async () => {
-      const stored = localStorage.getItem('ielts-roadmap')
+      const stored = localStorage.getItem(STORAGE_KEYS.localStorage.roadmap)
       if (stored) return stored
       try {
         const { PlanRepository } = await import('@ielts/storage')

@@ -35,6 +35,8 @@ export {
 export {
   IELTS_SKILLS,
   type IeltsSkill,
+  LANGUAGE_SKILLS,
+  type LanguageSkill,
   CEFR_LEVELS,
   BAND_MIN,
   BAND_MAX,

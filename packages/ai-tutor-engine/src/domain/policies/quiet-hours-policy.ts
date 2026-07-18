@@ -1,3 +1,6 @@
+const MS_PER_MINUTE = 60_000
+const MINUTES_PER_DAY = 1440
+
 export interface QuietHoursConfig {
   start: string
   end: string
@@ -32,8 +35,8 @@ export function getQuietHoursRemainingMs(
   const remainingMinutes = endMinutes - currentMinutes
 
   if (remainingMinutes < 0) {
-    return (1440 - currentMinutes + endMinutes) * 60 * 1000
+    return (MINUTES_PER_DAY - currentMinutes + endMinutes) * MS_PER_MINUTE
   }
 
-  return remainingMinutes * 60 * 1000
+  return remainingMinutes * MS_PER_MINUTE
 }

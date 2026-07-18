@@ -44,6 +44,10 @@ export type { ProgressReviewRequest, ProgressReviewResult, LearnerProgressAnalys
 export type { BandScore, IELTSSection, SkillBandScores, LocalDate, DayOfWeek, StudyDuration } from './domain/value-objects'
 export { isValidBandScore, formatStudyDuration } from './domain/value-objects'
 
+// ── Domain Constants ───────────────────────────────────────────────────
+export { PROACTIVE_TUTOR_DEFAULTS } from './domain/constants'
+export type { ProactiveTutorDefaults } from './domain/constants'
+
 // ── Events ────────────────────────────────────────────────────────────
 export type { LearningEvent, LearningEventType, LearningEventSource } from './domain/events/learning-event'
 export type { TutorEvent, TutorEventType } from './domain/events/tutor-event'

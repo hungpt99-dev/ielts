@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from '@ielts/config'
 import type { SaveCategory } from '../types'
 import type { AiExplainType } from '@ielts/ai'
 import {
@@ -621,9 +622,9 @@ const SAVE_FLUSH_MS = 2000
 function storeToChromeStorage(batch: typeof pendingSaves): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      chrome.storage.local.get('_pendingSaves', (result) => {
-        const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
-        safeStorageSet({ _pendingSaves: existing.concat(batch) }).then(resolve).catch(reject)
+      chrome.storage.local.get(STORAGE_KEYS.extensionLocal.pendingSaves, (result) => {
+        const existing = (result[STORAGE_KEYS.extensionLocal.pendingSaves] as Array<Record<string, unknown>>) || []
+        safeStorageSet({ [STORAGE_KEYS.extensionLocal.pendingSaves]: existing.concat(batch) }).then(resolve).catch(reject)
       })
     } catch (e) {
       console.error('apps/extension/src/content-script/selectionPanel.ts error:', e);
@@ -685,9 +686,9 @@ function recoverFromPageStorage(): void {
     if (!Array.isArray(items) || items.length === 0) return
 
     // Forward saved items into chrome.storage now that the new context is valid
-    chrome.storage.local.get('_pendingSaves', (result) => {
-      const existing = (result['_pendingSaves'] as Array<Record<string, unknown>>) || []
-      safeStorageSet({ _pendingSaves: existing.concat(items) })
+    chrome.storage.local.get(STORAGE_KEYS.extensionLocal.pendingSaves, (result) => {
+      const existing = (result[STORAGE_KEYS.extensionLocal.pendingSaves] as Array<Record<string, unknown>>) || []
+      safeStorageSet({ [STORAGE_KEYS.extensionLocal.pendingSaves]: existing.concat(items) })
     })
   } catch (error) {
     console.error('apps/extension/src/content-script/selectionPanel.ts error:', error);

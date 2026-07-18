@@ -18,6 +18,17 @@ export { submitAnswer } from './application/attempts/submit-answer'
 export { adaptDifficulty } from './application/adaptation/adapt-difficulty'
 export { generateMistakeReview } from './application/review/generate-mistake-review'
 
+// ── Domain Constants (NEW) ───────────────────────────────────────────
+export {
+  TASK_STATUS,
+  type TaskStatus,
+  ATTEMPT_STATUS,
+  type AttemptStatus,
+  SESSION_STATUS,
+  type SessionStatus,
+  TASK_PRIORITY,
+} from './domain/constants'
+
 // ── Domain Entities (NEW) ────────────────────────────────────────────
 export type {
   LearningSession, LearningSessionStatus, LearningSessionSource, LearningMode,

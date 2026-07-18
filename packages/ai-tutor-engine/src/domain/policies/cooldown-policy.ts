@@ -1,3 +1,7 @@
+const GLOBAL_COOLDOWN_MS = 60_000
+const DAILY_COOLDOWN_MS = 86_400_000
+const HALF_DAY_COOLDOWN_MS = 43_200_000
+
 export interface CooldownEntry {
   triggerType: string
   lastFiredAt: string
@@ -9,13 +13,13 @@ export interface CooldownPolicyConfig {
 }
 
 export const DEFAULT_COOLDOWN_CONFIG: CooldownPolicyConfig = {
-  globalCooldownMs: 60_000,
+  globalCooldownMs: GLOBAL_COOLDOWN_MS,
   perTriggerCooldownMs: {
-    long_inactivity: 86_400_000,
-    exam_approaching: 86_400_000,
-    study_streak_achieved: 86_400_000,
-    vocabulary_review_due: 43_200_000,
-    due_review_not_completed: 43_200_000,
+    long_inactivity: DAILY_COOLDOWN_MS,
+    exam_approaching: DAILY_COOLDOWN_MS,
+    study_streak_achieved: DAILY_COOLDOWN_MS,
+    vocabulary_review_due: HALF_DAY_COOLDOWN_MS,
+    due_review_not_completed: HALF_DAY_COOLDOWN_MS,
   },
 }
 

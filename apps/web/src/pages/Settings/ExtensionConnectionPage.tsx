@@ -741,7 +741,7 @@ export default function ExtensionConnectionPage() {
           </div>
 
           <div style={{ marginTop: 'var(--spacing-md)', textAlign: 'center' }}>
-            <Button variant="ghost" size="sm" onClick={() => navigate('/feedback')} aria-label="Contact support">
+            <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.feedback)} aria-label="Contact support">
               Contact Support
             </Button>
           </div>

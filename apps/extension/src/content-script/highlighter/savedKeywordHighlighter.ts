@@ -13,8 +13,9 @@ import {
   emitExtensionAutoHighlightEnabled,
   emitExtensionAutoHighlightDisabled,
 } from '../../background/eventEmitters'
+import { STORAGE_KEYS } from '@ielts/config'
 
-const SETTINGS_KEY = 'extensionSettings'
+const SETTINGS_KEY = STORAGE_KEYS.extensionLocal.extensionSettings
 const VOCAB_STORAGE_KEY = 'vocabulary'
 const SAVED_ITEMS_KEY = 'savedItems'
 

@@ -174,9 +174,9 @@ export async function completeOnboarding(data: OnboardingData): Promise<void> {
 
   localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(settings))
   localStorage.setItem(STORAGE_KEYS.localStorage.onboardingComplete, 'true')
-  localStorage.setItem('ielts-preferred-language', data.preferredLanguage || 'en')
-  localStorage.setItem('ielts-tutor-style', data.tutorStyle || 'encouraging')
-  localStorage.setItem('ielts-strong-skills', JSON.stringify(data.strongSkills || []))
+  localStorage.setItem(STORAGE_KEYS.localStorage.preferredLanguage, data.preferredLanguage || 'en')
+  localStorage.setItem(STORAGE_KEYS.localStorage.tutorStyle, data.tutorStyle || 'encouraging')
+  localStorage.setItem(STORAGE_KEYS.localStorage.strongSkills, JSON.stringify(data.strongSkills || []))
 
   const existingTasks = await taskRepo.findAll()
   if (existingTasks.length === 0) {

@@ -1,3 +1,4 @@
+import { ATTEMPT_STATUS } from '../../domain/constants'
 import type { ResumeLearningSessionResult } from '../../domain/entities/learning-session'
 import type { LearningSessionRepository, LearningAttemptRepository } from '../../ports/session-repository'
 
@@ -16,7 +17,7 @@ export async function resumeLearningSession(
   }
 
   const attempts = await deps.attemptRepository.findBySession(sessionId)
-  const currentAttempt = attempts.find(a => a.status === 'in-progress' || a.status === 'not-started')
+  const currentAttempt = attempts.find(a => a.status === ATTEMPT_STATUS.IN_PROGRESS || a.status === ATTEMPT_STATUS.NOT_STARTED)
 
   const currentActivity = session.currentActivityIndex < session.activities.length
     ? session.activities[session.currentActivityIndex]

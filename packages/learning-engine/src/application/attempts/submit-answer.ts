@@ -4,6 +4,7 @@ import type { LearningSessionRepository, LearningAttemptRepository, ExerciseRepo
 import type { TutorIntelligencePort } from '../../ports/tutor-intelligence-port'
 import type { MistakeRepository } from '../../ports/mistake-repository'
 import type { LearningEventPublisher } from '../../ports/learning-event-publisher'
+import { ATTEMPT_STATUS } from '../../domain/constants'
 import { gradeAnswer } from '../../domain/policies/deterministic-grader'
 import { selectEvaluationMethod } from '../../domain/policies/evaluation-policy'
 
@@ -22,7 +23,7 @@ export async function submitAnswer(
 ): Promise<SubmitLearningAnswerResult> {
   const attempt = await deps.attemptRepository.getById(request.attemptId)
   if (!attempt) throw new Error(`Attempt ${request.attemptId} not found`)
-  if (attempt.status === 'submitted' || attempt.status === 'evaluated' || attempt.status === 'completed') {
+  if (attempt.status === ATTEMPT_STATUS.SUBMITTED || attempt.status === ATTEMPT_STATUS.EVALUATED || attempt.status === ATTEMPT_STATUS.COMPLETED) {
     throw new Error(`Attempt ${request.attemptId} has already been submitted`)
   }
 
@@ -30,7 +31,7 @@ export async function submitAnswer(
   if (!exercise) throw new Error(`Exercise ${attempt.exerciseId} not found`)
 
   attempt.answers = request.answers
-  attempt.status = 'submitted'
+  attempt.status = ATTEMPT_STATUS.SUBMITTED
   attempt.submittedAt = new Date().toISOString()
   await deps.attemptRepository.save(attempt)
 
@@ -138,7 +139,7 @@ export async function submitAnswer(
   }
 
   attempt.evaluations = evaluations
-  attempt.status = allComplete ? 'evaluated' : 'submitted'
+  attempt.status = allComplete ? ATTEMPT_STATUS.EVALUATED : ATTEMPT_STATUS.SUBMITTED
   attempt.evaluatedAt = new Date().toISOString()
   await deps.attemptRepository.save(attempt)
 
@@ -177,7 +178,7 @@ export async function submitAnswer(
     sessionId: request.sessionId,
     exerciseId: attempt.exerciseId,
     questionId: '',
-    status: 'evaluated',
+    status: ATTEMPT_STATUS.EVALUATED,
     score: evaluations.reduce((s, e) => s + e.score, 0),
     schemaVersion: '1.0',
   })

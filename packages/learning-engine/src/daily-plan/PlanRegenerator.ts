@@ -14,6 +14,7 @@ import type {
   GenerateStudyPlanResult,
   DayOfWeek,
 } from './types';
+import { TASK_STATUS, TASK_PRIORITY } from '../domain/constants';
 
 // ── Public Config & Params Types ──
 
@@ -113,8 +114,8 @@ export class PlanRegenerator {
       return this.engine.generatePlan(newProfile);
     }
 
-    const completedTasks = currentPlan.tasks.filter(t => t.status === 'completed');
-    const inProgressTasks = currentPlan.tasks.filter(t => t.status === 'in-progress');
+    const completedTasks = currentPlan.tasks.filter(t => t.status === TASK_STATUS.COMPLETED);
+    const inProgressTasks = currentPlan.tasks.filter(t => t.status === TASK_STATUS.IN_PROGRESS);
 
     if (mode === 'rebalance') {
       return this.rebalanceRegeneration(currentPlan, newProfile, completedTasks, inProgressTasks);
@@ -203,18 +204,18 @@ export class PlanRegenerator {
     const preservedItems: string[] = [];
     let requiresConfirmation = false;
 
-    const completedCount = currentPlan.tasks.filter(t => t.status === 'completed').length;
+    const completedCount = currentPlan.tasks.filter(t => t.status === TASK_STATUS.COMPLETED).length;
     if (completedCount > 0) {
       preservedItems.push(`${completedCount} completed tasks will be preserved`);
     }
 
-    const inProgressCount = currentPlan.tasks.filter(t => t.status === 'in-progress').length;
+    const inProgressCount = currentPlan.tasks.filter(t => t.status === TASK_STATUS.IN_PROGRESS).length;
     if (inProgressCount > 0) {
       preservedItems.push(`${inProgressCount} in-progress tasks will be preserved`);
     }
 
     const hasUnfinishedTasks = currentPlan.tasks.some(
-      t => t.status !== 'completed' && t.status !== 'in-progress',
+      t => t.status !== TASK_STATUS.COMPLETED && t.status !== TASK_STATUS.IN_PROGRESS,
     );
     if (hasUnfinishedTasks) {
       preservedItems.push('Unfinished tasks will be regenerated based on new settings');
@@ -343,7 +344,7 @@ export class PlanRegenerator {
     const preview = this.engine.previewPlan(newProfile);
 
     const futureTasks = currentPlan.tasks.filter(
-      t => t.status !== 'completed' && t.status !== 'in-progress',
+      t => t.status !== TASK_STATUS.COMPLETED && t.status !== TASK_STATUS.IN_PROGRESS,
     );
 
     const preservedTasks = [...completedTasks, ...inProgressTasks];
@@ -563,7 +564,7 @@ export class PlanRegenerator {
 
     for (const task of futureTasks) {
       if (!scheduledIds.has(task.id)) {
-        rebalanced.push({ ...task, status: 'skipped' });
+        rebalanced.push({ ...task, status: TASK_STATUS.SKIPPED });
       }
     }
 
@@ -676,13 +677,13 @@ export class PlanRegenerator {
       if (excess <= 0) return null;
 
       const sorted = [...dayTasks]
-        .filter(t => t.status !== 'completed')
+        .filter(t => t.status !== TASK_STATUS.COMPLETED)
         .sort((a, b) => b.priority.localeCompare(a.priority));
       const updated = [...plan.tasks];
 
       for (const task of sorted) {
         if (excess <= 0) break;
-        if (task.priority === 'low' || task.priority === 'normal') {
+        if (task.priority === TASK_PRIORITY.LOW || task.priority === TASK_PRIORITY.NORMAL) {
           const nextDate = this.nextAvailableDate(plan, task.date);
           if (nextDate) {
             const idx = updated.findIndex(t => t.id === task.id);
@@ -724,10 +725,10 @@ export class PlanRegenerator {
       let tasks = [...plan.tasks];
       let remainingExcess = excess;
 
-      const nonCompleted = tasks.filter(t => t.status !== 'completed');
+      const nonCompleted = tasks.filter(t => t.status !== TASK_STATUS.COMPLETED);
 
       const lowPriority = nonCompleted
-        .filter(t => t.priority === 'low' && t.estimatedMinutes >= MIN_SESSION_MINUTES)
+        .filter(t => t.priority === TASK_PRIORITY.LOW && t.estimatedMinutes >= MIN_SESSION_MINUTES)
         .sort((a, b) => b.estimatedMinutes - a.estimatedMinutes);
 
       for (const task of lowPriority) {
@@ -748,7 +749,7 @@ export class PlanRegenerator {
 
       if (remainingExcess > 0) {
         const reviewTasks = tasks
-          .filter(t => t.skill === 'review' && t.status !== 'completed' && t.estimatedMinutes >= MIN_SESSION_MINUTES)
+          .filter(t => t.skill === 'review' && t.status !== TASK_STATUS.COMPLETED && t.estimatedMinutes >= MIN_SESSION_MINUTES)
           .sort((a, b) => b.estimatedMinutes - a.estimatedMinutes);
 
         for (const task of reviewTasks) {
@@ -770,7 +771,7 @@ export class PlanRegenerator {
 
       if (remainingExcess > 0) {
         const normalPriority = tasks
-          .filter(t => t.priority === 'normal' && t.status !== 'completed' && t.estimatedMinutes > MIN_SESSION_MINUTES + 5)
+          .filter(t => t.priority === TASK_PRIORITY.NORMAL && t.status !== TASK_STATUS.COMPLETED && t.estimatedMinutes > MIN_SESSION_MINUTES + 5)
           .sort((a, b) => b.estimatedMinutes - a.estimatedMinutes);
 
         for (const task of normalPriority) {

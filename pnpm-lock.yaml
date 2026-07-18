@@ -16,6 +16,9 @@ importers:
       '@ielts/ai-tutor-engine':
         specifier: workspace:*
         version: link:../../packages/ai-tutor-engine
+      '@ielts/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@ielts/learning-engine':
         specifier: workspace:*
         version: link:../../packages/learning-engine
@@ -247,6 +250,9 @@ importers:
 
   packages/ai-tutor-engine:
     dependencies:
+      '@ielts/config':
+        specifier: workspace:*
+        version: link:../config
       '@ielts/shared':
         specifier: workspace:*
         version: link:../shared
@@ -278,6 +284,9 @@ importers:
 
   packages/learning-engine:
     dependencies:
+      '@ielts/config':
+        specifier: workspace:*
+        version: link:../config
       '@ielts/shared':
         specifier: workspace:*
         version: link:../shared

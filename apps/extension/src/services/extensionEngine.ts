@@ -1,5 +1,5 @@
 import { getDb } from '@ielts/storage'
-import { createLearningEngine, createDefaultSkillRegistry } from '@ielts/learning-engine'
+import { createLearningEngine, createDefaultSkillRegistry, SESSION_STATUS } from '@ielts/learning-engine'
 import type { LearnerContextPort, TutorIntelligencePort, StudyPlanPort, LearningSessionRepository, LearningAttemptRepository, LearningOutcomeRepository, ExerciseRepository, ProgressRepository, MistakeRepository, VocabularyRepository, LearningEventPublisher } from '@ielts/learning-engine'
 
 let engineInstance: ReturnType<typeof createLearningEngine> | null = null
@@ -105,7 +105,7 @@ function createDbSessionRepository(): LearningSessionRepository {
       return (all as any[])
         .filter((a: any) => a.prompt === 'learning-session' && a.content)
         .map((a: any) => JSON.parse(a.content))
-        .filter((s: any) => s.status === 'in-progress' || s.status === 'prepared')
+        .filter((s: any) => s.status === SESSION_STATUS.IN_PROGRESS || s.status === SESSION_STATUS.PREPARED)
     },
   }
 }

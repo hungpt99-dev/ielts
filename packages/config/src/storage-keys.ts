@@ -6,6 +6,8 @@ export const STORAGE_KEYS = {
     accentColor: 'ielts-accent-color' as const,
     notificationPrefs: 'ielts-notification-prefs' as const,
     onboardingComplete: 'ielts-onboarding-complete' as const,
+    onboardingProfile: 'ielts-onboarding-profile' as const,
+    lastActiveAt: 'ielts-last-active-at' as const,
     preferredLanguage: 'ielts-preferred-language' as const,
     corsProxy: 'ielts-cors-proxy' as const,
     aiProgressReviewCache: 'ielts-ai-progress-review-cache-v2' as const,
@@ -20,6 +22,13 @@ export const STORAGE_KEYS = {
     proactiveSettingsV3: 'ielts-proactive-settings-v3' as const,
     configurationAdvanced: 'ielts-configuration-advanced' as const,
     configurationAdvancedVersion: 'ielts-configuration-advanced-version' as const,
+    aiTutorEngineSettings: 'ielts-ai-tutor-engine' as const,
+    tutorEvent: 'tutor-event' as const,
+    tutorStyle: 'ielts-tutor-style' as const,
+    strongSkills: 'ielts-strong-skills' as const,
+  },
+  sessionStorage: {
+    aiTutorPendingMessage: 'ai-tutor-pending-message' as const,
   },
   extensionLocal: {
     extensionSettings: 'extensionSettings' as const,
@@ -29,6 +38,7 @@ export const STORAGE_KEYS = {
     ytLearningMistakes: 'yt-learning-mistakes' as const,
     ytLearningAutoOpen: 'yt-learning-auto-open' as const,
     pendingSaves: '_pendingSaves' as const,
+    popupDarkMode: 'popup-dark-mode' as const,
   },
   indexedDB: {
     databaseName: 'ielts-journey' as const,

@@ -8,6 +8,7 @@ import {
   areTitlesSemanticallyUnique,
   detectGenericTitles,
 } from './phase-blueprint';
+import { TASK_STATUS, TASK_PRIORITY } from '../domain/constants';
 import type {
   NormalizedProfile,
   PlanningWindow,
@@ -360,7 +361,7 @@ export class DailyPlanEngine {
       return task.date >= weekBeforeExam;
     });
     const hasIntensiveNewMaterial = finalWeekTasks.some(task =>
-      task.difficulty === 'hard' && task.priority === 'high' && task.skill !== 'review' && task.skill !== 'exam-preparation'
+      task.difficulty === 'hard' && task.priority === TASK_PRIORITY.HIGH && task.skill !== 'review' && task.skill !== 'exam-preparation'
     );
     if (hasIntensiveNewMaterial) {
       issues.push(this.issue('final-week-violation', 'warning', 'Final week contains intensive new material'));
@@ -410,8 +411,8 @@ export class DailyPlanEngine {
     const futureCapacity = this.findFutureCapacity(plan, missedTask.date);
     const bufferAvailable = plan.timeBudget.reservedBufferMinutes - this.usedBuffer(plan);
 
-    if (missedTask.priority === 'low' && futureCapacity < missedTask.estimatedMinutes * 0.5) {
-      updatedTasks[taskIndex] = { ...missedTask, status: 'skipped' };
+    if (missedTask.priority === TASK_PRIORITY.LOW && futureCapacity < missedTask.estimatedMinutes * 0.5) {
+      updatedTasks[taskIndex] = { ...missedTask, status: TASK_STATUS.SKIPPED };
       return {
         updatedPlan: { ...plan, tasks: updatedTasks },
         resolution: {
@@ -489,7 +490,7 @@ export class DailyPlanEngine {
       }
     }
 
-    updatedTasks[taskIndex] = { ...missedTask, status: 'skipped' };
+    updatedTasks[taskIndex] = { ...missedTask, status: TASK_STATUS.SKIPPED };
     return {
       updatedPlan: { ...plan, tasks: updatedTasks },
       resolution: {
@@ -503,8 +504,8 @@ export class DailyPlanEngine {
 
   adaptToProfileChange(plan: StudyPlan, newProfile: NormalizedProfile, mode: RegenerationMode): GenerateStudyPlanResult {
     if (mode === 'future-only' || mode === 'settings-change' || mode === 'exam-date-change' || mode === 'availability-change' || mode === 'target-change') {
-      const completedTasks = plan.tasks.filter(t => t.status === 'completed');
-      const futureTasks = plan.tasks.filter(t => t.status !== 'completed' && isBeforeOrSame(newProfile.planStartDate, t.date));
+      const completedTasks = plan.tasks.filter(t => t.status === TASK_STATUS.COMPLETED);
+      const futureTasks = plan.tasks.filter(t => t.status !== TASK_STATUS.COMPLETED && isBeforeOrSame(newProfile.planStartDate, t.date));
 
       const window = this.calculatePlanningWindow(newProfile);
       const skillGaps = this.analyzeSkillGaps(newProfile);
@@ -540,35 +541,35 @@ export class DailyPlanEngine {
   calculateProgress(plan: StudyPlan): PlanProgress {
     const allTasks = plan.tasks;
     const totalTasks = allTasks.length;
-    const completedTasks = allTasks.filter(t => t.status === 'completed').length;
+    const completedTasks = allTasks.filter(t => t.status === TASK_STATUS.COMPLETED).length;
     const totalScheduledMinutes = allTasks.reduce((s, t) => s + t.estimatedMinutes, 0);
     const completedEstimatedMinutes = allTasks
-      .filter(t => t.status === 'completed')
+      .filter(t => t.status === TASK_STATUS.COMPLETED)
       .reduce((s, t) => s + t.estimatedMinutes, 0);
     const actualStudyMinutes = allTasks
-      .filter(t => t.status === 'completed' && t.actualMinutes != null)
+      .filter(t => t.status === TASK_STATUS.COMPLETED && t.actualMinutes != null)
       .reduce((s, t) => s + (t.actualMinutes ?? 0), 0);
-    const missedCount = allTasks.filter(t => t.status === 'skipped').length;
+    const missedCount = allTasks.filter(t => t.status === TASK_STATUS.SKIPPED).length;
     const rescheduledCount = allTasks.filter(t => t.status === 'rescheduled').length;
 
     const phaseProgress: Record<string, number> = {};
     for (const phase of plan.phases) {
       const phaseTasks = allTasks.filter(t => t.phaseId === phase.id);
-      const phaseCompleted = phaseTasks.filter(t => t.status === 'completed').length;
+      const phaseCompleted = phaseTasks.filter(t => t.status === TASK_STATUS.COMPLETED).length;
       phaseProgress[phase.id] = phaseTasks.length > 0 ? phaseCompleted / phaseTasks.length : 0;
     }
 
     const weeklyProgress: Record<string, number> = {};
     for (const week of plan.weeks) {
       const weekTasks = allTasks.filter(t => t.weekId === week.id);
-      const weekCompleted = weekTasks.filter(t => t.status === 'completed').length;
+      const weekCompleted = weekTasks.filter(t => t.status === TASK_STATUS.COMPLETED).length;
       weeklyProgress[week.id] = weekTasks.length > 0 ? weekCompleted / weekTasks.length : 0;
     }
 
     const skillProgress: Partial<Record<StudyTaskSkill, number>> = {};
     for (const skill of SKILL_NAMES) {
       const skillTasks = allTasks.filter(t => t.skill === skill);
-      const skillCompleted = skillTasks.filter(t => t.status === 'completed').length;
+      const skillCompleted = skillTasks.filter(t => t.status === TASK_STATUS.COMPLETED).length;
       skillProgress[skill] = skillTasks.length > 0 ? skillCompleted / skillTasks.length : 0;
     }
 
@@ -1278,7 +1279,7 @@ export class DailyPlanEngine {
         : `${skill.charAt(0).toUpperCase() + skill.slice(1)} practice for balanced improvement`,
       estimatedMinutes,
       difficulty: estimatedMinutes <= 20 ? 'easy' : estimatedMinutes <= 45 ? 'medium' : 'hard',
-      priority: gap && gap.bandGap >= 1.5 ? 'high' : gap && gap.bandGap >= 0.5 ? 'normal' : 'low',
+      priority: gap && gap.bandGap >= 1.5 ? TASK_PRIORITY.HIGH : gap && gap.bandGap >= 0.5 ? TASK_PRIORITY.NORMAL : TASK_PRIORITY.LOW,
       sourceType: 'built-in',
       status: 'not-started',
       scheduledAt: new Date().toISOString(),
@@ -1303,7 +1304,7 @@ export class DailyPlanEngine {
     const capacityByDate = new Map(dailyCapacities.map(c => [c.date, c]));
 
     let reviewCounter = 0;
-    const tasksToReview = tasks.filter(t => t.priority === 'high' || t.priority === 'critical');
+    const tasksToReview = tasks.filter(t => t.priority === TASK_PRIORITY.HIGH || t.priority === 'critical');
     const reviewedTaskIds = new Set<string>();
 
     for (const task of tasksToReview) {
@@ -1345,7 +1346,7 @@ export class DailyPlanEngine {
           reason: `Spaced repetition review of high-priority ${task.skill} task`,
           estimatedMinutes: reviewDuration,
           difficulty: 'easy',
-          priority: 'normal',
+          priority: TASK_PRIORITY.NORMAL,
           sourceType: 'built-in',
           reviewOfTaskId: task.id,
           status: 'not-started',
@@ -1410,7 +1411,7 @@ export class DailyPlanEngine {
         reason: 'Mock tests provide essential timed practice and performance feedback',
         estimatedMinutes: mockMinutes,
         difficulty: 'hard',
-        priority: 'high',
+        priority: TASK_PRIORITY.HIGH,
         sourceType: 'built-in',
         status: 'not-started',
         scheduledAt: new Date().toISOString(),
@@ -1453,7 +1454,7 @@ export class DailyPlanEngine {
               reason: 'Analysis is essential to benefit from mock tests',
               estimatedMinutes: analysisMinutes,
               difficulty: 'medium',
-              priority: 'high',
+        priority: TASK_PRIORITY.HIGH,
               sourceType: 'built-in',
               dependencies: [mockTask.id],
               status: 'not-started',
@@ -1532,7 +1533,7 @@ export class DailyPlanEngine {
         reason: 'Final preparation ensures you are mentally and logistically prepared',
         estimatedMinutes: 15,
         difficulty: 'easy',
-        priority: 'high',
+        priority: TASK_PRIORITY.HIGH,
         sourceType: 'built-in',
         status: 'not-started',
         scheduledAt: new Date().toISOString(),
@@ -1579,7 +1580,7 @@ export class DailyPlanEngine {
             reason: 'Final review consolidates knowledge for exam day',
             estimatedMinutes: reviewDuration,
             difficulty: 'easy',
-            priority: 'normal',
+          priority: TASK_PRIORITY.NORMAL,
             sourceType: 'built-in',
             reviewOfTaskId: task.id,
             status: 'not-started',
@@ -1680,7 +1681,7 @@ export class DailyPlanEngine {
 
       for (const task of sorted) {
         if (excess <= 0) break;
-        if (task.priority === 'low' || task.priority === 'normal') {
+        if (task.priority === TASK_PRIORITY.LOW || task.priority === TASK_PRIORITY.NORMAL) {
           const nextDate = this.nextAvailableDate(plan, task.date);
           if (nextDate) {
             const idx = updated.findIndex(t => t.id === task.id);
@@ -1729,7 +1730,7 @@ export class DailyPlanEngine {
       };
 
       const lowPriority = tasks
-        .filter(t => t.priority === 'low' && t.estimatedMinutes > MIN_SESSION_MINUTES && t.status !== 'completed')
+        .filter(t => t.priority === TASK_PRIORITY.LOW && t.estimatedMinutes > MIN_SESSION_MINUTES && t.status !== TASK_STATUS.COMPLETED)
         .sort((a, b) => b.estimatedMinutes - a.estimatedMinutes);
 
       for (const task of lowPriority) {
@@ -1740,7 +1741,7 @@ export class DailyPlanEngine {
 
       if (remaining > 0) {
         const reviews = tasks
-          .filter(t => t.skill === 'review' && t.estimatedMinutes > MIN_SESSION_MINUTES && t.status !== 'completed')
+          .filter(t => t.skill === 'review' && t.estimatedMinutes > MIN_SESSION_MINUTES && t.status !== TASK_STATUS.COMPLETED)
           .sort((a, b) => b.estimatedMinutes - a.estimatedMinutes);
 
         for (const task of reviews) {
@@ -1752,7 +1753,7 @@ export class DailyPlanEngine {
 
       if (remaining > 0) {
         const normalPriority = tasks
-          .filter(t => t.priority === 'normal' && t.estimatedMinutes > MIN_SESSION_MINUTES + 5 && t.status !== 'completed')
+          .filter(t => t.priority === TASK_PRIORITY.NORMAL && t.estimatedMinutes > MIN_SESSION_MINUTES + 5 && t.status !== TASK_STATUS.COMPLETED)
           .sort((a, b) => b.estimatedMinutes - a.estimatedMinutes);
 
         for (const task of normalPriority) {
@@ -1764,7 +1765,7 @@ export class DailyPlanEngine {
 
       if (remaining > 0) {
         const highPriority = tasks
-          .filter(t => t.priority === 'high' && t.estimatedMinutes > MIN_SESSION_MINUTES + 10 && t.status !== 'completed' && t.skill !== 'mock-test' && t.skill !== 'exam-preparation')
+          .filter(t => t.priority === TASK_PRIORITY.HIGH && t.estimatedMinutes > MIN_SESSION_MINUTES + 10 && t.status !== TASK_STATUS.COMPLETED && t.skill !== 'mock-test' && t.skill !== 'exam-preparation')
           .sort((a, b) => b.estimatedMinutes - a.estimatedMinutes);
 
         for (const task of highPriority) {
@@ -1869,9 +1870,9 @@ export class DailyPlanEngine {
     const capacityByDate = new Map(dailyCapacities.map(c => [c.date, c]));
     const rescheduled: StudyTask[] = [...completedTasks];
 
-    const pending = [...futureTasks].filter(t => t.status !== 'completed').sort((a, b) => {
-      const aScore = a.priority === 'critical' ? 3 : a.priority === 'high' ? 2 : a.priority === 'normal' ? 1 : 0;
-      const bScore = b.priority === 'critical' ? 3 : b.priority === 'high' ? 2 : b.priority === 'normal' ? 1 : 0;
+    const pending = [...futureTasks].filter(t => t.status !== TASK_STATUS.COMPLETED).sort((a, b) => {
+      const aScore =       a.priority === 'critical' ? 3 : a.priority === TASK_PRIORITY.HIGH ? 2 : a.priority === TASK_PRIORITY.NORMAL ? 1 : 0;
+      const bScore = b.priority === 'critical' ? 3 : b.priority === TASK_PRIORITY.HIGH ? 2 : b.priority === TASK_PRIORITY.NORMAL ? 1 : 0;
       return bScore - aScore;
     });
 
@@ -1916,7 +1917,7 @@ export class DailyPlanEngine {
 
     for (const [, t] of pendingById) {
       if (!scheduled.has(t.id)) {
-        rescheduled.push({ ...t, status: 'skipped' });
+        rescheduled.push({ ...t, status: TASK_STATUS.SKIPPED });
       }
     }
 

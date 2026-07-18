@@ -1,4 +1,4 @@
-import { createAITutorEngine } from '@ielts/ai-tutor-engine'
+import { createAITutorEngine, PROACTIVE_TUTOR_DEFAULTS } from '@ielts/ai-tutor-engine'
 import type { AITutorEngine, AITutorEngineDependencies } from '@ielts/ai-tutor-engine'
 import { userConfigurationSchema } from '@ielts/settings'
 import { STORAGE_KEYS } from '@ielts/config'
@@ -16,8 +16,6 @@ import { createAllContextSources, createExamContextSource, createProgressContext
 import type { LearningContext, LearningContextScope } from '@ielts/learning-engine'
 import { loadUserConfiguration } from '@ielts/settings'
 
-
-const AI_TUTOR_KEY = 'ielts-ai-tutor-engine'
 
 let engineInstance: AITutorEngine | null = null
 let learningEngineInstance: LearningEngine | null = null
@@ -68,38 +66,21 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
     const settingsRepo = {
       async getProactiveSettings() {
         try {
-          const raw = localStorage.getItem(AI_TUTOR_KEY)
+          const raw = localStorage.getItem(STORAGE_KEYS.localStorage.aiTutorEngineSettings)
           return raw ? JSON.parse(raw) : getDefaultSettings()
         } catch (error) {
  console.error('apps/web/src/services/engineBootstrap.ts error:', error);
  return getDefaultSettings() }
       },
       async saveProactiveSettings(settings: any) {
-        try { localStorage.setItem(AI_TUTOR_KEY, JSON.stringify(settings)) } catch (error) {
+        try { localStorage.setItem(STORAGE_KEYS.localStorage.aiTutorEngineSettings, JSON.stringify(settings)) } catch (error) {
       console.error('apps/web/src/services/engineBootstrap.ts error:', error);
         }
       },
     }
 
     function getDefaultSettings() {
-      return {
-        enabled: true,
-        browserNotifications: false,
-        extensionNotifications: false,
-        aiEnhanced: false,
-        quietHoursStart: '22:00',
-        quietHoursEnd: '08:00',
-        maxMessagesPerDay: 5,
-        minIntervalMinutes: 60,
-        categories: {},
-        examReminders: true,
-        inactivityReminders: true,
-        vocabularyReminders: true,
-        roadmapReminders: true,
-        motivationMessages: true,
-        preferredTone: 'friendly' as const,
-        preferredMessageLength: 'medium' as const,
-      }
+      return { ...PROACTIVE_TUTOR_DEFAULTS }
     }
 
     const memRepo = createDbMemoryRepository()
@@ -107,7 +88,7 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
 
     const eventPublisher = {
       publishTutorEvent(event: any) {
-        try { localStorage.setItem('tutor-event', JSON.stringify(event)) } catch (error) {
+        try { localStorage.setItem(STORAGE_KEYS.localStorage.tutorEvent, JSON.stringify(event)) } catch (error) {
       console.error('apps/web/src/services/engineBootstrap.ts error:', error);
         }
       },

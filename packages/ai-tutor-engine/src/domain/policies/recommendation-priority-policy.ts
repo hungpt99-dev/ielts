@@ -1,5 +1,19 @@
 import type { ProactiveInterventionCandidate, ProactiveMessage } from '../entities/proactive-message'
 
+const INTERRUPTION_THRESHOLD = 0.5
+
+const PEAK_HOUR_START = 9
+const PEAK_HOUR_END = 11
+const PEAK_HOUR_SCORE = 0.8
+const MID_HOUR_START = 14
+const MID_HOUR_END = 17
+const MID_HOUR_SCORE = 0.7
+const EVENING_HOUR_START = 19
+const EVENING_HOUR_END = 21
+const EVENING_HOUR_SCORE = 0.6
+const OFF_HOUR_SCORE = 0.3
+const DEFAULT_PERSONALIZATION_SCORE = 0.5
+
 export interface ScoringWeights {
   urgency: number
   learningValue: number
@@ -35,7 +49,7 @@ export function calculateInterventionScore(
     randomPersonalizationScore() * weights.personalization
 
   const repetitionPenalty = recentMessages.length * weights.repetitionPenalty
-  const interruptionPenalty = baseScore > 0.5 ? 0 : weights.interruptionPenalty
+  const interruptionPenalty = baseScore > INTERRUPTION_THRESHOLD ? 0 : weights.interruptionPenalty
   const lastMsg = recentMessages[recentMessages.length - 1]
   const recentMessagePenalty = lastMsg && lastMsg.triggerType === candidate.triggerType
     ? weights.recentMessagePenalty
@@ -46,14 +60,14 @@ export function calculateInterventionScore(
 
 function randomTimingScore(): number {
   const hour = new Date().getHours()
-  if (hour >= 9 && hour <= 11) return 0.8
-  if (hour >= 14 && hour <= 17) return 0.7
-  if (hour >= 19 && hour <= 21) return 0.6
-  return 0.3
+  if (hour >= PEAK_HOUR_START && hour <= PEAK_HOUR_END) return PEAK_HOUR_SCORE
+  if (hour >= MID_HOUR_START && hour <= MID_HOUR_END) return MID_HOUR_SCORE
+  if (hour >= EVENING_HOUR_START && hour <= EVENING_HOUR_END) return EVENING_HOUR_SCORE
+  return OFF_HOUR_SCORE
 }
 
 function randomPersonalizationScore(): number {
-  return 0.5
+  return DEFAULT_PERSONALIZATION_SCORE
 }
 
 export function selectBestInterventions(
