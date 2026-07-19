@@ -19,13 +19,25 @@
     "lint:web": "pnpm --filter @ielts/web lint",
     "lint:extension": "pnpm --filter @ielts/extension lint",
 
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:memory": "vitest run --maxWorkers=1 --no-file-parallelism --logHeapUsage",
 
-    "ai": "VITEST_MAX_WORKERS=2 pnpm -r exec -- vitest run --passWithNoTests --reporter verbose",
+    "test:web": "vitest run --project '@ielts/web'",
+    "test:extension": "vitest run --project '@ielts/extension'",
+    "test:ai-tutor-engine": "vitest run --project '@ielts/ai-tutor-engine'",
+    "test:learning-engine": "vitest run --project '@ielts/learning-engine'",
+    "test:storage": "vitest run --project '@ielts/storage'",
+    "test:ai": "vitest run --project '@ielts/ai'",
+    "test:settings": "vitest run --project '@ielts/settings'",
 
     "deploy:web": "pnpm build:web && wrangler pages deploy apps/web/dist --branch main",
     "deploy:web:prod": "pnpm build:web && wrangler pages deploy apps/web/dist --branch main --production",
 
     "clean": "pnpm -r clean"
+  },
+  "devDependencies": {
+    "vitest": "^3.1.1"
   },
   "pnpm": {}
 }
