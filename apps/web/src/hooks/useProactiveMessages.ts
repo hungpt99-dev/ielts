@@ -148,7 +148,7 @@ export function useProactiveMessages() {
     const interval = setInterval(async () => {
       const todayCount = getMessagesCountForToday(messagesRef.current)
       if (todayCount >= settings.maxMessagesPerDay) return
-      if (!checkQuietHours(settings.quietHoursStart, settings.quietHoursEnd)) return
+      if (checkQuietHours(settings.quietHoursStart, settings.quietHoursEnd)) return
       const state = await buildLearnerState()
       const engine = getAITutorEngine()
       if (!engine) return

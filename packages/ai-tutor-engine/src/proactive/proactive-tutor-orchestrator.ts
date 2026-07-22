@@ -86,7 +86,7 @@ export class ProactiveTutorOrchestrator {
   private buildEvalParams(state: LearnerStateSnapshot) {
     return {
       inactiveDays: state.progress.inactiveDays,
-      missedTasks: state.activitySummary.tasksCompletedToday,
+      missedTasks: state.roadmap?.missedTasks ?? 0,
       streak: state.progress.studyStreak,
       examDaysRemaining: state.exam.daysUntilExam,
       dueVocabularyCount: state.vocabularySummary.dueForReview,
