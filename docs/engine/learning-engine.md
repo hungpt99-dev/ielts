@@ -223,3 +223,78 @@ Similarly split:
 - `domain/services/__tests__/progress-evidence-builder.test.ts`, `mistake-evidence-builder.test.ts`, `skill-evidence-builder.test.ts`
 - `domain/policies/__tests__/difficulty-policy.test.ts`, `deterministic-grader.test.ts`, `evaluation-policy.test.ts`
 - `daily-plan/DailyPlanEngine.test.ts`, `AiPlanOrchestrator.test.ts`, `PlanRegenerator.test.ts`, `PlanEngineIntegration.test.ts`
+
+## Exercise Engine (NEW)
+
+The Exercise Engine (`packages/learning-engine/src/exercise-engine/`) is a blueprint-driven system providing one consistent exercise lifecycle across all modules.
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                  Exercise Engine API                      │
+│  (ExerciseEngine class — application layer)              │
+├─────────────────────────────────────────────────────────┤
+│               Application Layer                          │
+│  generateExercise │ startAttempt │ saveResponse          │
+│  pauseAttempt     │ resumeAttempt │ submitAttempt        │
+│  evaluateAttempt  │ abandonAttempt                       │
+├─────────────────────────────────────────────────────────┤
+│                Domain Layer                              │
+│  Types        │  Blueprints    │  Validators  │ Errors   │
+│  Exercise     │  IELTS BPs     │  Blueprint   │ Engine   │
+│  Question     │  Module BPs    │  Exercise    │ Blueprint│
+│  Response     │  freezeBP()    │  Attempt     │ Attempt  │
+│  Attempt      │               │  Response    │ IELTS    │
+│  Difficulty   │               │  Result      │ Repair   │
+├─────────────────────────────────────────────────────────┤
+│                 Scoring & Timing                         │
+│  ObjectiveScoring │ ReadingScoring │ ListeningScoring    │
+│  WritingScoring   │ SpeakingScoring│ GrammarScoring      │
+│  VocabularyScoring│ TimingEngine   │ BandConversion      │
+├─────────────────────────────────────────────────────────┤
+│                  Infrastructure                          │
+│  InMemory repos │ Migration │ Seed Data │ Events         │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Supported Modules
+
+8 modules: `reading`, `listening`, `writing`, `speaking`, `grammar`, `vocabulary`, `saved_content`, `mistake_review`
+
+### Supported Modes
+
+7 modes: `full_test`, `full_section`, `full_part`, `focused_practice`, `adaptive_practice`, `review`, `diagnostic`
+
+### Supported Families
+
+12 families: `objective_questions`, `completion_questions`, `matching_questions`, `classification_questions`, `ordering_questions`, `writing_task`, `speaking_session`, `interactive_listening`, `vocabulary_activity`, `grammar_activity`, `content_comprehension`, `review_activity`
+
+### Key Files
+
+| File | Purpose |
+|---|---|
+| `domain/types/` | Core domain types (Exercise, Question, Response, Attempt, Difficulty) |
+| `domain/blueprints/` | Blueprint system + 11 blueprint builders (7 IELTS + 4 practice) |
+| `domain/ports/` | Repository ports, generator/evaluator contracts (moved from infrastructure) |
+| `domain/utils/count-questions.ts` | Single shared question-counting utility (D.R.Y.) |
+| `domain/validators/` | Central validators (exercise, blueprint, attempt, response) |
+| `domain/errors/` | Typed domain errors |
+| `domain/events/` | Domain event types |
+| `scoring/` | Module-specific scoring strategies + `scoreQuestionBatch` shared helper |
+| `timing/` | Family-specific timing engine (uses shared `countAllQuestions`) |
+| `application/` | ExerciseEngine + bounded `generateWithRepair` |
+| `infrastructure/` | In-memory repos, legacy migration, seed data |
+
+### Test Coverage
+
+9 test files covering:
+- `domain-types.test.ts` — Module/mode/family validation, difficulty, state transitions, normalization
+- `blueprints.test.ts` — IELTS blueprint construction, timing, scoring, immutability
+- `validators.test.ts` — Exercise validation, blueprint validation, response validation
+- `scoring.test.ts` — Objective scoring, band conversion, strategy selection
+- `timing.test.ts` — Family-specific timing calculations
+- `exercise-engine.test.ts` — Full lifecycle (generate → start → save → pause → resume → submit → evaluate)
+- `ielts-invariants.test.ts` — Official IELTS structural rules
+- `migration.test.ts` — Legacy exercise migration
+- `seed-data.test.ts` — Seed data validation

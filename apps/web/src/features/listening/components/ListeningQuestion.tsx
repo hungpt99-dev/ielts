@@ -431,7 +431,7 @@ export default function ListeningQuestion({
       </div>
 
       <p className="mb-3 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-        {question.question}
+        {question.question || question.text || ''}
       </p>
 
       {renderQuestion()}

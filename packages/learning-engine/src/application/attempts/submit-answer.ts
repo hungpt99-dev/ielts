@@ -55,6 +55,7 @@ export async function submitAnswer(
           response: String(answer.answer),
           rubric,
           schema: {} as any,
+          maxTokens: 2000,
         })
         if (aiResult.success && aiResult.data) {
           const data = aiResult.data as any

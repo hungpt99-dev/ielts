@@ -65,6 +65,7 @@ export default function AITutorPage() {
   review={state.progressReview}
   onRefresh={state.onRefresh}
   refreshing={state.refreshing}
+  refreshError={state.refreshError}
 />
               <TeacherLedPracticeSection
                 isAiConfigured={state.isAiConfigured}

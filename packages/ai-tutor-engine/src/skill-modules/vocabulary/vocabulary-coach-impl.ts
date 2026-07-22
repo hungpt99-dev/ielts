@@ -1,5 +1,5 @@
 import type { TutorAIClient } from '../../ai/tutor-ai-client'
-import type { VocabularyExplanationRequest, VocabularyExplanationResult, VocabularyTutorModule, VocabularyExerciseRequest, VocabularyExerciseResult } from './vocabulary-coach'
+import type { VocabularyExplanationRequest, VocabularyExplanationResult, VocabularyTutorModule } from './vocabulary-coach'
 
 function buildVocabularyExplanationSystemPrompt(): string {
   return `You are an experienced IELTS vocabulary tutor. Explain the word in detail.
@@ -66,9 +66,6 @@ export class VocabularyTutorModuleImpl implements VocabularyTutorModule {
     }
   }
 
-  async generateExercises(_request: VocabularyExerciseRequest): Promise<VocabularyExerciseResult> {
-    return { exercises: [] }
-  }
 }
 
 function getSuggestedTopic(word: string): string {

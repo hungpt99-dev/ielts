@@ -98,9 +98,14 @@ export {
   AIAuthError,
   AIRateLimitError,
   AINetworkError,
+  AITimeoutError,
   AIEmptyResponseError,
   AIConfigError,
 } from './errors'
+
+// Model capabilities
+export { getModelCapabilities, getProviderCapabilities, buildRequestBody } from './adapters/model-capabilities'
+export type { ModelCapabilities } from './adapters/model-capabilities'
 
 // Config resolver
 export { AiConfigurationResolver, AiAdapterFactory } from './config'

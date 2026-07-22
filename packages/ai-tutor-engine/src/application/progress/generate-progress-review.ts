@@ -45,6 +45,7 @@ export async function generateProgressReview(
     realisticNextActions: buildNextActions(request.learnerState),
     examRisk: buildExamRisk(request.learnerState),
     generatedAt: new Date().toISOString(),
+    aiEnriched: false,
   }
 
   if (deps?.aiClient) {
@@ -73,10 +74,11 @@ Do NOT:
 - Be vague — every statement must reference something from their actual data
 - Use filler — every sentence should carry information
 
-The teacherSummary will be shown as the main message. The teacherFeedback will be shown as a "Tutor's Note" sidebar.`,
+RESPONSE FORMAT: You MUST respond with ONLY valid JSON (no markdown, no code fences) in this exact format:
+{"teacherSummary": "your 3-4 sentence summary here", "teacherFeedback": "your 2-3 sentence feedback here"}`,
       userMessage: JSON.stringify(result),
       schema: { teacherSummary: '', teacherFeedback: '' },
-      temperature: 0.7,
+      temperature: 1,
       maxTokens: 1024,
     })
 
@@ -84,9 +86,11 @@ The teacherSummary will be shown as the main message. The teacherFeedback will b
       const data = aiResult.data as Record<string, unknown>
       if (data.teacherSummary && typeof data.teacherSummary === 'string') {
         result.summary = data.teacherSummary
+        result.aiEnriched = true
       }
       if (data.teacherFeedback && typeof data.teacherFeedback === 'string') {
         result.examRisk = data.teacherFeedback
+        result.aiEnriched = true
       }
     }
   }

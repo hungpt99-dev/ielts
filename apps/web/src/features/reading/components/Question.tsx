@@ -206,12 +206,14 @@ export default function Question({ question, index, answer, onAnswer, showResult
 
   function renderGapFill() {
     const blanks = question.blanks || []
+    const fallbackBlanks = blanks.length === 0 && question.question.includes('______') ? [''] : blanks
+    const displayBlanks = fallbackBlanks.length > 0 ? fallbackBlanks : blanks
     const currentAnswer = (answer as string[]) || []
     return (
       <div className="space-y-3">
-        {blanks.map((blank, i) => {
+        {displayBlanks.map((blank, i) => {
           const userVal = currentAnswer[i] || ''
-          const isCorrect = showResult && userVal.toLowerCase().trim() === blank.toLowerCase()
+          const isCorrect = showResult && blank && userVal.toLowerCase().trim() === blank.toLowerCase()
           const isWrong = showResult && userVal.trim() !== '' && !isCorrect
           return (
             <div key={i} className="flex items-center gap-3">

@@ -222,15 +222,24 @@ export interface ReadingQuestion {
   blanks?: string[]
 }
 
+export interface PassageTopicMetadata {
+  requestedTopic: string
+  generatedTopic: string
+  title: string
+  source: 'ai-generated' | 'curated' | 'imported'
+}
+
 export interface ReadingPassageWithQuestions {
   id: string
   title: string
   topic: string
+  topicMetadata?: PassageTopicMetadata
   text: string
   questions: ReadingQuestion[]
   difficulty: 'easy' | 'medium' | 'hard'
   wordCount: number
   estimatedMinutes: number
+  sourceType?: 'ai-generated' | 'built-in'
 }
 
 export interface ReadingPracticeSession {
@@ -238,6 +247,7 @@ export interface ReadingPracticeSession {
   passageId: string
   title: string
   topic: string
+  topicMetadata?: PassageTopicMetadata
   passageText: string
   questions: ReadingQuestion[]
   answers: Record<string, unknown>

@@ -1,11 +1,10 @@
-export { AI_PROVIDER_IDS } from '@ielts/config'
+export { AI_PROVIDER_IDS, DEFAULT_AI_PROVIDER_ID, DEFAULT_AI_MODEL } from '@ielts/config'
 
 export {
   AI_PROVIDERS,
   THEME_MODES,
   NATIVE_LANGUAGES,
   OPENAI_BASE_URL,
-  DEFAULT_MODEL,
   aiSettingsSchema,
   sharedSettingsSchema,
   aiUserSettingsSchema,

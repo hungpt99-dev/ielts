@@ -1,12 +1,12 @@
 import type { AIAdapter, Message } from '../adapters/types'
-import { OpenAIAdapter } from '../adapters/openai'
+import { OpenAiCompatibleAdapter } from '../adapters/openai'
 import { AIConfigError } from '../errors/types'
 import type { AIClient, AICallResult, ProviderConfig } from './types'
 
 export type { AIClient, AICallResult, ProviderConfig }
 
 export function createAIClient(adapter?: AIAdapter): AIClient {
-  const actual = adapter ?? new OpenAIAdapter()
+  const actual = adapter ?? new OpenAiCompatibleAdapter()
 
   return {
     async complete(

@@ -1,12 +1,35 @@
 import type { AIAdapter, AIAdapterConfig, CompletionRequest, CompletionResponse } from './types'
-import { AIAuthError, AIRateLimitError, AINetworkError, AIEmptyResponseError, AIError } from '../errors/types'
+import { AIAuthError, AIRateLimitError, AINetworkError, AIEmptyResponseError, AIError, AITimeoutError } from '../errors/types'
+import { buildRequestBody } from './model-capabilities'
 
-export class OpenAIAdapter implements AIAdapter {
+export class OpenAiCompatibleAdapter implements AIAdapter {
   async complete(
     request: CompletionRequest,
     config: AIAdapterConfig,
   ): Promise<CompletionResponse> {
-    const url = `${config.baseUrl.replace(/\/+$/, '')}/chat/completions`
+    const apiKey = (config.apiKey ?? '').trim()
+    if (!apiKey) {
+      throw new AIError('API key is empty', 'MISSING_API_KEY')
+    }
+
+    const baseUrl = (config.baseUrl ?? '').trim().replace(/\/+$/, '')
+    if (!baseUrl) {
+      throw new AIError('Base URL is empty', 'MISSING_BASE_URL')
+    }
+
+    const model = (request.model ?? config.model ?? '').trim()
+    if (!model) {
+      throw new AIError('Model name is empty', 'MISSING_MODEL')
+    }
+
+    const url = `${baseUrl}/chat/completions`
+
+    const body = buildRequestBody(model, request.messages, {
+      temperature: request.temperature ?? config.temperature,
+      maxTokens: request.max_tokens ?? config.maxTokens,
+    })
+
+    const signal = createTimeoutSignal(request.signal, config.timeoutMs)
 
     let response: Response
     try {
@@ -14,31 +37,27 @@ export class OpenAIAdapter implements AIAdapter {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${config.apiKey}`,
+          Authorization: `Bearer ${apiKey}`,
         },
-        body: JSON.stringify({
-          model: request.model,
-          messages: request.messages,
-          ...(request.temperature !== undefined ? { temperature: request.temperature } : config.temperature !== undefined ? {} : { temperature: 0.5 }),
-          ...(request.max_tokens !== undefined ? { max_tokens: request.max_tokens } : config.maxTokens !== undefined ? {} : { max_tokens: 1500 }),
-        }),
+        body: JSON.stringify(body),
+        signal,
       })
     } catch (err: unknown) {
-      console.error('packages/ai/src/adapters/openai.ts error:', err);
       const message = err instanceof Error ? err.message : 'Unknown error'
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        throw new AITimeoutError()
+      }
       if (message.includes('Failed to fetch') || message.includes('NetworkError')) {
         throw new AINetworkError()
+      }
+      if (message.includes('abort') || message.includes('AbortError')) {
+        throw new AITimeoutError()
       }
       throw new AIError(`AI request failed: ${message}`, 'REQUEST_FAILED')
     }
 
     if (!response.ok) {
-      if (response.status === 401) throw new AIAuthError()
-      if (response.status === 429) throw new AIRateLimitError()
-      throw new AIError(
-        `AI API error (${response.status}). Check your provider settings.`,
-        'API_ERROR',
-      )
+      await throwProviderError(response, model, url)
     }
 
     const data = await response.json()
@@ -50,7 +69,7 @@ export class OpenAIAdapter implements AIAdapter {
 
     return {
       content,
-      model: data.model || request.model,
+      model: data.model || model,
       usage: data.usage
         ? {
             prompt_tokens: data.usage.prompt_tokens,
@@ -63,18 +82,73 @@ export class OpenAIAdapter implements AIAdapter {
 
   async testConnection(config: AIAdapterConfig): Promise<boolean> {
     try {
+      const apiKey = (config.apiKey ?? '').trim()
+      if (!apiKey) return false
+
+      const model = (config.model ?? '').trim()
+      if (!model) return false
+
       await this.complete(
         {
-          model: config.model,
-          messages: [{ role: 'user', content: 'Respond with "ok".' }],
+          model,
+          messages: [{ role: 'user', content: 'Say "ok"' }],
           max_tokens: 10,
         },
-        config,
+        { ...config, apiKey, model },
       )
       return true
-    } catch (error) {
-      console.error('packages/ai/src/adapters/openai.ts error:', error);
+    } catch {
       return false
     }
   }
+}
+
+async function throwProviderError(response: Response, model: string, _url: string): Promise<never> {
+  let providerMessage: string | undefined
+  let providerCode: string | undefined
+  let providerType: string | undefined
+
+  try {
+    const errorBody = await response.json()
+    const err = errorBody?.error
+    if (err) {
+      providerMessage = err.message
+      providerCode = err.code
+      providerType = err.type
+    }
+  } catch {
+    // could not parse error body
+  }
+
+  if (response.status === 401) throw new AIAuthError()
+  if (response.status === 429) throw new AIRateLimitError()
+
+  const parts: string[] = [`HTTP ${response.status}`]
+  if (providerMessage) parts.push(providerMessage)
+  if (providerCode) parts.push(`(code: ${providerCode})`)
+  if (providerType) parts.push(`[${providerType}]`)
+  parts.push(`model: ${model}`)
+
+  throw new AIError(parts.join(' — '), response.status === 404 ? 'MODEL_NOT_FOUND' : 'API_ERROR')
+}
+
+const DEFAULT_TIMEOUT_MS = 120_000
+
+function createTimeoutSignal(
+  requestSignal?: AbortSignal,
+  timeoutMs?: number,
+): AbortSignal | undefined {
+  const effectiveTimeout = timeoutMs ?? DEFAULT_TIMEOUT_MS
+
+  if (requestSignal) {
+    return requestSignal
+  }
+
+  if (effectiveTimeout <= 0) {
+    return undefined
+  }
+
+  const controller = new AbortController()
+  setTimeout(() => controller.abort(), effectiveTimeout)
+  return controller.signal
 }

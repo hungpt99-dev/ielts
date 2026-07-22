@@ -33,6 +33,4 @@ export interface GrammarExerciseResult {
 export interface GrammarTutorModule {
   explainError(request: GrammarExplanationRequest): Promise<GrammarExplanationResult>
 
-  /** @deprecated Use learning engine's `generateActivity()` via `@ielts/learning-engine` instead */
-  generateExercises(request: GrammarExerciseRequest): Promise<GrammarExerciseResult>
 }

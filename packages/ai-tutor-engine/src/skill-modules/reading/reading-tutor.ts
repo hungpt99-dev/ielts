@@ -33,6 +33,4 @@ export interface ReadingComprehensionResult {
 export interface ReadingTutorModule {
   explainPassage(request: ReadingExplanationRequest): Promise<ReadingExplanationResult>
 
-  /** @deprecated Use learning engine's `generateActivity()` via `@ielts/learning-engine` instead */
-  generateComprehensionQuestions(request: ReadingComprehensionRequest): Promise<ReadingComprehensionResult>
 }

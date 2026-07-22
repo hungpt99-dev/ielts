@@ -1,4 +1,4 @@
-import { DEFAULT_AI_MODEL } from '@ielts/config'
+import { DEFAULT_AI_MODEL, DEFAULT_AI_PROVIDER_ID } from '@ielts/config'
 import { vocabularyRepo, mistakeRepo, artifactRepo } from '../../../services/repositories'
 import { STORAGE_KEYS } from '@ielts/config'
 import { getClient } from '../bridge/ExtensionBridgeClient'
@@ -20,7 +20,7 @@ function mapWebSettingsToShared(): Record<string, unknown> {
     } catch { return {} }
   })()
   return {
-    aiProvider: s.aiProvider || 'openai',
+    aiProvider: s.aiProvider || DEFAULT_AI_PROVIDER_ID,
     aiModel: s.aiModel || DEFAULT_AI_MODEL,
     aiBaseUrl: s.aiBaseUrl || s.aiEndpoint || '',
     aiApiKey: s.aiApiKey || '',

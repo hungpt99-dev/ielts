@@ -8,6 +8,8 @@ export {
   type AiProviderId,
   type AiProviderDefinition,
   type AiCredential,
+  type ProviderModelCapability,
+  type AiModelAssignments,
   AI_PROVIDER_DEFINITIONS,
   getVisibleProviders,
   getProviderById,
@@ -15,12 +17,13 @@ export {
   DEFAULT_AI_MAX_RETRIES,
   DEFAULT_AI_TEMPERATURE,
   DEFAULT_AI_MODEL,
-  DEFAULT_AI_API_URL,
   DEFAULT_AI_MAX_TOKENS,
   DEFAULT_PLAN_ENRICH_MAX_CALLS,
   DEFAULT_PLAN_ENRICH_HARD_CALL_LIMIT,
   DEFAULT_PLAN_ENRICH_MAX_REPAIR_CALLS,
   AI_PROVIDER_IDS,
+  DEFAULT_AI_PROVIDER_ID,
+  DEFAULT_AI_MODEL_ASSIGNMENTS,
 } from './ai'
 export { type YouTubeInfrastructureConfig, YOUTUBE_INFRA_CONFIG } from './youtube'
 export { CORS_PROXY_URL, INFRASTRUCTURE_URLS } from './infrastructure'

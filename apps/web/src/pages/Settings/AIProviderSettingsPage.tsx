@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../../context/SettingsContext'
 import { testConnection } from '../../services/ai/testConnection'
-import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
-import { DEFAULT_AI_MODEL } from '@ielts/config'
+import { OPENAI_BASE_URL } from '@ielts/settings'
+import { DEFAULT_AI_MODEL, getVisibleProviders, getProviderById, AI_PROVIDER_DEFINITIONS, type AiProviderId } from '@ielts/config'
 import { ROUTES } from '@ielts/config'
 import { emitAIProviderConfigured, emitSettingsChanged } from '../../features/websiteActions/eventEmitters'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
@@ -77,7 +77,7 @@ export default function AIProviderSettingsPage() {
 
   function handleReset() {
     setEnabled(false)
-    setProvider('openai')
+    setProvider(AI_PROVIDER_DEFINITIONS.openai.id)
     setApiKey('')
     setBaseUrl('')
     setModel(DEFAULT_AI_MODEL)
@@ -85,7 +85,7 @@ export default function AIProviderSettingsPage() {
     setDirty(true)
     updateSettings({
       aiApiKey: '',
-      aiProvider: 'openai',
+      aiProvider: AI_PROVIDER_DEFINITIONS.openai.id,
       aiBaseUrl: '',
       aiEndpoint: '',
       aiModel: DEFAULT_AI_MODEL,
@@ -105,7 +105,7 @@ export default function AIProviderSettingsPage() {
       const result = await testConnection({
         apiKey,
         baseUrl: baseUrl || OPENAI_BASE_URL,
-        model: model || DEFAULT_MODEL,
+        model: model || DEFAULT_AI_MODEL,
       })
       setTestResult({ ok: result.ok, message: result.message })
     } catch (error) {
@@ -270,37 +270,35 @@ export default function AIProviderSettingsPage() {
                   label="Provider"
                   value={provider}
                   onChange={(e) => {
-                    const val = (e.target as HTMLSelectElement).value
-                    setProvider(val as 'openai' | 'custom')
-                    if (val === 'openai') {
-                      setBaseUrl('')
-                      setModel(DEFAULT_AI_MODEL)
-                    }
+                    const val = (e.target as HTMLSelectElement).value as AiProviderId
+                    const selected = getProviderById(val)
+                    setProvider(val)
+                    setBaseUrl(selected?.defaultApiUrl ?? '')
+                    setModel(selected?.defaultModel ?? '')
                     setTestResult(null)
                     setDirty(true)
                   }}
-                  options={[
-                    { value: 'openai', label: 'OpenAI' },
-                    { value: 'custom', label: 'Custom (OpenAI-compatible)' },
-                  ]}
+                  options={getVisibleProviders().map(p => ({ value: p.id, label: p.displayName }))}
                 />
 
-                <Input
-                  id="ai-api-key"
-                  type="password"
-                  label="API Key"
-                  value={apiKey}
-                  onChange={(e) => handleApiKeyChange((e.target as HTMLInputElement).value)}
-                  placeholder="sk-..."
-                  autoComplete="off"
-                  helperText={
-                    apiKey
-                      ? `${apiKey.slice(0, 8)}...${apiKey.slice(-4)}`
-                      : 'No API key set — AI features will not work'
-                  }
-                />
+                {getProviderById(provider as AiProviderId)?.requiresApiKey !== false && (
+                  <Input
+                    id="ai-api-key"
+                    type="password"
+                    label="API Key"
+                    value={apiKey}
+                    onChange={(e) => handleApiKeyChange((e.target as HTMLInputElement).value)}
+                    placeholder="sk-..."
+                    autoComplete="off"
+                    helperText={
+                      apiKey
+                        ? `${apiKey.slice(0, 8)}...${apiKey.slice(-4)}`
+                        : 'No API key set — AI features will not work'
+                    }
+                  />
+                )}
 
-                {provider === 'custom' && (
+                {getProviderById(provider as AiProviderId)?.allowsCustomApiUrl && (
                   <Input
                     id="ai-base-url"
                     type="text"
@@ -317,7 +315,7 @@ export default function AIProviderSettingsPage() {
                   label="Model"
                   value={model}
                   onChange={(e) => { setModel((e.target as HTMLInputElement).value); setTestResult(null); setDirty(true) }}
-                  placeholder={DEFAULT_MODEL}
+                  placeholder={DEFAULT_AI_MODEL}
                 />
 
                 <div

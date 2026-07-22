@@ -12,19 +12,23 @@ export interface ProgressReview {
   mistakesUnresolved: number; mistakesRecent: number; todayUnfinished: number; isExamUrgent: boolean;
   skillProgress: { skill: string; status: string; sessions: number; accuracy: number; trend: string; analysis: string }[];
   studyPlanAdherence: string; tutorFeedback: string; generatedAt: string | null;
+  aiEnriched: boolean;
 }
 
 interface TeacherProgressReviewCardProps {
   review: ProgressReview
   onRefresh?: () => void
   refreshing?: boolean
+  refreshError?: string | null
 }
 
 function agoLabel(iso: string | null): string | null {
   if (!iso) return null
   const diff = Date.now() - new Date(iso).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'Just now'
+  const secs = Math.floor(diff / 1000)
+  if (secs < 5) return 'Just now'
+  if (secs < 60) return `${secs}s ago`
+  const mins = Math.floor(secs / 60)
   if (mins < 60) return `${mins}m ago`
   const hours = Math.floor(mins / 60)
   if (hours < 24) return `${hours}h ago`
@@ -32,7 +36,7 @@ function agoLabel(iso: string | null): string | null {
   return `${days}d ago`
 }
 
-export default function TeacherProgressReviewCard({ review, onRefresh, refreshing }: TeacherProgressReviewCardProps) {
+export default function TeacherProgressReviewCard({ review, onRefresh, refreshing, refreshError }: TeacherProgressReviewCardProps) {
   return (
     <div
       className="rounded-2xl p-5 space-y-4"
@@ -41,7 +45,13 @@ export default function TeacherProgressReviewCard({ review, onRefresh, refreshin
         border: '1px solid var(--color-tutor-border)',
       }}
     >
-      <Header onRefresh={onRefresh} refreshing={refreshing} generatedAt={review.generatedAt} />
+      <Header onRefresh={onRefresh} refreshing={refreshing} generatedAt={review.generatedAt} refreshError={refreshError} />
+
+      {review.generatedAt && !review.aiEnriched && (
+        <div className="rounded-lg px-3 py-2 text-xs" style={{ backgroundColor: 'var(--color-warning-light)', border: '1px solid var(--color-warning)', color: 'var(--color-text)' }}>
+          AI tutor message unavailable. <button type="button" onClick={onRefresh} className="underline font-medium" style={{ color: 'var(--color-tutor-accent)' }}>Retry</button> or configure your API key in Settings.
+        </div>
+      )}
 
       <SummaryText text={review.summary} />
 
@@ -78,9 +88,10 @@ export default function TeacherProgressReviewCard({ review, onRefresh, refreshin
   )
 }
 
-function Header({ onRefresh, refreshing, generatedAt }: { onRefresh?: () => void; refreshing?: boolean; generatedAt?: string | null }) {
+function Header({ onRefresh, refreshing, generatedAt, refreshError }: { onRefresh?: () => void; refreshing?: boolean; generatedAt?: string | null; refreshError?: string | null }) {
   const label = agoLabel(generatedAt ?? null)
   return (
+    <>
     <div className="flex items-center gap-3">
       <div
         className="flex h-9 w-9 items-center justify-center rounded-lg"
@@ -93,11 +104,12 @@ function Header({ onRefresh, refreshing, generatedAt }: { onRefresh?: () => void
           Teacher's Progress Review
         </p>
         <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-          {label ? `Analysis from ${label}` : 'AI-powered analysis of your recent performance'}
+          {refreshing ? 'Refreshing…' : label ? `Analysis from ${label}` : 'AI-powered analysis of your recent performance'}
         </p>
       </div>
       {onRefresh && (
         <button
+          type="button"
           onClick={onRefresh}
           disabled={refreshing}
           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors hover:bg-[var(--color-surface)] disabled:cursor-not-allowed disabled:opacity-40"
@@ -124,6 +136,12 @@ function Header({ onRefresh, refreshing, generatedAt }: { onRefresh?: () => void
         </button>
       )}
     </div>
+    {refreshError && (
+      <p className="mt-1.5 text-xs rounded-lg px-2.5 py-1.5" style={{ color: 'var(--color-danger)', backgroundColor: 'var(--color-danger-light)', border: '1px solid var(--color-danger)' }}>
+        {refreshError}
+      </p>
+      )}
+    </>
   )
 }
 

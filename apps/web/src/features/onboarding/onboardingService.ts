@@ -1,7 +1,7 @@
 import type { StudyGoal } from '../../models'
 
 import { taskRepo } from '../../services/repositories'
-import { STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
+import { STORAGE_KEYS, DEFAULT_AI_MODEL, DEFAULT_AI_PROVIDER_ID } from '@ielts/config'
 
 function generateId(): string {
   return crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9)
@@ -157,7 +157,7 @@ export async function completeOnboarding(data: OnboardingData): Promise<void> {
       preferredSchedule: data.preferredSchedule,
     },
     ai: {
-      providerId: 'openai',
+      providerId: DEFAULT_AI_PROVIDER_ID,
       model: undefined,
       customApiUrl: undefined,
       temperature: undefined,

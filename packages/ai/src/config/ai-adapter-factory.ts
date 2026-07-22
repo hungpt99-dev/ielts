@@ -1,9 +1,12 @@
 import type { AiProviderDefinition } from '@ielts/config'
 import type { AIAdapter } from '../adapters/types'
-import { OpenAIAdapter } from '../adapters/openai'
+import { OpenAiCompatibleAdapter } from '../adapters/openai'
 
 export class AiAdapterFactory {
   create(_provider: AiProviderDefinition): AIAdapter {
-    return new OpenAIAdapter()
+    if (_provider.adapter === 'openai-compatible') {
+      return new OpenAiCompatibleAdapter()
+    }
+    return new OpenAiCompatibleAdapter()
   }
 }

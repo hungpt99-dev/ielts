@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { normalizeWord, formatTime } from '../utils/tokenizeTranscript'
+import { scoreObjectiveQuestion } from '@ielts/learning-engine'
 
 interface BlankSegment {
   id: string
@@ -89,8 +90,21 @@ export function FillInBlankPanel({ videoId, sendToParent, onClose }: {
   const handleCheck = useCallback(() => {
     const res: Record<string, boolean> = {}
     for (const item of items) {
-      const userNorm = normalizeWord(answers[item.id] || '')
-      res[item.id] = userNorm === item.normalizedAnswer
+      const result = scoreObjectiveQuestion(
+        {
+          id: item.id,
+          type: 'short_answer',
+          prompt: `${item.textBefore} ___ ${item.textAfter}`,
+          points: 1,
+          correctAnswer: item.answer,
+          acceptableAlternatives: [],
+          caseSensitive: false,
+          difficulty: { difficulty: 1 },
+          learningObjectiveIds: [],
+        },
+        { type: 'text', value: answers[item.id] || '' },
+      )
+      res[item.id] = result.correct
     }
     setResults(res)
     setPhase('submitted')

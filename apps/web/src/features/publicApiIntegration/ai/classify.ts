@@ -17,7 +17,7 @@ import type {
   MistakeReview,
   VocabularyExtraction,
 } from '@ielts/ai'
-import { DEFAULT_APP_CONFIG, STORAGE_KEYS, AI_PROVIDER_DEFINITIONS, DEFAULT_AI_MODEL } from '@ielts/config'
+import { DEFAULT_APP_CONFIG, STORAGE_KEYS, AI_PROVIDER_DEFINITIONS, DEFAULT_AI_MODEL, DEFAULT_AI_PROVIDER_ID } from '@ielts/config'
 import { getLearningEngine } from '../../../services/engineBootstrap'
 
 export interface AiProviderConfig {
@@ -151,7 +151,7 @@ export function getStoredAiConfig(): AiProviderConfig {
     const config = readUserConfig()
     const ai = (config?.ai as Record<string, unknown>) ?? {}
     const defaultProvider = DEFAULT_APP_CONFIG.ai
-    const providerId = (ai?.providerId as string) || 'openai'
+    const providerId = (ai?.providerId as string) || DEFAULT_AI_PROVIDER_ID
     const providerDef = Object.values(AI_PROVIDER_DEFINITIONS).find(p => p.id === providerId)
     return {
       apiKey: (ai?.apiKey as string) ?? (config?.aiApiKey as string) ?? '',
@@ -260,6 +260,36 @@ export async function extractVocabulary(content: string, config: AiProviderConfi
 }
 
 export async function generateReadingQuestions(content: string, title: string, config: AiProviderConfig): Promise<AiResult<ReadingQuestionsResult>> {
+  const engine = getLearningEngine()
+  if (engine) {
+    try {
+      const result = await engine.generateActivity({
+        sessionId: crypto.randomUUID(),
+        objectiveId: crypto.randomUUID(),
+        skill: 'reading',
+        activityType: 'independent-exercise',
+        availableMinutes: 15,
+        difficulty: 'medium',
+        contextScope: 'exercise',
+        sourceContent: content ? { id: crypto.randomUUID(), type: 'article', text: content, title } : undefined,
+        correlationId: crypto.randomUUID(),
+      })
+      if (result.status === 'success' && result.data.activity.exercise) {
+        const questions = result.data.activity.exercise.questions.map(q => {
+          const qAny = q as any
+          return {
+            question: (qAny.prompt || qAny.question || qAny.sentence || '') as string,
+            type: (q.type || 'multiple-choice') as ReadingQuestion['type'],
+            options: qAny.options,
+            answer: (qAny.correctAnswer || qAny.answer || qAny.correction || '') as string,
+            explanation: (qAny.explanation || '') as string,
+          }
+        })
+        return { data: { questions }, error: null }
+      }
+    } catch {}
+  }
+
   const { content: result, error } = await callAi(READING_SYSTEM_PROMPT, `Title: ${title}\n\nContent:\n${content}\n\nCreate 5 IELTS reading questions.`, config)
   if (error) return { data: null, error }
   try {
@@ -273,6 +303,34 @@ export async function generateReadingQuestions(content: string, title: string, c
 }
 
 export async function generateListeningExercise(content: string, config: AiProviderConfig): Promise<AiResult<ListeningExerciseResult>> {
+  const engine = getLearningEngine()
+  if (engine) {
+    try {
+      const result = await engine.generateActivity({
+        sessionId: crypto.randomUUID(),
+        objectiveId: crypto.randomUUID(),
+        skill: 'listening',
+        activityType: 'independent-exercise',
+        availableMinutes: 15,
+        difficulty: 'medium',
+        contextScope: 'exercise',
+        sourceContent: content ? { id: crypto.randomUUID(), type: 'article', text: content } : undefined,
+        correlationId: crypto.randomUUID(),
+      })
+      if (result.status === 'success' && result.data.activity.exercise) {
+        const gaps = result.data.activity.exercise.questions.map(q => {
+          const qAny = q as any
+          return {
+            sentence: (qAny.sentence || qAny.prompt || qAny.question || '') as string,
+            answer: (qAny.correctAnswer || qAny.answer || qAny.correction || '') as string,
+            hint: (qAny.explanation || '') as string,
+          }
+        })
+        return { data: { gaps }, error: null }
+      }
+    } catch {}
+  }
+
   const { content: result, error } = await callAi(LISTENING_SYSTEM_PROMPT, `Create a listening gap-fill exercise from:\n\n${content}`, config)
   if (error) return { data: null, error }
   try {
@@ -286,6 +344,34 @@ export async function generateListeningExercise(content: string, config: AiProvi
 }
 
 export async function generateSpeakingPrompts(content: string, config: AiProviderConfig): Promise<AiResult<SpeakingPromptsResult>> {
+  const engine = getLearningEngine()
+  if (engine) {
+    try {
+      const result = await engine.generateActivity({
+        sessionId: crypto.randomUUID(),
+        objectiveId: crypto.randomUUID(),
+        skill: 'speaking',
+        activityType: 'independent-exercise',
+        availableMinutes: 15,
+        difficulty: 'medium',
+        contextScope: 'exercise',
+        sourceContent: content ? { id: crypto.randomUUID(), type: 'article', text: content } : undefined,
+        correlationId: crypto.randomUUID(),
+      })
+      if (result.status === 'success' && result.data.activity.exercise) {
+        const prompts = result.data.activity.exercise.questions.map((q, i) => {
+          const qAny = q as any
+          return {
+            part: (i % 3 + 1) as 1 | 2 | 3,
+            question: (qAny.prompt || qAny.question || qAny.sentence || '') as string,
+            followUp: qAny.followUp as string | undefined,
+          }
+        })
+        return { data: { prompts }, error: null }
+      }
+    } catch {}
+  }
+
   const { content: result, error } = await callAi(SPEAKING_SYSTEM_PROMPT, `Create IELTS speaking prompts based on:\n\n${content}`, config)
   if (error) return { data: null, error }
   try {
@@ -299,6 +385,34 @@ export async function generateSpeakingPrompts(content: string, config: AiProvide
 }
 
 export async function generateWritingIdeas(content: string, config: AiProviderConfig): Promise<AiResult<WritingIdeasResult>> {
+  const engine = getLearningEngine()
+  if (engine) {
+    try {
+      const result = await engine.generateActivity({
+        sessionId: crypto.randomUUID(),
+        objectiveId: crypto.randomUUID(),
+        skill: 'writing',
+        activityType: 'independent-exercise',
+        availableMinutes: 15,
+        difficulty: 'medium',
+        contextScope: 'exercise',
+        sourceContent: content ? { id: crypto.randomUUID(), type: 'article', text: content } : undefined,
+        correlationId: crypto.randomUUID(),
+      })
+      if (result.status === 'success' && result.data.activity.exercise) {
+        const ideas = result.data.activity.exercise.questions.map(q => {
+          const qAny = q as any
+          return {
+            task: 2 as 1 | 2,
+            prompt: (qAny.prompt || qAny.question || qAny.sentence || '') as string,
+            instruction: (qAny.explanation || '') as string,
+          }
+        })
+        return { data: { ideas }, error: null }
+      }
+    } catch {}
+  }
+
   const { content: result, error } = await callAi(WRITING_SYSTEM_PROMPT, `Create IELTS writing task ideas based on:\n\n${content}`, config)
   if (error) return { data: null, error }
   try {
@@ -312,6 +426,35 @@ export async function generateWritingIdeas(content: string, config: AiProviderCo
 }
 
 export async function generateGrammarExercises(content: string, config: AiProviderConfig): Promise<AiResult<GrammarExercisesResult>> {
+  const engine = getLearningEngine()
+  if (engine) {
+    try {
+      const result = await engine.generateActivity({
+        sessionId: crypto.randomUUID(),
+        objectiveId: crypto.randomUUID(),
+        skill: 'grammar',
+        activityType: 'independent-exercise',
+        availableMinutes: 15,
+        difficulty: 'medium',
+        contextScope: 'exercise',
+        sourceContent: content ? { id: crypto.randomUUID(), type: 'article', text: content } : undefined,
+        correlationId: crypto.randomUUID(),
+      })
+      if (result.status === 'success' && result.data.activity.exercise) {
+        const exercises = result.data.activity.exercise.questions.map(q => {
+          const qAny = q as any
+          return {
+            sentence: (qAny.sentence || qAny.prompt || qAny.question || '') as string,
+            error: (qAny.error || '') as string,
+            correction: (qAny.correction || qAny.correctAnswer || qAny.answer || '') as string,
+            explanation: (qAny.explanation || '') as string,
+          }
+        })
+        return { data: { exercises }, error: null }
+      }
+    } catch {}
+  }
+
   const { content: result, error } = await callAi(GRAMMAR_SYSTEM_PROMPT, `Create grammar exercises based on:\n\n${content}`, config)
   if (error) return { data: null, error }
   try {
@@ -325,6 +468,35 @@ export async function generateGrammarExercises(content: string, config: AiProvid
 }
 
 export async function generateMistakeReviewTasks(content: string, config: AiProviderConfig): Promise<AiResult<MistakeReviewResult>> {
+  const engine = getLearningEngine()
+  if (engine) {
+    try {
+      const result = await engine.generateActivity({
+        sessionId: crypto.randomUUID(),
+        objectiveId: crypto.randomUUID(),
+        skill: 'grammar',
+        activityType: 'independent-exercise',
+        availableMinutes: 15,
+        difficulty: 'medium',
+        contextScope: 'exercise',
+        sourceContent: content ? { id: crypto.randomUUID(), type: 'article', text: content } : undefined,
+        correlationId: crypto.randomUUID(),
+      })
+      if (result.status === 'success' && result.data.activity.exercise) {
+        const tasks = result.data.activity.exercise.questions.map(q => {
+          const qAny = q as any
+          return {
+            type: (qAny.type || 'grammar') as MistakeReviewTask['type'],
+            question: (qAny.sentence || qAny.prompt || qAny.question || '') as string,
+            answer: (qAny.correction || qAny.correctAnswer || qAny.answer || '') as string,
+            explanation: (qAny.explanation || '') as string,
+          }
+        })
+        return { data: { tasks }, error: null }
+      }
+    } catch {}
+  }
+
   const { content: result, error } = await callAi(MISTAKE_REVIEW_SYSTEM_PROMPT, `Create mistake review tasks based on:\n\n${content}`, config)
   if (error) return { data: null, error }
   try {

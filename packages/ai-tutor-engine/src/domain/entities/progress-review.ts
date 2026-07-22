@@ -17,6 +17,7 @@ export interface ProgressReviewResult {
   realisticNextActions: string[]
   examRisk: string | null
   generatedAt: string
+  aiEnriched: boolean
 }
 
 export interface ProgressInsight {

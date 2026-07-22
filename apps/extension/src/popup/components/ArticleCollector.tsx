@@ -5,6 +5,7 @@ import { saveEntry } from '../../storage/indexedDB'
 import { incrementDailyProgress } from '../../services/storage'
 import type { LearningEntry } from '../../types'
 import { DEFAULT_AI_MODEL } from '@ielts/config'
+import { createAIClient } from '@ielts/ai'
 import { IconArticle, IconClose, IconCheck, IconHelpCircle, IconBookText } from '@ielts/ui'
 import type { ExtractResult } from '../../content-script/articleExtractor'
 
@@ -101,43 +102,27 @@ Requirements:
 - Realistic IELTS difficulty
 - Clear explanations referencing the text`
 
-  const url = `${config.baseUrl.replace(/\/+$/, '')}/chat/completions`
-
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${config.apiKey}`,
-      },
-      body: JSON.stringify({
-        model: config.model,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
-        ],
-        temperature: 0.5,
-        max_tokens: 2000,
-      }),
-    })
+    const { content: aiContent, error: aiError } = await createAIClient().complete(
+      [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      { apiKey: config.apiKey, baseUrl: config.baseUrl, model: config.model },
+      { temperature: 0.5, maxTokens: 2000 },
+    )
 
-    if (!response.ok) {
-      if (response.status === 401) return { data: null, error: 'Invalid API key. Check your key in Settings.' }
-      if (response.status === 429) return { data: null, error: 'Rate limit exceeded. Wait a moment and try again.' }
-      return { data: null, error: `AI API error (${response.status})` }
+    if (aiError || !aiContent) {
+      return { data: null, error: aiError || 'AI returned an empty response.' }
     }
 
-    const json = await response.json()
-    const content: string = json.choices?.[0]?.message?.content || ''
-    if (!content) return { data: null, error: 'AI returned an empty response.' }
-
-    const jsonStart = content.indexOf('{')
-    const jsonEnd = content.lastIndexOf('}')
+    const jsonStart = aiContent.indexOf('{')
+    const jsonEnd = aiContent.lastIndexOf('}')
     if (jsonStart === -1 || jsonEnd === -1) {
       return { data: null, error: 'AI response was not valid JSON.' }
     }
 
-    const parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
+    const parsed = JSON.parse(aiContent.slice(jsonStart, jsonEnd + 1))
     const questions = parsed.questions
     if (!Array.isArray(questions) || questions.length === 0) {
       return { data: null, error: 'AI response had unexpected format. Try again.' }

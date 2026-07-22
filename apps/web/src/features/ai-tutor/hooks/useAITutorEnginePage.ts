@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { flushSync } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { initializeAITutorEngine } from '../../../services/engineBootstrap'
 import { taskRepo, vocabularyRepo, mistakeRepo } from '../../../services/repositories'
@@ -108,6 +109,7 @@ const INITIAL_REVIEW: ProgressReview = {
   examCountdown: 0, skillBreakdown: [], weeklyTasksDone: 0, weeklyTasksTotal: 0, vocabDueReview: 0,
   vocabMastered: 0, mistakesUnresolved: 0, mistakesRecent: 0, todayUnfinished: 0, isExamUrgent: false,
   skillProgress: [], studyPlanAdherence: '', tutorFeedback: '', generatedAt: null,
+  aiEnriched: false,
 }
 
 export function useAITutorEnginePage(): AITutorPageState {
@@ -135,6 +137,7 @@ export function useAITutorEnginePage(): AITutorPageState {
   const [progressReview, setProgressReview] = useState<ProgressReview>(INITIAL_REVIEW)
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
+  const [refreshError, setRefreshError] = useState<string | null>(null)
 
   const isAiConfigured = (() => {
     try {
@@ -241,6 +244,7 @@ export function useAITutorEnginePage(): AITutorPageState {
         mistakesUnresolved, mistakesRecent: mistakes.filter(m => m.status !== 'resolved').length,
         todayUnfinished, isExamUrgent,
         skillBreakdown: computeSkillBreakdown(tasks, mistakes, weakSkillsList),
+        generatedAt: new Date().toISOString(),
       }))
 
       const engine = await initializeAITutorEngine()
@@ -313,14 +317,19 @@ export function useAITutorEnginePage(): AITutorPageState {
                   updates.tutorFeedback = d.examRisk
                 }
                 updates.generatedAt = d.generatedAt
+                updates.aiEnriched = d.aiEnriched
               }
 
               return { ...prev, ...updates }
             })
+            setRefreshError(null)
           }
         } catch (error) {
     console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
+      setRefreshError(error instanceof Error ? error.message : 'Failed to regenerate analysis')
         }
+      } else if (forceRefreshRef.current) {
+        setRefreshError('AI Tutor engine is not available. Check your configuration.')
       }
     } catch (error) {
       console.error('apps/web/src/features/ai-tutor/hooks/useAITutorEnginePage.ts error:', error);
@@ -338,9 +347,14 @@ export function useAITutorEnginePage(): AITutorPageState {
 
   const onRefresh = useCallback(() => {
     forceRefreshRef.current = true
-    setRefreshing(true)
-    loadData().finally(() => {
-      if (mountedRef.current) setRefreshing(false)
+    flushSync(() => {
+      setRefreshing(true)
+      setRefreshError(null)
+    })
+    Promise.all([loadData(), new Promise(r => setTimeout(r, 400))]).finally(() => {
+      flushSync(() => {
+        if (mountedRef.current) setRefreshing(false)
+      })
     })
   }, [loadData])
 
@@ -358,6 +372,7 @@ export function useAITutorEnginePage(): AITutorPageState {
     isAiConfigured,
     loading,
     refreshing,
+    refreshError,
     onRefresh,
     onStartSession: useCallback(() => recordAndNavigate(getRouteForSkill(session.skill)), [session.skill, recordAndNavigate]),
     onViewDetails: useCallback(() => navigate('/today-plan'), [navigate]),

@@ -1,4 +1,4 @@
-import { DEFAULT_AI_MODEL } from '@ielts/config'
+import { DEFAULT_AI_MODEL, DEFAULT_AI_PROVIDER_ID } from '@ielts/config'
 import { BRIDGE_NAMESPACE } from './extensionBridge.types'
 import { vocabularyRepo, mistakeRepo, studyNoteRepo, passageEntryRepo, artifactRepo } from '../../../services/repositories'
 import { getLearningEngine } from '../../../services/engineBootstrap'
@@ -249,7 +249,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
             articles: passageEntries,
             artifacts: artifactEntries,
             settings: {
-              aiProvider: settings.aiProvider || 'openai',
+              aiProvider: settings.aiProvider || DEFAULT_AI_PROVIDER_ID,
               aiModel: settings.aiModel || DEFAULT_AI_MODEL,
               aiBaseUrl: settings.aiBaseUrl || settings.aiEndpoint || '',
               aiApiKey: settings.aiApiKey || '',

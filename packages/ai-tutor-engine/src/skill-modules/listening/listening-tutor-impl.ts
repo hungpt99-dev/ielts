@@ -1,5 +1,5 @@
 import type { TutorAIClient } from '../../ai/tutor-ai-client'
-import type { ListeningExplanationRequest, ListeningExplanationResult, ListeningTutorModule, ListeningExerciseRequest, ListeningExerciseResult } from './listening-tutor'
+import type { ListeningExplanationRequest, ListeningExplanationResult, ListeningTutorModule } from './listening-tutor'
 
 function buildListeningExplanationSystemPrompt(): string {
   return `You are an experienced IELTS Listening tutor. Analyze the transcript and help the student understand it better.
@@ -52,7 +52,4 @@ export class ListeningTutorModuleImpl implements ListeningTutorModule {
     }
   }
 
-  async generateExercises(_request: ListeningExerciseRequest): Promise<ListeningExerciseResult> {
-    return { questions: [] }
-  }
 }

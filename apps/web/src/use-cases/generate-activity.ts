@@ -11,6 +11,10 @@ export interface GenerateActivityInput {
 export interface GenerateActivityOutput {
   content: string | null
   error: string | null
+  requestedTopic?: string
+  generatedTopic?: string
+  title?: string
+  sourceType?: 'ai-generated' | 'built-in' | string
 }
 
 export async function generateActivityUseCase(
@@ -61,7 +65,9 @@ export async function generateActivityUseCase(
       return { content: null, error: (result as any)?.error?.message ?? 'No activity generated' }
     }
 
-    const exercise = result.data.activity.exercise
+    const activity = result.data.activity
+    const exercise = activity.exercise
+    const topicMeta = activity.topicMetadata as { requestedTopic?: string; generatedTopic?: string; title?: string } | undefined
     const content = JSON.stringify({
       title: exercise.title,
       text: exercise.content?.passage ?? exercise.content?.text ?? '',
@@ -73,12 +79,26 @@ export async function generateActivityUseCase(
         question: q.question,
         options: q.options ?? [],
         blanks: Array.isArray(q.blanks) ? q.blanks : undefined,
-        correctAnswer: String(q.correctIndex ?? q.answer ?? ''),
+        correctAnswer: q.correctAnswer ?? String(q.correctIndex ?? q.answer ?? ''),
         explanation: q.explanation ?? '',
       })),
     })
 
-    return { content, error: null }
+    function extractTopicFromTitle(title: string, skill: string): string {
+      const skillPrefix = new RegExp(`^${skill}:\\s*`, 'i')
+      let topic = title.replace(skillPrefix, '').trim()
+      topic = topic.replace(/^(reading|listening|writing|speaking):\s*/i, '').trim()
+      return topic
+    }
+
+    return {
+      content,
+      error: null,
+      requestedTopic: topicMeta?.requestedTopic || input.topic || '',
+      generatedTopic: topicMeta?.generatedTopic || extractTopicFromTitle(exercise.title, input.skill),
+      title: topicMeta?.title || exercise.title,
+      sourceType: exercise.sourceType,
+    }
   } catch (err) {
     return { content: null, error: err instanceof Error ? err.message : 'Generation failed' }
   }

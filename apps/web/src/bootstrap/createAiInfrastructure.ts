@@ -1,7 +1,7 @@
 import { AiConfigurationResolver, createAIClient as createBaseAIClient } from '@ielts/ai'
 import type { AiCredentialProvider, ResolvedAiConnectionConfig } from '@ielts/ai'
 import type { AiUserSettings } from '@ielts/settings'
-import { DEFAULT_APP_CONFIG, AI_PROVIDER_DEFINITIONS, STORAGE_KEYS } from '@ielts/config'
+import { DEFAULT_APP_CONFIG, AI_PROVIDER_DEFINITIONS, STORAGE_KEYS, DEFAULT_AI_PROVIDER_ID } from '@ielts/config'
 
 export function mapNativeLanguage(lang: string | undefined): string {
   if (!lang || lang === '' || lang.toLowerCase() === 'auto') return 'english'
@@ -67,8 +67,8 @@ export async function resolveAiConfig(): Promise<ResolvedAiConnectionConfig> {
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
     const userSettings: AiUserSettings = raw
-      ? { providerId: 'openai', ...JSON.parse(raw)?.ai }
-      : { providerId: 'openai' }
+      ? { providerId: DEFAULT_AI_PROVIDER_ID, ...JSON.parse(raw)?.ai }
+      : { providerId: DEFAULT_AI_PROVIDER_ID }
     const cred = await credentialProvider.getCredential(userSettings.providerId)
     console.log('[AiConfig] settings key found:', !!raw, 'provider:', userSettings.providerId, 'credential found:', !!cred)
     const resolved = await resolver.resolve(userSettings)
@@ -77,7 +77,7 @@ export async function resolveAiConfig(): Promise<ResolvedAiConnectionConfig> {
   } catch (err) {
     console.error('[AiConfig] fallback due to:', err)
     return {
-      providerId: 'openai',
+      providerId: DEFAULT_AI_PROVIDER_ID,
       adapterType: 'openai-compatible',
       apiUrl: AI_PROVIDER_DEFINITIONS.openai.defaultApiUrl ?? '',
       model: DEFAULT_APP_CONFIG.ai.defaultModel,
@@ -119,14 +119,34 @@ export function createAIClient(): TutorAIClient {
         },
       )
       if (result.content) {
+        const json = extractJsonFromResponse(result.content)
+        if (json) {
+          try { return { success: true as const, data: JSON.parse(json) } }
+          catch { /* fall through to raw response */ }
+        }
         try { return { success: true as const, data: JSON.parse(result.content) } }
         catch {
+          console.warn('[generateStructured] JSON parse failed, wrapping raw content')
           return { success: true as const, data: { response: result.content } }
         }
       }
+      console.warn('[generateStructured] No content returned. Error:', result.error)
       return { success: false as const, error: { code: 'ai_failed', message: result.error ?? 'AI call failed', recoverable: true } }
     },
   }
+}
+
+function extractJsonFromResponse(text: string): string | null {
+  const trimmed = text.trim()
+  const codeFence = /^```(?:json)?\s*\n([\s\S]*?)\n\s*```$/m
+  const match = trimmed.match(codeFence)
+  if (match) return match[1].trim()
+  const firstBrace = trimmed.indexOf('{')
+  const lastBrace = trimmed.lastIndexOf('}')
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    return trimmed.slice(firstBrace, lastBrace + 1)
+  }
+  return null
 }
 
 export async function readConfigFromSettings() {

@@ -406,6 +406,7 @@ Please evaluate this essay according to the IELTS Writing Task rubric.`
         systemPrompt,
         userMessage,
         schema: {},
+        maxTokens: 3000,
       })
 
       if (!result.success) {
@@ -442,6 +443,7 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
         systemPrompt,
         userMessage,
         schema: {},
+        maxTokens: 1000,
       })
 
       if (!result.success) {
@@ -487,11 +489,12 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
 
   private isCorrect(question: any, answer: unknown): boolean {
     if (question.type === 'gap-fill') {
-      const blanks: string[] = question.blanks || []
-      const userBlanks = (answer as string[]) || []
+      const blanks: string[] = (question.blanks || []).filter((b: string) => b.trim().length > 0)
+      const userBlanks: string[] = (Array.isArray(answer) ? answer : []) as string[]
       if (blanks.length === 0) return false
+      if (userBlanks.every((v: string) => !v || v.trim() === '')) return false
       return blanks.every((b, i) => {
-        const userVal = userBlanks[i]?.toLowerCase().trim() || ''
+        const userVal = (userBlanks[i] || '').toLowerCase().trim()
         return b.toLowerCase().trim() === userVal
       })
     }
@@ -550,7 +553,9 @@ The question must be a complete, realistic IELTS Writing Task ${request.taskType
           mistakes.push({
             id: crypto.randomUUID?.() ?? `${Date.now()}-mistake`,
             mistake: q.question,
-            correction: Array.isArray(q.correctAnswer) ? q.correctAnswer.join(', ') : String(q.correctAnswer),
+            correction: Array.isArray(q.correctAnswer)
+              ? q.correctAnswer.join(', ')
+              : String(q.correctAnswer ?? q.options?.[(q as any).correctIndex ?? 0] ?? 'N/A'),
             explanation: q.explanation || '',
             source: `${request.skill === 'grammar' ? 'Grammar' : request.skill === 'reading' ? 'Reading' : request.skill === 'listening' ? 'Listening' : 'Exercise'} - ${request.topic}`,
             date: now.slice(0, 10),

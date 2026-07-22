@@ -4,8 +4,7 @@ import { taskRepo } from '../../services/repositories'
 import {
   STORAGE_KEYS,
   DEFAULT_APP_CONFIG,
-  AI_PROVIDER_DEFINITIONS,
-  DEFAULT_AI_API_URL,
+  getProviderById,
   DEFAULT_TARGET_BAND,
   DEFAULT_CURRENT_BAND,
   DEFAULT_DAILY_STUDY_MINUTES,
@@ -14,6 +13,7 @@ import {
   DEFAULT_WEAK_SKILLS,
   DEFAULT_AI_MAX_TOKENS,
   DEFAULT_PLAN_ENRICH_MAX_CALLS,
+  DEFAULT_AI_PROVIDER_ID,
 } from '@ielts/config'
 import { SKILL_TO_CATEGORY } from './constants'
 import { getLearningEngine } from '../../services/engineBootstrap'
@@ -626,9 +626,9 @@ export async function generateRoadmapWithEngine(settings: Record<string, unknown
       weakSkills: (study?.weakSkills as string[]) ?? (s.weakSkills as string[]) ?? [...DEFAULT_WEAK_SKILLS],
       studyGoal: (study?.studyGoal as string) ?? (s.studyGoal as string) ?? DEFAULT_STUDY_GOAL,
       preferredSchedule: (study?.preferredSchedule as string[]) ?? (s.preferredSchedule as string[]) ?? [...DEFAULT_SCHEDULE],
-      aiEnabled: (s.aiEnabled as boolean) ?? !!((s.ai as Record<string, unknown>)?.apiKey || s.aiApiKey || localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}openai`)),
-      aiProvider: (s.aiProvider as string) ?? (s.ai as Record<string, unknown>)?.providerId as string ?? 'openai',
-      aiApiKey: (s.aiApiKey as string) ?? (s.ai as Record<string, unknown>)?.apiKey as string ?? localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}openai`) ?? '',
+      aiEnabled: (s.aiEnabled as boolean) ?? !!((s.ai as Record<string, unknown>)?.apiKey || s.aiApiKey || localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${DEFAULT_AI_PROVIDER_ID}`)),
+      aiProvider: (s.aiProvider as string) ?? (s.ai as Record<string, unknown>)?.providerId as string ?? DEFAULT_AI_PROVIDER_ID,
+      aiApiKey: (s.aiApiKey as string) ?? (s.ai as Record<string, unknown>)?.apiKey as string ?? localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${DEFAULT_AI_PROVIDER_ID}`) ?? '',
     },
     overrides: { planStartDate: today },
   })
@@ -689,7 +689,7 @@ async function enrichPlanWithAI(
   const raw = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
   const userCfg = raw ? JSON.parse(raw) : {}
   const ai = (userCfg?.ai as Record<string, unknown>) ?? {}
-  const providerId = (ai.providerId as string) ?? 'openai'
+  const providerId = (ai.providerId as string) ?? DEFAULT_AI_PROVIDER_ID
   const storedKey = localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${providerId}`)
   const apiKey = (ai.apiKey as string) || (settings.aiApiKey as string) || storedKey || ''
   const hasAI = !!((settings.aiEnabled as boolean) ?? !!apiKey) && !!apiKey
@@ -705,7 +705,7 @@ async function enrichPlanWithAI(
 
     const config = {
       apiKey,
-      baseUrl: (ai.customApiUrl as string) || (settings.aiBaseUrl as string) || AI_PROVIDER_DEFINITIONS[providerId as keyof typeof AI_PROVIDER_DEFINITIONS]?.defaultApiUrl || DEFAULT_AI_API_URL,
+      baseUrl: (ai.customApiUrl as string) || (settings.aiBaseUrl as string) || getProviderById(providerId as any)?.defaultApiUrl || '',
       model: (ai.model as string) || (settings.aiModel as string) || DEFAULT_APP_CONFIG.ai.defaultModel,
     }
 

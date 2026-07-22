@@ -94,7 +94,7 @@ export async function generateVocabularyQuiz(
   )
 
   try {
-    const { content, error } = await callAI(VOCABULARY_QUIZ_SYSTEM_PROMPT, userPrompt, getConfig)
+    const { content, error } = await callAI(VOCABULARY_QUIZ_SYSTEM_PROMPT, userPrompt, getConfig, { maxTokens: 1000 })
     if (error) return { data: null, error }
 
     const json = extractJSON(content!)

@@ -37,6 +37,4 @@ export interface VocabularyExerciseResult {
 export interface VocabularyTutorModule {
   explainWord(request: VocabularyExplanationRequest): Promise<VocabularyExplanationResult>
 
-  /** @deprecated Use learning engine's `generateActivity()` via `@ielts/learning-engine` instead */
-  generateExercises(request: VocabularyExerciseRequest): Promise<VocabularyExerciseResult>
 }

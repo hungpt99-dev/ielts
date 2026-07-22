@@ -31,6 +31,7 @@ export interface OpenResponseEvaluationRequest<TSchema> {
   response: string
   rubric: string[]
   schema: TSchema
+  maxTokens?: number
 }
 
 export interface OpenResponseEvaluationResult<T> {

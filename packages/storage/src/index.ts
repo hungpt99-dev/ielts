@@ -111,6 +111,8 @@ export type {
   AIGenerationCache, ChannelEvaluation,
 } from './youtube-schemas'
 
+export { DexieExerciseRepository, DexieExerciseAttemptRepository } from './repositories/exercise-engine-repos'
+
 export {
   exportAllData,
   importBackup,

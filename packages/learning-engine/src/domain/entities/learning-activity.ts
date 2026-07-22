@@ -4,6 +4,19 @@ import type { Exercise } from './exercise'
 
 export type ActivityType = 'explanation' | 'worked-example' | 'guided-exercise' | 'independent-exercise' | 'answer-review' | 'reflection' | 'next-step'
 
+export type TopicAlignmentStatus =
+  | 'matched'
+  | 'related'
+  | 'mismatched'
+  | 'unknown'
+
+export interface ActivityMetadata {
+  requestedTopic: string
+  generatedTopic: string
+  title: string
+  source: 'ai-generated' | 'curated' | 'imported'
+}
+
 export interface LearningActivity {
   id: string
   sessionId: string
@@ -15,6 +28,8 @@ export interface LearningActivity {
   order: number
   exercise?: Exercise
   completed: boolean
+  topicMetadata?: ActivityMetadata
+  topicAlignment?: TopicAlignmentStatus
 }
 
 export interface GenerateLearningActivityRequest {
@@ -28,6 +43,12 @@ export interface GenerateLearningActivityRequest {
   sourceContent?: LearningSourceContent
   topic?: string
   correlationId: string
+}
+
+export interface GenerateLearningActivityResult {
+  activity: LearningActivity
+  aiUsed: boolean
+  cacheHit: boolean
 }
 
 export interface GenerateLearningActivityResult {

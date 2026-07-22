@@ -39,45 +39,6 @@ function formatTime(seconds: number): string {
   return s > 0 ? `${minutes}m ${s}s` : `${minutes}m`
 }
 
-export function computeAccuracy(correct: number, total: number): number {
-  if (total <= 0) return 0
-  return Math.round((correct / total) * 100)
-}
-
-export function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | string[]): boolean {
-  if (userAnswer === undefined || userAnswer === null) return false
-  if (typeof userAnswer === 'string' && typeof correctAnswer === 'string') {
-    return userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()
-  }
-  if (typeof userAnswer === 'number' && typeof correctAnswer === 'number') {
-    return userAnswer === correctAnswer
-  }
-  if (Array.isArray(userAnswer) && Array.isArray(correctAnswer)) {
-    return (
-      userAnswer.length === correctAnswer.length &&
-      userAnswer.every((v, i) => v.toLowerCase().trim() === (correctAnswer[i] as string).toLowerCase().trim())
-    )
-  }
-  return String(userAnswer).toLowerCase().trim() === String(correctAnswer).toLowerCase().trim()
-}
-
-export function checkAnswer(question: ReadingQuestion, answer: unknown): boolean {
-  if (question.type === 'matching-headings') {
-    const correctMatches = question.correctMatches || {}
-    const userMatches = (answer as Record<string, number>) || {}
-    const keys = Object.keys(correctMatches)
-    if (keys.length === 0) return false
-    return keys.every((k) => userMatches[k] === correctMatches[k])
-  }
-  if (question.type === 'gap-fill') {
-    const blanks = question.blanks || []
-    const userBlanks = (answer as string[]) || []
-    if (blanks.length === 0) return false
-    return blanks.every((b, i) => userBlanks[i]?.toLowerCase().trim() === b.toLowerCase().trim())
-  }
-  return normalizeAnswer(answer, question.correctAnswer)
-}
-
 function getAnswerLabel(question: ReadingQuestion): string {
   if (question.type === 'multiple-choice') {
     const idx = question.correctAnswer as number
@@ -275,7 +236,7 @@ export default function ReadingPractice() {
         questions: currentPassage.questions.map(q => ({
           id: q.id,
           question: q.question,
-          correctAnswer: q.correctAnswer,
+          correctAnswer: q.correctAnswer ?? (q as any).correctIndex ?? 0,
           options: q.options,
           explanation: q.explanation || '',
           type: q.type,
@@ -301,8 +262,12 @@ export default function ReadingPractice() {
       passageId: currentPassage.id,
       title: currentPassage.title,
       topic: currentPassage.topic,
+      topicMetadata: currentPassage.topicMetadata,
       passageText: currentPassage.text,
-      questions: currentPassage.questions,
+      questions: currentPassage.questions.map(q => ({
+        ...q,
+        correctAnswer: q.correctAnswer ?? (q as any).correctIndex ?? 0,
+      })),
       answers: answers as Record<string, unknown>,
       score,
       totalQuestions: total,
@@ -354,7 +319,8 @@ export default function ReadingPractice() {
         availableMinutes: 20,
         topic: aiTopic.trim(),
       })
-
+      if (result.error) throw new Error(result.error)
+      if (!result.content) throw new Error('AI returned an empty response. Try again.')
 
       let parsed: Record<string, unknown>
       try {
@@ -373,15 +339,21 @@ export default function ReadingPractice() {
       }
 
       const validTypes = ['multiple-choice', 'true-false-not-given', 'gap-fill'] as const
-      const trimmedTopic = aiTopic.trim()
-      const title = (parsed.title as string || '').toLowerCase().includes(trimmedTopic.toLowerCase())
-        ? parsed.title as string
-        : `Reading: ${trimmedTopic}`
+      const requestedTopic = aiTopic.trim()
+      const generatedTopic = result.generatedTopic || (parsed.title as string)
+      const generatedTitle = result.title || (parsed.title as string)
+      const actualSourceType = result.sourceType || 'ai-generated'
 
       const passage: ReadingPassageWithQuestions = {
         id: generateId(),
-        title,
-        topic: trimmedTopic,
+        title: parsed.title as string,
+        topic: generatedTopic,
+        topicMetadata: {
+          requestedTopic,
+          generatedTopic,
+          title: generatedTitle,
+          source: actualSourceType === 'built-in' ? 'curated' as const : 'ai-generated' as const,
+        },
         text: parsed.text as string,
         questions: (parsed.questions as Record<string, unknown>[]).map((q, i) => ({
           id: `ai-q${i}`,
@@ -397,6 +369,7 @@ export default function ReadingPractice() {
         difficulty: aiDifficulty,
         wordCount: (parsed.text as string).split(/\s+/).length,
         estimatedMinutes: 20,
+        sourceType: actualSourceType as 'ai-generated' | 'built-in',
       }
 
       setAllPassages(prev => [passage, ...prev])
@@ -724,6 +697,14 @@ export default function ReadingPractice() {
                 >
                   {currentPassage.topic}
                 </span>
+                {currentPassage.sourceType && (
+                  <span className="rounded-full px-2 py-0.5 text-[10px] font-medium" style={{
+                    backgroundColor: currentPassage.sourceType === 'ai-generated' ? 'var(--color-success-light)' : 'var(--color-warning-light, #fef3c7)',
+                    color: currentPassage.sourceType === 'ai-generated' ? 'var(--color-success)' : 'var(--color-warning, #92400e)',
+                  }}>
+                    {currentPassage.sourceType === 'ai-generated' ? 'AI-Generated' : 'Built-in Practice'}
+                  </span>
+                )}
                 <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
                   {currentPassage.wordCount} words
                 </span>
@@ -1156,7 +1137,12 @@ export default function ReadingPractice() {
                 <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
                   Topic
                 </span>
-                <p className="mt-0.5" style={{ color: 'var(--color-text)' }}>{historyDetail.topic}</p>
+                <p className="mt-0.5" style={{ color: 'var(--color-text)' }}>{historyDetail.topicMetadata?.generatedTopic || historyDetail.topic}</p>
+                {historyDetail.topicMetadata && historyDetail.topicMetadata.requestedTopic !== historyDetail.topicMetadata.generatedTopic && (
+                  <p className="mt-0.5 text-xs" style={{ color: 'var(--color-warning)' }}>
+                    Requested topic: {historyDetail.topicMetadata.requestedTopic}
+                  </p>
+                )}
               </div>
               <div>
                 <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>

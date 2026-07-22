@@ -8,6 +8,7 @@ export interface CompletionRequest {
   messages: Message[]
   temperature?: number
   max_tokens?: number
+  signal?: AbortSignal
 }
 
 export interface CompletionResponse {
@@ -26,6 +27,7 @@ export interface AIAdapterConfig {
   model: string
   temperature?: number
   maxTokens?: number
+  timeoutMs?: number
 }
 
 export interface AIAdapter {

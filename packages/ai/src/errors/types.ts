@@ -29,6 +29,13 @@ export class AINetworkError extends AIError {
   }
 }
 
+export class AITimeoutError extends AIError {
+  constructor(message = 'AI request timed out. The provider took too long to respond. Try again.') {
+    super(message, 'TIMEOUT')
+    this.name = 'AITimeoutError'
+  }
+}
+
 export class AIEmptyResponseError extends AIError {
   constructor(message = 'AI returned an empty response. Try again.') {
     super(message, 'EMPTY_RESPONSE')

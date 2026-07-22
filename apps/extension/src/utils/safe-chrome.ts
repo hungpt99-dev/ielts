@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { OPENAI_BASE_URL, DEFAULT_MODEL } from '@ielts/settings'
+import { OPENAI_BASE_URL, DEFAULT_AI_MODEL } from '@ielts/settings'
 
 const CONTEXT_INVALIDATED = 'Extension context invalidated'
 
@@ -118,13 +118,13 @@ export function safeFetchProviderConfig(): Promise<{
 
       const apiKey = localResult.aiApiKey || ''
       const baseUrl = syncSettings.aiBaseUrl || OPENAI_BASE_URL
-      const model = syncSettings.aiModel || DEFAULT_MODEL
+      const model = syncSettings.aiModel || DEFAULT_AI_MODEL
 
       cachedConfig = { apiKey, baseUrl, model }
       return cachedConfig
     } catch (error) {
       console.error('apps/extension/src/utils/safe-chrome.ts error:', error);
-      return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_MODEL }
+      return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_AI_MODEL }
     }
   })()
 }

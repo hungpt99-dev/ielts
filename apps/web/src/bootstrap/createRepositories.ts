@@ -218,20 +218,27 @@ export function createDependencyRepos() {
     },
     outcomeRepository: {
       async save(outcome: any) {
-        try { await DatabaseService.safePut('progressRecords', outcome) } catch (error) {
-      console.error('apps/web/src/services/engineBootstrap.ts error:', error);
-        }
+        try {
+          const { getDb } = await import('@ielts/storage')
+          const db = getDb()
+          await db.progressRecords.put({
+            id: outcome.sessionId || `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+            date: outcome.completedAt?.slice(0, 10) || new Date().toISOString().slice(0, 10),
+            metric: `skill.${outcome.skill}.score`,
+            value: outcome.maximumScore > 0 ? Math.round((outcome.score / outcome.maximumScore) * 100) : 0,
+            unit: 'percent',
+            createdAt: outcome.completedAt || new Date().toISOString(),
+          })
+        } catch { /* outcome persistence is non-critical */ }
       },
       async findRecent(query?: any) {
         try {
           const all = await DatabaseService.safeGetAll('progressRecords')
-          let filtered = all as any[]
-          if (query?.skill) filtered = filtered.filter((o: any) => o.skill === query.skill)
-          filtered.sort((a: any, b: any) => String(b.completedAt ?? '').localeCompare(String(a.completedAt ?? '')))
+          let filtered = all.filter((o: any) => o.metric?.startsWith('skill.'))
+          if (query?.skill) filtered = filtered.filter((o: any) => o.metric?.includes(`skill.${query.skill}`))
+          filtered.sort((a: any, b: any) => String(b.date ?? '').localeCompare(String(a.date ?? '')))
           return query?.limit ? filtered.slice(0, query.limit) : filtered
-        } catch (error) {
- console.error('apps/web/src/services/engineBootstrap.ts error:', error);
- return [] }
+        } catch { return [] }
       },
     },
     exerciseRepository: {

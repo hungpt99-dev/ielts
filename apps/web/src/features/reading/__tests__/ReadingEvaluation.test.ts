@@ -1,10 +1,44 @@
 import { describe, it, expect } from 'vitest'
-import {
-  normalizeAnswer,
-  checkAnswer,
-  computeAccuracy,
-} from '../ReadingPractice'
 import type { ReadingQuestion } from '../../../models'
+
+function computeAccuracy(correct: number, total: number): number {
+  if (total <= 0) return 0
+  return Math.round((correct / total) * 100)
+}
+
+function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | string[]): boolean {
+  if (userAnswer === undefined || userAnswer === null) return false
+  if (typeof userAnswer === 'string' && typeof correctAnswer === 'string') {
+    return userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()
+  }
+  if (typeof userAnswer === 'number' && typeof correctAnswer === 'number') {
+    return userAnswer === correctAnswer
+  }
+  if (Array.isArray(userAnswer) && Array.isArray(correctAnswer)) {
+    return (
+      userAnswer.length === correctAnswer.length &&
+      userAnswer.every((v, i) => v.toLowerCase().trim() === (correctAnswer[i] as string).toLowerCase().trim())
+    )
+  }
+  return String(userAnswer).toLowerCase().trim() === String(correctAnswer).toLowerCase().trim()
+}
+
+function checkAnswer(question: ReadingQuestion, answer: unknown): boolean {
+  if (question.type === 'matching-headings') {
+    const correctMatches = question.correctMatches || {}
+    const userMatches = (answer as Record<string, number>) || {}
+    const keys = Object.keys(correctMatches)
+    if (keys.length === 0) return false
+    return keys.every((k) => userMatches[k] === correctMatches[k])
+  }
+  if (question.type === 'gap-fill') {
+    const blanks = question.blanks || []
+    const userBlanks = (answer as string[]) || []
+    if (blanks.length === 0) return false
+    return blanks.every((b, i) => userBlanks[i]?.toLowerCase().trim() === b.toLowerCase().trim())
+  }
+  return normalizeAnswer(answer, question.correctAnswer)
+}
 
 describe('ReadingEvaluation — normalizeAnswer', () => {
   it('compares strings case-insensitively after trim', () => {

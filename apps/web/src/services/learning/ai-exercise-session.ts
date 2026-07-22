@@ -86,7 +86,7 @@ function parseExerciseFromActivity(activityResult: any) {
       question: q.question,
       options: q.options ?? [],
       blanks: Array.isArray(q.blanks) ? q.blanks : undefined,
-      correctAnswer: String(q.correctIndex ?? q.answer ?? ''),
+      correctAnswer: q.correctAnswer ?? String(q.correctIndex ?? q.answer ?? ''),
       explanation: q.explanation ?? '',
     })),
   }

@@ -1,15 +1,16 @@
 import { z } from 'zod'
-import { AI_PROVIDER_IDS } from '@ielts/config'
+import { AI_PROVIDER_IDS, DEFAULT_AI_PROVIDER_ID, DEFAULT_AI_MODEL } from '@ielts/config'
 
+/** @deprecated Use provider registry to resolve the API URL. */
 export const OPENAI_BASE_URL = 'https://api.openai.com/v1'
-export const DEFAULT_MODEL = 'gpt-4.1-mini'
 
+/** @deprecated Use AI_PROVIDER_IDS for the canonical provider list. */
 export const AI_PROVIDERS = ['openai', 'custom'] as const
 
 export const aiProviderSchema = z.enum(AI_PROVIDERS)
 
 export const aiUserSettingsSchema = z.object({
-  providerId: z.enum(AI_PROVIDER_IDS).default('openai'),
+  providerId: z.enum(AI_PROVIDER_IDS).default(DEFAULT_AI_PROVIDER_ID),
   model: z.string().optional(),
   customApiUrl: z.string().optional(),
   temperature: z.number().min(0).max(2).optional(),
@@ -45,10 +46,10 @@ export const userConfigurationSchema = z.object({
 })
 
 export const aiSettingsSchema = z.object({
-  aiProvider: aiProviderSchema.default('openai'),
+  aiProvider: aiProviderSchema.default(DEFAULT_AI_PROVIDER_ID),
   aiBaseUrl: z.string().default(''),
   aiApiKey: z.string().default(''),
-  aiModel: z.string().default(DEFAULT_MODEL),
+  aiModel: z.string().default(DEFAULT_AI_MODEL),
 })
 
 export const THEME_MODES = ['light', 'dark', 'system'] as const

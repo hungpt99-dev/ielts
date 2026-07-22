@@ -1,5 +1,5 @@
 import type { TutorAIClient } from '../../ai/tutor-ai-client'
-import type { ReadingExplanationRequest, ReadingExplanationResult, ReadingTutorModule, ReadingComprehensionRequest, ReadingComprehensionResult } from './reading-tutor'
+import type { ReadingExplanationRequest, ReadingExplanationResult, ReadingTutorModule } from './reading-tutor'
 
 function buildReadingExplanationSystemPrompt(): string {
   return `You are an experienced IELTS Reading tutor. Explain the passage and help the student understand it better.
@@ -57,9 +57,6 @@ export class ReadingTutorModuleImpl implements ReadingTutorModule {
     }
   }
 
-  async generateComprehensionQuestions(_request: ReadingComprehensionRequest): Promise<ReadingComprehensionResult> {
-    return { questions: [] }
-  }
 }
 
 function readStrategyForQuestion(question: string): string {

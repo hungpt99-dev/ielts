@@ -342,3 +342,6 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
 export function getLearningEngine(): LearningEngine | null {
   return learningEngineInstance
 }
+
+import { createExerciseEngineBridge, getExerciseEngine } from './exercise-engine-adapter'
+export { getExerciseEngine }

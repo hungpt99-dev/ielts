@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { formatTime } from '../utils/tokenizeTranscript'
+import { scoreObjectiveQuestion } from '@ielts/learning-engine'
+import type { LearnerResponse } from '@ielts/learning-engine'
 
 interface Question {
   id: string
@@ -25,6 +27,70 @@ interface Quiz {
   onePlay: boolean
   hideSubtitles: boolean
   createdAt: string
+}
+
+function mapQuizQuestionToEngine(question: Question): Record<string, unknown> | null {
+  const t = question.type.toLowerCase().replace(/-/g, '_')
+  if (t === 'multiple_choice') {
+    const correctIndex = question.options?.indexOf(question.correctAnswer) ?? -1
+    return {
+      id: question.id,
+      type: 'multiple_choice',
+      prompt: question.prompt,
+      options: question.options ?? [],
+      correctIndex,
+      points: question.points,
+      difficulty: { difficulty: 1 },
+      learningObjectiveIds: [],
+    }
+  }
+  if (t === 'gap_fill' || t === 'completion' || t === 'fill_in_blank' || t === 'fill_in_the_blank') {
+    return {
+      id: question.id,
+      type: 'completion',
+      subtype: 'gap_fill',
+      prompt: question.prompt,
+      text: question.prompt,
+      points: question.points,
+      gaps: [{ correctAnswer: question.correctAnswer, acceptableAlternatives: [], position: 0 }],
+      difficulty: { difficulty: 1 },
+      learningObjectiveIds: [],
+    }
+  }
+  if (t === 'true_false_not_given') {
+    return {
+      id: question.id,
+      type: 'true_false_not_given',
+      prompt: question.prompt,
+      correctAnswer: question.correctAnswer,
+      points: question.points,
+      difficulty: { difficulty: 1 },
+      learningObjectiveIds: [],
+    }
+  }
+  if (t === 'short_answer') {
+    return {
+      id: question.id,
+      type: 'short_answer',
+      prompt: question.prompt,
+      correctAnswer: question.correctAnswer,
+      acceptableAlternatives: [],
+      caseSensitive: false,
+      points: question.points,
+      difficulty: { difficulty: 1 },
+      learningObjectiveIds: [],
+    }
+  }
+  return null
+}
+
+function mapQuizAnswerToResponse(question: Question, answer: string): LearnerResponse {
+  const t = question.type.toLowerCase().replace(/-/g, '_')
+  if (t === 'multiple_choice') {
+    const selectedIndex = question.options?.indexOf(answer) ?? -1
+    return { type: 'choice', selectedIndex }
+  }
+  return { type: 'text', value: answer }
 }
 
 export function QuizPanel({
@@ -119,6 +185,53 @@ export function QuizPanel({
 
   const handleSubmit = useCallback(() => {
     if (!quiz) return
+    const scoredResults: Array<{ questionId: string; correct: boolean; points: number; totalPoints: number; userAnswer: string; correctAnswer: string; explanation: string; evidenceStartMs: number; evidenceEndMs: number }> = []
+    let totalScore = 0
+    let totalPossible = 0
+
+    for (const q of quiz.questions) {
+      const userAnswer = answers[q.id] || ''
+      const engineQ = mapQuizQuestionToEngine(q)
+      if (engineQ) {
+        const engineR = mapQuizAnswerToResponse(q, userAnswer)
+        const result = scoreObjectiveQuestion(engineQ as any, engineR)
+        totalScore += result.score
+        totalPossible += result.maxScore
+        scoredResults.push({
+          questionId: q.id,
+          correct: result.correct,
+          points: result.score,
+          totalPoints: result.maxScore,
+          userAnswer,
+          correctAnswer: q.correctAnswer,
+          explanation: q.explanation,
+          evidenceStartMs: q.evidenceStartMs,
+          evidenceEndMs: q.evidenceEndMs,
+        })
+      } else {
+        const isCorrect = userAnswer.toLowerCase().trim() === q.correctAnswer.toLowerCase().trim()
+        totalScore += isCorrect ? q.points : 0
+        totalPossible += q.points
+        scoredResults.push({
+          questionId: q.id,
+          correct: isCorrect,
+          points: isCorrect ? q.points : 0,
+          totalPoints: q.points,
+          userAnswer,
+          correctAnswer: q.correctAnswer,
+          explanation: q.explanation,
+          evidenceStartMs: q.evidenceStartMs,
+          evidenceEndMs: q.evidenceEndMs,
+        })
+      }
+    }
+
+    setResults(scoredResults)
+    setScore({
+      totalScore,
+      totalPossible,
+      accuracy: totalPossible > 0 ? Math.round((totalScore / totalPossible) * 100) : 0,
+    })
     setPhase('submitted')
     sendToParent('SUBMIT_QUIZ', { quizId: quiz.id, questions: quiz.questions, answers })
   }, [quiz, answers, sendToParent])

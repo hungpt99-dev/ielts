@@ -41,7 +41,7 @@ export async function explain(
   const schema = typeSchemas[type]
   const { systemPrompt, userPrompt } = buildExplainPrompt(type, text, language)
 
-  const { content, error } = await callAI(systemPrompt, userPrompt, getConfig)
+  const { content, error } = await callAI(systemPrompt, userPrompt, getConfig, { maxTokens: 800 })
   if (error) return { data: null, error }
 
   try {

@@ -15,7 +15,23 @@ export const activitySchema = z.object({
   generatedById: z.string(),
   schemaVersion: z.string(),
   createdAt: z.string(),
+  topicMetadata: z
+    .object({
+      requestedTopic: z.string(),
+      generatedTopic: z.string(),
+      title: z.string(),
+      source: z.enum(['ai-generated', 'curated', 'imported']),
+    })
+    .optional(),
+  topicAlignment: z.enum(['matched', 'related', 'mismatched', 'unknown']).optional(),
 })
+
+export interface TopicMetadataEntry {
+  requestedTopic: string
+  generatedTopic: string
+  title: string
+  source: 'ai-generated' | 'curated' | 'imported'
+}
 
 export interface ActivityEntry {
   id: string
@@ -31,6 +47,8 @@ export interface ActivityEntry {
   generatedById: string
   schemaVersion: string
   createdAt: string
+  topicMetadata?: TopicMetadataEntry
+  topicAlignment?: 'matched' | 'related' | 'mismatched' | 'unknown'
   [key: string]: unknown
 }
 

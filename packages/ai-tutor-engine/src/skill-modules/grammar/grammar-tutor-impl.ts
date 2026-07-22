@@ -1,5 +1,5 @@
 import type { TutorAIClient } from '../../ai/tutor-ai-client'
-import type { GrammarExplanationRequest, GrammarExplanationResult, GrammarTutorModule, GrammarExerciseRequest, GrammarExerciseResult } from './grammar-tutor'
+import type { GrammarExplanationRequest, GrammarExplanationResult, GrammarTutorModule } from './grammar-tutor'
 
 const GRAMMAR_PATTERNS: Array<{ pattern: RegExp; category: string; rule: string; correction: (match: string) => string; examples: string[] }> = [
   { pattern: /\b(he|she|it) don\'t\b/gi, category: 'subject-verb-agreement', rule: 'Third person singular subjects (he/she/it) require "doesn\'t" not "don\'t".', correction: m => m.replace(/\bdon\'t\b/i, 'doesn\'t'), examples: ['He doesn\'t like coffee. (not "He don\'t")', 'She doesn\'t work here.'] },
@@ -88,7 +88,4 @@ export class GrammarTutorModuleImpl implements GrammarTutorModule {
     }
   }
 
-  async generateExercises(_request: GrammarExerciseRequest): Promise<GrammarExerciseResult> {
-    return { exercises: [] }
-  }
 }

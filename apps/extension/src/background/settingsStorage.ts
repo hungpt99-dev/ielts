@@ -30,6 +30,8 @@ export type ExtensionSettings = SharedSettings & {
   defaultCategory: typeof SAVE_CATEGORIES[number]
   defaultTopic: string
   nativeLanguage: string
+  aiTimeout: number
+  aiTemperature?: number
 }
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
@@ -43,6 +45,7 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   defaultCategory: 'vocabulary',
   defaultTopic: 'general',
   nativeLanguage: '',
+  aiTimeout: 30000,
 }
 
 // Fields shared between extension and website settings
@@ -81,6 +84,8 @@ interface SyncSettings {
   defaultCategory: typeof SAVE_CATEGORIES[number]
   defaultTopic: string
   nativeLanguage: string
+  aiTimeout: number
+  aiTemperature?: number
 }
 
 const SYNC_KEY = STORAGE_KEYS.extensionLocal.extensionSettings
@@ -102,6 +107,8 @@ function toSyncSettings(s: ExtensionSettings): SyncSettings {
     defaultCategory: s.defaultCategory,
     defaultTopic: s.defaultTopic,
     nativeLanguage: s.nativeLanguage,
+    aiTimeout: s.aiTimeout,
+    aiTemperature: s.aiTemperature,
   }
 }
 

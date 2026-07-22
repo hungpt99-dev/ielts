@@ -11,6 +11,17 @@ export const AI_PROVIDER_DEFINITIONS = {
     allowsCustomApiUrl: false,
     allowsCustomModel: true,
     visibleInProviderPicker: true,
+    modelCapabilities: [
+      { modelPrefix: 'o1', supportsTemperature: false, supportsMaxTokens: false, supportsMaxCompletionTokens: true, supportsReasoningEffort: false },
+      { modelPrefix: 'o3', supportsTemperature: false, supportsMaxTokens: false, supportsMaxCompletionTokens: true, supportsReasoningEffort: true },
+      { modelPrefix: 'o4-mini', supportsTemperature: false, supportsMaxTokens: false, supportsMaxCompletionTokens: true, supportsReasoningEffort: true },
+      { modelPrefix: 'gpt-5', supportsTemperature: true, supportsMaxTokens: false, supportsMaxCompletionTokens: true, supportsReasoningEffort: false },
+      { modelPrefix: 'gpt-4.1', supportsTemperature: true, supportsMaxTokens: true, supportsMaxCompletionTokens: false, supportsReasoningEffort: false },
+      { modelPrefix: 'gpt-4o', supportsTemperature: true, supportsMaxTokens: true, supportsMaxCompletionTokens: false, supportsReasoningEffort: false },
+      { modelPrefix: 'gpt-4-turbo', supportsTemperature: true, supportsMaxTokens: true, supportsMaxCompletionTokens: false, supportsReasoningEffort: false },
+      { modelPrefix: 'gpt-4', supportsTemperature: true, supportsMaxTokens: true, supportsMaxCompletionTokens: false, supportsReasoningEffort: false },
+      { modelPrefix: 'gpt-3.5-turbo', supportsTemperature: true, supportsMaxTokens: true, supportsMaxCompletionTokens: false, supportsReasoningEffort: false },
+    ],
   },
   claude: {
     id: 'claude',
@@ -22,6 +33,9 @@ export const AI_PROVIDER_DEFINITIONS = {
     allowsCustomApiUrl: false,
     allowsCustomModel: true,
     visibleInProviderPicker: true,
+    modelCapabilities: [
+      { modelPrefix: 'claude', supportsTemperature: true, supportsMaxTokens: true, supportsMaxCompletionTokens: false, supportsReasoningEffort: false },
+    ],
   },
   gemini: {
     id: 'gemini',
@@ -33,6 +47,9 @@ export const AI_PROVIDER_DEFINITIONS = {
     allowsCustomApiUrl: false,
     allowsCustomModel: true,
     visibleInProviderPicker: true,
+    modelCapabilities: [
+      { modelPrefix: 'gemini', supportsTemperature: true, supportsMaxTokens: true, supportsMaxCompletionTokens: false, supportsReasoningEffort: false },
+    ],
   },
   deepseek: {
     id: 'deepseek',
@@ -44,6 +61,9 @@ export const AI_PROVIDER_DEFINITIONS = {
     allowsCustomApiUrl: false,
     allowsCustomModel: true,
     visibleInProviderPicker: true,
+    modelCapabilities: [
+      { modelPrefix: 'deepseek', supportsTemperature: true, supportsMaxTokens: true, supportsMaxCompletionTokens: false, supportsReasoningEffort: false },
+    ],
   },
   openrouter: {
     id: 'openrouter',

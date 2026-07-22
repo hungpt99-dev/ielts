@@ -176,7 +176,7 @@ export class VocabularyService {
         { role: 'user', content: userPrompt },
       ],
       providerConfig,
-      { temperature: 0.3 },
+      { temperature: 0.3, maxTokens: 1000 },
     )
     if (result.error || !result.content) return null
 

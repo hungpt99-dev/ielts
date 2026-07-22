@@ -15,7 +15,7 @@ import type {
   StudyReminderFrequency,
   PrivacyLevel,
 } from './models'
-import { STORAGE_KEYS, DEFAULT_AI_MODEL } from '@ielts/config'
+import { STORAGE_KEYS, DEFAULT_AI_MODEL, DEFAULT_AI_PROVIDER_ID } from '@ielts/config'
 import { loadUserConfiguration } from '@ielts/settings'
 import type { UserConfiguration } from '@ielts/settings'
 
@@ -31,8 +31,8 @@ export interface StorageMeta {
 
 export function createDefaultProvider(): AiProviderConfig {
   return {
-    providerId: 'default-openai',
-    provider: 'openai' as AiProviderType,
+    providerId: `default-${DEFAULT_AI_PROVIDER_ID}`,
+    provider: DEFAULT_AI_PROVIDER_ID as AiProviderType,
     apiKey: '',
     baseUrl: 'https://api.openai.com/v1',
     model: DEFAULT_AI_MODEL,
@@ -61,7 +61,7 @@ function createDefaultTutorConfig(): AiTutorConfig {
 
 function createDefaultAdvanced(): ConfigurationAdvanced {
   return {
-    activeProviderId: 'default-openai',
+    activeProviderId: `default-${DEFAULT_AI_PROVIDER_ID}`,
     providers: { 'default-openai': createDefaultProvider() },
     tutorConfig: createDefaultTutorConfig(),
     vocabReview: {
@@ -224,9 +224,9 @@ function migrateV0toV1(raw: Record<string, unknown>): boolean {
     if (typeof legacy.aiEndpoint === 'string' && !legacy.aiBaseUrl) provider.baseUrl = legacy.aiEndpoint
 
     ;(raw.advanced as Record<string, unknown>).providers = {
-      'default-openai': provider,
+      [`default-${DEFAULT_AI_PROVIDER_ID}`]: provider,
     }
-    ;(raw.advanced as Record<string, unknown>).activeProviderId = 'default-openai'
+    ;(raw.advanced as Record<string, unknown>).activeProviderId = `default-${DEFAULT_AI_PROVIDER_ID}`
 
     localStorage.removeItem(legacyKey)
     return true
@@ -448,8 +448,8 @@ export function migrateFromLegacySettings(): ExtendedUserConfiguration | null {
     if (typeof legacy.aiModel === 'string') provider.model = legacy.aiModel
     if (typeof legacy.aiEndpoint === 'string' && !legacy.aiBaseUrl) provider.baseUrl = legacy.aiEndpoint
 
-    config.advanced.providers = { 'default-openai': provider }
-    config.advanced.activeProviderId = 'default-openai'
+    config.advanced.providers = { [`default-${DEFAULT_AI_PROVIDER_ID}`]: provider }
+    config.advanced.activeProviderId = `default-${DEFAULT_AI_PROVIDER_ID}`
 
     return config
   } catch (error) {

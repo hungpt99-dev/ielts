@@ -37,40 +37,6 @@ function formatTime(seconds: number): string {
   return s > 0 ? `${minutes}m ${s}s` : `${minutes}m`
 }
 
-export function computeAccuracy(correct: number, total: number): number {
-  if (total <= 0) return 0
-  return Math.round((correct / total) * 100)
-}
-
-export function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | string[]): boolean {
-  if (userAnswer === undefined || userAnswer === null) return false
-  if (typeof userAnswer === 'string' && typeof correctAnswer === 'string') {
-    return userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()
-  }
-  if (typeof userAnswer === 'number' && typeof correctAnswer === 'number') {
-    return userAnswer === correctAnswer
-  }
-  if (Array.isArray(userAnswer) && Array.isArray(correctAnswer)) {
-    return userAnswer.some((v: string) =>
-      correctAnswer.some((c: string) => v.toLowerCase().trim() === c.toLowerCase().trim())
-    )
-  }
-  return String(userAnswer).toLowerCase().trim() === String(correctAnswer).toLowerCase().trim()
-}
-
-export function checkAnswer(question: ListeningQuestion, answer: unknown): boolean {
-  if (question.type === 'gap-fill') {
-    const blanks = question.blanks || []
-    const userBlanks = (answer as string[]) || []
-    if (blanks.length === 0) return false
-    return blanks.every((b, i) => {
-      const userVal = userBlanks[i]?.toLowerCase().trim() || ''
-      return b.toLowerCase().trim() === userVal
-    })
-  }
-  return normalizeAnswer(answer, question.correctAnswer)
-}
-
 function getAnswerLabel(question: ListeningQuestion): string {
   if (question.type === 'multiple-choice') {
     const idx = question.correctAnswer as number
@@ -343,9 +309,11 @@ export default function ListeningPractice() {
       const validTypes = ['multiple-choice', 'gap-fill'] as const
 
       const trimmedTopic = aiTopic.trim()
-      const title = (parsed.title as string || '').toLowerCase().includes(trimmedTopic.toLowerCase())
-        ? parsed.title as string
-        : `Listening: ${trimmedTopic}`
+      const isDefaultTitle = !parsed.title ||
+        (parsed.title as string).toLowerCase().startsWith('listening practice')
+      const title = isDefaultTitle
+        ? `Listening: ${trimmedTopic}`
+        : parsed.title as string
       const transcriptText = parsed.transcript as string || ''
       const transcriptMatchesTopic = transcriptText.toLowerCase().includes(trimmedTopic.toLowerCase())
       let finalTranscript = transcriptText

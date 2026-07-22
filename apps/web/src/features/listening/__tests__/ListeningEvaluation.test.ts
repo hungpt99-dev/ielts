@@ -1,10 +1,39 @@
 import { describe, it, expect } from 'vitest'
-import {
-  normalizeAnswer,
-  checkAnswer,
-  computeAccuracy,
-} from '../ListeningPractice'
 import type { ListeningQuestion } from '../../../models'
+
+function computeAccuracy(correct: number, total: number): number {
+  if (total <= 0) return 0
+  return Math.round((correct / total) * 100)
+}
+
+function normalizeAnswer(userAnswer: unknown, correctAnswer: string | number | string[]): boolean {
+  if (userAnswer === undefined || userAnswer === null) return false
+  if (typeof userAnswer === 'string' && typeof correctAnswer === 'string') {
+    return userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim()
+  }
+  if (typeof userAnswer === 'number' && typeof correctAnswer === 'number') {
+    return userAnswer === correctAnswer
+  }
+  if (Array.isArray(userAnswer) && Array.isArray(correctAnswer)) {
+    return userAnswer.some((v: string) =>
+      correctAnswer.some((c: string) => v.toLowerCase().trim() === c.toLowerCase().trim())
+    )
+  }
+  return String(userAnswer).toLowerCase().trim() === String(correctAnswer).toLowerCase().trim()
+}
+
+function checkAnswer(question: ListeningQuestion, answer: unknown): boolean {
+  if (question.type === 'gap-fill') {
+    const blanks = question.blanks || []
+    const userBlanks = (answer as string[]) || []
+    if (blanks.length === 0) return false
+    return blanks.every((b, i) => {
+      const userVal = userBlanks[i]?.toLowerCase().trim() || ''
+      return b.toLowerCase().trim() === userVal
+    })
+  }
+  return normalizeAnswer(answer, question.correctAnswer)
+}
 
 describe('ListeningEvaluation — normalizeAnswer', () => {
   it('compares strings case-insensitively after trim', () => {

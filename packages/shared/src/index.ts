@@ -28,6 +28,8 @@ export type {
   LearningActivity,
   LearningActivityType,
   ActivityContent,
+  LearningActivityMetadata,
+  TopicAlignmentStatus,
 } from './learning-activity'
 
 export type {

@@ -144,3 +144,6 @@ export type { CacheEntry } from './infrastructure/cache'
 export { MigrationRunner } from './infrastructure/migrations'
 export type { Migration, MigrationRecord } from './infrastructure/migrations'
 export { InMemorySessionRepository, InMemoryExerciseRepository, InMemoryAttemptRepository, InMemoryOutcomeRepository } from './infrastructure/persistence'
+
+// ── Exercise Engine (NEW — blueprint-driven exercise system) ──────────
+export * from './exercise-engine'

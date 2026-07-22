@@ -28,6 +28,28 @@ function log(...args: unknown[]): void {
   if (DEBUG) console.debug('[YT Content]', ...args)
 }
 
+function repairTruncatedJson(json: string): string | null {
+  let result = json.trimEnd()
+  if (!result.endsWith('}') && !result.endsWith(']')) {
+    const openBraces = (result.match(/\{/g) || []).length
+    const closeBraces = (result.match(/\}/g) || []).length
+    const openBrackets = (result.match(/\[/g) || []).length
+    const closeBrackets = (result.match(/\]/g) || []).length
+    const quoteCount = (result.match(/(?<!\\)"/g) || []).length
+    if (quoteCount % 2 !== 0) {
+      result += '"'
+    }
+    result += ']'.repeat(Math.max(0, openBrackets - closeBrackets))
+    result += '}'.repeat(Math.max(0, openBraces - closeBraces))
+  }
+  try {
+    JSON.parse(result)
+    return result
+  } catch {
+    return null
+  }
+}
+
 let youtubeAdapter: YouTubeAdapter | null = null
 let layoutManager: YouTubeLayoutManager | null = null
 let focusMode: FocusMode | null = null
@@ -369,14 +391,20 @@ async function handleVocabExplanation(payload: Record<string, unknown>): Promise
         { role: 'user', content: userPrompt },
       ],
       providerConfig,
-      { temperature: 0.3 },
+      { temperature: 0.3, maxTokens: 800 },
     )
 
     if (!result.error && result.content) {
       let parsed: Record<string, unknown>
-      try { parsed = JSON.parse(result.content) } catch (error) {
- console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
- throw new Error('AI returned invalid JSON') }
+      try { parsed = JSON.parse(result.content) } catch (e1) {
+        const repaired = repairTruncatedJson(result.content)
+        if (repaired) {
+          try { parsed = JSON.parse(repaired) } catch { throw new Error('AI returned invalid JSON') }
+        } else {
+          console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', e1);
+          throw new Error('AI returned invalid JSON')
+        }
+      }
 
       const collocations = Array.isArray(parsed.collocations)
         ? parsed.collocations.map((c: any) => ({ phrase: typeof c === 'string' ? c : c.phrase || '', example: c.example }))
@@ -541,7 +569,7 @@ async function handleExplainSentence(payload: Record<string, unknown>): Promise<
         { role: 'user', content: userPrompt },
       ],
       providerConfig,
-      { temperature: 0.3 },
+      { temperature: 0.3, maxTokens: 1000 },
     )
 
     if (result.error || !result.content) {
@@ -550,10 +578,18 @@ async function handleExplainSentence(payload: Record<string, unknown>): Promise<
     }
 
     let parsed: Record<string, unknown>
-    try { parsed = JSON.parse(result.content) } catch (error) {
-      console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
-      postToParent('SENTENCE_EXPLANATION', { error: 'AI returned invalid JSON' })
-      return
+    try { parsed = JSON.parse(result.content) } catch (e1) {
+      const repaired = repairTruncatedJson(result.content)
+      if (repaired) {
+        try { parsed = JSON.parse(repaired) } catch {
+          postToParent('SENTENCE_EXPLANATION', { error: 'AI returned invalid JSON' })
+          return
+        }
+      } else {
+        console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', e1);
+        postToParent('SENTENCE_EXPLANATION', { error: 'AI returned invalid JSON' })
+        return
+      }
     }
 
     postToParent('SENTENCE_EXPLANATION', {

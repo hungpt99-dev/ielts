@@ -5,12 +5,9 @@ const aiClient = createAIClient()
 export async function testConnection(config: { apiKey: string; baseUrl: string; model: string }): Promise<{ ok: boolean; message: string }> {
   try {
     const result = await aiClient.complete(
-      [
-        { role: 'system', content: 'You are a test assistant. Reply with exactly "OK".' },
-        { role: 'user', content: 'Reply with exactly "OK".' },
-      ],
-      { apiKey: config.apiKey, baseUrl: config.baseUrl, model: config.model, temperature: 0, maxTokens: 10 },
-      { temperature: 0, maxTokens: 10 },
+      [{ role: 'user', content: 'Say "ok"' }],
+      { apiKey: config.apiKey.trim(), baseUrl: config.baseUrl.trim(), model: config.model.trim() },
+      { maxTokens: 50 },
     )
     if (result.error) {
       return { ok: false, message: result.error }
