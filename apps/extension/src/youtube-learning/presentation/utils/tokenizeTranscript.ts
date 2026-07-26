@@ -5,6 +5,7 @@ export interface TokenizedWord {
   normalized: string
 }
 
+const PUNCTUATION_CHARS = /[.,!?;:'"()\[\]{}–—…\u2013\u2014\u2026]+/g
 const PUNCTUATION_RE = /^[.,!?;:'"()\[\]{}–—…\u2013\u2014\u2026]+$/
 const WHITESPACE_RE = /^\s+$/
 const WORD_RE = /^[a-zA-Z\u00C0-\u024F\u0400-\u04FF\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+(?:['\u2019][a-zA-Z]+)?$/
@@ -18,6 +19,28 @@ function isMeaningfulWord(part: string): boolean {
   return false
 }
 
+function pushToken(tokens: TokenizedWord[], text: string): void {
+  if (!text) return
+
+  if (WHITESPACE_RE.test(text)) {
+    tokens.push({ text, isPunctuation: false, isMeaningful: false, normalized: '' })
+    return
+  }
+
+  if (PUNCTUATION_RE.test(text)) {
+    tokens.push({ text, isPunctuation: true, isMeaningful: false, normalized: '' })
+    return
+  }
+
+  const isMeaningful = isMeaningfulWord(text)
+  tokens.push({
+    text,
+    isPunctuation: false,
+    isMeaningful,
+    normalized: isMeaningful ? normalizeWord(text) : '',
+  })
+}
+
 export function tokenize(text: string): TokenizedWord[] {
   const tokens: TokenizedWord[] = []
   const parts = text.split(/(\s+)/)
@@ -25,20 +48,29 @@ export function tokenize(text: string): TokenizedWord[] {
   for (const part of parts) {
     if (!part) continue
 
-    if (WHITESPACE_RE.test(part)) continue
-
-    if (PUNCTUATION_RE.test(part)) {
-      tokens.push({ text: part, isPunctuation: true, isMeaningful: false, normalized: '' })
+    if (WHITESPACE_RE.test(part) || PUNCTUATION_RE.test(part) || isMeaningfulWord(part)) {
+      pushToken(tokens, part)
       continue
     }
 
-    const isMeaningful = isMeaningfulWord(part)
-    tokens.push({
-      text: part,
-      isPunctuation: false,
-      isMeaningful,
-      normalized: isMeaningful ? normalizeWord(part) : '',
-    })
+    let punctMatch: RegExpExecArray | null
+    const punct: Array<{ text: string; index: number }> = []
+    PUNCTUATION_CHARS.lastIndex = 0
+    while ((punctMatch = PUNCTUATION_CHARS.exec(part)) !== null) {
+      punct.push({ text: punctMatch[0], index: punctMatch.index })
+    }
+
+    let si = 0
+    for (const pp of punct) {
+      if (pp.index > si) {
+        pushToken(tokens, part.slice(si, pp.index))
+      }
+      pushToken(tokens, pp.text)
+      si = pp.index + pp.text.length
+    }
+    if (si < part.length) {
+      pushToken(tokens, part.slice(si))
+    }
   }
 
   return tokens
