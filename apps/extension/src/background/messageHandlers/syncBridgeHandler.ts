@@ -109,6 +109,7 @@ export async function handleImportData(payload: unknown): Promise<{
         aiBaseUrl: (s.aiBaseUrl as string) || current.aiBaseUrl || '',
         aiApiKey: (s.aiApiKey as string) || current.aiApiKey || '',
         themeMode: (s.themeMode as string) || current.themeMode || 'light',
+        nativeLanguage: (s.nativeLanguage as string) || current.nativeLanguage || '',
       } as any)
       if ((s.aiApiKey as string)) {
         await setApiKey(s.aiApiKey as string)

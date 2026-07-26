@@ -67,6 +67,7 @@ async function importWebData(data: Record<string, unknown>): Promise<{ imported:
         aiModel: (webSettings.aiModel as string) || (current as any).aiModel || DEFAULT_AI_MODEL,
         aiBaseUrl: (webSettings.aiBaseUrl as string) || (current as any).aiBaseUrl || '',
         themeMode: (webSettings.themeMode as string) || (current as any).themeMode || 'light',
+        nativeLanguage: (webSettings.nativeLanguage as string) || (current as any).nativeLanguage || '',
       } as any)
       if (webSettings.aiApiKey) await setApiKey(webSettings.aiApiKey as string)
     } catch (error) {
