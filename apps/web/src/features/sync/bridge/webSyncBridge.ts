@@ -234,6 +234,13 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
         } catch { return {} }
       })()
 
+      const apiKey = (() => {
+        try {
+          const providerId = settings.ai?.providerId || settings.aiProvider || DEFAULT_AI_PROVIDER_ID
+          return localStorage.getItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${providerId}`) || ''
+        } catch { return '' }
+      })()
+
       window.postMessage(
         {
           namespace: BRIDGE_NAMESPACE,
@@ -252,8 +259,8 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
               aiProvider: settings.ai?.providerId || settings.aiProvider || DEFAULT_AI_PROVIDER_ID,
               aiModel: settings.ai?.model || settings.aiModel || DEFAULT_AI_MODEL,
               aiBaseUrl: settings.ai?.customApiUrl || settings.aiBaseUrl || settings.aiEndpoint || '',
-              aiApiKey: settings.aiApiKey || '',
-              themeMode: settings.darkMode ? 'dark' : 'light',
+              aiApiKey: apiKey,
+              themeMode: settings.theme?.mode || (settings.darkMode ? 'dark' : 'light'),
               nativeLanguage: settings.study?.nativeLanguage || settings.nativeLanguage || '',
             },
           },
