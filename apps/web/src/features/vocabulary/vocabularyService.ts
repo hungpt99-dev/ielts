@@ -96,7 +96,7 @@ export function filterVocabulary(
       e =>
         e.word.toLowerCase().includes(q) ||
         e.meaning.toLowerCase().includes(q) ||
-        e.translation.toLowerCase().includes(q) ||
+        (e.translation || '').toLowerCase().includes(q) ||
         e.exampleSentence.toLowerCase().includes(q),
     )
   }

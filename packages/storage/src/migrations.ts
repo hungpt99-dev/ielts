@@ -14,7 +14,7 @@ export interface AppDatabaseSchema {
   versions: StorageVersion[]
 }
 
-export const CURRENT_DB_VERSION = 9
+export const CURRENT_DB_VERSION = 10
 
 export const APP_SCHEMA: AppDatabaseSchema = {
   currentVersion: CURRENT_DB_VERSION,
@@ -365,6 +365,79 @@ export const APP_SCHEMA: AppDatabaseSchema = {
         weeks: 'id, phaseId, weekNumber, createdAt',
         days: 'id, weekId, date, dayNumber, createdAt',
         activities: 'id, type, skill, topic, createdAt',
+      },
+    },
+    {
+      number: 10,
+      stores: {
+        vocabulary: 'id, topic, status, difficulty, createdAt',
+        vocabularyReviews: 'id, vocabularyId, nextReviewDate, lastReviewDate',
+        tasks: 'id, date, category, isDone, createdAt',
+        readingSessions: 'id, topic, createdAt',
+        readingPracticeSessions: 'id, passageId, topic, createdAt',
+        listeningSessions: 'id, topic, createdAt',
+        listeningPracticeSessions: 'id, exerciseId, topic, createdAt',
+        writingSessions: 'id, taskType, topic, createdAt',
+        speakingSessions: 'id, part, topic, createdAt',
+        grammarNotes: 'id, topic, status, relatedSkill, createdAt',
+        mistakes: 'id, skill, status, source, date, createdAt',
+        mockTests: 'id, date, createdAt',
+        topicsProgress: 'id, topic, updatedAt',
+        passages: 'id, createdAt',
+        ieltsTopics: 'id, name, skill, *tags, createdAt',
+        exampleSentences: 'id, vocabularyId, topic, *tags, isFavorite, createdAt',
+        readingPassages: 'id, topic, difficulty, *tags, isFavorite, createdAt',
+        listeningTranscripts: 'id, topic, difficulty, *tags, isFavorite, createdAt',
+        writingPrompts: 'id, taskType, topic, difficulty, *tags, isFavorite, createdAt',
+        speakingQuestions: 'id, part, topic, difficulty, *tags, isFavorite, createdAt',
+        studyNotes: 'id, topic, *tags, isFavorite, createdAt',
+        customStudyPlans: 'id, createdAt',
+        usefulPhrases: 'id, createdAt',
+        aiContents: 'id, createdAt',
+        progressRecords: 'id, createdAt',
+        publicApiContent: 'id, createdAt',
+        contentMeta: 'id, createdAt',
+        userContentEdits: 'id, createdAt',
+        speakingExercises: 'id, createdAt',
+        writingExercises: 'id, createdAt',
+        readingExercises: 'id, createdAt',
+        listeningExercises: 'id, createdAt',
+        artifacts: 'id, createdAt',
+        learningEvents: 'id, type, timestamp, prompt, topic, createdAt',
+        youtubeVideos: 'id, videoId, channelId, publishedAt',
+        transcripts: 'id, videoId, language, createdAt',
+        videoAnalyses: 'id, videoId, analyzedAt, createdAt',
+        videoVocabularySources: 'id, videoId, createdAt',
+        savedSentences: 'id, videoId, timestamp, createdAt',
+        timestampedNotes: 'id, videoId, timestamp, createdAt',
+        learningPlaylists: 'id, createdAt',
+        playlistItems: 'id, playlistId, videoId, addedAt',
+        videoStudySessions: 'id, videoId, startTime, createdAt',
+        studyActivities: 'id, sessionId, videoId, timestamp',
+        youtubeExercises: 'id, videoId, createdAt',
+        exerciseAttempts: 'id, exerciseId, videoId, createdAt',
+        dictationAttempts: 'id, videoId, createdAt',
+        shadowingAttempts: 'id, videoId, createdAt',
+        speakingAttempts: 'id, videoId, createdAt',
+        summaryAttempts: 'id, videoId, createdAt',
+        tutorInterventions: 'id, sessionId, videoId, createdAt',
+        aiGenerationCache: 'id, cacheKey, videoId, expiresAt, createdAt',
+        channelEvaluations: 'id, channelId, lastAnalyzedAt, createdAt',
+        plans: 'id, createdAt',
+        phases: 'id, planId, order, createdAt',
+        weeks: 'id, phaseId, weekNumber, createdAt',
+        days: 'id, weekId, date, dayNumber, createdAt',
+        activities: 'id, type, skill, topic, createdAt',
+      },
+      upgrade: async (db) => {
+        const vocab = await db.vocabulary.toArray() as any[]
+        for (const entry of vocab) {
+          if ('meaningVi' in entry && !('translation' in entry)) {
+            entry.translation = entry.meaningVi
+            delete entry.meaningVi
+            await db.vocabulary.put(entry)
+          }
+        }
       },
     },
   ],
