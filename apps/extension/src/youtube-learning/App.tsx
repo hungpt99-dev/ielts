@@ -9,6 +9,7 @@ import { SentenceExplanationPanel } from './presentation/components/SentenceExpl
 import { QuizPanel } from './presentation/components/QuizPanel'
 import { FillInBlankPanel } from './presentation/components/FillInBlank'
 import { IconHeadphones } from '@ielts/ui'
+import { NATIVE_LANGUAGES } from '@ielts/settings'
 import { tokenizeSegment, normalizeWord, formatTime } from './presentation/utils/tokenizeTranscript'
 import type { TokenizedWord } from './presentation/utils/tokenizeTranscript'
 
@@ -399,12 +400,13 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
   const [translations, setTranslations] = useState<Map<string, string>>(new Map())
   const [translating, setTranslating] = useState(false)
   const [translateError, setTranslateError] = useState<string | null>(null)
-  const translateLanguageRef = useRef(userSettings.nativeLanguage)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  const [translateLanguage, setTranslateLanguage] = useState(userSettings.nativeLanguage || '')
 
   useEffect(() => {
     if (userSettings.nativeLanguage) {
-      translateLanguageRef.current = userSettings.nativeLanguage
+      setTranslateLanguage(userSettings.nativeLanguage)
     }
     if (userSettings.autoTranslateTranscript && userSettings.nativeLanguage) {
       setTranslateEnabled(true)
@@ -471,10 +473,10 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
   }, [videoId, sendToParent])
 
   useEffect(() => {
-    if (!translateEnabled || !segments || segments.length === 0 || !translateLanguageRef.current) return
+    if (!translateEnabled || !segments || segments.length === 0 || !translateLanguage) return
     setTranslations(new Map())
     setTranslating(true)
-    sendToParent('TRANSLATE_SEGMENTS', { segments, language: translateLanguageRef.current })
+    sendToParent('TRANSLATE_SEGMENTS', { segments, language: translateLanguage })
   }, [translateEnabled, segments, sendToParent])
 
   const activeIndex = segments?.findIndex(
@@ -580,17 +582,17 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
       setTranslateEnabled(false)
       setTranslations(new Map())
       setTranslateError(null)
-    } else if (!translateLanguageRef.current) {
-      const lang = prompt('Set target language for translation (e.g. Vietnamese, Spanish, French):\nYou can also set a default in extension Settings → Native Language.')
-      if (lang) {
-        translateLanguageRef.current = lang
-        setTranslateError(null)
-        setTranslateEnabled(true)
-      }
-    } else {
+    } else if (translateLanguage) {
       setTranslateError(null)
       setTranslateEnabled(true)
     }
+  }
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setTranslateLanguage(e.target.value)
+    setTranslateEnabled(false)
+    setTranslations(new Map())
+    setTranslateError(null)
   }
 
   return (
@@ -600,11 +602,27 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
           <button onClick={handleToggleTranslate} style={translateBtnStyle} aria-label={translateEnabled ? 'Hide translation' : 'Show translation'}>
             {translateEnabled ? 'Translate: ON' : 'Translate'}
           </button>
-          {translateLanguageRef.current && (
-            <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>
-              → {translateLanguageRef.current}
-            </span>
-          )}
+          <select
+            value={translateLanguage}
+            onChange={handleLanguageChange}
+            style={{
+              fontSize: '10px',
+              padding: '2px 4px',
+              borderRadius: 'var(--radius-xs)',
+              border: '1px solid var(--color-border)',
+              background: 'var(--color-surface)',
+              color: 'var(--color-text-secondary)',
+              fontFamily: 'var(--font-sans)',
+              maxWidth: '140px',
+              cursor: 'pointer',
+            }}
+            aria-label="Target language for translation"
+          >
+            <option value="">Translate to...</option>
+            {NATIVE_LANGUAGES.filter(l => l.value !== '').map(lang => (
+              <option key={lang.value} value={lang.value}>{lang.label}</option>
+            ))}
+          </select>
           {translating && <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Translating...</span>}
           {translateError && <span style={{ fontSize: '10px', color: 'var(--color-danger)', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={translateError}>⚠ {translateError}</span>}
         </div>
