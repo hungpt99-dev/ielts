@@ -15,6 +15,7 @@ import {
   type IeltsVocabResult,
   type ExampleSentencesResult,
 } from '../../services/aiEnrichmentService'
+import { getAllVocabulary, updateVocabularyEntry } from '../../storage/vocabularyStore'
 
 interface SavedItemDetailViewProps {
   item: SavedItemDisplay
@@ -85,6 +86,27 @@ export default function SavedItemDetailView({ item: initialItem, onBack, onDelet
       const r = await handler(text)
       const key = { vocab: 'vocab', explain: 'explain', 'ielts-vocab': 'ielts-vocab', examples: 'examples' }[action] as 'vocab' | 'explain' | 'ielts-vocab' | 'examples'
       setEnrich({ type: key, data: r } as EnrichmentState)
+      if (action === 'vocab') {
+        const data = r as VocabEnrichResult
+        try {
+          const all = await getAllVocabulary()
+          const entry = all.find(v => v.word.toLowerCase() === text.split(/\s+/)[0]?.replace(/[.,!?;:'"()\-]/g, '').toLowerCase())
+          if (entry) {
+            await updateVocabularyEntry(entry.id, {
+              meaning: data.meaning || entry.meaning,
+              translation: data.translation || entry.translation,
+              pronunciation: data.pronunciation || entry.pronunciation,
+              partOfSpeech: data.partOfSpeech || entry.partOfSpeech,
+              exampleSentence: data.exampleSentence || entry.exampleSentence,
+              synonyms: data.synonyms.length > 0 ? data.synonyms : entry.synonyms,
+              antonyms: data.antonyms.length > 0 ? data.antonyms : entry.antonyms,
+              collocations: data.collocations.length > 0 ? data.collocations : entry.collocations,
+              wordFamily: data.wordFamily.length > 0 ? data.wordFamily : entry.wordFamily,
+              cefrLevel: (data.cefrLevel as any) || entry.cefrLevel,
+            })
+          }
+        } catch { /* non-critical */ }
+      }
     } catch (err) {
       console.error('apps/extension/src/popup/components/SavedItemDetailView.tsx error:', err);
       setEnrich({ type: 'error', message: err instanceof Error ? err.message : 'AI enrichment failed' })
@@ -326,9 +348,11 @@ function VocabResult({ data }: { data: VocabEnrichResult }) {
       {data.partOfSpeech && <span style={{ display: 'inline-block', padding: '2px 6px', borderRadius: '6px', fontSize: '10px', background: 'var(--color-primary-light)', color: 'var(--color-primary)', marginBottom: '6px', fontWeight: 500 }}>{data.partOfSpeech}</span>}
       {data.meaning && <p style={{ margin: '0 0 4px', color: 'var(--color-text)', fontWeight: 500 }}>{data.meaning}</p>}
       {data.translation && <p style={{ margin: '0 0 6px', color: 'var(--color-text-secondary)', fontStyle: 'italic', fontSize: '11px' }}>{data.translation}</p>}
+      {data.cefrLevel && <span style={{ display: 'inline-block', padding: '2px 6px', borderRadius: '6px', fontSize: '10px', background: 'var(--color-success-light)', color: 'var(--color-success)', marginBottom: '6px', fontWeight: 500 }}>{data.cefrLevel}</span>}
       {data.exampleSentence && <div style={{ padding: '6px 8px', borderRadius: '6px', background: 'var(--color-surface)', marginBottom: '6px', borderLeft: '2px solid var(--color-primary)' }}><span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.02em', display: 'block', marginBottom: '2px' }}>Example</span><p style={{ margin: 0, color: 'var(--color-text-secondary)', fontStyle: 'italic', fontSize: '11px' }}>"{data.exampleSentence}"</p></div>}
       <RowChips label="Synonyms" items={data.synonyms} />
       <RowChips label="Antonyms" items={data.antonyms} />
+      <RowChips label="Collocations" items={data.collocations} />
     </div>
   )
 }
