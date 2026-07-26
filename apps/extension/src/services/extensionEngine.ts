@@ -2,8 +2,20 @@ import { getDb } from '@ielts/storage'
 import { ensureStorageInitialized } from './repositories'
 import { createLearningEngine, createDefaultSkillRegistry, SESSION_STATUS } from '@ielts/learning-engine'
 import type { LearnerContextPort, TutorIntelligencePort, StudyPlanPort, LearningSessionRepository, LearningAttemptRepository, LearningOutcomeRepository, ExerciseRepository, ProgressRepository, MistakeRepository, VocabularyRepository, LearningEventPublisher } from '@ielts/learning-engine'
+import { safeFetchProviderConfig } from '../utils/safe-chrome'
 
 let engineInstance: ReturnType<typeof createLearningEngine> | null = null
+let aiAvailable = false
+
+async function checkAiAvailability(): Promise<boolean> {
+  try {
+    const config = await safeFetchProviderConfig()
+    aiAvailable = !!config.apiKey
+  } catch {
+    aiAvailable = false
+  }
+  return aiAvailable
+}
 
 const systemClock = {
   now: () => new Date(),
@@ -39,7 +51,7 @@ const extensionLearnerContextPort: LearnerContextPort = {
       },
       constraints: {
         offlineOnly: true,
-        aiAvailable: false,
+        aiAvailable,
       },
       contextQuality: {
         status: 'partial',
@@ -234,6 +246,7 @@ export async function initializeExtensionEngine() {
   if (engineInstance) return engineInstance
 
   ensureStorageInitialized()
+  await checkAiAvailability()
 
   const engine = createLearningEngine({
     contextPort: extensionLearnerContextPort,

@@ -9,7 +9,7 @@ import {
 import { saveEntry } from '../storage/indexedDB'
 import { saveVocabularyEntry, type ExtensionVocabEntry } from '../storage/vocabularyStore'
 import { emitFromBackground } from './eventEmitters'
-import { vocabularyRepo, passageEntryRepo } from '../services/repositories'
+import { passageEntryRepo } from '../services/repositories'
 
 const DEBUG = typeof process !== 'undefined' && process.env?.NODE_ENV === 'development'
 
