@@ -297,7 +297,7 @@ async function handleTranscriptRequest(): Promise<void> {
           postToParent('TRANSCRIPT_ERROR', { ...errorPayload, message: err.message || 'The YouTube player is still loading. Try again.' })
           break
         case 'CAPTION_FETCH_FAILED':
-          postToParent('TRANSCRIPT_ERROR', { ...errorPayload, message: err.message || 'Captions were found, but could not be downloaded.' })
+          postToParent('TRANSCRIPT_ERROR', { ...errorPayload, message: err.message || 'Could not load transcript. Try again.' })
           break
         case 'CAPTION_PARSE_FAILED':
           postToParent('TRANSCRIPT_ERROR', { ...errorPayload, message: err.message || 'Caption data could not be processed.' })

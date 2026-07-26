@@ -222,7 +222,7 @@ interface MessageMap {
   AI_EXPLAIN: AiExplainPayload
   MINI_TUTOR_TRIGGER: MiniTutorOpenPayload
   FETCH_TRANSCRIPT: FetchTranscriptPayload
-  FETCH_TRANSCRIPT_XML: { baseUrl: string; videoId: string }
+  FETCH_TRANSCRIPT_XML: { baseUrl: string; videoId: string; language: string }
 }
 
 export type ExtensionMessage<K extends keyof MessageMap = keyof MessageMap> = {
@@ -651,6 +651,55 @@ export function initMessaging(): void {
  continue }
     }
     return { success: false, error: 'ALL_FAILED' }
+  })
+
+  registerHandler('FETCH_TRANSCRIPT_XML', async (_msg) => {
+    const msg = _msg as unknown as { type: 'FETCH_TRANSCRIPT_XML'; payload: { baseUrl: string; videoId: string; language: string } }
+    const { baseUrl, videoId, language } = msg.payload
+    if (!baseUrl || !videoId) return { success: false, error: 'INVALID_PARAMS' }
+
+    try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10_000)
+      const response = await fetch(baseUrl, {
+        signal: controller.signal,
+        credentials: 'include',
+      })
+      clearTimeout(timeoutId)
+
+      if (!response.ok) return { success: false, error: 'FETCH_FAILED' }
+      const xml = await response.text()
+      if (!xml || xml.length < 20) return { success: false, error: 'EMPTY_RESPONSE' }
+
+      const parser = new DOMParser()
+      const xmlDoc = parser.parseFromString(xml, 'text/xml')
+      const textElements = xmlDoc.querySelectorAll('text')
+      if (!textElements.length) return { success: false, error: 'PARSE_FAILED' }
+
+      const segments: Array<{ id: string; start: number; end: number; text: string }> = []
+      textElements.forEach((el, index) => {
+        const start = parseFloat(el.getAttribute('start') || '0')
+        const dur = parseFloat(el.getAttribute('dur') || '0')
+        const t = el.textContent?.trim() || ''
+        if (!t) return
+        segments.push({ id: `${videoId}-bg-xml-${index}`, start, end: start + dur, text: t })
+      })
+      if (!segments.length) return { success: false, error: 'PARSE_FAILED' }
+
+      return {
+        success: true,
+        data: {
+          videoId,
+          language,
+          source: 'auto-generated',
+          segments,
+          fullText: segments.map(s => s.text).join(' '),
+        },
+      }
+    } catch (error) {
+      console.error('apps/extension/src/background/messaging.ts error:', error);
+      return { success: false, error: 'FETCH_EXCEPTION' }
+    }
   })
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
