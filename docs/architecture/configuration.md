@@ -189,12 +189,12 @@ export const STORAGE_KEYS = Object.freeze({
 
 ```typescript
 export const ROUTES = Object.freeze({
-  tutor: '/tutor',
+  tutor: '/ai-tutor',
   dashboard: '/dashboard',
-  roadmap: '/roadmap',
+  roadmap: '/study-roadmap',
   vocabulary: '/vocabulary',
-  reading: '/reading',
-  listening: '/listening',
+  reading: '/practice/reading',
+  listening: '/practice/listening',
   writing: '/writing',
   speaking: '/speaking',
   grammar: '/grammar',
@@ -203,6 +203,8 @@ export const ROUTES = Object.freeze({
   progress: '/progress',
   settings: '/settings',
   settingsAi: '/settings/ai',
+  landing: '/',
+  onboarding: '/onboarding',
   // ...
 } as const);
 ```

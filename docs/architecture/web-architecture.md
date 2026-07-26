@@ -36,11 +36,11 @@ App.tsx
                   └── ToastProvider
                       ├── OfflineIndicator
                       ├── PwaUpdateBanner
-                      └── Routes:
-                          ├── / → redirect to /dashboard or /onboarding
-                          ├── /landing → LandingPage
-                          ├── /onboarding → OnboardingPage (9 steps)
-                          └── /* → AppLayout (sidebar + routes)
+                       └── Routes:
+                           ├── / → LandingPage (onboarded → /dashboard)
+                           ├── /landing → redirect to /
+                           ├── /onboarding → OnboardingPage (9 steps, onboarded → /dashboard)
+                           └── /* → AppLayout (sidebar + routes, not-onboarded → /onboarding)
 ```
 
 ## Layout Structure
@@ -52,13 +52,14 @@ AppLayout (apps/web/src/components/Layout.tsx)
 ├── MobileBottomNavigation (@ielts/ui)
 ├── ChatIcon (floating AI tutor trigger)
 └── <Routes> (lazy-loaded pages):
+    ├── /ai-tutor → AITutorPage
     ├── /dashboard → Dashboard
-    ├── /roadmap → FullStudyRoadmapPage
+    ├── /study-roadmap → FullStudyRoadmapPage
     ├── /vocabulary → NotebookPage
     ├── /review → VocabularyReview
     ├── /review-center → ReviewCenter
-    ├── /reading → ReadingPracticePage
-    ├── /listening → ListeningPracticePage
+    ├── /practice/reading → ReadingPracticePage
+    ├── /practice/listening → ListeningPracticePage
     ├── /writing → WritingPracticePage
     ├── /speaking → SpeakingPracticePage
     ├── /grammar → GrammarExercisePage

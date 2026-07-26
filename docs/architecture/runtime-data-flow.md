@@ -6,7 +6,7 @@
 User views roadmap → FullStudyRoadmapPage
   → reads tasks from IndexedDB (tasks table)
   → clicks a task (e.g., "Reading Passage 1")
-  → navigates to practice page (/reading)
+  → navigates to practice page (/practice/reading)
 
 Practice page (ReadingPracticePage)
   → loads exercise content

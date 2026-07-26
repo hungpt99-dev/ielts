@@ -1,11 +1,13 @@
 import { useEffect, useState, useRef } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { ROUTES } from '@ielts/config'
 import { ThemeProvider } from '../context/ThemeContext'
 import { SettingsProvider } from '../context/SettingsContext'
 import AppLayout from '../components/Layout'
 import LandingPage from '../pages/LandingPage'
 import OnboardingPage from '../pages/OnboardingPage'
 import { isOnboardingComplete } from '../features/onboarding/onboardingService'
+import { RequireOnboarding, RedirectIfOnboarded } from '../features/onboarding/guards/OnboardingGuard'
 import { ToastProvider } from '../components/ui/Toast'
 import ErrorBoundary from '../components/ui/ErrorBoundary'
 import OfflineIndicator from '../components/ui/OfflineIndicator'
@@ -108,16 +110,28 @@ export default function App() {
             )}
             <Routes>
               <Route
-                path="/"
+                path={ROUTES.landing}
                 element={
                   isOnboardingComplete()
-                    ? <Navigate to="/dashboard" replace />
-                    : <Navigate to="/onboarding" replace />
+                    ? <Navigate to={ROUTES.dashboard} replace />
+                    : <LandingPage />
                 }
               />
-              <Route path="/landing" element={<LandingPage />} />
-              <Route path="/onboarding" element={<OnboardingPage />} />
-              <Route path="/*" element={<AppLayout />} />
+              <Route path="/landing" element={<Navigate to={ROUTES.landing} replace />} />
+              <Route path={ROUTES.onboarding} element={
+                <RedirectIfOnboarded>
+                  <OnboardingPage />
+                </RedirectIfOnboarded>
+              } />
+              <Route path="/tutor" element={<Navigate to={ROUTES.tutor} replace />} />
+              <Route path="/roadmap" element={<Navigate to={ROUTES.roadmap} replace />} />
+              <Route path="/reading" element={<Navigate to={ROUTES.reading} replace />} />
+              <Route path="/listening" element={<Navigate to={ROUTES.listening} replace />} />
+              <Route path="/*" element={
+                <RequireOnboarding>
+                  <AppLayout />
+                </RequireOnboarding>
+              } />
             </Routes>
           </ToastProvider>
         </SettingsProvider>

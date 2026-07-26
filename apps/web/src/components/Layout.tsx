@@ -1,7 +1,6 @@
 import { useState, useEffect, type ReactNode, lazy, Suspense } from 'react'
 import { Link, NavLink, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import Headbar from './layout/Headbar'
-import { isOnboardingComplete } from '../features/onboarding/onboardingService'
 import ChatIcon from './aiTutor/ChatIcon'
 import { MobileBottomNavigation } from '@ielts/ui'
 import type { MobileNavItem } from '@ielts/ui'
@@ -248,7 +247,7 @@ export default function AppLayout() {
           className="flex h-16 shrink-0 items-center justify-between border-b px-4"
           style={{ borderColor: 'var(--color-border)' }}
         >
-          <Link to="/landing" className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
+          <Link to={ROUTES.landing} className="flex items-center gap-2" style={{ textDecoration: 'none' }}>
             <img src="/icon.png" alt="" className="h-7 w-7 rounded-lg" loading="lazy" decoding="async" />
             <span style={{ color: 'var(--color-text)', fontWeight: 700, fontSize: '1.125rem', fontFamily: 'var(--font-sans)' }}>
               IELTS Journey
@@ -394,7 +393,7 @@ export default function AppLayout() {
         <SafeAreaContainer left right className="flex flex-1 flex-col min-w-0 overflow-hidden">
           <main className="flex-1 min-w-0 w-full overflow-y-auto pb-[calc(72px+env(safe-area-inset-bottom,0px))] lg:pb-0" style={{ WebkitOverflowScrolling: 'touch' }}>
             <Routes>
-              <Route path="/tutor" element={
+              <Route path={ROUTES.tutor} element={
                 <Suspense fallback={<LoadingSpinner fullPage message="Loading AI Tutor..." />}>
                   <AITutorPage />
                 </Suspense>
@@ -403,36 +402,35 @@ export default function AppLayout() {
                 <PageContainer width="wide">
                   <Suspense fallback={<LoadingSpinner fullPage />}>
                     <Routes>
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/roadmap" element={<FullStudyRoadmapPage />} />
-                      <Route path="/vocabulary" element={<NotebookPage />} />
-                      <Route path="/review" element={<VocabularyReview />} />
-                      <Route path="/review/Notebook" element={<Navigate to="/review" replace />} />
-                      <Route path="/review-center" element={<ReviewCenter />} />
-                      <Route path="/reading" element={<ReadingPracticePage />} />
-                      <Route path="/listening" element={<ListeningPracticePage />} />
-                      <Route path="/writing" element={<WritingPracticePage />} />
-                      <Route path="/speaking" element={<SpeakingPracticePage />} />
-                      <Route path="/grammar" element={<GrammarExercisePage />} />
-                      <Route path="/mistakes" element={<MistakeNotebook />} />
-                      <Route path="/mock-tests" element={<MockTests />} />
-
-                      <Route path="/artifacts" element={<ArtifactsPage />} />
-                      <Route path="/search" element={<SearchPage />} />
-                      <Route path="/books" element={<BooksPage />} />
-                      <Route path="/public-api" element={<PublicApiImportPage />} />
-                      <Route path="/settings" element={<Settings />} />
-                      <Route path="/settings/ai" element={<AIProviderSettingsPage />} />
-                      <Route path="/settings/data" element={<DataManagement />} />
-                      <Route path="/settings/extension" element={<ExtensionConnectionPage />} />
-                      <Route path="/import-export" element={<ImportExport />} />
-                      <Route path="/info" element={<PublicTabPage />} />
+                      <Route path={ROUTES.dashboard} element={<Dashboard />} />
+                      <Route path={ROUTES.roadmap} element={<FullStudyRoadmapPage />} />
+                      <Route path={ROUTES.vocabulary} element={<NotebookPage />} />
+                      <Route path={ROUTES.review} element={<VocabularyReview />} />
+                      <Route path="/review/Notebook" element={<Navigate to={ROUTES.review} replace />} />
+                      <Route path={ROUTES.reviewCenter} element={<ReviewCenter />} />
+                      <Route path={ROUTES.reading} element={<ReadingPracticePage />} />
+                      <Route path={ROUTES.listening} element={<ListeningPracticePage />} />
+                      <Route path={ROUTES.writing} element={<WritingPracticePage />} />
+                      <Route path={ROUTES.speaking} element={<SpeakingPracticePage />} />
+                      <Route path={ROUTES.grammar} element={<GrammarExercisePage />} />
+                      <Route path={ROUTES.mistakes} element={<MistakeNotebook />} />
+                      <Route path={ROUTES.mockTests} element={<MockTests />} />
+                      <Route path={ROUTES.artifacts} element={<ArtifactsPage />} />
+                      <Route path={ROUTES.search} element={<SearchPage />} />
+                      <Route path={ROUTES.books} element={<BooksPage />} />
+                      <Route path={ROUTES.publicApi} element={<PublicApiImportPage />} />
+                      <Route path={ROUTES.settings} element={<Settings />} />
+                      <Route path={ROUTES.settingsAi} element={<AIProviderSettingsPage />} />
+                      <Route path={ROUTES.settingsData} element={<DataManagement />} />
+                      <Route path={ROUTES.settingsExtension} element={<ExtensionConnectionPage />} />
+                      <Route path={ROUTES.importExport} element={<ImportExport />} />
+                      <Route path={ROUTES.info} element={<PublicTabPage />} />
                       <Route path="/website-info" element={<RedirectWithHash to="/info" hash="about-website" />} />
                       <Route path="/about-me" element={<RedirectWithHash to="/info" hash="about-me" />} />
                       <Route path="/recruit" element={<RedirectWithHash to="/info" hash="recruit" />} />
                       <Route path="/donate" element={<RedirectWithHash to="/info" hash="donate" />} />
-                      <Route path="/feedback" element={<RedirectWithHash to="/info" hash="feedback" />} />
-                      <Route path="/privacy" element={<PrivacyPage />} />
+                      <Route path={ROUTES.feedback} element={<RedirectWithHash to="/info" hash="feedback" />} />
+                      <Route path={ROUTES.privacy} element={<PrivacyPage />} />
                       <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                   </Suspense>
