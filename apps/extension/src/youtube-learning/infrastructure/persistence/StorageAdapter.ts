@@ -36,18 +36,16 @@ export class StorageAdapter {
   async saveSession(session: StudySessionData): Promise<void> {
     try {
       await safeStorageSet({ [SESSION_STORAGE_KEY]: session })
-    } catch (error) {
-      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
-      console.warn('[IELTS] Failed to save study session')
+    } catch {
+      // safeStorageSet never rejects — it resolves silently on failure
     }
   }
 
   async clearSession(): Promise<void> {
     try {
       await safeStorageSet({ [SESSION_STORAGE_KEY]: null })
-    } catch (error) {
-      console.error('apps/extension/src/youtube-learning/infrastructure/persistence/StorageAdapter.ts error:', error);
-      console.warn('[IELTS] Failed to clear study session')
+    } catch {
+      // safeStorageSet never rejects — it resolves silently on failure
     }
   }
 

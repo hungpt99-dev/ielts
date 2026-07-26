@@ -264,6 +264,14 @@ export function handleMessage(
     return false
   }
 
+  const safeRespond = (response: unknown) => {
+    try {
+      sendResponse(response)
+    } catch {
+      // channel closed — e.g. tab navigated away during async handler
+    }
+  }
+
   const handler = handlers.get(message.type)!
   try {
     const result = handler(message, sender)
@@ -271,11 +279,11 @@ export function handleMessage(
     if (result instanceof Promise) {
       result
         .then((data) => {
-          sendResponse({ success: true, data })
+          safeRespond({ success: true, data })
         })
         .catch((err) => {
           console.error(`[messaging] Handler error for ${message.type}:`, err)
-          sendResponse({
+          safeRespond({
             success: false,
             error: 'HANDLER_ERROR',
             message: err instanceof Error ? err.message : 'Unknown error',
@@ -284,11 +292,11 @@ export function handleMessage(
       return true
     }
 
-    sendResponse({ success: true, data: result })
+    safeRespond({ success: true, data: result })
     return false
   } catch (err) {
     console.error(`[messaging] Sync handler error for ${message.type}:`, err)
-    sendResponse({
+    safeRespond({
       success: false,
       error: 'HANDLER_ERROR',
       message: err instanceof Error ? err.message : 'Unknown error',

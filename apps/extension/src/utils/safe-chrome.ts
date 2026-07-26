@@ -37,16 +37,23 @@ export function safeStorageGet<T>(
   })
 }
 
+let contextInvalidated = false
+
 export function safeStorageSet(
   data: Record<string, unknown>,
 ): Promise<void> {
   return new Promise((resolve) => {
+    if (contextInvalidated) return resolve()
     try {
       chrome.storage.local.set(data, () => {
         chrome.runtime.lastError
         resolve()
       })
     } catch (error) {
+      if (isContextError(error)) {
+        contextInvalidated = true
+        return resolve()
+      }
       console.error('apps/extension/src/utils/safe-chrome.ts error:', error);
       resolve()
     }
