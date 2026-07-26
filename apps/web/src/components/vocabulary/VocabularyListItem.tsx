@@ -56,23 +56,22 @@ function VocabularyListItem({
         showToast('error', error || 'Enrichment failed')
         return
       }
-      const mergedWordFamily = [...new Set([...entry.wordFamily, ...(data.wordFamily || [])])]
       const updated: VocabularyEntry = {
         ...entry,
-        word: data.lemma || displayEntry.word,
-        meaning: data.meaning || displayEntry.meaning,
-        translation: data.translation || displayEntry.translation,
-        pronunciation: data.pronunciation || displayEntry.pronunciation,
-        partOfSpeech: data.partOfSpeech || displayEntry.partOfSpeech,
-        exampleSentence: data.exampleSentence || displayEntry.exampleSentence,
-        collocations: [...new Set([...entry.collocations, ...(data.collocations || [])])],
-        synonyms: [...new Set([...entry.synonyms, ...(data.synonyms || [])])],
-        antonyms: [...new Set([...entry.antonyms, ...(data.antonyms || [])])],
-        wordFamily: mergedWordFamily,
-        cefrLevel: (data.cefrLevel || displayEntry.cefrLevel) as VocabularyEntry['cefrLevel'],
-        ieltsRelevance: (data.ieltsRelevance || displayEntry.ieltsRelevance) as VocabularyEntry['ieltsRelevance'],
-        difficulty: (data.difficulty || displayEntry.difficulty) as VocabularyEntry['difficulty'],
-        verbConjugation: data.verbConjugation || displayEntry.verbConjugation,
+        word: data.lemma || entry.word,
+        meaning: data.meaning || entry.meaning,
+        translation: data.translation || entry.translation,
+        pronunciation: data.pronunciation || entry.pronunciation,
+        partOfSpeech: data.partOfSpeech || entry.partOfSpeech,
+        exampleSentence: data.exampleSentence || entry.exampleSentence,
+        collocations: data.collocations || entry.collocations,
+        synonyms: data.synonyms || entry.synonyms,
+        antonyms: data.antonyms || entry.antonyms,
+        wordFamily: data.wordFamily || entry.wordFamily,
+        cefrLevel: (data.cefrLevel || entry.cefrLevel) as VocabularyEntry['cefrLevel'],
+        ieltsRelevance: (data.ieltsRelevance || entry.ieltsRelevance) as VocabularyEntry['ieltsRelevance'],
+        difficulty: (data.difficulty || entry.difficulty) as VocabularyEntry['difficulty'],
+        verbConjugation: data.verbConjugation || entry.verbConjugation,
         updatedAt: new Date().toISOString(),
       }
       await vocabularyRepo.bulkUpsert([updated])

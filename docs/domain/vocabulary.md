@@ -13,7 +13,7 @@ Store and manage the learner's personal vocabulary collection with spaced-repeti
 | `id` | string | UUID |
 | `word` | string | The vocabulary word |
 | `meaning` | string | Definition in English |
-| `meaningVi` | string | Vietnamese translation |
+| `translation` | string | Translation in the learner's native language |
 | `pronunciation` | string | IPA or phonetic spelling |
 | `partOfSpeech` | string | e.g. `'noun'`, `'verb'` |
 | `exampleSentence` | string | Usage example |

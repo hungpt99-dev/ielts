@@ -1,7 +1,7 @@
 import { createAIClient, vocabularyDetailsSchema, AiConfigurationResolver } from '@ielts/ai'
 import type { VocabularyDetails } from '@ielts/ai'
 import { DEFAULT_APP_CONFIG } from '@ielts/config'
-import { LocalStorageCredentialStore, loadUserConfiguration } from '@ielts/settings'
+import { LocalStorageCredentialStore, loadUserConfiguration, translationTarget } from '@ielts/settings'
 
 const aiClient = createAIClient()
 
@@ -64,12 +64,15 @@ export async function enrichVocabulary(word: string, topic?: string): Promise<{ 
   const config = await getAiConfig()
   if (!config) return { data: null, error: 'AI API key not configured' }
 
+  const userConfig = loadUserConfiguration()
+  const lang = translationTarget(userConfig.study.nativeLanguage)
+
   const topicHint = topic ? ` on the topic of "${topic}"` : ''
   const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
   const userPrompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a JSON object with ALL fields filled:
 
 - "meaning": clear English definition
-- "translation": translation in the learner's native language (empty string if unknown)
+- "translation": translation in ${lang}
 - "pronunciation": IPA pronunciation string
 - "partOfSpeech": one of: noun, verb, adjective, adverb, preposition, conjunction, pronoun, determiner, phrasal verb, idiom
 - "exampleSentence": natural IELTS-level example sentence
@@ -172,12 +175,15 @@ export async function generateExample(word: string, topic?: string): Promise<{ d
   const config = await getAiConfig()
   if (!config) return { data: null, error: 'AI API key not configured' }
 
+  const userConfig = loadUserConfiguration()
+  const lang = translationTarget(userConfig.study.nativeLanguage)
+
   const topicHint = topic ? ` on the topic of "${topic}"` : ''
   const systemPrompt = 'You are an IELTS vocabulary expert. Always respond with valid JSON only, no markdown.'
   const userPrompt = `Analyze the IELTS vocabulary word "${word}"${topicHint}. Return a JSON object with ALL of these fields:
 
 - "meaning": clear English definition suitable for IELTS learners
-- "translation": translation in the learner's native language (optional, empty string if unknown)
+- "translation": translation in ${lang}
 - "pronunciation": IPA pronunciation (e.g. "/juːˈbɪk.wɪ.təs/")
 - "partOfSpeech": one of: noun, verb, adjective, adverb, preposition, conjunction, pronoun, determiner, phrasal verb, idiom
 - "exampleSentence": natural IELTS-level example sentence

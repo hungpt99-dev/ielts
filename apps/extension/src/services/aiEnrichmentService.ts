@@ -43,7 +43,7 @@ export async function enrichVocabulary(word: string, context?: string): Promise<
   const providerConfig = await safeFetchProviderConfig()
   const result = await aiClient.complete(
     [
-      { role: 'system', content: 'You are an IELTS vocabulary assistant. Return JSON with: meaning, translation (to Vietnamese), pronunciation, partOfSpeech, wordFamily, collocations, cefrLevel, synonyms, antonyms, exampleSentence.' },
+      { role: 'system', content: 'You are an IELTS vocabulary assistant. Return JSON with: meaning, translation (to the learner\'s native language), pronunciation, partOfSpeech, wordFamily, collocations, cefrLevel, synonyms, antonyms, exampleSentence.' },
       { role: 'user', content: `Word: ${word}${context ? ` Context: ${context.slice(0, 500)}` : ''}` },
     ],
     providerConfig,

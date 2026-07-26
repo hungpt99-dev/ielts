@@ -30,7 +30,7 @@ function makeVocab(id: string, overrides: Partial<VocabularyEntry> = {}): Vocabu
     id,
     word: 'ubiquitous',
     meaning: 'existing everywhere',
-    meaningVi: 'phổ biến khắp nơi',
+    translation: 'phổ biến khắp nơi',
     pronunciation: '/juːˈbɪk.wɪ.təs/',
     partOfSpeech: 'adjective',
     topic: 'Technology',

@@ -278,18 +278,18 @@ export default function NotebookPage() {
     setEnriching(true)
     const { data, error } = await enrichVocabulary(detailEntry.word, detailEntry.topic)
     if (error || !data) { setEnriching(false); return }
-    const mergedWordFamily = [...new Set([...detailEntry.wordFamily, ...(data.wordFamily || [])])]
     const updated: VocabularyEntry = {
       ...detailEntry,
       word: data.lemma || detailEntry.word,
       meaning: data.meaning || detailEntry.meaning,
+      translation: data.translation || detailEntry.translation,
       pronunciation: data.pronunciation || detailEntry.pronunciation,
       partOfSpeech: data.partOfSpeech || detailEntry.partOfSpeech,
       exampleSentence: data.exampleSentence || detailEntry.exampleSentence,
-      collocations: [...new Set([...detailEntry.collocations, ...(data.collocations || [])])],
-      synonyms: [...new Set([...detailEntry.synonyms, ...(data.synonyms || [])])],
-      antonyms: [...new Set([...detailEntry.antonyms, ...(data.antonyms || [])])],
-      wordFamily: mergedWordFamily,
+      collocations: data.collocations || detailEntry.collocations,
+      synonyms: data.synonyms || detailEntry.synonyms,
+      antonyms: data.antonyms || detailEntry.antonyms,
+      wordFamily: data.wordFamily || detailEntry.wordFamily,
       cefrLevel: (data.cefrLevel || detailEntry.cefrLevel) as VocabularyEntry['cefrLevel'],
       ieltsRelevance: (data.ieltsRelevance || detailEntry.ieltsRelevance) as VocabularyEntry['ieltsRelevance'],
       updatedAt: new Date().toISOString(),
