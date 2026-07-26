@@ -160,17 +160,17 @@ import('./messageHandlers/syncBridgeHandler').then(({ handleGetSyncStatus, handl
     const msg = message as Record<string, unknown>
 
     if (msg.type === 'GET_SYNC_STATUS') {
-      handleGetSyncStatus().then(sendResponse)
+      handleGetSyncStatus().then(sendResponse).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'GET_SYNC_STATUS failed' }))
       return true
     }
 
     if (msg.type === 'EXPORT_EXTENSION_DATA') {
-      handleExportData().then(sendResponse)
+      handleExportData().then(sendResponse).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'EXPORT_EXTENSION_DATA failed' }))
       return true
     }
 
     if (msg.type === 'IMPORT_EXTENSION_DATA') {
-      handleImportData(msg.payload).then(sendResponse)
+      handleImportData(msg.payload).then(sendResponse).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'IMPORT_EXTENSION_DATA failed' }))
       return true
     }
 

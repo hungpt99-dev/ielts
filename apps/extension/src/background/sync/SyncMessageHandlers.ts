@@ -7,13 +7,13 @@ export function registerSyncMessageHandlers(): void {
     const msg = message as Record<string, unknown>
 
     if (msg.type === 'GET_AUTO_SYNC_SETTINGS') {
-      loadSettings().then((s) => sendResponse({ success: true, data: s }))
+      loadSettings().then((s) => sendResponse({ success: true, data: s })).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'GET_AUTO_SYNC_SETTINGS failed' }))
       return true
     }
 
     if (msg.type === 'SAVE_AUTO_SYNC_SETTINGS') {
       const s = msg.payload as Partial<AutoSyncSettings>
-      loadSettings().then((current) => saveSettings({ ...current, ...s })).then(() => sendResponse({ success: true }))
+      loadSettings().then((current) => saveSettings({ ...current, ...s })).then(() => sendResponse({ success: true })).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'SAVE_AUTO_SYNC_SETTINGS failed' }))
       return true
     }
 
@@ -23,12 +23,12 @@ export function registerSyncMessageHandlers(): void {
     }
 
     if (msg.type === 'TRIGGER_AUTO_SYNC') {
-      checkAndSync({ force: true }).then(() => sendResponse({ success: true }))
+      checkAndSync({ force: true }).then(() => sendResponse({ success: true })).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'TRIGGER_AUTO_SYNC failed' }))
       return true
     }
 
     if (msg.type === 'WEB_TAB_OPENED') {
-      onWebTabAvailable().then(() => sendResponse({ success: true }))
+      onWebTabAvailable().then(() => sendResponse({ success: true })).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'WEB_TAB_OPENED failed' }))
       return true
     }
 

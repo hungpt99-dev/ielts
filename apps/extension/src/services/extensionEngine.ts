@@ -1,4 +1,5 @@
 import { getDb } from '@ielts/storage'
+import { ensureStorageInitialized } from './repositories'
 import { createLearningEngine, createDefaultSkillRegistry, SESSION_STATUS } from '@ielts/learning-engine'
 import type { LearnerContextPort, TutorIntelligencePort, StudyPlanPort, LearningSessionRepository, LearningAttemptRepository, LearningOutcomeRepository, ExerciseRepository, ProgressRepository, MistakeRepository, VocabularyRepository, LearningEventPublisher } from '@ielts/learning-engine'
 
@@ -231,6 +232,8 @@ const extensionEventPublisher: LearningEventPublisher = {
 
 export async function initializeExtensionEngine() {
   if (engineInstance) return engineInstance
+
+  ensureStorageInitialized()
 
   const engine = createLearningEngine({
     contextPort: extensionLearnerContextPort,
