@@ -49,7 +49,6 @@ const BRIDGE_NAMESPACE = 'IELTS_JOURNEY_EXTENSION_BRIDGE'
 
 const VALID_TYPES = new Set([
   'PING_EXTENSION', 'PING_EXTENSION_RESPONSE',
-  'GET_SYNC_STATUS', 'GET_SYNC_STATUS_RESPONSE',
   'EXPORT_EXTENSION_DATA', 'EXPORT_EXTENSION_DATA_RESPONSE',
   'IMPORT_EXTENSION_DATA', 'IMPORT_EXTENSION_DATA_RESPONSE',
 ])
@@ -117,7 +116,7 @@ window.addEventListener('message', (event: MessageEvent) => {
       return
     }
 
-    if (type === 'GET_SYNC_STATUS' || type === 'EXPORT_EXTENSION_DATA' || type === 'IMPORT_EXTENSION_DATA') {
+    if (type === 'EXPORT_EXTENSION_DATA' || type === 'IMPORT_EXTENSION_DATA') {
       forwardToBackground(type, requestId, payload)
     }
   } catch (error) {

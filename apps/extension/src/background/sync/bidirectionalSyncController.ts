@@ -39,7 +39,7 @@ export interface SyncSummary {
   completedAt: string
 }
 
-async function exportExtensionData(): Promise<Record<string, unknown>> {
+export async function exportExtensionData(): Promise<Record<string, unknown>> {
   const [vocab, mistakes, entries, articles, artifacts] = await Promise.all([
     getAllVocabulary().catch(() => []),
     getAllMistakes().catch(() => []),
@@ -53,7 +53,7 @@ async function exportExtensionData(): Promise<Record<string, unknown>> {
   return { vocabulary: vocab, mistakes, learningEntries: entries, articles, artifacts }
 }
 
-async function importWebData(data: Record<string, unknown>): Promise<{ imported: number; updated: number }> {
+export async function importWebData(data: Record<string, unknown>): Promise<{ imported: number; updated: number }> {
   let imported = 0
   let updated = 0
 

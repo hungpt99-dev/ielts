@@ -153,36 +153,25 @@ ensureStorageInitialized()
 initMessaging()
 initAiService()
 
-// Sync bridge handlers
-import('./messageHandlers/syncBridgeHandler').then(({ handleGetSyncStatus, handleExportData, handleImportData }) => {
+// Sync bridge handlers and bidirectional sync
+import('./sync/bidirectionalSyncController').then(({ exportExtensionData, importWebData, syncBidirectional }) => {
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (!message || typeof message !== 'object') return false
     const msg = message as Record<string, unknown>
 
-    if (msg.type === 'GET_SYNC_STATUS') {
-      handleGetSyncStatus().then(sendResponse).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'GET_SYNC_STATUS failed' }))
-      return true
-    }
-
     if (msg.type === 'EXPORT_EXTENSION_DATA') {
-      handleExportData().then(sendResponse).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'EXPORT_EXTENSION_DATA failed' }))
+      exportExtensionData()
+        .then((data) => sendResponse({ success: true, data }))
+        .catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'EXPORT failed' }))
       return true
     }
 
     if (msg.type === 'IMPORT_EXTENSION_DATA') {
-      handleImportData(msg.payload).then(sendResponse).catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'IMPORT_EXTENSION_DATA failed' }))
+      importWebData(msg.payload as Record<string, unknown> || {})
+        .then((result) => sendResponse({ success: true, data: result }))
+        .catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'IMPORT failed' }))
       return true
     }
-
-    return false
-  })
-})
-
-// Bidirectional sync handler (called from popup)
-import('./sync/bidirectionalSyncController').then(({ syncBidirectional }) => {
-  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    if (!message || typeof message !== 'object') return false
-    const msg = message as Record<string, unknown>
 
     if (msg.type === 'BIDIRECTIONAL_SYNC') {
       syncBidirectional().then(sendResponse).catch(() => sendResponse({ failed: 1 }))
