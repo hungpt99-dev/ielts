@@ -3,6 +3,9 @@ import { ensureStorageInitialized } from './repositories'
 import { createLearningEngine, createDefaultSkillRegistry, SESSION_STATUS } from '@ielts/learning-engine'
 import type { LearnerContextPort, TutorIntelligencePort, StudyPlanPort, LearningSessionRepository, LearningAttemptRepository, LearningOutcomeRepository, ExerciseRepository, ProgressRepository, MistakeRepository, VocabularyRepository, LearningEventPublisher } from '@ielts/learning-engine'
 import { safeFetchProviderConfig } from '../utils/safe-chrome'
+import { createAIClient } from '@ielts/ai'
+
+const aiClient = createAIClient()
 
 let engineInstance: ReturnType<typeof createLearningEngine> | null = null
 let aiAvailable = false
@@ -69,11 +72,57 @@ const extensionTutorPort: TutorIntelligencePort = {
   async selectTeachingStrategy() {
     return { strategy: 'explain', reason: 'default' }
   },
-  async generateEducationalContent() {
-    return { success: false, error: { code: 'ai_unavailable', message: 'AI not available in extension offline mode', recoverable: true } }
+  async generateEducationalContent(request: any) {
+    if (!aiAvailable) {
+      return { success: false, error: { code: 'ai_unavailable', message: 'AI not available in extension offline mode', recoverable: true } }
+    }
+    try {
+      const providerConfig = await safeFetchProviderConfig()
+      if (!providerConfig.apiKey) {
+        return { success: false, error: { code: 'ai_not_configured', message: 'No AI API key configured', recoverable: true } }
+      }
+      const raw = await aiClient.complete(
+        [
+          { role: 'system', content: request.systemPrompt || '' },
+          { role: 'user', content: request.userMessage || '' },
+        ],
+        { apiKey: providerConfig.apiKey, baseUrl: providerConfig.baseUrl, model: providerConfig.model, maxTokens: request.maxTokens || 4096 },
+        { temperature: request.temperature ?? 0.5, maxTokens: request.maxTokens || 4096 },
+      )
+      if (raw.error) return { success: false, error: { code: 'ai_failed', message: raw.error, recoverable: true } }
+      try { return { success: true, data: JSON.parse(raw.content ?? '') } }
+      catch {
+        return { success: false, error: { code: 'invalid_json', message: 'AI returned invalid JSON', recoverable: true } }
+      }
+    } catch (err) {
+      return { success: false, error: { code: 'ai_call_failed', message: err instanceof Error ? err.message : 'AI call failed', recoverable: true } }
+    }
   },
-  async evaluateOpenResponse() {
-    return { success: false, error: { code: 'ai_unavailable', message: 'AI not available in extension offline mode', recoverable: true } }
+  async evaluateOpenResponse(request: any) {
+    if (!aiAvailable) {
+      return { success: false, error: { code: 'ai_unavailable', message: 'AI not available in extension offline mode', recoverable: true } }
+    }
+    try {
+      const providerConfig = await safeFetchProviderConfig()
+      if (!providerConfig.apiKey) {
+        return { success: false, error: { code: 'ai_not_configured', message: 'No AI API key configured', recoverable: true } }
+      }
+      const raw = await aiClient.complete(
+        [
+          { role: 'system', content: request.systemPrompt || '' },
+          { role: 'user', content: request.userMessage || '' },
+        ],
+        { apiKey: providerConfig.apiKey, baseUrl: providerConfig.baseUrl, model: providerConfig.model, maxTokens: request.maxTokens || 2048 },
+        { temperature: request.temperature ?? 0.3, maxTokens: request.maxTokens || 2048 },
+      )
+      if (raw.error) return { success: false, error: { code: 'ai_failed', message: raw.error, recoverable: true } }
+      try { return { success: true, data: JSON.parse(raw.content ?? '') } }
+      catch {
+        return { success: false, error: { code: 'invalid_json', message: 'AI returned invalid JSON', recoverable: true } }
+      }
+    } catch (err) {
+      return { success: false, error: { code: 'ai_call_failed', message: err instanceof Error ? err.message : 'AI call failed', recoverable: true } }
+    }
   },
   async explainFeedback() {
     return { explanation: '', suggestions: [] }
