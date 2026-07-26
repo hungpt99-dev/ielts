@@ -61,7 +61,7 @@ function VocabularyListItem({
         ...entry,
         word: data.lemma || displayEntry.word,
         meaning: data.meaning || displayEntry.meaning,
-        meaningVi: data.translation || displayEntry.meaningVi,
+        translation: data.translation || displayEntry.translation,
         pronunciation: data.pronunciation || displayEntry.pronunciation,
         partOfSpeech: data.partOfSpeech || displayEntry.partOfSpeech,
         exampleSentence: data.exampleSentence || displayEntry.exampleSentence,
@@ -155,9 +155,9 @@ function VocabularyListItem({
           <p style={{ margin: 'var(--spacing-2xs) 0 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', fontFamily: 'var(--font-sans)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
             {displayEntry.meaning}
           </p>
-          {displayEntry.meaningVi && (
+          {displayEntry.translation && (
             <p style={{ margin: 'var(--spacing-2xs) 0 0 0', fontSize: 'var(--text-xs)', color: 'var(--color-muted)', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-              {displayEntry.meaningVi}
+              {displayEntry.translation}
             </p>
           )}
 

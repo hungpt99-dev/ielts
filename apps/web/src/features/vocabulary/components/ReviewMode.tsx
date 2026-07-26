@@ -281,9 +281,9 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
                 <p className="mt-1 text-lg" style={{ color: 'var(--color-text)' }}>
                   {currentItem.vocab.meaning}
                 </p>
-                {currentItem.vocab.meaningVi && (
+                {currentItem.vocab.translation && (
                   <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-                    {currentItem.vocab.meaningVi}
+                    {currentItem.vocab.translation}
                   </p>
                 )}
               </div>
@@ -295,9 +295,9 @@ export default function ReviewMode({ onComplete }: { onComplete?: () => void }) 
               <p className="text-2xl font-semibold" style={{ color: 'var(--color-text)' }}>
                 {currentItem.vocab.meaning}
               </p>
-              {currentItem.vocab.meaningVi && (
+              {currentItem.vocab.translation && (
                 <p className="mt-2 text-sm" style={{ color: 'var(--color-muted)' }}>
-                  {currentItem.vocab.meaningVi}
+                  {currentItem.vocab.translation}
                 </p>
               )}
               <div className="mt-6 rounded-lg p-4" style={{ backgroundColor: 'var(--color-surface-alt)' }}>

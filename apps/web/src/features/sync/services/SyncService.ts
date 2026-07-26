@@ -74,7 +74,7 @@ export async function syncFromExtension(): Promise<SyncResult> {
         id: v.id,
         word: (v.word as string) || 'unknown',
         meaning: (v.meaning as string) || '',
-        meaningVi: (v.meaningVi as string) || (v.translation as string) || '',
+        translation: (v.translation as string) || '',
         topic: (v.topic as string) || 'general',
         difficulty: (v.difficulty as string) || 'medium',
         status: (v.status as string) || 'new',

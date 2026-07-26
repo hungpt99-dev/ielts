@@ -1,9 +1,7 @@
 import type { VocabularyEntryOutput } from '@ielts/storage'
 import { openDB, STORE_NAMES } from './db'
 
-export type ExtensionVocabEntry = VocabularyEntryOutput & {
-  translation: string
-}
+export type ExtensionVocabEntry = VocabularyEntryOutput
 
 const STORE = STORE_NAMES.VOCABULARY
 

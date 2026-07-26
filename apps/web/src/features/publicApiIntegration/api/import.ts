@@ -108,7 +108,7 @@ export async function importPublicApiContent(
       const vocabEntry: Omit<VocabularyEntry, 'id' | 'createdAt' | 'updatedAt'> = {
         word: preview.title,
         meaning: preview.content || preview.title,
-        meaningVi: '',
+        translation: '',
         pronunciation: '',
         partOfSpeech: '',
         topic: overrides?.topic || 'general',

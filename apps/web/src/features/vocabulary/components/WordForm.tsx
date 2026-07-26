@@ -26,7 +26,7 @@ const IELTS_RELEVANCE = ['', 'low', 'medium', 'high'] as const
 const vocabSchema = z.object({
   word: z.string().min(1, 'Word is required').max(100),
   meaning: z.string().min(1, 'Meaning is required').max(500),
-  meaningVi: z.string().max(500),
+  translation: z.string().max(500),
   pronunciation: z.string().max(100),
   partOfSpeech: z.string(),
   topic: z.string(),
@@ -85,7 +85,7 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
     defaultValues: initialValues ? {
       word: initialValues.word,
       meaning: initialValues.meaning,
-      meaningVi: initialValues.meaningVi,
+      translation: initialValues.translation,
       pronunciation: initialValues.pronunciation,
       partOfSpeech: initialValues.partOfSpeech,
       topic: initialValues.topic,
@@ -101,7 +101,7 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
     } : {
       word: '',
       meaning: '',
-      meaningVi: '',
+      translation: '',
       pronunciation: '',
       partOfSpeech: 'noun',
       topic: 'Education',
@@ -128,7 +128,7 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
       id: initialValues?.id ?? crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2, 9),
       word: values.word.trim(),
       meaning: values.meaning.trim(),
-      meaningVi: values.meaningVi.trim(),
+      translation: values.translation.trim(),
       pronunciation: values.pronunciation.trim(),
       partOfSpeech: values.partOfSpeech,
       topic: values.topic,
@@ -181,7 +181,7 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
       }
 
       if (data.meaning) setValue('meaning', data.meaning)
-      if (data.translation) setValue('meaningVi', data.translation)
+      if (data.translation) setValue('translation', data.translation)
       if (data.pronunciation) setValue('pronunciation', data.pronunciation)
       if (data.partOfSpeech) setValue('partOfSpeech', data.partOfSpeech)
       if (data.exampleSentence) setValue('exampleSentence', data.exampleSentence)
@@ -263,14 +263,14 @@ export default function WordForm({ initialValues, onSave, onCancel, saving }: Wo
           {errors.meaning && <p className={errorClass}>{errors.meaning.message}</p>}
         </div>
         <div>
-          <label htmlFor="meaningVi" className={labelClass}>
+          <label htmlFor="translation" className={labelClass}>
             Translation
           </label>
           <textarea
-            id="meaningVi"
+            id="translation"
             rows={2}
-            {...register('meaningVi')}
-            className={inputClass('meaningVi')}
+            {...register('translation')}
+            className={inputClass('translation')}
           />
         </div>
       </div>

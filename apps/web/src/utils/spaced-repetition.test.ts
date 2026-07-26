@@ -7,7 +7,7 @@ function makeVocab(id: string, status: VocabularyEntry['status'] = 'new'): Vocab
     id,
     word: 'test',
     meaning: 'a test',
-    meaningVi: '',
+    translation: '',
     pronunciation: '',
     partOfSpeech: 'noun',
     topic: 'Education',

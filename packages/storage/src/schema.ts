@@ -81,7 +81,7 @@ export const vocabularyEntrySchema = z.object({
   id: z.string().min(1),
   word: z.string().min(1),
   meaning: z.string().min(1),
-  meaningVi: z.string().default(''),
+  translation: z.string().default(''),
   pronunciation: z.string().default(''),
   partOfSpeech: z.string().default(''),
   topic: z.string().min(1),

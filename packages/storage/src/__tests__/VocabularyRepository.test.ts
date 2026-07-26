@@ -21,7 +21,7 @@ function makeVocab(overrides: Partial<VocabularyEntry> = {}): Omit<VocabularyEnt
   return {
     word: 'test',
     meaning: 'a procedure intended to establish quality',
-    meaningVi: '',
+    translation: '',
     pronunciation: '/tɛst/',
     partOfSpeech: 'noun',
     topic: 'general',

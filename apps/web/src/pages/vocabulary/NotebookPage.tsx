@@ -157,7 +157,7 @@ export default function NotebookPage() {
       filtered = filtered.filter(e =>
         e.word.toLowerCase().includes(q) ||
         e.meaning.toLowerCase().includes(q) ||
-        e.meaningVi.toLowerCase().includes(q) ||
+        e.translation.toLowerCase().includes(q) ||
         e.exampleSentence.toLowerCase().includes(q)
       )
     }
@@ -818,9 +818,9 @@ export default function NotebookPage() {
               <p style={{ margin: 'var(--spacing-2xs) 0 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)' }}>
                 {detailEntry.meaning}
               </p>
-              {detailEntry.meaningVi && (
+              {detailEntry.translation && (
                 <p style={{ margin: 'var(--spacing-2xs) 0 0 0', fontSize: 'var(--text-sm)', color: 'var(--color-muted)' }}>
-                  {detailEntry.meaningVi}
+                  {detailEntry.translation}
                 </p>
               )}
             </div>

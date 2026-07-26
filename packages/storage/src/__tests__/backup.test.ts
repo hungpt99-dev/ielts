@@ -36,7 +36,7 @@ function makeVocab(overrides: Partial<VocabularyEntry> = {}): Omit<VocabularyEnt
   return {
     word: 'test',
     meaning: 'meaning',
-    meaningVi: '',
+    translation: '',
     pronunciation: '/test/',
     partOfSpeech: 'noun',
     topic: 'general',

@@ -36,7 +36,7 @@ async function handleIncomingSync(event: MessageEvent): Promise<void> {
           id: v.id,
           word: (v.word as string) || (v.sourceSentence as string)?.split(/\s+/)[0] || 'unknown',
           meaning: (v.meaning as string) || (v.sourceSentence as string) || (v.word as string) || '',
-          meaningVi: (v.meaningVi as string) || '',
+          translation: (v.translation as string) || '',
           pronunciation: (v.pronunciation as string) || '',
           partOfSpeech: (v.partOfSpeech as string) || '',
           topic: (v.topic as string) || 'general',

@@ -549,7 +549,7 @@ export default function ArtifactsPage() {
         const entry = await vocabularyRepo.create({
           word: w.word,
           meaning: w.meaning,
-          meaningVi: '',
+          translation: '',
           pronunciation: '',
           partOfSpeech: w.partOfSpeech,
           topic: a.ieltsTopic || 'General',

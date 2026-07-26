@@ -83,9 +83,9 @@ export function WordToMeaning({ vocab, onReveal, revealed }: ModeRendererProps) 
           <p className="mt-1 text-lg text-slate-900 dark:text-slate-100">
             {vocab.meaning}
           </p>
-          {vocab.meaningVi && (
+          {vocab.translation && (
             <p className="mt-1 text-sm text-slate-400 dark:text-slate-500">
-              {vocab.meaningVi}
+              {vocab.translation}
             </p>
           )}
           {vocab.exampleSentence && (
@@ -105,9 +105,9 @@ export function MeaningToWord({ vocab, onReveal, revealed }: ModeRendererProps) 
       <p className="text-2xl font-semibold text-slate-900 dark:text-slate-100">
         {vocab.meaning}
       </p>
-      {vocab.meaningVi && (
+      {vocab.translation && (
         <p className="mt-2 text-sm text-slate-400 dark:text-slate-500">
-          {vocab.meaningVi}
+          {vocab.translation}
         </p>
       )}
       {vocab.partOfSpeech && (
@@ -309,9 +309,9 @@ export function TypingMode({ vocab, onReveal, revealed }: ModeRendererProps) {
         <p className="mt-1 text-lg text-slate-900 dark:text-slate-100">
           {vocab.meaning}
         </p>
-        {vocab.meaningVi && (
+        {vocab.translation && (
           <p className="mt-1 text-sm text-slate-400 dark:text-slate-500">
-            {vocab.meaningVi}
+            {vocab.translation}
           </p>
         )}
       </div>

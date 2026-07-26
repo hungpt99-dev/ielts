@@ -466,9 +466,9 @@ export default function VocabularyManager({
                   <p className="mt-0.5 text-sm text-slate-700 dark:text-slate-300">
                     {entry.meaning}
                   </p>
-                  {entry.meaningVi && (
+                  {entry.translation && (
                     <p className="text-xs text-slate-400 dark:text-slate-500">
-                      {entry.meaningVi}
+                      {entry.translation}
                     </p>
                   )}
                   <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -669,8 +669,8 @@ function WordDetail({ entry, onEdit, onClose }: { entry: VocabularyEntry; onEdit
       <div>
         <p className="text-sm font-medium text-slate-900 dark:text-slate-100">Meaning</p>
         <p className="text-sm text-slate-700 dark:text-slate-300">{entry.meaning}</p>
-        {entry.meaningVi && (
-          <p className="text-sm text-slate-400 dark:text-slate-500">{entry.meaningVi}</p>
+        {entry.translation && (
+          <p className="text-sm text-slate-400 dark:text-slate-500">{entry.translation}</p>
         )}
       </div>
 

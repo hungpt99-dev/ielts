@@ -87,10 +87,9 @@ export async function importWebData(data: Record<string, unknown>): Promise<{ im
       await saveVocabularyEntry({
         ...(item as any),
         id,
-        meaningVi: (item.meaningVi as string) || (item.translation as string) || '',
-        translation: (item.translation as string) || (item.meaningVi as string) || '',
         word: (item.word as string) || 'unknown',
-        meaning: (item.meaning as string) || (item.meaningVi as string) || (item.translation as string) || '',
+        meaning: (item.meaning as string) || item.translation as string || '',
+        translation: (item.translation as string) || '',
         topic: (item.topic as string) || 'general',
         difficulty: (item.difficulty as string) || 'medium',
         status: (item.status as string) || 'new',

@@ -67,9 +67,9 @@ function defaultMockData() {
         ]
       case 'vocabulary':
         return [
-          { id: 'v1', word: 'sustainable', meaning: '', meaningVi: '', pronunciation: '', partOfSpeech: 'adj', topic: 'environment', exampleSentence: '', collocations: [], synonyms: [], antonyms: [], wordFamily: [], personalNote: '', difficulty: 'medium', status: 'mastered', tags: [], createdAt: '2026-07-01T10:00:00Z', updatedAt: '2026-07-05T10:00:00Z' },
-          { id: 'v2', word: 'biodiversity', meaning: '', meaningVi: '', pronunciation: '', partOfSpeech: 'n', topic: 'environment', exampleSentence: '', collocations: [], synonyms: [], antonyms: [], wordFamily: [], personalNote: '', difficulty: 'medium', status: 'learning', tags: [], createdAt: '2026-07-01T10:00:00Z', updatedAt: '2026-07-05T10:00:00Z' },
-          { id: 'v3', word: 'curriculum', meaning: '', meaningVi: '', pronunciation: '', partOfSpeech: 'n', topic: 'education', exampleSentence: '', collocations: [], synonyms: [], antonyms: [], wordFamily: [], personalNote: '', difficulty: 'hard', status: 'reviewing', tags: [], createdAt: '2026-07-02T10:00:00Z', updatedAt: '2026-07-05T10:00:00Z' },
+          { id: 'v1', word: 'sustainable', meaning: '', translation: '', pronunciation: '', partOfSpeech: 'adj', topic: 'environment', exampleSentence: '', collocations: [], synonyms: [], antonyms: [], wordFamily: [], personalNote: '', difficulty: 'medium', status: 'mastered', tags: [], createdAt: '2026-07-01T10:00:00Z', updatedAt: '2026-07-05T10:00:00Z' },
+          { id: 'v2', word: 'biodiversity', meaning: '', translation: '', pronunciation: '', partOfSpeech: 'n', topic: 'environment', exampleSentence: '', collocations: [], synonyms: [], antonyms: [], wordFamily: [], personalNote: '', difficulty: 'medium', status: 'learning', tags: [], createdAt: '2026-07-01T10:00:00Z', updatedAt: '2026-07-05T10:00:00Z' },
+          { id: 'v3', word: 'curriculum', meaning: '', translation: '', pronunciation: '', partOfSpeech: 'n', topic: 'education', exampleSentence: '', collocations: [], synonyms: [], antonyms: [], wordFamily: [], personalNote: '', difficulty: 'hard', status: 'reviewing', tags: [], createdAt: '2026-07-02T10:00:00Z', updatedAt: '2026-07-05T10:00:00Z' },
         ]
       case 'vocabularyReviews':
         return [
