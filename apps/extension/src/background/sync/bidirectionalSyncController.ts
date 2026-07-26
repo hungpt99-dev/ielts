@@ -14,15 +14,20 @@ const META_KEY = 'ielts-bidi-sync-meta'
 
 interface SyncMeta { lastBidirectionalSyncAt: string | null }
 
-function getMeta(): SyncMeta {
-  try { return JSON.parse(localStorage.getItem(META_KEY) || '{}') } catch (error) {
+async function getMeta(): Promise<SyncMeta> {
+  try {
+    const result = await chrome.storage.local.get(META_KEY)
+    return JSON.parse((result[META_KEY] as string) || '{}')
+  } catch (error) {
   console.error('apps/extension/src/background/sync/bidirectionalSyncController.ts error:', error);
   }
   return { lastBidirectionalSyncAt: null }
 }
 
-function saveMeta(m: SyncMeta): void {
-  try { localStorage.setItem(META_KEY, JSON.stringify(m)) } catch (error) {
+async function saveMeta(m: SyncMeta): Promise<void> {
+  try {
+    await chrome.storage.local.set({ [META_KEY]: JSON.stringify(m) })
+  } catch (error) {
 console.error('apps/extension/src/background/sync/bidirectionalSyncController.ts error:', error);
   }
 }
@@ -275,9 +280,9 @@ export async function syncBidirectional(): Promise<SyncSummary> {
     summary.updated = result.updated
     console.log('[BidiSync] Import result:', result)
 
-    const meta = getMeta()
+    const meta = await getMeta()
     meta.lastBidirectionalSyncAt = new Date().toISOString()
-    saveMeta(meta)
+    await saveMeta(meta)
 
     summary.completedAt = new Date().toISOString()
     return summary

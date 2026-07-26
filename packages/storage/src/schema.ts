@@ -35,7 +35,7 @@ export const skillSchema = z.enum(['reading', 'listening', 'writing', 'speaking'
 export const ieltsSkillSchema = z.enum(['reading', 'listening', 'writing', 'speaking', 'vocabulary', 'grammar', 'general'])
 export const reviewRatingSchema = z.enum(['again', 'hard', 'good', 'easy'])
 export const difficultySchema = z.enum(['easy', 'medium', 'hard'])
-export const passageSourceSchema = z.enum(['user-created', 'pasted'])
+export const passageSourceSchema = z.enum(['user-created', 'pasted']).catch('user-created')
 export const taskCategorySchema = z.enum([
   'Vocabulary', 'Reading', 'Listening', 'Writing Task 1', 'Writing Task 2',
   'Speaking Part 1', 'Speaking Part 2', 'Speaking Part 3', 'Grammar', 'Mock Test',

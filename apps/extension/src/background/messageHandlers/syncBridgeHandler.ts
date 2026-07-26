@@ -7,9 +7,10 @@ import { vocabularyRepo, mistakeRepo } from '../../services/repositories'
 
 const SYNC_META_KEY = 'ielts-legacy-sync-meta'
 
-function getMeta(): { lastSyncFromWebAt: string | null; lastSyncToWebAt: string | null } {
+async function getMeta(): Promise<{ lastSyncFromWebAt: string | null; lastSyncToWebAt: string | null }> {
   try {
-    const raw = localStorage.getItem(SYNC_META_KEY)
+    const result = await chrome.storage.local.get(SYNC_META_KEY)
+    const raw = result[SYNC_META_KEY] as string | undefined
     if (raw) return JSON.parse(raw)
   } catch (error) {
   console.error('apps/extension/src/background/messageHandlers/syncBridgeHandler.ts error:', error);
@@ -17,9 +18,9 @@ function getMeta(): { lastSyncFromWebAt: string | null; lastSyncToWebAt: string 
   return { lastSyncFromWebAt: null, lastSyncToWebAt: null }
 }
 
-function saveMeta(meta: { lastSyncFromWebAt: string | null; lastSyncToWebAt: string | null }): void {
+async function saveMeta(meta: { lastSyncFromWebAt: string | null; lastSyncToWebAt: string | null }): Promise<void> {
   try {
-    localStorage.setItem(SYNC_META_KEY, JSON.stringify(meta))
+    await chrome.storage.local.set({ [SYNC_META_KEY]: JSON.stringify(meta) })
   } catch (error) {
 console.error('apps/extension/src/background/messageHandlers/syncBridgeHandler.ts error:', error);
   }
@@ -31,7 +32,7 @@ export async function handleGetSyncStatus(): Promise<{
   error?: string
 }> {
   try {
-    const meta = getMeta()
+    const meta = await getMeta()
     const [vocab, mistakes] = await Promise.all([
       getAllVocabulary().catch(() => []),
       getAllMistakes().catch(() => []),
@@ -140,9 +141,9 @@ export async function handleImportData(payload: unknown): Promise<{
       }
     }
 
-    const meta = getMeta()
+    const meta = await getMeta()
     meta.lastSyncFromWebAt = new Date().toISOString()
-    saveMeta(meta)
+    await saveMeta(meta)
 
     await syncStorageForHighlighter(getAllVocabulary)
 

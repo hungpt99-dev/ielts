@@ -600,6 +600,23 @@ export function initMessaging(): void {
     return { success: !result.error, data: result }
   })
 
+  function parseXmlTranscript(xml: string): Array<{ id: string; start: number; end: number; text: string }> {
+    const segments: Array<{ id: string; start: number; end: number; text: string }> = []
+    const textBlockRegex = /<text\b([^>]*)>([^<]*)<\/text>/g
+    let match
+    while ((match = textBlockRegex.exec(xml)) !== null) {
+      const attrs = match[1]
+      const text = match[2]?.trim()
+      if (!text) continue
+      const startMatch = attrs.match(/start="([^"]*)"/)
+      const durMatch = attrs.match(/dur="([^"]*)"/)
+      const start = parseFloat(startMatch?.[1] || '0')
+      const dur = parseFloat(durMatch?.[1] || '0')
+      segments.push({ id: `xml-seg-${segments.length}`, start, end: start + dur, text })
+    }
+    return segments
+  }
+
   registerHandler('FETCH_TRANSCRIPT_DIRECT', async (_msg) => {
     const msg = _msg as unknown as { type: 'FETCH_TRANSCRIPT_DIRECT'; payload: { videoId: string; language: string } }
     const { videoId, language } = msg.payload
@@ -617,21 +634,10 @@ export function initMessaging(): void {
         const text = await response.text()
         if (!text || text.length < 20) continue
         if (text.trim().startsWith('<')) {
-          const parser = new DOMParser()
-          const xmlDoc = parser.parseFromString(text, 'text/xml')
-          const textElements = xmlDoc.querySelectorAll('text')
-          if (!textElements.length) continue
-          const segments: Array<{ id: string; start: number; end: number; text: string }> = []
-          textElements.forEach((el, index) => {
-            const start = parseFloat(el.getAttribute('start') || '0')
-            const dur = parseFloat(el.getAttribute('dur') || '0')
-            const t = el.textContent?.trim() || ''
-            if (!t) return
-            segments.push({ id: `${videoId}-bg-${index}`, start, end: start + dur, text: t })
-          })
-          if (segments.length) {
-            return { success: true, data: { videoId, language, source: 'auto-generated', segments, fullText: segments.map(s => s.text).join(' ') } }
-          }
+          const segments = parseXmlTranscript(text)
+          if (!segments.length) continue
+          segments.forEach((s, i) => { s.id = `${videoId}-bg-${i}` })
+          return { success: true, data: { videoId, language, source: 'auto-generated', segments, fullText: segments.map(s => s.text).join(' ') } }
         } else {
           const json = JSON.parse(text)
           const raw = Array.isArray(json) ? json : (json as any).segments || (json as any).captions || (json as any).transcript || []
@@ -671,19 +677,9 @@ export function initMessaging(): void {
       const xml = await response.text()
       if (!xml || xml.length < 20) return { success: false, error: 'EMPTY_RESPONSE' }
 
-      const parser = new DOMParser()
-      const xmlDoc = parser.parseFromString(xml, 'text/xml')
-      const textElements = xmlDoc.querySelectorAll('text')
-      if (!textElements.length) return { success: false, error: 'PARSE_FAILED' }
-
-      const segments: Array<{ id: string; start: number; end: number; text: string }> = []
-      textElements.forEach((el, index) => {
-        const start = parseFloat(el.getAttribute('start') || '0')
-        const dur = parseFloat(el.getAttribute('dur') || '0')
-        const t = el.textContent?.trim() || ''
-        if (!t) return
-        segments.push({ id: `${videoId}-bg-xml-${index}`, start, end: start + dur, text: t })
-      })
+      const parser = parseXmlTranscript(xml)
+      if (!parser.length) return { success: false, error: 'PARSE_FAILED' }
+      const segments = parser.map((s, index) => ({ ...s, id: `${videoId}-bg-xml-${index}` }))
       if (!segments.length) return { success: false, error: 'PARSE_FAILED' }
 
       return {
