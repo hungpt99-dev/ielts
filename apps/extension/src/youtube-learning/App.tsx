@@ -582,7 +582,9 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
       setTranslateEnabled(false)
       setTranslations(new Map())
       setTranslateError(null)
-    } else if (translateLanguage) {
+    } else if (!translateLanguage) {
+      setTranslateError('Select a language first')
+    } else {
       setTranslateError(null)
       setTranslateEnabled(true)
     }
