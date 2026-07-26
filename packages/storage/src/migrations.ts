@@ -432,9 +432,21 @@ export const APP_SCHEMA: AppDatabaseSchema = {
       upgrade: async (db) => {
         const vocab = await db.vocabulary.toArray() as any[]
         for (const entry of vocab) {
+          let changed = false
           if ('meaningVi' in entry && !('translation' in entry)) {
             entry.translation = entry.meaningVi
             delete entry.meaningVi
+            changed = true
+          }
+          if (!entry.meaning || entry.meaning.trim() === '') {
+            entry.meaning = entry.word || 'unknown'
+            changed = true
+          }
+          if (!entry.difficulty || entry.difficulty === '') {
+            entry.difficulty = 'medium'
+            changed = true
+          }
+          if (changed) {
             await db.vocabulary.put(entry)
           }
         }

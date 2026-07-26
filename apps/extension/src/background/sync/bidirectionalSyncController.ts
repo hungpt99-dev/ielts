@@ -84,19 +84,22 @@ export async function importWebData(data: Record<string, unknown>): Promise<{ im
       const id = (item.id as string) || crypto.randomUUID()
       if (existingIds.has(id)) { updated++ } else { imported++ }
       existingIds.add(id)
-      await saveVocabularyEntry({
+      const enriched = {
         ...(item as any),
         id,
         word: (item.word as string) || 'unknown',
-        meaning: (item.meaning as string) || item.translation as string || '',
+        meaning: (item.meaning as string) || (item.translation as string) || 'unknown',
         translation: (item.translation as string) || '',
         topic: (item.topic as string) || 'general',
         difficulty: (item.difficulty as string) || 'medium',
         status: (item.status as string) || 'new',
+        cefrLevel: (item.cefrLevel as string) || '',
+        ieltsRelevance: (item.ieltsRelevance as string) || '',
         createdAt: (item.createdAt as string) || new Date().toISOString(),
         updatedAt: (item.updatedAt as string) || new Date().toISOString(),
-      }).catch(() => {})
-      vocabularyRepo.bulkUpsert([item as any]).catch(() => {})
+      }
+      await saveVocabularyEntry(enriched).catch(() => {})
+      vocabularyRepo.bulkUpsert([enriched as any]).catch(() => {})
     }
   }
 

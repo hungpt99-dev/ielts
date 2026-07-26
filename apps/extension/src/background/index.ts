@@ -245,16 +245,17 @@ chrome.storage.onChanged.addListener((changes, area) => {
         if (pending.category === 'vocabulary') {
           vocabCount++
           const text = pending.text as string
+          const word = text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, '')
           await saveVocabularyEntry({
             id: sharedId,
-            word: text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+            word,
             sourceSentence: text,
             pageTitle: (pending.pageTitle as string) || '',
             pageUrl: (pending.pageUrl as string) || '',
             topic: (pending.topic as string) || 'general',
             personalNote: (pending.note as string) || '',
             tags: (pending.tags as string[]) || [],
-            meaning: '',
+            meaning: word || 'unknown',
             translation: '',
             partOfSpeech: '',
             pronunciation: '',
@@ -263,14 +264,16 @@ chrome.storage.onChanged.addListener((changes, area) => {
             antonyms: [],
             collocations: [],
             wordFamily: [],
-            difficulty: '',
+            difficulty: 'medium',
             status: 'new',
+            cefrLevel: '',
+            ieltsRelevance: '',
             addedToReview: true,
             reviewId: '',
             createdAt: now,
             updatedAt: now,
           }).catch(() => {})
-          vocabularyRepo.bulkUpsert([{ id: sharedId, word: text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''), sourceSentence: text, pageTitle: (pending.pageTitle as string) || '', pageUrl: (pending.pageUrl as string) || '', topic: (pending.topic as string) || 'general', personalNote: (pending.note as string) || '', tags: (pending.tags as string[]) || [], meaning: '', translation: '', partOfSpeech: '', pronunciation: '', exampleSentence: '', synonyms: [], antonyms: [], collocations: [], wordFamily: [], difficulty: '', status: 'new', addedToReview: true, reviewId: '', createdAt: now, updatedAt: now }]).catch(() => {})
+          vocabularyRepo.bulkUpsert([{ id: sharedId, word, sourceSentence: text, pageTitle: (pending.pageTitle as string) || '', pageUrl: (pending.pageUrl as string) || '', topic: (pending.topic as string) || 'general', personalNote: (pending.note as string) || '', tags: (pending.tags as string[]) || [], meaning: word || 'unknown', translation: '', partOfSpeech: '', pronunciation: '', exampleSentence: '', synonyms: [], antonyms: [], collocations: [], wordFamily: [], difficulty: 'medium', status: 'new', cefrLevel: '', ieltsRelevance: '', addedToReview: true, reviewId: '', createdAt: now, updatedAt: now }]).catch(() => {})
         }
       } catch (err) {
         console.error('[PendingSave] Item failed:', err)
