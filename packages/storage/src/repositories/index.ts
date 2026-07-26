@@ -11,7 +11,7 @@ export {
   VocabularyRepository,
   VocabReviewRepository,
 } from './VocabularyRepository'
-export type { VocabularyEntry, VocabReviewEntry } from './VocabularyRepository'
+export type { VocabularyEntry, VocabularyEntryOutput, VocabReviewEntry } from './VocabularyRepository'
 
 export { MistakeRepository } from './MistakeRepository'
 export type { MistakeEntry } from './MistakeRepository'

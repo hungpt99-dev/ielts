@@ -50,6 +50,7 @@ export type { PlanEntry, PhaseEntry, WeekEntry, DayEntry } from './repositories'
 export type { ExerciseEntry, Artifact } from './repositories'
 export type {
   VocabularyEntry,
+  VocabularyEntryOutput,
   VocabReviewEntry,
   MistakeEntry,
   TaskEntry,

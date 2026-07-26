@@ -1,31 +1,8 @@
-import type { VerbConjugation } from '@ielts/shared'
+import type { VocabularyEntryOutput } from '@ielts/storage'
 import { openDB, STORE_NAMES } from './db'
 
-export interface ExtensionVocabEntry {
-  id: string
-  word: string
-  sourceSentence: string
-  pageTitle: string
-  pageUrl: string
-  topic: string
-  personalNote: string
-  tags: string[]
-  meaning: string
+export type ExtensionVocabEntry = VocabularyEntryOutput & {
   translation: string
-  partOfSpeech: string
-  pronunciation: string
-  exampleSentence: string
-  synonyms: string[]
-  antonyms: string[]
-  collocations: string[]
-  wordFamily: string[]
-  verbConjugation?: VerbConjugation
-  difficulty: 'easy' | 'medium' | 'hard' | ''
-  status: 'new' | 'learning' | 'reviewing' | 'mastered'
-  addedToReview: boolean
-  reviewId: string
-  createdAt: string
-  updatedAt: string
 }
 
 const STORE = STORE_NAMES.VOCABULARY
@@ -44,9 +21,7 @@ export async function saveVocabularyEntry(entry: ExtensionVocabEntry): Promise<v
 export async function getAllVocabulary(): Promise<ExtensionVocabEntry[]> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, 'readonly')
-    const store = tx.objectStore(STORE)
-    const request = store.getAll()
+    const request = db.transaction(STORE, 'readonly').objectStore(STORE).getAll()
     request.onsuccess = () => { db.close(); resolve(request.result as ExtensionVocabEntry[]) }
     request.onerror = () => { db.close(); reject(request.error) }
   })
@@ -55,9 +30,7 @@ export async function getAllVocabulary(): Promise<ExtensionVocabEntry[]> {
 export async function getVocabularyById(id: string): Promise<ExtensionVocabEntry | undefined> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, 'readonly')
-    const store = tx.objectStore(STORE)
-    const request = store.get(id)
+    const request = db.transaction(STORE, 'readonly').objectStore(STORE).get(id)
     request.onsuccess = () => { db.close(); resolve(request.result as ExtensionVocabEntry | undefined) }
     request.onerror = () => { db.close(); reject(request.error) }
   })
@@ -72,41 +45,25 @@ export async function updateVocabularyEntry(id: string, updates: Partial<Extensi
     getRequest.onsuccess = () => {
       const existing = getRequest.result as ExtensionVocabEntry | undefined
       if (existing) {
-        store.put({ ...existing, ...updates, updatedAt: new Date().toISOString() })
+        store.put({ ...existing, ...updates })
       }
+      tx.oncomplete = () => { db.close(); resolve() }
+      tx.onerror = () => { db.close(); reject(tx.error) }
     }
-    tx.oncomplete = () => { db.close(); resolve() }
-    tx.onerror = () => { db.close(); reject(tx.error) }
+    getRequest.onerror = () => { db.close(); reject(getRequest.error) }
   })
 }
 
 export async function deleteVocabularyEntry(id: string): Promise<void> {
   const db = await openDB()
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, 'readwrite')
-    const store = tx.objectStore(STORE)
-    store.delete(id)
-    tx.oncomplete = () => { db.close(); resolve() }
-    tx.onerror = () => { db.close(); reject(tx.error) }
+    const request = db.transaction(STORE, 'readwrite').objectStore(STORE).delete(id)
+    request.onsuccess = () => { db.close(); resolve() }
+    request.onerror = () => { db.close(); reject(request.error) }
   })
 }
 
 export async function getVocabularyDueForReview(): Promise<ExtensionVocabEntry[]> {
-  const all = await getAllVocabulary()
-  return all.filter(v => v.addedToReview)
-}
-
-export async function getVocabularyStats(): Promise<{
-  total: number
-  learning: number
-  mastered: number
-  addedToReview: number
-}> {
-  const all = await getAllVocabulary()
-  return {
-    total: all.length,
-    learning: all.filter(v => v.status === 'learning' || v.status === 'new').length,
-    mastered: all.filter(v => v.status === 'mastered').length,
-    addedToReview: all.filter(v => v.addedToReview).length,
-  }
+  const all = await getAllVocabulary().catch(() => [] as ExtensionVocabEntry[])
+  return all.filter(v => v.addedToReview && v.status !== 'mastered')
 }

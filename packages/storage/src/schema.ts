@@ -97,6 +97,11 @@ export const vocabularyEntrySchema = z.object({
   cefrLevel: z.enum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2', '']).default(''),
   ieltsRelevance: z.enum(['low', 'medium', 'high', '']).default(''),
   tags: z.array(z.string()).default([]),
+  sourceSentence: z.string().default(''),
+  pageTitle: z.string().default(''),
+  pageUrl: z.string().default(''),
+  addedToReview: z.boolean().default(true),
+  reviewId: z.string().default(''),
   createdAt: isoStringSchema,
   updatedAt: isoStringSchema,
 })

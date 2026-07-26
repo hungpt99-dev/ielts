@@ -70,22 +70,14 @@ export async function syncFromExtension(): Promise<SyncResult> {
     const incomingVocab = data.vocabulary as Record<string, unknown>[] | undefined
     if (Array.isArray(incomingVocab)) {
       const normalized = incomingVocab.map(v => ({
+        ...v,
         id: v.id,
-        word: (v.word as string) || (v.sourceSentence as string)?.split(/\s+/)[0] || 'unknown',
-        meaning: (v.meaning as string) || (v.sourceSentence as string) || (v.word as string) || '',
-        meaningVi: (v.meaningVi as string) || '',
-        pronunciation: (v.pronunciation as string) || '',
-        partOfSpeech: (v.partOfSpeech as string) || '',
+        word: (v.word as string) || 'unknown',
+        meaning: (v.meaning as string) || '',
+        meaningVi: (v.meaningVi as string) || (v.translation as string) || '',
         topic: (v.topic as string) || 'general',
-        exampleSentence: (v.exampleSentence as string) || (v.sourceSentence as string) || '',
-        collocations: Array.isArray(v.collocations) ? v.collocations as string[] : [],
-        synonyms: Array.isArray(v.synonyms) ? v.synonyms as string[] : [],
-        antonyms: Array.isArray(v.antonyms) ? v.antonyms as string[] : [],
-        wordFamily: Array.isArray(v.wordFamily) ? v.wordFamily as string[] : [],
-        personalNote: (v.personalNote as string) || '',
-        difficulty: ((v.difficulty as string) || 'medium') as 'easy' | 'medium' | 'hard',
-        status: ((v.status as string) || 'new') as 'new' | 'learning' | 'reviewing' | 'mastered',
-        tags: Array.isArray(v.tags) ? v.tags as string[] : [],
+        difficulty: (v.difficulty as string) || 'medium',
+        status: (v.status as string) || 'new',
         createdAt: (v.createdAt as string) || new Date().toISOString(),
         updatedAt: (v.updatedAt as string) || new Date().toISOString(),
       }))

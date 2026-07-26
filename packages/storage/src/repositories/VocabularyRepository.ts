@@ -3,6 +3,7 @@ import { vocabularyEntrySchema, vocabReviewEntrySchema } from '../schema'
 import type { z } from 'zod'
 
 export type VocabularyEntry = z.infer<typeof vocabularyEntrySchema>
+export type VocabularyEntryOutput = z.output<typeof vocabularyEntrySchema>
 export type VocabReviewEntry = z.infer<typeof vocabReviewEntrySchema>
 
 export class VocabularyRepository extends BaseRepository<VocabularyEntry> {

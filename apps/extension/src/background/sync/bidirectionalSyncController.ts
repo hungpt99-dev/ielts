@@ -6,7 +6,7 @@ import { getAllArticles, saveArticleEntry } from '../../storage/articleStore'
 import { getAllArtifacts, saveArtifact, type ExtensionArtifact } from '../../services/artifactService'
 import { findWebAppTab } from './webTabConnection'
 import { loadSettings, saveSettings, setApiKey } from '../settingsStorage'
-import { toExtensionVocab, toExtensionMistake, syncStorageForHighlighter } from './syncHelpers'
+import { toExtensionMistake, syncStorageForHighlighter } from './syncHelpers'
 import { vocabularyRepo, mistakeRepo, passageEntryRepo } from '../../services/repositories'
 
 const TIMEOUT_MS = 15000
@@ -84,8 +84,20 @@ export async function importWebData(data: Record<string, unknown>): Promise<{ im
       const id = (item.id as string) || crypto.randomUUID()
       if (existingIds.has(id)) { updated++ } else { imported++ }
       existingIds.add(id)
-      await saveVocabularyEntry(toExtensionVocab(item, id)).catch(() => {})
-      vocabularyRepo.bulkUpsert([toExtensionVocab(item, id) as any]).catch(() => {})
+      await saveVocabularyEntry({
+        ...(item as any),
+        id,
+        meaningVi: (item.meaningVi as string) || (item.translation as string) || '',
+        translation: (item.translation as string) || (item.meaningVi as string) || '',
+        word: (item.word as string) || 'unknown',
+        meaning: (item.meaning as string) || (item.meaningVi as string) || (item.translation as string) || '',
+        topic: (item.topic as string) || 'general',
+        difficulty: (item.difficulty as string) || 'medium',
+        status: (item.status as string) || 'new',
+        createdAt: (item.createdAt as string) || new Date().toISOString(),
+        updatedAt: (item.updatedAt as string) || new Date().toISOString(),
+      }).catch(() => {})
+      vocabularyRepo.bulkUpsert([item as any]).catch(() => {})
     }
   }
 
