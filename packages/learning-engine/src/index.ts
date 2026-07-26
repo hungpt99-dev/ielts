@@ -141,8 +141,7 @@ export { InMemoryLearnerContextAdapter } from './infrastructure/adapters'
 export { OfflineTutorIntelligenceAdapter } from './infrastructure/ai'
 export { InMemoryCache, CachedActivityGenerator } from './infrastructure/cache'
 export type { CacheEntry } from './infrastructure/cache'
-export { MigrationRunner } from './infrastructure/migrations'
-export type { Migration, MigrationRecord } from './infrastructure/migrations'
+
 export { InMemorySessionRepository, InMemoryExerciseRepository, InMemoryAttemptRepository, InMemoryOutcomeRepository } from './infrastructure/persistence'
 
 // ── Exercise Engine (NEW — blueprint-driven exercise system) ──────────

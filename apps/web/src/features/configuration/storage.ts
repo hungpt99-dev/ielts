@@ -20,14 +20,6 @@ import { loadUserConfiguration } from '@ielts/settings'
 import type { UserConfiguration } from '@ielts/settings'
 
 const STORAGE_KEY = STORAGE_KEYS.localStorage.configurationAdvanced
-const LEGACY_STORAGE_KEY = STORAGE_KEYS.localStorage.appSettings
-const STORAGE_VERSION_KEY = STORAGE_KEYS.localStorage.configurationAdvancedVersion
-const CURRENT_VERSION = 1
-
-export interface StorageMeta {
-  version: number
-  migratedAt: string | null
-}
 
 export function createDefaultProvider(): AiProviderConfig {
   return {
@@ -112,32 +104,6 @@ export function createDefaultConfiguration(): ExtendedUserConfiguration {
   }
 }
 
-function getStoredMeta(): StorageMeta {
-  try {
-    const raw = localStorage.getItem(STORAGE_VERSION_KEY)
-    if (raw) {
-      const parsed = JSON.parse(raw)
-      return {
-        version: typeof parsed.version === 'number' ? parsed.version : 0,
-        migratedAt: typeof parsed.migratedAt === 'string' ? parsed.migratedAt : null,
-      }
-    }
-  } catch (error) {
-    console.error('apps/web/src/features/configuration/storage.ts error:', error);
-    /* ignore */
-  }
-  return { version: 0, migratedAt: null }
-}
-
-function setStoredMeta(meta: StorageMeta): void {
-  try {
-    localStorage.setItem(STORAGE_VERSION_KEY, JSON.stringify(meta))
-  } catch (error) {
-    console.error('apps/web/src/features/configuration/storage.ts error:', error);
-    /* ignore */
-  }
-}
-
 function applyCanonicalToBasic(basic: ConfigurationBasic, canonical: UserConfiguration): void {
   if (canonical.study.targetBand) basic.targetBand = canonical.study.targetBand
   if (canonical.study.examDate) basic.examDate = canonical.study.examDate
@@ -194,61 +160,6 @@ function syncCanonicalFromConfig(config: ExtendedUserConfiguration): void {
     }
   } catch (error) {
     console.error('apps/web/src/features/configuration/storage.ts error:', error);
-  }
-}
-
-function migrateV0toV1(raw: Record<string, unknown>): boolean {
-  const legacyKey = STORAGE_KEYS.localStorage.appSettings
-  const legacyRaw = localStorage.getItem(legacyKey)
-  if (!legacyRaw) return false
-
-  try {
-    const legacy = JSON.parse(legacyRaw)
-    if (!legacy || typeof legacy !== 'object') return false
-
-    if (typeof legacy.targetBand === 'number') {
-      (raw.basic as Record<string, unknown>).targetBand = legacy.targetBand
-    }
-    if (typeof legacy.examDate === 'string') {
-      (raw.basic as Record<string, unknown>).examDate = legacy.examDate
-    }
-    if (typeof legacy.dailyStudyMinutes === 'number') {
-      (raw.basic as Record<string, unknown>).dailyStudyMinutes = legacy.dailyStudyMinutes
-    }
-
-    const provider = createDefaultProvider()
-    if (typeof legacy.aiApiKey === 'string') provider.apiKey = legacy.aiApiKey
-    if (typeof legacy.aiProvider === 'string') provider.provider = legacy.aiProvider as AiProviderType
-    if (typeof legacy.aiBaseUrl === 'string') provider.baseUrl = legacy.aiBaseUrl
-    if (typeof legacy.aiModel === 'string') provider.model = legacy.aiModel
-    if (typeof legacy.aiEndpoint === 'string' && !legacy.aiBaseUrl) provider.baseUrl = legacy.aiEndpoint
-
-    ;(raw.advanced as Record<string, unknown>).providers = {
-      [`default-${DEFAULT_AI_PROVIDER_ID}`]: provider,
-    }
-    ;(raw.advanced as Record<string, unknown>).activeProviderId = `default-${DEFAULT_AI_PROVIDER_ID}`
-
-    localStorage.removeItem(legacyKey)
-    return true
-  } catch (error) {
-    console.error('apps/web/src/features/configuration/storage.ts error:', error);
-    return false
-  }
-}
-
-const MIGRATIONS: Record<number, (raw: Record<string, unknown>) => boolean> = {
-  0: migrateV0toV1,
-}
-
-function runMigrations(raw: Record<string, unknown>, fromVersion: number): void {
-  const versions = Object.keys(MIGRATIONS)
-    .map(Number)
-    .sort((a, b) => a - b)
-
-  for (const version of versions) {
-    if (version >= fromVersion && version < CURRENT_VERSION) {
-      MIGRATIONS[version](raw)
-    }
   }
 }
 
@@ -336,7 +247,6 @@ function loadExtendedConfig(): ExtendedUserConfiguration | null {
 
 export function loadConfiguration(): ExtendedUserConfiguration {
   try {
-    const meta = getStoredMeta()
     const extended = loadExtendedConfig()
     const defaults = createDefaultConfiguration()
     const canonical = loadUserConfiguration()
@@ -345,10 +255,6 @@ export function loadConfiguration(): ExtendedUserConfiguration {
       const fresh = createDefaultConfiguration()
       applyCanonicalToBasic(fresh.basic, canonical)
       return fresh
-    }
-
-    if (meta.version < CURRENT_VERSION) {
-      runMigrations(extended as unknown as Record<string, unknown>, meta.version)
     }
 
     applyCanonicalToBasic(extended.basic, canonical)
@@ -383,17 +289,10 @@ export function loadConfiguration(): ExtendedUserConfiguration {
       (extended.advanced?.privacy || {}) as Partial<typeof defaults.advanced.privacy>,
     ) as typeof defaults.advanced.privacy
 
-    const config: ExtendedUserConfiguration = {
+    return {
       basic: { ...defaults.basic, ...extended.basic },
       advanced: mergedAdv,
     }
-
-    if (meta.version < CURRENT_VERSION) {
-      setStoredMeta({ version: CURRENT_VERSION, migratedAt: new Date().toISOString() })
-      saveConfiguration(config)
-    }
-
-    return config
   } catch (error) {
     console.error('apps/web/src/features/configuration/storage.ts error:', error);
     return createDefaultConfiguration()
@@ -412,7 +311,6 @@ export function saveConfiguration(config: ExtendedUserConfiguration): void {
       advanced: { ...config.advanced },
     }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(extended))
-    setStoredMeta({ version: CURRENT_VERSION, migratedAt: new Date().toISOString() })
     syncCanonicalFromConfig(config)
   } catch (e) {
     console.error('Failed to save configuration to localStorage:', e)
@@ -422,39 +320,8 @@ export function saveConfiguration(config: ExtendedUserConfiguration): void {
 export function clearConfiguration(): void {
   try {
     localStorage.removeItem(STORAGE_KEY)
-    localStorage.removeItem(STORAGE_VERSION_KEY)
   } catch (e) {
     console.error('Failed to clear configuration:', e)
-  }
-}
-
-export function migrateFromLegacySettings(): ExtendedUserConfiguration | null {
-  try {
-    const raw = localStorage.getItem(LEGACY_STORAGE_KEY)
-    if (!raw) return null
-
-    const legacy = JSON.parse(raw)
-    if (!legacy || typeof legacy !== 'object') return null
-
-    const config = createDefaultConfiguration()
-    if (typeof legacy.targetBand === 'number') config.basic.targetBand = legacy.targetBand
-    if (typeof legacy.examDate === 'string') config.basic.examDate = legacy.examDate
-    if (typeof legacy.dailyStudyMinutes === 'number') config.basic.dailyStudyMinutes = legacy.dailyStudyMinutes
-
-    const provider = createDefaultProvider()
-    if (typeof legacy.aiApiKey === 'string') provider.apiKey = legacy.aiApiKey
-    if (typeof legacy.aiProvider === 'string') provider.provider = legacy.aiProvider as AiProviderType
-    if (typeof legacy.aiBaseUrl === 'string') provider.baseUrl = legacy.aiBaseUrl
-    if (typeof legacy.aiModel === 'string') provider.model = legacy.aiModel
-    if (typeof legacy.aiEndpoint === 'string' && !legacy.aiBaseUrl) provider.baseUrl = legacy.aiEndpoint
-
-    config.advanced.providers = { [`default-${DEFAULT_AI_PROVIDER_ID}`]: provider }
-    config.advanced.activeProviderId = `default-${DEFAULT_AI_PROVIDER_ID}`
-
-    return config
-  } catch (error) {
-    console.error('apps/web/src/features/configuration/storage.ts error:', error);
-    return null
   }
 }
 
@@ -467,16 +334,14 @@ export function configurationExists(): boolean {
   }
 }
 
-export function getStorageStats(): { sizeBytes: number; version: number } {
+export function getStorageStats(): { sizeBytes: number } {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    const meta = getStoredMeta()
     return {
       sizeBytes: raw ? new Blob([raw]).size : 0,
-      version: meta.version,
     }
   } catch (error) {
     console.error('apps/web/src/features/configuration/storage.ts error:', error);
-    return { sizeBytes: 0, version: 0 }
+    return { sizeBytes: 0 }
   }
 }

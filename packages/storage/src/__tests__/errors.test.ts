@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest'
 import {
   StorageError,
   ValidationError,
-  MigrationError,
   BackupError,
   EntityNotFoundError,
   DuplicateEntityError,
@@ -37,17 +36,6 @@ describe('Storage Errors', () => {
       expect(error.message).toBe('Invalid field')
       expect(error.name).toBe('ValidationError')
       expect(error).toBeInstanceOf(StorageError)
-      expect(error).toBeInstanceOf(Error)
-    })
-  })
-
-  describe('MigrationError', () => {
-    it('creates migration error with message and cause', () => {
-      const cause = new Error('Schema mismatch')
-      const error = new MigrationError('Migration failed', cause)
-      expect(error.message).toBe('Migration failed')
-      expect(error.name).toBe('MigrationError')
-      expect(error.cause).toBe(cause)
       expect(error).toBeInstanceOf(Error)
     })
   })

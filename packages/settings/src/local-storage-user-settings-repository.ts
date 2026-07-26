@@ -2,7 +2,6 @@ import { STORAGE_KEYS } from '@ielts/config'
 import type { UserConfiguration } from './types'
 import type { UserSettingsRepository } from './repository'
 import { userConfigurationSchema } from './schemas'
-import { migrateFromLegacySettings } from './migration'
 
 const SETTINGS_KEY = STORAGE_KEYS.localStorage.userSettings
 
@@ -15,9 +14,6 @@ export class LocalStorageUserSettingsRepository implements UserSettingsRepositor
       const data = JSON.parse(raw)
       const canonicalResult = userConfigurationSchema.safeParse(data)
       if (canonicalResult.success) return canonicalResult.data
-
-      const migrated = migrateFromLegacySettings(data)
-      if (migrated) return migrated
 
       return userConfigurationSchema.parse({})
     } catch {

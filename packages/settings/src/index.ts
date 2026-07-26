@@ -29,7 +29,6 @@ export {
 
 export type { UserSettingsRepository } from './repository'
 
-export { migrateFromLegacySettings } from './migration'
 export { loadUserConfiguration } from './settings-service'
 export { LocalStorageCredentialStore } from './local-storage-credential-store'
 export { LocalStorageUserSettingsRepository } from './local-storage-user-settings-repository'

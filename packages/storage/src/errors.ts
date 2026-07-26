@@ -12,13 +12,6 @@ export class ValidationError extends StorageError {
   }
 }
 
-export class MigrationError extends Error {
-  constructor(message: string, public cause?: unknown) {
-    super(message)
-    this.name = 'MigrationError'
-  }
-}
-
 export class BackupError extends Error {
   constructor(message: string, public cause?: unknown) {
     super(message)

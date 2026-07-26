@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { createDefaultConfiguration, saveConfiguration, loadConfiguration, clearConfiguration, migrateFromLegacySettings } from '../../src/features/configuration/storage'
-
-const LEGACY_KEY = 'ielts-settings'
+import { createDefaultConfiguration, saveConfiguration, loadConfiguration, clearConfiguration } from '../../src/features/configuration/storage'
 
 beforeEach(() => {
   localStorage.clear()
@@ -43,48 +41,6 @@ describe('End-to-end: Configuration Persistence', () => {
     expect(config.advanced.tutorConfig.mode).toBe('friendly-tutor')
   })
 })
-
-describe('End-to-end: Migration from Legacy Settings', () => {
-  it('migrates legacy settings using migrateFromLegacySettings', () => {
-    const legacy = {
-      targetBand: 6.0,
-      examDate: '2026-12-15',
-      dailyStudyMinutes: 45,
-      aiApiKey: 'sk-legacy',
-      aiProvider: 'deepseek',
-      aiModel: 'deepseek-chat',
-    }
-    localStorage.setItem(LEGACY_KEY, JSON.stringify(legacy))
-
-    const migrated = migrateFromLegacySettings()
-    expect(migrated).not.toBeNull()
-    expect(migrated!.basic.targetBand).toBe(6.0)
-    expect(migrated!.basic.examDate).toBe('2026-12-15')
-    expect(migrated!.basic.dailyStudyMinutes).toBe(45)
-    expect(migrated!.advanced.providers['default-openai'].apiKey).toBe('sk-legacy')
-    expect(migrated!.advanced.providers['default-openai'].provider).toBe('deepseek')
-    expect(migrated!.advanced.providers['default-openai'].model).toBe('deepseek-chat')
-  })
-
-  it('migrated configuration is saveable and reloadable', () => {
-    const legacy = { targetBand: 7.5, aiApiKey: 'sk-test' }
-    localStorage.setItem(LEGACY_KEY, JSON.stringify(legacy))
-
-    const migrated = migrateFromLegacySettings()
-    expect(migrated).not.toBeNull()
-
-    migrated!.basic.dailyStudyMinutes = 90
-    saveConfiguration(migrated!)
-
-    localStorage.removeItem(LEGACY_KEY)
-    const reloaded = loadConfiguration()
-    expect(reloaded.basic.targetBand).toBe(7.5)
-    expect(reloaded.basic.dailyStudyMinutes).toBe(90)
-    expect(reloaded.advanced.providers['default-openai'].apiKey).toBe('sk-test')
-  })
-})
-
-
 
 describe('End-to-end: Multiple config save/load cycles', () => {
   it('survives multiple save and load cycles', () => {

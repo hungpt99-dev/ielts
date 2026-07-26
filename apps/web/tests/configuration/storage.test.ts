@@ -7,12 +7,9 @@ import {
   clearConfiguration,
   configurationExists,
   getStorageStats,
-  migrateFromLegacySettings,
 } from '../../src/features/configuration/storage'
 
 const STORAGE_KEY = 'ielts-configuration'
-const LEGACY_KEY = 'ielts-settings'
-const STORAGE_VERSION_KEY = 'ielts-configuration-version'
 
 beforeEach(() => {
   localStorage.clear()
@@ -200,12 +197,6 @@ describe('clearConfiguration', () => {
     expect(configurationExists()).toBe(false)
   })
 
-  it('removes version metadata', () => {
-    saveConfiguration(createDefaultConfiguration())
-    clearConfiguration()
-    expect(localStorage.getItem(STORAGE_VERSION_KEY)).toBeNull()
-  })
-
   it('handles clearing when nothing is stored', () => {
     expect(() => clearConfiguration()).not.toThrow()
   })
@@ -226,100 +217,16 @@ describe('getStorageStats', () => {
   it('returns zero stats when no configuration', () => {
     const stats = getStorageStats()
     expect(stats.sizeBytes).toBe(0)
-    expect(stats.version).toBe(0)
   })
 
-  it('returns size and version for stored configuration', () => {
+  it('returns size for stored configuration', () => {
     saveConfiguration(createDefaultConfiguration())
     const stats = getStorageStats()
     expect(stats.sizeBytes).toBeGreaterThan(0)
-    expect(stats.version).toBe(1)
   })
 })
 
-describe('migrateFromLegacySettings', () => {
-  it('returns null when no legacy settings exist', () => {
-    const result = migrateFromLegacySettings()
-    expect(result).toBeNull()
-  })
-
-  it('migrates legacy settings to new configuration', () => {
-    const legacy = {
-      targetBand: 6.5,
-      examDate: '2026-12-15',
-      dailyStudyMinutes: 45,
-      aiApiKey: 'legacy-key',
-      aiProvider: 'deepseek',
-      aiBaseUrl: 'https://api.deepseek.com',
-      aiModel: 'deepseek-chat',
-    }
-    localStorage.setItem(LEGACY_KEY, JSON.stringify(legacy))
-
-    const result = migrateFromLegacySettings()
-    expect(result).not.toBeNull()
-    expect(result!.basic.targetBand).toBe(6.5)
-    expect(result!.basic.examDate).toBe('2026-12-15')
-    expect(result!.basic.dailyStudyMinutes).toBe(45)
-    expect(result!.advanced.providers['default-openai'].apiKey).toBe('legacy-key')
-    expect(result!.advanced.providers['default-openai'].provider).toBe('deepseek')
-    expect(result!.advanced.providers['default-openai'].baseUrl).toBe('https://api.deepseek.com')
-    expect(result!.advanced.providers['default-openai'].model).toBe('deepseek-chat')
-  })
-
-  it('handles partial legacy settings', () => {
-    const legacy = { targetBand: 7.0 }
-    localStorage.setItem(LEGACY_KEY, JSON.stringify(legacy))
-
-    const result = migrateFromLegacySettings()
-    expect(result!.basic.targetBand).toBe(7.0)
-    expect(result!.basic.examDate).toBe('')
-    expect(result!.basic.dailyStudyMinutes).toBe(60)
-  })
-
-  it('migrates aiEndpoint when aiBaseUrl is not set', () => {
-    const legacy = {
-      aiEndpoint: 'https://custom.endpoint.com/v1',
-      aiModel: 'custom-model',
-      aiApiKey: 'key',
-    }
-    localStorage.setItem(LEGACY_KEY, JSON.stringify(legacy))
-
-    const result = migrateFromLegacySettings()
-    expect(result!.advanced.providers['default-openai'].baseUrl).toBe('https://custom.endpoint.com/v1')
-  })
-
-  it('prefers aiBaseUrl over aiEndpoint', () => {
-    const legacy = {
-      aiBaseUrl: 'https://base.url/v1',
-      aiEndpoint: 'https://endpoint.url/v1',
-    }
-    localStorage.setItem(LEGACY_KEY, JSON.stringify(legacy))
-
-    const result = migrateFromLegacySettings()
-    expect(result!.advanced.providers['default-openai'].baseUrl).toBe('https://base.url/v1')
-  })
-
-  it('returns null for non-object legacy data', () => {
-    localStorage.setItem(LEGACY_KEY, '"string"')
-    expect(migrateFromLegacySettings()).toBeNull()
-  })
-
-  it('returns null for invalid JSON legacy data', () => {
-    localStorage.setItem(LEGACY_KEY, 'not json')
-    expect(migrateFromLegacySettings()).toBeNull()
-  })
-})
-
-describe('loadConfiguration with migration', () => {
-  it('triggers migration from legacy settings when they exist', () => {
-    const legacy = { targetBand: 8.0, aiModel: 'gpt-4' }
-    localStorage.setItem(LEGACY_KEY, JSON.stringify(legacy))
-
-    const migrated = migrateFromLegacySettings()
-    expect(migrated).not.toBeNull()
-    expect(migrated!.basic.targetBand).toBe(8.0)
-  })
-
+describe('loadConfiguration edge cases', () => {
   it('handles corrupted stored config gracefully', () => {
     localStorage.setItem(STORAGE_KEY, '{broken')
     const config = loadConfiguration()

@@ -2,7 +2,6 @@ import { STORAGE_KEYS } from '@ielts/config'
 import type { SharedSettings, UserConfiguration } from './types'
 import { DEFAULT_SHARED_SETTINGS } from './defaults'
 import { userConfigurationSchema } from './schemas'
-import { migrateFromLegacySettings } from './migration'
 import { LocalStorageUserSettingsRepository } from './local-storage-user-settings-repository'
 
 export { LocalStorageUserSettingsRepository }
@@ -20,9 +19,6 @@ export function loadUserConfiguration(): UserConfiguration {
     if (canonicalResult.success) {
       return canonicalResult.data
     }
-
-    const migrated = migrateFromLegacySettings(data)
-    if (migrated) return migrated
 
     return userConfigurationSchema.parse({})
   } catch {

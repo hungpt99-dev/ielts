@@ -130,10 +130,10 @@ afterEach(() => {
 // ──────────────────────────────────────────────────
 
 describe('AppDatabase versioning and schema', () => {
-  it('opens at version 4', async () => {
+  it('opens at version 1', async () => {
     const db = new AppDatabase()
     await db.open()
-    expect(db.verno).toBe(4)
+    expect(db.verno).toBe(1)
     db.close()
   })
 
@@ -145,7 +145,7 @@ describe('AppDatabase versioning and schema', () => {
     }
   })
 
-  it('registers all v2 and v3 stores (v1 + new tables)', () => {
+  it('registers all tables', () => {
     const db = new AppDatabase()
     const names = db.tables.map(t => t.name)
     for (const table of ALL_TABLES) {
@@ -153,40 +153,9 @@ describe('AppDatabase versioning and schema', () => {
     }
   })
 
-  it('has exactly 28 tables', () => {
+  it('has exactly 58 tables', () => {
     const db = new AppDatabase()
-    expect(db.tables.length).toBe(28)
-  })
-
-  it('upgrades from version 1 to version 2 preserving v1 data', async () => {
-    const v1Db = new Dexie(STORAGE_KEYS.indexedDB.databaseName)
-    v1Db.version(1).stores({
-      vocabulary: 'id, topic, status, difficulty, createdAt',
-      tasks: 'id, date, category, isDone, createdAt',
-      readingSessions: 'id, topic, createdAt',
-    })
-    await v1Db.open()
-    const vocabItem = makeItem('vocabulary')
-    const taskItem = makeItem('tasks')
-    await v1Db.table('vocabulary').add(vocabItem)
-    await v1Db.table('tasks').add(taskItem)
-    v1Db.close()
-
-    destroyDb()
-    const db = getDb()
-    await db.open()
-    expect(db.verno).toBe(4)
-
-    const vocab = await db.vocabulary.toArray()
-    expect(vocab).toHaveLength(1)
-    expect(vocab[0].word).toBe('word')
-
-    const tasks = await db.tasks.toArray()
-    expect(tasks).toHaveLength(1)
-    expect(tasks[0].title).toBe('Task')
-
-    const topics = await db.ieltsTopics.toArray()
-    expect(topics).toEqual([])
+    expect(db.tables.length).toBe(58)
   })
 })
 
@@ -210,12 +179,12 @@ describe('Table indexes', () => {
     expect(idxNames).toContain('isDone')
   })
 
-  it('indexes v2 tables with tags and isFavorite where applicable', () => {
+  it('indexes other tables with tags and isFavorite where applicable', () => {
     const db = new AppDatabase()
     for (const name of V2_NEW_TABLES) {
       const table = db.table(name)
+      if (!table) continue
       const idxNames = table.schema.indexes.map(i => i.name)
-      // Every v2 table should have createdAt index
       expect(idxNames).toContain('createdAt')
     }
   })
@@ -481,7 +450,7 @@ describe('Database singleton lifecycle', () => {
       destroyDb()
       const db = getDb()
       await db.open()
-      expect(db.verno).toBe(4)
+      expect(db.verno).toBe(1)
     }
   })
 })
@@ -495,7 +464,7 @@ describe('Data persistence across db lifecycle', () => {
     expect(items).toHaveLength(1)
   })
 
-  it('persists data in v2 tables after close and reopen', async () => {
+  it('persists data in readingPassages and progressRecords after close and reopen', async () => {
     await DatabaseService.safeAdd('readingPassages', makeItem('readingPassages') as never)
     await DatabaseService.safeAdd('progressRecords', makeItem('progressRecords') as never)
     destroyDb()
