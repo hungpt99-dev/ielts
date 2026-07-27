@@ -130,7 +130,9 @@ export function createAIClient(): TutorAIClient {
           return { success: true as const, data: { response: result.content } }
         }
       }
-      console.warn('[generateStructured] No content returned. Error:', result.error)
+      if (result.error && !result.error.includes('API key not configured')) {
+        console.warn('[generateStructured] No content returned. Error:', result.error)
+      }
       return { success: false as const, error: { code: 'ai_failed', message: result.error ?? 'AI call failed', recoverable: true } }
     },
   }
