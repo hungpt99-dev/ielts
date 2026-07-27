@@ -1255,7 +1255,7 @@ export default function Settings() {
                         <Button
                           size="sm"
                           variant="primary"
-                          onClick={() => navigate(ROUTES.settingsExtension)}
+                          onClick={() => navigate(ROUTES.settings)}
                         >
                           Manage Extension
                         </Button>

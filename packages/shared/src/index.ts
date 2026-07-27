@@ -66,12 +66,6 @@ export type {
 
 export { createSharedEvent } from './mappers'
 
-export {
-  mapLegacyMistakeToEvidence,
-  mapLegacySessionToOutcome,
-  mapLegacyResultToEvaluation,
-} from './mappers/legacy-to-canonical'
-
 export type {
   ProactiveMessageTriggerType,
   ProactiveMessageCategory,

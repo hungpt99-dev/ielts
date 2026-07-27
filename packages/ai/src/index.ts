@@ -34,14 +34,6 @@ export {
   buildGrammarExercisesPrompt,
   buildMistakeReviewPrompt,
   buildVocabularyExtractionPrompt,
-  /** @deprecated Import from @ielts/learning-engine's prompt-builders instead */
-  buildReadingPassagePrompt,
-  /** @deprecated Import from @ielts/learning-engine's prompt-builders instead */
-  buildListeningPassagePrompt,
-  /** @deprecated Import from @ielts/learning-engine's prompt-builders instead */
-  buildPracticeQuestionsPrompt,
-  /** @deprecated Import from @ielts/learning-engine's prompt-builders instead */
-  buildPracticeQuestionsSystemPrompt,
 } from './prompts'
 
 // Schema types and runtimes (used by extension and vocabulary enrichment)

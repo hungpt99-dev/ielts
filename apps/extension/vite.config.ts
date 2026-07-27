@@ -16,7 +16,6 @@ export default defineConfig({
       'recharts': resolve(__dirname, 'node_modules/recharts/es6/index.js'),
       'react-hook-form': resolve(__dirname, 'node_modules/react-hook-form/dist/index.esm.mjs'),
       'dexie': resolve(__dirname, 'node_modules/dexie/dist/dexie.mjs'),
-      'idb': resolve(__dirname, 'node_modules/idb/build/index.js'),
       '@hookform/resolvers/zod': resolve(__dirname, 'node_modules/@hookform/resolvers/zod/dist/zod.mjs'),
       '@hookform/resolvers': resolve(__dirname, 'node_modules/@hookform/resolvers/dist/resolvers.mjs'),
       'zod': resolve(__dirname, 'node_modules/zod/index.js'),

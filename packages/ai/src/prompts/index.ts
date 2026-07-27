@@ -37,8 +37,4 @@ export {
   buildGrammarExercisesPrompt,
   buildMistakeReviewPrompt,
   buildVocabularyExtractionPrompt,
-  buildReadingPassagePrompt,
-  buildListeningPassagePrompt,
-  buildPracticeQuestionsPrompt,
-  buildPracticeQuestionsSystemPrompt,
 } from './exercise-generation'

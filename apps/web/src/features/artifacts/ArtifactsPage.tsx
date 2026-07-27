@@ -638,7 +638,7 @@ export default function ArtifactsPage() {
         className="!mb-4 sm:!mb-6"
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.settingsExtension)}>
+            <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.settings)}>
               Extension Guide
             </Button>
             <Button onClick={openCreate}>
