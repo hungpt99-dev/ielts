@@ -3,6 +3,7 @@ import { createAIClient } from '@ielts/ai'
 import { safeFetchProviderConfig } from '../utils/safe-chrome'
 import { initializeExtensionEngine, getExtensionEngine } from '../services/extensionEngine'
 import { YouTubeAdapter } from './infrastructure/youtube/YouTubeAdapter'
+import { TranscriptPlaybackController } from './infrastructure/youtube/TranscriptPlaybackController'
 import { YouTubeLayoutManager, PANEL_IFRAME_ID } from './infrastructure/youtube/YouTubeLayoutManager'
 import { FocusMode } from './infrastructure/youtube/FocusMode'
 import { detectVideoPage, type VideoPageInfo } from './infrastructure/youtube/YouTubePageDetector'
@@ -56,6 +57,7 @@ let focusMode: FocusMode | null = null
 let storageAdapter: StorageAdapter | null = null
 let eventBus: LearningEventBus | null = null
 let sessionService: LearningSessionService | null = null
+let playbackController: TranscriptPlaybackController | null = null
 let vocabService: VocabularyService | null = null
 
 let translationService: TranscriptTranslationService | null = null
@@ -187,6 +189,28 @@ function setupPanelMessaging(): void {
         if (payload && typeof payload === 'object') handleSaveVocab(payload as Record<string, unknown>)
         break
 
+      case 'TRANSCRIPT_PLAY_SEGMENT': {
+        const index = (payload as { segmentIndex: number })?.segmentIndex
+        playbackController?.playSegment(index)
+        sessionService?.markUserActive()
+        break
+      }
+
+      case 'TRANSCRIPT_PREVIOUS':
+        playbackController?.previous()
+        sessionService?.markUserActive()
+        break
+
+      case 'TRANSCRIPT_NEXT':
+        playbackController?.next()
+        sessionService?.markUserActive()
+        break
+
+      case 'TRANSCRIPT_CONTINUE':
+        playbackController?.continuePlayback()
+        sessionService?.markUserActive()
+        break
+
       case 'TRANSLATE_SEGMENTS':
         if (payload && typeof payload === 'object') handleTranslateSegments(payload as Record<string, unknown>)
         break
@@ -282,6 +306,9 @@ async function handleTranscriptRequest(): Promise<void> {
       }))
       postToParent('TRANSCRIPT_DATA', segments)
       postToParent('TRANSCRIPT_AVAILABLE', true)
+      if (playbackController) {
+        playbackController.setSegments(segments)
+      }
       log('Transcript loaded successfully')
     } else if (result && !result.ok) {
       const err = result.error
@@ -796,6 +823,8 @@ function cleanup(): void {
   }
   layoutManager?.destroy()
   youtubeAdapter?.destroy()
+  playbackController?.disconnect()
+  playbackController = null
   sessionService?.destroy()
   panelReady = false
   isLearningMode = false
@@ -838,6 +867,15 @@ export async function initYouTubeLearning(): Promise<void> {
       onVideoChange,
       onTimeUpdate,
     })
+
+    playbackController = new TranscriptPlaybackController(
+      youtubeAdapter.getPlayer(),
+      {
+        onActiveSegmentChange: (index: number) => {
+          postToParent('TRANSCRIPT_ACTIVE_SEGMENT_INDEX', { activeSegmentIndex: index })
+        },
+      },
+    )
 
     if (!youtubeAdapter.init()) return
 
