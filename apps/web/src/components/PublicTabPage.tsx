@@ -5,7 +5,6 @@ const navLinks = [
   { id: 'about-website', label: 'Project' },
   { id: 'about-me', label: 'About Me' },
   { id: 'recruit', label: 'Recruit' },
-  { id: 'donate', label: 'Donate' },
   { id: 'feedback', label: 'Feedback' },
 ]
 
@@ -341,59 +340,6 @@ const sections = [
             </p>
           </div>
         </div>
-      </div>
-    ),
-  },
-  {
-    id: 'donate',
-    title: 'Donate',
-    content: (
-      <div className="space-y-6">
-        <p className="text-center text-base leading-relaxed sm:text-lg" style={{ color: 'var(--color-text-secondary)' }}>
-          IELTS Journey is and will always be free. If you find the app useful,
-          consider buying me a coffee ☕ — your support keeps the project alive.
-        </p>
-
-        <div
-          className="w-full overflow-hidden rounded-2xl border-2 text-center shadow-lg transition-all hover:shadow-xl"
-          style={{
-            borderColor: 'var(--color-warning)',
-            backgroundColor: 'var(--color-warning-light)',
-          }}
-        >
-          <div className="px-6 pb-2 pt-8">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full shadow-md" style={{ backgroundColor: 'var(--color-warning-light)' }}>
-              <svg className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning-dark)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M17 8h1a4 4 0 1 1 0 8h-1" />
-                <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
-                <line x1="6" y1="2" x2="6" y2="4" />
-                <line x1="10" y1="2" x2="10" y2="4" />
-                <line x1="14" y1="2" x2="14" y2="4" />
-              </svg>
-            </div>
-            <h3 className="mt-4 text-xl font-bold" style={{ color: 'var(--color-warning-dark)' }}>Buy Me a Coffee</h3>
-            <p className="mt-1 text-sm" style={{ color: 'var(--color-warning-dark)' }}>
-              Your support means a lot!
-            </p>
-          </div>
-
-          <div className="border-t border-amber-200 px-6 py-5" style={{ backgroundColor: 'var(--color-warning-light)' }}>
-            <img
-              src="/1783047807283_360225198377512995_3352638618091119450_b1e24afbc8810215cf87240c092f4bb8.jpg"
-              alt="QR code for donation"
-              className="mx-auto h-48 w-48 rounded-xl object-contain shadow-md"
-              style={{ backgroundColor: 'var(--color-surface)' }}
-              loading="lazy"
-            />
-            <p className="mt-3 text-xs" style={{ color: 'var(--color-warning-dark)' }}>
-              Scan with your banking app to buy me a coffee
-            </p>
-          </div>
-        </div>
-
-        <p className="text-center text-xs" style={{ color: 'var(--color-muted)' }}>
-          No pressure. The app is and will always be free.
-        </p>
       </div>
     ),
   },
