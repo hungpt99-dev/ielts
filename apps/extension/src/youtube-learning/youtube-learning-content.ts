@@ -866,6 +866,15 @@ export async function initYouTubeLearning(): Promise<void> {
     youtubeAdapter = new YouTubeAdapter({
       onVideoChange,
       onTimeUpdate,
+      onPlay: () => {
+        // Cancel segment auto-stop when user manually plays
+      },
+      onPause: () => {
+        playbackController?.handlePlayerPause()
+      },
+      onSeek: () => {
+        playbackController?.handlePlayerSeek()
+      },
     })
 
     playbackController = new TranscriptPlaybackController(

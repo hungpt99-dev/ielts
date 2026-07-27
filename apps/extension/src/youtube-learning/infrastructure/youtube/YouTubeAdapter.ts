@@ -9,6 +9,9 @@ export type { TranscriptData, TranscriptResult }
 export interface YouTubeAdapterCallbacks {
   onVideoChange?: (videoId: string) => void
   onPlayerReady?: () => void
+  onPlay?: () => void
+  onPause?: () => void
+  onSeek?: (time: number) => void
   onPlayerStateChange?: (state: PlayerState) => void
   onTimeUpdate?: (time: number) => void
   onLayoutChange?: () => void
@@ -114,6 +117,15 @@ export class YouTubeAdapter {
     return {
       onTimeUpdate: (time: number) => {
         this.callbacks.onTimeUpdate?.(time)
+      },
+      onPlay: () => {
+        this.callbacks.onPlay?.()
+      },
+      onPause: () => {
+        this.callbacks.onPause?.()
+      },
+      onSeek: (time: number) => {
+        this.callbacks.onSeek?.(time)
       },
       onStateChange: (state: PlayerState) => {
         this.callbacks.onPlayerStateChange?.(state)
