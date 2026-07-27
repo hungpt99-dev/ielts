@@ -121,8 +121,7 @@ The migration is not complete because the following issues remain:
 3. Old bidirectional synchronization logic still exists.
 4. The public website under `apps/web` still contains the complete independent application runtime.
 5. Cloudflare Pages, Capacitor, and PWA configuration may still support the old independent application.
-6. The onboarding guard still stores its completed state directly in `localStorage`.
-7. The extension currently has approximately 272 pre-existing TypeScript errors.
+6. The extension currently has approximately 272 pre-existing TypeScript errors.
 8. Documentation may still describe the web application and extension as two learning applications that synchronize.
 
 ## Final target architecture
@@ -232,7 +231,6 @@ Create a short internal dependency map showing:
 * Popup data sources
 * Background write paths
 * Sync services
-* Onboarding state readers and writers
 * Web-only runtime entry points
 * PWA and Capacitor entry points
 
@@ -852,87 +850,8 @@ Adapt names to existing repository conventions.
 Avoid calling the landing page build `build:web-app` when it no longer contains the main app.
 
 ---
-
-# Phase 9: Move onboarding state into shared storage
-
-## Goal
-
-Remove direct onboarding business logic from `localStorage`.
-
-Current behavior may resemble:
-
-```ts
-const completed =
-  localStorage.getItem('onboarding-completed') === 'true';
-```
-
-Replace it with a typed repository through `@ielts/storage`.
-
-Example:
-
-```ts
-interface UserPreferencesRepository {
-  getOnboardingStatus(): Promise<OnboardingStatus>;
-  completeOnboarding(): Promise<void>;
-  resetOnboarding(): Promise<void>;
-}
-```
-
-Example status:
-
-```ts
-type OnboardingStatus =
-  | { completed: false }
-  | {
-      completed: true;
-      completedAt: string;
-      version: number;
-    };
-```
-
-Adapt this to existing storage conventions.
-
-## One-time migration
-
-Migrate the old `localStorage` value.
-
-Required behavior:
-
-1. Check whether the new preference value exists.
-2. If it exists, use it.
-3. Otherwise, inspect the legacy `localStorage` key.
-4. Validate the legacy value.
-5. Write the converted value to the preferences repository.
-6. Mark migration completion.
-7. Remove the old key only after a successful write.
-8. Do not repeat migration on every startup.
-
-Handle:
-
-* Missing value
-* `"true"`
-* `"false"`
-* Invalid strings
-* Storage access exceptions
-* Database initialization failure
-
-Preserve current routing behavior.
-
-Users who completed onboarding must not be sent through onboarding again.
-
-## Theme storage
-
-Theme state may remain in `localStorage` if changing it would expand scope unnecessarily.
-
-When retained:
-
-* Document it as UI-only state.
-* Do not mix it with core learning data.
-* Do not claim all `localStorage` usage has been removed.
-
----
-
-# Phase 10: Improve typed data-change notifications
+ 
+# Phase 9: Improve typed data-change notifications
 
 Internal extension context notifications must remain.
 
@@ -950,7 +869,6 @@ interface DataChangedMessage {
     | 'mistakes'
     | 'progress'
     | 'settings'
-    | 'onboarding'
   >;
   source:
     | 'background'
@@ -1062,9 +980,8 @@ Do not replace domain types with `any`.
    * Message request types
    * Message response types
    * Repository return types
-   * Popup dashboard data
-   * Onboarding preferences
-   * Import and export schemas
+    * Popup dashboard data
+    * Import and export schemas
 5. Lower the total error count below the baseline.
 6. Categorize the remaining errors.
 7. Do not claim the extension fully type-checks unless it actually does.
@@ -1179,19 +1096,6 @@ Add tests proving:
 * `SAVE_ARTICLE` validates.
 * Invalid payloads are rejected.
 * Route-specific `OPEN_MAIN_APP` messages still work.
-
-## Onboarding tests
-
-Add tests proving:
-
-* Existing completed onboarding state migrates from `localStorage`.
-* Existing incomplete onboarding state migrates safely.
-* Invalid legacy values fall back safely.
-* Migration runs only once.
-* The legacy key is removed only after successful migration.
-* New onboarding state is stored through the shared repository.
-* Completed users are not redirected to onboarding.
-* New users are still shown onboarding.
 
 ## Landing-page tests
 
@@ -1342,7 +1246,6 @@ Document:
 * Backup and restore
 * Export and import
 * Migration from the old website
-* Onboarding preference migration
 * Landing-page responsibilities
 * Removed synchronization system
 * Removed legacy IndexedDB
@@ -1378,8 +1281,7 @@ Perform the work in this order:
 6. Clarify and reduce `chrome.storage.local` usage.
 7. Remove obsolete web–extension synchronization.
 8. Preserve export/import migration.
-9. Move onboarding state into shared preferences storage.
-10. Convert `apps/web` into a landing-page-only application.
+9. Convert `apps/web` into a landing-page-only application.
 11. Remove obsolete PWA and Capacitor runtime.
 12. Clean up Cloudflare and deployment configuration.
 13. Fix TypeScript errors in modified files.
@@ -1440,14 +1342,6 @@ The migration is complete only when all the following conditions are satisfied.
 * Capacitor runtime is removed unless explicitly justified.
 * Cloudflare configuration supports only the landing page.
 
-## Onboarding
-
-* Onboarding state uses a shared typed preferences repository.
-* Old onboarding state migrates safely from `localStorage`.
-* Migration runs once.
-* Existing completed users retain their status.
-* New users still receive onboarding.
-
 ## TypeScript
 
 * No new TypeScript errors are introduced.
@@ -1495,7 +1389,6 @@ rg "WEB_TO_EXTENSION|EXTENSION_TO_WEB"
 rg "lastSyncAt|syncStatus|syncEnabled"
 rg "Capacitor"
 rg "vite-plugin-pwa|workbox|registerSW"
-rg "localStorage.*onboarding|onboarding.*localStorage"
 ```
 
 For each remaining match:
@@ -1556,16 +1449,7 @@ Report:
 * Cloudflare decisions
 * Final landing-page responsibilities
 
-## 6. Onboarding migration
-
-Report:
-
-* New repository
-* Legacy key
-* Migration behavior
-* Tests
-
-## 7. TypeScript improvements
+## 6. TypeScript improvements
 
 Report:
 

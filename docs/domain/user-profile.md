@@ -25,7 +25,6 @@ Legacy fields (`currentBand`, `dailyStudyMinutes`, `preferredSchedule`, `studyGo
 
 ## Lifecycle
 
-- Created during onboarding (`onboardingService.ts`).
 - Edited via settings forms (`BasicSettingsForm`, `AdvancedSettingsForm`).
 - Loaded at app startup; dispatched as a `'ielts-settings-updated'` custom event.
 - Synced to extension via `syncFromWebsite()` bridge.

@@ -296,7 +296,6 @@ export const STORAGE_KEYS = {
     themeMode: 'ielts-theme-mode' as const,
     accentColor: 'ielts-accent-color' as const,
     notificationPrefs: 'ielts-notification-prefs' as const,
-    onboardingComplete: 'ielts-onboarding-complete' as const,
     preferredLanguage: 'ielts-preferred-language' as const,
     corsProxy: 'ielts-cors-proxy' as const,
     aiProgressReviewCache: 'ielts-ai-progress-review-cache-v2' as const,
@@ -355,7 +354,6 @@ export const ROUTES = {
   info: '/info',
   privacy: '/privacy',
   landing: '/landing',
-  onboarding: '/onboarding',
 } as const
 ```
 

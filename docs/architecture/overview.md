@@ -17,7 +17,7 @@ Two domain engines — **@ielts/learning-engine** and **@ielts/ai-tutor-engine**
 │                                                          │
 │  Features: dashboard, roadmap, practice pages, vocab,    │
 │  mistakes, mock-tests, progress, settings, AI tutor,     │
-│  onboarding, search, artifacts, books, review center     │
+│  search, artifacts, books, review center     │
 ├─────────────────────────────────────────────────────────┤
 │                  Extension (apps/extension)               │
 │  MV3 Service Worker  │  Content Scripts  │  Popup/Options│

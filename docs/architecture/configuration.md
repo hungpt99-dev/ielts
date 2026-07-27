@@ -170,7 +170,6 @@ export const STORAGE_KEYS = Object.freeze({
     configurationVersion: 'ielts-configuration-version',
     themeMode: 'ielts-theme-mode',
     accentColor: 'ielts-accent-color',
-    onboardingComplete: 'ielts-onboarding-complete',
     // ... all other localStorage keys
   },
   extensionLocal: {
@@ -204,7 +203,6 @@ export const ROUTES = Object.freeze({
   settings: '/settings',
   settingsAi: '/settings/ai',
   landing: '/',
-  onboarding: '/onboarding',
   // ...
 } as const);
 ```

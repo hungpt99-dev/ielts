@@ -32,7 +32,7 @@ Tasks are stored in the `tasks` table (IndexedDB via Dexie). Roadmap structure (
 
 ## Lifecycle
 
-1. **Generate**: user completes onboarding → `DailyPlanEngine.generate()` → tasks written to IndexedDB.
+1. **Generate**: `DailyPlanEngine.generate()` → tasks written to IndexedDB.
 2. **View**: roadmap UI reads tasks, groups by date, displays phases/weeks/days via `planConverter`.
 3. **Complete**: user marks task done or completes a learning session linked to the task → `isDone = true`.
 4. **Regenerate**: profile change triggers `PlanRegenerator` → tasks are adjusted.

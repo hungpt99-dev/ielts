@@ -37,10 +37,9 @@ App.tsx
                       ├── OfflineIndicator
                       ├── PwaUpdateBanner
                        └── Routes:
-                           ├── / → LandingPage (onboarded → /dashboard)
+                           ├── / → LandingPage
                            ├── /landing → redirect to /
-                           ├── /onboarding → OnboardingPage (9 steps, onboarded → /dashboard)
-                           └── /* → AppLayout (sidebar + routes, not-onboarded → /onboarding)
+                           └── /* → AppLayout (sidebar + routes)
 ```
 
 ## Layout Structure
