@@ -148,7 +148,7 @@ const sections = [
           </div>
           <div className="space-y-2 text-center sm:text-left">
             <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-              Pham Thanh Hung (Harry) <span className="text-2xl">👨‍💻</span>
+              Thanh Hung Pham (Harry) <span className="text-2xl">👨‍💻</span>
             </h3>
             <p className="text-base italic leading-relaxed" style={{ color: 'var(--color-muted)' }}>
               Fullstack Software Engineer in Fintech
