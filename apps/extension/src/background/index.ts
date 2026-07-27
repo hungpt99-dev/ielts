@@ -174,7 +174,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
           content: pending.text as string,
           createdAt: now,
           updatedAt: now,
-        } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch(() => {})
+        } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch((err) => { console.warn("[PendingSave] passageEntry save failed:", err) })
 
         if (pending.category === 'vocabulary') {
           vocabCount++
@@ -206,7 +206,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
             reviewId: '',
             createdAt: now,
             updatedAt: now,
-          }]).catch(() => {})
+          }]).catch((err) => { console.warn("[PendingSave] vocab save failed:", err) })
         }
       } catch (err) {
         console.error('[PendingSave] Item failed:', err)

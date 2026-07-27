@@ -433,7 +433,7 @@ export function initMessaging(): void {
         content: msg.payload.text,
         createdAt: now,
         updatedAt: now,
-      } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch(() => {})
+      } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch((err) => { console.warn("[BgMsg] save failed:", err) })
       await incrementDailyProgress('wordsAdded', 1)
 
       const sourceUrl = msg.payload.pageUrl || ''
@@ -480,7 +480,7 @@ export function initMessaging(): void {
         content: msg.payload.text,
         createdAt: now,
         updatedAt: now,
-      } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch(() => {})
+      } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch((err) => { console.warn("[BgMsg] save failed:", err) })
 
       if (msg.payload.category === 'vocabulary') {
         const word = msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, '')
@@ -510,7 +510,7 @@ export function initMessaging(): void {
           reviewId: '',
           createdAt: now,
           updatedAt: now,
-        }]).catch(() => {})
+        }]).catch((err) => { console.warn("[BgMsg] save failed:", err) })
       }
 
       await incrementDailyProgress('wordsAdded', msg.payload.category === 'vocabulary' ? 1 : 0)
@@ -561,7 +561,7 @@ export function initMessaging(): void {
       reviewId: '',
       createdAt: now,
       updatedAt: now,
-    }]).catch(() => {})
+    }]).catch((err) => { console.warn("[BgMsg] save failed:", err) })
     return { success: true }
   })
 
