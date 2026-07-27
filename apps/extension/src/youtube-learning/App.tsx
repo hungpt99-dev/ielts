@@ -33,6 +33,7 @@ export function YouTubeLearningApp() {
     isFocusMode: false,
     currentTime: 0,
   })
+  const [activeSegmentIndex, setActiveSegmentIndex] = useState(-1)
   const eventBusRef = useRef(LearningEventBus.getInstance())
 
   const userSettingsRef = useRef<{ nativeLanguage: string; autoTranslateTranscript: boolean }>({ nativeLanguage: '', autoTranslateTranscript: false })
@@ -93,6 +94,11 @@ export function YouTubeLearningApp() {
             setState(prev => ({ ...prev, isLearningMode: payload }))
           }
           break
+        case 'TRANSCRIPT_ACTIVE_SEGMENT_INDEX': {
+          const idx = (payload as { activeSegmentIndex: number })?.activeSegmentIndex
+          if (typeof idx === 'number') setActiveSegmentIndex(idx)
+          break
+        }
       }
     }
 
@@ -153,6 +159,7 @@ export function YouTubeLearningApp() {
               transcriptAvailable={state.transcriptAvailable}
               sendToParent={sendToParent}
               userSettings={userSettingsRef.current}
+              activeSegmentIndex={activeSegmentIndex}
             />
           </div>
         </>
@@ -229,19 +236,20 @@ const TABS: TabDefinition[] = [
   { id: 'practice', label: 'Practice' },
 ]
 
-function PanelContent({ activeTab, videoInfo, currentTime, transcriptAvailable, sendToParent, userSettings }: {
+function PanelContent({ activeTab, videoInfo, currentTime, transcriptAvailable, sendToParent, userSettings, activeSegmentIndex }: {
   activeTab: PanelTab
   videoInfo: VideoPageInfo
   currentTime: number
   transcriptAvailable: boolean
   sendToParent: (type: string, payload?: unknown) => void
   userSettings: { nativeLanguage: string; autoTranslateTranscript: boolean }
+  activeSegmentIndex: number
 }) {
   switch (activeTab) {
     case 'overview':
       return <OverviewPanel videoInfo={videoInfo} transcriptAvailable={transcriptAvailable} currentTime={currentTime} sendToParent={sendToParent} />
     case 'transcript':
-      return <TranscriptPanel videoId={videoInfo.videoId} currentTime={currentTime} sendToParent={sendToParent} userSettings={userSettings} />
+      return <TranscriptPanel videoId={videoInfo.videoId} currentTime={currentTime} sendToParent={sendToParent} userSettings={userSettings} activeSegmentIndex={activeSegmentIndex} />
     case 'practice':
       return <PracticePanel transcriptAvailable={transcriptAvailable} videoId={videoInfo.videoId} sendToParent={sendToParent} />
     default:
@@ -384,11 +392,12 @@ interface VocabWordState {
   startTime: number
 }
 
-function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
+function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings, activeSegmentIndex }: {
   videoId: string
   currentTime: number
   sendToParent: (type: string, payload?: unknown) => void
   userSettings: { nativeLanguage: string; autoTranslateTranscript: boolean }
+  activeSegmentIndex: number
 }) {
   const [segments, setSegments] = useState<Array<{ id: string; start: number; end: number; text: string }> | null>(null)
   const [loading, setLoading] = useState(true)
@@ -479,9 +488,12 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
     sendToParent('TRANSLATE_SEGMENTS', { segments, language: translateLanguage })
   }, [translateEnabled, segments, sendToParent])
 
-  const activeIndex = segments?.findIndex(
-    s => currentTime >= s.start && currentTime < s.end,
-  ) ?? -1
+  const activeIndex = useMemo(() => {
+    if (activeSegmentIndex >= 0 && segments && activeSegmentIndex < segments.length) {
+      return activeSegmentIndex
+    }
+    return segments?.findIndex(s => currentTime >= s.start && currentTime < s.end) ?? -1
+  }, [segments, currentTime, activeSegmentIndex])
 
   const tokenizedSegments = useMemo(() => {
     if (!segments) return null
@@ -628,6 +640,104 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings }: {
           {translating && <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Translating...</span>}
           {translateError && <span style={{ fontSize: '10px', color: 'var(--color-danger)', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={translateError}>⚠ {translateError}</span>}
         </div>
+        {segments.length > 0 && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '8px 6px',
+              borderBottom: '1px solid var(--color-border)',
+              background: 'var(--color-background)',
+            }}
+          >
+            <button
+              onClick={() => sendToParent('TRANSCRIPT_PREVIOUS')}
+              disabled={activeSegmentIndex <= 0}
+              title="Previous segment"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '32px',
+                height: '32px',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface)',
+                color: activeSegmentIndex <= 0 ? 'var(--color-muted)' : 'var(--color-text)',
+                cursor: activeSegmentIndex <= 0 ? 'default' : 'pointer',
+                fontSize: '14px',
+                opacity: activeSegmentIndex <= 0 ? 0.4 : 1,
+              }}
+            >
+              ⏮
+            </button>
+
+            <button
+              onClick={() => sendToParent('TRANSCRIPT_PLAY_SEGMENT', { segmentIndex: activeSegmentIndex >= 0 ? activeSegmentIndex : 0 })}
+              title="Play segment"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '4px 12px',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--color-primary)',
+                backgroundColor: 'var(--color-primary)',
+                color: '#fff',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 500,
+              }}
+            >
+              ▶ Play Segment
+            </button>
+
+            <button
+              onClick={() => sendToParent('TRANSCRIPT_NEXT')}
+              disabled={activeSegmentIndex >= segments.length - 1}
+              title="Next segment"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '32px',
+                height: '32px',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface)',
+                color: activeSegmentIndex >= segments.length - 1 ? 'var(--color-muted)' : 'var(--color-text)',
+                cursor: activeSegmentIndex >= segments.length - 1 ? 'default' : 'pointer',
+                fontSize: '14px',
+                opacity: activeSegmentIndex >= segments.length - 1 ? 0.4 : 1,
+              }}
+            >
+              ⏭
+            </button>
+
+            <div style={{ width: '1px', height: '24px', backgroundColor: 'var(--color-border)', margin: '0 4px' }} />
+
+            <button
+              onClick={() => sendToParent('TRANSCRIPT_CONTINUE')}
+              title="Continue playback without auto-stop"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '4px 12px',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text)',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 500,
+              }}
+            >
+              ▶ Continue
+            </button>
+          </div>
+        )}
         <div style={{ padding: '0 var(--spacing-xs) var(--spacing-xs)' }}>
         {(tokenizedSegments || segments).map((seg: any, idx: number) => {
           const tokens = seg.tokens || []
