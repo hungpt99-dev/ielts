@@ -1,3 +1,4 @@
+import { logContentError } from '../../utils/safe-chrome'
 import { injectContentStyles } from '../sharedStyles'
 import { injectHighlightStyles, tryRemoveHighlightStyles } from './highlightStyles'
 import {
@@ -60,7 +61,7 @@ async function loadSettings(): Promise<boolean> {
     excludedHosts = settings.highlightExcludedHosts ?? []
     return settings.autoHighlightSavedVocabulary !== false
   } catch (error) {
-    console.error('apps/extension/src/content-script/highlighter/savedKeywordHighlighter.ts error:', error);
+    logContentError('apps/extension/src/content-script/highlighter/savedKeywordHighlighter.ts', error);
     console.debug('[IELTS Journey] Could not load settings, defaulting to enabled')
     excludedHosts = []
     return true
@@ -109,7 +110,7 @@ async function loadVocabulary(): Promise<HighlightWord[]> {
       }
     }
   } catch (error) {
-    console.error('apps/extension/src/content-script/highlighter/savedKeywordHighlighter.ts error:', error);
+    logContentError('apps/extension/src/content-script/highlighter/savedKeywordHighlighter.ts', error);
     console.debug('[IELTS Journey] Could not load vocabulary from storage')
   }
 

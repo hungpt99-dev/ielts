@@ -1,4 +1,4 @@
-import { safeSendMessage } from '../utils/safe-chrome'
+import { safeSendMessage, logContentError } from '../utils/safe-chrome'
 
 const PANEL_ID = 'ielts-video-helper'
 
@@ -31,7 +31,7 @@ function extractYoutubeVideoId(url: string): string {
     const match = urlObj.pathname.match(/^\/embed\/([^/?]+)/)
     return match?.[1] || ''
   } catch (error) {
-    console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
+    logContentError('apps/extension/src/content-script/videoHelper.ts', error);
     return ''
   }
 }
@@ -195,7 +195,7 @@ async function extractYoutubeTranscriptFromPage(): Promise<string> {
           break
         }
       } catch (error) {
-        console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
+        logContentError('apps/extension/src/content-script/videoHelper.ts', error);
         continue
       }
     }
@@ -215,7 +215,7 @@ async function extractYoutubeTranscriptFromPage(): Promise<string> {
                 captionTracks = tracks
               }
             } catch (error) {
- console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
+ logContentError('apps/extension/src/content-script/videoHelper.ts', error);
  /* continue */ }
           }
         }
@@ -240,7 +240,7 @@ async function extractYoutubeTranscriptFromPage(): Promise<string> {
 
     return segments.join(' ')
   } catch (error) {
-    console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
+    logContentError('apps/extension/src/content-script/videoHelper.ts', error);
     return ''
   }
 }
@@ -382,7 +382,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === 'GET_VIDEO_PAGE_INFO') {
     const info = detectVideoPage()
     try { sendResponse(info) } catch (error) {
- console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
+ logContentError('apps/extension/src/content-script/videoHelper.ts', error);
  /* ignore */ }
     return true
   }
@@ -390,7 +390,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === 'FETCH_YOUTUBE_TRANSCRIPT') {
     instance.getTranscript().then((transcript) => {
       try { sendResponse({ transcript }) } catch (error) {
- console.error('apps/extension/src/content-script/videoHelper.ts error:', error);
+ logContentError('apps/extension/src/content-script/videoHelper.ts', error);
  /* ignore */ }
     })
     return true

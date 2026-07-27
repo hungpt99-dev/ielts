@@ -24,6 +24,7 @@ import {
   safeSyncGet,
   safeStorageSet,
   safeFetchProviderConfig,
+  logContentError,
 } from '../utils/safe-chrome'
 import {
   emitExtensionSelectedTextDetected,
@@ -627,7 +628,7 @@ function storeToChromeStorage(batch: typeof pendingSaves): Promise<void> {
         safeStorageSet({ [STORAGE_KEYS.extensionLocal.pendingSaves]: existing.concat(batch) }).then(resolve).catch(reject)
       })
     } catch (e) {
-      console.error('apps/extension/src/content-script/selectionPanel.ts error:', e);
+      logContentError('apps/extension/src/content-script/selectionPanel.ts', e);
       reject(e)
     }
   })
@@ -640,7 +641,7 @@ function storeToPageStorage(batch: typeof pendingSaves): void {
     existing.push(...batch.map(s => ({ ...s })))
     window.localStorage.setItem(PENDING_QUEUE_KEY, JSON.stringify(existing))
   } catch (error) {
-    console.error('apps/extension/src/content-script/selectionPanel.ts error:', error);
+    logContentError('apps/extension/src/content-script/selectionPanel.ts', error);
     // localStorage full or unavailable — silently drop
   }
 }
@@ -691,7 +692,7 @@ function recoverFromPageStorage(): void {
       safeStorageSet({ [STORAGE_KEYS.extensionLocal.pendingSaves]: existing.concat(items) })
     })
   } catch (error) {
-    console.error('apps/extension/src/content-script/selectionPanel.ts error:', error);
+    logContentError('apps/extension/src/content-script/selectionPanel.ts', error);
     // nothing to recover
   }
 }

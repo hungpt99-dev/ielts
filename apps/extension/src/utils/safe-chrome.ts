@@ -12,6 +12,11 @@ function isContextError(err: unknown): boolean {
   )
 }
 
+export function logContentError(filePath: string, err: unknown): void {
+  if (isContextError(err)) return
+  console.error(`${filePath} error:`, err)
+}
+
 export function safeStorageGet<T>(
   keys: string | string[],
 ): Promise<Record<string, T | undefined>> {
@@ -29,7 +34,7 @@ export function safeStorageGet<T>(
       })
     } catch (err) {
       if (isContextError(err)) return resolve({})
-      console.error('apps/extension/src/utils/safe-chrome.ts error:', err);
+      logContentError('apps/extension/src/utils/safe-chrome.ts', err);
       resolve({})
     }
   })
@@ -52,7 +57,7 @@ export function safeStorageSet(
         contextInvalidated = true
         return resolve()
       }
-      console.error('apps/extension/src/utils/safe-chrome.ts error:', error);
+      logContentError('apps/extension/src/utils/safe-chrome.ts', error);
       resolve()
     }
   })
@@ -68,7 +73,8 @@ export function safeSyncGet<T>(
       })
     } catch (error) {
       if (isContextError(error)) return resolve({})
-      console.error('apps/extension/src/utils/safe-chrome.ts error:', error);
+      if (isContextError(error)) return resolve({})
+      logContentError('apps/extension/src/utils/safe-chrome.ts', error);
       resolve({})
     }
   })
@@ -79,7 +85,7 @@ export async function safeSendMessage(message: Record<string, unknown>): Promise
     await chrome.runtime.sendMessage(message)
   } catch (err) {
     if (isContextError(err)) return
-    console.error('apps/extension/src/utils/safe-chrome.ts error:', err);
+    logContentError('apps/extension/src/utils/safe-chrome.ts', err);
   }
 }
 
@@ -98,8 +104,8 @@ export function safeSendMessageCb(
       cb?.(response)
     })
   } catch (error) {
-    if (isContextError(error)) return
-    console.error('apps/extension/src/utils/safe-chrome.ts error:', error);
+          if (isContextError(error)) return
+    logContentError('apps/extension/src/utils/safe-chrome.ts', error);
   }
 }
 
@@ -128,7 +134,7 @@ export function safeFetchProviderConfig(): Promise<{
       return cachedConfig
     } catch (error) {
       if (isContextError(error)) return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_AI_MODEL }
-      console.error('apps/extension/src/utils/safe-chrome.ts error:', error);
+      logContentError('apps/extension/src/utils/safe-chrome.ts', error);
       return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_AI_MODEL }
     }
   })()

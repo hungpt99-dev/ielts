@@ -2,6 +2,7 @@ import type { SaveCategory } from '../types'
 import {
   safeStorageGet,
   safeStorageSet,
+  logContentError,
 } from '../utils/safe-chrome'
 import {
   emitExtensionSelectedTextSaved,
@@ -61,7 +62,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     const payload = message.payload as SaveSelectionPayload
     showToast(`Saved as ${payload.category}`)
     try { sendResponse({ success: true }) } catch (error) {
- console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
+ logContentError('apps/extension/src/content-script/saveSelectedText.ts', error);
  /* ignore */ }
     return false
   }
@@ -74,7 +75,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         selectedText: getSelectedText(),
       })
     } catch (error) {
- console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
+ logContentError('apps/extension/src/content-script/saveSelectedText.ts', error);
  /* ignore */ }
     return false
   }
@@ -84,7 +85,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       const result = extractArticle()
       sendResponse({ success: true, data: result })
     } catch (error) {
-      console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
+      logContentError('apps/extension/src/content-script/saveSelectedText.ts', error);
       sendResponse({ success: false, error: 'Failed to extract article' })
     }
     return false
@@ -114,7 +115,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     })
     showToast('Page saved as Artifact')
     try { sendResponse({ success: true }) } catch (error) {
- console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
+ logContentError('apps/extension/src/content-script/saveSelectedText.ts', error);
  /* ignore */ }
     return false
   }
@@ -153,7 +154,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     }
 
     try { sendResponse({ success: true }) } catch (error) {
- console.error('apps/extension/src/content-script/saveSelectedText.ts error:', error);
+ logContentError('apps/extension/src/content-script/saveSelectedText.ts', error);
  /* ignore */ }
     return false
   }

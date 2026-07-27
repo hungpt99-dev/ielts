@@ -13,7 +13,7 @@ import {
   AI_EXPLAIN_LABELS,
 } from '@ielts/ai'
 import { injectContentStyles } from './sharedStyles'
-import { safeSendMessage, safeFetchProviderConfig } from '../utils/safe-chrome'
+import { safeSendMessage, safeFetchProviderConfig, logContentError } from '../utils/safe-chrome'
 import {
   emitExtensionSelectedTextExplained,
   emitExtensionSelectedTextSimplified,
@@ -626,7 +626,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
       showExplainPanel(text, action)
     }
     try { sendResponse({ success: true }) } catch (error) {
- console.error('apps/extension/src/content-script/aiExplain.ts error:', error);
+ logContentError('apps/extension/src/content-script/aiExplain.ts', error);
  /* ignore */ }
     return false
   }

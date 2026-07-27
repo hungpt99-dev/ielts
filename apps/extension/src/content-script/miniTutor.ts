@@ -1,3 +1,4 @@
+import { logContentError } from '../utils/safe-chrome'
 import type { AiExplainType } from '@ielts/ai'
 import { showExplainPanel } from './aiExplain'
 
@@ -67,7 +68,7 @@ function getSelectionContext(): MiniTutorSelection & {
           (end < fullText.length ? '...' : '')
       }
     } catch (error) {
-      console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+      logContentError('apps/extension/src/content-script/miniTutor.ts', error);
       surroundingText = base.text
     }
   }
@@ -95,11 +96,11 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (aiType) {
       showExplainPanel(text, aiType)
       try { sendResponse({ success: true, panelOpened: true }) } catch (error) {
- console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ logContentError('apps/extension/src/content-script/miniTutor.ts', error);
  /* ignore */ }
     } else {
       try { sendResponse({ success: true, panelOpened: false }) } catch (error) {
- console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ logContentError('apps/extension/src/content-script/miniTutor.ts', error);
  /* ignore */ }
     }
     return false
@@ -108,7 +109,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === 'MINI_TUTOR_GET_SELECTION') {
     const selection = getActiveSelection()
     try { sendResponse(selection) } catch (error) {
- console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ logContentError('apps/extension/src/content-script/miniTutor.ts', error);
  /* ignore */ }
     return false
   }
@@ -116,7 +117,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message.type === 'MINI_TUTOR_GET_SELECTION_FULL') {
     const context = getSelectionContext()
     try { sendResponse(context) } catch (error) {
- console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ logContentError('apps/extension/src/content-script/miniTutor.ts', error);
  /* ignore */ }
     return false
   }
@@ -127,7 +128,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     if (!selection.text) {
       try { sendResponse({ success: false, error: 'No text selected' }) } catch (error) {
- console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ logContentError('apps/extension/src/content-script/miniTutor.ts', error);
  /* ignore */ }
       return false
     }
@@ -136,12 +137,12 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (aiType) {
       showExplainPanel(selection.text, aiType)
       try { sendResponse({ success: true, panelOpened: true }) } catch (error) {
- console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ logContentError('apps/extension/src/content-script/miniTutor.ts', error);
  /* ignore */ }
     } else {
       showExplainPanel(selection.text, 'simple')
       try { sendResponse({ success: true, panelOpened: true }) } catch (error) {
- console.error('apps/extension/src/content-script/miniTutor.ts error:', error);
+ logContentError('apps/extension/src/content-script/miniTutor.ts', error);
  /* ignore */ }
     }
     return false

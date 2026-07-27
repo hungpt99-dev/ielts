@@ -1,3 +1,4 @@
+import { logContentError } from '../../utils/safe-chrome'
 import { findMatches, hasAnyWord, type HighlightWord, type TextMatch } from './highlightMatcher'
 import { showTooltip, scheduleHideTooltip, cancelHideTooltip, hideTooltip } from './highlightTooltip'
 
@@ -68,7 +69,7 @@ function getHighlightWord(el: HTMLElement): HighlightWord | null {
   try {
     return JSON.parse(data) as HighlightWord
   } catch (error) {
-    console.error('apps/extension/src/content-script/highlighter/highlightEngine.ts error:', error);
+    logContentError('apps/extension/src/content-script/highlighter/highlightEngine.ts', error);
     return null
   }
 }
