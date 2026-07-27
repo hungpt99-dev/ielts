@@ -7,6 +7,18 @@ function saveUserConfig(config: UserConfiguration): void {
   try {
     localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(config))
   } catch { /* ignore */ }
+  try {
+    chrome?.storage?.local?.set({
+      aiApiKey: config.aiApiKey ?? '',
+      extensionSettings: {
+        aiModel: config.ai?.model ?? '',
+        aiBaseUrl: config.ai?.customApiUrl ?? '',
+        themeMode: config.themeMode ?? 'system',
+        nativeLanguage: config.nativeLanguage ?? '',
+        accentColor: config.accentColor ?? '#2563eb',
+      },
+    })
+  } catch { /* ignore */ }
 }
 
 interface SettingsContextValue {
