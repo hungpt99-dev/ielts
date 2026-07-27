@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { OPENAI_BASE_URL, DEFAULT_AI_MODEL } from '@ielts/settings'
+import { getProviderById, DEFAULT_AI_PROVIDER_ID } from '@ielts/config'
 
 const CONTEXT_INVALIDATED = 'Extension context invalidated'
 
@@ -128,7 +129,7 @@ export function safeFetchProviderConfig(): Promise<{
 
       const apiKey = localResult.aiApiKey || ''
       const baseUrl = syncSettings.aiBaseUrl || OPENAI_BASE_URL
-      const model = syncSettings.aiModel || DEFAULT_AI_MODEL
+      const model = syncSettings.aiModel || getProviderById(DEFAULT_AI_PROVIDER_ID)?.defaultModel || ''
 
       cachedConfig = { apiKey, baseUrl, model }
       return cachedConfig

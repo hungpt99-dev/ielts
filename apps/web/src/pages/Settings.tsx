@@ -310,7 +310,7 @@ export default function Settings() {
           aiProvider: 'openai' as const,
           aiBaseUrl: '',
           aiEndpoint: '',
-          aiModel: DEFAULT_AI_MODEL,
+          aiModel: AI_PROVIDER_DEFINITIONS.openai.defaultModel || '',
           aiEnabled: false,
           darkMode: false,
         }
@@ -432,7 +432,7 @@ export default function Settings() {
       const result = await testConnection({
         apiKey: aiApiKeyInput,
         baseUrl: aiBaseUrlInput || OPENAI_BASE_URL,
-        model: aiModelInput || defaultProviderDef?.defaultModel || 'gpt-4.1-mini',
+        model: aiModelInput || defaultProviderDef?.defaultModel || '',
       })
       setAiTestResult({ ok: result.ok, message: result.message })
     } catch (error) {

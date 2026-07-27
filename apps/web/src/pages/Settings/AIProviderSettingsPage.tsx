@@ -80,7 +80,7 @@ export default function AIProviderSettingsPage() {
     setProvider(AI_PROVIDER_DEFINITIONS.openai.id)
     setApiKey('')
     setBaseUrl('')
-    setModel(DEFAULT_AI_MODEL)
+    setModel(AI_PROVIDER_DEFINITIONS.openai.defaultModel || '')
     setTestResult(null)
     setDirty(true)
     updateSettings({
@@ -88,7 +88,7 @@ export default function AIProviderSettingsPage() {
       aiProvider: AI_PROVIDER_DEFINITIONS.openai.id,
       aiBaseUrl: '',
       aiEndpoint: '',
-      aiModel: DEFAULT_AI_MODEL,
+      aiModel: AI_PROVIDER_DEFINITIONS.openai.defaultModel || '',
       aiEnabled: false,
     })
     showFeedback('success', 'AI settings reset to defaults.')
@@ -105,7 +105,7 @@ export default function AIProviderSettingsPage() {
       const result = await testConnection({
         apiKey,
         baseUrl: baseUrl || OPENAI_BASE_URL,
-        model: model || DEFAULT_AI_MODEL,
+        model: model || getProviderById(provider)?.defaultModel || '',
       })
       setTestResult({ ok: result.ok, message: result.message })
     } catch (error) {

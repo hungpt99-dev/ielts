@@ -1,7 +1,7 @@
 export const DEFAULT_AI_TIMEOUT_MS = 120_000
 export const DEFAULT_AI_MAX_RETRIES = 2
 export const DEFAULT_AI_TEMPERATURE = 0.7
-export const DEFAULT_AI_MODEL = 'gpt-4.1-mini'
+export const DEFAULT_AI_MODEL = ''
 export const DEFAULT_AI_MAX_TOKENS = 24_000
 
 /** @deprecated Use dynamic call budgeting in AiPlanOrchestrator instead. */
