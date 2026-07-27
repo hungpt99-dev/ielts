@@ -13,9 +13,9 @@ function saveUserConfig(config: UserConfiguration): void {
       extensionSettings: {
         aiModel: config.ai?.model ?? '',
         aiBaseUrl: config.ai?.customApiUrl ?? '',
-        themeMode: config.themeMode ?? 'system',
+        themeMode: config.themeMode ?? '',
         nativeLanguage: config.nativeLanguage ?? '',
-        accentColor: config.accentColor ?? '#2563eb',
+        accentColor: config.accentColor ?? '',
       },
     })
   } catch { /* ignore */ }
