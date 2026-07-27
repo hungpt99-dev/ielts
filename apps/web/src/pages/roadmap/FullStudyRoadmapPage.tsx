@@ -49,6 +49,8 @@ export default function FullStudyRoadmapPage() {
   const [taskRefreshKey, setTaskRefreshKey] = useState(0)
   const [persistedRegen, setPersistedRegen] = useState(loadRegenerationState())
 
+  const [autoGenerating, setAutoGenerating] = useState(false)
+
   const loadData = useCallback(async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true)
@@ -273,12 +275,21 @@ export default function FullStudyRoadmapPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <button
-              onClick={loadData}
+              onClick={() => loadData(true)}
               className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
               style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}
             >
               Try Again
             </button>
+            {error.includes('settings') && (
+              <button
+                onClick={() => navigate(ROUTES.settings)}
+                className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
+                style={{ borderColor: 'var(--color-primary)', color: 'var(--color-primary)' }}
+              >
+                Configure Settings
+              </button>
+            )}
             <button
               onClick={() => navigate(ROUTES.dashboard)}
               className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
@@ -294,32 +305,25 @@ export default function FullStudyRoadmapPage() {
 
   // ---- Null state ----
   if (!roadmap) {
+    if (!autoGenerating && !loading && !error) {
+      setAutoGenerating(true)
+      loadData(true).finally(() => setAutoGenerating(false))
+      return null
+    }
+
     return (
       <PageContent className="flex items-center justify-center">
         <div className="w-full space-y-4 text-center">
-          <IconMap size={48} />
+          <div
+            className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-t-transparent"
+            style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }}
+          />
           <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
-            Your IELTS journey hasn't started yet
+            Generating Your Study Plan
           </h2>
           <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Generate your personalized study roadmap to see your complete path from today to exam day.
+            Building your personalized IELTS roadmap based on your goals and schedule...
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <button
-              onClick={() => loadData(true)}
-              className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
-              style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}
-            >
-              Create My Study Plan
-            </button>
-            <button
-              onClick={() => openAITutorChat()}
-              className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
-              style={{ borderColor: 'var(--color-tutor-border)', color: 'var(--color-tutor-accent)' }}
-            >
-              Talk to AI Tutor
-            </button>
-          </div>
         </div>
       </PageContent>
     )

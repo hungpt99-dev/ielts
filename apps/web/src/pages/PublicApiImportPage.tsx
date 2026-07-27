@@ -20,24 +20,24 @@ export default function PublicApiImportPage() {
       />
 
       <Card padding={false}>
-        <div className="flex border-b border-slate-200 dark:border-slate-700">
+        <div className="flex" style={{ borderBottom: '1px solid var(--color-border)' }}>
           <button
             onClick={() => setActiveTab('search')}
-            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'search'
-                ? 'border-b-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
-            }`}
+            className="flex-1 px-4 py-3 text-sm font-medium transition-colors"
+            style={{
+              borderBottom: activeTab === 'search' ? '2px solid var(--color-primary)' : '2px solid transparent',
+              color: activeTab === 'search' ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+            }}
           >
             Search Public Content
           </button>
           <button
             onClick={() => setActiveTab('imported')}
-            className={`flex-1 px-4 py-3 text-sm font-medium transition-colors ${
-              activeTab === 'imported'
-                ? 'border-b-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
-            }`}
+            className="flex-1 px-4 py-3 text-sm font-medium transition-colors"
+            style={{
+              borderBottom: activeTab === 'imported' ? '2px solid var(--color-primary)' : '2px solid transparent',
+              color: activeTab === 'imported' ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+            }}
           >
             Imported Content
           </button>
@@ -51,7 +51,7 @@ export default function PublicApiImportPage() {
       )}
 
       <Card>
-        <CardContent className="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+        <CardContent className="space-y-2" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
           <p>
             <strong>About Public API Content</strong>
           </p>

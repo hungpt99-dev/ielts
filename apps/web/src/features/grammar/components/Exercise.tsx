@@ -33,9 +33,9 @@ export default function Exercise({ exercises, topic, onComplete, onGenerateAi, o
   const isLast = currentIndex === exercises.length - 1
 
   const progress = useMemo(() => {
-    const answered = Object.keys(userAnswers).length
+    const answered = results.length
     return { answered, total: exercises.length }
-  }, [userAnswers, exercises.length])
+  }, [results, exercises.length])
 
   function setAnswer(value: string) {
     setUserAnswers(prev => ({ ...prev, [currentExercise.id]: value }))
@@ -339,7 +339,7 @@ export default function Exercise({ exercises, topic, onComplete, onGenerateAi, o
 
               <div className="flex items-center justify-between pt-2">
               <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                {Object.keys(userAnswers).length} of {exercises.length} answered
+                {results.length} of {exercises.length} answered
               </p>
               <div className="flex gap-2">
                 {!submitted ? (

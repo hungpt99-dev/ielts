@@ -322,12 +322,12 @@ export default function ImportedContentManager() {
 
   if (error && items.length === 0) {
     return (
-      <Card className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20">
+      <Card style={{ borderColor: 'var(--color-danger)', backgroundColor: 'var(--color-danger-light)' }}>
         <CardContent className="py-6">
-          <p className="text-sm font-medium text-red-700 dark:text-red-300">
+          <p className="text-sm font-medium" style={{ color: 'var(--color-danger)' }}>
             Error loading content
           </p>
-          <p className="mt-1 text-sm text-red-600 dark:text-red-400">{error}</p>
+          <p className="mt-1 text-sm" style={{ color: 'var(--color-danger)' }}>{error}</p>
         </CardContent>
       </Card>
     )
@@ -339,10 +339,10 @@ export default function ImportedContentManager() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+        <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
           Imported API Content
           {items.length > 0 && (
-            <span className="ml-2 text-sm font-normal text-slate-500 dark:text-slate-400">
+            <span className="ml-2 text-sm font-normal" style={{ color: 'var(--color-text-secondary)' }}>
               ({items.length} item{items.length !== 1 ? 's' : ''})
             </span>
           )}
@@ -397,7 +397,7 @@ export default function ImportedContentManager() {
               />
             </div>
             {filterTags && (
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}>
                 Comma-separated; matches items with any matching tag
               </p>
             )}
@@ -473,17 +473,17 @@ export default function ImportedContentManager() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
+                    <h3 className="mt-2 text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                       {item.title}
                     </h3>
 
                     {/* Content preview */}
-                    <p className="mt-1 text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
+                    <p className="mt-1 text-sm line-clamp-2" style={{ color: 'var(--color-text-secondary)' }}>
                       {item.content?.slice(0, 200) || 'No content preview.'}
                     </p>
 
                     {/* Classification info */}
-                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
                       {item.topic && <span>Topic: {item.topic}</span>}
                       {item.skill && <span>Skill: {item.skill}</span>}
                       {item.tags && item.tags.length > 0 && (
@@ -499,7 +499,14 @@ export default function ImportedContentManager() {
                     </div>
 
                     {/* Attribution */}
-                    <div className="mt-2 rounded bg-slate-50 px-2 py-1.5 text-xs text-slate-500 dark:bg-slate-900 dark:text-slate-400">
+                    <div
+                      className="mt-2 rounded px-2 py-1.5"
+                      style={{
+                        fontSize: 'var(--text-xs)',
+                        color: 'var(--color-text-secondary)',
+                        backgroundColor: 'var(--color-surface-alt)',
+                      }}
+                    >
                       Source: {item.sourceName} &middot; License:{' '}
                       {item.licenseName}
                       {item.attribution && (
@@ -511,7 +518,7 @@ export default function ImportedContentManager() {
 
                     {/* User notes preview */}
                     {item.userNotes && (
-                      <p className="mt-2 text-xs italic text-slate-500 dark:text-slate-400 line-clamp-1">
+                      <p className="mt-2 line-clamp-1" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>
                         Notes: {item.userNotes}
                       </p>
                     )}
@@ -549,7 +556,7 @@ export default function ImportedContentManager() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Are you sure you want to delete this imported content? This action
             cannot be undone.
           </p>
@@ -611,7 +618,7 @@ export default function ImportedContentManager() {
             {(selectedItem.topic ||
               selectedItem.skill ||
               (selectedItem.tags && selectedItem.tags.length > 0)) && (
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
                 {selectedItem.topic && (
                   <span>
                     Topic: <strong>{selectedItem.topic}</strong>
@@ -636,13 +643,27 @@ export default function ImportedContentManager() {
             )}
 
             {/* Content body */}
-            <div className="max-h-60 overflow-y-auto whitespace-pre-wrap rounded-lg bg-slate-50 p-4 text-sm text-slate-700 dark:bg-slate-900 dark:text-slate-300">
+            <div
+              className="max-h-60 overflow-y-auto whitespace-pre-wrap rounded-lg p-4 text-sm"
+              style={{
+                backgroundColor: 'var(--color-surface-alt)',
+                color: 'var(--color-text-secondary)',
+              }}
+            >
               {selectedItem.content || 'No content available.'}
             </div>
 
             {/* Attribution — prominently displayed per requirements */}
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
-              <p className="mb-1.5 font-medium text-slate-700 dark:text-slate-300">
+            <div
+              className="rounded-lg p-3"
+              style={{
+                fontSize: 'var(--text-xs)',
+                color: 'var(--color-text-secondary)',
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface-alt)',
+              }}
+            >
+              <p className="mb-1.5 font-medium" style={{ color: 'var(--color-text)' }}>
                 Source & Attribution
               </p>
               <p>
@@ -654,7 +675,8 @@ export default function ImportedContentManager() {
                   href={selectedItem.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline dark:text-blue-400"
+                  className="underline"
+                  style={{ color: 'var(--color-primary)' }}
                 >
                   {selectedItem.sourceUrl}
                 </a>
@@ -676,7 +698,8 @@ export default function ImportedContentManager() {
             <div>
               <label
                 htmlFor="item-notes"
-                className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                className="mb-1 block text-sm font-medium"
+                style={{ color: 'var(--color-text-secondary)' }}
               >
                 Your Notes
               </label>
@@ -697,7 +720,7 @@ export default function ImportedContentManager() {
                   Save Notes
                 </Button>
                 {notesSaved && (
-                  <span className="text-xs text-green-600 dark:text-green-400">
+                  <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-success)' }}>
                     Saved &check;
                   </span>
                 )}
@@ -705,10 +728,11 @@ export default function ImportedContentManager() {
             </div>
 
             {/* AI Exercise Generation */}
-            <div className="border-t border-slate-200 pt-4 dark:border-slate-700">
+            <div className="pt-4" style={{ borderTop: '1px solid var(--color-border)' }}>
               <label
                 htmlFor="exercise-type"
-                className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                className="mb-2 block text-sm font-medium"
+                style={{ color: 'var(--color-text-secondary)' }}
               >
                 Generate Exercises with AI
               </label>
@@ -719,7 +743,12 @@ export default function ImportedContentManager() {
                   onChange={e =>
                     setExerciseType(e.target.value as ExerciseType)
                   }
-                  className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
+                  className="rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                  style={{
+                    border: '1px solid var(--color-border)',
+                    backgroundColor: 'var(--color-surface)',
+                    color: 'var(--color-text)',
+                  }}
                 >
                   {EXERCISE_TYPES.map(t => (
                     <option key={t.value} value={t.value}>
@@ -744,19 +773,25 @@ export default function ImportedContentManager() {
               </div>
 
               {exerciseError && (
-                <p className="mt-2 text-xs text-red-600 dark:text-red-400">
+                <p className="mt-2" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-danger)' }}>
                   {exerciseError}
                 </p>
               )}
 
               {generating && exerciseResult === null && !exerciseError && (
-                <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-2" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
                   Generating exercises... This may take a moment.
                 </p>
               )}
 
               {exerciseResult && (
-                <div className="mt-3 max-h-60 overflow-y-auto whitespace-pre-wrap rounded-lg bg-slate-50 p-4 text-sm text-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                <div
+                  className="mt-3 max-h-60 overflow-y-auto whitespace-pre-wrap rounded-lg p-4 text-sm"
+                  style={{
+                    backgroundColor: 'var(--color-surface-alt)',
+                    color: 'var(--color-text-secondary)',
+                  }}
+                >
                   {exerciseResult}
                 </div>
               )}

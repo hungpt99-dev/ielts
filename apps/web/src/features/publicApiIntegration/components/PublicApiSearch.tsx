@@ -501,7 +501,8 @@ export default function PublicApiSearch() {
           <div>
             <label
               htmlFor="api-source"
-              className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+              className="mb-1.5 block text-sm font-medium"
+              style={{ color: 'var(--color-text-secondary)' }}
             >
               Content Source
             </label>
@@ -511,7 +512,12 @@ export default function PublicApiSearch() {
               onChange={(e) =>
                 handleSourceChange(e.target.value as PublicApiSourceName)
               }
-              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100"
+              className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+              style={{
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text)',
+              }}
             >
               {PUBLIC_API_SOURCES.map((s) => (
                 <option key={s.name} value={s.name}>
@@ -519,7 +525,7 @@ export default function PublicApiSearch() {
                 </option>
               ))}
             </select>
-            <div className="mt-1 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+            <div className="mt-1 flex items-center gap-2" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
               <span>Category: {sourceConfig.category}</span>
               <span aria-hidden="true">·</span>
               <span>
@@ -542,7 +548,8 @@ export default function PublicApiSearch() {
             <div>
               <label
                 htmlFor="api-key-input"
-                className="mb-1.5 block text-sm font-medium text-slate-700 dark:text-slate-300"
+                className="mb-1.5 block text-sm font-medium"
+                style={{ color: 'var(--color-text-secondary)' }}
               >
                 {sourceConfig.apiKeyLabel ?? "API Key"}
               </label>
@@ -557,9 +564,14 @@ export default function PublicApiSearch() {
                 placeholder={
                   sourceConfig.apiKeyPlaceholder ?? "Enter your API key"
                 }
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
+                className="w-full rounded-lg px-3 py-2 text-sm placeholder:opacity-50 focus:outline-none focus:ring-2"
+                style={{
+                  border: '1px solid var(--color-border)',
+                  backgroundColor: 'var(--color-surface)',
+                  color: 'var(--color-text)',
+                }}
               />
-              <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+              <p className="mt-1" style={{ fontSize: 'var(--text-xs)', color: 'var(--color-warning-dark)' }}>
                 This source requires an API key. Your key is stored locally and
                 never sent to our servers.
               </p>
@@ -574,7 +586,12 @@ export default function PublicApiSearch() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder={`Search ${sourceConfig.label}...`}
               aria-label="Search query"
-              className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500"
+              className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm placeholder:opacity-50 focus:outline-none focus:ring-2"
+              style={{
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface)',
+                color: 'var(--color-text)',
+              }}
             />
             <Button type="submit" disabled={!canSearch} loading={loading}>
               Search
@@ -582,8 +599,8 @@ export default function PublicApiSearch() {
           </form>
 
           {/* Source info */}
-          <details className="text-xs text-slate-500 dark:text-slate-400">
-            <summary className="cursor-pointer hover:text-slate-700 dark:hover:text-slate-300">
+          <details style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
+            <summary className="cursor-pointer" style={{ color: 'var(--color-text-secondary)' }}>
               About this source
             </summary>
             <p className="mt-1">{sourceConfig.description}</p>
@@ -593,7 +610,8 @@ export default function PublicApiSearch() {
                 href={sourceConfig.docsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
+                className="underline"
+                style={{ color: 'var(--color-primary)' }}
               >
                 API docs
               </a>
@@ -604,10 +622,11 @@ export default function PublicApiSearch() {
 
       {/* Error state */}
       {error && (
-        <Card className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20">
+        <Card style={{ borderColor: 'var(--color-danger)', backgroundColor: 'var(--color-danger-light)' }}>
           <CardContent className="flex items-start gap-3">
             <svg
-              className="mt-0.5 h-5 w-5 shrink-0 text-red-500"
+              className="mt-0.5 h-5 w-5 shrink-0"
+              style={{ color: 'var(--color-danger)' }}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -620,10 +639,10 @@ export default function PublicApiSearch() {
               />
             </svg>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-red-700 dark:text-red-300">
+              <p className="text-sm font-medium" style={{ color: 'var(--color-danger)' }}>
                 {error.title}
               </p>
-              <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+              <p className="mt-1 text-sm" style={{ color: 'var(--color-danger)' }}>
                 {error.message}
               </p>
               {error.suggestions.length > 0 && (
@@ -631,7 +650,12 @@ export default function PublicApiSearch() {
                   {error.suggestions.map((s, i) => (
                     <span
                       key={i}
-                      className="rounded-lg bg-white px-2.5 py-1 text-xs font-medium text-slate-600 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-600"
+                      className="rounded-lg px-2.5 py-1 text-xs font-medium shadow-sm"
+                      style={{
+                        backgroundColor: 'var(--color-surface)',
+                        color: 'var(--color-text-secondary)',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                      }}
                     >
                       {s.label}
                     </span>
@@ -643,7 +667,12 @@ export default function PublicApiSearch() {
                     <button
                       key={s.name}
                       onClick={() => handleSourceChange(s.name)}
-                      className="rounded-lg bg-white px-2.5 py-1 text-xs font-medium text-blue-600 shadow-sm ring-1 ring-slate-200 hover:bg-blue-50 dark:bg-slate-800 dark:text-blue-400 dark:ring-slate-600 dark:hover:bg-slate-700"
+                      className="rounded-lg px-2.5 py-1 text-xs font-medium shadow-sm"
+                      style={{
+                        backgroundColor: 'var(--color-surface)',
+                        color: 'var(--color-primary)',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                      }}
                     >
                       Try {s.label} instead
                     </button>
@@ -653,7 +682,8 @@ export default function PublicApiSearch() {
             </div>
             <button
               onClick={() => setError(null)}
-              className="shrink-0 rounded p-1 text-red-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-800/50"
+              className="shrink-0 rounded p-1"
+              style={{ color: 'var(--color-muted)' }}
               aria-label="Dismiss error"
             >
               <svg
@@ -679,7 +709,8 @@ export default function PublicApiSearch() {
         <div className="flex justify-center py-12">
           <div
             role="status"
-            className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"
+            className="h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"
+            style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }}
           />
         </div>
       )}
@@ -688,9 +719,13 @@ export default function PublicApiSearch() {
       {!loading && searched && results.length === 0 && !error && (
         <Card className="text-center">
           <CardContent className="py-12">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
+            <div
+              className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
+              style={{ backgroundColor: 'var(--color-surface-alt)' }}
+            >
               <svg
-                className="h-8 w-8 text-slate-400"
+                className="h-8 w-8"
+                style={{ color: 'var(--color-muted)' }}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -703,10 +738,10 @@ export default function PublicApiSearch() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
               No results found
             </h3>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
               Try a different search query or source. Results depend on the
               source's available content.
             </p>
@@ -718,20 +753,20 @@ export default function PublicApiSearch() {
       {!loading && results.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+            <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
               Results ({results.length})
             </h2>
-            <span className="text-xs text-slate-500 dark:text-slate-400">
+            <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)' }}>
               Source: {sourceConfig.label} — {sourceConfig.defaultLicense}
             </span>
           </div>
 
           <ul
-            className="divide-y divide-slate-100 dark:divide-slate-800"
             role="list"
+            style={{ borderTop: '1px solid var(--color-border)' }}
           >
             {results.map((result) => (
-              <li key={result.id}>
+              <li key={result.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
                 <Card padding={false}>
                   <div className="p-4 sm:p-5">
                     <div className="flex items-start justify-between gap-4">
@@ -754,12 +789,15 @@ export default function PublicApiSearch() {
                           <Badge variant="default">{result.licenseName}</Badge>
                         </div>
 
-                        <h3 className="mt-2 text-sm font-semibold text-slate-900 dark:text-slate-100">
+                        <h3 className="mt-2 text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                           {result.title}
                         </h3>
 
                         {result.snippet && (
-                          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400 line-clamp-3">
+                          <p
+                            className="mt-1 text-sm line-clamp-3"
+                            style={{ color: 'var(--color-text-secondary)' }}
+                          >
                             {result.snippet}
                           </p>
                         )}
@@ -769,13 +807,14 @@ export default function PublicApiSearch() {
                             href={result.sourceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-blue-600 underline hover:text-blue-700 dark:text-blue-400"
+                            className="underline"
+                            style={{ fontSize: 'var(--text-xs)', color: 'var(--color-primary)' }}
                           >
                             View original
                           </a>
                           {result.licenseName && (
                             <span
-                              className="text-xs text-slate-400"
+                              style={{ fontSize: 'var(--text-xs)', color: 'var(--color-muted)' }}
                               title="License"
                             >
                               {result.licenseName}
@@ -840,11 +879,25 @@ export default function PublicApiSearch() {
               <Badge variant="default">{previewItem.licenseName}</Badge>
             </div>
 
-            <div className="max-h-80 overflow-y-auto whitespace-pre-wrap rounded-lg bg-slate-50 p-4 text-sm text-slate-700 dark:bg-slate-900 dark:text-slate-300">
+            <div
+              className="max-h-80 overflow-y-auto whitespace-pre-wrap rounded-lg p-4 text-sm"
+              style={{
+                backgroundColor: 'var(--color-surface-alt)',
+                color: 'var(--color-text-secondary)',
+              }}
+            >
               {previewItem.content || "No content available."}
             </div>
 
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+            <div
+              className="rounded-lg p-3"
+              style={{
+                fontSize: 'var(--text-xs)',
+                color: 'var(--color-text-secondary)',
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--color-surface-alt)',
+              }}
+            >
               <p>
                 <strong>Source:</strong> {previewItem.sourceName}
               </p>
@@ -854,7 +907,8 @@ export default function PublicApiSearch() {
                   href={previewItem.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline dark:text-blue-400"
+                  className="underline"
+                  style={{ color: 'var(--color-primary)' }}
                 >
                   {previewItem.sourceUrl}
                 </a>

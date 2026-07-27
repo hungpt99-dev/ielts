@@ -392,6 +392,10 @@ export default function NotebookPage() {
                 <IconRefresh size={16} style={{ marginRight: 'var(--spacing-2xs)' }} />
                 Review
               </Button>
+              <Button variant="secondary" size="sm" onClick={() => navigate(ROUTES.publicApi)}>
+                <IconSearch size={16} style={{ marginRight: 'var(--spacing-2xs)' }} />
+                Search Public
+              </Button>
               <Button variant="secondary" size="sm" onClick={handleExport}>
                 <IconDownload size={16} style={{ marginRight: 'var(--spacing-2xs)' }} />
                 Export

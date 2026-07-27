@@ -65,6 +65,7 @@ export default function GrammarLearning() {
   const [exerciseMode, setExerciseMode] = useState(false)
 
   const [aiLoading, setAiLoading] = useState(false)
+  const [loadingTopic, setLoadingTopic] = useState<string | null>(null)
   const [aiError, setAiError] = useState<string | null>(null)
 
   const [mistakes, setMistakes] = useState<MistakeEntry[]>([])
@@ -261,6 +262,7 @@ export default function GrammarLearning() {
 
   async function startExercises(topic: string) {
     setAiLoading(true)
+    setLoadingTopic(topic)
     setAiError(null)
     try {
       const result = await generateActivityUseCase({
@@ -297,6 +299,7 @@ export default function GrammarLearning() {
       setAiError(err instanceof Error ? err.message : 'Failed to generate exercises')
     } finally {
       setAiLoading(false)
+      setLoadingTopic(null)
     }
   }
 
@@ -559,6 +562,8 @@ export default function GrammarLearning() {
                         variant="ghost"
                         size="sm"
                         onClick={() => startExercises(note.topic)}
+                        loading={loadingTopic === note.topic}
+                        disabled={loadingTopic !== null}
                         className="p-1.5"
                         title="Practice exercises"
                       >
@@ -689,26 +694,41 @@ export default function GrammarLearning() {
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {GRAMMAR_TOPICS.map(topic => {
               const note = notes.find(n => n.topic === topic)
+              const isGenerating = loadingTopic === topic
               return (
                 <button
                   key={topic}
                   onClick={() => startExercises(topic)}
+                  disabled={isGenerating}
                   className="rounded-lg border p-4 text-left transition-colors hover:border-[var(--color-primary)]"
                   style={{
-                    borderColor: 'var(--color-border)',
+                    borderColor: isGenerating ? 'var(--color-primary)' : 'var(--color-border)',
                     backgroundColor: 'var(--color-surface)',
+                    opacity: isGenerating ? 0.7 : 1,
+                    cursor: isGenerating ? 'wait' : 'pointer',
                   }}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
                       {topic}
                     </span>
-                    <svg className="h-4 w-4" style={{ color: 'var(--color-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
+                    {isGenerating ? (
+                      <div
+                        className="h-4 w-4 animate-spin rounded-full border-2 border-t-transparent"
+                        style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }}
+                      />
+                    ) : (
+                      <svg className="h-4 w-4" style={{ color: 'var(--color-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    )}
                   </div>
                   <div className="mt-2 flex items-center gap-2 text-xs" style={{ color: 'var(--color-muted)' }}>
-                    <span>Generated exercises</span>
+                    {isGenerating ? (
+                      <span style={{ color: 'var(--color-primary)' }}>Generating exercises...</span>
+                    ) : (
+                      <span>Generated exercises</span>
+                    )}
                     {note && (
                       <span
                         className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-medium ${getStatusStyle(note.status)}`}
