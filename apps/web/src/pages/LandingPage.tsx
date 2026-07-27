@@ -52,19 +52,19 @@ export default function LandingPage() {
             </div>
 
             <nav className="hidden items-center gap-6 sm:flex" aria-label="Landing page navigation">
-              <a href="#features" className="text-sm font-medium transition-colors hover:text-[var(--color-primary)]" style={{ color: 'var(--color-text-secondary)' }}>
+              <a href="#features" className="text-sm font-medium transition-colors text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]">
                 Features
               </a>
-              <a href="#ai-tutor" className="text-sm font-medium transition-colors hover:text-[var(--color-primary)]" style={{ color: 'var(--color-text-secondary)' }}>
+              <a href="#ai-tutor" className="text-sm font-medium transition-colors text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]">
                 AI Tutor
               </a>
-              <a href="#how-it-works" className="text-sm font-medium transition-colors hover:text-[var(--color-primary)]" style={{ color: 'var(--color-text-secondary)' }}>
+              <a href="#how-it-works" className="text-sm font-medium transition-colors text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]">
                 How It Works
               </a>
               <a
                 href={APP_URL}
                 className="rounded-xl px-4 py-1.5 text-sm font-semibold transition-all hover:brightness-110"
-                style={{ backgroundColor: 'var(--color-primary)', color: '#fff' }}
+                style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-text-inverse)' }}
               >
                 Get Started
               </a>
@@ -121,7 +121,7 @@ export default function LandingPage() {
                 </a>
                 <a href={APP_URL} onClick={() => setMobileMenuOpen(false)}
                   className="mt-2 inline-flex h-10 items-center justify-center rounded-xl text-sm font-semibold"
-                  style={{ backgroundColor: 'var(--color-primary)', color: '#fff' }}>
+                  style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-text-inverse)' }}>
                   Get Started
                 </a>
               </div>

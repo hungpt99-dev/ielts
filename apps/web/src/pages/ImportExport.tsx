@@ -168,7 +168,7 @@ export default function ImportExport() {
       />
 
       {success && (
-        <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/30 dark:text-green-400">
+        <div className="flex items-center gap-2 rounded-lg border px-4 py-3 text-sm" style={{ borderColor: 'var(--color-success)', backgroundColor: 'color-mix(in srgb, var(--color-success) 10%, transparent)', color: 'var(--color-success)' }}>
           <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
@@ -185,14 +185,14 @@ export default function ImportExport() {
           <CardTitle>Export Backup</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Download a complete JSON backup of all your IELTS data, including vocabulary, practice sessions,
             essays, grammar notes, mistakes, mock tests, and settings.
           </p>
           {lastExport && (
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-600 dark:bg-slate-700/50">
-              <p className="font-medium text-slate-700 dark:text-slate-300">Last export</p>
-              <p className="mt-0.5 text-slate-500 dark:text-slate-400">
+            <div className="rounded-lg border px-4 py-3 text-sm" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-alt)' }}>
+              <p className="font-medium" style={{ color: 'var(--color-text)' }}>Last export</p>
+              <p className="mt-0.5" style={{ color: 'var(--color-text-secondary)' }}>
                 {lastExport.date} &middot; {lastExport.size} &middot; {lastExport.records} records
               </p>
             </div>
@@ -211,7 +211,7 @@ export default function ImportExport() {
           <CardTitle>Import Backup</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Restore your data from a previously exported JSON backup file. This will replace all current data.
           </p>
           <input
@@ -284,7 +284,7 @@ export default function ImportExport() {
           <CardTitle>Data Management</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Clear all IELTS data from this browser. This action cannot be undone.
             Export a backup first if you want to keep your data.
           </p>
@@ -298,8 +298,8 @@ export default function ImportExport() {
         </CardContent>
       </Card>
 
-      <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800/50">
-        <p className="text-xs text-slate-500 dark:text-slate-400">
+      <div className="rounded-lg border px-4 py-3" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface-alt)' }}>
+        <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
           All data is stored locally in this browser using IndexedDB. No data is ever sent to any server.
           Regular backups are recommended. Backup files contain all your learning data in JSON format
           and can be safely stored or transferred to another device.

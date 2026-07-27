@@ -198,7 +198,7 @@ export default function ReviewCenter() {
       <div className="flex h-full items-center justify-center">
         <div
           role="status"
-          className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"
+          className="h-8 w-8 animate-spin rounded-full border-4 border-[var(--color-primary)] border-t-transparent"
         />
       </div>
     )
@@ -209,7 +209,7 @@ export default function ReviewCenter() {
       <div className="flex h-full items-center justify-center">
         <Card className="max-w-md text-center">
           <CardContent>
-            <p className="text-red-600 dark:text-red-400">{error}</p>
+            <p style={{ color: 'var(--color-danger)' }}>{error}</p>
             <Button variant="secondary" className="mt-4" onClick={loadReviewData}>Retry</Button>
           </CardContent>
         </Card>
@@ -222,13 +222,13 @@ export default function ReviewCenter() {
       <div className="mx-auto max-w-2xl">
         <Card className="text-center">
           <CardContent className="py-12">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
-              <svg className="h-8 w-8 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full" style={{ backgroundColor: 'color-mix(in srgb, var(--color-success) 15%, transparent)' }}>
+              <svg className="h-8 w-8" style={{ color: 'var(--color-success)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">All caught up!</h2>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>All caught up!</h2>
+            <p className="mt-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
               Nothing needs your review right now. Great work staying on top of things!
             </p>
             <Button className="mt-6" variant="secondary" onClick={loadReviewData}>
@@ -263,25 +263,25 @@ export default function ReviewCenter() {
             <Card key={group.id} className={`border-l-4 ${group.color}`}>
               <CardHeader className="flex-row items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800">
-                    <svg className="h-5 w-5 text-slate-600 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+                    <svg className="h-5 w-5" style={{ color: 'var(--color-text-secondary)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d={group.icon} />
                     </svg>
                   </div>
                   <div>
                     <CardTitle>{group.title}</CardTitle>
-                    <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                    <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-secondary)' }}>
                       {group.description}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="flex h-7 min-w-[2rem] items-center justify-center rounded-full bg-slate-200 px-2 text-xs font-bold tabular-nums text-slate-700 dark:bg-slate-700 dark:text-slate-300">
+                  <span className="flex h-7 min-w-[2rem] items-center justify-center rounded-full px-2 text-xs font-bold tabular-nums" style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}>
                     {group.count}
                   </span>
                   <Link
                     to={group.linkTo}
-                    className="rounded-lg px-3 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/30"
+                    className="rounded-lg px-3 py-1.5 text-xs font-medium transition-colors" style={{ color: 'var(--color-primary)' }}
                   >
                     Review
                   </Link>
@@ -289,19 +289,19 @@ export default function ReviewCenter() {
               </CardHeader>
               {group.items.length > 0 && (
                 <CardContent className="pt-0">
-                  <ul className="divide-y divide-slate-100 dark:divide-slate-800">
+                  <ul className="divide-y" style={{ borderColor: 'var(--color-border)' }}>
                     {group.items.slice(0, 10).map(item => (
                       <li
                         key={item.id}
                         className="flex items-start gap-3 py-2"
                       >
-                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-300 dark:bg-slate-600" />
+                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: 'var(--color-muted)' }} />
                         <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
+                          <p className="truncate text-sm font-medium" style={{ color: 'var(--color-text)' }}>
                             {item.label}
                           </p>
                           {item.subtitle && (
-                            <p className="truncate text-xs text-slate-500 dark:text-slate-400">
+                            <p className="truncate text-xs" style={{ color: 'var(--color-text-secondary)' }}>
                               {item.subtitle}
                             </p>
                           )}
@@ -309,7 +309,7 @@ export default function ReviewCenter() {
                       </li>
                     ))}
                     {group.items.length > 10 && (
-                      <li className="py-2 text-center text-xs text-slate-400 dark:text-slate-500">
+                      <li className="py-2 text-center text-xs" style={{ color: 'var(--color-muted)' }}>
                         +{group.items.length - 10} more {group.title.toLowerCase()}
                       </li>
                     )}

@@ -324,7 +324,6 @@ export default function AppLayout() {
               expanded={practiceExpanded}
               onToggle={() => {
                 setPracticeExpanded(!practiceExpanded)
-                if (progressExpanded) setProgressExpanded(false)
               }}
             >
               {practiceSubItems.map((item) => (
