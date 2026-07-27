@@ -120,7 +120,7 @@ export default function PopupDashboard() {
   }, [])
 
   const handleOpenSettings = useCallback(() => {
-    chrome.tabs.create({ url: chrome.runtime.getURL('options.html') })
+    openMainApp('/settings')
   }, [])
 
   const handleBackup = useCallback(() => {

@@ -50,7 +50,7 @@ beforeEach(() => {
         addListener: vi.fn(),
       },
       sendMessage: vi.fn(),
-      openOptionsPage: vi.fn(),
+      getURL: vi.fn((path: string) => `chrome-extension://test-id/${path}`),
     },
     storage: {
       local: mockStorage,
@@ -58,6 +58,11 @@ beforeEach(() => {
     tabs: {
       query: vi.fn(() => Promise.resolve([{ id: 1 }])),
       sendMessage: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+    },
+    windows: {
+      update: vi.fn(),
     },
   })
 
@@ -214,14 +219,29 @@ describe('initMessaging', () => {
     })
   })
 
-  it('OPEN_OPTIONS calls chrome.runtime.openOptionsPage', () => {
+  it('OPEN_OPTIONS opens main app at /settings route', async () => {
+    const mockTabsQuery = vi.fn().mockResolvedValue([])
+    const mockTabsCreate = vi.fn()
+    vi.stubGlobal('chrome', {
+      ...chrome,
+      tabs: {
+        query: mockTabsQuery,
+        create: mockTabsCreate,
+      },
+      runtime: {
+        ...chrome.runtime,
+        getURL: vi.fn((path: string) => `chrome-extension://test-id/${path}`),
+      },
+    })
     initMessaging()
 
     const sendResponse = vi.fn()
     const listener = (chrome.runtime.onMessage.addListener as ReturnType<typeof vi.fn>).mock.calls[0][0]
-    listener({ type: 'OPEN_OPTIONS', payload: undefined }, SENDER, sendResponse)
+    await listener({ type: 'OPEN_OPTIONS', payload: undefined }, SENDER, sendResponse)
 
-    expect(chrome.runtime.openOptionsPage).toHaveBeenCalledOnce()
+    expect(mockTabsCreate).toHaveBeenCalledWith({
+      url: 'chrome-extension://test-id/app/index.html#/settings',
+    })
   })
 
   it('VIDEO_PAGE_DETECTED ignores payload when isVideoPage is false', async () => {

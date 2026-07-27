@@ -344,8 +344,28 @@ export function initMessaging(): void {
     await updateDailyProgress(msg.payload)
   })
 
-  registerHandler('OPEN_OPTIONS', () => {
-    chrome.runtime.openOptionsPage()
+  registerHandler('OPEN_OPTIONS', async () => {
+    const targetUrl = chrome.runtime.getURL('app/index.html#/settings')
+    try {
+      const existingTabs = await chrome.tabs.query({
+        url: chrome.runtime.getURL('app/index.html*'),
+      })
+      if (existingTabs.length > 0) {
+        const tab = existingTabs[0]
+        if (tab?.id != null && tab?.windowId != null) {
+          await chrome.tabs.update(tab.id, { active: true })
+          await chrome.windows.update(tab.windowId, { focused: true })
+        } else if (tab?.id != null) {
+          await chrome.tabs.update(tab.id, { active: true })
+        }
+      } else {
+        await chrome.tabs.create({ url: targetUrl })
+      }
+      return { opened: true }
+    } catch {
+      await chrome.tabs.create({ url: targetUrl })
+      return { opened: true }
+    }
   })
 
   registerHandler('OPEN_MAIN_APP', async (_msg) => {
