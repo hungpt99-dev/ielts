@@ -11,10 +11,10 @@ export async function openMainApp(route?: string): Promise<void> {
     if (existingTabs.length > 0) {
       const tab = existingTabs[0]
       if (tab?.id != null && tab?.windowId != null) {
-        await chrome.tabs.update(tab.id, { active: true })
+        await chrome.tabs.update(tab.id, { active: true, url: targetUrl })
         await chrome.windows.update(tab.windowId, { focused: true })
       } else if (tab?.id != null) {
-        await chrome.tabs.update(tab.id, { active: true })
+        await chrome.tabs.update(tab.id, { active: true, url: targetUrl })
       }
     } else {
       await chrome.tabs.create({ url: targetUrl })
