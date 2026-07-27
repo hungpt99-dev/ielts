@@ -270,6 +270,7 @@ export default function Settings() {
       })
       if (aiApiKeyInput) {
         try { localStorage.setItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${aiProviderInput || 'openai'}`, aiApiKeyInput) } catch {}
+        try { chrome?.storage?.local?.set({ aiApiKey: aiApiKeyInput }) } catch {}
       }
       if (notifications.enabled && 'Notification' in window) {
         Notification.requestPermission()
