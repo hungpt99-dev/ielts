@@ -432,7 +432,7 @@ export default function Settings() {
       const result = await testConnection({
         apiKey: aiApiKeyInput,
         baseUrl: aiBaseUrlInput || OPENAI_BASE_URL,
-        model: aiModelInput || DEFAULT_AI_MODEL,
+        model: aiModelInput || defaultProviderDef?.defaultModel || 'gpt-4.1-mini',
       })
       setAiTestResult({ ok: result.ok, message: result.message })
     } catch (error) {
