@@ -52,8 +52,8 @@ export default function ExtensionApp() {
       if (!cancelled) {
         window.dispatchEvent(new Event('app-db-ready'))
       }
-      try { await initializeAITutorEngine() } catch { /* non-critical */ }
-      try { await initializeLearningEngine() } catch { /* non-critical */ }
+      try { await initializeAITutorEngine() } catch (err) { console.warn('[ExtensionApp] AI engine init failed:', err) }
+      try { await initializeLearningEngine() } catch (err) { console.warn('[ExtensionApp] Learning engine init failed:', err) }
     }
 
     bootstrap()
