@@ -26,7 +26,6 @@ const MockTests = lazy(() => import('../pages/MockTests'))
 const Settings = lazy(() => import('../pages/Settings'))
 const DataManagement = lazy(() => import('../pages/Settings/DataManagement'))
 const AIProviderSettingsPage = lazy(() => import('../pages/Settings/AIProviderSettingsPage'))
-const ExtensionConnectionPage = lazy(() => import('../pages/Settings/ExtensionConnectionPage'))
 const SearchPage = lazy(() => import('../pages/Search'))
 const ImportExport = lazy(() => import('../pages/ImportExport'))
 const PublicApiImportPage = lazy(() => import('../pages/PublicApiImportPage'))
@@ -422,7 +421,6 @@ export default function AppLayout() {
                       <Route path={ROUTES.settings} element={<Settings />} />
                       <Route path={ROUTES.settingsAi} element={<AIProviderSettingsPage />} />
                       <Route path={ROUTES.settingsData} element={<DataManagement />} />
-                      <Route path={ROUTES.settingsExtension} element={<ExtensionConnectionPage />} />
                       <Route path={ROUTES.importExport} element={<ImportExport />} />
                       <Route path={ROUTES.info} element={<PublicTabPage />} />
                       <Route path="/website-info" element={<RedirectWithHash to="/info" hash="about-website" />} />

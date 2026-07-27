@@ -4,26 +4,24 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev:web": "pnpm --filter @ielts/web dev",
+    "dev:landing": "pnpm --filter @ielts/web dev",
     "dev:extension": "pnpm --filter @ielts/extension dev",
 
     "build": "pnpm -r build",
-    "build:web": "pnpm --filter @ielts/web build",
+    "build:landing": "pnpm --filter @ielts/web build",
     "build:extension": "pnpm --filter @ielts/extension build",
 
     "typecheck": "pnpm -r typecheck",
-    "typecheck:web": "pnpm --filter @ielts/web typecheck",
+    "typecheck:landing": "pnpm --filter @ielts/web typecheck",
     "typecheck:extension": "pnpm --filter @ielts/extension typecheck",
 
     "lint": "pnpm -r lint",
-    "lint:web": "pnpm --filter @ielts/web lint",
     "lint:extension": "pnpm --filter @ielts/extension lint",
 
     "test": "vitest run",
     "test:watch": "vitest",
     "test:memory": "vitest run --maxWorkers=1 --no-file-parallelism --logHeapUsage",
 
-    "test:web": "vitest run --project '@ielts/web'",
     "test:extension": "vitest run --project '@ielts/extension'",
     "test:ai-tutor-engine": "vitest run --project '@ielts/ai-tutor-engine'",
     "test:learning-engine": "vitest run --project '@ielts/learning-engine'",
@@ -31,8 +29,8 @@
     "test:ai": "vitest run --project '@ielts/ai'",
     "test:settings": "vitest run --project '@ielts/settings'",
 
-    "deploy:web": "pnpm build:web && wrangler pages deploy apps/web/dist --branch main",
-    "deploy:web:prod": "pnpm build:web && wrangler pages deploy apps/web/dist --branch main --production",
+    "deploy:landing": "pnpm build:landing && wrangler pages deploy apps/web/dist --branch main",
+    "deploy:landing:prod": "pnpm build:landing && wrangler pages deploy apps/web/dist --branch main --production",
 
     "clean": "pnpm -r clean"
   },

@@ -50,11 +50,6 @@ describe('LearningEventRepository', () => {
       expect(event.eventId.length).toBeGreaterThan(0)
     })
 
-    it('sets syncStatus to local_only', async () => {
-      const event = await repo.save(makeInput())
-      expect(event.syncStatus).toBe('local_only')
-    })
-
     it('sets createdAt and timestamp', async () => {
       const event = await repo.save(makeInput())
       expect(event.createdAt).toBeTruthy()
@@ -223,17 +218,6 @@ describe('LearningEventRepository', () => {
     })
   })
 
-  describe('updateSyncStatus', () => {
-    it('updates sync status of an event', async () => {
-      const event = await repo.save(makeInput())
-      expect(event.syncStatus).toBe('local_only')
-
-      await repo.updateSyncStatus(event.eventId, 'synced')
-      const updated = await repo.findById(event.eventId)
-      expect(updated!.syncStatus).toBe('synced')
-    })
-  })
-
   describe('bulkSave', () => {
     it('saves multiple events', async () => {
       const inputs = [
@@ -283,7 +267,6 @@ describe('LearningEventRepository', () => {
 
       const event = await repo.save(makeInput())
       expect(event.eventId).toBeTruthy()
-      expect(event.syncStatus).toBe('local_only')
 
       const found = await repo.findById(event.eventId)
       expect(found).toBeDefined()

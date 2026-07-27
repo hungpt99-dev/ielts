@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
-import type { SyncEntityType } from '@ielts/storage'
 
-export function useDataRefresh(onChange?: (entityType: SyncEntityType) => void): void {
+export function useDataRefresh(onChange?: () => void): void {
   useEffect(() => {
-    // no-op: auto-sync removed
+    // no-op: auto-sync removed per extension-first refactor
   }, [onChange])
 }

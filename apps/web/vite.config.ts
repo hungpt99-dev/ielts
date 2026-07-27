@@ -1,58 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-const pwaConfig = {
-  registerType: 'autoUpdate' as const,
-  includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
-  manifest: {
-    id: '/',
-    name: 'IELTS Journey',
-    short_name: 'IELTS Journey',
-    description: 'Learn IELTS with AI Tutor',
-    theme_color: '#2563eb',
-    background_color: '#f8fafc',
-    display: 'standalone' as const,
-    orientation: 'portrait-primary' as const,
-    start_url: '/',
-    scope: '/',
-    categories: ['education', 'productivity'],
-    prefer_related_applications: false,
-    icons: [
-      {
-        src: 'icons/icon-192x192.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        src: 'icons/icon-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-      },
-      {
-        src: 'icons/icon-512x512.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'maskable',
-      },
-    ],
-  },
-  workbox: {
-    globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
-    maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
-    navigateFallback: '/',
-    navigateFallbackDenylist: [/^\/api\//],
-    runtimeCaching: [],
-  },
-}
-
 export default defineConfig({
-  plugins: [react(), tailwindcss(), VitePWA(pwaConfig)],
+  plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
     strictPort: true,
@@ -60,29 +15,20 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-charts': ['recharts'],
-          'vendor-ui': ['lucide-react', 'react-hook-form', '@hookform/resolvers'],
-          'vendor-ai': ['@ielts/ai', '@ielts/ai-tutor-engine'],
+          'vendor-ui': ['lucide-react'],
         },
       },
     },
   },
-  optimizeDeps: {
-    include: ['@hookform/resolvers/zod'],
-  },
   resolve: {
     alias: {
       'zod/v4/core': resolve(__dirname, '../../node_modules/.pnpm/zod@4.4.3/node_modules/zod/v4/core/index.js'),
-      '@ielts/ai': resolve(__dirname, '../../packages/ai/src'),
-      '@ielts/ai-tutor-engine': resolve(__dirname, '../../packages/ai-tutor-engine/src'),
       '@ielts/config': resolve(__dirname, '../../packages/config/src'),
-      '@ielts/settings': resolve(__dirname, '../../packages/settings/src'),
-      '@ielts/storage': resolve(__dirname, '../../packages/storage/src'),
       '@ielts/theme': resolve(__dirname, '../../packages/theme/src'),
       '@ielts/ui': resolve(__dirname, '../../packages/ui/src'),
     },

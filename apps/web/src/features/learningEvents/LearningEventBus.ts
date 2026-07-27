@@ -91,7 +91,6 @@ export class LearningEventBus {
       sessionId: crypto.randomUUID(),
       correlationId: input.correlationId ?? null,
       createdAt: now,
-      syncStatus: 'local_only',
     }
   }
 }

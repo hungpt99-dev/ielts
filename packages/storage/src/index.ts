@@ -121,12 +121,7 @@ export {
 } from './backup'
 export type { AppBackupData, ImportMode, ImportSummary } from './backup'
 
-export {
-  DATA_SYNC_ACTION,
-  createMessageId,
-} from './syncProtocol'
-export type {
-  DataSyncPayload,
-  SyncEntityType,
-  SyncOperation,
-} from './syncProtocol'
+export { onboardingPreferences } from './onboarding-preferences'
+export type { OnboardingPreferences } from './onboarding-preferences'
+
+

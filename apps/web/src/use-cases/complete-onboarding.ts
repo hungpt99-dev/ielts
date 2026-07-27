@@ -1,5 +1,5 @@
 import { DailyPlanEngine, buildNormalizedProfile, type SettingsSource } from '@ielts/learning-engine'
-import { PlanRepository } from '@ielts/storage'
+import { PlanRepository, onboardingPreferences } from '@ielts/storage'
 import { STORAGE_KEYS } from '@ielts/config'
 import type { StudyTask } from '@ielts/learning-engine'
 
@@ -58,10 +58,11 @@ function persistCanonicalSettings(input: CompleteOnboardingInput): void {
   }
 
   localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(settings))
-  localStorage.setItem(STORAGE_KEYS.localStorage.onboardingComplete, 'true')
   localStorage.setItem(STORAGE_KEYS.localStorage.preferredLanguage, input.preferredLanguage || 'en')
   localStorage.setItem(STORAGE_KEYS.localStorage.tutorStyle, input.tutorStyle || 'encouraging')
   localStorage.setItem(STORAGE_KEYS.localStorage.strongSkills, JSON.stringify(input.strongSkills || []))
+
+  onboardingPreferences.complete().catch(() => {})
 }
 
 function mapEngineTaskToDb(

@@ -82,7 +82,6 @@ describe('LearningEventBus', () => {
       expect(event.page).toBe(ROUTES.dashboard)
       expect(event.payload.eventType).toBe('app_opened')
       expect(event.sessionId).toBeTruthy()
-      expect(event.syncStatus).toBe('local_only')
       expect(event.createdAt).toBeTruthy()
     })
 
@@ -284,7 +283,6 @@ describe('LearningEventBus', () => {
       expect(event).toBeDefined()
       expect(event.eventId).toBeTruthy()
       expect(event.eventType).toBe('app_opened')
-      expect(event.syncStatus).toBe('local_only')
 
       consoleSpy.mockRestore()
     })
@@ -313,7 +311,6 @@ describe('LearningEventBus', () => {
       expect(event.sessionId).toBeTruthy()
       expect(event.correlationId).toBe('corr-1')
       expect(event.createdAt).toBeTruthy()
-      expect(event.syncStatus).toBe('local_only')
     })
 
     it('main action is not blocked by event emission failure', async () => {
@@ -339,7 +336,6 @@ describe('LearningEventBus', () => {
       expect(found).toBeDefined()
       expect(found!.eventId).toBe(event.eventId)
       expect(found!.eventType).toBe('app_opened')
-      expect(found!.syncStatus).toBe('local_only')
     })
 
     it('saves event with entity info', async () => {
@@ -360,7 +356,6 @@ describe('LearningEventBus', () => {
 
       expect(event.entityType).toBe('mistake')
       expect(event.entityId).toBe('mistake-1')
-      expect(event.syncStatus).toBe('local_only')
     })
   })
 })

@@ -48,7 +48,7 @@ export const APP_SCHEMA: AppDatabaseSchema = {
         readingExercises: 'id, topic, skill, difficulty, sourceId, *tags, isFavorite, createdAt',
         listeningExercises: 'id, topic, skill, difficulty, sourceId, *tags, isFavorite, createdAt',
         artifacts: 'id, url, category, *tags, isFavorite, createdAt',
-        learningEvents: 'id, eventType, source, timestamp, sessionId, syncStatus, createdAt',
+        learningEvents: 'id, eventType, source, timestamp, sessionId, createdAt',
         youtubeVideos: 'id, videoId, createdAt',
         transcripts: 'id, videoId, fetchedAt',
         videoAnalyses: 'id, videoId, createdAt',

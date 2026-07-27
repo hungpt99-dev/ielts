@@ -72,17 +72,6 @@ export const LEARNING_EVENT_SOURCES = [
 
 export type LearningEventSource = typeof LEARNING_EVENT_SOURCES[number]
 
-// ─── Sync Status ─────────────────────────────────────────────────────────────
-
-export const SYNC_STATUSES = [
-  'local_only',
-  'pending_sync',
-  'synced',
-  'sync_failed',
-] as const
-
-export type SyncStatus = typeof SYNC_STATUSES[number]
-
 // ─── Entity Types ────────────────────────────────────────────────────────────
 
 export type LearningEntityType =
@@ -428,7 +417,6 @@ export interface LearningEventBase {
   sessionId: string
   correlationId: string | null
   createdAt: ISOString
-  syncStatus: SyncStatus
 }
 
 export type LearningEvent = LearningEventBase & {

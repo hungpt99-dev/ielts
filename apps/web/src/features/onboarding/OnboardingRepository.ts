@@ -1,9 +1,9 @@
 import type { OnboardingProfile } from './types'
 import { getDefaultProfile } from './types'
 import { STORAGE_KEYS } from '@ielts/config'
+import { onboardingPreferences } from './OnboardingPreferencesRepository'
 
 const STORAGE_KEY = STORAGE_KEYS.localStorage.onboardingProfile
-const COMPLETED_KEY = STORAGE_KEYS.localStorage.onboardingComplete
 
 export class OnboardingRepository {
   load(): OnboardingProfile {
@@ -12,8 +12,7 @@ export class OnboardingRepository {
       if (!raw) return getDefaultProfile()
       const parsed = JSON.parse(raw)
       return { ...getDefaultProfile(), ...parsed, createdAt: parsed.createdAt || new Date().toISOString() }
-    } catch (error) {
-      console.error('apps/web/src/features/onboarding/OnboardingRepository.ts error:', error);
+    } catch {
       return getDefaultProfile()
     }
   }
@@ -22,35 +21,37 @@ export class OnboardingRepository {
     try {
       const toStore = { ...profile, updatedAt: new Date().toISOString() }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore))
-    } catch (e) {
-      console.error('[OnboardingRepository] Failed to save profile', e)
+    } catch {
+      /* non-critical */
     }
   }
 
   markCompleted(): void {
-    try {
-      localStorage.setItem(COMPLETED_KEY, 'true')
-    } catch (e) {
-      console.error('[OnboardingRepository] Failed to mark onboarding complete', e)
-    }
+    localStorage.setItem(STORAGE_KEYS.localStorage.onboardingComplete, 'true')
+    onboardingPreferences.complete().catch(() => {})
   }
 
-  isCompleted(): boolean {
+  async isCompleted(): Promise<boolean> {
     try {
-      return localStorage.getItem(COMPLETED_KEY) === 'true'
-    } catch (error) {
-      console.error('apps/web/src/features/onboarding/OnboardingRepository.ts error:', error);
-      return false
+      const status = await onboardingPreferences.getStatus()
+      return status.completed
+    } catch {
+      try {
+        return localStorage.getItem(STORAGE_KEYS.localStorage.onboardingComplete) === 'true'
+      } catch {
+        return false
+      }
     }
   }
 
   clear(): void {
     try {
       localStorage.removeItem(STORAGE_KEY)
-      localStorage.removeItem(COMPLETED_KEY)
-    } catch (e) {
-      console.error('[OnboardingRepository] Failed to clear onboarding data', e)
+      localStorage.removeItem(STORAGE_KEYS.localStorage.onboardingComplete)
+    } catch {
+      /* best effort */
     }
+    onboardingPreferences.reset().catch(() => {})
   }
 }
 

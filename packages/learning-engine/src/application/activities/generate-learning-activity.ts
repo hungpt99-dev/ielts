@@ -592,7 +592,7 @@ function normalizeAiQuestion(
           correctIdx = num
         } else {
           // Try matching the correctAnswer text against options
-          const idx = cleaned.findIndex(o => o.toLowerCase().trim() === q.correctAnswer.trim().toLowerCase())
+          const idx = cleaned.findIndex(o => o.toLowerCase().trim() === (q.correctAnswer as string).trim().toLowerCase())
           if (idx >= 0) correctIdx = idx
         }
       }

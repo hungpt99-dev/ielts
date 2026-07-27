@@ -1,8 +1,6 @@
-import type { SaveCategory, LearningEntry } from '../types'
+import type { SaveCategory } from '../types'
 import { STORAGE_KEYS } from '@ielts/config'
 import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
-import { saveEntry } from '../storage/indexedDB'
-import { saveVocabularyEntry } from '../storage/vocabularyStore'
 import { safeStorageSet } from '../utils/safe-chrome'
 import { initMessaging } from './messaging'
 import { initAiService } from './ai-service'
@@ -153,61 +151,6 @@ ensureStorageInitialized()
 initMessaging()
 initAiService()
 
-// Sync bridge handlers and bidirectional sync
-import('./sync/bidirectionalSyncController').then(({ exportExtensionData, importWebData, syncBidirectional }) => {
-  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    if (!message || typeof message !== 'object') return false
-    const msg = message as Record<string, unknown>
-
-    if (msg.type === 'EXPORT_EXTENSION_DATA') {
-      exportExtensionData()
-        .then((data) => sendResponse({ success: true, data }))
-        .catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'EXPORT failed' }))
-      return true
-    }
-
-    if (msg.type === 'IMPORT_EXTENSION_DATA') {
-      importWebData(msg.payload as Record<string, unknown> || {})
-        .then((result) => sendResponse({ success: true, data: result }))
-        .catch((err) => sendResponse({ success: false, error: err instanceof Error ? err.message : 'IMPORT failed' }))
-      return true
-    }
-
-    if (msg.type === 'BIDIRECTIONAL_SYNC') {
-      syncBidirectional().then(sendResponse).catch(() => sendResponse({ failed: 1 }))
-      return true
-    }
-
-    return false
-  })
-})
-
-// Web connection checker
-import('./sync/webTabConnection').then(({ findWebAppTab }) => {
-  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    if (!message || typeof message !== 'object') return false
-    const msg = message as Record<string, unknown>
-    if (msg.type === 'CHECK_WEB_CONNECTION') {
-      findWebAppTab().then((tab) => sendResponse({ connected: !!tab })).catch(() => sendResponse({ connected: false }))
-      return true
-    }
-    return false
-  })
-})
-
-// Auto sync message handlers
-import('./sync/SyncMessageHandlers').then(({ registerSyncMessageHandlers }) => {
-  registerSyncMessageHandlers()
-})
-
-// Trigger auto sync when extension popup opens
-import('./sync/AutoSyncController').then(({ onExtensionPopupOpen }) => {
-  chrome.runtime.onMessage.addListener((message) => {
-    if (message?.type === 'POPUP_OPENED') { onExtensionPopupOpen() }
-    return false
-  })
-})
-
 // Process batched saves queued by content scripts via chrome.storage.local.
 // Content scripts write to _pendingSaves (array) at most once per 2 seconds.
 chrome.storage.onChanged.addListener((changes, area) => {
@@ -224,29 +167,20 @@ chrome.storage.onChanged.addListener((changes, area) => {
         const now = new Date().toISOString()
         const sharedId = crypto.randomUUID()
 
-        const learningEntry: LearningEntry = {
+        const title = (pending.text as string).slice(0, 80)
+        await passageEntryRepo.bulkUpsert([{
           id: sharedId,
-          text: pending.text as string,
-          category: pending.category as LearningEntry['category'],
-          topic: (pending.topic as string) || 'general',
-          skill: ((pending.skill as string) || 'general') as LearningEntry['skill'],
-          difficulty: ((pending.difficulty as string) || '') as LearningEntry['difficulty'],
-          tags: (pending.tags as string[]) || [],
-          personalNote: (pending.note as string) || '',
-          pageTitle: (pending.pageTitle as string) || '',
-          pageUrl: (pending.pageUrl as string) || '',
-          status: 'new',
+          title: title || 'Extension Entry',
+          content: pending.text as string,
           createdAt: now,
           updatedAt: now,
-        }
-        await saveEntry(learningEntry)
-        passageEntryRepo.bulkUpsert([{ id: sharedId, title: 'Extension Entry', content: JSON.stringify(learningEntry), topic: pending.category as string || 'general', createdAt: now, updatedAt: now }]).catch(() => {})
+        } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch(() => {})
 
         if (pending.category === 'vocabulary') {
           vocabCount++
           const text = pending.text as string
           const word = text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, '')
-          await saveVocabularyEntry({
+          await vocabularyRepo.bulkUpsert([{
             id: sharedId,
             word,
             sourceSentence: text,
@@ -272,8 +206,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
             reviewId: '',
             createdAt: now,
             updatedAt: now,
-          }).catch(() => {})
-          vocabularyRepo.bulkUpsert([{ id: sharedId, word, sourceSentence: text, pageTitle: (pending.pageTitle as string) || '', pageUrl: (pending.pageUrl as string) || '', topic: (pending.topic as string) || 'general', personalNote: (pending.note as string) || '', tags: (pending.tags as string[]) || [], meaning: word || 'unknown', translation: '', partOfSpeech: '', pronunciation: '', exampleSentence: '', synonyms: [], antonyms: [], collocations: [], wordFamily: [], difficulty: 'medium', status: 'new', cefrLevel: '', ieltsRelevance: '', addedToReview: true, reviewId: '', createdAt: now, updatedAt: now }]).catch(() => {})
+          }]).catch(() => {})
         }
       } catch (err) {
         console.error('[PendingSave] Item failed:', err)
@@ -283,6 +216,8 @@ chrome.storage.onChanged.addListener((changes, area) => {
     if (vocabCount > 0) {
       await incrementDailyProgress('wordsAdded', vocabCount)
     }
+
+    chrome.runtime.sendMessage({ type: 'DATA_CHANGED', entity: 'savedItems', action: 'created' }).catch(() => {})
   })
 })
 

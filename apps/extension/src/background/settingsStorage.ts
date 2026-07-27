@@ -1,6 +1,5 @@
 import {
   type SharedSettings,
-  type SharedSettingsPatch,
   DEFAULT_SHARED_SETTINGS,
   THEME_MODES,
   AI_PROVIDERS,
@@ -48,9 +47,6 @@ export const DEFAULT_SETTINGS: ExtensionSettings = {
   aiTimeout: 30000,
 }
 
-// Fields shared between extension and website settings
-export type WebsiteOverlappingSettings = SharedSettingsPatch
-
 type SettingsChangeListener = (settings: ExtensionSettings) => void
 let listeners: SettingsChangeListener[] = []
 
@@ -70,7 +66,7 @@ function notifyListeners(settings: ExtensionSettings): void {
   }
 }
 
-interface SyncSettings {
+interface ExtensionSettingsData {
   aiProvider: 'openai' | 'custom'
   aiBaseUrl: string
   aiModel: string
@@ -88,11 +84,11 @@ interface SyncSettings {
   aiTemperature?: number
 }
 
-const SYNC_KEY = STORAGE_KEYS.extensionLocal.extensionSettings
+const SETTINGS_STORAGE_KEY = STORAGE_KEYS.extensionLocal.extensionSettings
 const LOCAL_API_KEY = STORAGE_KEYS.extensionLocal.aiApiKey
 const LOCAL_SETTINGS_BACKUP = STORAGE_KEYS.extensionLocal.settingsBackup
 
-function toSyncSettings(s: ExtensionSettings): SyncSettings {
+function toStorageSettings(s: ExtensionSettings): ExtensionSettingsData {
   return {
     aiProvider: s.aiProvider,
     aiBaseUrl: s.aiBaseUrl,
@@ -114,8 +110,8 @@ function toSyncSettings(s: ExtensionSettings): SyncSettings {
 
 function getDefaults(): Promise<ExtensionSettings> {
   return new Promise((resolve) => {
-    chrome.storage.local.get([SYNC_KEY], (result) => {
-      const stored = result[SYNC_KEY] as Partial<ExtensionSettings> | undefined
+    chrome.storage.local.get([SETTINGS_STORAGE_KEY], (result) => {
+      const stored = result[SETTINGS_STORAGE_KEY] as Partial<ExtensionSettings> | undefined
       if (stored && typeof stored === 'object') {
         resolve({ ...DEFAULT_SETTINGS, ...stored })
         return
@@ -132,10 +128,10 @@ export async function loadSettings(): Promise<ExtensionSettings> {
 }
 
 export async function saveSettings(settings: ExtensionSettings): Promise<void> {
-  const syncData = toSyncSettings(settings)
+  const settingsData = toStorageSettings(settings)
   await Promise.all([
     new Promise<void>((resolve) => {
-      chrome.storage.local.set({ [SYNC_KEY]: syncData, [LOCAL_SETTINGS_BACKUP]: syncData }, () => {
+      chrome.storage.local.set({ [SETTINGS_STORAGE_KEY]: settingsData, [LOCAL_SETTINGS_BACKUP]: settingsData }, () => {
         resolve()
       })
     }),
@@ -149,39 +145,6 @@ export async function patchSettings(patch: Partial<ExtensionSettings>): Promise<
   const merged = { ...current, ...patch }
   await saveSettings(merged)
   return merged
-}
-
-// ── Bridge integration ──
-
-// Apply overlapping settings pushed from the website bridge.
-// Handles aiApiKey separately via chrome.storage.local.
-export async function syncFromWebsite(websiteSettings: WebsiteOverlappingSettings): Promise<ExtensionSettings> {
-  const patch: Partial<ExtensionSettings> = {}
-  if (websiteSettings.aiProvider !== undefined) patch.aiProvider = websiteSettings.aiProvider
-  if (websiteSettings.aiModel !== undefined) patch.aiModel = websiteSettings.aiModel
-  if (websiteSettings.aiBaseUrl !== undefined) patch.aiBaseUrl = websiteSettings.aiBaseUrl
-  if (websiteSettings.themeMode !== undefined) patch.themeMode = websiteSettings.themeMode
-
-  const merged = await patchSettings(patch)
-
-  if (websiteSettings.aiApiKey !== undefined) {
-    merged.aiApiKey = websiteSettings.aiApiKey
-    await setApiKey(websiteSettings.aiApiKey)
-    notifyListeners(merged)
-  }
-
-  return merged
-}
-
-// Extract overlapping settings for the website bridge.
-// Excludes aiApiKey (handled separately via chrome.storage.local).
-export function getOverlappingForWebsite(settings: ExtensionSettings): WebsiteOverlappingSettings {
-  return {
-    aiProvider: settings.aiProvider,
-    aiModel: settings.aiModel,
-    aiBaseUrl: settings.aiBaseUrl,
-    themeMode: settings.themeMode,
-  }
 }
 
 export function getApiKey(): Promise<string> {
@@ -200,7 +163,7 @@ export function setApiKey(key: string): Promise<void> {
 
 export function clearAllSettings(): Promise<void> {
   return new Promise((resolve) => {
-    chrome.storage.local.remove([SYNC_KEY, LOCAL_API_KEY, LOCAL_SETTINGS_BACKUP], resolve)
+    chrome.storage.local.remove([SETTINGS_STORAGE_KEY, LOCAL_API_KEY, LOCAL_SETTINGS_BACKUP], resolve)
   })
 }
 

@@ -1,15 +1,13 @@
 import { STORAGE_KEYS } from '@ielts/config'
-import type { SaveCategory, LearningEntry } from '../types'
+import type { SaveCategory } from '../types'
 import {
   updateDailyProgress,
   setVideoPageInfo,
   setPendingVideoInfo,
   incrementDailyProgress,
 } from '../services/storage'
-import { saveEntry } from '../storage/indexedDB'
-import { saveVocabularyEntry, type ExtensionVocabEntry } from '../storage/vocabularyStore'
 import { emitFromBackground } from './eventEmitters'
-import { passageEntryRepo } from '../services/repositories'
+import { passageEntryRepo, vocabularyRepo } from '../services/repositories'
 
 const DEBUG = typeof process !== 'undefined' && process.env?.NODE_ENV === 'development'
 
@@ -306,6 +304,27 @@ export function handleMessage(
 }
 
 export function initMessaging(): void {
+  registerHandler('GET_POPUP_DASHBOARD', async () => {
+    const [progressResult, vocabResult] = await Promise.all([
+      chrome.storage.local.get([STORAGE_KEYS.extensionLocal.dailyProgress]).catch(() => ({} as Record<string, unknown>)),
+      vocabularyRepo.findAll().catch(() => []),
+    ])
+
+    const storedProgress = (progressResult as Record<string, unknown>)[STORAGE_KEYS.extensionLocal.dailyProgress] as Record<string, number> | undefined
+    const progress = storedProgress || {
+      wordsAdded: 0, notesAdded: 0, articlesSaved: 0, notesSaved: 0, reviewDue: 0, streak: 0,
+    }
+
+    return {
+      vocabularyCount: vocabResult.length,
+      dueReviewCount: progress.reviewDue || 0,
+      currentStreak: progress.streak || 0,
+      wordsAdded: progress.wordsAdded || 0,
+      articlesSaved: progress.articlesSaved || 0,
+      notesSaved: progress.notesSaved || 0,
+    }
+  })
+
   registerHandler('GET_DAILY_PROGRESS', async () => {
     const result = await chrome.storage.local.get([STORAGE_KEYS.extensionLocal.dailyProgress])
     return (
@@ -327,6 +346,34 @@ export function initMessaging(): void {
 
   registerHandler('OPEN_OPTIONS', () => {
     chrome.runtime.openOptionsPage()
+  })
+
+  registerHandler('OPEN_MAIN_APP', async (_msg) => {
+    const msg = _msg as unknown as { type: 'OPEN_MAIN_APP'; route?: string }
+    const targetUrl = msg.route
+      ? chrome.runtime.getURL(`app/index.html#${msg.route}`)
+      : chrome.runtime.getURL('app/index.html#/dashboard')
+
+    try {
+      const existingTabs = await chrome.tabs.query({
+        url: chrome.runtime.getURL('app/index.html*'),
+      })
+      if (existingTabs.length > 0) {
+        const tab = existingTabs[0]
+        if (tab?.id != null && tab?.windowId != null) {
+          await chrome.tabs.update(tab.id, { active: true })
+          await chrome.windows.update(tab.windowId, { focused: true })
+        } else if (tab?.id != null) {
+          await chrome.tabs.update(tab.id, { active: true })
+        }
+      } else {
+        await chrome.tabs.create({ url: targetUrl })
+      }
+      return { opened: true }
+    } catch {
+      await chrome.tabs.create({ url: targetUrl })
+      return { opened: true }
+    }
   })
 
   registerHandler('VIDEO_PAGE_DETECTED', async (_msg) => {
@@ -358,24 +405,15 @@ export function initMessaging(): void {
   registerHandler('MINI_TUTOR_SAVE_RESULT', async (_msg) => {
     const msg = _msg as ExtensionMessage<'MINI_TUTOR_SAVE_RESULT'>
     const now = new Date().toISOString()
+    const entryId = msg.payload.id || `ext-${Date.now()}`
     try {
-      const learningEntry: LearningEntry = {
-        id: msg.payload.id,
-        text: msg.payload.text,
-        category: msg.payload.category,
-        topic: 'general',
-        skill: 'vocabulary',
-        difficulty: '',
-        tags: [],
-        personalNote: '',
-        pageTitle: msg.payload.pageTitle || '',
-        pageUrl: msg.payload.pageUrl || '',
-        status: 'new',
+      await passageEntryRepo.bulkUpsert([{
+        id: entryId,
+        title: (msg.payload.text || '').slice(0, 80),
+        content: msg.payload.text,
         createdAt: now,
         updatedAt: now,
-      }
-      await saveEntry(learningEntry)
-      passageEntryRepo.bulkUpsert([{ id: msg.payload.id || `ext-${Date.now()}`, title: 'Extension Entry', content: JSON.stringify(learningEntry), topic: msg.payload.category || 'general', createdAt: now, updatedAt: now }]).catch(() => {})
+      } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch(() => {})
       await incrementDailyProgress('wordsAdded', 1)
 
       const sourceUrl = msg.payload.pageUrl || ''
@@ -414,35 +452,28 @@ export function initMessaging(): void {
   registerHandler('SAVE_SELECTION_FULL', async (_msg) => {
     const msg = _msg as ExtensionMessage<'SAVE_SELECTION_FULL'>
     const now = new Date().toISOString()
+    const entryId = crypto.randomUUID()
     try {
-      const entry: LearningEntry = {
-        id: crypto.randomUUID(),
-        text: msg.payload.text,
-        category: msg.payload.category,
-        topic: msg.payload.topic || 'general',
-        skill: (msg.payload.skill || 'general') as LearningEntry['skill'],
-        difficulty: (msg.payload.difficulty || '') as LearningEntry['difficulty'],
-        tags: msg.payload.tags || [],
-        personalNote: msg.payload.note || '',
-        pageTitle: msg.payload.pageTitle,
-        pageUrl: msg.payload.pageUrl,
-        status: 'new',
+      await passageEntryRepo.bulkUpsert([{
+        id: entryId,
+        title: (msg.payload.text || '').slice(0, 80),
+        content: msg.payload.text,
         createdAt: now,
         updatedAt: now,
-      }
-      await saveEntry(entry)
+      } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch(() => {})
 
       if (msg.payload.category === 'vocabulary') {
-        await saveVocabularyEntry({
+        const word = msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, '')
+        await vocabularyRepo.bulkUpsert([{
           id: crypto.randomUUID(),
-          word: msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+          word: word || 'unknown',
           sourceSentence: msg.payload.text,
           pageTitle: msg.payload.pageTitle || '',
           pageUrl: msg.payload.pageUrl || '',
           topic: (msg.payload.topic as string) || 'general',
           personalNote: msg.payload.note || '',
           tags: (msg.payload.tags as string[]) || [],
-          meaning: msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, ''),
+          meaning: word || 'unknown',
           translation: '',
           partOfSpeech: '',
           pronunciation: '',
@@ -451,15 +482,15 @@ export function initMessaging(): void {
           antonyms: [],
           collocations: [],
           wordFamily: [],
-          difficulty: (msg.payload.difficulty as string) || 'medium',
-          status: 'new',
+          difficulty: 'medium' as const,
+          status: 'new' as const,
           cefrLevel: '',
           ieltsRelevance: '',
           addedToReview: true,
           reviewId: '',
           createdAt: now,
           updatedAt: now,
-        }).catch(() => {})
+        }]).catch(() => {})
       }
 
       await incrementDailyProgress('wordsAdded', msg.payload.category === 'vocabulary' ? 1 : 0)
@@ -484,7 +515,7 @@ export function initMessaging(): void {
     const msg = _msg as { type: string; payload: Record<string, unknown> }
     const { word, sentence, videoTitle, videoUrl } = msg.payload
     const now = new Date().toISOString()
-    await saveVocabularyEntry({
+    await vocabularyRepo.bulkUpsert([{
       id: crypto.randomUUID(),
       word: (word as string) ?? '',
       sourceSentence: (sentence as string) ?? '',
@@ -502,57 +533,16 @@ export function initMessaging(): void {
       antonyms: [],
       collocations: [],
       wordFamily: [],
-      difficulty: 'medium',
-      status: 'new',
+      difficulty: 'medium' as const,
+      status: 'new' as const,
       cefrLevel: '',
       ieltsRelevance: '',
       addedToReview: false,
       reviewId: '',
       createdAt: now,
       updatedAt: now,
-    }).catch(() => {})
+    }]).catch(() => {})
     return { success: true }
-  })
-
-  registerHandler('SYNC_ALL_TO_WEB', async () => {
-    try {
-      const { getAllVocabulary } = await import('../storage/vocabularyStore')
-      const allVocab = await getAllVocabulary()
-      if (allVocab.length === 0) {
-        return { ok: true, count: 0 }
-      }
-
-      const tabs = await chrome.tabs.query({})
-      const ieltsTabs = tabs.filter(t => {
-        if (!t.id || !t.url) return false
-        try { return new URL(t.url).hostname === 'ieltsjourney.dev' }
-        catch (error) {
- console.error('apps/extension/src/background/messaging.ts error:', error);
- return false }
-      })
-      const targets = ieltsTabs.length > 0 ? ieltsTabs : tabs.filter(t => t.id)
-
-      const batchPayload = allVocab.map(vocab => ({
-        entityType: 'vocabulary' as const,
-        operation: 'created' as const,
-        entityId: vocab.id,
-        entity: vocab as unknown as Record<string, unknown>,
-        timestamp: new Date().toISOString(),
-        messageId: `sync-all-${vocab.id}-${Date.now()}`,
-      }))
-
-      await Promise.all(targets.map(tab =>
-        chrome.tabs.sendMessage(tab.id!, {
-          type: 'FORWARD_DATA_SYNC_BATCH',
-          payload: batchPayload,
-        }).catch(() => {})
-      ))
-
-      return { ok: true, count: allVocab.length }
-    } catch (err) {
-      console.error('[messaging] SYNC_ALL_TO_WEB handler error:', err)
-      return { ok: false, error: String(err) }
-    }
   })
 
   registerHandler('FETCH_TRANSCRIPT', async (_msg, sender) => {

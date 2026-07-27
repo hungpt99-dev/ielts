@@ -18,12 +18,6 @@ export interface VideoPageInfo {
   videoId: string
 }
 
-export interface SyncStatus {
-  lastSyncAt: string | null
-  pendingItems: Array<{ id: string; type: string; savedAt: string }>
-  lastSyncResult: 'success' | 'failed' | null
-}
-
 const LOCAL_KEYS = {
   DAILY_PROGRESS: EXT_STORAGE_KEYS.extensionLocal.dailyProgress,
   AI_API_KEY: EXT_STORAGE_KEYS.extensionLocal.aiApiKey,
@@ -55,14 +49,9 @@ function promisifyChromeStorage<K>(keyOrKeys: string | string[]): Promise<K | nu
   })
 }
 
-export type StorageGet<T> = (key: string) => Promise<T | null>
-export type StorageSet = (key: string, value: unknown) => Promise<void>
-
-export const storageGet: StorageGet<unknown> = (key: string) =>
-  promisifyChromeStorage(key)
-
-export const storageSet: StorageSet = (key: string, value: unknown) =>
-  safeStorageSet({ [key]: value })
+function storageSet(key: string, value: unknown): Promise<void> {
+  return safeStorageSet({ [key]: value })
+}
 
 export async function getDailyProgress(): Promise<DailyProgress> {
   const progress = await promisifyChromeStorage<DailyProgress>(LOCAL_KEYS.DAILY_PROGRESS)
@@ -168,24 +157,6 @@ export async function clearAllExtensionData(): Promise<void> {
   return new Promise((resolve) => {
     chrome.storage.local.clear(resolve)
   })
-}
-
-export function getSyncStatus(storageGet: StorageGet<SyncStatus>): Promise<SyncStatus | null> {
-  return storageGet('syncStatus')
-}
-
-export async function markItemsSynced(
-  ids: string[],
-  storageGetFn: StorageGet<SyncStatus>,
-  storageSetFn: StorageSet,
-): Promise<void> {
-  const status = await storageGetFn('syncStatus')
-  if (status) {
-    status.pendingItems = status.pendingItems.filter((item) => !ids.includes(item.id))
-    status.lastSyncAt = new Date().toISOString()
-    status.lastSyncResult = 'success'
-    await storageSetFn('syncStatus', status)
-  }
 }
 
 export { LOCAL_KEYS as STORAGE_KEYS, DEFAULT_PROGRESS }

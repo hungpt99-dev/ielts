@@ -1,6 +1,5 @@
 import { safeDb, getDb, isDbOpen } from '@ielts/storage'
 import type { LearningEvent, CreateLearningEventInput, AggregationWindow } from './types'
-import { SYNC_STATUSES } from './types'
 
 const TABLE_NAME = 'learningEvents'
 
@@ -36,7 +35,6 @@ function createEvent(input: CreateLearningEventInput): LearningEvent {
     sessionId: crypto.randomUUID(),
     correlationId: input.correlationId ?? null,
     createdAt: now,
-    syncStatus: 'local_only',
   }
 }
 
@@ -54,7 +52,6 @@ function toTable(item: LearningEvent): Record<string, unknown> {
     sessionId: item.sessionId,
     correlationId: item.correlationId,
     createdAt: item.createdAt,
-    syncStatus: item.syncStatus,
   }
 }
 
@@ -72,7 +69,6 @@ function fromTable(row: Record<string, unknown>): LearningEvent {
     sessionId: row.sessionId as string,
     correlationId: row.correlationId as LearningEvent['correlationId'],
     createdAt: row.createdAt as string,
-    syncStatus: row.syncStatus as LearningEvent['syncStatus'],
   } as LearningEvent
 }
 
@@ -186,23 +182,6 @@ export class LearningEventRepository {
     )
   }
 
-  async findBySyncStatus(syncStatus: LearningEvent['syncStatus']): Promise<LearningEvent[]> {
-    return persist(
-      async () => {
-        const table = getDb().table(TABLE_NAME)
-        const rows = await table
-          .where('syncStatus')
-          .equals(syncStatus)
-          .toArray()
-        return rows.map(r => fromTable(r as Record<string, unknown>))
-      },
-      () => {
-        const store = getInMemoryStore()
-        return Array.from(store.items.values()).filter(e => e.syncStatus === syncStatus)
-      },
-    )
-  }
-
   async findAll(limit = 500): Promise<LearningEvent[]> {
     return persist(
       async () => {
@@ -270,24 +249,6 @@ export class LearningEventRepository {
     const end = new Date(now).toISOString()
     const events = await this.findByDateRange(new Date(startMs).toISOString(), end)
     return events.filter(e => e.eventType === eventType).length
-  }
-
-  async updateSyncStatus(eventId: string, syncStatus: LearningEvent['syncStatus']): Promise<void> {
-    if (!SYNC_STATUSES.includes(syncStatus as typeof SYNC_STATUSES[number])) return
-
-    await persist(
-      async () => {
-        const table = getDb().table(TABLE_NAME)
-        await table.update(eventId, { syncStatus })
-      },
-      () => {
-        const store = getInMemoryStore()
-        const event = store.items.get(eventId)
-        if (event) {
-          store.items.set(eventId, { ...event, syncStatus })
-        }
-      },
-    )
   }
 
   async bulkSave(inputs: CreateLearningEventInput[]): Promise<LearningEvent[]> {

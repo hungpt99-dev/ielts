@@ -35,9 +35,18 @@ export function isOnboardingComplete(): boolean {
       Array.isArray(study?.weakSkills ?? settings.weakSkills) &&
       typeof (study?.studyGoal ?? settings.studyGoal) !== 'undefined'
     )
-  } catch (error) {
-    console.error('apps/web/src/features/onboarding/onboardingService.ts error:', error);
+  } catch {
     return false
+  }
+}
+
+export async function isOnboardingCompleteAsync(): Promise<boolean> {
+  const { onboardingPreferences } = await import('./OnboardingPreferencesRepository')
+  try {
+    const status = await onboardingPreferences.getStatus()
+    return status.completed
+  } catch {
+    return isOnboardingComplete()
   }
 }
 
@@ -173,10 +182,12 @@ export async function completeOnboarding(data: OnboardingData): Promise<void> {
   }
 
   localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(settings))
-  localStorage.setItem(STORAGE_KEYS.localStorage.onboardingComplete, 'true')
   localStorage.setItem(STORAGE_KEYS.localStorage.preferredLanguage, data.preferredLanguage || 'en')
   localStorage.setItem(STORAGE_KEYS.localStorage.tutorStyle, data.tutorStyle || 'encouraging')
   localStorage.setItem(STORAGE_KEYS.localStorage.strongSkills, JSON.stringify(data.strongSkills || []))
+
+  const { onboardingPreferences } = await import('./OnboardingPreferencesRepository')
+  onboardingPreferences.complete().catch(() => {})
 
   const existingTasks = await taskRepo.findAll()
   if (existingTasks.length === 0) {

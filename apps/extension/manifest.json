@@ -3,7 +3,7 @@
   "name": "IELTS Journey",
   "version": "1.0.0",
   "minimum_chrome_version": "88",
-  "description": "Collect English learning material from any webpage and save it to your IELTS study system.",
+  "description": "Your complete IELTS study companion. Learn vocabulary, practice skills, and get AI-powered tutoring — all inside your browser.",
   "author": "IELTS Journey",
   "homepage_url": "https://ieltsjourney.dev",
   "icons": {
@@ -48,8 +48,12 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["youtube-learning.html", "assets/*"],
-      "matches": ["*://www.youtube.com/*", "*://youtube.com/*", "*://youtu.be/*"]
+      "resources": [
+        "app/index.html",
+        "assets/*",
+        "youtube-learning.html"
+      ],
+      "matches": ["<all_urls>"]
     }
   ],
   "content_security_policy": {
