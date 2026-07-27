@@ -132,8 +132,8 @@ export default function PopupDashboard() {
     { icon: <IconArticle />, label: 'Articles', onClick: () => handleOpenMainApp('/artifacts') },
     { icon: <IconRefresh />, label: 'Review', onClick: () => handleOpenMainApp('/review') },
     { icon: <IconAITutor />, label: 'AI Tutor', onClick: () => handleOpenMainApp('/ai-tutor') },
-    { icon: <IconEdit />, label: 'Notes', onClick: () => handleOpenMainApp('/artifacts') },
     { icon: <IconSettings />, label: 'Settings', onClick: handleOpenSettings },
+    { icon: <IconEdit />, label: 'Import', onClick: () => handleOpenMainApp('/import-export') },
   ], [handleOpenMainApp, handleOpenSettings])
 
   const dashboardData = state.status === 'success' || state.status === 'empty' ? state.data : EMPTY_DATA
@@ -306,7 +306,6 @@ export default function PopupDashboard() {
               <IconSave size={12} />Backup
             </button>
           </div>
-          <Button variant="primary" size="sm" onClick={() => handleOpenMainApp()} icon={<IconHome size={14} />}>Open IELTS Journey</Button>
         </div>
       </div>
     )
