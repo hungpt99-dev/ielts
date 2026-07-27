@@ -160,6 +160,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
   safeStorageSet({ [STORAGE_KEYS.extensionLocal.pendingSaves]: [] }).then(async () => {
     let vocabCount = 0
+    const failed: Array<Record<string, unknown>> = []
 
     for (const pending of items) {
       if (!pending.text || !pending.category) continue
@@ -174,7 +175,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
           content: pending.text as string,
           createdAt: now,
           updatedAt: now,
-        } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch((err) => { console.warn("[PendingSave] passageEntry save failed:", err) })
+        } as Parameters<typeof passageEntryRepo.bulkUpsert>[0][number]]).catch((err) => { console.warn("[PendingSave] passageEntry save failed:", err); throw err })
 
         if (pending.category === 'vocabulary') {
           vocabCount++
@@ -206,11 +207,19 @@ chrome.storage.onChanged.addListener((changes, area) => {
             reviewId: '',
             createdAt: now,
             updatedAt: now,
-          }]).catch((err) => { console.warn("[PendingSave] vocab save failed:", err) })
+          }]).catch((err) => { console.warn("[PendingSave] vocab save failed:", err); throw err })
         }
       } catch (err) {
-        console.error('[PendingSave] Item failed:', err)
+        console.error('[PendingSave] Item failed, re-queuing:', err)
+        failed.push(pending)
       }
+    }
+
+    if (failed.length > 0) {
+      chrome.storage.local.get(STORAGE_KEYS.extensionLocal.pendingSaves, (result) => {
+        const existing = (result[STORAGE_KEYS.extensionLocal.pendingSaves] as Array<Record<string, unknown>>) || []
+        safeStorageSet({ [STORAGE_KEYS.extensionLocal.pendingSaves]: existing.concat(failed) })
+      })
     }
 
     if (vocabCount > 0) {

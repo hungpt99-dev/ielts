@@ -16,7 +16,7 @@ export async function loadSavedGrammarExercises(): Promise<Map<string, GrammarEx
     let rawQuestions: any[] = []
     const q = e.questions
     if (typeof q === 'string') {
-      try { rawQuestions = JSON.parse(q) } catch {}
+      try { rawQuestions = JSON.parse(q) } catch { /* malformed grammar cache */ }
     } else if (Array.isArray(q)) {
       rawQuestions = q
     }

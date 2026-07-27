@@ -287,7 +287,7 @@ export async function generateReadingQuestions(content: string, title: string, c
         })
         return { data: { questions }, error: null }
       }
-    } catch {}
+    } catch { /* classification not available */ }
   }
 
   const { content: result, error } = await callAi(READING_SYSTEM_PROMPT, `Title: ${title}\n\nContent:\n${content}\n\nCreate 5 IELTS reading questions.`, config)
@@ -328,7 +328,7 @@ export async function generateListeningExercise(content: string, config: AiProvi
         })
         return { data: { gaps }, error: null }
       }
-    } catch {}
+    } catch { /* classification not available */ }
   }
 
   const { content: result, error } = await callAi(LISTENING_SYSTEM_PROMPT, `Create a listening gap-fill exercise from:\n\n${content}`, config)
@@ -369,7 +369,7 @@ export async function generateSpeakingPrompts(content: string, config: AiProvide
         })
         return { data: { prompts }, error: null }
       }
-    } catch {}
+    } catch { /* classification not available */ }
   }
 
   const { content: result, error } = await callAi(SPEAKING_SYSTEM_PROMPT, `Create IELTS speaking prompts based on:\n\n${content}`, config)
@@ -410,7 +410,7 @@ export async function generateWritingIdeas(content: string, config: AiProviderCo
         })
         return { data: { ideas }, error: null }
       }
-    } catch {}
+    } catch { /* classification not available */ }
   }
 
   const { content: result, error } = await callAi(WRITING_SYSTEM_PROMPT, `Create IELTS writing task ideas based on:\n\n${content}`, config)
@@ -452,7 +452,7 @@ export async function generateGrammarExercises(content: string, config: AiProvid
         })
         return { data: { exercises }, error: null }
       }
-    } catch {}
+    } catch { /* classification not available */ }
   }
 
   const { content: result, error } = await callAi(GRAMMAR_SYSTEM_PROMPT, `Create grammar exercises based on:\n\n${content}`, config)
@@ -494,7 +494,7 @@ export async function generateMistakeReviewTasks(content: string, config: AiProv
         })
         return { data: { tasks }, error: null }
       }
-    } catch {}
+    } catch { /* classification not available */ }
   }
 
   const { content: result, error } = await callAi(MISTAKE_REVIEW_SYSTEM_PROMPT, `Create mistake review tasks based on:\n\n${content}`, config)

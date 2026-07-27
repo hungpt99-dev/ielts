@@ -22,7 +22,7 @@ export async function loadAllPassages(): Promise<ReadingPassageWithQuestions[]> 
     let questions: ReadingQuestion[] = []
     const rawQ = e.questions
     if (typeof rawQ === 'string') {
-      try { questions = JSON.parse(rawQ) as ReadingQuestion[] } catch {}
+      try { questions = JSON.parse(rawQ) as ReadingQuestion[] } catch { /* malformed reading questions cache */ }
     } else if (Array.isArray(rawQ)) {
       questions = (rawQ as any[]).map(q => ({
         ...q,

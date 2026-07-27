@@ -74,7 +74,6 @@ export function safeSyncGet<T>(
       })
     } catch (error) {
       if (isContextError(error)) return resolve({})
-      if (isContextError(error)) return resolve({})
       logContentError('apps/extension/src/utils/safe-chrome.ts', error);
       resolve({})
     }

@@ -7,8 +7,8 @@ export function initializeExtensionEngine(): LearningEngine {
   if (engineInstance) return engineInstance
 
   const noopRepo = {
-    save: async () => {},
-    delete: async () => {},
+    save: async () => { console.warn('[ExtensionEngine] noopRepo.save called — data not persisted') },
+    delete: async () => { console.warn('[ExtensionEngine] noopRepo.delete called') },
   }
 
   engineInstance = createLearningEngine({
@@ -34,15 +34,15 @@ export function initializeExtensionEngine(): LearningEngine {
     exerciseRepository: noopRepo as any,
     attemptRepository: noopRepo as any,
     outcomeRepository: noopRepo as any,
-    progressRepository: {} as any,
+    progressRepository: noopRepo as any,
     mistakeRepository: noopRepo as any,
     vocabularyRepository: noopRepo as any,
     learningEventPublisher: { publish: async () => {} },
     clock: {
       now: () => new Date(),
-    } as any,
+    },
     skillRegistry: createDefaultSkillRegistry(),
-  } as any)
+  })
 
   return engineInstance
 }

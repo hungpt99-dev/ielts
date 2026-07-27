@@ -9,7 +9,7 @@ function getTranscriptText(e: Record<string, unknown>): string {
         const parsed = JSON.parse(raw)
         return (typeof parsed.transcript === 'string' ? parsed.transcript : '') ||
                (typeof parsed.passage === 'string' ? parsed.passage : '')
-      } catch {}
+      } catch { /* malformed listening cache */ }
     }
     return raw
   }
@@ -24,7 +24,7 @@ function getListeningQuestions(e: Record<string, unknown>): ListeningQuestion[] 
   const raw = e.questions
   if (Array.isArray(raw)) return raw as ListeningQuestion[]
   if (typeof raw === 'string') {
-    try { return JSON.parse(raw) as ListeningQuestion[] } catch {}
+    try { return JSON.parse(raw) as ListeningQuestion[] } catch { /* malformed listening cache */ }
   }
   return []
 }

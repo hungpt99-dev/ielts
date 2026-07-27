@@ -140,7 +140,7 @@ export async function initializeAITutorEngine(): Promise<AITutorEngine | null> {
           } catch { return null }
         },
         set: (result) => {
-          try { localStorage.setItem(AI_TUTOR_CACHE.PROGRESS_REVIEW_STORAGE_KEY, JSON.stringify(result)) } catch {}
+          try { localStorage.setItem(AI_TUTOR_CACHE.PROGRESS_REVIEW_STORAGE_KEY, JSON.stringify(result)) } catch { /* localStorage may be full or unavailable */ }
         },
       },
     }

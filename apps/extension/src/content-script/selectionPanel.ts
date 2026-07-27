@@ -649,14 +649,6 @@ function storeToPageStorage(batch: typeof pendingSaves): void {
 function flushPendingSaves(): void {
   flushTimer = null
 
-  // Drain shared window queue (used by saveSelectedText.ts context menu handler)
-  const shared = (window as unknown as Record<string, unknown>).__ieltsSaveQueue as Array<Record<string, unknown>> | undefined
-  if (shared && shared.length > 0) {
-    for (const item of shared.splice(0)) {
-      pendingSaves.push(item as unknown as typeof pendingSaves[number])
-    }
-  }
-
   const batch = pendingSaves.splice(0)
   if (batch.length === 0) return
 

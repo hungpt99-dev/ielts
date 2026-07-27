@@ -1,4 +1,5 @@
 import type { SaveCategory } from '../types'
+import { STORAGE_KEYS } from '@ielts/config'
 import {
   safeStorageGet,
   safeStorageSet,
@@ -125,19 +126,20 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
     showToast(`Saved as ${payload.category}`)
 
-    // Share the same in-memory queue as selectionPanel.ts via window
-    const queue = (window as unknown as Record<string, unknown>).__ieltsSaveQueue ||
-      ((window as unknown as Record<string, unknown>).__ieltsSaveQueue = [])
-    ;(queue as Array<Record<string, unknown>>).push({
-      text: payload.text,
-      category: payload.category,
-      pageTitle: payload.pageTitle || document.title,
-      pageUrl: payload.pageUrl || window.location.href,
-      topic: payload.topic,
-      difficulty: payload.difficulty,
-      note: payload.note,
-      tags: payload.tags,
-      timestamp: Date.now(),
+    chrome.storage.local.get(STORAGE_KEYS.extensionLocal.pendingSaves, (result) => {
+      const existing = (result[STORAGE_KEYS.extensionLocal.pendingSaves] as Array<Record<string, unknown>>) || []
+      existing.push({
+        text: payload.text,
+        category: payload.category,
+        pageTitle: payload.pageTitle || document.title,
+        pageUrl: payload.pageUrl || window.location.href,
+        topic: payload.topic,
+        difficulty: payload.difficulty,
+        note: payload.note,
+        tags: payload.tags,
+        timestamp: Date.now(),
+      })
+      safeStorageSet({ [STORAGE_KEYS.extensionLocal.pendingSaves]: existing })
     })
 
     if (payload.category === 'vocabulary') {
