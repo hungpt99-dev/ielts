@@ -120,8 +120,8 @@ export default function PopupDashboard() {
   }, [])
 
   const handleOpenSettings = useCallback(() => {
-    openMainApp('/settings')
-  }, [])
+    handleOpenMainApp('/settings')
+  }, [handleOpenMainApp])
 
   const handleBackup = useCallback(() => {
     handleOpenMainApp('/import-export')
