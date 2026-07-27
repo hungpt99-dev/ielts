@@ -28,10 +28,8 @@ export function safeStorageGet<T>(
         resolve(result as Record<string, T | undefined>)
       })
     } catch (err) {
+      if (isContextError(err)) return resolve({})
       console.error('apps/extension/src/utils/safe-chrome.ts error:', err);
-      if (!isContextError(err)) {
-        console.warn('[IELTS] storage.local.get threw:', err)
-      }
       resolve({})
     }
   })
@@ -69,6 +67,7 @@ export function safeSyncGet<T>(
         resolve(result as Record<string, T | undefined>)
       })
     } catch (error) {
+      if (isContextError(error)) return resolve({})
       console.error('apps/extension/src/utils/safe-chrome.ts error:', error);
       resolve({})
     }
@@ -79,10 +78,8 @@ export async function safeSendMessage(message: Record<string, unknown>): Promise
   try {
     await chrome.runtime.sendMessage(message)
   } catch (err) {
+    if (isContextError(err)) return
     console.error('apps/extension/src/utils/safe-chrome.ts error:', err);
-    if (!isContextError(err)) {
-      console.warn('[IELTS] sendMessage error:', err)
-    }
   }
 }
 
@@ -101,8 +98,8 @@ export function safeSendMessageCb(
       cb?.(response)
     })
   } catch (error) {
+    if (isContextError(error)) return
     console.error('apps/extension/src/utils/safe-chrome.ts error:', error);
-    // Extension context invalidated — silently ignore
   }
 }
 
@@ -130,6 +127,7 @@ export function safeFetchProviderConfig(): Promise<{
       cachedConfig = { apiKey, baseUrl, model }
       return cachedConfig
     } catch (error) {
+      if (isContextError(error)) return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_AI_MODEL }
       console.error('apps/extension/src/utils/safe-chrome.ts error:', error);
       return { apiKey: '', baseUrl: OPENAI_BASE_URL, model: DEFAULT_AI_MODEL }
     }
