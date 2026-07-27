@@ -14,34 +14,46 @@ export const transcriptErrorCodeSchema = z.enum([
   'UNKNOWN',
 ])
 
-export const contentScriptMessageSchema = z.object({
-  source: z.literal('ielts-content-script'),
-  type: z.enum([
-    'VIDEO_INFO',
-    'TIME_UPDATE',
-    'TRANSCRIPT_AVAILABLE',
-    'TRANSCRIPT_DATA',
-    'TRANSCRIPT_UNAVAILABLE',
-    'TRANSCRIPT_ERROR',
-    'TRANSCRIPT_LOADING',
-    'FOCUS_MODE',
-    'LEARNING_EVENT',
-    'LEARNING_MODE_STATE',
-    'EXERCISE_DATA',
-    'DICTATION_RESULT',
-    'ANALYSIS_DATA',
-    'START_PRACTICE',
-    'VOCAB_EXPLANATION',
-    'VOCAB_SAVED',
-    'SENTENCE_EXPLANATION',
-    'QUIZ_DATA',
-    'QUIZ_EVALUATION',
-    'MISTAKES_SAVED',
-    'TRANSLATED_SEGMENTS',
-    'SETTINGS_DATA',
-  ]),
-  payload: z.unknown().optional(),
+const playSegmentPayloadSchema = z.object({
+  segmentIndex: z.number().int().min(0),
 })
+
+const activeSegmentIndexPayloadSchema = z.object({
+  activeSegmentIndex: z.number().int().min(0),
+})
+
+export const contentScriptMessageSchema = z.intersection(
+  z.object({ source: z.literal('ielts-content-script') }),
+  z.discriminatedUnion('type', [
+    { type: z.literal('VIDEO_INFO'), payload: z.unknown().optional() },
+    { type: z.literal('TIME_UPDATE'), payload: z.unknown().optional() },
+    { type: z.literal('TRANSCRIPT_AVAILABLE'), payload: z.unknown().optional() },
+    { type: z.literal('TRANSCRIPT_DATA'), payload: z.unknown().optional() },
+    { type: z.literal('TRANSCRIPT_UNAVAILABLE'), payload: z.unknown().optional() },
+    { type: z.literal('TRANSCRIPT_ERROR'), payload: z.unknown().optional() },
+    { type: z.literal('TRANSCRIPT_LOADING'), payload: z.unknown().optional() },
+    { type: z.literal('FOCUS_MODE'), payload: z.unknown().optional() },
+    { type: z.literal('LEARNING_EVENT'), payload: z.unknown().optional() },
+    { type: z.literal('LEARNING_MODE_STATE'), payload: z.unknown().optional() },
+    { type: z.literal('EXERCISE_DATA'), payload: z.unknown().optional() },
+    { type: z.literal('DICTATION_RESULT'), payload: z.unknown().optional() },
+    { type: z.literal('ANALYSIS_DATA'), payload: z.unknown().optional() },
+    { type: z.literal('START_PRACTICE'), payload: z.unknown().optional() },
+    { type: z.literal('VOCAB_EXPLANATION'), payload: z.unknown().optional() },
+    { type: z.literal('VOCAB_SAVED'), payload: z.unknown().optional() },
+    { type: z.literal('SENTENCE_EXPLANATION'), payload: z.unknown().optional() },
+    { type: z.literal('QUIZ_DATA'), payload: z.unknown().optional() },
+    { type: z.literal('QUIZ_EVALUATION'), payload: z.unknown().optional() },
+    { type: z.literal('MISTAKES_SAVED'), payload: z.unknown().optional() },
+    { type: z.literal('TRANSLATED_SEGMENTS'), payload: z.unknown().optional() },
+    { type: z.literal('SETTINGS_DATA'), payload: z.unknown().optional() },
+    { type: z.literal('TRANSCRIPT_PLAY_SEGMENT'), payload: playSegmentPayloadSchema },
+    { type: z.literal('TRANSCRIPT_PREVIOUS'), payload: z.number().optional() },
+    { type: z.literal('TRANSCRIPT_NEXT'), payload: z.number().optional() },
+    { type: z.literal('TRANSCRIPT_CONTINUE'), payload: z.null().optional() },
+    { type: z.literal('TRANSCRIPT_ACTIVE_SEGMENT_INDEX'), payload: activeSegmentIndexPayloadSchema },
+  ])
+)
 
 export const vocabularyExplanationSchema = z.object({
   word: z.string().min(1),
