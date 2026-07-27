@@ -18,21 +18,6 @@ declare module '@ielts/web-app/pages/LandingPage' {
   const LandingPage: FC
   export default LandingPage
 }
-declare module '@ielts/web-app/pages/OnboardingPage' {
-  import type { FC } from 'react'
-  const OnboardingPage: FC
-  export default OnboardingPage
-}
-declare module '@ielts/web-app/features/onboarding/onboardingService' {
-  export function isOnboardingComplete(): boolean
-  export interface OnboardingData {}
-  export function completeOnboarding(data: OnboardingData): Promise<void>
-}
-declare module '@ielts/web-app/features/onboarding/guards/OnboardingGuard' {
-  import type { FC, ReactNode } from 'react'
-  export const RequireOnboarding: FC<{ children: ReactNode }>
-  export const RedirectIfOnboarded: FC<{ children: ReactNode }>
-}
 declare module '@ielts/web-app/components/ui/Toast' {
   import type { FC, ReactNode } from 'react'
   export const ToastProvider: FC<{ children: ReactNode }>

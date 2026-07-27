@@ -26,6 +26,5 @@ export const ROUTES = {
   info: '/info',
   privacy: '/privacy',
   landing: '/',
-  onboarding: '/onboarding',
   feedback: '/feedback',
 } as const

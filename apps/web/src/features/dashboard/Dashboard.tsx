@@ -139,7 +139,7 @@ export default function Dashboard() {
           <EmptyStateIllustrated
             variant="default"
             title="Your IELTS journey starts here"
-            description="Complete your onboarding and let's build your first study plan."
+            description="Set up your IELTS goals and let's build your first study plan."
             action={{ label: 'Create My First Study Plan', onClick: () => navigate(ROUTES.roadmap) }}
           />
         </div>

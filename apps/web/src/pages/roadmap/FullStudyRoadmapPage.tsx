@@ -269,7 +269,7 @@ export default function FullStudyRoadmapPage() {
             {error}
           </p>
           <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
-            Please complete the onboarding first to set up your IELTS goals.
+            Set up your IELTS goals to build your study plan.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <button
@@ -285,13 +285,6 @@ export default function FullStudyRoadmapPage() {
               style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-secondary)' }}
             >
               Go to Dashboard
-            </button>
-            <button
-              onClick={() => navigate(ROUTES.onboarding)}
-              className="inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium transition-all hover:brightness-95"
-              style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-on-primary)' }}
-            >
-              Go to Onboarding
             </button>
           </div>
         </div>

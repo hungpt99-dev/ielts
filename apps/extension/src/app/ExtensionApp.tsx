@@ -4,10 +4,6 @@ import { ROUTES } from '@ielts/config'
 import { ThemeProvider } from '@ielts/web-app/context/ThemeContext'
 import { SettingsProvider } from '@ielts/web-app/context/SettingsContext'
 import AppLayout from '@ielts/web-app/components/Layout'
-import LandingPage from '@ielts/web-app/pages/LandingPage'
-import OnboardingPage from '@ielts/web-app/pages/OnboardingPage'
-import { isOnboardingComplete } from '@ielts/web-app/features/onboarding/onboardingService'
-import { RequireOnboarding, RedirectIfOnboarded } from '@ielts/web-app/features/onboarding/guards/OnboardingGuard'
 import { ToastProvider } from '@ielts/web-app/components/ui/Toast'
 import ErrorBoundary from '@ielts/web-app/components/ui/ErrorBoundary'
 import OfflineIndicator from '@ielts/web-app/components/ui/OfflineIndicator'
@@ -87,27 +83,14 @@ export default function ExtensionApp() {
             <Routes>
               <Route
                 path={ROUTES.landing}
-                element={
-                  isOnboardingComplete()
-                    ? <Navigate to={ROUTES.dashboard} replace />
-                    : <LandingPage />
-                }
+                element={<Navigate to={ROUTES.dashboard} replace />}
               />
               <Route path="/landing" element={<Navigate to={ROUTES.landing} replace />} />
-              <Route path={ROUTES.onboarding} element={
-                <RedirectIfOnboarded>
-                  <OnboardingPage />
-                </RedirectIfOnboarded>
-              } />
               <Route path="/tutor" element={<Navigate to={ROUTES.tutor} replace />} />
               <Route path="/roadmap" element={<Navigate to={ROUTES.roadmap} replace />} />
               <Route path="/reading" element={<Navigate to={ROUTES.reading} replace />} />
               <Route path="/listening" element={<Navigate to={ROUTES.listening} replace />} />
-              <Route path="/*" element={
-                <RequireOnboarding>
-                  <AppLayout />
-                </RequireOnboarding>
-              } />
+              <Route path="/*" element={<AppLayout />} />
             </Routes>
           </ToastProvider>
         </SettingsProvider>

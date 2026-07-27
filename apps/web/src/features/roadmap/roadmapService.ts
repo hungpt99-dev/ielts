@@ -528,7 +528,7 @@ export async function ensureRoadmap(): Promise<RoadmapData> {
   const existing = loadRoadmap()
   const settings = await loadUserSettings()
   if (!settings) {
-    throw new Error('User settings not found. Please complete onboarding first.')
+    throw new Error('User settings not found. Please configure your settings first.')
   }
 
   const tasks = await taskRepo.findAll()

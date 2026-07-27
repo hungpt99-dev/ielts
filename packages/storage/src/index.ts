@@ -121,7 +121,4 @@ export {
 } from './backup'
 export type { AppBackupData, ImportMode, ImportSummary } from './backup'
 
-export { onboardingPreferences } from './onboarding-preferences'
-export type { OnboardingPreferences } from './onboarding-preferences'
-
 

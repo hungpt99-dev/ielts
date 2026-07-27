@@ -5,8 +5,6 @@ export const STORAGE_KEYS = {
     themeMode: 'ielts-theme-mode' as const,
     accentColor: 'ielts-accent-color' as const,
     notificationPrefs: 'ielts-notification-prefs' as const,
-    onboardingComplete: 'ielts-onboarding-complete' as const,
-    onboardingProfile: 'ielts-onboarding-profile' as const,
     lastActiveAt: 'ielts-last-active-at' as const,
     preferredLanguage: 'ielts-preferred-language' as const,
     corsProxy: 'ielts-cors-proxy' as const,

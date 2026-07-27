@@ -1,6 +1,3 @@
-export { completeOnboardingUseCase } from './complete-onboarding'
-export type { CompleteOnboardingInput, CompleteOnboardingOutput } from './complete-onboarding'
-
 export { generateActivityUseCase } from './generate-activity'
 export type { GenerateActivityInput, GenerateActivityOutput } from './generate-activity'
 

@@ -15,7 +15,7 @@ describe('FinalCTASection', () => {
     render(<FinalCTASection />)
     const cta = screen.getByText('Start Learning Free')
     expect(cta).toBeInTheDocument()
-    expect(cta.closest('a')).toHaveAttribute('href', ROUTES.onboarding)
+    expect(cta.closest('a')).toHaveAttribute('href', ROUTES.landing)
   })
 
   it('renders trust badges', () => {

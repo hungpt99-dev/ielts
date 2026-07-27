@@ -3,4 +3,4 @@ export const EXTENSION_URL =
 
 import { ROUTES } from '@ielts/config'
 
-export const APP_URL = ROUTES.onboarding
+export const APP_URL = ROUTES.landing
