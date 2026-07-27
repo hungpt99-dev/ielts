@@ -1,25 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import type { UserConfiguration } from '@ielts/settings'
 import { loadUserConfiguration } from '@ielts/settings'
-import { STORAGE_KEYS } from '@ielts/config'
-
-function saveUserConfig(config: UserConfiguration): void {
-  try {
-    localStorage.setItem(STORAGE_KEYS.localStorage.userSettings, JSON.stringify(config))
-  } catch { /* ignore */ }
-  try {
-    chrome?.storage?.local?.set({
-      aiApiKey: config.aiApiKey ?? '',
-      extensionSettings: {
-        aiModel: config.ai?.model ?? '',
-        aiBaseUrl: config.ai?.customApiUrl ?? '',
-        themeMode: config.themeMode ?? '',
-        nativeLanguage: config.nativeLanguage ?? '',
-        accentColor: config.accentColor ?? '',
-      },
-    })
-  } catch { /* ignore */ }
-}
+import { persistUserConfig } from '../services/settingsBridge'
 
 interface SettingsContextValue {
   settings: UserConfiguration
@@ -35,7 +17,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<UserConfiguration>(loadUserConfiguration)
 
   useEffect(() => {
-    saveUserConfig(settings)
+    persistUserConfig(settings)
   }, [settings])
 
   useEffect(() => {

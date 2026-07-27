@@ -13,6 +13,7 @@ import { testConnection } from '../services/ai/testConnection'
 import { OPENAI_BASE_URL } from '@ielts/settings'
 import { ACCENT_COLOR_PRESETS, type ThemeMode } from '@ielts/theme'
 import { ROUTES, STORAGE_KEYS, AI_PROVIDER_DEFINITIONS, getVisibleProviders, getProviderById, DEFAULT_AI_MODEL, type AiProviderId } from '@ielts/config'
+import { persistApiKey } from '../services/settingsBridge'
 import Card, { CardContent, CardHeader, CardTitle } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
@@ -269,8 +270,7 @@ export default function Settings() {
         },
       })
       if (aiApiKeyInput) {
-        try { localStorage.setItem(`${STORAGE_KEYS.localStorage.apiKeyPrefix}${aiProviderInput || 'openai'}`, aiApiKeyInput) } catch {}
-        try { chrome?.storage?.local?.set({ aiApiKey: aiApiKeyInput }) } catch {}
+        persistApiKey(aiApiKeyInput, aiProviderInput || 'openai')
       }
       if (notifications.enabled && 'Notification' in window) {
         Notification.requestPermission()
