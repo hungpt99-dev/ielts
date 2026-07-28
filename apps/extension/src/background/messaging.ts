@@ -253,6 +253,17 @@ function isKnownMessage(msg: unknown): msg is ExtensionMessage {
   return typeof m.type === 'string' && handlers.has(m.type)
 }
 
+function safeRespond(sendResponse: (response: unknown) => void, response: unknown): void {
+  try {
+    sendResponse(response)
+  } catch {
+    // channel closed — e.g. tab navigated away during async handler
+  }
+  if (chrome.runtime.lastError) {
+    // suppress "message channel closed" warning
+  }
+}
+
 export function handleMessage(
   message: unknown,
   sender: chrome.runtime.MessageSender,
@@ -262,14 +273,6 @@ export function handleMessage(
     return false
   }
 
-  const safeRespond = (response: unknown) => {
-    try {
-      sendResponse(response)
-    } catch {
-      // channel closed — e.g. tab navigated away during async handler
-    }
-  }
-
   const handler = handlers.get(message.type)!
   try {
     const result = handler(message, sender)
@@ -277,11 +280,11 @@ export function handleMessage(
     if (result instanceof Promise) {
       result
         .then((data) => {
-          safeRespond({ success: true, data })
+          safeRespond(sendResponse, { success: true, data })
         })
         .catch((err) => {
           console.error(`[messaging] Handler error for ${message.type}:`, err)
-          safeRespond({
+          safeRespond(sendResponse, {
             success: false,
             error: 'HANDLER_ERROR',
             message: err instanceof Error ? err.message : 'Unknown error',
@@ -290,11 +293,11 @@ export function handleMessage(
       return true
     }
 
-    safeRespond({ success: true, data: result })
+    safeRespond(sendResponse, { success: true, data: result })
     return false
   } catch (err) {
     console.error(`[messaging] Sync handler error for ${message.type}:`, err)
-    safeRespond({
+    safeRespond(sendResponse, {
       success: false,
       error: 'HANDLER_ERROR',
       message: err instanceof Error ? err.message : 'Unknown error',
