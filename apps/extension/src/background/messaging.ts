@@ -573,7 +573,6 @@ export function initMessaging(): void {
     const { videoId } = msg.payload
     if (!videoId) return { success: false, error: 'NO_VIDEO_ID' }
 
-    // First try: use chrome.scripting.executeScript in MAIN world to access window.ytInitialPlayerResponse
     const tabId = sender.tab?.id
     if (tabId) {
       try {
@@ -584,17 +583,39 @@ export function initMessaging(): void {
             try {
               const w = window as any
               let data = w.ytInitialPlayerResponse
-              if (!data && w.ytplayer?.config?.args?.player_response) {
-                const raw = w.ytplayer.config.args.player_response
-                data = typeof raw === 'string' ? JSON.parse(raw) : raw
+                || w.ytInitialData
+                || w.ytplayer?.config?.args?.player_response
+              if (!data && w.ytcfg?.data_) {
+                data = w.ytcfg.data_
               }
               if (!data) return null
-              const tracks = data.captions?.playerCaptionsTracklistRenderer?.captionTracks
-              if (!tracks?.length) return null
+
+              let captionTracks: any[] = []
+
+              const tracks =
+                data?.captions?.playerCaptionsTracklistRenderer?.captionTracks
+                || data?.playerResponse?.captions?.playerCaptionsTracklistRenderer?.captionTracks
+                || []
+
+              if (tracks.length) {
+                captionTracks = tracks
+              }
+
+              if (!captionTracks.length) {
+                const raw = w.ytplayer?.config?.args?.player_response
+                if (raw) {
+                  const pr = typeof raw === 'string' ? JSON.parse(raw) : raw
+                  const prTracks = pr?.captions?.playerCaptionsTracklistRenderer?.captionTracks || []
+                  captionTracks.push(...prTracks)
+                }
+              }
+
+              if (!captionTracks.length) return null
+
               return {
-                videoId: data.videoDetails?.videoId || vid,
-                playabilityStatus: data.playabilityStatus?.status || null,
-                captionTracks: tracks.map((t: any) => ({
+                videoId: data?.videoDetails?.videoId || vid,
+                playabilityStatus: data?.playabilityStatus?.status || null,
+                captionTracks: captionTracks.map((t: any) => ({
                   baseUrl: t.baseUrl || '',
                   languageCode: t.languageCode || '',
                   name: (t.name?.simpleText) || t.languageCode || '',
@@ -604,8 +625,8 @@ export function initMessaging(): void {
                 })),
               }
             } catch (error) {
- console.error('apps/extension/src/background/messaging.ts error:', error);
- return null }
+              return null
+            }
           },
           args: [videoId],
         })
@@ -620,7 +641,6 @@ export function initMessaging(): void {
       }
     }
 
-    // Fallback: use YouTube internal API
     const result = await backgroundFetchTranscript(videoId)
     return { success: !result.error, data: result }
   })

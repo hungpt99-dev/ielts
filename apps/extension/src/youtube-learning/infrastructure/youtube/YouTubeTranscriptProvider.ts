@@ -1,7 +1,7 @@
-import type { TranscriptSegmentData, TranscriptData } from '../../domain/types'
+import type { TranscriptData } from '../../domain/types'
 import { TranscriptCacheService } from '../persistence/TranscriptCacheService'
 
-export type { TranscriptSegmentData, TranscriptData }
+export type { TranscriptData }
 
 export interface TranscriptProviderConfig {
   preferredLanguages: string[]
@@ -41,7 +41,6 @@ function log(...args: unknown[]): void {
 }
 
 const CACHE_TTL_MS = 5 * 60 * 1000
-const FETCH_TIMEOUT_MS = 10_000
 
 interface CacheEntry {
   data: TranscriptData
@@ -89,37 +88,7 @@ function makeError(code: TranscriptErrorCode, message: string, retryable: boolea
   return { code, message, retryable, detail }
 }
 
-// -- Fetch helpers --
-
-function combineAbortSignals(...signals: AbortSignal[]): AbortSignal {
-  const controller = new AbortController()
-  for (const sig of signals) {
-    if (sig.aborted) {
-      controller.abort(sig.reason)
-      return controller.signal
-    }
-    sig.addEventListener('abort', () => controller.abort(sig.reason), { once: true })
-  }
-  return controller.signal
-}
-
-async function fetchWithTimeout(
-  url: string,
-  options: RequestInit & { timeout?: number },
-  signal?: AbortSignal,
-): Promise<Response> {
-  const timeoutMs = options.timeout ?? FETCH_TIMEOUT_MS
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
-  const combinedSignal = signal ? combineAbortSignals(signal, controller.signal) : controller.signal
-  try {
-    return await fetch(url, { ...options, signal: combinedSignal })
-  } finally {
-    clearTimeout(timeoutId)
-  }
-}
-
-// -- Download captions from YouTube's servers (via background script) --
+// -- Primary fetch strategy: YouTube internal API via background script --
 
 interface CaptionTrack {
   baseUrl: string
@@ -189,88 +158,9 @@ async function fetchViaYoutubeInternalApi(
 async function fetchDirect(videoId: string, language: string, signal?: AbortSignal): Promise<TranscriptData | null> {
   if (signal?.aborted) return null
 
-  // Strategy 1: Get caption tracks from YouTube page via background script,
-  // then download XML also via background (bypasses CORS / content-script restrictions)
   if (typeof chrome?.runtime?.sendMessage === 'function') {
     const viaYoutube = await fetchViaYoutubeInternalApi(videoId, language, signal)
     if (viaYoutube) return viaYoutube
-  }
-  if (signal?.aborted) return null
-
-  // Strategy 2: Fetch via background script from third-party APIs
-  try {
-    const raw = await chrome.runtime.sendMessage({
-      type: 'FETCH_TRANSCRIPT_DIRECT',
-      payload: { videoId, language },
-    })
-    if (signal?.aborted) return null
-    const result = raw?.data
-    if (result?.success && result.data) {
-      return result.data as TranscriptData
-    }
-  } catch (_bgError) {
-    /* background script unavailable */
-  }
-  if (signal?.aborted) return null
-
-  // Strategy 3: Direct fetch from third-party APIs (may be blocked by CORS from content script)
-  const urls = [
-    `https://youtubetranscript.com/?v=${videoId}`,
-    `https://youtubetranscriptapi.vercel.app/api/transcript?videoId=${videoId}`,
-  ]
-
-  for (const url of urls) {
-    if (signal?.aborted) return null
-    try {
-      const response = await fetchWithTimeout(
-        url,
-        { headers: { 'Accept': 'application/json,text/xml,*/*' } },
-        signal,
-      )
-      if (!response.ok) continue
-      const text = await response.text()
-      if (!text || text.length < 20) continue
-
-      if (text.trim().startsWith('<')) {
-        try {
-          const parser = new DOMParser()
-          const xmlDoc = parser.parseFromString(text, 'text/xml')
-          const textElements = xmlDoc.querySelectorAll('text')
-          if (!textElements.length) continue
-          const segments: TranscriptSegmentData[] = []
-          textElements.forEach((el, index) => {
-            const start = parseFloat(el.getAttribute('start') || '0')
-            const dur = parseFloat(el.getAttribute('dur') || '0')
-            const t = el.textContent?.trim() || ''
-            if (!t) return
-            segments.push({ id: `${videoId}-${language}-xml-${index}`, start, end: start + dur, text: t })
-          })
-          if (segments.length) {
-            return {
-              videoId, language, source: 'unknown',
-              segments, fullText: segments.map(s => s.text).join(' '),
-            }
-          }
-        } catch (_xmlError) { continue }
-      }
-
-      try {
-        const json = JSON.parse(text)
-        const rawSegments = Array.isArray(json) ? json : (json as any).segments || (json as any).captions || (json as any).transcript || []
-        if (!rawSegments.length) continue
-        const segments = rawSegments
-          .map((s: any, i: number) => {
-            const start = typeof s.start === 'number' ? s.start : parseFloat(s.start || s.offset || '0')
-            const dur = typeof s.duration === 'number' ? s.duration : parseFloat(s.duration || '0')
-            return { id: `${videoId}-${language}-direct-${i}`, start, end: start + dur, text: (s.text || '').trim() }
-          })
-          .filter((s: TranscriptSegmentData) => s.text)
-        if (segments.length) {
-          const detectedLang = (json as any).language || language
-          return { videoId, language: detectedLang, source: 'auto-generated', segments, fullText: segments.map((s: TranscriptSegmentData) => s.text).join(' ') }
-        }
-      } catch (_jsonError) { continue }
-    } catch (_fetchError) { continue }
   }
 
   return null
