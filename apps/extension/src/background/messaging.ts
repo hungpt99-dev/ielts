@@ -579,61 +579,90 @@ export function initMessaging(): void {
         const results = await chrome.scripting.executeScript({
           target: { tabId },
           world: 'MAIN',
-          func: (vid: string) => {
+          func: () => {
             try {
               const w = window as any
-              let data = w.ytInitialPlayerResponse
-                || w.ytInitialData
-                || w.ytplayer?.config?.args?.player_response
-              if (!data && w.ytcfg?.data_) {
-                data = w.ytcfg.data_
+
+              let data: any = null
+
+              const scripts = document.querySelectorAll('script')
+              for (const script of scripts) {
+                const text = script.textContent || ''
+                const idx = text.indexOf('ytInitialPlayerResponse')
+                if (idx === -1) continue
+                const bracePos = text.indexOf('{', idx)
+                if (bracePos === -1) continue
+                let depth = 0
+                let inStr = false
+                let esc = false
+                for (let i = bracePos; i < text.length; i++) {
+                  const ch = text[i]
+                  if (esc) { esc = false; continue }
+                  if (ch === '\\') { esc = true; continue }
+                  if (ch === '"') { inStr = !inStr; continue }
+                  if (inStr) continue
+                  if (ch === '{') depth++
+                  if (ch === '}') depth--
+                  if (depth === 0) {
+                    try {
+                      data = JSON.parse(text.slice(bracePos, i + 1))
+                    } catch { /* malformed JSON */ }
+                    break
+                  }
+                }
+                if (data) break
               }
-              if (!data) return null
 
-              let captionTracks: any[] = []
-
-              const tracks =
-                data?.captions?.playerCaptionsTracklistRenderer?.captionTracks
-                || data?.playerResponse?.captions?.playerCaptionsTracklistRenderer?.captionTracks
-                || []
-
-              if (tracks.length) {
-                captionTracks = tracks
-              }
-
-              if (!captionTracks.length) {
-                const raw = w.ytplayer?.config?.args?.player_response
-                if (raw) {
-                  const pr = typeof raw === 'string' ? JSON.parse(raw) : raw
-                  const prTracks = pr?.captions?.playerCaptionsTracklistRenderer?.captionTracks || []
-                  captionTracks.push(...prTracks)
+              if (!data) {
+                const src = document.documentElement.innerHTML
+                const idx2 = src.indexOf('ytInitialPlayerResponse')
+                if (idx2 !== -1) {
+                  const bracePos2 = src.indexOf('{', idx2)
+                  if (bracePos2 !== -1) {
+                    let depth2 = 0
+                    let inStr2 = false
+                    let esc2 = false
+                    for (let i = bracePos2; i < src.length; i++) {
+                      const ch = src[i]
+                      if (esc2) { esc2 = false; continue }
+                      if (ch === '\\') { esc2 = true; continue }
+                      if (ch === '"') { inStr2 = !inStr2; continue }
+                      if (inStr2) continue
+                      if (ch === '{') depth2++
+                      if (ch === '}') depth2--
+                      if (depth2 === 0) {
+                        try {
+                          data = JSON.parse(src.slice(bracePos2, i + 1))
+                        } catch { /* ignore */ }
+                        break
+                      }
+                    }
+                  }
                 }
               }
 
-              if (!captionTracks.length) return null
+              if (!data) return null
 
-              return {
-                videoId: data?.videoDetails?.videoId || vid,
-                playabilityStatus: data?.playabilityStatus?.status || null,
-                captionTracks: captionTracks.map((t: any) => ({
-                  baseUrl: t.baseUrl || '',
-                  languageCode: t.languageCode || '',
-                  name: (t.name?.simpleText) || t.languageCode || '',
-                  kind: t.kind === 'asr' ? 'auto' : 'manual',
-                  isTranslatable: !!t.isTranslatable,
-                  vssId: t.vssId || undefined,
-                })),
-              }
-            } catch (error) {
+              const tracks = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks
+              if (!tracks?.length) return null
+
+              return tracks.map((t: any) => ({
+                baseUrl: t.baseUrl || '',
+                languageCode: t.languageCode || '',
+                name: (t.name?.simpleText) || t.languageCode || '',
+                kind: t.kind === 'asr' ? 'auto' : 'manual',
+                isTranslatable: !!t.isTranslatable,
+                vssId: t.vssId || undefined,
+              }))
+            } catch {
               return null
             }
           },
-          args: [videoId],
         })
-        const playerResult = results?.[0]?.result as { videoId: string | null; playabilityStatus: string | null; captionTracks: Array<{ baseUrl: string; languageCode: string; name: string; kind: string; isTranslatable: boolean; vssId?: string }> } | null
-        if (playerResult?.captionTracks?.length) {
-          bgLog('Found caption tracks via scripting MAIN world')
-          return { success: true, data: { tracks: playerResult.captionTracks, playabilityStatus: playerResult.playabilityStatus } }
+        const tracks = results?.[0]?.result as Array<{ baseUrl: string; languageCode: string; name: string; kind: string; isTranslatable: boolean; vssId?: string }> | null
+        if (tracks?.length) {
+          bgLog('Found', tracks.length, 'caption tracks via script tag parsing')
+          return { success: true, data: { tracks } }
         }
       } catch (e) {
         console.error('apps/extension/src/background/messaging.ts error:', e);
