@@ -100,23 +100,71 @@ interface CaptionTrack {
   vssId?: string
 }
 
+function extractYtInitialPlayerResponseFromDOM(): Record<string, unknown> | null {
+  const scripts = document.querySelectorAll('script')
+  for (const script of scripts) {
+    const text = script.textContent || ''
+    const idx = text.indexOf('ytInitialPlayerResponse')
+    if (idx === -1) continue
+    const bracePos = text.indexOf('{', idx)
+    if (bracePos === -1) continue
+
+    let depth = 0
+    let inStr = false
+    let esc = false
+    for (let i = bracePos; i < text.length; i++) {
+      const ch = text[i]
+      if (esc) { esc = false; continue }
+      if (ch === '\\') { esc = true; continue }
+      if (ch === '"') { inStr = !inStr; continue }
+      if (inStr) continue
+      if (ch === '{') depth++
+      if (ch === '}') depth--
+      if (depth === 0) {
+        try { return JSON.parse(text.slice(bracePos, i + 1)) } catch { return null }
+      }
+    }
+  }
+  return null
+}
+
+function extractCaptionTracks(data: Record<string, unknown>): CaptionTrack[] {
+  const tracks: any[] = data?.captions?.playerCaptionsTracklistRenderer?.captionTracks || []
+  return tracks.map((t: any) => ({
+    baseUrl: t.baseUrl || '',
+    languageCode: t.languageCode || '',
+    name: (t.name?.simpleText) || t.languageCode || '',
+    kind: t.kind === 'asr' ? 'auto' : 'manual',
+    isTranslatable: !!t.isTranslatable,
+    vssId: t.vssId || undefined,
+  }))
+}
+
 async function fetchViaYoutubeInternalApi(
   videoId: string,
   language: string,
   signal?: AbortSignal,
 ): Promise<TranscriptData | null> {
   try {
-    const raw = await chrome.runtime.sendMessage({
-      type: 'FETCH_TRANSCRIPT',
-      payload: { videoId },
-    })
-    if (signal?.aborted) return null
-    if (!raw?.success) return null
+    let tracks: CaptionTrack[] = []
 
-    const inner = raw?.data as { success?: boolean; data?: { tracks?: CaptionTrack[] } } | undefined
-    if (!inner?.success) return null
+    const playerResponse = extractYtInitialPlayerResponseFromDOM()
+    if (playerResponse) {
+      tracks = extractCaptionTracks(playerResponse)
+    }
 
-    const tracks = inner?.data?.tracks || []
+    if (!tracks.length) {
+      const raw = await chrome.runtime.sendMessage({
+        type: 'FETCH_TRANSCRIPT',
+        payload: { videoId },
+      })
+      if (signal?.aborted) return null
+      if (!raw?.success) return null
+      const inner = raw?.data as { success?: boolean; data?: { tracks?: CaptionTrack[] } } | undefined
+      if (!inner?.success) return null
+      tracks = inner?.data?.tracks || []
+    }
+
     if (!tracks.length) return null
 
     const preferredCodes = [language, 'en', 'en-US', 'en-GB']
