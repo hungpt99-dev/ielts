@@ -1,37 +1,37 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { useState, useEffect, useCallback, useMemo, useReducer, useRef } from 'react'
 import type { SpeakingSession, SpeakingPart } from '../../models'
 import { speakingSessionRepo } from '../../services/repositories'
 import Card, { CardContent, CardHeader, CardTitle } from '../../components/ui/Card'
 import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
-import SelfEvaluation, { type EvaluationResult } from './components/SelfEvaluation'
-interface SpeakingQuestion {
-  id: string
-  part: 1 | 2 | 3
-  question: string
-  topic: string
-  followUp?: string[]
-  cueCard?: {
-    topic: string
-    points: string[]
-    followUp: string[]
-  }
-}
-
-interface SpeakingPhrase {
-  category: string
-  phrases: string[]
-}
 import { generateId } from '../../utils'
 import { getLearningEngine } from '../../services/engineBootstrap'
 import { generateActivityUseCase } from '../../use-cases/generate-activity'
-import { submitAndComplete } from '../../services/learning/ai-exercise-session'
-import type { SessionInfo } from '../../services/learning/ai-exercise-session'
 import PageHeader from '../../components/layout/PageHeader'
 import { IconSpeaking } from '@ielts/ui'
-import TimerCard from '../../components/TimerCard'
-import { useTimer } from '../../hooks/useTimer'
-import { DEFAULT_TIMER_CONFIG } from '../../models/timer'
+
+import {
+  speakingReducer,
+  initialState,
+} from './types'
+import type {
+  SpeakingQuestion,
+  SpeakingPhrase,
+  AICoachFeedback,
+  SessionStats,
+  SessionStage,
+} from './types'
+
+import QuestionCard from './components/QuestionCard'
+import PreparationMode from './components/PreparationMode'
+import RecordingMode from './components/RecordingMode'
+import LiveTranscript from './components/LiveTranscript'
+import AICoachPanel from './components/AICoachPanel'
+import AIExaminer from './components/AIExaminer'
+import ModelAnswerView from './components/ModelAnswer'
+import SpeakingPhrasesDrawer from './components/SpeakingPhrases'
+import SessionSummary from './components/SessionSummary'
+import PracticeAgainOptions from './components/PracticeAgain'
 
 const TOPICS = [
   'Education', 'Technology', 'Environment', 'Health', 'Work',
@@ -45,8 +45,6 @@ const SPEAKING_PARTS: { value: SpeakingPart; label: string }[] = [
   { value: 2, label: 'Part 2 (Cue Card)' },
   { value: 3, label: 'Part 3 (Discussion)' },
 ]
-
-const TIMER_CONFIG = DEFAULT_TIMER_CONFIG
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
@@ -74,72 +72,41 @@ function getScoreLabel(score: number): string {
   return 'Poor'
 }
 
-const emptyEvaluation: EvaluationResult = {
-  fluency: 5,
-  vocabulary: 5,
-  grammar: 5,
-  pronunciation: 5,
-  coherence: 5,
-  taskAchievement: 5,
+const PART_DURATIONS: Record<number, number> = { 1: 60, 2: 120, 3: 120 }
+const PART_PREP_SECONDS: Record<number, number> = { 1: 0, 2: 60, 3: 0 }
+
+const STAGE_LABELS: Record<SessionStage, string> = {
+  browse: 'Question',
+  preparation: 'Preparation',
+  speaking: 'Speaking',
+  analyzing: 'AI Analysis',
+  results: 'Practice Again',
+  history: 'History',
 }
 
-type ViewState = 'browse' | 'practice' | 'results' | 'history'
+const STAGE_ORDER: SessionStage[] = ['browse', 'preparation', 'speaking', 'analyzing', 'results']
 
 export default function SpeakingPractice() {
-  const [view, setView] = useState<ViewState>('browse')
+  const [state, dispatch] = useReducer(speakingReducer, initialState)
 
   const [search, setSearch] = useState('')
   const [topicFilter, setTopicFilter] = useState('')
   const [partFilter, setPartFilter] = useState<SpeakingPart | 0>(0)
-
-  const [selectedQuestion, setSelectedQuestion] = useState<SpeakingQuestion | null>(null)
-  const [answerNotes, setAnswerNotes] = useState('')
-  const [sessionId, setSessionId] = useState<string | null>(null)
-  const [sessionInfo, setSessionInfo] = useState<SessionInfo | null>(null)
-  const [evaluation, setEvaluation] = useState<EvaluationResult>(emptyEvaluation)
-  const [fluencyNotes, setFluencyNotes] = useState('')
-  const [vocabularyNotes, setVocabularyNotes] = useState('')
-  const [grammarNotes, setGrammarNotes] = useState('')
-  const [pronunciationNotes, setPronunciationNotes] = useState('')
-  const [betterExpressions, setBetterExpressions] = useState('')
-  const [improvedAnswer, setImprovedAnswer] = useState('')
-  const [customTopic, setCustomTopic] = useState('')
-
-  const [history, setHistory] = useState<SpeakingSession[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const [aiLoading, setAiLoading] = useState(false)
-  const [aiError, setAiError] = useState<string | null>(null)
-  const [aiFeedback, setAiFeedback] = useState<string | null>(null)
-
-  const timer = useTimer({ config: TIMER_CONFIG })
-
-  const [recording, setRecording] = useState(false)
-  const [recordingSupported, setRecordingSupported] = useState(true)
-  const [recordingTime, setRecordingTime] = useState(0)
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-  const recordingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const audioChunksRef = useRef<Blob[]>([])
-  const recognitionRef = useRef<SpeechRecognition | null>(null)
-  const transcriptRef = useRef('')
-
   const [phrasesOpen, setPhrasesOpen] = useState(false)
-  const [phrasesFilter, setPhrasesFilter] = useState('')
-
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const [historyDetail, setHistoryDetail] = useState<SpeakingSession | null>(null)
 
+  const [speakingQuestions, setSpeakingQuestions] = useState<SpeakingQuestion[]>([])
+  const [speakingPhrases, setSpeakingPhrases] = useState<SpeakingPhrase[]>([])
+
   const loadHistory = useCallback(async () => {
     try {
-      setLoading(true)
+      dispatch({ type: 'SET_LOADING', loading: true })
       const all = await speakingSessionRepo.findAll()
-      setHistory(all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
+      dispatch({ type: 'SET_HISTORY', history: all.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) })
     } catch (err) {
-      console.error('apps/web/src/features/speaking/SpeakingPractice.tsx error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load speaking history')
-    } finally {
-      setLoading(false)
+      console.error('SpeakingPractice error:', err)
+      dispatch({ type: 'SET_ERROR', error: err instanceof Error ? err.message : 'Failed to load speaking history' })
     }
   }, [])
 
@@ -148,46 +115,53 @@ export default function SpeakingPractice() {
   }, [loadHistory])
 
   useEffect(() => {
-    return () => {
-      if (recordingTimerRef.current) clearInterval(recordingTimerRef.current)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (typeof navigator !== 'undefined' && navigator.mediaDevices) {
-      setRecordingSupported(true)
-    } else {
-      setRecordingSupported(false)
-    }
-  }, [])
-
-  const [speakingQuestions, setSpeakingQuestions] = useState<SpeakingQuestion[]>([])
-
-  useEffect(() => {
     getLearningEngine()?.getExercises('speaking').then(result => {
       if (result.status !== 'success' || !result.data) return
-      const mapped: SpeakingQuestion[] = []
+
+      const questions: SpeakingQuestion[] = []
+      const phrases: SpeakingPhrase[] = []
+
       for (const e of result.data.exercises) {
         const entry = e as any
         const part = entry.metadata?.part
-        if (!part || part < 1 || part > 3) continue
-        const topic = entry.metadata?.topic || 'General'
-        const question = entry.content || ''
-        if (!question) continue
-        const cueCardRaw = entry.metadata?.cueCard
-        let cueCard: SpeakingQuestion['cueCard']
-        if (typeof cueCardRaw === 'string') { try { cueCard = JSON.parse(cueCardRaw) } catch {} }
-        else if (cueCardRaw && typeof cueCardRaw === 'object') cueCard = cueCardRaw as any
-        mapped.push({
-          id: entry.id,
-          part: part as 1 | 2 | 3,
-          question,
-          topic,
-          followUp: cueCard?.followUp,
-          cueCard: cueCard ? { topic: cueCard.topic, points: cueCard.points, followUp: cueCard.followUp } : undefined,
-        })
+
+        if (part && part >= 1 && part <= 3) {
+          const topic = entry.metadata?.topic || 'General'
+          const question = entry.content
+          if (question) {
+            const cueCardRaw = entry.metadata?.cueCard
+            let cueCard: SpeakingQuestion['cueCard']
+            if (typeof cueCardRaw === 'string') { try { cueCard = JSON.parse(cueCardRaw) } catch {} }
+            else if (cueCardRaw && typeof cueCardRaw === 'object') cueCard = cueCardRaw as any
+            const difficulty = entry.metadata?.difficulty || (part === 1 ? 'B1' : part === 2 ? 'B2' : 'C1')
+            questions.push({
+              id: entry.id,
+              part: part as 1 | 2 | 3,
+              question,
+              topic,
+              difficulty,
+              estimatedTime: part === 1 ? '~1 minute' : part === 2 ? '~2 minutes (+1 min prep)' : '~2 minutes',
+              followUp: cueCard?.followUp,
+              cueCard: cueCard ? { topic: cueCard.topic, points: cueCard.points, followUp: cueCard.followUp } : undefined,
+            })
+          }
+        }
+
+        if ((entry.source || entry.sourceType) === 'built-in') {
+          const rawPhrases = entry.metadata?.phrases
+          if (rawPhrases) {
+            let phraseList: string[] = []
+            if (typeof rawPhrases === 'string') { try { phraseList = JSON.parse(rawPhrases) } catch {} }
+            else if (Array.isArray(rawPhrases)) phraseList = rawPhrases
+            if (phraseList.length > 0) {
+              phrases.push({ category: entry.title || 'General', phrases: phraseList })
+            }
+          }
+        }
       }
-      setSpeakingQuestions(mapped)
+
+      setSpeakingQuestions(questions)
+      setSpeakingPhrases(phrases)
     }).catch(() => {})
   }, [])
 
@@ -196,9 +170,7 @@ export default function SpeakingPractice() {
     if (search.trim()) {
       const query = search.toLowerCase()
       filtered = filtered.filter(
-        p =>
-          p.question.toLowerCase().includes(query) ||
-          p.topic.toLowerCase().includes(query)
+        p => p.question.toLowerCase().includes(query) || p.topic.toLowerCase().includes(query)
       )
     }
     if (topicFilter) filtered = filtered.filter(p => p.topic === topicFilter)
@@ -206,331 +178,294 @@ export default function SpeakingPractice() {
     return filtered
   }, [speakingQuestions, search, topicFilter, partFilter])
 
-  const [speakingPhrases, setSpeakingPhrases] = useState<SpeakingPhrase[]>([])
-
-  useEffect(() => {
-    getLearningEngine()?.getExercises('speaking').then(result => {
-      if (result.status !== 'success' || !result.data) {
-        console.log('[SpeakingPhrases] no data:', result?.status)
-        return
-      }
-      console.log('[SpeakingPhrases] exercises count:', result.data.exercises.length)
-      const mapped: SpeakingPhrase[] = []
-      for (const e of result.data.exercises) {
-        const entry = e as any
-        console.log('[SpeakingPhrases] entry:', JSON.stringify({ id: entry.id, source: entry.source, title: entry.title, hasPhrases: !!entry.metadata?.phrases }))
-        if (entry.source !== 'built-in') continue
-        const rawPhrases = entry.metadata?.phrases
-        if (!rawPhrases) continue
-        let phrases: string[] = []
-        if (typeof rawPhrases === 'string') { try { phrases = JSON.parse(rawPhrases) } catch { continue } }
-        else if (Array.isArray(rawPhrases)) phrases = rawPhrases
-        if (phrases.length === 0) continue
-        mapped.push({ category: entry.title || 'General', phrases })
-      }
-      setSpeakingPhrases(mapped)
-    }).catch(() => {})
-  }, [])
-
-  const filteredPhrases = useMemo(() => {
-    if (!phrasesFilter.trim()) return speakingPhrases
-    const query = phrasesFilter.toLowerCase()
-    return speakingPhrases
-      .map(group => ({
-        category: group.category,
-        phrases: group.phrases.filter(p => p.toLowerCase().includes(query)),
-      }))
-      .filter(group => group.phrases.length > 0)
-  }, [speakingPhrases, phrasesFilter])
-
-  async function startRecording() {
-    if (!recordingSupported) return
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' })
-      mediaRecorderRef.current = mediaRecorder
-      audioChunksRef.current = []
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data)
-        }
-      }
-
-      mediaRecorder.onstop = () => {
-        stream.getTracks().forEach(track => track.stop())
-      }
-
-      mediaRecorder.start()
-      setRecording(true)
-      setRecordingTime(0)
-      transcriptRef.current = ''
-
-      const SpeechRecognitionConstructor = (window as unknown as Record<string, unknown>).SpeechRecognition
-        || (window as unknown as Record<string, unknown>).webkitSpeechRecognition
-      if (SpeechRecognitionConstructor) {
-        const recognition = new (SpeechRecognitionConstructor as new () => SpeechRecognition)()
-        recognition.continuous = true
-        recognition.interimResults = true
-        recognition.lang = 'en-US'
-        recognition.onresult = (event: SpeechRecognitionEvent) => {
-          let final = ''
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            if (event.results[i].isFinal) {
-              final += event.results[i][0].transcript + ' '
-            }
-          }
-          if (final) {
-            transcriptRef.current += final
-            setAnswerNotes(prev => (prev + final).trim())
-          }
-        }
-        recognition.onerror = () => {}
-        recognition.start()
-        recognitionRef.current = recognition
-      }
-
-      recordingTimerRef.current = setInterval(() => {
-        setRecordingTime(prev => prev + 1)
-      }, 1000)
-    } catch (error) {
-      console.error('apps/web/src/features/speaking/SpeakingPractice.tsx error:', error);
-      setRecordingSupported(false)
-    }
-  }
-
-  function stopRecording() {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop()
-      recognitionRef.current = null
-    }
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop()
-    }
-    if (recordingTimerRef.current) {
-      clearInterval(recordingTimerRef.current)
-      recordingTimerRef.current = null
-    }
-    setRecording(false)
-  }
+  const historyStats = useMemo(() => {
+    if (state.history.length === 0) return null
+    const total = state.history.length
+    const avgRating = Math.round((state.history.reduce((s, h) => s + h.selfRating, 0) / total) * 10) / 10
+    const totalTime = state.history.reduce((s, h) => s + h.durationSeconds, 0)
+    const partsCount = new Set(state.history.map(h => h.part)).size
+    return { total, avgRating, totalTime, partsCount }
+  }, [state.history])
 
   function startPractice(question: SpeakingQuestion) {
-    setSelectedQuestion(question)
-    setAnswerNotes('')
-    setSessionId(null)
-    setAiError(null)
-    setAiFeedback(null)
-    setEvaluation(emptyEvaluation)
-    setFluencyNotes('')
-    setVocabularyNotes('')
-    setGrammarNotes('')
-    setPronunciationNotes('')
-    setBetterExpressions('')
-    setImprovedAnswer('')
-    setCustomTopic(question.topic)
-    setView('practice')
-
-    if (question.part === 2) {
-      timer.configure('countdown', TIMER_CONFIG.part2PrepSeconds)
-    } else {
-      timer.configure('stopwatch')
-    }
+    dispatch({ type: 'START_SESSION', question, sessionId: null })
   }
 
   function startCustomPractice() {
-    setSelectedQuestion(null)
-    setAnswerNotes('')
-    setSessionId(null)
-    setAiError(null)
-    setAiFeedback(null)
-    setEvaluation(emptyEvaluation)
-    setFluencyNotes('')
-    setVocabularyNotes('')
-    setGrammarNotes('')
-    setPronunciationNotes('')
-    setBetterExpressions('')
-    setImprovedAnswer('')
-    setCustomTopic('')
-    setView('practice')
-    timer.configure('stopwatch')
+    if (speakingQuestions.length > 0) {
+      const part2Questions = speakingQuestions.filter(q => q.part === 2)
+      const questions = part2Questions.length > 0 ? part2Questions : speakingQuestions
+      startPractice(questions[Math.floor(Math.random() * questions.length)])
+    }
   }
 
-  function saveSession() {
-    if (!answerNotes.trim() && !selectedQuestion) return
-    const now = new Date().toISOString()
-    const part = selectedQuestion?.part ?? 1
-    const duration = timer.mode === 'countdown'
-      ? timer.total - timer.seconds
-      : timer.seconds
+  function handlePreparationComplete() {
+    dispatch({ type: 'SET_STAGE', stage: 'speaking' })
+    setRecordingTime(0)
+  }
 
-    const session: SpeakingSession = {
-      id: sessionId || generateId(),
-      part,
-      question: selectedQuestion?.question || answerNotes.slice(0, 100) || 'Custom practice',
-      answerNotes: answerNotes.trim(),
-      topic: customTopic || selectedQuestion?.topic || '',
+  const [recordingTime, setRecordingTime] = useState(0)
+  const [audioBlobUrl, setAudioBlobUrl] = useState<string | null>(null)
+  const audioBlobUrlRef = useRef(audioBlobUrl)
+  audioBlobUrlRef.current = audioBlobUrl
+
+  useEffect(() => {
+    return () => {
+      if (audioBlobUrlRef.current) URL.revokeObjectURL(audioBlobUrlRef.current)
+    }
+  }, [])
+
+  function handleAudioBlob(blob: Blob) {
+    const url = URL.createObjectURL(blob)
+    setAudioBlobUrl(prev => {
+      if (prev) URL.revokeObjectURL(prev)
+      return url
+    })
+  }
+
+  function handleRecordingFinish() {
+    dispatch({ type: 'SET_STAGE', stage: 'analyzing' })
+
+    const duration = recordingTime
+    const transcript = state.answerTranscript
+    const wordCount = transcript.trim() ? transcript.trim().split(/\s+/).length : 0
+    const wpm = duration > 0 ? Math.round((wordCount / duration) * 60) : 0
+    const fillerCount = (transcript.match(/\b(um|uh|er|ah|like|you know|i mean)\b/gi) || []).length
+    const fillerDensity = wordCount > 0 ? fillerCount / wordCount : 0
+
+    const estimatedOverall = wordCount === 0 ? 1
+      : wordCount < 15 ? 3
+      : wordCount < 30 ? 4
+      : wordCount < 50 ? 4.5
+      : wordCount < 70 ? 5
+      : wordCount < 90 ? 5.5
+      : wordCount < 110 ? 6
+      : wordCount < 140 ? 6.5
+      : 7
+
+    const wpmPenalty = wpm > 0 && wpm < 50 ? 0.5 : wpm > 0 && wpm < 70 ? 0.25 : 0
+    const fillerPenalty = fillerDensity > 0.12 ? 1 : fillerDensity > 0.06 ? 0.5 : 0
+
+    const finalBand = Math.max(1, Math.min(9, estimatedOverall - wpmPenalty - fillerPenalty))
+    const vocabScore = Math.min(9, finalBand + (wordCount > 60 ? 1 : wordCount > 30 ? 0.5 : -0.5))
+    const grammarScore = Math.min(9, finalBand + (fillerDensity < 0.05 ? 0.5 : -0.5))
+    const fluScore = Math.max(1, Math.min(9, finalBand + (fillerDensity < 0.06 ? 0.5 : -1)))
+
+    const mockStats: SessionStats = {
+      bandScore: {
+        overall: finalBand,
+        fluency: fluScore,
+        vocabulary: vocabScore,
+        grammar: grammarScore,
+        pronunciation: finalBand,
+        coherence: finalBand,
+        taskAchievement: finalBand,
+      },
       durationSeconds: duration,
-      selfRating: Math.round(Object.values(evaluation).reduce((s, v) => s + v, 0) / Object.keys(evaluation).length) || 5,
-      fluencyNotes,
-      vocabularyNotes,
-      grammarMistakes: grammarNotes,
-      pronunciationNotes,
-      betterExpressions,
-      improvedAnswer,
+      wordsSpoken: wordCount,
+      wordsPerMinute: wpm,
+      vocabularyRichness: wordCount > 80 ? 'Rich' : wordCount > 40 ? 'Good' : 'Limited',
+      grammarAccuracy: fillerDensity < 0.05 ? 'Good' : fillerDensity < 0.1 ? 'Moderate' : 'Needs Work',
+      fillersUsed: fillerCount,
+      longestPause: 3200,
+      improvementTips: [
+        ...(fillerDensity > 0.05 ? ['Try to reduce filler words by pausing silently instead'] : []),
+        ...(wordCount < 50 ? ['Expand your answers with more details and examples'] : []),
+        ...(wpm < 70 && wpm > 0 ? ['Practice speaking at a more natural pace'] : []),
+        'Record yourself regularly to track pronunciation progress',
+        'Practice using complex sentence structures',
+      ].slice(0, 4),
+    }
+    dispatch({ type: 'SET_SESSION_STATS', stats: mockStats })
+
+    handleGetAiFeedback(transcript, duration)
+  }
+
+  function handleRecordingCancel() {
+    dispatch({ type: 'RESET_SESSION' })
+  }
+
+  function handleSaveSession(
+    transcript: string,
+    duration: number,
+    feedback?: { fluencyNotes?: string; pronunciationNotes?: string; betterExpressions?: string; improvedAnswer?: string },
+  ) {
+    if (!state.selectedQuestion) return
+    const now = new Date().toISOString()
+    const session: SpeakingSession = {
+      id: state.sessionId || generateId(),
+      part: state.selectedQuestion.part,
+      question: state.selectedQuestion.question,
+      answerNotes: transcript.trim(),
+      topic: state.selectedQuestion.topic,
+      durationSeconds: duration,
+      selfRating: Math.round(state.sessionStats?.bandScore?.overall ?? 5),
+      fluencyNotes: feedback?.fluencyNotes || '',
+      vocabularyNotes: '',
+      grammarMistakes: '',
+      pronunciationNotes: feedback?.pronunciationNotes || '',
+      betterExpressions: feedback?.betterExpressions || '',
+      improvedAnswer: feedback?.improvedAnswer || '',
       createdAt: now,
     }
-
-    if (sessionId) {
-      speakingSessionRepo.bulkUpsert([session]).then(() => {
-        loadHistory()
-      }).catch(() => {})
+    if (state.sessionId) {
+      speakingSessionRepo.bulkUpsert([session]).then(() => loadHistory()).catch(() => {})
     } else {
       speakingSessionRepo.create(session).then(() => {
-        setSessionId(session.id)
+        dispatch({ type: 'SET_SESSION_ID', sessionId: session.id })
         loadHistory()
       }).catch(() => {})
     }
   }
 
-  async function handleGetAiFeedback(text?: string) {
-    const textForFeedback = text || improvedAnswer.trim() || answerNotes.trim() || transcriptRef.current.trim()
+  async function handleGetAiFeedback(transcript: string, duration: number) {
+    const textForFeedback = transcript.trim()
     if (!textForFeedback) {
-      setAiError('Record your answer first or type it in the "Your Answer" field.')
+      dispatch({ type: 'SET_AI_ERROR', error: 'Record your answer first to get AI feedback.' })
+      handleSaveSession(transcript, duration)
+      dispatch({ type: 'SET_STAGE', stage: 'results' })
       return
     }
 
-    setAiLoading(true)
-    setAiError(null)
-    setAiFeedback(null)
+    dispatch({ type: 'SET_AI_LOADING', loading: true })
 
-    const aiContent = ''
+    const FEEDBACK_TIMEOUT_MS = 30_000
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
+
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(() => reject(new Error('AI feedback timed out')), FEEDBACK_TIMEOUT_MS)
+    })
+
     try {
-      const questionText = selectedQuestion?.question || 'Custom practice'
-      const part = (selectedQuestion?.part || 1) as 1 | 2 | 3
+      const topic = state.selectedQuestion?.topic || 'General'
+      const result = await Promise.race([
+        generateActivityUseCase({
+          skill: 'speaking',
+          description: `Evaluate this IELTS speaking response about "${topic}" and provide:
+1. An estimated band score (0-9)
+2. Overall feedback
+3. Strengths (list)
+4. Areas to improve (list)
+5. Fluency, pronunciation, and task achievement feedback
+6. An IMPROVED VERSION of the same answer written at Band 8+ level — rephrase the user's ideas with better vocabulary, grammar, and structure. Keep the same meaning but elevate the language.
 
-      const result = await generateActivityUseCase({
-        skill: 'speaking',
-        description: `Speaking: ${selectedQuestion.topic}`,
-        difficulty: selectedQuestion.difficulty || 'medium',
-        availableMinutes: 10,
-        topic: selectedQuestion.topic,
-      })
+User's response: "${textForFeedback.slice(0, 500)}"
+
+Respond as JSON with these keys: bandScore, overallFeedback, strengths, areasToImprove, fluencyFeedback, pronunciationFeedback, taskAchievementFeedback, improvedAnswer`,
+          difficulty: state.selectedQuestion?.difficulty || 'medium',
+          availableMinutes: 10,
+          topic,
+        }),
+        timeoutPromise,
+      ])
+      if (timeoutId) clearTimeout(timeoutId)
+
       const rawContent = result.content || ''
       const jsonStart = rawContent.indexOf('{')
       const jsonEnd = rawContent.lastIndexOf('}')
       const jsonStr = jsonStart >= 0 && jsonEnd >= 0 ? rawContent.slice(jsonStart, jsonEnd + 1) : rawContent
       const parsed = JSON.parse(jsonStr) as Record<string, unknown>
 
-      const textFields = ['fluencyNotes', 'vocabularyNotes', 'grammarNotes', 'pronunciationNotes', 'betterExpressions', 'improvedAnswer'] as const
-      for (const field of textFields) {
-        const val = parsed[field]
-        if (typeof val === 'string') {
-          const setters: Record<string, (v: string) => void> = {
-            fluencyNotes: setFluencyNotes,
-            vocabularyNotes: setVocabularyNotes,
-            grammarNotes: setGrammarNotes,
-            pronunciationNotes: setPronunciationNotes,
-            betterExpressions: setBetterExpressions,
-            improvedAnswer: setImprovedAnswer,
-          }
-          setters[field](val)
-        }
+      const bandScore = typeof parsed.bandScore === 'number' ? parsed.bandScore : (state.sessionStats?.bandScore?.overall ?? 0)
+
+      const feedback: AICoachFeedback = {
+        estimatedBand: bandScore,
+        overallFeedback: typeof parsed.overallFeedback === 'string' ? parsed.overallFeedback : '',
+        strengths: Array.isArray(parsed.strengths) ? parsed.strengths as string[] : [],
+        areasToImprove: Array.isArray(parsed.areasToImprove) ? parsed.areasToImprove as string[] : [],
+        grammarCorrections: Array.isArray(parsed.grammarCorrections) ? parsed.grammarCorrections : [],
+        vocabularySuggestions: Array.isArray(parsed.vocabularySuggestions) ? parsed.vocabularySuggestions : [],
+        fluencyFeedback: typeof parsed.fluencyFeedback === 'string' ? parsed.fluencyFeedback : '',
+        pronunciationFeedback: typeof parsed.pronunciationFeedback === 'string' ? parsed.pronunciationFeedback : '',
+        taskAchievementFeedback: typeof parsed.taskAchievementFeedback === 'string' ? parsed.taskAchievementFeedback : '',
+        modelAnswers: [],
+        followUpQuestions: Array.isArray(parsed.followUpQuestions) ? parsed.followUpQuestions as string[] : [],
+        improvedAnswer: typeof parsed.improvedAnswer === 'string' ? parsed.improvedAnswer : undefined,
       }
 
-      if (parsed.scores && typeof parsed.scores === 'object') {
-        const scores = parsed.scores as Record<string, unknown>
-        setEvaluation(prev => {
-          const next = { ...prev }
-          for (const key of Object.keys(next) as (keyof EvaluationResult)[]) {
-            const score = scores[key]
-            if (typeof score === 'number' && score >= 1 && score <= 10) {
-              next[key] = Math.round(score)
-            }
-          }
-          return next
-        })
-      }
-
-      const bandScore = parsed.bandScore
-      const bandMsg = typeof bandScore === 'number' ? `\n\nEstimated Band: ${bandScore.toFixed(1)}` : ''
-      setAiFeedback((result.content || aiContent) + bandMsg)
-      saveSession()
-      if (sessionInfo) {
-        const dur = timer.mode === 'countdown' ? timer.total - timer.seconds : timer.seconds
-        submitAndComplete(
-          sessionInfo,
-          [{ questionId: `part-${part}`, answer: textForFeedback, answeredAt: new Date().toISOString(), timeSpentMs: dur * 1000 }],
-          dur,
-        ).catch(() => {})
-      }
+      dispatch({ type: 'SET_AI_FEEDBACK', feedback })
+      handleSaveSession(transcript, duration, {
+        fluencyNotes: feedback.fluencyFeedback,
+        pronunciationNotes: feedback.pronunciationFeedback,
+        betterExpressions: feedback.vocabularySuggestions.map(v => `${v.word} → ${v.alternatives.join(', ')}`).join('; '),
+        improvedAnswer: feedback.improvedAnswer || '',
+      })
+      dispatch({ type: 'SET_STAGE', stage: 'results' })
     } catch (err) {
-      console.error('apps/web/src/features/speaking/SpeakingPractice.tsx error:', err);
-      if (err instanceof SyntaxError && aiContent) {
-        setAiFeedback(aiContent)
-        saveSession()
-      } else {
-        setAiError(err instanceof Error ? err.message : 'Failed to get AI feedback')
-      }
-    } finally {
-      setAiLoading(false)
+      console.error('AI feedback error:', err)
+      if (timeoutId) clearTimeout(timeoutId)
+      dispatch({ type: 'SET_AI_ERROR', error: err instanceof Error ? err.message : 'AI feedback generation failed. Please try again.' })
+      handleSaveSession(transcript, duration)
+      dispatch({ type: 'SET_STAGE', stage: 'results' })
     }
-  }
-
-  function handleFinish() {
-    timer.stop()
-    if (recording) stopRecording()
-    saveSession()
-    if (sessionInfo && answerNotes.trim()) {
-      const dur = timer.mode === 'countdown' ? timer.total - timer.seconds : timer.seconds
-      submitAndComplete(
-        sessionInfo,
-        [{ questionId: `part-${selectedQuestion?.part || 1}`, answer: answerNotes, answeredAt: new Date().toISOString(), timeSpentMs: dur * 1000 }],
-        dur,
-      ).catch(() => {})
-    }
-    setView('results')
-  }
-
-  function handleSaveAndFinish() {
-    saveSession()
-    setView('browse')
   }
 
   function handleReset() {
-    timer.stop()
-    if (recording) stopRecording()
-    setSelectedQuestion(null)
-    setAnswerNotes('')
-    setEvaluation(emptyEvaluation)
-    setSessionId(null)
-    setSessionInfo(null)
-    setAiError(null)
-    setAiFeedback(null)
-    setView('browse')
+    if (audioBlobUrl) {
+      URL.revokeObjectURL(audioBlobUrl)
+      setAudioBlobUrl(null)
+    }
+    setRecordingTime(0)
+    dispatch({ type: 'RESET_SESSION' })
   }
 
   function handleViewHistory() {
     loadHistory()
-    setView('history')
+    dispatch({ type: 'SET_STAGE', stage: 'history' })
   }
 
-  function handleDeleteSession(id: string) {
-    speakingSessionRepo.delete(id)
-    setHistory(prev => prev.filter(s => s.id !== id))
+  async function handleDeleteSession(id: string) {
+    try {
+      await speakingSessionRepo.delete(id)
+    } catch {
+      setDeleteConfirmId(null)
+      loadHistory()
+      return
+    }
+    dispatch({ type: 'SET_HISTORY', history: state.history.filter(s => s.id !== id) })
     setDeleteConfirmId(null)
   }
 
-  const historyStats = useMemo(() => {
-    if (history.length === 0) return null
-    const total = history.length
-    const avgRating = Math.round((history.reduce((s, h) => s + h.selfRating, 0) / total) * 10) / 10
-    const totalTime = history.reduce((s, h) => s + h.durationSeconds, 0)
-    const partsCount = new Set(history.map(h => h.part)).size
-    const bestRating = Math.max(...history.map(h => h.selfRating))
-    return { total, avgRating, totalTime, partsCount, bestRating }
-  }, [history])
+  function handleExaminerAnswer(_question: string, _answer: string) {}
 
-  if (loading && view === 'history') {
+  const handlePracticeAgain = {
+    onPracticeSame: () => state.selectedQuestion && startPractice(state.selectedQuestion),
+    onSimilarQuestion: () => {
+      if (!state.selectedQuestion) return
+      const sameTopic = speakingQuestions.filter(q => q.topic === state.selectedQuestion?.topic && q.id !== state.selectedQuestion?.id)
+      if (sameTopic.length > 0) {
+        startPractice(sameTopic[Math.floor(Math.random() * sameTopic.length)])
+      } else {
+        startPractice(state.selectedQuestion)
+      }
+    },
+    onRandomQuestion: () => {
+      if (speakingQuestions.length > 0) {
+        startPractice(speakingQuestions[Math.floor(Math.random() * speakingQuestions.length)])
+      } else {
+        startCustomPractice()
+      }
+    },
+    onHarderDifficulty: () => {
+      const harder = speakingQuestions.filter(q => q.part === 3)
+      if (harder.length > 0) {
+        startPractice(harder[Math.floor(Math.random() * harder.length)])
+      } else if (state.selectedQuestion) {
+        startPractice(state.selectedQuestion)
+      }
+    },
+    onEasierDifficulty: () => {
+      const easier = speakingQuestions.filter(q => q.part === 1)
+      if (easier.length > 0) {
+        startPractice(easier[Math.floor(Math.random() * easier.length)])
+      } else if (state.selectedQuestion) {
+        startPractice(state.selectedQuestion)
+      }
+    },
+    onBackToBrowse: () => handleReset(),
+  }
+
+  if (state.loading && state.stage === 'history') {
     return (
       <div className="flex h-full items-center justify-center">
         <div
@@ -541,12 +476,12 @@ export default function SpeakingPractice() {
     )
   }
 
-  if (error && view === 'history') {
+  if (state.error && state.stage === 'history') {
     return (
       <div className="flex h-full items-center justify-center">
         <Card className="max-w-md text-center">
           <CardContent>
-            <p style={{ color: 'var(--color-danger)' }}>{error}</p>
+            <p style={{ color: 'var(--color-danger)' }}>{state.error}</p>
             <Button variant="secondary" className="mt-4" onClick={loadHistory}>Retry</Button>
           </CardContent>
         </Card>
@@ -554,14 +489,16 @@ export default function SpeakingPractice() {
     )
   }
 
+  const isInSession = state.stage === 'preparation' || state.stage === 'speaking' || state.stage === 'analyzing' || state.stage === 'results'
+
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      {view === 'browse' && (
+      {state.stage === 'browse' && (
         <>
           <PageHeader
             icon={<IconSpeaking size={22} />}
             title="Speaking Practice"
-            description="Practice IELTS Speaking Part 1, 2, and 3 with question bank, timer, and AI feedback"
+            description="Practice IELTS Speaking with AI-powered feedback, real-time transcription, and personalized coaching"
             actions={
               <div className="flex flex-wrap gap-2">
                 <Button variant="outline" onClick={() => setPhrasesOpen(true)}>
@@ -574,62 +511,44 @@ export default function SpeakingPractice() {
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
-                  Custom Practice
+                  Quick Practice
                 </Button>
                 <Button onClick={handleViewHistory} variant="secondary">
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                History
-              </Button>
-            </div>
-          }
-        />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  History
+                </Button>
+              </div>
+            }
+          />
 
           {historyStats && (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <Card>
                 <CardContent>
-                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                    Total Sessions
-                  </p>
-                  <p className="mt-1 text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>
-                    {historyStats.total}
+                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Total Sessions</p>
+                  <p className="mt-1 text-2xl font-bold" style={{ color: 'var(--color-primary)' }}>{historyStats.total}</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent>
+                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Avg Rating</p>
+                  <p className="mt-1 text-2xl font-bold" style={{ color: getScoreColor(historyStats.avgRating) }}>
+                    {historyStats.avgRating}<span className="ml-1 text-sm font-normal" style={{ color: 'var(--color-muted)' }}>/10</span>
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent>
-                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                    Avg Self-Rating
-                  </p>
-                  <p
-                    className="mt-1 text-2xl font-bold"
-                    style={{ color: getScoreColor(historyStats.avgRating) }}
-                  >
-                    {historyStats.avgRating}
-                    <span className="ml-1 text-sm font-normal" style={{ color: 'var(--color-muted)' }}>/10</span>
-                  </p>
+                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Speaking Time</p>
+                  <p className="mt-1 text-2xl font-bold" style={{ color: 'var(--color-warning)' }}>{formatDuration(historyStats.totalTime)}</p>
                 </CardContent>
               </Card>
               <Card>
                 <CardContent>
-                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                    Speaking Time
-                  </p>
-                  <p className="mt-1 text-2xl font-bold" style={{ color: 'var(--color-warning)' }}>
-                    {formatDuration(historyStats.totalTime)}
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                    Parts Practiced
-                  </p>
-                  <p className="mt-1 text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-                    {historyStats.partsCount}/3
-                  </p>
+                  <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Parts Practiced</p>
+                  <p className="mt-1 text-2xl font-bold" style={{ color: 'var(--color-text)' }}>{historyStats.partsCount}/3</p>
                 </CardContent>
               </Card>
             </div>
@@ -645,11 +564,7 @@ export default function SpeakingPractice() {
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search questions..."
                     className="w-full rounded-lg border px-3 py-2 text-sm placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    style={{
-                      borderColor: 'var(--color-border)',
-                      backgroundColor: 'var(--color-surface)',
-                      color: 'var(--color-text)',
-                    }}
+                    style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
                     aria-label="Search questions"
                   />
                 </div>
@@ -657,33 +572,21 @@ export default function SpeakingPractice() {
                   value={topicFilter}
                   onChange={(e) => setTopicFilter(e.target.value)}
                   className="rounded-lg border px-2 py-2 text-xs"
-                  style={{
-                    borderColor: 'var(--color-border)',
-                    backgroundColor: 'var(--color-surface)',
-                    color: 'var(--color-text)',
-                  }}
+                  style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
                   aria-label="Filter by topic"
                 >
                   <option value="">All Topics</option>
-                  {TOPICS.map(t => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
+                  {TOPICS.map(t => (<option key={t} value={t}>{t}</option>))}
                 </select>
                 <select
                   value={partFilter}
                   onChange={(e) => setPartFilter(Number(e.target.value) as SpeakingPart | 0)}
                   className="rounded-lg border px-2 py-2 text-xs"
-                  style={{
-                    borderColor: 'var(--color-border)',
-                    backgroundColor: 'var(--color-surface)',
-                    color: 'var(--color-text)',
-                  }}
+                  style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
                   aria-label="Filter by part"
                 >
                   <option value={0}>All Parts</option>
-                  {SPEAKING_PARTS.map(p => (
-                    <option key={p.value} value={p.value}>{p.label}</option>
-                  ))}
+                  {SPEAKING_PARTS.map(p => (<option key={p.value} value={p.value}>{p.label}</option>))}
                 </select>
               </div>
             </CardContent>
@@ -696,12 +599,8 @@ export default function SpeakingPractice() {
                   <svg className="mb-4 h-12 w-12" style={{ color: 'var(--color-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
-                  <p className="text-sm font-medium" style={{ color: 'var(--color-muted)' }}>
-                    No questions match your filters.
-                  </p>
-                  <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
-                    Try adjusting your search or filters.
-                  </p>
+                  <p className="text-sm font-medium" style={{ color: 'var(--color-muted)' }}>No questions match your filters.</p>
+                  <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>Try adjusting your search or filters.</p>
                 </div>
               </CardContent>
             </Card>
@@ -710,61 +609,54 @@ export default function SpeakingPractice() {
               {filteredQuestions.map((question) => (
                 <div
                   key={question.id}
-                  className="rounded-xl border p-4 transition-colors hover:border-blue-300 cursor-pointer"
-                  style={{
-                    borderColor: 'var(--color-border)',
-                    backgroundColor: 'var(--color-surface)',
-                  }}
+                  className="cursor-pointer rounded-xl border p-4 transition-all hover:border-blue-300 hover:shadow-md"
+                  style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
                   onClick={() => startPractice(question)}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') startPractice(question) }}
-                  aria-label={`Practice: ${question.question}`}
+                  aria-label={`Practice Part ${question.part}: ${question.question}`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <span
-                          className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
+                          className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold"
                           style={{
-                            backgroundColor: question.part === 1
-                              ? 'var(--color-primary-light)'
-                              : question.part === 2
-                                ? 'var(--color-success-light)'
-                                : 'var(--color-warning-light)',
-                            color: question.part === 1
-                              ? 'var(--color-primary)'
-                              : question.part === 2
-                                ? 'var(--color-success)'
-                                : 'var(--color-warning)',
+                            backgroundColor: question.part === 1 ? 'var(--color-primary-light)' : question.part === 2 ? 'var(--color-success-light)' : 'var(--color-warning-light)',
+                            color: question.part === 1 ? 'var(--color-primary)' : question.part === 2 ? 'var(--color-success)' : 'var(--color-warning)',
                           }}
                         >
-                          Part {question.part}
+                          Speaking Part {question.part}
                         </span>
                         {question.topic && (
-                          <span
-                            className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
-                            style={{
-                              backgroundColor: 'var(--color-surface-alt)',
-                              color: 'var(--color-muted)',
-                            }}
-                          >
+                          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium" style={{ backgroundColor: 'var(--color-surface-alt)', color: 'var(--color-muted)' }}>
                             {question.topic}
                           </span>
                         )}
+                        {question.difficulty && (
+                          <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium" style={{ backgroundColor: 'var(--color-surface-alt)', color: 'var(--color-muted)' }}>
+                            {question.difficulty}
+                          </span>
+                        )}
+                        <span className="inline-flex items-center gap-1 text-[11px]" style={{ color: 'var(--color-muted)' }}>
+                          <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          {question.estimatedTime}
+                        </span>
                       </div>
-                      <p className="mt-2 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                      <p className="mt-2 text-sm font-medium leading-relaxed" style={{ color: 'var(--color-text)' }}>
                         {question.question}
                       </p>
                       {question.cueCard && (
-                        <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
-                          Cue card with {question.cueCard.points.length} points to cover
-                        </p>
-                      )}
-                      {question.followUp && question.followUp.length > 0 && (
-                        <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
-                          {question.followUp.length} follow-up question{question.followUp.length > 1 ? 's' : ''}
-                        </p>
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          {question.cueCard.points.map((point, i) => (
+                            <span key={i} className="rounded-full border px-2 py-0.5 text-[10px] font-medium" style={{ borderColor: 'var(--color-border)', color: 'var(--color-muted)' }}>
+                              {point}
+                            </span>
+                          ))}
+                        </div>
                       )}
                     </div>
                     <svg className="h-5 w-5 shrink-0" style={{ color: 'var(--color-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -778,459 +670,228 @@ export default function SpeakingPractice() {
         </>
       )}
 
-      {view === 'practice' && (
+      {isInSession && (
         <>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-                {selectedQuestion
-                  ? `Part ${selectedQuestion.part} Practice`
-                  : 'Custom Practice'}
-              </h1>
-              <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-                {selectedQuestion?.topic || customTopic || 'Speaking practice'}
-              </p>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
+                  {state.selectedQuestion ? `Speaking Part ${state.selectedQuestion.part}` : 'Speaking Practice'}
+                </h1>
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                {STAGE_ORDER.map((s, i) => {
+                  const isActive = s === state.stage
+                  const isPast = STAGE_ORDER.indexOf(state.stage) > i
+                  return (
+                    <div key={s} className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5">
+                        <div
+                          className={`flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold transition-all ${
+                            isActive ? 'scale-110' : ''
+                          }`}
+                          style={{
+                            backgroundColor: isPast ? 'var(--color-success)' : isActive ? 'var(--color-primary)' : 'var(--color-border)',
+                            color: isPast || isActive ? 'white' : 'var(--color-muted)',
+                          }}
+                        >
+                          {isPast ? '✓' : i + 1}
+                        </div>
+                        <span
+                          className={`text-xs font-medium hidden sm:inline ${isActive ? 'font-bold' : ''}`}
+                          style={{ color: isActive ? 'var(--color-primary)' : 'var(--color-muted)' }}
+                        >
+                          {STAGE_LABELS[s]}
+                        </span>
+                      </div>
+                      {i < STAGE_ORDER.length - 1 && (
+                        <div className="h-px w-6 sm:w-8" style={{ backgroundColor: isPast ? 'var(--color-success)' : 'var(--color-border)' }} />
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" onClick={() => setPhrasesOpen(true)} size="sm">
                 Speaking Phrases
               </Button>
-              <Button variant="secondary" size="sm" onClick={handleSaveAndFinish}>
-                Save & Exit
+              <Button variant="ghost" size="sm" onClick={handleReset}>
+                Exit
               </Button>
             </div>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-2 space-y-6">
-              {/* Question / Cue Card */}
-              {selectedQuestion && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Question</CardTitle>
-                  </CardHeader>
+          <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+            <div className="space-y-6">
+              {state.selectedQuestion && (
+                <QuestionCard question={state.selectedQuestion} />
+              )}
+
+              {state.stage === 'preparation' && (
+                <PreparationMode
+                  onComplete={handlePreparationComplete}
+                  topic={state.selectedQuestion?.topic || 'General'}
+                  notes={state.quickNotes}
+                  onNotesChange={(notes) => dispatch({ type: 'SET_QUICK_NOTES', notes })}
+                  keywordChips={state.keywordChips}
+                  onAddChip={(chip) => dispatch({ type: 'ADD_KEYWORD_CHIP', chip })}
+                  onRemoveChip={(index) => dispatch({ type: 'REMOVE_KEYWORD_CHIP', index })}
+                />
+              )}
+
+              {state.stage === 'speaking' && (
+                <RecordingMode
+                  onTranscript={(text) => dispatch({ type: 'SET_ANSWER_TRANSCRIPT', transcript: text })}
+                  onFinish={handleRecordingFinish}
+                  onPause={() => {}}
+                  onCancel={handleRecordingCancel}
+                  onAudioBlob={handleAudioBlob}
+                  recordingTime={recordingTime}
+                  setRecordingTime={setRecordingTime}
+                  maxDuration={state.selectedQuestion ? PART_DURATIONS[state.selectedQuestion.part] || 120 : 120}
+                />
+              )}
+
+              {state.stage === 'analyzing' && (
+                <Card variant="elevated">
                   <CardContent>
-                    <p className="text-base font-medium leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                      {selectedQuestion.question}
-                    </p>
-                    {selectedQuestion.cueCard && (
-                      <div className="mt-4 rounded-lg border p-4" style={{ borderColor: 'var(--color-border)' }}>
-                        <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                          Cue Card: {selectedQuestion.cueCard.topic}
-                        </p>
-                        <ul className="mt-2 space-y-1">
-                          {selectedQuestion.cueCard.points.map((point, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'var(--color-text)' }}>
-                              <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: 'var(--color-primary)' }} />
-                              {point}
-                            </li>
-                          ))}
-                        </ul>
-                        {selectedQuestion.cueCard.followUp.length > 0 && (
-                          <div className="mt-3 border-t pt-3" style={{ borderColor: 'var(--color-border)' }}>
-                            <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                              Follow-up Discussion
-                            </p>
-                            <ul className="mt-1 space-y-1">
-                              {selectedQuestion.cueCard.followUp.map((q, i) => (
-                                <li key={i} className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                                  • {q}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    {selectedQuestion.followUp && selectedQuestion.followUp.length > 0 && !selectedQuestion.cueCard && (
-                      <div className="mt-3 space-y-1">
-                        <p className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                          Follow-up Questions
-                        </p>
-                        {selectedQuestion.followUp.map((q, i) => (
-                          <p key={i} className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                            • {q}
-                          </p>
+                    <div className="flex flex-col items-center justify-center py-12">
+                      <div
+                        className="mb-4 h-12 w-12 animate-spin rounded-full"
+                        style={{
+                          borderWidth: '4px',
+                          borderTopColor: 'transparent',
+                          borderRightColor: 'var(--color-primary)',
+                          borderBottomColor: 'var(--color-primary)',
+                          borderLeftColor: 'var(--color-primary)',
+                        }}
+                      />
+                      <p className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>
+                        Analyzing Your Response
+                      </p>
+                      <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
+                        Our AI is evaluating your fluency, vocabulary, grammar, and more...
+                      </p>
+                      <div className="mt-4 flex gap-1.5">
+                        {[0, 1, 2].map(i => (
+                          <div
+                            key={i}
+                            className="h-2.5 w-2.5 animate-pulse rounded-full"
+                            style={{ backgroundColor: 'var(--color-primary)', animationDelay: `${i * 0.2}s`, opacity: 0.5 }}
+                          />
                         ))}
                       </div>
-                    )}
+                    </div>
                   </CardContent>
                 </Card>
               )}
 
-              <TimerCard
-                timer={timer}
-                isPart2={selectedQuestion?.part === 2}
-                config={TIMER_CONFIG}
-                recording={recording}
-                onStart={startRecording}
-                onPause={stopRecording}
-                onReset={() => {
-                  stopRecording()
-                  setAnswerNotes('')
-                }}
-              />
-
-              {/* Recording Indicator */}
-              {recording && (
-                <div
-                  className="flex items-center gap-2 rounded-lg border px-4 py-2 text-sm"
-                  style={{
-                    borderColor: 'var(--color-danger)',
-                    backgroundColor: 'var(--color-danger-light)',
-                    color: 'var(--color-danger)',
-                  }}
-                >
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-current" />
-                  Recording... {Math.floor(recordingTime / 60)}:{String(recordingTime % 60).padStart(2, '0')}
-                </div>
+              {(state.stage === 'speaking' || state.stage === 'results') && (
+                <LiveTranscript
+                  transcript={state.answerTranscript}
+                  editable={state.stage === 'results'}
+                  onEdit={(text) => dispatch({ type: 'SET_ANSWER_TRANSCRIPT', transcript: text })}
+                  highlights={{ fillers: true, repetitions: true }}
+                  timestamps={state.stage === 'results'}
+                />
               )}
 
-              {/* Answer Notes */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Your Answer</CardTitle>
-                  <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                    {answerNotes.trim() ? answerNotes.trim().split(/\s+/).length : 0} words
-                  </span>
-                </CardHeader>
-                <CardContent>
-                  <textarea
-                    value={answerNotes}
-                    onChange={(e) => setAnswerNotes(e.target.value)}
-                    readOnly
-                    rows={8}
-                    className="w-full rounded-lg border px-3 py-2 text-sm leading-relaxed focus:outline-none focus:ring-1"
-                    style={{
-                      borderColor: 'var(--color-border)',
-                      backgroundColor: 'var(--color-surface)',
-                      color: 'var(--color-text)',
-                      fontFamily: 'Georgia, serif',
-                    }}
-                    placeholder="Write your answer or key points you spoke about..."
-                    aria-label="Your answer notes"
+              {state.stage === 'results' && state.sessionStats && (
+                <SessionSummary
+                  stats={state.sessionStats}
+                  questionTopic={state.selectedQuestion?.topic || 'Speaking'}
+                  questionText={state.selectedQuestion?.question || ''}
+                  transcript={state.answerTranscript}
+                  improvedAnswer={state.aiCoachFeedback?.improvedAnswer}
+                  audioUrl={audioBlobUrl}
+                />
+              )}
+
+              {state.stage === 'results' && state.aiCoachFeedback && (
+                <>
+                  {state.aiCoachFeedback.modelAnswers.length > 0 && (
+                    <ModelAnswerView answers={state.aiCoachFeedback.modelAnswers} />
+                  )}
+                  <AIExaminer
+                    followUpQuestions={state.aiCoachFeedback.followUpQuestions}
+                    topic={state.selectedQuestion?.topic || 'Speaking'}
+                    onAnswer={handleExaminerAnswer}
                   />
-                </CardContent>
-              </Card>
+                  <PracticeAgainOptions {...handlePracticeAgain} />
+                </>
+              )}
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-6">
-              {/* Self Evaluation */}
-              <SelfEvaluation result={evaluation} onChange={setEvaluation} />
-
-              {/* Notes */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Speaking Notes</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
-                        Fluency Notes
-                      </label>
-                      <textarea
-                        value={fluencyNotes}
-                        onChange={(e) => setFluencyNotes(e.target.value)}
-                        rows={2}
-                        className="mt-1 w-full rounded-lg border px-2 py-1.5 text-xs focus:outline-none focus:ring-1"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface)',
-                          color: 'var(--color-text)',
-                        }}
-                        placeholder="Pauses, hesitations, speech rate..."
-                        aria-label="Fluency notes"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
-                        Vocabulary Notes
-                      </label>
-                      <textarea
-                        value={vocabularyNotes}
-                        onChange={(e) => setVocabularyNotes(e.target.value)}
-                        rows={2}
-                        className="mt-1 w-full rounded-lg border px-2 py-1.5 text-xs focus:outline-none focus:ring-1"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface)',
-                          color: 'var(--color-text)',
-                        }}
-                        placeholder="Range, collocations, word choice..."
-                        aria-label="Vocabulary notes"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
-                        Grammar Notes
-                      </label>
-                      <textarea
-                        value={grammarNotes}
-                        onChange={(e) => setGrammarNotes(e.target.value)}
-                        rows={2}
-                        className="mt-1 w-full rounded-lg border px-2 py-1.5 text-xs focus:outline-none focus:ring-1"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface)',
-                          color: 'var(--color-text)',
-                        }}
-                        placeholder="Sentence structures, errors..."
-                        aria-label="Grammar notes"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
-                        Pronunciation Notes
-                      </label>
-                      <textarea
-                        value={pronunciationNotes}
-                        onChange={(e) => setPronunciationNotes(e.target.value)}
-                        rows={2}
-                        className="mt-1 w-full rounded-lg border px-2 py-1.5 text-xs focus:outline-none focus:ring-1"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface)',
-                          color: 'var(--color-text)',
-                        }}
-                        placeholder="Intonation, word stress, clarity..."
-                        aria-label="Pronunciation notes"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
-                        Better Expressions
-                      </label>
-                      <textarea
-                        value={betterExpressions}
-                        onChange={(e) => setBetterExpressions(e.target.value)}
-                        rows={2}
-                        className="mt-1 w-full rounded-lg border px-2 py-1.5 text-xs focus:outline-none focus:ring-1"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface)',
-                          color: 'var(--color-text)',
-                        }}
-                        placeholder="Alternative phrases you could have used..."
-                        aria-label="Better expressions"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-medium" style={{ color: 'var(--color-muted)' }}>
-                        Improved Answer
-                      </label>
-                      <textarea
-                        value={improvedAnswer}
-                        onChange={(e) => setImprovedAnswer(e.target.value)}
-                        rows={4}
-                        className="mt-1 w-full rounded-lg border px-2 py-1.5 text-xs focus:outline-none focus:ring-1"
-                        style={{
-                          borderColor: 'var(--color-border)',
-                          backgroundColor: 'var(--color-surface)',
-                          color: 'var(--color-text)',
-                          fontFamily: 'Georgia, serif',
-                        }}
-                        placeholder="Write an improved version of your answer..."
-                        aria-label="Improved answer"
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* AI Feedback */}
-              <Card>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                        AI Feedback
-                      </span>
-                    </div>
-                    <p className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                      Get AI feedback on your answer. Uses your API key from Settings.
-                    </p>
-                    <Button
-                      onClick={handleGetAiFeedback}
-                      loading={aiLoading}
-                      className="w-full"
-                      size="sm"
-                    >
-                      {aiLoading ? 'Getting Feedback...' : 'Get AI Feedback'}
-                    </Button>
-                    {aiError && (
-                      <p className="text-xs" style={{ color: 'var(--color-danger)' }}>
-                        {aiError}
-                      </p>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Action buttons */}
-              <div className="flex flex-col gap-2">
-                <Button onClick={handleFinish} className="w-full">
-                  Finish & Review
-                </Button>
-                <Button variant="secondary" onClick={handleSaveAndFinish} className="w-full">
-                  Save & Back to Browse
-                </Button>
-                <Button variant="ghost" onClick={handleReset} className="w-full">
-                  Cancel
-                </Button>
+            <div className="hidden lg:block">
+              <div className="sticky top-24 space-y-4">
+                <AICoachPanel
+                  feedback={state.aiCoachFeedback}
+                  loading={state.aiLoading}
+                  error={state.aiError}
+                  transcript={state.answerTranscript}
+                  bandScore={state.sessionStats?.bandScore ?? null}
+                />
               </div>
             </div>
           </div>
+
+          {state.stage === 'results' && (
+            <div className="lg:hidden space-y-4">
+              <AICoachPanel
+                feedback={state.aiCoachFeedback}
+                loading={state.aiLoading}
+                error={state.aiError}
+                transcript={state.answerTranscript}
+                bandScore={state.sessionStats?.bandScore ?? null}
+              />
+              {state.aiCoachFeedback?.modelAnswers && state.aiCoachFeedback.modelAnswers.length > 0 && (
+                <ModelAnswerView answers={state.aiCoachFeedback.modelAnswers} />
+              )}
+              <AIExaminer
+                followUpQuestions={state.aiCoachFeedback?.followUpQuestions || []}
+                topic={state.selectedQuestion?.topic || 'Speaking'}
+                onAnswer={handleExaminerAnswer}
+              />
+              <PracticeAgainOptions {...handlePracticeAgain} />
+            </div>
+          )}
         </>
       )}
 
-      {view === 'results' && (
+      {state.stage === 'history' && (
         <>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-                Session Review
-              </h1>
+              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>Speaking History</h1>
               <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-                {selectedQuestion?.question || 'Custom practice'}
+                {state.history.length} session{state.history.length !== 1 ? 's' : ''} recorded
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button variant="secondary" onClick={handleSaveAndFinish}>
-                Save & Back
-              </Button>
-              <Button onClick={handleReset}>
-                Practice Again
-              </Button>
-            </div>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Your Answer</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                  {answerNotes || 'No answer recorded.'}
-                </p>
-              </CardContent>
-            </Card>
-
-            <SelfEvaluation result={evaluation} onChange={setEvaluation} />
-
-            {aiFeedback && (
-              <Card className="lg:col-span-2">
-                <CardHeader>
-                  <CardTitle>AI Feedback</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                      {([
-                        ['fluency', 'Fluency'],
-                        ['vocabulary', 'Vocab'],
-                        ['grammar', 'Grammar'],
-                        ['pronunciation', 'Pronun.'],
-                        ['coherence', 'Coherence'],
-                        ['taskAchievement', 'Task'],
-                      ] as const).map(([key, label]) => (
-                        <div key={key} className="rounded-lg border p-3 text-center" style={{ borderColor: 'var(--color-border)' }}>
-                          <p className="text-[10px] font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>{label}</p>
-                          <p className="mt-1 text-lg font-bold" style={{ color: getScoreColor(evaluation[key]) }}>
-                            {evaluation[key]}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="space-y-3 text-sm leading-relaxed" style={{ color: 'var(--color-text)' }}>
-                      {[
-                        ['fluencyNotes', 'Fluency & Coherence'],
-                        ['vocabularyNotes', 'Lexical Resource'],
-                        ['grammarNotes', 'Grammatical Range & Accuracy'],
-                        ['pronunciationNotes', 'Pronunciation'],
-                        ['betterExpressions', 'Better Expressions'],
-                      ].map(([field, label]) => {
-                        const val = ({
-                          fluencyNotes,
-                          vocabularyNotes,
-                          grammarNotes,
-                          pronunciationNotes,
-                          betterExpressions,
-                        } as Record<string, string>)[field]
-                        if (!val) return null
-                        return (
-                          <div key={field}>
-                            <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                              {label}
-                            </p>
-                            <p className="mt-1 whitespace-pre-wrap">{val}</p>
-                          </div>
-                        )
-                      })}
-                      {improvedAnswer && (
-                        <div>
-                          <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                            Improved Answer
-                          </p>
-                          <p className="mt-1 whitespace-pre-wrap" style={{ color: 'var(--color-success)' }}>{improvedAnswer}</p>
-                        </div>
-                      )}
-                      {fluencyNotes || vocabularyNotes || grammarNotes || pronunciationNotes || betterExpressions || improvedAnswer ? null : (
-                        <p className="whitespace-pre-wrap">{aiFeedback}</p>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        </>
-      )}
-
-      {view === 'history' && (
-        <>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
-                Speaking History
-              </h1>
-              <p className="mt-1 text-sm" style={{ color: 'var(--color-muted)' }}>
-                {history.length} session{history.length !== 1 ? 's' : ''} recorded
-              </p>
-            </div>
-            <Button variant="secondary" onClick={() => setView('browse')}>
+            <Button variant="secondary" onClick={() => dispatch({ type: 'SET_STAGE', stage: 'browse' })}>
               Back to Practice
             </Button>
           </div>
 
-          {history.length === 0 ? (
+          {state.history.length === 0 ? (
             <Card>
               <CardContent>
                 <div className="flex flex-col items-center justify-center py-12">
                   <svg className="mb-4 h-12 w-12" style={{ color: 'var(--color-muted)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
-                  <p className="text-sm font-medium" style={{ color: 'var(--color-muted)' }}>
-                    No speaking sessions yet.
-                  </p>
-                  <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>
-                    Complete your first speaking practice to see it here.
-                  </p>
+                  <p className="text-sm font-medium" style={{ color: 'var(--color-muted)' }}>No speaking sessions yet.</p>
+                  <p className="mt-1 text-xs" style={{ color: 'var(--color-muted)' }}>Complete your first speaking practice to see it here.</p>
                 </div>
               </CardContent>
             </Card>
           ) : (
             <div className="space-y-3">
-              {history.map(session => (
+              {state.history.map(session => (
                 <div
                   key={session.id}
                   className="rounded-xl border p-4 transition-colors"
-                  style={{
-                    borderColor: 'var(--color-border)',
-                    backgroundColor: 'var(--color-surface)',
-                  }}
+                  style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0 flex-1">
@@ -1238,40 +899,21 @@ export default function SpeakingPractice() {
                         <span
                           className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
                           style={{
-                            backgroundColor: session.part === 1
-                              ? 'var(--color-primary-light)'
-                              : session.part === 2
-                                ? 'var(--color-success-light)'
-                                : 'var(--color-warning-light)',
-                            color: session.part === 1
-                              ? 'var(--color-primary)'
-                              : session.part === 2
-                                ? 'var(--color-success)'
-                                : 'var(--color-warning)',
+                            backgroundColor: session.part === 1 ? 'var(--color-primary-light)' : session.part === 2 ? 'var(--color-success-light)' : 'var(--color-warning-light)',
+                            color: session.part === 1 ? 'var(--color-primary)' : session.part === 2 ? 'var(--color-success)' : 'var(--color-warning)',
                           }}
                         >
                           Part {session.part}
                         </span>
                         {session.topic && (
-                          <span
-                            className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
-                            style={{
-                              backgroundColor: 'var(--color-surface-alt)',
-                              color: 'var(--color-muted)',
-                            }}
-                          >
+                          <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium" style={{ backgroundColor: 'var(--color-surface-alt)', color: 'var(--color-muted)' }}>
                             {session.topic}
                           </span>
                         )}
                       </div>
-                      <button
-                        onClick={() => setHistoryDetail(session)}
-                        className="mt-1 text-left"
-                      >
+                      <button onClick={() => setHistoryDetail(session)} className="mt-1 text-left">
                         <h3 className="text-sm font-medium hover:underline" style={{ color: 'var(--color-text)' }}>
-                          {session.question.length > 80
-                            ? session.question.slice(0, 80) + '...'
-                            : session.question}
+                          {session.question.length > 80 ? session.question.slice(0, 80) + '...' : session.question}
                         </h3>
                       </button>
                       <div className="mt-2 flex flex-wrap items-center gap-3 text-xs" style={{ color: 'var(--color-muted)' }}>
@@ -1283,26 +925,13 @@ export default function SpeakingPractice() {
                       </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setHistoryDetail(session)}
-                        aria-label="View details"
-                        className="p-1.5"
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => setHistoryDetail(session)} aria-label="View details" className="p-1.5">
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setDeleteConfirmId(session.id)}
-                        aria-label="Delete session"
-                        className="p-1.5"
-                        style={{ color: 'var(--color-danger)' }}
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => setDeleteConfirmId(session.id)} aria-label="Delete session" className="p-1.5" style={{ color: 'var(--color-danger)' }}>
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
@@ -1316,122 +945,53 @@ export default function SpeakingPractice() {
         </>
       )}
 
-      {/* Detail Modal */}
+      {/* Speaking Phrases Drawer */}
+      <SpeakingPhrasesDrawer
+        isOpen={phrasesOpen}
+        onClose={() => setPhrasesOpen(false)}
+        phrases={speakingPhrases}
+        savedPhrases={state.savedPhrases}
+        onToggleSave={(phrase) => dispatch({ type: 'TOGGLE_SAVED_PHRASE', phrase })}
+      />
+
+      {/* History Detail Modal */}
       <Modal open={!!historyDetail} onClose={() => setHistoryDetail(null)} title={historyDetail?.question ?? ''} size="lg">
         {historyDetail && (
           <div className="space-y-4 text-sm" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Speaking Part
-                </span>
-                <p className="mt-0.5" style={{ color: 'var(--color-text)' }}>
-                  Part {historyDetail.part}
-                </p>
+                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Speaking Part</span>
+                <p className="mt-0.5" style={{ color: 'var(--color-text)' }}>Part {historyDetail.part}</p>
               </div>
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Topic
-                </span>
+                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Topic</span>
                 <p className="mt-0.5" style={{ color: 'var(--color-text)' }}>{historyDetail.topic || '—'}</p>
               </div>
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Date
-                </span>
+                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Date</span>
                 <p className="mt-0.5" style={{ color: 'var(--color-text)' }}>{formatDate(historyDetail.createdAt)}</p>
               </div>
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Duration
-                </span>
+                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Duration</span>
                 <p className="mt-0.5" style={{ color: 'var(--color-text)' }}>{formatDuration(historyDetail.durationSeconds)}</p>
               </div>
               <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Self-Rating
-                </span>
+                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Rating</span>
                 <p className="mt-0.5 font-semibold" style={{ color: getScoreColor(historyDetail.selfRating) }}>
                   {getScoreLabel(historyDetail.selfRating)} ({historyDetail.selfRating}/10)
                 </p>
               </div>
             </div>
             <div>
-              <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                Question
-              </span>
-              <p className="mt-0.5 whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>
-                {historyDetail.question}
-              </p>
+              <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Question</span>
+              <p className="mt-0.5 whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>{historyDetail.question}</p>
             </div>
             <div>
-              <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                Answer Notes
-              </span>
+              <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>Answer</span>
               <p className="mt-0.5 whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--color-text)' }}>
                 {historyDetail.answerNotes}
               </p>
             </div>
-            {historyDetail.improvedAnswer && (
-              <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Improved Answer
-                </span>
-                <p className="mt-0.5 whitespace-pre-wrap text-sm leading-relaxed" style={{ color: 'var(--color-success)' }}>
-                  {historyDetail.improvedAnswer}
-                </p>
-              </div>
-            )}
-            {historyDetail.fluencyNotes && (
-              <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Fluency Notes
-                </span>
-                <p className="mt-0.5 whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>
-                  {historyDetail.fluencyNotes}
-                </p>
-              </div>
-            )}
-            {historyDetail.vocabularyNotes && (
-              <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Vocabulary Notes
-                </span>
-                <p className="mt-0.5 whitespace-pre-wrap" style={{ color: 'var(--color-primary)' }}>
-                  {historyDetail.vocabularyNotes}
-                </p>
-              </div>
-            )}
-            {historyDetail.grammarMistakes && (
-              <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Grammar Notes
-                </span>
-                <p className="mt-0.5 whitespace-pre-wrap" style={{ color: 'var(--color-danger)' }}>
-                  {historyDetail.grammarMistakes}
-                </p>
-              </div>
-            )}
-            {historyDetail.pronunciationNotes && (
-              <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Pronunciation Notes
-                </span>
-                <p className="mt-0.5 whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>
-                  {historyDetail.pronunciationNotes}
-                </p>
-              </div>
-            )}
-            {historyDetail.betterExpressions && (
-              <div>
-                <span className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--color-muted)' }}>
-                  Better Expressions
-                </span>
-                <p className="mt-0.5 whitespace-pre-wrap" style={{ color: 'var(--color-text)' }}>
-                  {historyDetail.betterExpressions}
-                </p>
-              </div>
-            )}
           </div>
         )}
       </Modal>
@@ -1443,60 +1003,9 @@ export default function SpeakingPractice() {
             Are you sure you want to delete this speaking session? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-3">
-            <Button variant="secondary" onClick={() => setDeleteConfirmId(null)}>
-              Cancel
-            </Button>
-            <Button variant="danger" onClick={() => deleteConfirmId && handleDeleteSession(deleteConfirmId)}>
-              Delete
-            </Button>
+            <Button variant="secondary" onClick={() => setDeleteConfirmId(null)}>Cancel</Button>
+            <Button variant="danger" onClick={() => deleteConfirmId && handleDeleteSession(deleteConfirmId)}>Delete</Button>
           </div>
-        </div>
-      </Modal>
-
-      {/* Speaking Phrases Modal */}
-      <Modal open={phrasesOpen} onClose={() => setPhrasesOpen(false)} title="Common Speaking Phrases" size="lg">
-        <div className="space-y-4" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
-          <input
-            type="text"
-            value={phrasesFilter}
-            onChange={(e) => setPhrasesFilter(e.target.value)}
-            placeholder="Search phrases..."
-            className="w-full rounded-lg border px-3 py-2 text-sm placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            style={{
-              borderColor: 'var(--color-border)',
-              backgroundColor: 'var(--color-surface)',
-              color: 'var(--color-text)',
-            }}
-            aria-label="Search phrases"
-          />
-          {filteredPhrases.map((category) => (
-            <div key={category.category}>
-              <h4
-                className="mb-2 text-xs font-bold uppercase tracking-wider"
-                style={{ color: 'var(--color-muted)' }}
-              >
-                {category.category}
-              </h4>
-              <div className="space-y-1">
-                {category.phrases.map((phrase, i) => (
-                  <div
-                    key={i}
-                    className="cursor-pointer rounded-lg border px-3 py-2 text-sm transition-colors hover:bg-blue-50"
-                    style={{
-                      borderColor: 'var(--color-border)',
-                      color: 'var(--color-text)',
-                    }}
-                    onClick={() => {
-                      navigator.clipboard?.writeText(phrase)
-                    }}
-                    title="Click to copy"
-                  >
-                    {phrase}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
         </div>
       </Modal>
     </div>

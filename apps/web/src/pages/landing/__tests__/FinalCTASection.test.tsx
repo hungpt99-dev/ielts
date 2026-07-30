@@ -1,13 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { ROUTES } from '@ielts/config'
 import FinalCTASection from '../FinalCTASection'
 
 describe('FinalCTASection', () => {
   it('renders the section heading', () => {
     render(<FinalCTASection />)
     expect(
-      screen.getByText('Start your IELTS journey today.')
+      screen.getByText(/Ready to start your/)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/IELTS journey/)
     ).toBeInTheDocument()
   })
 
@@ -15,7 +17,10 @@ describe('FinalCTASection', () => {
     render(<FinalCTASection />)
     const cta = screen.getByText('Start Learning Free')
     expect(cta).toBeInTheDocument()
-    expect(cta.closest('a')).toHaveAttribute('href', ROUTES.landing)
+    expect(cta.closest('a')).toHaveAttribute(
+      'href',
+      'https://chromewebstore.google.com/detail/ielts-journey'
+    )
   })
 
   it('renders trust badges', () => {

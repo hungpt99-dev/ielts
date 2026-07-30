@@ -10,7 +10,6 @@ import Button from '../../components/ui/Button'
 import Modal from '../../components/ui/Modal'
 import AudioPlayer from './components/AudioPlayer'
 import LQuestion from './components/ListeningQuestion'
-
 import { generateId } from '../../utils'
 import { generateActivityUseCase } from '../../use-cases/generate-activity'
 import { getLearningEngine } from '../../services/engineBootstrap'
@@ -306,7 +305,7 @@ export default function ListeningPractice() {
         throw new Error('AI response missing required fields (title, transcript, or questions)')
       }
 
-      const validTypes = ['multiple-choice', 'gap-fill'] as const
+      const validTypes = ['multiple-choice', 'gap-fill', 'true-false', 'short-answer', 'multiple-answer', 'table-completion'] as const
 
       const trimmedTopic = aiTopic.trim()
       const isDefaultTitle = !parsed.title ||
@@ -330,17 +329,30 @@ export default function ListeningPractice() {
         questions: parsed.questions.map((q: Record<string, unknown>, i: number) => ({
           id: `ai-lq${i}`,
           type: (validTypes as readonly string[]).includes(q.type as string)
-            ? (q.type as 'multiple-choice' | 'gap-fill')
+            ? (q.type as ListeningQuestion['type'])
             : 'gap-fill',
-          question: q.question as string,
+          question: (q.question as string) || (q.text as string) || '',
           options: Array.isArray(q.options) ? (q.options as string[]) : undefined,
-          correctAnswer: q.correctAnswer ?? '',
+          correctAnswer: q.correctIndex !== undefined ? (q.correctIndex as number)
+            : q.correctAnswer ?? '',
           explanation: (q.explanation as string) || '',
-          blanks: Array.isArray(q.blanks) ? (q.blanks as string[]) : undefined,
+          blanks: Array.isArray(q.blanks) ? (q.blanks as string[])
+            : Array.isArray((q as any).answers) ? ((q as any).answers as string[])
+            : q.correctAnswer ? [String(q.correctAnswer)]
+            : undefined,
+          formFields: Array.isArray((q as any).formFields) ? (q as any).formFields : undefined,
+          tableHeaders: Array.isArray((q as any).tableHeaders) ? (q as any).tableHeaders : undefined,
+          tableRows: Array.isArray((q as any).tableRows) ? (q as any).tableRows : undefined,
+          acceptableAnswers: Array.isArray(q.acceptableAlternatives) ? q.acceptableAlternatives as string[]
+            : Array.isArray((q as any).acceptableAnswers) ? (q as any).acceptableAnswers as string[]
+            : undefined,
         })),
         difficulty: aiDifficulty,
         wordCount: parsed.transcript.split(/\s+/).length,
         estimatedMinutes: 12,
+        pipelineMetadata: (parsed as any).layoutMetadata
+          ? { layout: (parsed as any).layoutMetadata.layout || 'note-completion', pipelineVersion: '2.0', ...(parsed as any).layoutMetadata }
+          : undefined,
       }
 
       setAllExercises(prev => [exercise, ...prev])
@@ -670,6 +682,15 @@ export default function ListeningPractice() {
             <h2 className="mb-4 text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
               Questions ({currentExercise.questions.length})
             </h2>
+
+            {currentExercise.pipelineMetadata?.layout === 'form-completion' && (
+              <FormLayoutRenderer
+                exercise={currentExercise}
+                answers={answers}
+                onAnswer={handleAnswer}
+              />
+            )}
+
             <div className="space-y-4">
               {currentExercise.questions.map((q, i) => (
                 <LQuestion
@@ -1159,6 +1180,147 @@ export default function ListeningPractice() {
         onConfirm={() => confirmDelete && handleDeleteExercise(confirmDelete)}
         loading={deletingId !== null}
       />
+    </div>
+  )
+}
+
+// ─── Form Layout Renderer (Cambridge-style booking form) ───────────────
+
+function FormLayoutRenderer({
+  exercise,
+  answers,
+  onAnswer,
+}: {
+  exercise: ListeningExercise
+  answers: Record<string, unknown>
+  onAnswer: (questionId: string, answer: unknown) => void
+}) {
+  const meta = exercise.pipelineMetadata
+  if (!meta || !meta.formFields) return null
+
+  const fields = meta.formFields
+  const sections = meta.formSections || []
+
+  const sectionMap = new Map<string, typeof fields>()
+  for (const field of fields) {
+    const key = field.section || 'main'
+    if (!sectionMap.has(key)) sectionMap.set(key, [])
+    sectionMap.get(key)!.push(field)
+  }
+
+  return (
+    <div
+      className="mb-6 rounded-xl border p-6"
+      style={{
+        borderColor: 'var(--color-border)',
+        backgroundColor: 'var(--color-surface-alt)',
+      }}
+    >
+      {/* Form title */}
+      <h3
+        className="mb-1 text-lg font-bold"
+        style={{ color: 'var(--color-text)' }}
+      >
+        {meta.formTitle || 'Booking Form'}
+      </h3>
+      {meta.formSubtitle && (
+        <p className="mb-4 text-xs" style={{ color: 'var(--color-muted)' }}>
+          {meta.formSubtitle}
+        </p>
+      )}
+
+      {/* Sections */}
+      {sections.length > 0 ? (
+        sections.map((section, sIdx) => {
+          const secFields = sectionMap.get(section.id) || []
+          if (secFields.length === 0) return null
+          return (
+            <div
+              key={section.id}
+              className={sIdx > 0 ? 'mt-5 pt-5 border-t' : ''}
+              style={{ borderColor: 'var(--color-border)' }}
+            >
+              <h4
+                className="mb-3 text-sm font-semibold uppercase tracking-wide"
+                style={{ color: 'var(--color-muted)' }}
+              >
+                {section.title}
+              </h4>
+              <div className="space-y-3">
+                {secFields.map((field) => {
+                  const question = exercise.questions.find(q =>
+                    q.formFields?.some(f => f.label === field.label),
+                  )
+                  const qId = question?.id || `form-${field.order}`
+                  const val = (answers[qId] as string) ?? ''
+
+                  return (
+                    <div key={field.order} className="flex items-center gap-3">
+                      <label
+                        className="text-sm font-medium min-w-[140px] shrink-0"
+                        style={{ color: 'var(--color-text-secondary)' }}
+                      >
+                        {field.label}:
+                      </label>
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          value={val}
+                          onChange={(e) => onAnswer(qId, e.target.value)}
+                          className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-1"
+                          placeholder="____________"
+                          style={{
+                            borderColor: 'var(--color-border)',
+                            backgroundColor: 'var(--color-surface)',
+                            color: 'var(--color-text)',
+                          }}
+                          aria-label={field.label}
+                        />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })
+      ) : (
+        /* Fallback: no sections, just list fields */
+        <div className="space-y-3">
+          {fields.map((field) => {
+            const question = exercise.questions.find(q =>
+              q.formFields?.some(f => f.label === field.label),
+            )
+            const qId = question?.id || `form-${field.order}`
+            const val = (answers[qId] as string) ?? ''
+            return (
+              <div key={field.order} className="flex items-center gap-3">
+                <label
+                  className="text-sm font-medium min-w-[140px] shrink-0"
+                  style={{ color: 'var(--color-text-secondary)' }}
+                >
+                  {field.label}:
+                </label>
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={val}
+                    onChange={(e) => onAnswer(qId, e.target.value)}
+                    className="w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-1"
+                    placeholder="____________"
+                    style={{
+                      borderColor: 'var(--color-border)',
+                      backgroundColor: 'var(--color-surface)',
+                      color: 'var(--color-text)',
+                    }}
+                    aria-label={field.label}
+                  />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

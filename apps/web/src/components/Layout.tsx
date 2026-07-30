@@ -15,7 +15,7 @@ import { ROUTES } from '@ielts/config'
 const Dashboard = lazy(() => import('../features/dashboard/Dashboard'))
 const NotebookPage = lazy(() => import('../pages/vocabulary/NotebookPage'))
 const VocabularyReview = lazy(() => import('../pages/VocabularyReview'))
-const ReviewCenter = lazy(() => import('../pages/ReviewCenter'))
+
 const ReadingPracticePage = lazy(() => import('../pages/practice/ReadingPracticePage'))
 const ListeningPracticePage = lazy(() => import('../pages/practice/ListeningPracticePage'))
 const WritingPracticePage = lazy(() => import('../pages/practice/WritingPracticePage'))
@@ -65,6 +65,7 @@ const learningParentItems: NavItemDefinition[] = [
   { to: ROUTES.vocabulary, label: 'Vocabulary', icon: <IconVocabulary size={20} />, end: false },
   { to: ROUTES.artifacts, label: 'Saved Content', icon: <IconSaved size={20} />, end: false },
   { to: ROUTES.books, label: 'Books', icon: <IconBookText size={20} />, end: false },
+
 ]
 
 const practiceSubItems: NavItemDefinition[] = [
@@ -338,7 +339,7 @@ export default function AppLayout() {
           style={{ borderColor: 'var(--color-border)' }}
         >
           <NavLink
-            to="/info"
+            to={ROUTES.info}
             onClick={closeSidebar}
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-lg px-3 min-h-[44px] text-sm font-medium transition-colors ${
@@ -361,7 +362,7 @@ export default function AppLayout() {
             About
           </NavLink>
           <NavLink
-            to="/settings"
+            to={ROUTES.settings}
             onClick={closeSidebar}
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-lg px-3 min-h-[44px] text-sm font-medium transition-colors ${
@@ -405,7 +406,7 @@ export default function AppLayout() {
                       <Route path={ROUTES.vocabulary} element={<NotebookPage />} />
                       <Route path={ROUTES.review} element={<VocabularyReview />} />
                       <Route path="/review/Notebook" element={<Navigate to={ROUTES.review} replace />} />
-                      <Route path={ROUTES.reviewCenter} element={<ReviewCenter />} />
+
                       <Route path={ROUTES.reading} element={<ReadingPracticePage />} />
                       <Route path={ROUTES.listening} element={<ListeningPracticePage />} />
                       <Route path={ROUTES.writing} element={<WritingPracticePage />} />

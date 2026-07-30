@@ -18,14 +18,14 @@ export type TranslateExplain = z.infer<typeof translateExplainSchema>
 export const ieltsVocabSchema = z.object({
   words: z.array(z.object({
     word: z.string().min(1),
-    meaning: z.string().min(1),
+    meaning: z.string().default(''),
     partOfSpeech: z.string().default(''),
-    example: z.string().min(1),
+    example: z.string().default(''),
     synonyms: z.array(z.string()).default([]),
     collocations: z.array(z.string()).default([]),
     verbConjugation: verbConjugationSchema.optional(),
     verbAnalysis: verbAnalysisSchema.optional(),
-  })).min(1),
+  })).default([]),
 })
 export type IeltsVocabResult = z.infer<typeof ieltsVocabSchema>
 

@@ -7,13 +7,72 @@ import {
   incrementDailyProgress,
 } from '../services/storage'
 import { emitFromBackground } from './eventEmitters'
-import { passageEntryRepo, vocabularyRepo } from '../services/repositories'
+import { passageEntryRepo, vocabularyRepo, mistakeRepo } from '../services/repositories'
+import { safeStorageSet } from '../utils/safe-chrome'
+import { enrichVocabulary, encodeWordForm } from '../services/aiEnrichmentService'
 
 const DEBUG = typeof process !== 'undefined' && process.env?.NODE_ENV === 'development'
 
 function bgLog(...args: unknown[]): void {
   if (DEBUG) console.debug('[BG Transcript]', ...args)
 }
+
+const HIGHLIGHTER_VOCAB_KEY = 'vocabulary'
+
+function normalizeWordFamily(raw: string[]): Array<{ word: string; partOfSpeech: string; relationship: string }> {
+  if (!raw || !Array.isArray(raw) || raw.length === 0) return []
+  return raw.map((entry) => {
+    if (typeof entry === 'string') {
+      try {
+        const parsed = JSON.parse(entry) as Record<string, unknown>
+        if (parsed.word) {
+          return {
+            word: String(parsed.word),
+            partOfSpeech: String(parsed.pos || parsed.partOfSpeech || ''),
+            relationship: '',
+          }
+        }
+      } catch { /* not JSON, use as plain string */ }
+      return { word: entry, partOfSpeech: '', relationship: '' }
+    }
+    return {
+      word: (entry as any).word || String(entry),
+      partOfSpeech: (entry as any).partOfSpeech || (entry as any).pos || '',
+      relationship: (entry as any).relationship || '',
+    }
+  })
+}
+
+async function syncAllVocabToHighlighter(): Promise<void> {
+  try {
+    const all = await vocabularyRepo.findAll()
+    const entries = all
+      .filter(v => v.word)
+      .map(v => ({
+        id: v.id,
+        word: v.word,
+        meaning: v.meaning || '',
+        translation: v.translation || '',
+        exampleSentence: v.exampleSentence || v.sourceSentence || '',
+        personalNote: v.personalNote || '',
+        pronunciation: v.pronunciation || '',
+        partOfSpeech: v.partOfSpeech || '',
+        topic: v.topic || '',
+        difficulty: v.difficulty || '',
+        cefrLevel: v.cefrLevel || '',
+        wordFamily: normalizeWordFamily(v.wordFamily || []),
+        collocations: v.collocations || [],
+        synonyms: v.synonyms || [],
+        sourceUrl: v.sourceUrl || v.pageUrl || '',
+        category: 'vocabulary' as const,
+      }))
+    await safeStorageSet({ [HIGHLIGHTER_VOCAB_KEY]: entries })
+  } catch (err) {
+    console.warn('[BgMsg] Failed to sync vocab to highlighter:', err)
+  }
+}
+
+export { syncAllVocabToHighlighter }
 
 export interface SaveItemPayload {
   category: SaveCategory
@@ -344,6 +403,14 @@ export function initMessaging(): void {
 
       if (msg.payload.category === 'vocabulary') {
         const word = msg.payload.text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, '')
+
+        let enriched: Awaited<ReturnType<typeof enrichVocabulary>> | null = null
+        try {
+          enriched = await enrichVocabulary(word, msg.payload.text)
+        } catch {
+          /* AI enrichment failed, save with defaults */
+        }
+
         await vocabularyRepo.bulkUpsert([{
           id: crypto.randomUUID(),
           word: word || 'unknown',
@@ -353,24 +420,26 @@ export function initMessaging(): void {
           topic: (msg.payload.topic as string) || 'general',
           personalNote: msg.payload.note || '',
           tags: (msg.payload.tags as string[]) || [],
-          meaning: word || 'unknown',
-          translation: '',
-          partOfSpeech: '',
-          pronunciation: '',
-          exampleSentence: '',
-          synonyms: [],
-          antonyms: [],
-          collocations: [],
-          wordFamily: [],
+          meaning: enriched?.meaning || word || 'unknown',
+          translation: enriched?.translation || '',
+          partOfSpeech: enriched?.partOfSpeech || '',
+          pronunciation: enriched?.pronunciation || '',
+          exampleSentence: enriched?.exampleSentence || '',
+          synonyms: enriched?.synonyms || [],
+          antonyms: enriched?.antonyms || [],
+          collocations: enriched?.collocations || [],
+          wordFamily: enriched?.wordFamily?.map(encodeWordForm) || [],
           difficulty: 'medium' as const,
           status: 'new' as const,
-          cefrLevel: '',
+          cefrLevel: enriched?.cefrLevel || '',
           ieltsRelevance: '',
           addedToReview: true,
           reviewId: '',
           createdAt: now,
           updatedAt: now,
         }]).catch((err) => { console.warn("[BgMsg] save failed:", err) })
+
+        await syncAllVocabToHighlighter()
       }
 
       await incrementDailyProgress('wordsAdded', msg.payload.category === 'vocabulary' ? 1 : 0)
@@ -425,10 +494,27 @@ export function initMessaging(): void {
     return { success: true }
   })
 
+  registerHandler('SAVE_YOUTUBE_MISTAKES_TO_IDB', async (_msg) => {
+    const msg = _msg as { type: string; payload: Record<string, unknown> }
+    const mistakes = msg.payload.mistakes as Array<Record<string, unknown>> | undefined
+    if (!Array.isArray(mistakes) || mistakes.length === 0) return { success: true }
+    const now = new Date().toISOString()
+    await mistakeRepo.bulkUpsert(mistakes.map((m) => ({
+      id: crypto.randomUUID(),
+      title: (m.question as string) || 'YouTube Mistake',
+      content: typeof m.fullQuestion === 'string' ? m.fullQuestion : JSON.stringify(m),
+      tags: [],
+      source: 'youtube' as const,
+      createdAt: now,
+      updatedAt: now,
+    }))).catch((err) => { console.warn("[BgMsg] youtube mistake save failed:", err) })
+    return { success: true }
+  })
+
   registerHandler('FETCH_TRANSCRIPT', async (_msg, sender) => {
     const msg = _msg as { type: 'FETCH_TRANSCRIPT'; payload: { videoId: string } }
     const { videoId } = msg.payload
-    if (!videoId) return { success: false, error: 'NO_VIDEO_ID' }
+    if (!videoId) throw new Error('NO_VIDEO_ID')
 
     let tabId = sender.tab?.id
 
@@ -528,7 +614,7 @@ export function initMessaging(): void {
         const tracks = results?.[0]?.result as Array<{ baseUrl: string; languageCode: string; name: string; kind: string; isTranslatable: boolean; vssId?: string }> | null
         if (tracks?.length) {
           bgLog('Found', tracks.length, 'caption tracks via script tag parsing')
-          return { success: true, data: { tracks } }
+          return { tracks }
         }
       } catch (e) {
         console.error('apps/extension/src/background/messaging.ts error:', e);
@@ -536,7 +622,7 @@ export function initMessaging(): void {
       }
     }
 
-    return { success: false, error: 'NO_CAPTIONS_EXIST' }
+    throw new Error('NO_CAPTIONS_EXIST')
   })
 
   function parseXmlTranscript(xml: string): Array<{ id: string; start: number; end: number; text: string }> {
@@ -559,7 +645,7 @@ export function initMessaging(): void {
   registerHandler('FETCH_TRANSCRIPT_XML', async (_msg) => {
     const msg = _msg as unknown as { type: 'FETCH_TRANSCRIPT_XML'; payload: { baseUrl: string; videoId: string; language: string } }
     const { baseUrl, videoId, language } = msg.payload
-    if (!baseUrl || !videoId) return { success: false, error: 'INVALID_PARAMS' }
+    if (!baseUrl || !videoId) throw new Error('INVALID_PARAMS')
 
     try {
       const controller = new AbortController()
@@ -570,29 +656,272 @@ export function initMessaging(): void {
       })
       clearTimeout(timeoutId)
 
-      if (!response.ok) return { success: false, error: 'FETCH_FAILED' }
+      if (!response.ok) throw new Error('FETCH_FAILED')
       const xml = await response.text()
-      if (!xml || xml.length < 20) return { success: false, error: 'EMPTY_RESPONSE' }
+      if (!xml || xml.length < 20) throw new Error('EMPTY_RESPONSE')
 
       const parser = parseXmlTranscript(xml)
-      if (!parser.length) return { success: false, error: 'PARSE_FAILED' }
+      if (!parser.length) throw new Error('PARSE_FAILED')
       const segments = parser.map((s, index) => ({ ...s, id: `${videoId}-bg-xml-${index}` }))
-      if (!segments.length) return { success: false, error: 'PARSE_FAILED' }
 
       return {
-        success: true,
-        data: {
-          videoId,
-          language,
-          source: 'auto-generated',
-          segments,
-          fullText: segments.map(s => s.text).join(' '),
-        },
+        videoId,
+        language,
+        source: 'auto-generated' as const,
+        segments,
+        fullText: segments.map(s => s.text).join(' '),
       }
     } catch (error) {
       console.error('apps/extension/src/background/messaging.ts error:', error);
-      return { success: false, error: 'FETCH_EXCEPTION' }
+      throw error
     }
+  })
+
+  // Injected into MAIN world to read window.ytInitialPlayerResponse and alternative sources.
+  // Captures ALL possible caption URL sources for comparison.
+  function extractPlayerResponseFromMainWorld(): Record<string, unknown> | null {
+    try {
+      const w = window as any
+
+      // Source 1: ytInitialPlayerResponse
+      const ytInitial = w.ytInitialPlayerResponse as Record<string, unknown> | undefined
+
+      // Source 2: ytplayer.config.args.player_response
+      let ytplayerResp: Record<string, unknown> | null = null
+      try {
+        const raw = w.ytplayer?.config?.args?.player_response
+        if (raw) {
+          ytplayerResp = typeof raw === 'string' ? JSON.parse(raw) : raw
+        }
+      } catch { /* ignore */ }
+
+      // Use whichever has caption tracks
+      const data = ytInitial || ytplayerResp
+      if (!data) return null
+
+      const captions = (data as any)?.captions
+      const tracklist = captions?.playerCaptionsTracklistRenderer
+      const tracks = tracklist?.captionTracks
+
+      // Source 3: movie_player.getPlayerResponse() — may differ from ytInitialPlayerResponse
+      let moviePlayerTracks: any[] | null = null
+      try {
+        const mp = w.document?.querySelector?.('#movie_player')
+        if (mp && typeof (mp as any).getPlayerResponse === 'function') {
+          const mpResp = (mp as any).getPlayerResponse()
+          const mpTracklist = mpResp?.captions?.playerCaptionsTracklistRenderer
+          moviePlayerTracks = mpTracklist?.captionTracks || null
+        }
+      } catch { /* ignore */ }
+
+      if (!tracks?.length && !moviePlayerTracks?.length) return null
+
+      const effectiveTracks = tracks?.length ? tracks : moviePlayerTracks
+
+      const trackUrls = effectiveTracks.map((t: any) => ({
+        baseUrl: t.baseUrl || '',
+        vssId: t.vssId || '',
+        languageCode: t.languageCode || '',
+        kind: t.kind === 'asr' ? 'auto' : 'manual',
+        name: (t.name?.simpleText) || t.languageCode || '',
+        isTranslatable: !!t.isTranslatable,
+      }))
+
+      return {
+        videoId: (data as any)?.videoDetails?.videoId || null,
+        source: ytInitial ? 'ytInitialPlayerResponse' : 'ytplayer.config',
+        moviePlayerTracksCount: moviePlayerTracks?.length || 0,
+        captionTracks: trackUrls,
+        captionsAvailable: !!captions,
+        tracklistRenderer: !!tracklist,
+        captionsSection: captions ? Object.keys(captions) : [],
+      }
+    } catch {
+      return null
+    }
+  }
+
+  registerHandler('FETCH_TIMEDTEXT', async (_msg) => {
+    const msg = _msg as { type: 'FETCH_TIMEDTEXT'; payload: { url: string } }
+    const { url } = msg.payload
+    if (!url) throw new Error('INVALID_PARAMS')
+
+    const controller = new AbortController()
+    const tid = setTimeout(() => controller.abort(), 10_000)
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'Accept-Language': 'en-US',
+          'User-Agent': navigator.userAgent,
+          'Origin': 'https://www.youtube.com',
+          'Referer': 'https://www.youtube.com/',
+        },
+      })
+      const text = await response.text()
+      if (!response.ok || !text.trim()) throw new Error(`HTTP ${response.status} empty`)
+      return { text }
+    } finally {
+      clearTimeout(tid)
+    }
+  })
+
+  registerHandler('GET_PLAYER_RESPONSE', async (_msg, sender) => {
+    const tabId = sender.tab?.id
+    if (!tabId) throw new Error('NO_TAB')
+
+    const results = await chrome.scripting.executeScript({
+      target: { tabId },
+      world: 'MAIN',
+      func: extractPlayerResponseFromMainWorld,
+    })
+
+    const data = results?.[0]?.result as Record<string, unknown> | null
+    if (!data) throw new Error('NO_PLAYER_RESPONSE')
+    return data
+  })
+
+  // Injected into the YouTube page's MAIN world via chrome.scripting.executeScript.
+  // Must be a standalone function (no closures) for serialization.
+  async function fetchCaptionInMainWorld(captionUrl: string): Promise<Record<string, unknown>> {
+    try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10_000)
+      const response = await fetch(captionUrl, { signal: controller.signal })
+      clearTimeout(timeoutId)
+
+      const body = await response.text()
+
+      return {
+        ok: response.ok,
+        status: response.status,
+        statusText: response.statusText,
+        redirected: response.redirected,
+        finalUrl: response.url,
+        contentType: response.headers.get('content-type') || '',
+        bodyLength: body.length,
+        bodyPreview: body,
+      }
+    } catch (err) {
+      return {
+        ok: false,
+        status: 0,
+        statusText: 'NetworkError',
+        redirected: false,
+        finalUrl: captionUrl,
+        contentType: '',
+        bodyLength: 0,
+        bodyPreview: '',
+        error: err instanceof Error ? err.message : String(err),
+      }
+    }
+  }
+
+  function extractInnerTubeApiKey(): string | null {
+    const html = document.documentElement.innerHTML
+    const match = html.match(/"INNERTUBE_API_KEY":\s*"([a-zA-Z0-9_-]+)"/)
+    return match?.[1] || null
+  }
+
+  async function fetchTranscriptViaInnerTube(videoId: string, languageCode: string): Promise<{ xml?: string; error?: string }> {
+    try {
+      const html = document.documentElement.innerHTML
+      const keyMatch = html.match(/"INNERTUBE_API_KEY":\s*"([a-zA-Z0-9_-]+)"/)
+      const apiKey = keyMatch?.[1]
+      if (!apiKey) return { error: 'NO_API_KEY' }
+
+      const playerResp = await fetch(
+        `https://www.youtube.com/youtubei/v1/player?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            context: {
+              client: { clientName: 'ANDROID', clientVersion: '20.10.38' },
+            },
+            videoId,
+          }),
+        },
+      )
+      if (!playerResp.ok) return { error: `PLAYER_HTTP_${playerResp.status}` }
+
+      const playerData = await playerResp.json() as Record<string, unknown>
+      const tracks = (playerData as any)?.captions?.playerCaptionsTracklistRenderer?.captionTracks
+      if (!tracks?.length) return { error: 'NO_TRACKS' }
+
+      const track = tracks.find((t: any) => t.languageCode === languageCode)
+        || tracks.find((t: any) => (t.languageCode || '').startsWith(languageCode))
+        || tracks[0]
+      if (!track?.baseUrl) return { error: 'NO_BASE_URL' }
+
+      // Strip fmt=srv3 as youtube-transcript-api does
+      const cleanUrl = (track.baseUrl as string).replace('&fmt=srv3', '')
+
+      const captionResp = await fetch(cleanUrl)
+      if (!captionResp.ok) return { error: `CAPTION_HTTP_${captionResp.status}` }
+
+      const xml = await captionResp.text()
+      if (!xml?.trim()) return { error: 'EMPTY_CAPTION' }
+
+      return { xml }
+    } catch (err) {
+      return { error: err instanceof Error ? err.message : String(err) }
+    }
+  }
+
+  registerHandler('FETCH_CAPTION_XML', async (_msg, sender) => {
+    const msg = _msg as { type: 'FETCH_CAPTION_XML'; payload: { url: string } }
+    const { url } = msg.payload
+    if (!url) throw new Error('INVALID_PARAMS')
+
+    let tabId = sender.tab?.id
+
+    if (!tabId) {
+      try {
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+        const ytTab = tabs.find(t => t.url?.includes('youtube.com/watch') || t.url?.includes('youtu.be'))
+        tabId = ytTab?.id
+      } catch { /* query failed */ }
+    }
+
+    if (!tabId) throw new Error('NO_TAB')
+
+    const results = await chrome.scripting.executeScript({
+      target: { tabId },
+      world: 'MAIN',
+      func: fetchCaptionInMainWorld,
+      args: [url],
+    })
+
+    const diagnostics = results?.[0]?.result as Record<string, unknown> | null | undefined
+    return { diagnostics }
+  })
+
+  registerHandler('FETCH_TRANSCRIPT_INNERTUBE', async (_msg, sender) => {
+    const msg = _msg as { type: 'FETCH_TRANSCRIPT_INNERTUBE'; payload: { videoId: string; languageCode: string } }
+    const { videoId, languageCode } = msg.payload
+    if (!videoId) throw new Error('INVALID_VIDEO_ID')
+
+    let tabId = sender.tab?.id
+    if (!tabId) {
+      try {
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
+        const ytTab = tabs.find(t => t.url?.includes('youtube.com/watch') || t.url?.includes('youtu.be'))
+        tabId = ytTab?.id
+      } catch { /* query failed */ }
+    }
+    if (!tabId) throw new Error('NO_TAB')
+
+    const results = await chrome.scripting.executeScript({
+      target: { tabId },
+      world: 'MAIN',
+      func: fetchTranscriptViaInnerTube,
+      args: [videoId, languageCode],
+    })
+
+    const data = results?.[0]?.result as { xml?: string; error?: string } | null | undefined
+    if (!data?.xml) throw new Error(data?.error || 'NO_XML')
+    return { xml: data.xml }
   })
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

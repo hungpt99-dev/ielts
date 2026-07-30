@@ -10,28 +10,70 @@ function escapeHtml(str: string): string {
 }
 
 function buildTooltipContent(word: HighlightWord): string {
-  const title = escapeHtml(word.text)
-  const meaning = escapeHtml(word.meaning)
-  const example = escapeHtml(word.exampleSentence)
-  const note = escapeHtml(word.personalNote)
-  const reviewUrl = `https://ieltsjourney.dev/review/${encodeURIComponent(word.text)}`
+  const reviewUrl = chrome.runtime.getURL('app/index.html#/review')
+  const hasWordFamily = word.wordFamily && word.wordFamily.length > 0
+  const hasCollocations = word.collocations && word.collocations.length > 0
 
-  let html = `
-    <div style="font-weight:600;font-size:14px;margin-bottom:${meaning ? '6px' : '0'};color:#fbbf24;">
-      ${title}
-    </div>`
+  let html = ''
 
-  if (meaning) {
-    html += `<div style="margin-bottom:6px;color:#e2e8f0;">${meaning}</div>`
+  if (word.pronunciation) {
+    html += `<div style="font-weight:700;font-size:16px;margin-bottom:2px;color:#fbbf24;">${escapeHtml(word.text)} <span style="font-weight:400;font-size:13px;color:#94a3b8;">${escapeHtml(word.pronunciation)}</span></div>`
+  } else {
+    html += `<div style="font-weight:700;font-size:16px;margin-bottom:2px;color:#fbbf24;">${escapeHtml(word.text)}</div>`
   }
 
-  if (example) {
-    html += `<div style="margin-bottom:6px;font-style:italic;color:#94a3b8;font-size:12px;border-left:2px solid #334155;padding-left:8px;">${example}</div>`
+  if (word.partOfSpeech) {
+    html += `<div style="margin-bottom:4px;font-size:12px;color:#94a3b8;font-style:italic;">${escapeHtml(word.partOfSpeech)}</div>`
   }
 
-  if (note) {
-    html += `<div style="margin-bottom:6px;font-size:12px;color:#94a3b8;">${note}</div>`
+  if (word.meaning) {
+    html += `<div style="margin-bottom:4px;color:#e2e8f0;font-size:13px;line-height:1.5;">${escapeHtml(word.meaning)}</div>`
   }
+
+  if (word.translation) {
+    html += `<div style="margin-bottom:4px;color:#64748b;font-size:12px;">${escapeHtml(word.translation)}</div>`
+  }
+
+  if (word.exampleSentence) {
+    html += `<div style="margin-bottom:6px;font-style:italic;color:#94a3b8;font-size:12px;line-height:1.5;border-left:2px solid #475569;padding-left:10px;">"${escapeHtml(word.exampleSentence)}"</div>`
+  }
+
+  if (hasWordFamily) {
+    html += `<div style="margin-bottom:6px;">`
+    html += `<div style="font-size:11px;font-weight:600;color:#64748b;margin-bottom:3px;">Word Forms</div>`
+    html += `<div style="display:flex;flex-wrap:wrap;gap:4px;">`
+    for (const wf of word.wordFamily) {
+      const pos = wf.partOfSpeech ? ` <span style="color:#94a3b8;">${escapeHtml(wf.partOfSpeech)}</span>` : ''
+      html += `<span style="font-size:11px;background:#334155;color:#e2e8f0;padding:2px 8px;border-radius:6px;">${escapeHtml(wf.word)}${pos}</span>`
+    }
+    html += `</div></div>`
+  }
+
+  if (hasCollocations) {
+    html += `<div style="margin-bottom:6px;">`
+    html += `<div style="font-size:11px;font-weight:600;color:#64748b;margin-bottom:3px;">Collocations</div>`
+    html += `<div style="display:flex;flex-wrap:wrap;gap:4px;">`
+    for (const c of word.collocations) {
+      html += `<span style="font-size:11px;background:#1e293b;color:#94a3b8;border:1px solid #334155;padding:2px 8px;border-radius:6px;">${escapeHtml(c)}</span>`
+    }
+    html += `</div></div>`
+  }
+
+  if (word.personalNote) {
+    html += `<div style="margin-bottom:6px;font-size:12px;color:#94a3b8;">${escapeHtml(word.personalNote)}</div>`
+  }
+
+  html += `<div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid #334155;">`
+  if (word.cefrLevel) {
+    html += `<span style="font-size:10px;font-weight:600;background:#334155;color:#e2e8f0;padding:1px 6px;border-radius:4px;">${escapeHtml(word.cefrLevel)}</span>`
+  }
+  if (word.difficulty) {
+    html += `<span style="font-size:10px;font-weight:600;background:#1e3a5f;color:#60a5fa;padding:1px 6px;border-radius:4px;">${escapeHtml(word.difficulty)}</span>`
+  }
+  if (word.topic) {
+    html += `<span style="font-size:10px;font-weight:500;color:#64748b;">${escapeHtml(word.topic)}</span>`
+  }
+  html += `</div>`
 
   html += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #334155;">
     <a href="${reviewUrl}" target="_blank" rel="noopener noreferrer" style="color:#60a5fa;font-size:12px;text-decoration:none;font-weight:500;">
@@ -53,12 +95,12 @@ function createTooltip(): HTMLDivElement {
     fontFamily: 'system-ui, -apple-system, sans-serif',
     background: '#1e293b',
     color: '#f1f5f9',
-    borderRadius: '10px',
-    padding: '12px 16px',
+    borderRadius: '12px',
+    padding: '14px 18px',
     fontSize: '13px',
     lineHeight: '1.5',
-    maxWidth: '320px',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
+    maxWidth: '360px',
+    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
     border: '1px solid #334155',
     opacity: '0',
     transform: 'translateY(4px)',
@@ -70,7 +112,7 @@ function createTooltip(): HTMLDivElement {
 }
 
 function positionTooltip(x: number, y: number, el: HTMLDivElement): void {
-  const tooltipWidth = el.offsetWidth || 280
+  const tooltipWidth = el.offsetWidth || 360
   const tooltipHeight = el.offsetHeight || 100
   const padding = 12
 

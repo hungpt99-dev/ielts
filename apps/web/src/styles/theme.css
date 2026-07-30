@@ -132,6 +132,8 @@
   --transition-slow: 300ms ease;
 
   --animation-fade-in: fadeIn var(--transition-normal);
+  --animation-fade-in-up: fadeInUp 0.6s ease-out;
+  --animation-fade-in-down: fadeInDown 0.6s ease-out;
   --animation-slide-up: slideUp var(--transition-normal);
   --animation-slide-down: slideDown var(--transition-normal);
   --animation-slide-in-right: slideInRight var(--transition-normal);
@@ -140,6 +142,13 @@
   --animation-pulse: pulse 1.5s ease-in-out infinite;
   --animation-spin: spin 0.6s linear infinite;
   --animation-scale-in: scaleIn var(--transition-normal);
+  --animation-blob-1: blobFloat1 20s ease-in-out infinite;
+  --animation-blob-2: blobFloat2 25s ease-in-out infinite;
+  --animation-blob-3: blobFloat3 22s ease-in-out infinite;
+  --animation-gradient-shift: gradientShift 8s ease infinite;
+  --animation-float-slow: floatSlow 3s ease-in-out infinite;
+  --animation-count-up: countUp 0.6s ease-out;
+  --animation-card-lift: cardLift 0.3s ease-out forwards;
 
   --ext-width: 400px;
   --ext-min-height: 500px;
@@ -215,6 +224,16 @@
   to { opacity: 1; }
 }
 
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -253,6 +272,70 @@
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@keyframes blobFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.08); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes blobFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-20px, -20px) scale(1.05); }
+  66% { transform: translate(30px, 20px) scale(0.92); }
+}
+
+@keyframes blobFloat3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-30px, 10px) scale(1.1); }
+  66% { transform: translate(10px, -30px) scale(0.93); }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes cardLift {
+  from { transform: translateY(0); box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06); }
+  to { transform: translateY(-4px); box-shadow: 0 12px 32px -8px rgb(0 0 0 / 0.12); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes borderGlow {
+  0%, 100% { border-color: rgba(37, 99, 235, 0.15); }
+  50% { border-color: rgba(37, 99, 235, 0.4); }
+}
+
+@keyframes drawLine {
+  from { height: 0; }
+  to { height: 100%; }
+}
+
+@keyframes chartBar {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
 }
 
 *,

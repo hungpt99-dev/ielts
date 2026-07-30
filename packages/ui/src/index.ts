@@ -14,14 +14,6 @@ export type { CardProps, CardVariant, CardPadding, CardTint } from './components
 export { Badge } from './components/Badge'
 export type { BadgeProps, BadgeVariant, BadgeSize } from './components/Badge'
 
-// SearchInput
-export { SearchInput } from './components/SearchInput'
-export type { SearchInputProps } from './components/SearchInput'
-
-// Modal
-export { Modal } from './components/Modal'
-export type { ModalProps, ModalSize } from './components/Modal'
-
 // Drawer
 export { Drawer } from './components/Drawer'
 export type { DrawerProps, DrawerSide, DrawerSize } from './components/Drawer'
@@ -54,17 +46,9 @@ export type { MobileBottomNavigationProps, MobileNavItem } from './components/Mo
 export { ExtensionSyncStatusBadge } from './components/ExtensionSyncStatusBadge'
 export type { ExtensionSyncStatusBadgeProps, SyncStatus } from './components/ExtensionSyncStatusBadge'
 
-// Select
-export { Select } from './components/Select'
-export type { SelectProps, SelectSize, SelectOption } from './components/Select'
-
 // Tabs
 export { Tabs } from './components/Tabs'
 export type { TabsProps, TabItem } from './components/Tabs'
-
-// ErrorState
-export { ErrorState } from './components/ErrorState'
-export type { ErrorStateProps } from './components/ErrorState'
 
 // ProgressSummaryCard
 export { ProgressSummaryCard } from './components/ProgressSummaryCard'

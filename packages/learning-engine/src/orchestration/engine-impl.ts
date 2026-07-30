@@ -97,7 +97,6 @@ export class LearningEngineImpl implements LearningEngine {
         tutorPort: this.deps.tutorPort,
         contextPort: this.deps.contextPort,
         eventPublisher: this.deps.eventPublisher,
-        skillRegistry: this.deps.skillRegistry,
       })
       return { status: 'success', data: result, metadata: metadata(result.aiUsed, result.cacheHit) }
     } catch (err) {

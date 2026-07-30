@@ -4,7 +4,6 @@ export const ROUTES = {
   roadmap: '/study-roadmap',
   vocabulary: '/vocabulary',
   review: '/review',
-  reviewCenter: '/review-center',
   reading: '/practice/reading',
   listening: '/practice/listening',
   writing: '/writing',

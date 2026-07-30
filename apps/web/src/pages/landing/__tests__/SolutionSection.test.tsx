@@ -6,7 +6,7 @@ describe('SolutionSection', () => {
   it('renders the section heading', () => {
     render(<SolutionSection />)
     expect(
-      screen.getByText("IELTS Journey gives you what's missing.")
+      screen.getByText(/IELTS Journey gives you/)
     ).toBeInTheDocument()
   })
 

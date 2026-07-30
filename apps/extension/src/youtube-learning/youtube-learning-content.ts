@@ -12,7 +12,6 @@ import { StorageAdapter } from './infrastructure/persistence/StorageAdapter'
 import { LearningSessionService } from './application/services/LearningSessionService'
 import { VocabularyService } from './application/services/VocabularyService'
 import { TranscriptTranslationService } from './application/services/TranscriptTranslationService'
-import { clearTranscriptCache } from './infrastructure/youtube/YouTubeTranscriptProvider'
 import { safeStorageGet } from '../utils/safe-chrome'
 import { setVideoHelperHidden } from '../content-script/videoHelper'
 import { loadSettings } from '../background/settingsStorage'
@@ -133,7 +132,7 @@ function setupPanelMessaging(): void {
         break
 
       case 'REQUEST_TRANSCRIPT':
-        clearTranscriptCache()
+        youtubeAdapter?.getTranscriptProvider().clearCache()
         handleTranscriptRequest()
         break
 
@@ -196,14 +195,37 @@ function setupPanelMessaging(): void {
         break
       }
 
-      case 'TRANSCRIPT_PREVIOUS':
-        playbackController?.previous()
+      case 'TRANSCRIPT_PREVIOUS': {
+        const index = (payload as { segmentIndex: number })?.segmentIndex
+        if (typeof index === 'number') {
+          playbackController?.playSegment(index)
+        } else {
+          playbackController?.previous()
+        }
         sessionService?.markUserActive()
         break
+      }
 
-      case 'TRANSCRIPT_NEXT':
-        playbackController?.next()
+      case 'TRANSCRIPT_NEXT': {
+        const index = (payload as { segmentIndex: number })?.segmentIndex
+        if (typeof index === 'number') {
+          playbackController?.playSegment(index)
+        } else {
+          playbackController?.next()
+        }
         sessionService?.markUserActive()
+        break
+      }
+
+      case 'TRANSCRIPT_STOP':
+        playbackController?.stop()
+        youtubeAdapter?.getPlayer().pause()
+        break
+
+      case 'SET_PLAYBACK_MODE':
+        if (typeof payload === 'string' && (payload === 'segment' || payload === 'continuous')) {
+          playbackController?.setMode(payload)
+        }
         break
 
       case 'TRANSCRIPT_CONTINUE':
@@ -521,6 +543,10 @@ async function handleSaveMistakes(payload: Record<string, unknown>): Promise<voi
       if (!dup) all.push({ ...m, savedAt: new Date().toISOString() })
     }
     await chrome.storage.local.set({ [STORAGE_KEYS.extensionLocal.ytLearningMistakes]: all })
+    chrome.runtime.sendMessage({
+      type: 'SAVE_YOUTUBE_MISTAKES_TO_IDB',
+      payload: { mistakes },
+    }).catch(() => { /* background may not be ready */ })
     postToParent('MISTAKES_SAVED', { success: true })
   } catch (error) {
     console.error('apps/extension/src/youtube-learning/youtube-learning-content.ts error:', error);
@@ -794,7 +820,7 @@ async function handleSubmitQuiz(payload: Record<string, unknown>): Promise<void>
 
 function onVideoChange(videoId: string): void {
   cancelInFlightTranscript()
-  clearTranscriptCache(videoId)
+  youtubeAdapter?.getTranscriptProvider().clearCache(videoId)
 
   currentVideoInfo = detectVideoPage()
   sentTranscriptRequest = false
@@ -882,6 +908,9 @@ export async function initYouTubeLearning(): Promise<void> {
       {
         onActiveSegmentChange: (index: number) => {
           postToParent('TRANSCRIPT_ACTIVE_SEGMENT_INDEX', { activeSegmentIndex: index })
+        },
+        onModeChange: (mode) => {
+          postToParent('PLAYBACK_MODE_CHANGED', { mode })
         },
       },
     )

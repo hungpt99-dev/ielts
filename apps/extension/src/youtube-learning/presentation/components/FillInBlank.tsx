@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { normalizeWord, formatTime } from '../utils/tokenizeTranscript'
 import { scoreObjectiveQuestion } from '@ielts/learning-engine'
 
@@ -11,7 +11,7 @@ interface BlankSegment {
   startTime: number
 }
 
-type Phase = 'loading' | 'ready' | 'playing' | 'answering' | 'submitted'
+type Phase = 'loading' | 'config' | 'ready' | 'playing' | 'answering' | 'submitted'
 
 export function FillInBlankPanel({ videoId, sendToParent, onClose }: {
   videoId: string
@@ -23,9 +23,10 @@ export function FillInBlankPanel({ videoId, sendToParent, onClose }: {
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [results, setResults] = useState<Record<string, boolean>>({})
   const [error, setError] = useState<string | null>(null)
-
-  const sectionStart = 0
-  const sectionEnd = 45
+  const [sectionStart, setSectionStart] = useState(0)
+  const [sectionEnd, setSectionEnd] = useState(0)
+  const [maxDuration, setMaxDuration] = useState(0)
+  const segmentsRef = useRef<Array<{ id: string; start: number; end: number; text: string }>>([])
 
   useEffect(() => {
     const handler = (event: MessageEvent) => {
@@ -37,35 +38,12 @@ export function FillInBlankPanel({ videoId, sendToParent, onClose }: {
           setPhase('ready')
           return
         }
-        const section = segments.filter(s => s.start >= sectionStart && s.end <= sectionEnd)
-        if (section.length < 3) {
-          setError('Not enough transcript content for this section')
-          setPhase('ready')
-          return
-        }
-        const blanked: BlankSegment[] = []
-        const taken = new Set<string>()
-        for (const seg of section) {
-          const words = seg.text.split(/\s+/).filter(w => w.length > 3)
-          if (words.length === 0) continue
-          const pick = words[Math.floor(Math.random() * words.length)]
-          const norm = normalizeWord(pick)
-          if (!norm || taken.has(norm) || norm.length < 3) continue
-          taken.add(norm)
-          const idx = seg.text.indexOf(pick)
-          if (idx === -1) continue
-          blanked.push({
-            id: `fb-${seg.id}-${blanked.length}`,
-            textBefore: seg.text.slice(0, idx).trim(),
-            textAfter: seg.text.slice(idx + pick.length).trim(),
-            answer: pick,
-            normalizedAnswer: norm,
-            startTime: seg.start,
-          })
-          if (blanked.length >= 8) break
-        }
-        setItems(blanked)
-        setPhase('ready')
+        segmentsRef.current = segments
+        const dur = Math.max(...segments.map(s => s.end), 0)
+        setMaxDuration(Math.ceil(dur))
+        setSectionStart(0)
+        setSectionEnd(Math.min(45, Math.ceil(dur)))
+        setPhase('config')
       }
     }
     window.addEventListener('message', handler)
@@ -78,10 +56,42 @@ export function FillInBlankPanel({ videoId, sendToParent, onClose }: {
     return () => { sendToParent('EXIT_EXERCISE_MODE') }
   }, [sendToParent])
 
+  const handleConfirmSection = useCallback(() => {
+    const section = segmentsRef.current.filter(s => s.start >= sectionStart && s.end <= sectionEnd)
+    if (section.length < 3) {
+      setError('Not enough transcript content in this section. Try a wider range.')
+      return
+    }
+    setError(null)
+    const blanked: BlankSegment[] = []
+    const taken = new Set<string>()
+    for (const seg of section) {
+      const words = seg.text.split(/\s+/).filter(w => w.length > 3)
+      if (words.length === 0) continue
+      const pick = words[Math.floor(Math.random() * words.length)]
+      const norm = normalizeWord(pick)
+      if (!norm || taken.has(norm) || norm.length < 3) continue
+      taken.add(norm)
+      const idx = seg.text.indexOf(pick)
+      if (idx === -1) continue
+      blanked.push({
+        id: `fb-${seg.id}-${blanked.length}`,
+        textBefore: seg.text.slice(0, idx).trim(),
+        textAfter: seg.text.slice(idx + pick.length).trim(),
+        answer: pick,
+        normalizedAnswer: norm,
+        startTime: seg.start,
+      })
+      if (blanked.length >= 8) break
+    }
+    setItems(blanked)
+    setPhase('ready')
+  }, [sectionStart, sectionEnd])
+
   const handleStart = useCallback(() => {
     setPhase('playing')
     sendToParent('SEEK_TO', sectionStart)
-  }, [sendToParent])
+  }, [sendToParent, sectionStart])
 
   const handleStartAnswering = useCallback(() => {
     setPhase('answering')
@@ -133,6 +143,63 @@ export function FillInBlankPanel({ videoId, sendToParent, onClose }: {
     )
   }
 
+  if (phase === 'config') {
+    const timeInput: React.CSSProperties = {
+      width: '64px', padding: '6px 8px', borderRadius: '6px',
+      border: '1px solid var(--color-border)', background: 'rgba(255,255,255,0.05)',
+      color: 'var(--color-text)', fontSize: '14px', textAlign: 'center',
+      outline: 'none', fontFamily: 'var(--font-sans)',
+    }
+    const parseTime = (value: string): number => {
+      const parts = value.split(':')
+      if (parts.length === 2) return parseInt(parts[0]) * 60 + parseInt(parts[1])
+      return parseInt(value)
+    }
+    return (
+      <div style={{ ...container, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+        <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'rgba(99,102,241,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#818cf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" />
+          </svg>
+        </div>
+        <div style={{ fontWeight: 600, fontSize: '16px', color: 'var(--color-text)', marginBottom: '4px' }}>Fill in the Blank</div>
+        <div style={{ fontSize: '12px', color: 'var(--color-muted)', marginBottom: '16px', maxWidth: '280px' }}>
+          Select the video section to practice with.
+        </div>
+        {error && <div style={{ color: 'var(--color-danger)', fontSize: '12px', marginBottom: '12px' }}>{error}</div>}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+          <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>Start</span>
+          <input
+            value={formatTime(sectionStart)}
+            onChange={e => {
+              const v = parseTime(e.target.value)
+              if (!isNaN(v) && v >= 0) setSectionStart(v)
+            }}
+            style={timeInput}
+            aria-label="Section start time"
+          />
+          <span style={{ fontSize: '12px', color: 'var(--color-text-secondary)' }}>End</span>
+          <input
+            value={formatTime(sectionEnd)}
+            onChange={e => {
+              const v = parseTime(e.target.value)
+              if (!isNaN(v) && v > 0 && v <= maxDuration) setSectionEnd(v)
+            }}
+            style={timeInput}
+            aria-label="Section end time"
+          />
+        </div>
+        <div style={{ fontSize: '11px', color: 'var(--color-muted)', marginBottom: '20px' }}>
+          Video length: {formatTime(maxDuration)}
+        </div>
+        <button onClick={handleConfirmSection} style={btnPrimary} disabled={sectionStart >= sectionEnd}>
+          Start Practice
+        </button>
+        <button onClick={onClose} style={{ ...btnOutline, marginTop: '8px' }}>Cancel</button>
+      </div>
+    )
+  }
+
   if (phase === 'ready') {
     return (
       <div style={{ ...container, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
@@ -143,7 +210,7 @@ export function FillInBlankPanel({ videoId, sendToParent, onClose }: {
         </div>
         <div style={{ fontWeight: 600, fontSize: '16px', color: 'var(--color-text)', marginBottom: '4px' }}>Fill in the Blank</div>
         <div style={{ fontSize: '12px', color: 'var(--color-muted)', lineHeight: 1.5, marginBottom: '20px', maxWidth: '280px' }}>
-          Listen to the first {sectionEnd}s of the video, then type the missing words.
+          Listen to {formatTime(sectionStart)} – {formatTime(sectionEnd)}, then type the missing words.
         </div>
         <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '10px', padding: '12px 16px', marginBottom: '20px', fontSize: '12px', color: 'var(--color-text-secondary)', textAlign: 'left', lineHeight: 1.6 }}>
           <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}><span style={{ color: '#818cf8', fontWeight: 600 }}>1.</span><span>Listen to the video section carefully</span></div>
@@ -159,7 +226,7 @@ export function FillInBlankPanel({ videoId, sendToParent, onClose }: {
   if (phase === 'playing') {
     return (
       <div style={{ ...container, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-        <div style={{ fontSize: '14px', color: 'var(--color-muted)' }}>Playing 0:00 – 0:45...</div>
+        <div style={{ fontSize: '14px', color: 'var(--color-muted)' }}>Playing {formatTime(sectionStart)} – {formatTime(sectionEnd)}...</div>
         <button onClick={handleStartAnswering} style={btnPrimary}>I'm done — show blanks</button>
       </div>
     )

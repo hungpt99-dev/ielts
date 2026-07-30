@@ -1,4 +1,5 @@
 import { STORAGE_KEYS } from '@ielts/config'
+import { getResolvedNativeLanguage } from './storageSync'
 import {
   explain,
   type AiExplainType,
@@ -280,12 +281,7 @@ async function loadTab(type: AiExplainType): Promise<void> {
     return
   }
 
-  const nativeLanguage = await new Promise<string>((resolve) => {
-    chrome.storage.local.get(STORAGE_KEYS.extensionLocal.extensionSettings, (result) => {
-      const s = result[STORAGE_KEYS.extensionLocal.extensionSettings] as { nativeLanguage?: string } | undefined
-      resolve(s?.nativeLanguage || '')
-    })
-  })
+  const nativeLanguage = await getResolvedNativeLanguage()
 
   const result = await explain(type, currentText, () => config, nativeLanguage || undefined)
 

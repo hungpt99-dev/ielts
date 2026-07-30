@@ -10,6 +10,7 @@ import {
   generateRoadmapWithEngine,
   loadRegenerationState,
   clearRegenerationState,
+  loadRoadmap as loadRoadmapFromStorage,
 } from '../../features/roadmap/roadmapService'
 import type {
   RoadmapPhase,
@@ -49,8 +50,6 @@ export default function FullStudyRoadmapPage() {
   const [taskRefreshKey, setTaskRefreshKey] = useState(0)
   const [persistedRegen, setPersistedRegen] = useState(loadRegenerationState())
 
-  const [autoGenerating, setAutoGenerating] = useState(false)
-
   const loadData = useCallback(async (showLoading = true) => {
     try {
       if (showLoading) setLoading(true)
@@ -86,8 +85,29 @@ export default function FullStudyRoadmapPage() {
   }, [loadRoadmap])
 
   useEffect(() => {
-    loadData()
-  }, [loadData])
+    const existing = loadRoadmapFromStorage()
+    if (existing && existing.phases.length > 0) {
+      loadRoadmap(existing)
+      const userProfile = getRoadmapUserProfile()
+      setProfile(userProfile)
+      const initialExpand = new Set<number>()
+      if (existing.currentPhaseIndex !== undefined) {
+        initialExpand.add(existing.currentPhaseIndex)
+      }
+      if (initialExpand.size === 0) initialExpand.add(0)
+      setExpandedPhases(initialExpand)
+
+      const settingsStr = localStorage.getItem(STORAGE_KEYS.localStorage.userSettings)
+      if (settingsStr) {
+        try {
+          const settings = JSON.parse(settingsStr)
+          const hasKey = !!(settings.aiApiKey || settings.ai?.apiKey)
+          setAiEnabled(hasKey)
+        } catch { /* ignore */ }
+      }
+    }
+    setLoading(false)
+  }, [loadRoadmap])
 
   useEffect(() => {
     const current = loadRegenerationState()
@@ -130,6 +150,16 @@ export default function FullStudyRoadmapPage() {
     window.addEventListener('plan-enrich-progress', handleProgress)
     return () => window.removeEventListener('plan-enrich-progress', handleProgress)
   }, [])
+
+  useEffect(() => {
+    if (enrichProgress && enrichProgress.current >= enrichProgress.total) {
+      const timer = setTimeout(() => {
+        setEnrichProgress(null)
+        setPersistedRegen(null)
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [enrichProgress])
 
   const handleToggleTask = useCallback(async (phaseIndex: number, weekIndex: number, dayIndex: number, taskIndex: number) => {
     const r = roadmapRef.current
@@ -241,18 +271,89 @@ export default function FullStudyRoadmapPage() {
     })
   }, [])
 
-  // ---- Loading State ----
+  // ---- Loading / Generating State ----
   if (loading) {
+    const progressPercent = enrichProgress?.total
+      ? Math.round((enrichProgress.current / enrichProgress.total) * 100)
+      : 0
+
     return (
-      <PageContent className="space-y-6" role="status" aria-label="Loading your IELTS roadmap">
-        <div className="space-y-4" aria-hidden="true">
-          <div className="h-5 w-32 animate-pulse rounded" style={{ backgroundColor: 'var(--color-surface-alt)' }} />
-          <div className="h-40 w-full animate-pulse rounded-2xl" style={{ backgroundColor: 'var(--color-surface-alt)' }} />
-          <div className="h-16 w-full animate-pulse rounded-2xl" style={{ backgroundColor: 'var(--color-surface-alt)' }} />
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-32 w-full animate-pulse rounded-2xl" style={{ backgroundColor: 'var(--color-surface-alt)' }} />
-          ))}
-          <div className="h-24 w-full animate-pulse rounded-2xl" style={{ backgroundColor: 'var(--color-surface-alt)' }} />
+      <PageContent className="flex items-center justify-center" role="status" aria-label="Generating your IELTS roadmap">
+        <div className="w-full max-w-md space-y-6">
+          <div className="flex justify-center">
+            <div
+              className="flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg"
+              style={{
+                background: 'linear-gradient(135deg, var(--color-primary), #4f46e5)',
+              }}
+            >
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
+              Generating Your Study Plan
+            </h2>
+            <p className="mt-1.5 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              {enrichProgress?.phase
+                ? `${enrichProgress.phase} (${enrichProgress.current} of ${enrichProgress.total})`
+                : 'Building your personalized IELTS roadmap...'}
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span style={{ color: 'var(--color-muted)' }}>Progress</span>
+              <span className="font-semibold" style={{ color: 'var(--color-primary)' }}>{progressPercent}%</span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full" style={{ backgroundColor: 'var(--color-surface-alt)' }}>
+              <div
+                className="h-full rounded-full transition-all duration-700 ease-out"
+                style={{
+                  width: `${progressPercent}%`,
+                  background: 'linear-gradient(90deg, var(--color-primary), #4f46e5)',
+                }}
+              />
+            </div>
+          </div>
+
+          {enrichProgress?.phase && (
+            <div className="space-y-2">
+              {['Analyzing your goals', 'Creating study phases', 'Building weekly schedules', 'Generating daily tasks', 'Finalizing your plan'].map((step, i) => {
+                const totalSteps = 5
+                const stepProgress = enrichProgress.total > 0 ? enrichProgress.current / enrichProgress.total : 0
+                const completed = stepProgress >= (i + 1) / totalSteps
+                return (
+                  <div key={step} className="flex items-center gap-3 text-sm">
+                    <div
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
+                        completed ? 'text-white' : 'text-[var(--color-muted)]'
+                      }`}
+                      style={{
+                        backgroundColor: completed ? 'var(--color-primary)' : 'var(--color-surface-alt)',
+                      }}
+                    >
+                      {completed ? (
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
+                        </svg>
+                      ) : (
+                        i + 1
+                      )}
+                    </div>
+                    <span style={{ color: completed ? 'var(--color-text)' : 'var(--color-muted)' }}>{step}</span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          <p className="text-center text-xs" style={{ color: 'var(--color-muted)' }}>
+            This may take a moment — we're creating your personalized study plan.
+          </p>
         </div>
       </PageContent>
     )
@@ -305,25 +406,29 @@ export default function FullStudyRoadmapPage() {
 
   // ---- Null state ----
   if (!roadmap) {
-    if (!autoGenerating && !loading && !error) {
-      setAutoGenerating(true)
-      loadData(true).finally(() => setAutoGenerating(false))
-      return null
-    }
-
     return (
       <PageContent className="flex items-center justify-center">
-        <div className="w-full space-y-4 text-center">
-          <div
-            className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-t-transparent"
-            style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }}
-          />
-          <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
-            Generating Your Study Plan
-          </h2>
-          <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-            Building your personalized IELTS roadmap based on your goals and schedule...
-          </p>
+        <div className="w-full max-w-md space-y-6 text-center">
+          <IconMap size={48} className="mx-auto" />
+          <div>
+            <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
+              No Study Plan Yet
+            </h2>
+            <p className="mt-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              Create a personalized IELTS study roadmap based on your target band score, exam date, and available study time.
+            </p>
+          </div>
+          <button
+            onClick={() => loadData(true)}
+            disabled={loading}
+            className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all hover:brightness-110"
+            style={{ backgroundColor: 'var(--color-primary)' }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
+            Generate My Study Plan
+          </button>
         </div>
       </PageContent>
     )
@@ -403,21 +508,34 @@ export default function FullStudyRoadmapPage() {
         Skip to today's tasks
       </a>
 
-      {(regenerating || persistedRegen) && enrichProgress && (
+      {(regenerating || persistedRegen) && enrichProgress && (() => {
+        const isComplete = enrichProgress.current >= enrichProgress.total
+        return (
         <div
-          className="rounded-xl border p-4"
-          style={{ borderColor: 'var(--color-primary)', backgroundColor: 'var(--color-primary-light)' }}
+          className="rounded-xl border p-4 transition-all duration-500"
+          style={{
+            borderColor: isComplete ? 'var(--color-success)' : 'var(--color-primary)',
+            backgroundColor: isComplete ? 'var(--color-success-light)' : 'var(--color-primary-light)',
+          }}
           role="status"
           aria-live="polite"
         >
           <div className="flex items-center gap-3">
-            <span className="inline-block h-5 w-5 animate-spin rounded-full border-2" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
+            {isComplete ? (
+              <div className="flex h-5 w-5 items-center justify-center rounded-full" style={{ backgroundColor: 'var(--color-success)' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
+                </svg>
+              </div>
+            ) : (
+              <span className="inline-block h-5 w-5 animate-spin rounded-full border-2" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
+            )}
             <div className="flex-1">
-              <p className="text-sm font-semibold" style={{ color: 'var(--color-primary)' }}>
-                Regenerating plan with AI...
+              <p className="text-sm font-semibold" style={{ color: isComplete ? 'var(--color-success)' : 'var(--color-primary)' }}>
+                {isComplete ? 'Plan generation complete' : 'Regenerating plan with AI...'}
               </p>
               {enrichProgress.phase && (
-                <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-secondary)' }}>
+                <p className="text-xs mt-0.5" style={{ color: isComplete ? 'var(--color-success-dark)' : 'var(--color-text-secondary)' }}>
                   {enrichProgress.phase} ({enrichProgress.current}/{enrichProgress.total})
                 </p>
               )}
@@ -428,15 +546,16 @@ export default function FullStudyRoadmapPage() {
               className="h-full rounded-full transition-all duration-500"
               style={{
                 width: enrichProgress.total > 0 ? `${Math.round((enrichProgress.current / enrichProgress.total) * 100)}%` : '0%',
-                backgroundColor: 'var(--color-primary)',
+                backgroundColor: isComplete ? 'var(--color-success)' : 'var(--color-primary)',
               }}
             />
           </div>
           <p className="mt-2 text-xs" style={{ color: 'var(--color-muted)' }}>
-            You can leave this page and come back — progress will be saved.
+            {isComplete ? 'Plan ready — loading your roadmap...' : 'You can leave this page and come back — progress will be saved.'}
           </p>
         </div>
-      )}
+        )
+      })()}
 
       <RoadmapHeader
         roadmap={roadmap}

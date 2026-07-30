@@ -79,7 +79,7 @@ function isVocabCategory(category: string): boolean {
   return category === 'vocabulary'
 }
 
-chrome.runtime.onMessage.addListener((message) => {
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (!message || typeof message !== 'object') return false
   const msg = message as Record<string, unknown>
 
@@ -88,6 +88,7 @@ chrome.runtime.onMessage.addListener((message) => {
     if (isVocabCategory(payload.category)) {
       handleVocabSaved(payload.text)
     }
+    try { sendResponse({}) } catch { /* channel closed */ }
     return false
   }
 

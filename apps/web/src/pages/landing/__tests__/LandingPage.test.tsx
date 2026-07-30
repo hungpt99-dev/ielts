@@ -4,50 +4,50 @@ import LandingPage from '../../LandingPage'
 
 vi.mock('../config', () => ({
   EXTENSION_URL: 'https://chromewebstore.google.com/detail/ielts-journey',
-  APP_URL: '/',
 }))
 
 describe('LandingPage', () => {
   it('renders the HeroSection with product name', () => {
     render(<LandingPage />)
-    expect(screen.getByText('IELTS Journey')).toBeInTheDocument()
+    const headings = screen.getAllByText('IELTS Journey')
+    expect(headings.length).toBeGreaterThanOrEqual(1)
   })
 
   it('renders the ProblemSection heading', () => {
     render(<LandingPage />)
     expect(
-      screen.getByText("Studying for IELTS alone is hard.")
+      screen.getByText(/Studying for IELTS alone/)
     ).toBeInTheDocument()
   })
 
   it('renders the SolutionSection heading', () => {
     render(<LandingPage />)
     expect(
-      screen.getByText("IELTS Journey gives you what's missing.")
+      screen.getByText(/IELTS Journey gives you/)
     ).toBeInTheDocument()
   })
 
   it('renders the FeatureGrid heading', () => {
     render(<LandingPage />)
     expect(
-      screen.getByText('Everything you need to master IELTS')
+      screen.getByText(/All features/)
     ).toBeInTheDocument()
   })
 
   it('renders the ExtensionSection heading', () => {
     render(<LandingPage />)
-    expect(screen.getByText('Learn from the real internet.')).toBeInTheDocument()
+    expect(screen.getByText(/Learn from the/)).toBeInTheDocument()
   })
 
   it('renders the HowItWorksSection heading', () => {
     render(<LandingPage />)
-    expect(screen.getByText('Start learning in 4 simple steps.')).toBeInTheDocument()
+    expect(screen.getByText(/Start learning in/)).toBeInTheDocument()
   })
 
   it('renders the FinalCTASection heading', () => {
     render(<LandingPage />)
     expect(
-      screen.getByText('Start your IELTS journey today.')
+      screen.getByText(/Ready to start/)
     ).toBeInTheDocument()
   })
 

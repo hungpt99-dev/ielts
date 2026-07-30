@@ -1,4 +1,4 @@
-import { createAIClient, vocabularyDetailsSchema, AiConfigurationResolver } from '@ielts/ai'
+import { createAIClient, vocabularyDetailsSchema, AiConfigurationResolver, extractJSON } from '@ielts/ai'
 import type { VocabularyDetails } from '@ielts/ai'
 import { DEFAULT_APP_CONFIG } from '@ielts/config'
 import { LocalStorageCredentialStore, loadUserConfiguration, translationTarget } from '@ielts/settings'
@@ -101,13 +101,13 @@ export async function enrichVocabulary(word: string, topic?: string): Promise<{ 
   if (!content) return { data: null, error: 'AI returned an empty response' }
 
   try {
-    const jsonStart = content.indexOf('{')
-    const jsonEnd = content.lastIndexOf('}')
-    if (jsonStart === -1 || jsonEnd === -1) return { data: null, error: 'AI returned an unexpected format' }
-
-    const parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
+    const json = extractJSON(content)
+    const parsed = JSON.parse(json)
     const validated = vocabularyDetailsSchema.safeParse(parsed)
-    if (!validated.success) return { data: null, error: 'AI response had unexpected format' }
+    if (!validated.success) {
+      console.error('Vocabulary enrichment schema validation failed:', validated.error.issues, 'Raw content:', content)
+      return { data: null, error: 'AI response had unexpected format' }
+    }
 
     const lemma = await normalizeToLemma(word).catch(() => word)
     const details = validated.data
@@ -212,13 +212,13 @@ export async function generateExample(word: string, topic?: string): Promise<{ d
   if (!content) return { data: null, error: 'Empty response from AI' }
 
   try {
-    const jsonStart = content.indexOf('{')
-    const jsonEnd = content.lastIndexOf('}')
-    if (jsonStart === -1 || jsonEnd === -1) return { data: null, error: 'AI returned an unexpected format' }
-
-    const parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
+    const json = extractJSON(content)
+    const parsed = JSON.parse(json)
     const validated = vocabularyDetailsSchema.safeParse(parsed)
-    if (!validated.success) return { data: null, error: 'AI response had unexpected format' }
+    if (!validated.success) {
+      console.error('Vocabulary enrichment schema validation failed:', validated.error.issues, 'Raw content:', content)
+      return { data: null, error: 'AI response had unexpected format' }
+    }
 
     return { data: validated.data, error: null }
   } catch (error) {

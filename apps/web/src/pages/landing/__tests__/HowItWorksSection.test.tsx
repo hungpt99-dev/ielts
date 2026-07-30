@@ -5,7 +5,8 @@ import HowItWorksSection from '../HowItWorksSection'
 describe('HowItWorksSection', () => {
   it('renders the section heading', () => {
     render(<HowItWorksSection />)
-    expect(screen.getByText('Start learning in 4 simple steps.')).toBeInTheDocument()
+    expect(screen.getByText(/Start learning in/)).toBeInTheDocument()
+    expect(screen.getByText(/4 simple steps/)).toBeInTheDocument()
   })
 
   it('renders all four steps', () => {
@@ -31,6 +32,6 @@ describe('HowItWorksSection', () => {
 
   it('has an id attribute', () => {
     render(<HowItWorksSection />)
-    expect(screen.getByText('Start learning in 4 simple steps.').closest('section')).toHaveAttribute('id', 'how-it-works')
+    expect(screen.getByText(/Start learning in/).closest('section')).toHaveAttribute('id', 'how-it-works')
   })
 })

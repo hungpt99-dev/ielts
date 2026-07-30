@@ -1,4 +1,5 @@
 import { STORAGE_KEYS } from '@ielts/config'
+import { getResolvedNativeLanguage } from './storageSync'
 import type { SaveCategory } from '../types'
 import type { AiExplainType } from '@ielts/ai'
 import {
@@ -748,8 +749,8 @@ async function loadDictionaryData(): Promise<void> {
     return
   }
 
-  const syncResult = await safeSyncGet<any>(['extensionSettings'])
-  const nativeLang = syncResult.extensionSettings?.nativeLanguage || ''
+  const nativeLang = await getResolvedNativeLanguage()
+
   const result = await generateDictionaryEntry(word, context, () => config, nativeLang)
   if (result.data) {
     renderDictionaryData(result.data)

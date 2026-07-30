@@ -114,6 +114,7 @@ export const DatabaseService = {
   async getById<T>(table: string, id: string): Promise<T | undefined> { return this.safeGetById<T>(table, id) },
   async add<T>(table: string, item: T): Promise<string> { return this.safeAdd(table, item as Record<string, unknown>) },
   async put<T>(table: string, item: T): Promise<void> { return this.safePut(table, item as Record<string, unknown>) },
+  async update<T>(table: string, id: string, changes: Partial<T>): Promise<void> { return this.safeUpdate<T>(table, id, changes) },
   async remove(table: string, id: string): Promise<void> { return this.safeRemove(table, id) },
   async count(table: string): Promise<number> { return this.safeCount(table) },
   async bulkAdd(table: string, items: Record<string, unknown>[]): Promise<void> { return this.safeBulkAdd(table, items) },

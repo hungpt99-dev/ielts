@@ -6,7 +6,6 @@ import type { LearningEventPublisher } from '../../ports/learning-event-publishe
 import { determineDifficulty } from '../../domain/policies/difficulty-policy'
 import { selectQuestionTypes, estimateQuestionCount } from '../../domain/policies/question-count-policy'
 import type { LearnerContextPort } from '../../ports/learner-context-port'
-import type { SkillRegistry } from '../../skills/skill-registry'
 import { buildListeningPassagePrompt, buildPracticeQuestionsPrompt, buildPracticeQuestionsSystemPrompt } from './prompt-builders'
 import { buildReadingPassagePrompt, buildFullPassageSimulationPrompt } from '../../exercise-engine/application/prompt-builders-ielts'
 import { createDefaultExerciseRegistry } from '../../exercise-engine/domain/ielts/task-registry'
@@ -24,7 +23,6 @@ export interface GenerateActivityDependencies {
   tutorPort: TutorIntelligencePort
   contextPort: LearnerContextPort
   eventPublisher?: LearningEventPublisher
-  skillRegistry?: SkillRegistry
 }
 
 export async function generateLearningActivity(
@@ -450,21 +448,23 @@ function normalizeAiQuestion(
   }
 
   const isTfng = TFNG_TYPES.has(rawType)
-  const isCompletion = COMPLETION_TYPES.has(rawType)
+  const isTableCompletion = rawType === 'table-completion'
+  const isCompletion = COMPLETION_TYPES.has(rawType) && !isTableCompletion
   const isShortAnswer = rawType === 'short-answer'
   const isMc = rawType === 'multiple-choice-single' || rawType === 'multiple-choice-multiple'
 
   const questionText = (q.question ?? q.Question ?? q.statement ?? q.sentence ?? q.prompt ?? q.text ?? '') as string
-  if (!questionText) {
+  if (!isTableCompletion && !questionText) {
     console.warn(`${prefix} Rejected question ${idx}: empty question text`)
     return null
   }
 
   const explanation = (q.explanation ?? q.Explanation ?? '') as string
 
-  // Map new type to old kebab-case type for renderer compatibility
   const renderType = isTfng ? 'true-false-not-given'
-    : isCompletion || isShortAnswer ? 'gap-fill'
+    : isTableCompletion ? 'table-completion'
+    : isCompletion ? 'gap-fill'
+    : isShortAnswer ? 'short-answer'
     : isMc ? 'multiple-choice'
     : rawType === 'matching-headings' || rawType.startsWith('matching') ? 'matching-headings'
     : 'multiple-choice'
@@ -511,6 +511,31 @@ function normalizeAiQuestion(
     }
   }
 
+  if (isTableCompletion) {
+    const tableHeaders = Array.isArray((q as any).columnHeaders) ? (q as any).columnHeaders as string[]
+      : Array.isArray((q as any).tableHeaders) ? (q as any).tableHeaders as string[]
+      : ['Detail', 'Information']
+    const rawRows = Array.isArray((q as any).rows) ? (q as any).rows
+      : Array.isArray((q as any).tableRows) ? (q as any).tableRows
+      : []
+    const tableRows = rawRows.map((r: any) => ({
+      label: typeof r.label === 'string' ? r.label : '',
+      blanks: Array.isArray(r.blanks) ? r.blanks as string[]
+        : Array.isArray(r.cells) ? r.cells.filter((c: any) => c.blank).map((c: any) => c.answerValue || c.correctAnswer || '')
+        : [r.correctAnswer ?? r.answer ?? ''],
+    }))
+    const allBlanks = tableRows.flatMap((r: any) => r.blanks as string[]).filter((b: string) => b.length > 0)
+
+    return {
+      ...base,
+      blanks: allBlanks,
+      correctAnswer: allBlanks.join(', '),
+      tableHeaders,
+      tableRows,
+      question: questionText || `Complete the table below.`,
+    }
+  }
+
   if (isCompletion || isShortAnswer) {
     const text = questionText.trim()
 
@@ -539,14 +564,19 @@ function normalizeAiQuestion(
     // Fallback: extract blanks from gap markers in the text
     if (rawGaps.length === 0 && isCompletion) {
       const gapCount = (text.match(/_{2,}/g) || []).length
+      const fallbackAnswer = (q.correctAnswer as string)?.trim()
       if (gapCount > 0) {
-        const fallbackAnswer = (q.correctAnswer as string)?.trim()
         if (fallbackAnswer) {
           rawGaps = Array.from({ length: gapCount }, (_, i) => ({
             id: `${exerciseId}-gap${i}`,
             correctAnswer: fallbackAnswer,
           }))
         }
+      } else if (fallbackAnswer) {
+        rawGaps = [{
+          id: `${exerciseId}-gap0`,
+          correctAnswer: fallbackAnswer,
+        }]
       }
     }
 

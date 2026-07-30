@@ -94,26 +94,22 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
   if (message.type === 'SAVE_ARTIFACT') {
     const payload = message.payload as Record<string, unknown>
-    safeStorageGet<any[]>('artifacts').then((result) => {
-      const items = result.artifacts || []
-      items.unshift({
-        id: crypto.randomUUID(),
-        url: payload.url || window.location.href,
-        title: payload.title || document.title,
-        description: (payload.description as string) || '',
-        favicon: (payload.favicon as string) || '',
-        tags: (payload.tags as string[]) || [],
-        isFavorite: false,
-        category: (payload.category as string) || 'article',
-        source: 'extension',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+    const title = (payload.title as string) || document.title
+    const url = (payload.url as string) || window.location.href
+
+    chrome.storage.local.get(STORAGE_KEYS.extensionLocal.pendingSaves, (result) => {
+      const existing = (result[STORAGE_KEYS.extensionLocal.pendingSaves] as Array<Record<string, unknown>>) || []
+      existing.push({
+        text: url,
+        category: 'article',
+        pageTitle: title,
+        pageUrl: url,
+        description: payload.description || '',
+        timestamp: Date.now(),
       })
-      safeStorageSet({ artifacts: items })
-      const title = (payload.title as string) || document.title
-      const url = (payload.url as string) || window.location.href
-      emitExtensionArticleSaved(title, url)
+      safeStorageSet({ [STORAGE_KEYS.extensionLocal.pendingSaves]: existing })
     })
+    emitExtensionArticleSaved(title, url)
     showToast('Page saved as Artifact')
     try { sendResponse({ success: true }) } catch (error) {
  logContentError('apps/extension/src/content-script/saveSelectedText.ts', error);

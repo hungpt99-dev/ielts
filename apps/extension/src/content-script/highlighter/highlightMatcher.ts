@@ -4,6 +4,16 @@ export interface HighlightWord {
   meaning: string
   exampleSentence: string
   personalNote: string
+  pronunciation: string
+  partOfSpeech: string
+  translation: string
+  topic: string
+  difficulty: string
+  cefrLevel: string
+  wordFamily: Array<{ word: string; partOfSpeech: string; relationship: string }>
+  collocations: string[]
+  synonyms: string[]
+  sourceUrl: string
 }
 
 export interface TextMatch {

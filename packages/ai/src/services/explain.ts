@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { callAI } from '../client'
 import type { ProviderConfig } from '../client/types'
+import { AIError } from '../errors/types'
 import { buildExplainPrompt } from '../prompts'
 import type { AiExplainType } from '../prompts'
 import {
@@ -49,12 +50,16 @@ export async function explain(
     const parsed = JSON.parse(json)
     const result = schema.safeParse(parsed)
     if (!result.success) {
+      console.error('Explain schema validation failed:', result.error.issues, 'Raw content:', content)
       return { data: null, error: 'AI response had unexpected format. Try again.' }
     }
     aiExplainCache.set(cacheKey, result.data as AiExplainResult)
     return { data: result.data as AiExplainResult, error: null }
   } catch (error) {
     console.error('packages/ai/src/services/explain.ts error:', error);
+    if (error instanceof AIError) {
+      return { data: null, error: error.message }
+    }
     return { data: null, error: 'AI response was not valid JSON. Try again.' }
   }
 }

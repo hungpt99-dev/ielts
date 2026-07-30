@@ -87,17 +87,10 @@ export class FocusMode {
 
     const rules = FOCUS_TARGETS.map(t => `${t.selector} { ${t.style} }`).join('\n')
     const cleanupRule = `
-      html, body { overflow: auto !important; background-color: #000 !important; }
-      #columns { display: flex !important; flex-direction: row !important; }
-      #primary { width: 100% !important; max-width: 100% !important; flex: 1 !important; }
-      #primary #primary-inner { width: 100% !important; max-width: 100% !important; }
-      #primary ytd-watch-flexy { flex-direction: column !important; }
-      #primary .html5-video-player { width: 100% !important; }
+      html, body { overflow: auto !important; background-color: #000 !important; height: 100% !important; }
+      #page-manager { margin-top: 0 !important; background-color: #000 !important; height: 100% !important; }
+      ytd-watch-flexy { height: 100% !important; display: flex !important; flex-direction: column !important; justify-content: center !important; }
       #secondary { display: none !important; }
-      #page-manager { margin-top: 0 !important; background-color: #000 !important; }
-      ytd-watch-flexy[flexy_] #columns.ytd-watch-flexy, ytd-watch-flexy[flexy] #columns.ytd-watch-flexy { min-width: 100% !important; }
-      #movie_player { max-width: 100vw !important; }
-      ytd-watch-flexy #primary.ytd-watch-flexy { margin-right: 0 !important; }
     `
 
     this.styleElement = document.createElement('style')

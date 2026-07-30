@@ -10,7 +10,7 @@ export const verbConjugationSchema = z.object({
 export type VerbConjugation = z.infer<typeof verbConjugationSchema>
 
 export const verbAnalysisSchema = z.object({
-  verb: z.string().min(1),
+  verb: z.string().default(''),
   baseForm: z.string().default(''),
   tense: z.string().default(''),
   aspect: z.string().default(''),

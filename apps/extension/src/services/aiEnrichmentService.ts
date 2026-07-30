@@ -3,13 +3,27 @@ import { safeFetchProviderConfig } from '../utils/safe-chrome'
 
 const aiClient = createAIClient()
 
+export interface VocabWordForm {
+  word: string
+  pos: string
+  pronunciation: string
+  meaning: string
+  verbConjugation?: {
+    base: string
+    pastSimple: string
+    pastParticiple: string
+    presentParticiple: string
+    thirdPersonSingular: string
+  }
+}
+
 export interface VocabEnrichResult {
   word: string
   meaning: string
   translation: string
   pronunciation: string
   partOfSpeech: string
-  wordFamily: string[]
+  wordFamily: VocabWordForm[]
   collocations: string[]
   cefrLevel: string
   ieltsUsage: string
@@ -18,6 +32,8 @@ export interface VocabEnrichResult {
   antonyms: string[]
   exampleSentence: string
   exampleSentences?: string[]
+  difficulty: string
+  ieltsRelevance: string
 }
 
 export interface ExplainResult {
@@ -39,86 +55,111 @@ export interface ExampleSentencesResult {
   sentences: string[]
 }
 
+const ENRICH_SYSTEM_PROMPT = `You are an IELTS vocabulary expert. For the given word, provide comprehensive information in JSON format.
+Include:
+- "meaning": clear English definition suitable for IELTS learners
+- "translation": translation to the learner's native language (if context indicates a language)
+- "pronunciation": IPA pronunciation
+- "partOfSpeech": part of speech (noun, verb, adjective, adverb, etc.)
+- "wordFamily": array of related word form objects, each with:
+  "word" (the form), "pos" (part of speech), "pronunciation" (IPA), "meaning" (short definition)
+  For verbs also include "verbConjugation" object with base/pastSimple/pastParticiple/presentParticiple/thirdPersonSingular
+- "collocations": array of 2-3 common collocations with this word
+- "cefrLevel": one of A1, A2, B1, B2, C1, C2
+- "synonyms": array of 2-3 synonyms
+- "antonyms": array of 1-2 antonyms (empty array if none exist)
+- "exampleSentence": one natural example sentence using the word
+- "difficulty": one of easy, medium, hard
+- "ieltsRelevance": one of low, medium, high`
+
 export async function enrichVocabulary(word: string, context?: string): Promise<VocabEnrichResult> {
+  const empty = (): VocabEnrichResult => ({
+    word, meaning: '', translation: '', pronunciation: '', partOfSpeech: '',
+    wordFamily: [], collocations: [], cefrLevel: '', ieltsUsage: '',
+    contextualExamples: [], synonyms: [], antonyms: [], exampleSentence: '',
+    difficulty: 'medium', ieltsRelevance: '',
+  })
+
   const providerConfig = await safeFetchProviderConfig()
+  if (!providerConfig.apiKey) return empty()
+
   const result = await aiClient.complete(
     [
-      { role: 'system', content: 'You are an IELTS vocabulary assistant. Return JSON with: meaning, translation (to the learner\'s native language), pronunciation, partOfSpeech, wordFamily, collocations, cefrLevel, synonyms, antonyms, exampleSentence.' },
-      { role: 'user', content: `Word: ${word}${context ? ` Context: ${context.slice(0, 500)}` : ''}` },
+      { role: 'system', content: ENRICH_SYSTEM_PROMPT },
+      { role: 'user', content: `Word: ${word}${context ? `\nContext: ${context.slice(0, 500)}` : ''}` },
     ],
     providerConfig,
-    { temperature: 0.3, maxTokens: 1000 },
+    { temperature: 0.3, maxTokens: 2000 },
   )
-  if (result.error || !result.content) {
-    return { word, meaning: '', translation: '', pronunciation: '', partOfSpeech: '', wordFamily: [], collocations: [], cefrLevel: '', ieltsUsage: '', contextualExamples: [], synonyms: [], antonyms: [], exampleSentence: '' }
-  }
+  if (result.error || !result.content) return empty()
+
   try {
-    const parsed = JSON.parse(result.content) as Record<string, unknown>
+    let content = result.content.trim()
+    const fenceMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/)
+    if (fenceMatch) {
+      content = fenceMatch[1].trim()
+    }
+    const parsed = JSON.parse(content) as Record<string, unknown>
+
+    const normalizeWordFamily = (raw: unknown): VocabWordForm[] => {
+      if (!Array.isArray(raw)) return []
+      return raw.map((item: unknown) => {
+        if (typeof item === 'string') return { word: item, pos: '', pronunciation: '', meaning: '' }
+        if (typeof item === 'object' && item !== null) {
+          const wf = item as Record<string, unknown>
+          return {
+            word: String(wf.word ?? ''),
+            pos: String(wf.pos ?? ''),
+            pronunciation: String(wf.pronunciation ?? ''),
+            meaning: String(wf.meaning ?? ''),
+            verbConjugation: wf.verbConjugation && typeof wf.verbConjugation === 'object'
+              ? {
+                base: String((wf.verbConjugation as Record<string, unknown>).base ?? ''),
+                pastSimple: String((wf.verbConjugation as Record<string, unknown>).pastSimple ?? ''),
+                pastParticiple: String((wf.verbConjugation as Record<string, unknown>).pastParticiple ?? ''),
+                presentParticiple: String((wf.verbConjugation as Record<string, unknown>).presentParticiple ?? ''),
+                thirdPersonSingular: String((wf.verbConjugation as Record<string, unknown>).thirdPersonSingular ?? ''),
+              }
+              : undefined,
+          }
+        }
+        return { word: String(item), pos: '', pronunciation: '', meaning: '' }
+      })
+    }
+
+    const wordFamily = normalizeWordFamily(parsed.wordFamily)
+
     return {
       word: String(parsed.word ?? word),
       meaning: String(parsed.meaning ?? ''),
       translation: String(parsed.translation ?? ''),
       pronunciation: String(parsed.pronunciation ?? ''),
       partOfSpeech: String(parsed.partOfSpeech ?? ''),
-      wordFamily: Array.isArray(parsed.wordFamily) ? parsed.wordFamily as string[] : [],
-      collocations: Array.isArray(parsed.collocations) ? parsed.collocations as string[] : [],
+      wordFamily,
+      collocations: Array.isArray(parsed.collocations) ? parsed.collocations.map(String) : [],
       cefrLevel: String(parsed.cefrLevel ?? ''),
       ieltsUsage: String(parsed.ieltsUsage ?? ''),
-      contextualExamples: Array.isArray(parsed.contextualExamples) ? parsed.contextualExamples as string[] : [],
-      synonyms: Array.isArray(parsed.synonyms) ? parsed.synonyms as string[] : [],
-      antonyms: Array.isArray(parsed.antonyms) ? parsed.antonyms as string[] : [],
+      contextualExamples: Array.isArray(parsed.contextualExamples) ? parsed.contextualExamples.map(String) : [],
+      synonyms: Array.isArray(parsed.synonyms) ? parsed.synonyms.map(String) : [],
+      antonyms: Array.isArray(parsed.antonyms) ? parsed.antonyms.map(String) : [],
       exampleSentence: String(parsed.exampleSentence ?? ''),
+      difficulty: String(parsed.difficulty || 'medium'),
+      ieltsRelevance: String(parsed.ieltsRelevance || 'medium'),
     }
   } catch (error) {
     console.error('apps/extension/src/services/aiEnrichmentService.ts error:', error);
-    return { word, meaning: result.content.slice(0, 200), translation: '', pronunciation: '', partOfSpeech: '', wordFamily: [], collocations: [], cefrLevel: '', ieltsUsage: '', contextualExamples: [], synonyms: [], antonyms: [], exampleSentence: '' }
+    return { ...empty(), meaning: result.content.slice(0, 200) }
   }
 }
 
-export async function explainText(text: string, _language?: string): Promise<ExplainResult> {
-  const providerConfig = await safeFetchProviderConfig()
-  const result = await aiClient.complete(
-    [
-      { role: 'system', content: 'You are an IELTS text explainer. Explain the text simply. Return JSON: { "explanation": string, "examples": string[], "relatedWords": string[] }' },
-      { role: 'user', content: `Explain this:\n${text.slice(0, 2000)}` },
-    ],
-    providerConfig,
-    { temperature: 0.3, maxTokens: 800 },
-  )
-  if (result.error || !result.content) return { explanation: '', examples: [], relatedWords: [] }
-  try {
-    const parsed = JSON.parse(result.content) as Record<string, unknown>
-    return {
-      explanation: String(parsed.explanation ?? result.content),
-      examples: Array.isArray(parsed.examples) ? parsed.examples as string[] : [],
-      relatedWords: Array.isArray(parsed.relatedWords) ? parsed.relatedWords as string[] : [],
-    }
-  } catch (error) {
-    console.error('apps/extension/src/services/aiEnrichmentService.ts error:', error);
-    return { explanation: result.content, examples: [], relatedWords: [] }
-  }
+function encodeWordForm(wf: VocabWordForm): string {
+  return JSON.stringify({
+    word: wf.word,
+    pos: wf.pos,
+    pronunciation: wf.pronunciation,
+    meaning: wf.meaning,
+    ...(wf.verbConjugation ? { verbConjugation: wf.verbConjugation } : {}),
+  })
 }
 
-export async function analyzeIeltsVocab(word: string, _context?: string): Promise<IeltsVocabResult> {
-  return { word, ieltsBand: 5, bandLevel: '', topic: 'general', usage: [], tips: '' }
-}
-
-export async function generateExamples(word: string, _count: number = 3): Promise<ExampleSentencesResult> {
-  const providerConfig = await safeFetchProviderConfig()
-  const result = await aiClient.complete(
-    [
-      { role: 'system', content: 'You are an IELTS vocabulary examples generator. Return JSON: { "sentences": string[] }' },
-      { role: 'user', content: `Generate example sentences using "${word}" suitable for IELTS level.` },
-    ],
-    providerConfig,
-    { temperature: 0.5, maxTokens: 500 },
-  )
-  if (result.error || !result.content) return { sentences: [] }
-  try {
-    const parsed = JSON.parse(result.content) as Record<string, unknown>
-    return { sentences: Array.isArray(parsed.sentences) ? parsed.sentences as string[] : [result.content.slice(0, 200)] }
-  } catch (error) {
-    console.error('apps/extension/src/services/aiEnrichmentService.ts error:', error);
-    return { sentences: [result.content.slice(0, 200)] }
-  }
-}
+export { encodeWordForm }

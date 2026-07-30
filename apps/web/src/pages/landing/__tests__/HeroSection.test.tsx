@@ -10,9 +10,11 @@ describe('HeroSection', () => {
 
   it('renders the headline', () => {
     render(<HeroSection />)
-    expect(
-      screen.getByText(/Your daily study plan,/)
-    ).toBeInTheDocument()
+    const h1 = screen.getByRole('heading', { level: 1 })
+    expect(h1).toBeInTheDocument()
+    expect(h1.textContent).toContain('Your daily')
+    expect(h1.textContent).toContain('study plan')
+    expect(h1.textContent).toContain('built by AI')
   })
 
   it('renders the subheadline', () => {
@@ -28,10 +30,16 @@ describe('HeroSection', () => {
     expect(cta).toBeInTheDocument()
   })
 
-  it('renders trust text about privacy', () => {
+  it('renders trust badges', () => {
     render(<HeroSection />)
     expect(
-      screen.getByText(/No account required/)
+      screen.getByText(/100% Free/)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/Private & Local/)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/No Account Needed/)
     ).toBeInTheDocument()
   })
 

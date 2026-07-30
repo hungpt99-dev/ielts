@@ -2,9 +2,10 @@ import type { SaveCategory } from '../types'
 import { STORAGE_KEYS } from '@ielts/config'
 import { updateDailyProgress, incrementDailyProgress } from '../services/storage'
 import { safeStorageSet } from '../utils/safe-chrome'
-import { initMessaging } from './messaging'
+import { initMessaging, syncAllVocabToHighlighter } from './messaging'
 import { initAiService } from './ai-service'
-import { ensureStorageInitialized, vocabularyRepo, passageEntryRepo } from '../services/repositories'
+import { ensureStorageInitialized, vocabularyRepo, passageEntryRepo, artifactRepo, mistakeRepo, studyNoteRepo } from '../services/repositories'
+import { enrichVocabulary, encodeWordForm } from '../services/aiEnrichmentService'
 
 interface AiExplainItem {
   id: string
@@ -150,6 +151,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 ensureStorageInitialized()
 initMessaging()
 initAiService()
+syncAllVocabToHighlighter()
 
 // Process batched saves queued by content scripts via chrome.storage.local.
 // Content scripts write to _pendingSaves (array) at most once per 2 seconds.
@@ -181,6 +183,14 @@ chrome.storage.onChanged.addListener((changes, area) => {
           vocabCount++
           const text = pending.text as string
           const word = text.split(/\s+/)[0].replace(/[.,!?;:'"()\-]/g, '')
+
+          let enriched: Awaited<ReturnType<typeof enrichVocabulary>> | null = null
+          try {
+            enriched = await enrichVocabulary(word, text)
+          } catch {
+            /* AI enrichment failed, save with defaults */
+          }
+
           await vocabularyRepo.bulkUpsert([{
             id: sharedId,
             word,
@@ -190,24 +200,68 @@ chrome.storage.onChanged.addListener((changes, area) => {
             topic: (pending.topic as string) || 'general',
             personalNote: (pending.note as string) || '',
             tags: (pending.tags as string[]) || [],
-            meaning: word || 'unknown',
-            translation: '',
-            partOfSpeech: '',
-            pronunciation: '',
-            exampleSentence: '',
-            synonyms: [],
-            antonyms: [],
-            collocations: [],
-            wordFamily: [],
+            meaning: enriched?.meaning || word,
+            translation: enriched?.translation || '',
+            partOfSpeech: enriched?.partOfSpeech || '',
+            pronunciation: enriched?.pronunciation || '',
+            exampleSentence: enriched?.exampleSentence || '',
+            synonyms: enriched?.synonyms || [],
+            antonyms: enriched?.antonyms || [],
+            collocations: enriched?.collocations || [],
+            wordFamily: enriched?.wordFamily?.map(encodeWordForm) || [],
             difficulty: 'medium',
             status: 'new',
-            cefrLevel: '',
+            cefrLevel: enriched?.cefrLevel || '',
             ieltsRelevance: '',
             addedToReview: true,
             reviewId: '',
             createdAt: now,
             updatedAt: now,
           }]).catch((err) => { console.warn("[PendingSave] vocab save failed:", err); throw err })
+        }
+
+        if (pending.category === 'article') {
+          await artifactRepo.bulkUpsert([{
+            id: sharedId,
+            url: (pending.pageUrl as string) || '',
+            title: title || 'Untitled',
+            description: (pending.description as string) || '',
+            tags: [],
+            isFavorite: false,
+            category: 'article' as const,
+            source: 'extension',
+            createdAt: now,
+            updatedAt: now,
+          } as Parameters<typeof artifactRepo.bulkUpsert>[0][number]]).catch((err) => { console.warn("[PendingSave] artifact save failed:", err); throw err })
+        }
+
+        if (pending.category === 'mistake') {
+          await mistakeRepo.bulkUpsert([{
+            id: sharedId,
+            title: title || 'Mistake Note',
+            content: pending.text as string,
+            pageTitle: (pending.pageTitle as string) || '',
+            pageUrl: (pending.pageUrl as string) || '',
+            tags: (pending.tags as string[]) || [],
+            source: 'extension',
+            createdAt: now,
+            updatedAt: now,
+          } as Parameters<typeof mistakeRepo.bulkUpsert>[0][number]]).catch((err) => { console.warn("[PendingSave] mistake save failed:", err); throw err })
+        }
+
+        if (['sentence', 'phrase', 'grammar', 'reading', 'writing', 'speaking'].includes(pending.category as string)) {
+          await studyNoteRepo.bulkUpsert([{
+            id: sharedId,
+            title: title || 'Study Note',
+            content: pending.text as string,
+            category: (pending.category as string) || 'general',
+            pageTitle: (pending.pageTitle as string) || '',
+            pageUrl: (pending.pageUrl as string) || '',
+            tags: (pending.tags as string[]) || [],
+            source: 'extension',
+            createdAt: now,
+            updatedAt: now,
+          } as Parameters<typeof studyNoteRepo.bulkUpsert>[0][number]]).catch((err) => { console.warn("[PendingSave] studyNote save failed:", err); throw err })
         }
       } catch (err) {
         console.error('[PendingSave] Item failed, re-queuing:', err)
@@ -224,6 +278,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
     if (vocabCount > 0) {
       await incrementDailyProgress('wordsAdded', vocabCount)
+      await syncAllVocabToHighlighter()
     }
 
     chrome.runtime.sendMessage({ type: 'DATA_CHANGED', entity: 'savedItems', action: 'created' }).catch(() => {})

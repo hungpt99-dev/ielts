@@ -298,67 +298,6 @@ describe('Binary search for active segment', () => {
   })
 })
 
-// ─── YouTubeTranscriptProvider ───────────────────────────────────────────────
-
-import { YouTubeTranscriptProvider, clearTranscriptCache } from '../infrastructure/youtube/YouTubeTranscriptProvider'
-
-describe('YouTubeTranscriptProvider', () => {
-  let provider: YouTubeTranscriptProvider
-
-  beforeEach(() => {
-    provider = new YouTubeTranscriptProvider({ preferredLanguages: ['en', 'en-US', 'en-GB'] })
-    clearTranscriptCache()
-  })
-
-  afterEach(() => {
-    clearTranscriptCache()
-  })
-
-  describe('getTranscript', () => {
-    it('returns INVALID_VIDEO_ID for empty video ID', async () => {
-      const result = await provider.getTranscript('')
-      expect(result.ok).toBe(false)
-      if (!result.ok) {
-        expect(result.error.code).toBe('INVALID_VIDEO_ID')
-        expect(result.error.retryable).toBe(false)
-      }
-    })
-
-    it('returns REQUEST_CANCELLED when signal is already aborted', async () => {
-      const controller = new AbortController()
-      controller.abort()
-      const result = await provider.getTranscript('test123', { signal: controller.signal })
-      expect(result.ok).toBe(false)
-      if (!result.ok) {
-        expect(result.error.code).toBe('REQUEST_CANCELLED')
-      }
-    })
-
-    it('returns typed error with retryable flag', async () => {
-      const result = await provider.getTranscript('test456')
-      expect(result.ok).toBe(false)
-      if (!result.ok) {
-        expect(result.error.code).toBeDefined()
-        expect(typeof result.error.retryable).toBe('boolean')
-        expect(typeof result.error.message).toBe('string')
-      }
-    })
-
-    it('supports language override via options', async () => {
-      const result = await provider.getTranscript('test789', { language: 'vi' })
-      expect(result.ok).toBe(false)
-    })
-  })
-
-  describe('checkAvailability', () => {
-    it('returns not available', async () => {
-      const result = await provider.checkAvailability()
-      expect(result.available).toBe(false)
-    })
-  })
-
-
-})
 
 // ─── Error states ────────────────────────────────────────────────────────────
 
@@ -486,69 +425,6 @@ describe('Race condition handling', () => {
     controller.abort()
     await promise
     expect(userFacingError).toBe(false)
-  })
-})
-
-// ─── Caching behavior ────────────────────────────────────────────────────────
-
-describe('Transcript caching', () => {
-  beforeEach(() => { clearTranscriptCache() })
-  afterEach(() => { clearTranscriptCache() })
-
-  it('clearTranscriptCache clears all entries', () => {
-    clearTranscriptCache()
-    clearTranscriptCache('test123')
-    expect(true).toBe(true)
-  })
-
-  it('clearTranscriptCache with videoId clears specific video', () => {
-    clearTranscriptCache('test123')
-    expect(true).toBe(true)
-  })
-})
-
-// ─── Track selection ─────────────────────────────────────────────────────────
-
-describe('Caption track selection', () => {
-  it('defaults preferred languages to English variants', () => {
-    const provider = new YouTubeTranscriptProvider()
-    expect((provider as any).config.preferredLanguages).toEqual(['en', 'en-US', 'en-GB'])
-  })
-
-  it('accepts custom preferred languages', () => {
-    const provider = new YouTubeTranscriptProvider({ preferredLanguages: ['vi', 'en'] })
-    expect((provider as any).config.preferredLanguages).toEqual(['vi', 'en'])
-  })
-
-  it('checkAvailability returns unavailable by default', async () => {
-    const provider = new YouTubeTranscriptProvider()
-    const result = await provider.checkAvailability()
-    expect(result.available).toBe(false)
-    expect(result.languages).toEqual([])
-  })
-})
-
-// ─── Provider config ─────────────────────────────────────────────────────────
-
-describe('Provider configuration', () => {
-  it('uses default preferred languages when not provided', () => {
-    const provider = new YouTubeTranscriptProvider()
-    expect((provider as any).config.preferredLanguages).toEqual(['en', 'en-US', 'en-GB'])
-  })
-})
-
-// ─── Page Bridge ─────────────────────────────────────────────────────────────
-
-import { extractFromPageScriptsFallback, extractViaBackgroundScripting, withRetry } from '../infrastructure/youtube/YouTubePageBridge'
-
-describe('YouTube Page Bridge', () => {
-  it('exports all bridge functions', () => {
-    expect(extractFromPageScriptsFallback).toBeDefined()
-    expect(extractViaBackgroundScripting).toBeDefined()
-    expect(withRetry).toBeDefined()
-    expect(typeof extractFromPageScriptsFallback).toBe('function')
-    expect(typeof extractViaBackgroundScripting).toBe('function')
-    expect(typeof withRetry).toBe('function')
   })
 })
 

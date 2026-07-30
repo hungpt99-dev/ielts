@@ -49,6 +49,15 @@ export async function getVocabularyById(id: string): Promise<VocabularyEntry | u
 export async function addVocabulary(
   entry: Omit<VocabularyEntry, 'id' | 'createdAt' | 'updatedAt'>,
 ): Promise<VocabularyEntry> {
+  const all = await vocabularyRepo.findAll()
+  const lowered = entry.word.toLowerCase()
+  const duplicate = all.find(e => e.word.toLowerCase() === lowered)
+  if (duplicate) {
+    const updates = { ...entry, updatedAt: new Date().toISOString() }
+    await vocabularyRepo.update(duplicate.id, updates)
+    return { ...duplicate, ...updates }
+  }
+
   const now = new Date().toISOString()
   const full: VocabularyEntry = {
     ...entry,
@@ -75,6 +84,20 @@ export async function deleteVocabulary(id: string): Promise<void> {
 }
 
 export async function upsertVocabulary(entry: VocabularyEntry): Promise<void> {
+  const all = await vocabularyRepo.findAll()
+  const lowered = entry.word.toLowerCase()
+  const duplicate = all.find(e => e.word.toLowerCase() === lowered)
+  if (duplicate) {
+    const merged = {
+      ...duplicate,
+      ...entry,
+      id: duplicate.id,
+      createdAt: duplicate.createdAt,
+      updatedAt: new Date().toISOString(),
+    }
+    await vocabularyRepo.bulkUpsert([merged])
+    return
+  }
   await vocabularyRepo.bulkUpsert([entry])
 }
 

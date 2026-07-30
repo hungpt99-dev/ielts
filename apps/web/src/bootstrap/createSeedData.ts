@@ -388,6 +388,117 @@ export async function seedSpeakingPhrases(engine: LearningEngine): Promise<void>
   }
 }
 
+const READING_SEED_PASSAGES = [
+  {
+    title: 'The Rise of Remote Work',
+    topic: 'Work',
+    difficulty: 'easy',
+    passage: 'The shift toward remote work has been one of the most significant changes in the modern workplace. Before 2019, only a small percentage of employees worked from home on a regular basis. However, recent global events accelerated this trend dramatically. Today, millions of workers around the world perform their jobs from home offices, coffee shops, or co-working spaces. Companies have discovered that remote work can reduce office costs while maintaining or even increasing productivity. Employees report higher job satisfaction due to flexible schedules and the elimination of daily commutes. However, challenges remain. Some workers struggle with feelings of isolation, and managers must find new ways to build team culture without physical proximity. Experts predict that hybrid models — combining remote and in-office work — will become the standard for many industries in the coming years.',
+    questions: [
+      { type: 'true-false-not-given', question: 'Before 2019, most employees regularly worked from home.', correctIndex: 1, explanation: 'The passage states only a small percentage worked from home before 2019.' },
+      { type: 'multiple-choice', question: 'According to the passage, what is a benefit of remote work for companies?', options: ['Higher salaries', 'Reduced office costs', 'More meetings', 'Better technology'], correctIndex: 1, explanation: 'Companies have discovered that remote work can reduce office costs.' },
+      { type: 'multiple-choice', question: 'What challenge of remote work is mentioned in the passage?', options: ['Higher internet costs', 'Feelings of isolation', 'Longer working hours', 'Lower salaries'], correctIndex: 1, explanation: 'Some workers struggle with feelings of isolation.' },
+      { type: 'gap-fill', question: 'Experts predict that ______ models will become the standard for many industries.', blanks: ['hybrid'], explanation: 'Hybrid models — combining remote and in-office work — will become the standard.' },
+    ],
+  },
+  {
+    title: 'The Psychology of Color in Marketing',
+    topic: 'Marketing',
+    difficulty: 'medium',
+    passage: 'Colors play a powerful role in consumer behavior, influencing purchasing decisions often without the buyer\'s conscious awareness. Research in color psychology has shown that different colors evoke distinct emotional responses. Red, for example, creates a sense of urgency and is frequently used in clearance sales and fast-food branding. Blue conveys trust and reliability, which is why many banks and social media platforms incorporate it into their logos. Green is associated with health, nature, and sustainability, making it a popular choice for organic food brands and environmental organizations. Yellow captures attention and represents optimism, but overuse can cause visual fatigue. The effectiveness of color in marketing depends heavily on context. A color that works well for a luxury brand may be inappropriate for a budget product. Cultural differences also matter significantly — white symbolizes purity in Western cultures but is associated with mourning in some Eastern traditions. Successful marketers understand these nuances and test color schemes carefully before launching campaigns.',
+    questions: [
+      { type: 'multiple-choice', question: 'According to the passage, what emotion does the color red create?', options: ['Trust', 'Urgency', 'Relaxation', 'Sadness'], correctIndex: 1, explanation: 'Red creates a sense of urgency.' },
+      { type: 'true-false-not-given', question: 'Yellow causes visual fatigue when overused.', correctIndex: 0, explanation: 'The passage states overuse of yellow can cause visual fatigue.' },
+      { type: 'multiple-choice', question: 'Why do banks often use blue in their branding?', options: ['It represents urgency', 'It conveys trust and reliability', 'It is the cheapest color to print', 'It attracts young customers'], correctIndex: 1, explanation: 'Blue conveys trust and reliability, which is why many banks use it.' },
+      { type: 'gap-fill', question: 'The effectiveness of color depends on ______ and cultural differences.', blanks: ['context'], explanation: 'The effectiveness of color in marketing depends heavily on context.' },
+    ],
+  },
+  {
+    title: 'Urban Beekeeping and Biodiversity',
+    topic: 'Environment',
+    difficulty: 'medium',
+    passage: 'In cities around the world, a surprising environmental movement is gaining momentum: urban beekeeping. Rooftops, balconies, and community gardens are being transformed into habitats for honeybees. Proponents argue that urban environments can actually provide safer homes for bees than rural areas, where agricultural pesticides pose significant threats. Cities offer diverse flowering plants in parks, gardens, and green spaces, giving bees access to a varied diet throughout the growing season. Studies have found that urban bees often produce more honey per hive than their rural counterparts. Beyond honey production, urban beekeeping raises awareness about the critical role of pollinators in food systems. Many city governments have revised regulations to permit and encourage beekeeping. However, critics point out that too many hives in one area can lead to competition for limited floral resources, potentially harming native wild bee populations. The key to successful urban beekeeping lies in careful planning and coordination among beekeepers to maintain ecological balance.',
+    questions: [
+      { type: 'multiple-choice', question: 'According to the passage, why might cities be safer for bees than rural areas?', options: ['More flowers in cities', 'Fewer agricultural pesticides', 'Better weather conditions', 'More beekeepers'], correctIndex: 1, explanation: 'Urban environments can provide safer homes than rural areas, where agricultural pesticides pose threats.' },
+      { type: 'multiple-choice', question: 'What benefit of urban beekeeping is mentioned besides honey production?', options: ['Lower food prices', 'Increased tourism', 'Raising awareness about pollinators', 'Creating jobs'], correctIndex: 2, explanation: 'Urban beekeeping raises awareness about the critical role of pollinators.' },
+      { type: 'true-false-not-given', question: 'Urban bees always produce higher quality honey than rural bees.', correctIndex: 2, explanation: 'The passage says urban bees produce MORE honey, but does not mention quality.' },
+      { type: 'gap-fill', question: 'Critics warn that too many hives can lead to competition for limited ______ resources.', blanks: ['floral'], explanation: 'Competition for limited floral resources.' },
+    ],
+  },
+  {
+    title: 'The Economics of Renewable Energy',
+    topic: 'Economics',
+    difficulty: 'hard',
+    passage: 'The global transition from fossil fuels to renewable energy represents one of the most profound economic shifts of the 21st century. Over the past decade, the cost of solar photovoltaic modules has fallen by approximately 90%, while wind turbine prices have dropped by nearly 50%. These dramatic cost reductions have made renewable energy cost-competitive with, and in many cases cheaper than, coal and natural gas. According to the International Renewable Energy Agency, renewable power generation costs continued to fall in 2022, despite rising inflation and supply chain disruptions. Investment patterns reflect this transformation. Global investment in renewable energy technologies reached a record 495 billion dollars in 2022, surpassing investment in fossil fuel extraction for the first time. However, significant challenges remain. The intermittent nature of solar and wind power requires substantial investment in energy storage technologies and grid infrastructure. Developing nations face particular difficulties, as the initial capital costs of renewable projects can be prohibitive despite lower long-term operating costs. International cooperation and innovative financing mechanisms will be essential to ensure that the renewable energy transition is both rapid and equitable.',
+    questions: [
+      { type: 'multiple-choice', question: 'By approximately what percentage has the cost of solar modules fallen over the past decade?', options: ['50%', '70%', '90%', '95%'], correctIndex: 2, explanation: 'The cost of solar photovoltaic modules has fallen by approximately 90%.' },
+      { type: 'true-false-not-given', question: 'Global investment in renewable energy surpassed fossil fuel investment in 2022.', correctIndex: 0, explanation: 'The passage states investment reached 495 billion, surpassing fossil fuel extraction investment.' },
+      { type: 'multiple-choice', question: 'What challenge is associated with solar and wind power?', options: ['They require too much land', 'They produce harmful emissions', 'Their intermittent nature requires energy storage', 'They are too expensive to maintain'], correctIndex: 2, explanation: 'The intermittent nature requires substantial investment in energy storage.' },
+      { type: 'gap-fill', question: 'Developing nations face difficulties because the ______ costs of renewable projects can be prohibitive.', blanks: ['initial capital'], explanation: 'The initial capital costs can be prohibitive.' },
+    ],
+  },
+  {
+    title: 'The History of Chocolate',
+    topic: 'History',
+    difficulty: 'easy',
+    passage: 'Chocolate has a rich history that spans over 3,000 years. The ancient Olmec civilization of Mexico was likely the first to cultivate cacao plants around 1500 BCE. Later, the Maya and Aztec civilizations developed sophisticated methods for processing cacao beans into a bitter beverage that was reserved for royalty and religious ceremonies. The word "chocolate" itself comes from the Aztec word "xocolatl," meaning bitter water. When Spanish explorers arrived in the Americas in the 16th century, they brought cacao beans back to Europe. Initially, chocolate remained an expensive luxury available only to the wealthy. European chocolatiers began adding sugar and milk to sweeten the bitter drink, creating the basis for modern hot chocolate. The invention of the cocoa press in 1828 by Dutch chemist Coenraad van Houten revolutionized chocolate production by separating cocoa butter from cocoa solids. This innovation led to the creation of solid chocolate bars and made chocolate more affordable for the general population. Today, the global chocolate industry is worth over 100 billion dollars, with West Africa producing the majority of the world\'s cacao.',
+    questions: [
+      { type: 'multiple-choice', question: 'Which civilization was likely the first to cultivate cacao plants?', options: ['Aztec', 'Maya', 'Olmec', 'Spanish'], correctIndex: 2, explanation: 'The ancient Olmec civilization was likely the first to cultivate cacao plants.' },
+      { type: 'true-false-not-given', question: 'The Aztecs used chocolate primarily as a medicine.', correctIndex: 2, explanation: 'The passage says it was reserved for royalty and ceremonies, but does not mention medicine.' },
+      { type: 'gap-fill', question: 'The Spanish brought cacao beans back to Europe in the ______ century.', blanks: ['16th', 'sixteenth'], explanation: 'Spanish explorers brought cacao beans back in the 16th century.' },
+      { type: 'multiple-choice', question: 'What did Coenraad van Houten invent in 1828?', options: ['The chocolate bar', 'The cocoa press', 'Milk chocolate', 'The cacao plantation'], correctIndex: 1, explanation: 'The invention of the cocoa press in 1828 revolutionized chocolate production.' },
+    ],
+  },
+]
+
+export async function seedReadingExercises(engine: LearningEngine): Promise<void> {
+  try {
+    const existing = await engine.getExercises('reading')
+    const alreadySeeded = existing.status === 'success' && existing.data?.exercises.some(
+      (e: any) => (e.source || e.sourceType) === 'built-in' && e.metadata?.seedVersion === '1',
+    )
+    if (alreadySeeded) return
+
+    const diffMap: Record<string, any> = { easy: 'easy', medium: 'medium', hard: 'hard' }
+    for (const ex of READING_SEED_PASSAGES) {
+      await engine.saveExercise({
+        id: `reading-seed-${ex.title.toLowerCase().replace(/\s+/g, '-')}`,
+        sessionId: '',
+        skill: 'reading',
+        exerciseType: 'comprehension',
+        objectiveId: '',
+        title: ex.title,
+        instructions: 'Read the passage and answer the questions below.',
+        content: { passage: ex.passage },
+        questions: ex.questions.map((q: any, i: number) => ({
+          id: `rs-q-${i}`,
+          type: q.type,
+          question: q.question,
+          options: q.options || [],
+          correctIndex: typeof q.correctIndex === 'number' ? q.correctIndex : 0,
+          blanks: Array.isArray(q.blanks) ? q.blanks : undefined,
+          explanation: q.explanation || '',
+        })),
+        difficulty: diffMap[ex.difficulty] || 'medium',
+        estimatedMinutes: 15,
+        sourceType: 'built-in',
+        sourceIds: [],
+        explanationPolicy: 'after-attempt',
+        evaluationPolicy: 'deterministic',
+        metadata: {
+          focusAreas: [],
+          contextSnapshotHash: '',
+          schemaVersion: '1.0',
+          topic: ex.topic,
+          seedVersion: '1',
+        },
+      } as any)
+    }
+  } catch (error) {
+    console.error('apps/web/src/bootstrap/createSeedData.ts error:', error);
+  }
+}
+
 export async function seedListeningExercises(engine: LearningEngine): Promise<void> {
   try {
     const existing = await engine.getExercises('listening')

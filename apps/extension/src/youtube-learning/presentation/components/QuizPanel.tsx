@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { formatTime } from '../utils/tokenizeTranscript'
 import { scoreObjectiveQuestion } from '@ielts/learning-engine'
 import type { LearnerResponse } from '@ielts/learning-engine'
@@ -108,6 +108,29 @@ export function QuizPanel({
     return () => { sendToParent('EXIT_EXERCISE_MODE') }
   }, [sendToParent])
 
+  useEffect(() => {
+    if (durationFetchedRef.current) return
+    const handler = (event: MessageEvent) => {
+      if (event.data?.source !== 'ielts-content-script') return
+      if (event.data?.type === 'TRANSCRIPT_DATA') {
+        const segments = event.data.payload as Array<{ start: number; end: number }> | undefined
+        if (segments && segments.length > 0) {
+          const durMs = Math.max(...segments.map(s => s.end)) * 1000
+          const dur = Math.ceil(durMs)
+          setMaxDurationMs(dur)
+          if (sectionStartMs === 0 && sectionEndMs === 0) {
+            setSectionStartMs(0)
+            setSectionEndMs(Math.min(120000, dur))
+          }
+          durationFetchedRef.current = true
+        }
+      }
+    }
+    window.addEventListener('message', handler)
+    sendToParent('REQUEST_TRANSCRIPT')
+    return () => window.removeEventListener('message', handler)
+  }, [sendToParent])
+
   const [phase, setPhase] = useState<'config' | 'generating' | 'ready' | 'playing' | 'answering' | 'submitted'>('config')
   const [difficulty, setDifficulty] = useState('medium')
   const [questionCount, setQuestionCount] = useState(5)
@@ -116,6 +139,10 @@ export function QuizPanel({
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [results, setResults] = useState<Array<{ questionId: string; correct: boolean; points: number; totalPoints: number; userAnswer: string; correctAnswer: string; explanation: string; evidenceStartMs: number; evidenceEndMs: number }> | null>(null)
   const [score, setScore] = useState<{ totalScore: number; totalPossible: number; accuracy: number } | null>(null)
+  const [sectionStartMs, setSectionStartMs] = useState(startMs)
+  const [sectionEndMs, setSectionEndMs] = useState(endMs)
+  const [maxDurationMs, setMaxDurationMs] = useState(0)
+  const durationFetchedRef = useRef(false)
 
   useEffect(() => {
     if (phase !== 'generating') return
@@ -133,9 +160,9 @@ export function QuizPanel({
       }
     }
     window.addEventListener('message', handler)
-    sendToParent('GENERATE_QUIZ', { videoId, startMs, endMs, difficulty, questionCount })
+    sendToParent('GENERATE_QUIZ', { videoId, startMs: sectionStartMs, endMs: sectionEndMs, difficulty, questionCount })
     return () => window.removeEventListener('message', handler)
-  }, [phase, videoId, startMs, endMs, difficulty, questionCount, sendToParent])
+  }, [phase, videoId, sectionStartMs, sectionEndMs, difficulty, questionCount, sendToParent])
 
   useEffect(() => {
     if (phase !== 'submitted') return
@@ -172,8 +199,8 @@ export function QuizPanel({
 
   const handleStartPlayback = useCallback(() => {
     setPhase('playing')
-    onSeek(startMs / 1000)
-  }, [onSeek, startMs])
+    onSeek(sectionStartMs / 1000)
+  }, [onSeek, sectionStartMs])
 
   const handleStartAnswering = useCallback(() => {
     setPhase('answering')
@@ -245,7 +272,37 @@ export function QuizPanel({
       <div style={containerStyle}>
         <div style={{ fontWeight: 600, fontSize: '13px', marginBottom: '12px', color: 'var(--color-text)' }}>Listening Quiz</div>
         <div style={{ padding: '8px 10px', borderRadius: '4px', background: 'rgba(255,255,255,0.03)', fontSize: '11px', color: 'var(--color-muted)', marginBottom: '12px' }}>
-          Section: {formatTime(startMs / 1000)} – {formatTime(endMs / 1000)}
+          <div style={{ marginBottom: '6px', color: 'var(--color-text-secondary)' }}>Section range</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <input
+              value={formatTime(Math.floor(sectionStartMs / 1000))}
+              onChange={e => {
+                const parts = e.target.value.split(':')
+                const secs = parts.length === 2 ? parseInt(parts[0]) * 60 + parseInt(parts[1]) : parseInt(e.target.value)
+                if (!isNaN(secs) && secs >= 0) setSectionStartMs(secs * 1000)
+              }}
+              style={{ width: '56px', padding: '4px 6px', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'rgba(255,255,255,0.05)', color: 'var(--color-text)', fontSize: '11px', textAlign: 'center', outline: 'none', fontFamily: 'var(--font-sans)' }}
+              disabled={maxDurationMs === 0}
+              aria-label="Section start time"
+            />
+            <span>–</span>
+            <input
+              value={formatTime(Math.floor(sectionEndMs / 1000))}
+              onChange={e => {
+                const parts = e.target.value.split(':')
+                const secs = parts.length === 2 ? parseInt(parts[0]) * 60 + parseInt(parts[1]) : parseInt(e.target.value)
+                if (!isNaN(secs) && secs > 0) setSectionEndMs(secs * 1000)
+              }}
+              style={{ width: '56px', padding: '4px 6px', borderRadius: '4px', border: '1px solid var(--color-border)', background: 'rgba(255,255,255,0.05)', color: 'var(--color-text)', fontSize: '11px', textAlign: 'center', outline: 'none', fontFamily: 'var(--font-sans)' }}
+              disabled={maxDurationMs === 0}
+              aria-label="Section end time"
+            />
+          </div>
+          {maxDurationMs > 0 ? (
+            <div style={{ marginTop: '4px' }}>Video length: {formatTime(Math.floor(maxDurationMs / 1000))}</div>
+          ) : (
+            <div style={{ marginTop: '4px', opacity: 0.5 }}>Loading duration...</div>
+          )}
         </div>
         {error && <div style={{ color: 'var(--color-danger)', fontSize: '11px', marginBottom: '8px' }}>{error}</div>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -295,7 +352,7 @@ export function QuizPanel({
       <div style={{ ...containerStyle, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
         <div style={{ fontSize: '14px', color: 'var(--color-muted)' }}>Playing section...</div>
         <div style={{ fontSize: '11px', color: 'var(--color-muted)' }}>
-          {formatTime(startMs / 1000)} – {formatTime(endMs / 1000)}
+          {formatTime(Math.floor(sectionStartMs / 1000))} – {formatTime(Math.floor(sectionEndMs / 1000))}
         </div>
         <button onClick={handleStartAnswering} style={btnStyle}>I'm done — show questions</button>
       </div>

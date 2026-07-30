@@ -56,6 +56,12 @@ CRITICAL RULES:
 8. For completion questions: specify word limit as structured data (maxWords, allowsNumber)
 9. For gap-fill/completion: answers must be words/phrases HEARD in the recording
 10. Never use placeholder values like "Option A", "TBD", "N/A"
+11. MANDATORY: Use AT LEAST 3 DIFFERENT question types across the task groups. Never generate only one type.
+12. Divide questions across 2-3 task groups, each with a DIFFERENT question type.
+13. For Part 1 (everyday social): use "form-completion" + "multiple-choice-single" + "short-answer"
+14. For Part 2 (social monologue): use "table-completion" + "multiple-choice-single" + "sentence-completion"
+15. For Part 3 (academic discussion): use "multiple-choice-single" + "matching" + "short-answer"
+16. For Part 4 (academic lecture): use "sentence-completion" + "multiple-choice-single" + "summary-completion"
 
 TRANSCRIPT FORMAT (JSON):
 {
@@ -79,7 +85,7 @@ TRANSCRIPT FORMAT (JSON):
       "id": "group1",
       "type": "form-completion",
       "startNumber": 1,
-      "endNumber": 5,
+      "endNumber": 3,
       "instructions": ["Complete the form below.", "Write NO MORE THAN TWO WORDS AND/OR A NUMBER for each answer."],
       "wordLimit": { "maxWords": 2, "allowsNumber": true },
       "questions": [
@@ -93,30 +99,67 @@ TRANSCRIPT FORMAT (JSON):
           "evidence": { "segmentId": "seg3", "startTimeMs": 15000, "endTimeMs": 20000, "supportingText": "relevant transcript quote" }
         }
       ]
+    },
+    {
+      "id": "group2",
+      "type": "multiple-choice-single",
+      "startNumber": 4,
+      "endNumber": 6,
+      "instructions": ["Choose the correct letter, A, B, C or D."],
+      "questions": [
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "multiple-choice-single",
+          "question": "What does the speaker recommend?",
+          "options": ["Option A text", "Option B text", "Option C text", "Option D text"],
+          "correctAnswer": "Option B text",
+          "evidence": { "segmentId": "seg10", "startTimeMs": 50000, "endTimeMs": 55000, "supportingText": "relevant transcript quote" }
+        }
+      ]
+    },
+    {
+      "id": "group3",
+      "type": "short-answer",
+      "startNumber": 7,
+      "endNumber": 8,
+      "instructions": ["Answer the following questions.", "Write NO MORE THAN THREE WORDS for each answer."],
+      "wordLimit": { "maxWords": 3, "allowsNumber": false },
+      "questions": [
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "short-answer",
+          "question": "When does the facility close on weekends?",
+          "correctAnswer": "answer text",
+          "acceptableAlternatives": ["alt1"],
+          "evidence": { "segmentId": "seg15", "startTimeMs": 75000, "endTimeMs": 80000, "supportingText": "relevant transcript quote" }
+        }
+      ]
     }
   ]
 }
 
 SUPPORTED QUESTION TYPES (use type field exactly):
-- "form-completion": fill a form with words from recording
-- "note-completion": complete notes
-- "table-completion": complete a table
-- "sentence-completion": complete sentences
-- "summary-completion": complete a summary
-- "multiple-choice-single": 3 options, one correct
-- "multiple-choice-multiple": pick 2+ from a list
-- "matching": match items from two lists
-- "short-answer": short response (max 3 words)
+- "form-completion": fill a form with words from recording (completion — use "prompt" + "correctAnswer")
+- "note-completion": complete notes (completion — use "prompt" + "correctAnswer")
+- "table-completion": complete a table (use "rows" with "label" + "correctAnswer")
+- "sentence-completion": complete sentences (completion — use "prompt" + "correctAnswer")
+- "summary-completion": complete a summary (completion — use "prompt" + "correctAnswer")
+- "multiple-choice-single": 3-4 options, one correct (use "question" + "options" array)
+- "multiple-choice-multiple": pick 2+ from a list (use "question" + "options" array)
+- "matching": match items from two lists (use "leftItems" + "rightItems")
+- "short-answer": short response max 3 words (use "question" + "correctAnswer")
 - "map-labelling": label locations on a map/plan
 - "plan-labelling": label a floor plan
 
-For multiple-choice: Do NOT add letter prefixes (A. B. C.) to option text. Options MUST be distinct and plausible.
-For completion types: Do NOT include "options" array. Include "correctAnswer" and "acceptableAlternatives" instead.
+For multiple-choice: DO NOT include "prompt" field. Use "question" + "options" (array of strings) + "correctAnswer" (exact text of the correct option). Options MUST be distinct and plausible.
+For completion types: DO NOT include "options" array. Use "prompt" (with _____ markers) + "correctAnswer".
 For ALL questions: Include "evidence" with segmentId and timestamps.
 
 IMPORTANT: Questions in a task group MUST follow transcript order. Verify that evidence.startTimeMs increases for each question.`,
-    
-    userMessage: `Create an IELTS Listening Part ${part} exercise${topic ? ` about "${topic}"` : ''} at ${difficulty} difficulty with ${questionCount} questions divided into 1-2 task groups.`,
+
+    userMessage: `Create an IELTS Listening Part ${part} exercise${topic ? ` about "${topic}"` : ''} at ${difficulty} difficulty with ${questionCount} questions divided into 2-3 task groups using DIFFERENT question types (at least 3 types). Mix completion types (form-completion, note-completion, table-completion, sentence-completion) with choice types (multiple-choice-single, multiple-choice-multiple, short-answer, matching). Never use only one type.`,
   }
 }
 

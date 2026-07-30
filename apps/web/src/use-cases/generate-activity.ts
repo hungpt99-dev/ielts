@@ -68,19 +68,36 @@ export async function generateActivityUseCase(
     const activity = result.data.activity
     const exercise = activity.exercise
     const topicMeta = activity.topicMetadata as { requestedTopic?: string; generatedTopic?: string; title?: string } | undefined
+
+    // Extract pipeline layout metadata from the first question (if present)
+    const firstQ = (exercise.questions ?? [])[0] as Record<string, unknown> | undefined
+    const layoutMetadata = (firstQ as any)?.layoutMetadata as Record<string, unknown> | undefined
+
     const content = JSON.stringify({
       title: exercise.title,
       text: exercise.content?.passage ?? exercise.content?.text ?? '',
       transcript: exercise.content?.transcript ?? '',
       instructions: exercise.instructions,
+      layoutMetadata,
       questions: (exercise.questions ?? []).map((q: any) => ({
         id: q.id ?? crypto.randomUUID(),
         type: q.type,
-        question: q.question,
+        question: q.question ?? q.text ?? '',
         options: q.options ?? [],
-        blanks: Array.isArray(q.blanks) ? q.blanks : undefined,
-        correctAnswer: q.correctAnswer ?? String(q.correctIndex ?? q.answer ?? ''),
+        blanks: Array.isArray(q.blanks) ? q.blanks
+          : Array.isArray(q.answers) ? q.answers
+          : (q.correctAnswer || q.answer) ? [String(q.correctAnswer ?? q.answer ?? '')]
+          : undefined,
+        correctAnswer: typeof q.correctIndex === 'number' ? q.correctIndex
+          : q.correctAnswer ?? String(q.correctIndex ?? q.answer ?? ''),
+        correctIndex: typeof q.correctIndex === 'number' ? q.correctIndex : undefined,
         explanation: q.explanation ?? '',
+        formFields: Array.isArray((q as any).formFields) ? (q as any).formFields : undefined,
+        tableHeaders: Array.isArray((q as any).tableHeaders) ? (q as any).tableHeaders : undefined,
+        tableRows: Array.isArray((q as any).tableRows) ? (q as any).tableRows : undefined,
+        acceptableAlternatives: Array.isArray(q.acceptableAlternatives) ? q.acceptableAlternatives
+          : Array.isArray((q as any).acceptableAnswers) ? (q as any).acceptableAnswers
+          : undefined,
       })),
     })
 

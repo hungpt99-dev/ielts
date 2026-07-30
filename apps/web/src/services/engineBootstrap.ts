@@ -15,6 +15,7 @@ import { generateEducationalContent, evaluateOpenResponse } from '../bootstrap/c
 import { createAllContextSources, createExamContextSource, createProgressContextSource, createSkillStatesContextSource, createMistakesContextSource, createVocabularyContextSource, createActivityContextSource, createPreferencesContextSource } from '../bootstrap/createContextSources'
 import type { LearningContext, LearningContextScope } from '@ielts/learning-engine'
 import { loadUserConfiguration } from '@ielts/settings'
+import { seedWritingPrompts, seedListeningExercises, seedSpeakingQuestions, seedSpeakingPhrases, seedReadingExercises } from '../bootstrap/createSeedData'
 
 
 let engineInstance: AITutorEngine | null = null
@@ -332,6 +333,14 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
       clock: systemClock,
       skillRegistry: createDefaultSkillRegistry(),
     })
+
+    // Seed initial data for sections that need it
+    seedSpeakingPhrases(learningEngineInstance).catch(() => {})
+    seedListeningExercises(learningEngineInstance).catch(() => {})
+    seedSpeakingQuestions(learningEngineInstance).catch(() => {})
+    seedWritingPrompts(learningEngineInstance).catch(() => {})
+    seedReadingExercises(learningEngineInstance).catch(() => {})
+
     return learningEngineInstance
   } catch (error) {
     console.error('apps/web/src/services/engineBootstrap.ts error:', error);

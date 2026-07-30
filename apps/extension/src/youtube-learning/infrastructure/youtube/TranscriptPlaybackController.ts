@@ -5,6 +5,7 @@ export type PlaybackMode = 'segment' | 'continuous'
 
 export interface TranscriptPlaybackCallbacks {
   onActiveSegmentChange: (index: number) => void
+  onModeChange: (mode: PlaybackMode) => void
 }
 
 export class TranscriptPlaybackController {
@@ -15,6 +16,7 @@ export class TranscriptPlaybackController {
   private rafId: number | null = null
   private callbacks: TranscriptPlaybackCallbacks
   private lastCheckTime = 0
+  private autoStopSegment: TranscriptSegmentData | null = null
   private readonly STOP_TOLERANCE_MS = 150
 
   constructor(
@@ -27,6 +29,20 @@ export class TranscriptPlaybackController {
 
   setSegments(segments: TranscriptSegmentData[]): void {
     this.segments = segments
+  }
+
+  getMode(): PlaybackMode {
+    return this.mode
+  }
+
+  setMode(mode: PlaybackMode): void {
+    if (this.mode === mode) return
+    this.cleanup()
+    this.mode = mode
+    this.callbacks.onModeChange(mode)
+    if (mode === 'continuous' && this.player.getState().isPlaying) {
+      this.startContinuousTracking()
+    }
   }
 
   getActiveSegmentIndex(): number {
@@ -44,6 +60,7 @@ export class TranscriptPlaybackController {
   playSegment(index?: number): void {
     this.cleanup()
     this.mode = 'segment'
+    this.callbacks.onModeChange('segment')
 
     const idx = index ?? this.activeSegmentIndex
     if (idx < 0 || idx >= this.segments.length) return
@@ -52,6 +69,7 @@ export class TranscriptPlaybackController {
     const segment = this.segments[idx]
     this.player.seek(segment.start)
     this.player.play()
+    this.autoStopSegment = segment
     this.startAutoStop(segment)
   }
 
@@ -68,6 +86,7 @@ export class TranscriptPlaybackController {
   continuePlayback(): void {
     this.cleanup()
     this.mode = 'continuous'
+    this.callbacks.onModeChange('continuous')
     const currentTime = this.player.getCurrentTime()
     this.player.play()
     this.lastCheckTime = currentTime
@@ -104,9 +123,30 @@ export class TranscriptPlaybackController {
   }
 
   handlePlayerSeek(): void {
-    if (this.mode === 'segment') {
+    if (this.mode === 'continuous') {
+      this.syncActiveSegmentToTime()
+      return
+    }
+
+    if (!this.autoStopSegment) {
+      this.autoStopSegment = null
       this.cleanup()
-      this.mode = 'continuous'
+      this.syncActiveSegmentToTime()
+      return
+    }
+
+    const currentTime = this.player.getCurrentTime()
+    const endTime = this.resolveEndTime(this.autoStopSegment)
+    if (currentTime < this.autoStopSegment.start || currentTime >= endTime) {
+      this.cleanup()
+      this.syncActiveSegmentToTime()
+    }
+  }
+
+  private syncActiveSegmentToTime(): void {
+    const idx = this.findSegmentAtTime(this.player.getCurrentTime())
+    if (idx >= 0) {
+      this.setActiveSegmentIndex(idx)
     }
   }
 
@@ -114,6 +154,10 @@ export class TranscriptPlaybackController {
     this.cleanup()
     this.segments = []
     this.activeSegmentIndex = -1
+  }
+
+  stop(): void {
+    this.cleanup()
   }
 
   private startAutoStop(segment: TranscriptSegmentData): void {
@@ -129,7 +173,9 @@ export class TranscriptPlaybackController {
 
       const activeIdx = this.findSegmentAtTime(currentTime)
       if (activeIdx >= 0 && activeIdx !== this.activeSegmentIndex) {
-        this.setActiveSegmentIndex(activeIdx)
+        this.player.pause()
+        this.rafId = null
+        return
       }
 
       if (currentTime >= endTime - this.STOP_TOLERANCE_MS / 1000) {
@@ -175,15 +221,22 @@ export class TranscriptPlaybackController {
   }
 
   private findSegmentAtTime(time: number): number {
+    let bestIdx = -1
     for (let i = 0; i < this.segments.length; i++) {
       const seg = this.segments[i]
+      if (time < seg.start) continue
       const end = this.resolveEndTime(seg)
-      if (time >= seg.start && time < end) return i
+      if (time < end) {
+        if (bestIdx === -1 || seg.start > this.segments[bestIdx].start) {
+          bestIdx = i
+        }
+      }
     }
-    return -1
+    return bestIdx
   }
 
   private cleanup(): void {
+    this.autoStopSegment = null
     if (this.rafId !== null) {
       cancelAnimationFrame(this.rafId)
       this.rafId = null

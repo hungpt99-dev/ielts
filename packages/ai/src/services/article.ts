@@ -43,6 +43,7 @@ export async function generateArticleQuestions(
     const parsed = JSON.parse(json)
     const result = articleQuestionSchema.safeParse(parsed)
     if (!result.success) {
+      console.error('Article schema validation failed:', result.error.issues, 'Raw content:', content)
       return { data: null, error: 'AI response had unexpected format. Try again.' }
     }
 

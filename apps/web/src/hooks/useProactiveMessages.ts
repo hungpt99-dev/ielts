@@ -58,11 +58,31 @@ async function buildLearnerState(): Promise<LearnerStateSnapshot> {
   const examDate = study.examDate || ''
   const daysUntilExam = examDate ? Math.max(0, Math.floor((new Date(examDate).getTime() - Date.now()) / 86400000)) : null
 
-  const roadmap = roadmapRaw ? JSON.parse(roadmapRaw) : null
-  const missedTasks = roadmap?.phases
-    ? roadmap.phases.reduce((sum: number, p: any) => sum + (p.weeks?.reduce((ws: number, w: any) => ws + (w.days?.reduce((ds: number, d: any) => ds + d.taskIds?.length || 0, 0) || 0), 0) || 0), 0) -
-      (roadmap.completedTasks || 0)
-    : 0
+  let roadmap = null
+  try {
+    roadmap = roadmapRaw ? JSON.parse(roadmapRaw) : null
+  } catch {
+    roadmap = null
+  }
+  let missedTasks = 0
+  let completedRoadmapTasks = 0
+  let totalRoadmapTasks = 0
+  if (roadmap?.phases) {
+    const roadmapTaskIds = new Set<string>()
+    for (const phase of roadmap.phases) {
+      for (const week of (phase.weeks || [])) {
+        for (const day of (week.days || [])) {
+          for (const taskId of (day.taskIds || [])) {
+            roadmapTaskIds.add(taskId)
+          }
+        }
+      }
+    }
+    const completedTaskIds = new Set(tasks.filter((t: any) => t.isDone).map((t: any) => t.id))
+    completedRoadmapTasks = [...roadmapTaskIds].filter(id => completedTaskIds.has(id)).length
+    totalRoadmapTasks = roadmapTaskIds.size
+    missedTasks = Math.max(0, totalRoadmapTasks - completedRoadmapTasks)
+  }
 
   return {
     profile: {
@@ -82,7 +102,7 @@ async function buildLearnerState(): Promise<LearnerStateSnapshot> {
       examType: study.studyGoal || 'academic',
     },
     progress: {
-      overallCompletionPercent: roadmap?.overallProgress || 0,
+      overallCompletionPercent: totalRoadmapTasks > 0 ? Math.round((completedRoadmapTasks / totalRoadmapTasks) * 100) : roadmap?.overallProgress || 0,
       skillProgress: {},
       weeklyCompletionPercent: 0,
       studyStreak,
@@ -103,9 +123,9 @@ async function buildLearnerState(): Promise<LearnerStateSnapshot> {
     roadmap: roadmap ? {
       currentPhase: roadmap.currentPhaseIndex ?? 0,
       totalPhases: roadmap.phases?.length || 0,
-      overallProgress: roadmap.overallProgress || 0,
-      completedTasks: roadmap.completedTasks || 0,
-      totalTasks: roadmap.totalTasks || 0,
+      overallProgress: totalRoadmapTasks > 0 ? Math.round((completedRoadmapTasks / totalRoadmapTasks) * 100) : roadmap.overallProgress || 0,
+      completedTasks: completedRoadmapTasks,
+      totalTasks: totalRoadmapTasks,
       missedTasks,
     } : null,
     activitySummary: {
@@ -131,8 +151,8 @@ async function buildLearnerState(): Promise<LearnerStateSnapshot> {
 }
 
 export function useProactiveMessages() {
-  const [messages, setMessages] = useState<ProactiveMessage[]>(repository.loadMessages)
-  const [settings, setSettingsState] = useState<ProactiveMessageSettings>(repository.loadSettings)
+  const [messages, setMessages] = useState<ProactiveMessage[]>(() => repository.loadMessages())
+  const [settings, setSettingsState] = useState<ProactiveMessageSettings>(() => repository.loadSettings())
   const [unreadCount, setUnreadCount] = useState(0)
   const listenersRef = useRef<Set<ProactiveMessageCallback>>(new Set())
   const messagesRef = useRef(messages)

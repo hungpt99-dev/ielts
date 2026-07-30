@@ -34,6 +34,15 @@ interface SavedVocabEntry {
   personalNote?: string
   note?: string
   category?: string
+  pronunciation?: string
+  partOfSpeech?: string
+  topic?: string
+  difficulty?: string
+  cefrLevel?: string
+  wordFamily?: Array<{ word: string; partOfSpeech: string; relationship: string }>
+  collocations?: string[]
+  synonyms?: string[]
+  sourceUrl?: string
 }
 
 let currentWords: HighlightWord[] = []
@@ -80,6 +89,16 @@ function normalizeVocabEntry(
     meaning: item.meaning || item.translation || '',
     exampleSentence: item.exampleSentence || '',
     personalNote: item.personalNote || item.note || '',
+    pronunciation: item.pronunciation || '',
+    partOfSpeech: item.partOfSpeech || '',
+    translation: item.translation || '',
+    topic: item.topic || '',
+    difficulty: item.difficulty || '',
+    cefrLevel: item.cefrLevel || '',
+    wordFamily: item.wordFamily || [],
+    collocations: item.collocations || [],
+    synonyms: item.synonyms || [],
+    sourceUrl: item.sourceUrl || '',
   }
 }
 

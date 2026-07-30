@@ -409,6 +409,7 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings, act
   const [translations, setTranslations] = useState<Map<string, string>>(new Map())
   const [translating, setTranslating] = useState(false)
   const [translateError, setTranslateError] = useState<string | null>(null)
+  const [playbackMode, setPlaybackMode] = useState<'segment' | 'continuous'>('segment')
   const containerRef = useRef<HTMLDivElement>(null)
 
   const [translateLanguage, setTranslateLanguage] = useState(userSettings.nativeLanguage || '')
@@ -440,6 +441,12 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings, act
         setSegments(event.data.payload)
         setLoading(false)
         clearTimeout(timeoutId)
+      }
+      if (event.data?.type === 'PLAYBACK_MODE_CHANGED') {
+        const payload = event.data.payload as { mode: string } | undefined
+        if (payload?.mode === 'segment' || payload?.mode === 'continuous') {
+          setPlaybackMode(payload.mode)
+        }
       }
       if (event.data?.type === 'TRANSCRIPT_UNAVAILABLE') {
         setSegments(null)
@@ -492,7 +499,23 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings, act
     if (activeSegmentIndex >= 0 && segments && activeSegmentIndex < segments.length) {
       return activeSegmentIndex
     }
-    return segments?.findIndex(s => currentTime >= s.start && currentTime < s.end) ?? -1
+    if (!segments) return -1
+    let bestIdx = -1
+    for (let i = 0; i < segments.length; i++) {
+      const seg = segments[i]
+      if (currentTime < seg.start) continue
+      let end = seg.end
+      if (!(end > seg.start)) {
+        const next = segments[i + 1]
+        end = next ? next.start : seg.start + 5
+      }
+      if (currentTime < end) {
+        if (bestIdx === -1 || seg.start > segments[bestIdx].start) {
+          bestIdx = i
+        }
+      }
+    }
+    return bestIdx
   }, [segments, currentTime, activeSegmentIndex])
 
   const tokenizedSegments = useMemo(() => {
@@ -510,8 +533,51 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings, act
     }
   }, [activeIndex, vocabWord])
 
+  const navigatePrev = useCallback(() => {
+    if (!segments || activeIndex <= 0) return
+    const idx = activeIndex - 1
+    if (playbackMode === 'segment') {
+      sendToParent('TRANSCRIPT_PREVIOUS', { segmentIndex: idx })
+    } else {
+      sendToParent('SEEK_TO', segments[idx].start)
+      sendToParent('TRANSCRIPT_CONTINUE')
+    }
+  }, [segments, activeIndex, playbackMode, sendToParent])
+
+  const navigateNext = useCallback(() => {
+    if (!segments || activeIndex >= segments.length - 1) return
+    const idx = activeIndex + 1
+    if (playbackMode === 'segment') {
+      sendToParent('TRANSCRIPT_NEXT', { segmentIndex: idx })
+    } else {
+      sendToParent('SEEK_TO', segments[idx].start)
+      sendToParent('TRANSCRIPT_CONTINUE')
+    }
+  }, [segments, activeIndex, playbackMode, sendToParent])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement) return
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        navigatePrev()
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        navigateNext()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [navigatePrev, navigateNext])
+
   const handleSegmentClick = (start: number) => {
+    const idx = segments?.findIndex(s => s.start === start) ?? -1
     sendToParent('SEEK_TO', start)
+    if (playbackMode === 'segment' && idx >= 0) {
+      sendToParent('TRANSCRIPT_PLAY_SEGMENT', { segmentIndex: idx })
+    } else {
+      sendToParent('TRANSCRIPT_CONTINUE')
+    }
   }
 
   const handleSentenceTextClick = (e: React.MouseEvent, seg: { text: string; start: number; end: number }) => {
@@ -546,6 +612,11 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings, act
   const handleVocabSeek = (time: number) => {
     sendToParent('SEEK_TO', time)
   }
+
+  const setMode = useCallback((mode: 'segment' | 'continuous') => {
+    setPlaybackMode(mode)
+    sendToParent('SET_PLAYBACK_MODE', mode)
+  }, [sendToParent])
 
   const smallBtnStyle: React.CSSProperties = {
     padding: '2px 8px', borderRadius: '4px', border: 'none',
@@ -610,8 +681,8 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings, act
   }
 
   return (
-    <div style={{ position: 'relative', height: '100%' }}>
-      <div ref={containerRef} style={{ height: '100%', overflow: 'auto' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <div ref={containerRef} style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>
         <div style={{ position: 'sticky', top: 0, zIndex: 5, display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 6px 8px', borderBottom: '1px solid var(--color-border)', background: 'var(--color-background)' }}>
           <button onClick={handleToggleTranslate} style={translateBtnStyle} aria-label={translateEnabled ? 'Hide translation' : 'Show translation'}>
             {translateEnabled ? 'Translate: ON' : 'Translate'}
@@ -640,104 +711,6 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings, act
           {translating && <span style={{ fontSize: '10px', color: 'var(--color-muted)' }}>Translating...</span>}
           {translateError && <span style={{ fontSize: '10px', color: 'var(--color-danger)', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={translateError}>⚠ {translateError}</span>}
         </div>
-        {segments.length > 0 && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '8px 6px',
-              borderBottom: '1px solid var(--color-border)',
-              background: 'var(--color-background)',
-            }}
-          >
-            <button
-              onClick={() => sendToParent('TRANSCRIPT_PREVIOUS')}
-              disabled={activeSegmentIndex <= 0}
-              title="Previous segment"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '32px',
-                height: '32px',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--color-border)',
-                backgroundColor: 'var(--color-surface)',
-                color: activeSegmentIndex <= 0 ? 'var(--color-muted)' : 'var(--color-text)',
-                cursor: activeSegmentIndex <= 0 ? 'default' : 'pointer',
-                fontSize: '14px',
-                opacity: activeSegmentIndex <= 0 ? 0.4 : 1,
-              }}
-            >
-              ⏮
-            </button>
-
-            <button
-              onClick={() => sendToParent('TRANSCRIPT_PLAY_SEGMENT', { segmentIndex: activeSegmentIndex >= 0 ? activeSegmentIndex : 0 })}
-              title="Play segment"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '4px 12px',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--color-primary)',
-                backgroundColor: 'var(--color-primary)',
-                color: '#fff',
-                cursor: 'pointer',
-                fontSize: '13px',
-                fontWeight: 500,
-              }}
-            >
-              ▶ Play Segment
-            </button>
-
-            <button
-              onClick={() => sendToParent('TRANSCRIPT_NEXT')}
-              disabled={activeSegmentIndex >= segments.length - 1}
-              title="Next segment"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '32px',
-                height: '32px',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--color-border)',
-                backgroundColor: 'var(--color-surface)',
-                color: activeSegmentIndex >= segments.length - 1 ? 'var(--color-muted)' : 'var(--color-text)',
-                cursor: activeSegmentIndex >= segments.length - 1 ? 'default' : 'pointer',
-                fontSize: '14px',
-                opacity: activeSegmentIndex >= segments.length - 1 ? 0.4 : 1,
-              }}
-            >
-              ⏭
-            </button>
-
-            <div style={{ width: '1px', height: '24px', backgroundColor: 'var(--color-border)', margin: '0 4px' }} />
-
-            <button
-              onClick={() => sendToParent('TRANSCRIPT_CONTINUE')}
-              title="Continue playback without auto-stop"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '4px 12px',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--color-border)',
-                backgroundColor: 'var(--color-surface)',
-                color: 'var(--color-text)',
-                cursor: 'pointer',
-                fontSize: '13px',
-                fontWeight: 500,
-              }}
-            >
-              ▶ Continue
-            </button>
-          </div>
-        )}
         <div style={{ padding: '0 var(--spacing-xs) var(--spacing-xs)' }}>
         {(tokenizedSegments || segments).map((seg: any, idx: number) => {
           const tokens = seg.tokens || []
@@ -821,6 +794,107 @@ function TranscriptPanel({ videoId, currentTime, sendToParent, userSettings, act
         })}
       </div>
       </div>
+      {segments.length > 0 && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            padding: '8px 8px',
+            borderTop: '1px solid var(--color-border)',
+            background: 'var(--color-background)',
+            flexShrink: 0,
+          }}
+        >
+          <button
+            onClick={navigatePrev}
+            disabled={activeIndex <= 0}
+            title="Previous segment (←)"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '32px',
+              height: '32px',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--color-border)',
+              backgroundColor: 'var(--color-surface)',
+              color: activeIndex <= 0 ? 'var(--color-muted)' : 'var(--color-text)',
+              cursor: activeIndex <= 0 ? 'default' : 'pointer',
+              fontSize: '14px',
+              opacity: activeIndex <= 0 ? 0.4 : 1,
+            }}
+          >
+            ⏮
+          </button>
+
+          <div
+            style={{
+              display: 'inline-flex',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--color-border)',
+              overflow: 'hidden',
+            }}
+          >
+            <button
+              onClick={() => setMode('segment')}
+              style={{
+                padding: '4px 10px',
+                border: 'none',
+                borderRight: '1px solid var(--color-border)',
+                backgroundColor: playbackMode === 'segment' ? 'var(--color-primary)' : 'transparent',
+                color: playbackMode === 'segment' ? '#fff' : 'var(--color-text-secondary)',
+                cursor: 'pointer',
+                fontSize: '11px',
+                fontWeight: 600,
+                fontFamily: 'var(--font-sans)',
+                transition: 'all 0.15s',
+              }}
+            >
+              Segment
+            </button>
+            <button
+              onClick={() => setMode('continuous')}
+              style={{
+                padding: '4px 10px',
+                border: 'none',
+                backgroundColor: playbackMode === 'continuous' ? 'var(--color-primary)' : 'transparent',
+                color: playbackMode === 'continuous' ? '#fff' : 'var(--color-text-secondary)',
+                cursor: 'pointer',
+                fontSize: '11px',
+                fontWeight: 600,
+                fontFamily: 'var(--font-sans)',
+                transition: 'all 0.15s',
+              }}
+            >
+              Continuous
+            </button>
+          </div>
+
+          <button
+            onClick={navigateNext}
+            disabled={activeIndex >= segments.length - 1}
+            title="Next segment (→)"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '32px',
+              height: '32px',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--color-border)',
+              backgroundColor: 'var(--color-surface)',
+              color: activeIndex >= segments.length - 1 ? 'var(--color-muted)' : 'var(--color-text)',
+              cursor: activeIndex >= segments.length - 1 ? 'default' : 'pointer',
+              fontSize: '14px',
+              opacity: activeIndex >= segments.length - 1 ? 0.4 : 1,
+            }}
+          >
+            ⏭
+          </button>
+        </div>
+      )}
       {vocabWord && (
         <VocabularyDetail
           word={vocabWord.word}
@@ -860,7 +934,7 @@ function PracticePanel({ transcriptAvailable, videoId, sendToParent }: {
         <QuizPanel
           videoId={videoId}
           startMs={0}
-          endMs={120000}
+          endMs={0}
           onClose={() => setMode(null)}
           onSeek={(time) => sendToParent('SEEK_TO', time)}
           sendToParent={sendToParent}

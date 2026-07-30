@@ -6,7 +6,10 @@ describe('ProblemSection', () => {
   it('renders the section heading', () => {
     render(<ProblemSection />)
     expect(
-      screen.getByText('Studying for IELTS alone is hard.')
+      screen.getByText(/Studying for IELTS alone/)
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/is hard/)
     ).toBeInTheDocument()
   })
 

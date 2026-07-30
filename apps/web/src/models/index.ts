@@ -291,6 +291,8 @@ export interface ListeningQuestion {
   tableRows?: TableRow[]
   explanation: string
   blanks?: string[]
+  /** @since 2.0 - Form layout fields for form-completion questions */
+  formFields?: FormFieldModel[]
 }
 
 export interface ListeningExercise {
@@ -304,6 +306,42 @@ export interface ListeningExercise {
   difficulty: 'easy' | 'medium' | 'hard'
   wordCount: number
   estimatedMinutes: number
+  /** @since 2.0 - Pipeline-generated metadata */
+  pipelineMetadata?: ListeningPipelineMetadata
+}
+
+/** Pipeline generation metadata embedded in exercises */
+export interface ListeningPipelineMetadata {
+  pipelineVersion: string
+  scenarioId?: string
+  transcriptId?: string
+  questionSetId?: string
+  layout: 'form-completion' | 'table-completion' | 'note-completion' | string
+  formTitle?: string
+  formSubtitle?: string
+  formSections?: Array<{ id: string; title: string }>
+  formFields?: FormFieldModel[]
+  noteTitle?: string
+  tableTitle?: string
+  distractors?: DistractorModel[]
+  validationScore?: number
+  qualityScore?: number
+  estimatedBand?: number
+}
+
+export interface FormFieldModel {
+  label: string
+  answerValue: string
+  acceptableAlternatives?: string[]
+  wordLimit: number
+  order: number
+  section?: string
+}
+
+export interface DistractorModel {
+  type: string
+  wrongValue: string
+  correctionPhrase: string
 }
 
 export interface ListeningPracticeSession {

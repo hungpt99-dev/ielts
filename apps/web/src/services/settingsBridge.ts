@@ -13,9 +13,9 @@ function toExtensionSettings(config: UserConfiguration): ExtensionSettings {
   return {
     aiModel: config.ai?.model ?? '',
     aiBaseUrl: config.ai?.customApiUrl ?? '',
-    themeMode: config.themeMode ?? '',
-    nativeLanguage: config.nativeLanguage ?? '',
-    accentColor: config.accentColor ?? '',
+    themeMode: config.theme?.mode ?? '',
+    nativeLanguage: config.study?.nativeLanguage ?? '',
+    accentColor: config.theme?.accentColor ?? '',
   }
 }
 

@@ -1,5 +1,6 @@
 import { callAI } from '../client'
 import type { ProviderConfig } from '../client/types'
+import { AIError } from '../errors/types'
 import { buildVocabularyDetailsPrompt, buildVocabularyQuizPrompt, VOCABULARY_DETAILS_SYSTEM_PROMPT, VOCABULARY_QUIZ_SYSTEM_PROMPT } from '../prompts'
 import { vocabularyDetailsSchema, vocabularyQuizSchema } from '../schemas'
 import type { VocabularyDetails, VocabularyQuiz } from '../schemas'
@@ -47,15 +48,11 @@ export async function generateVocabularyDetails(
 
     if (!content) return { data: null, error: 'AI returned an empty response.' }
 
-    const jsonStart = content.indexOf('{')
-    const jsonEnd = content.lastIndexOf('}')
-    if (jsonStart === -1 || jsonEnd === -1) {
-      return { data: null, error: 'AI response was not valid JSON.' }
-    }
-
-    const parsed = JSON.parse(content.slice(jsonStart, jsonEnd + 1))
+    const json = extractJSON(content)
+    const parsed = JSON.parse(json)
     const result = vocabularyDetailsSchema.safeParse(parsed)
     if (!result.success) {
+      console.error('Vocabulary details schema validation failed:', result.error.issues, 'Raw content:', content)
       return { data: null, error: 'AI response had unexpected format. Try again.' }
     }
 
@@ -64,6 +61,9 @@ export async function generateVocabularyDetails(
   } catch (err: unknown) {
     console.error('packages/ai/src/services/vocabulary.ts error:', err);
     const message = err instanceof Error ? err.message : 'Unknown error'
+    if (err instanceof AIError) {
+      return { data: null, error: err.message }
+    }
     return { data: null, error: message.includes('Failed to fetch') || message.includes('NetworkError')
       ? 'Network error. Check your internet connection and API endpoint.'
       : `AI request failed: ${message}` }
