@@ -1,5 +1,6 @@
 import type { VocabularyEntry, VocabReviewEntry, ReviewRating, VocabStatus } from '../../models'
 import { vocabReviewRepo, vocabularyRepo } from '../../services/repositories'
+import { getVocabularyEngine } from '../../services/engineBootstrap'
 import { getDailyReviewQueue, calculateNextReview, getInitialReviewEntry } from '../../utils/spaced-repetition'
 
 export type ReviewMode =
@@ -99,6 +100,12 @@ export async function handleRating(
   item: ReviewItem,
   rating: ReviewRating,
 ): Promise<void> {
+  const engine = getVocabularyEngine()
+  if (engine) {
+    await engine.rateWord(item.vocab, rating)
+    return
+  }
+
   const now = new Date()
 
   let review = item.review
