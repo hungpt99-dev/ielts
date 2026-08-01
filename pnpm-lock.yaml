@@ -44,6 +44,9 @@ importers:
       '@ielts/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@ielts/vocabulary-engine':
+        specifier: workspace:*
+        version: link:../../packages/vocabulary-engine
       dexie:
         specifier: ^4.4.4
         version: 4.4.4
@@ -120,6 +123,9 @@ importers:
       '@ielts/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@ielts/vocabulary-engine':
+        specifier: workspace:*
+        version: link:../../packages/vocabulary-engine
       lucide-react:
         specifier: ^1.23.0
         version: 1.23.0(react@19.2.7)
@@ -327,6 +333,25 @@ importers:
       '@types/react':
         specifier: ^19.1.2
         version: 19.2.17
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.1.1
+        version: 3.2.6(@types/node@26.0.1)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)
+
+  packages/vocabulary-engine:
+    dependencies:
+      '@ielts/shared':
+        specifier: workspace:*
+        version: link:../shared
+      '@ielts/storage':
+        specifier: workspace:*
+        version: link:../storage
+    devDependencies:
+      fake-indexeddb:
+        specifier: ^6.2.5
+        version: 6.2.5
       typescript:
         specifier: ~5.8.3
         version: 5.8.3

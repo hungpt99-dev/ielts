@@ -152,6 +152,28 @@
 
 **Consumers**: `@ielts/ai-tutor-engine`, `@ielts/learning-engine`, apps/web.
 
+---
+
+### `@ielts/vocabulary-engine`
+
+**Purpose**: Canonical vocabulary domain engine consolidating word CRUD, spaced-repetition review, search, analytics, knowledge graph, word detail, and practice generation.
+
+**Public exports**:
+- Facade: `VocabularyEngine`, `createVocabularyEngine`
+- Review: `ReviewEngine`, `getInitialReviewEntry`, `calculateNextReview`, `getDailyReviewQueue`, `getDueReviewEntries`
+- Search: `SearchEngine`, `VocabularyFilter`
+- Analytics: `AnalyticsService`, `VocabularyStats`
+- Knowledge graph: `KnowledgeGraph`, `WordRelationship`, `WordRelationshipType`
+- Word detail: `WordDetailService`, `WordDetail`, `RelatedWord`
+- Practice: `PracticeEngine`, `VocabExercisePrompt`
+- Ports: `VocabularyRepository`, `VocabReviewRepository`, `ClockPort`
+- Infrastructure: `DexieVocabularyRepository`, `DexieVocabReviewRepository`, `InMemoryVocabularyRepository`, `InMemoryVocabReviewRepository`
+- Domain types: `VocabularyEntry`, `VocabReviewEntry` (re-exported from `@ielts/storage`), `ReviewRating`
+
+**Stability**: New — API may evolve during adoption.
+
+**Consumers**: apps/web, apps/extension (target).
+
 ## Monorepo Structure
 
 ```
@@ -163,6 +185,7 @@ packages/
   storage/        — IndexedDB persistence layer
   learning-engine/— Study planning and learning orchestration
   ai-tutor-engine/— AI tutor engine
+  vocabulary-engine/— Vocabulary domain engine
   ai/             — Low-level AI client
 apps/
   web/            — Main web application

@@ -7,7 +7,7 @@ import AppLayout from '@ielts/web-app/components/Layout'
 import { ToastProvider } from '@ielts/web-app/components/ui/Toast'
 import ErrorBoundary from '@ielts/web-app/components/ui/ErrorBoundary'
 import OfflineIndicator from '@ielts/web-app/components/ui/OfflineIndicator'
-import { initializeAITutorEngine, initializeLearningEngine } from '@ielts/web-app/services/engineBootstrap'
+import { initializeAITutorEngine, initializeLearningEngine, initializeVocabularyEngine } from '@ielts/web-app/services/engineBootstrap'
 import { APP_SCHEMA, initDb, getDb } from '@ielts/storage'
 import { useExtensionDataRefresh } from './useExtensionDataRefresh'
 
@@ -54,6 +54,7 @@ export default function ExtensionApp() {
       }
       try { await initializeAITutorEngine() } catch (err) { console.warn('[ExtensionApp] AI engine init failed:', err) }
       try { await initializeLearningEngine() } catch (err) { console.warn('[ExtensionApp] Learning engine init failed:', err) }
+      try { await initializeVocabularyEngine() } catch (err) { console.warn('[ExtensionApp] Vocabulary engine init failed:', err) }
     }
 
     bootstrap()

@@ -31,6 +31,7 @@ export default defineConfig({
       '@ielts/config': resolve(__dirname, '../../packages/config/src'),
       '@ielts/theme': resolve(__dirname, '../../packages/theme/src'),
       '@ielts/ui': resolve(__dirname, '../../packages/ui/src'),
+      '@ielts/vocabulary-engine': resolve(__dirname, '../../packages/vocabulary-engine/src'),
     },
   },
 })

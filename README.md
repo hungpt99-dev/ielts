@@ -54,8 +54,9 @@ Web Application (React 19 / PWA)    Browser Extension (Chrome MV3)
 - **Study Plan Engine** — Schedules study objectives and generates weekly plans (`DailyPlanEngine` in `packages/learning-engine/src/daily-plan/`).
 - **Learning Engine** — Creates and evaluates learning sessions with exercises, attempts, and outcomes (`packages/learning-engine/`).
 - **AI Tutor Engine** — Maintains learner context, manages tutor memory, generates proactive interventions (`packages/ai-tutor-engine/`).
+- **Vocabulary Engine** — Canonical vocabulary domain model, spaced-repetition review, search, analytics, and knowledge graph (`packages/vocabulary-engine/`).
 
-All three engines are workspace packages that can be used independently by both the web app and the extension.
+All engines are workspace packages that can be used independently by both the web app and the extension.
 
 ## Repository structure
 
@@ -72,6 +73,7 @@ packages/
   settings/      — AI and shared settings schemas and defaults
   theme/         — Design tokens, ThemeProvider, CSS variables
   ui/            — 22 React components + 180+ icons (lucide-react)
+  vocabulary-engine/  — Hexagonal Vocabulary engine: review, search, analytics, knowledge graph
 ```
 
 ## Quick start

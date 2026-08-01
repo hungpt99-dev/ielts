@@ -35,10 +35,13 @@ declare module '@ielts/web-app/components/ui/OfflineIndicator' {
 declare module '@ielts/web-app/services/engineBootstrap' {
   import type { AITutorEngine } from '@ielts/ai-tutor-engine'
   import type { LearningEngine } from '@ielts/learning-engine'
+  import type { VocabularyEngine } from '@ielts/vocabulary-engine'
   export function initializeAITutorEngine(): Promise<AITutorEngine | null>
   export function initializeLearningEngine(): Promise<LearningEngine | null>
+  export function initializeVocabularyEngine(): Promise<VocabularyEngine | null>
   export function getAITutorEngine(): AITutorEngine | null
   export function getLearningEngine(): LearningEngine | null
+  export function getVocabularyEngine(): VocabularyEngine | null
 }
 declare module '@ielts/web-app/index.css' {}
 declare module '@ielts/web-app/styles/theme.css' {}

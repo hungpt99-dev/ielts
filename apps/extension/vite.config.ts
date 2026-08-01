@@ -29,6 +29,7 @@ export default defineConfig({
       '@ielts/learning-engine': resolve(__dirname, '../../packages/learning-engine/src'),
       '@ielts/theme': resolve(__dirname, '../../packages/theme/src'),
       '@ielts/ui': resolve(__dirname, '../../packages/ui/src'),
+      '@ielts/vocabulary-engine': resolve(__dirname, '../../packages/vocabulary-engine/src'),
     },
   },
   server: {

@@ -15,7 +15,8 @@ IELTS/
 │   ├── shared/       # Shared domain types & utilities
 │   ├── storage/      # IndexedDB schema, migrations, repositories
 │   ├── theme/        # CSS theme tokens & context
-│   └── ui/           # Shared React components & icons
+│   ├── ui/           # Shared React components & icons
+│   └── vocabulary-engine/  # Vocabulary domain engine (review, search, graph, analytics)
 ```
 
 ## Application Details
@@ -77,6 +78,17 @@ IELTS/
 | **Internal** | `client/` (AIClient, callAI, types), `adapters/` (OpenAI adapter), `prompts/` (PromptRegistry, explain labels, built-in prompts), `schemas/` (Zod schemas), `services/` (validated AI services), `errors/` (typed errors), `utils/` (cache) |
 | **Tests** | `src/__tests__/` |
 | **Key deps** | `zod` |
+
+### `@ielts/vocabulary-engine`
+
+| Attribute | Description |
+|---|---|
+| **Purpose** | Canonical vocabulary domain engine: word CRUD, spaced-repetition review, search, analytics, knowledge graph, word detail, practice generation |
+| **Entry** | `src/index.ts` (re-exports engine facade, application services, ports, infrastructure adapters, domain types) |
+| **Consumers** | `apps/web`, `apps/extension` (target) |
+| **Internal** | Hexagonal architecture: `domain/` (canonical `VocabularyEntry`/`VocabReviewEntry` from `@ielts/storage`, `WordRelationship` types, SM-2 spaced-repetition policies), `application/` (`ReviewEngine`, `SearchEngine`, `AnalyticsService`, `KnowledgeGraph`, `WordDetailService`, `PracticeEngine`), `ports/` (vocabulary + review repository interfaces, `ClockPort`), `infrastructure/` (`DexieVocabularyRepository`/`DexieVocabReviewRepository` adapters over `@ielts/storage`, in-memory repositories for tests), `orchestration/` (`VocabularyEngine` facade, `createVocabularyEngine`) |
+| **Tests** | `src/__tests__/` |
+| **Key deps** | `@ielts/storage`, `@ielts/shared`, `fake-indexeddb` (dev) |
 
 ### `@ielts/storage`
 
