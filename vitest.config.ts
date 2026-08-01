@@ -26,6 +26,7 @@ export default defineConfig({
       'packages/ai-tutor-engine/vitest.config.ts',
       'packages/learning-engine/vitest.config.ts',
       'packages/storage/vitest.config.ts',
+      'packages/vocabulary-engine/vitest.config.ts',
       'packages/ai/vitest.config.ts',
       'packages/settings/vitest.config.ts',
     ],

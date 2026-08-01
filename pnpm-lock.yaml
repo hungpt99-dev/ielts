@@ -334,6 +334,25 @@ importers:
         specifier: ^3.1.1
         version: 3.2.6(@types/node@26.0.1)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)
 
+  packages/vocabulary-engine:
+    dependencies:
+      '@ielts/shared':
+        specifier: workspace:*
+        version: link:../shared
+      '@ielts/storage':
+        specifier: workspace:*
+        version: link:../storage
+    devDependencies:
+      fake-indexeddb:
+        specifier: ^6.2.5
+        version: 6.2.5
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+      vitest:
+        specifier: ^3.1.1
+        version: 3.2.6(@types/node@26.0.1)(jiti@2.7.0)(jsdom@26.1.0)(lightningcss@1.32.0)
+
 packages:
 
   '@adobe/css-tools@4.5.0':
