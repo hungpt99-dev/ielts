@@ -17,6 +17,7 @@ export default defineConfig({
       '@ielts/storage': resolve(__dirname, '../../packages/storage/src'),
       '@ielts/theme': resolve(__dirname, '../../packages/theme/src'),
       '@ielts/ui': resolve(__dirname, '../../packages/ui/src'),
+      '@ielts/vocabulary-engine': resolve(__dirname, '../../packages/vocabulary-engine/src'),
     },
   },
   test: {

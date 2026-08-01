@@ -8,6 +8,8 @@ import { SystemClock } from '@ielts/ai-tutor-engine'
 import { AI_TUTOR_CACHE } from '../features/ai-tutor/constants'
 import { createLearningEngine, createDefaultSkillRegistry } from '@ielts/learning-engine'
 import type { LearningEngine } from '@ielts/learning-engine'
+import { createVocabularyEngine, DexieVocabularyRepository, DexieVocabReviewRepository } from '@ielts/vocabulary-engine'
+import type { VocabularyEngine } from '@ielts/vocabulary-engine'
 import { DatabaseService } from '../services/storage/Database'
 import { createAiCredentialProvider, resolveAiConfig, createAIClient, readConfigFromSettings } from '../bootstrap/createAiInfrastructure'
 import { createDbMessageRepository, createDbMemoryRepository, createDependencyRepos } from '../bootstrap/createRepositories'
@@ -20,6 +22,7 @@ import { seedWritingPrompts, seedListeningExercises, seedSpeakingQuestions, seed
 
 let engineInstance: AITutorEngine | null = null
 let learningEngineInstance: LearningEngine | null = null
+let vocabularyEngineInstance: VocabularyEngine | null = null
 
 const systemClock = new SystemClock()
 
@@ -350,6 +353,25 @@ export async function initializeLearningEngine(): Promise<LearningEngine | null>
 
 export function getLearningEngine(): LearningEngine | null {
   return learningEngineInstance
+}
+
+export async function initializeVocabularyEngine(): Promise<VocabularyEngine | null> {
+  if (vocabularyEngineInstance) return vocabularyEngineInstance
+  try {
+    vocabularyEngineInstance = createVocabularyEngine({
+      vocabularyRepository: new DexieVocabularyRepository(),
+      vocabReviewRepository: new DexieVocabReviewRepository(),
+      clock: systemClock,
+    })
+    return vocabularyEngineInstance
+  } catch (error) {
+    console.error('apps/web/src/services/engineBootstrap.ts error:', error);
+    return null
+  }
+}
+
+export function getVocabularyEngine(): VocabularyEngine | null {
+  return vocabularyEngineInstance
 }
 
 import { createExerciseEngineBridge, getExerciseEngine } from './exercise-engine-adapter'
