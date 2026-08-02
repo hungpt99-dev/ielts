@@ -8,3 +8,5 @@
 export { determineNextLifecycle } from './domain/policies'
 export type { LifecycleTrigger, TransitionContext, LifecycleTransitionResult } from './domain/policies'
 export { LIFECYCLE_PHASE, type LifecyclePhase } from './domain/constants'
+export { calculateNextReview, getDueReviewQueue, predictRecallProbability, REVIEW_RATING, REVIEW_CONTEXT } from './domain/policies'
+export type { ReviewRating, ReviewContext, SpacedRepetitionInfo, ReviewHistoryEntry } from './domain/policies'
