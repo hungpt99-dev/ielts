@@ -20,8 +20,8 @@ export const vocabularyDetailsSchema = z.object({
   collocations: z.array(z.string()).default([]),
   wordFamily: z.array(z.union([z.string(), wordFormSchema])).default([]),
   verbConjugation: verbConjugationSchema.optional(),
-  cefrLevel: z.string().default(''),
-  ieltsRelevance: z.string().default(''),
+  cefrLevel: z.union([z.enum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2']), z.literal('')]).default(''),
+  ieltsRelevance: z.union([z.enum(['low', 'medium', 'high']), z.literal('')]).default(''),
   difficulty: z.string().default(''),
 }).passthrough()
 export type VocabularyDetails = z.infer<typeof vocabularyDetailsSchema>

@@ -14,3 +14,4 @@ export type { ReviewRating, ReviewContext, SpacedRepetitionInfo, ReviewHistoryEn
 export * from './ports'
 export { calculateMastery, calculateOverallMastery, SKILL, MASTERY_SKILLS, INTERACTION_TYPE } from './domain/policies'
 export type { SkillType, InteractionType, MasteryProfile, SkillMasteryState, Interaction, ReviewRecord } from './domain/policies'
+export * from './schemas'
