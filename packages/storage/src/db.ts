@@ -64,6 +64,22 @@ export interface IDatabase {
   weeks: Table<Record<string, unknown>, string>
   days: Table<Record<string, unknown>, string>
   activities: Table<Record<string, unknown>, string>
+  words: Table<Record<string, unknown>, string>
+  vocabularyStates: Table<Record<string, unknown>, string>
+  interactions: Table<Record<string, unknown>, string>
+  spacedRepetitionInfo: Table<Record<string, unknown>, string>
+  reviewRecords: Table<Record<string, unknown>, string>
+  masteryProfiles: Table<Record<string, unknown>, string>
+  collocations: Table<Record<string, unknown>, string>
+  synonyms: Table<Record<string, unknown>, string>
+  antonyms: Table<Record<string, unknown>, string>
+  wordFamily: Table<Record<string, unknown>, string>
+  commonMistakes: Table<Record<string, unknown>, string>
+  usageExamples: Table<Record<string, unknown>, string>
+  inflections: Table<Record<string, unknown>, string>
+  wordConnections: Table<Record<string, unknown>, string>
+  topicClusters: Table<Record<string, unknown>, string>
+  searchIndex: Table<Record<string, unknown>, string>
 }
 
 export class AppDatabase extends Dexie implements IDatabase {
@@ -125,6 +141,22 @@ export class AppDatabase extends Dexie implements IDatabase {
   weeks!: Table<Record<string, unknown>, string>
   days!: Table<Record<string, unknown>, string>
   activities!: Table<Record<string, unknown>, string>
+  words!: Table<Record<string, unknown>, string>
+  vocabularyStates!: Table<Record<string, unknown>, string>
+  interactions!: Table<Record<string, unknown>, string>
+  spacedRepetitionInfo!: Table<Record<string, unknown>, string>
+  reviewRecords!: Table<Record<string, unknown>, string>
+  masteryProfiles!: Table<Record<string, unknown>, string>
+  collocations!: Table<Record<string, unknown>, string>
+  synonyms!: Table<Record<string, unknown>, string>
+  antonyms!: Table<Record<string, unknown>, string>
+  wordFamily!: Table<Record<string, unknown>, string>
+  commonMistakes!: Table<Record<string, unknown>, string>
+  usageExamples!: Table<Record<string, unknown>, string>
+  inflections!: Table<Record<string, unknown>, string>
+  wordConnections!: Table<Record<string, unknown>, string>
+  topicClusters!: Table<Record<string, unknown>, string>
+  searchIndex!: Table<Record<string, unknown>, string>
 
   constructor(schema: AppDatabaseSchema, options?: DexieOptions) {
     super(DB_NAME, options)
@@ -245,4 +277,20 @@ export const TABLE_NAMES: (keyof IDatabase)[] = [
   'weeks',
   'days',
   'activities',
+  'words',
+  'vocabularyStates',
+  'interactions',
+  'spacedRepetitionInfo',
+  'reviewRecords',
+  'masteryProfiles',
+  'collocations',
+  'synonyms',
+  'antonyms',
+  'wordFamily',
+  'commonMistakes',
+  'usageExamples',
+  'inflections',
+  'wordConnections',
+  'topicClusters',
+  'searchIndex',
 ]
