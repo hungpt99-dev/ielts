@@ -1,0 +1,10 @@
+export const LIFECYCLE_PHASE = {
+  DISCOVERED: 'DISCOVERED',
+  LEARNING: 'LEARNING',
+  PRACTICING: 'PRACTICING',
+  REVIEWING: 'REVIEWING',
+  USING: 'USING',
+  MASTERED: 'MASTERED',
+} as const
+
+export type LifecyclePhase = (typeof LIFECYCLE_PHASE)[keyof typeof LIFECYCLE_PHASE]
