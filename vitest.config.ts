@@ -28,6 +28,7 @@ export default defineConfig({
       'packages/storage/vitest.config.ts',
       'packages/ai/vitest.config.ts',
       'packages/settings/vitest.config.ts',
+      'packages/vocabulary-engine/vitest.config.ts',
     ],
   },
 })
