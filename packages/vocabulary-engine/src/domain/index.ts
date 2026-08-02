@@ -1,5 +1,6 @@
 export * from './value-objects'
-export { LIFECYCLE_PHASE, type LifecyclePhase } from './constants'
+export * from './entities'
+export { LIFECYCLE_PHASE, CEFR_LEVELS, type LifecyclePhase, type CefrLevel } from './constants'
 export { determineNextLifecycle } from './policies'
 export type { LifecycleTrigger, TransitionContext, LifecycleTransitionResult } from './policies'
 export { calculateNextReview, getDueReviewQueue, predictRecallProbability, REVIEW_RATING, REVIEW_CONTEXT } from './policies'
