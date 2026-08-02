@@ -1,3 +1,5 @@
+import { VOCABULARY_STORES } from './schema-vocabulary'
+
 export interface StorageVersion {
   number: number
   stores: Record<string, string>
@@ -10,7 +12,7 @@ export interface AppDatabaseSchema {
 }
 
 export const APP_SCHEMA: AppDatabaseSchema = {
-  currentVersion: 1,
+  currentVersion: 2,
   versions: [
     {
       number: 1,
@@ -73,6 +75,12 @@ export const APP_SCHEMA: AppDatabaseSchema = {
         weeks: 'id, phaseId, weekNumber, createdAt',
         days: 'id, weekId, date, dayNumber, createdAt',
         activities: 'id, type, skill, topic, createdAt',
+      },
+    },
+    {
+      number: 2,
+      stores: {
+        ...VOCABULARY_STORES,
       },
     },
   ],

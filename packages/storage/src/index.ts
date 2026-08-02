@@ -9,6 +9,46 @@ export {
 } from './errors'
 
 export {
+  VOCABULARY_SCHEMA_VERSION,
+  VOCABULARY_STORES,
+  vocabularyTableSchemas,
+  wordSchema,
+  vocabularyStateSchema,
+  interactionSchema,
+  spacedRepetitionInfoSchema,
+  reviewRecordSchema,
+  masteryProfileSchema,
+  collocationSchema,
+  synonymSchema,
+  antonymSchema,
+  wordFamilyMemberSchema,
+  commonMistakeSchema,
+  usageExampleSchema,
+  inflectionSchema,
+  wordConnectionSchema,
+  topicClusterSchema,
+  searchIndexEntrySchema,
+} from './schema-vocabulary'
+export type {
+  WordRow,
+  VocabularyStateRow,
+  InteractionRow,
+  SpacedRepetitionInfoRow,
+  ReviewRecordRow,
+  MasteryProfileRow,
+  CollocationRow,
+  SynonymRow,
+  AntonymRow,
+  WordFamilyRow,
+  CommonMistakeRow,
+  UsageExampleRow,
+  InflectionRow,
+  WordConnectionRow,
+  TopicClusterRow,
+  SearchIndexRow,
+} from './schema-vocabulary'
+
+export {
   PlanRepository,
   ActivityRepository,
   VocabularyRepository,
